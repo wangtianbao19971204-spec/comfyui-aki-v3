@@ -1,0 +1,16 @@
+{
+  "entries": [
+    {
+      "git_mode": "160000",
+      "object": "da645b1cf33ff31d5b2092277d0678271e292ec5",
+      "path": "subpack",
+      "reasons": [
+        "nested_gitlink"
+      ],
+      "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+    }
+  ],
+  "original_payloads": "Retained only in the separate private original Git archive",
+  "purpose": "Public history reference; not a runnable restored revision",
+  "schema": 1
+}
