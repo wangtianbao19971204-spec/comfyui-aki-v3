@@ -2,7 +2,7 @@
   "entries": [
     {
       "git_mode": "160000",
-      "object": "452e5f6d04781dd7bcbb4fab8e08bc1b169f6b05",
+      "object": "811ebe00d01191b1b73247c87de45e6290129546",
       "path": "subpack",
       "reasons": [
         "nested_gitlink"
