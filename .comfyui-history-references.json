@@ -1,0 +1,18 @@
+{
+  "entries": [
+    {
+      "bytes": 3208,
+      "git_mode": "100644",
+      "object": "8e3f0b7bb0e55c2041f3f989570cae097f1c92c6",
+      "path": "TranslateNode/config.json",
+      "reasons": [
+        "credential_bearing_history_payload",
+        "literal_credential_assignment"
+      ],
+      "sha256": "7668ef46b29c468b2c68314c63f93d5868e9c324472d09bc7fda06741665a15e"
+    }
+  ],
+  "original_payloads": "Retained only in the separate private original Git archive",
+  "purpose": "Public history reference; not a runnable restored revision",
+  "schema": 1
+}
