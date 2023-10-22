@@ -9,6 +9,16 @@
         "private_runtime_directory"
       ],
       "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "bytes": 1,
+      "git_mode": "100644",
+      "object": "8b137891791fe96927ad78e64b0aad7bded08bdc",
+      "path": "workflows/test.txt",
+      "reasons": [
+        "private_runtime_directory"
+      ],
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     }
   ],
   "original_payloads": "Retained only in the separate private original Git archive",
