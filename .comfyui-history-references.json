@@ -4,7 +4,7 @@
       "bytes": 3184,
       "git_mode": "100644",
       "object": "49796cfe7ddf0d97776fb6cf04668d287367e0f7",
-      "path": "TranslateNode/config.json",
+      "path": "DeepTranslatorNode/config.json",
       "reasons": [
         "credential_bearing_history_payload",
         "literal_credential_assignment"
