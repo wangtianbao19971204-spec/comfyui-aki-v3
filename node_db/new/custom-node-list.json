@@ -12,6 +12,26 @@
 
 
         {
+            "author": "kale4eat",
+            "title": "ComfyUI-speech-dataset-toolkit",
+            "reference": "https://github.com/kale4eat/ComfyUI-speech-dataset-toolkit",
+            "files": [
+                "https://github.com/kale4eat/ComfyUI-speech-dataset-toolkit"
+            ],
+            "install_type": "git-clone",
+            "description": "Basic audio tools using torchaudio for ComfyUI. It is assumed to assist in the speech dataset creation for ASR, TTS, etc."
+        },
+        {
+            "author": "nullquant",
+            "title": "ComfyUI-BrushNet",
+            "reference": "https://github.com/nullquant/ComfyUI-BrushNet",
+            "files": [
+                "https://github.com/nullquant/ComfyUI-BrushNet"
+            ],
+            "install_type": "git-clone",
+            "description": "Custom nodes for ComfyUI allow to inpaint using Brushnet: '[a/BrushNet: A Plug-and-Play Image Inpainting Model with Decomposed Dual-Branch Diffusion](https://arxiv.org/abs/2403.06976)'."
+        },
+        {
             "author": "logtd",
             "title": "ComfyUI-RAVE Attention",
             "reference": "https://github.com/logtd/ComfyUI-RAVE_ATTN",
