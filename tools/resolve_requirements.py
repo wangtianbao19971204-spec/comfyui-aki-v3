@@ -3,6 +3,8 @@ import sys
 import re
 from typing import Tuple, Optional
 from packaging import version, specifiers
+import re
+
 
 def parse_pip_spec(spec: str) -> Tuple[str, Optional[str]]:
     match = re.match(r'([^=<>!~]+)(.*)', spec)
@@ -12,6 +14,7 @@ def parse_pip_spec(spec: str) -> Tuple[str, Optional[str]]:
         return package_name, version_spec
     else:
         raise ValueError(f"Invalid package spec: {spec}")
+
 
 def fetch_package_versions(package_name):
     url = f"https://pypi.org/pypi/{package_name}/json"
@@ -26,7 +29,6 @@ def fetch_package_versions(package_name):
         print(f"Error fetching package versions: {e}")
         return []
 
-import re
 
 def fetch_required_dist(package_name, version):
     url = f"https://pypi.org/pypi/{package_name}/{version}/json"
@@ -56,9 +58,11 @@ def fetch_required_dist(package_name, version):
         print(f"Error fetching required distribution info: {e}")
         return []
 
+
 def filter_versions(versions, spec):
     specifier = specifiers.SpecifierSet(spec) if spec else specifiers.SpecifierSet()
     return [v for v in versions if v in specifier]
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
