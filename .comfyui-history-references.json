@@ -2,7 +2,7 @@
   "entries": [
     {
       "git_mode": "160000",
-      "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+      "object": "2322caa480535b1011a1f9c18126d85ea444f146",
       "path": "repositories/ultimate_sd_upscale",
       "reasons": [
         "nested_gitlink"
