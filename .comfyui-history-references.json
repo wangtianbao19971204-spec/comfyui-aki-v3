@@ -10,6 +10,18 @@
         "literal_credential_assignment"
       ],
       "sha256": "759c1a536bd056b452075d88cf6bc5e08080da284ef7c64b209438c6e0025035"
+    },
+    {
+      "bytes": 3898319,
+      "git_mode": "100644",
+      "object": "f0d3856c76e350b6c4241873ae18cfa2d0a31824",
+      "path": "node.tar.gz",
+      "reasons": [
+        "credential_bearing_history_payload",
+        "invalid_gzip_payload",
+        "zip_literal_credential_assignment"
+      ],
+      "sha256": "f61ac7a3c3a7203d40750135b171ea7fe8f4d13a022e9a3fc908be6971708310"
     }
   ],
   "original_payloads": "Retained only in the separate private original Git archive",
