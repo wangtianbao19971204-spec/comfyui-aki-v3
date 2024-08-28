@@ -4,7 +4,7 @@
       "bytes": 7289,
       "git_mode": "100644",
       "object": "47e943cfacabf7040b4af8cf4084ab91177f1b88",
-      "path": "src/controlnet_aux/diffusion_edge/taming/modules/autoencoder/lpips/vgg.pth",
+      "path": "src/custom_controlnet_aux/diffusion_edge/taming/modules/autoencoder/lpips/vgg.pth",
       "reasons": [
         "model_weight_payload"
       ],
