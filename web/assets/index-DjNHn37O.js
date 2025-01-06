@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["./GraphView-DswvqURL.js","./index-hdfnBvYs.js","./index-B7ycxfFq.js","./index-lMQBwSDj.js","./keybindingService-D48fkLBy.js","./serverConfigStore-BawYAb1j.js","./GraphView-CIRWBKTm.css","./UserSelectView-2l9Kbchu.js","./BaseViewTemplate-CsEJhGbv.js","./ServerStartView-CiO_acWT.js","./ServerStartView-CnyN4Ib6.css","./InstallView-AV2llYNm.js","./InstallView-CwQdoH-C.css","./WelcomeView-CB7Th_kO.js","./WelcomeView-Brz3-luE.css","./NotSupportedView-CRaD8u74.js","./NotSupportedView-bFzHmqNj.css","./DownloadGitView-DP1MIWYX.js","./ManualConfigurationView-BA4Vtud8.js","./ManualConfigurationView-B6ecEClB.css","./KeybindingPanel-CxaJ1IiJ.js","./index-CK0rrCYF.js","./KeybindingPanel-DvrUYZ4S.css","./ExtensionPanel-CxijYN47.js","./ServerConfigPanel-TLv4HMGK.js","./index-5Sv744Dr.js","./index-BRhY6FpL.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["./GraphView-HVeNbkaW.js","./index-jXPKy3pP.js","./index-5HFeZax4.js","./index-B-aVupP5.js","./keybindingService-Bx7YdkXn.js","./serverConfigStore-CvyKFVuP.js","./GraphView-CIRWBKTm.css","./UserSelectView-B3jYchWu.js","./BaseViewTemplate-BNGF4K22.js","./ServerStartView-CIDTUh4x.js","./ServerStartView-CnyN4Ib6.css","./InstallView-CAcYt0HL.js","./InstallView-CwQdoH-C.css","./WelcomeView-N0ZXLjdi.js","./WelcomeView-Brz3-luE.css","./NotSupportedView-Drz3x2d-.js","./NotSupportedView-bFzHmqNj.css","./DownloadGitView-DeC7MBzG.js","./ManualConfigurationView-Bi_qHE-n.js","./ManualConfigurationView-B6ecEClB.css","./KeybindingPanel-Dc3C4lG1.js","./index-B5F0uxTQ.js","./KeybindingPanel-DvrUYZ4S.css","./ExtensionPanel-D4Phn0Zr.js","./ServerConfigPanel-Be4StJmv.js","./index-Bordpmzt.js","./index-BRhY6FpL.css"])))=>i.map(i=>d[i]);
 var __defProp2 = Object.defineProperty;
 var __name = (target, value4) => __defProp2(target, "name", { value: value4, configurable: true });
 (/* @__PURE__ */ __name(function polyfill() {
@@ -38279,7 +38279,7 @@ class LGraphCanvas {
     } else if (e2.type == "keyup") {
       if (e2.keyCode == 32) {
         this.read_only = false;
-        this.dragging_canvas = this._previously_dragging_canvas ?? false;
+        this.dragging_canvas = (this._previously_dragging_canvas ?? false) && this.pointer.isDown;
         this._previously_dragging_canvas = null;
       }
       if (this.selected_nodes) {
@@ -46123,7 +46123,7 @@ const router = createRouter({
         {
           path: "",
           name: "GraphView",
-          component: /* @__PURE__ */ __name(() => __vitePreload(() => import("./GraphView-DswvqURL.js"), true ? __vite__mapDeps([0,1,2,3,4,5,6]) : void 0, import.meta.url), "component"),
+          component: /* @__PURE__ */ __name(() => __vitePreload(() => import("./GraphView-HVeNbkaW.js"), true ? __vite__mapDeps([0,1,2,3,4,5,6]) : void 0, import.meta.url), "component"),
           beforeEnter: /* @__PURE__ */ __name(async (to, from2, next2) => {
             const userStore = useUserStore();
             await userStore.initialize();
@@ -46137,42 +46137,42 @@ const router = createRouter({
         {
           path: "user-select",
           name: "UserSelectView",
-          component: /* @__PURE__ */ __name(() => __vitePreload(() => import("./UserSelectView-2l9Kbchu.js"), true ? __vite__mapDeps([7,8]) : void 0, import.meta.url), "component")
+          component: /* @__PURE__ */ __name(() => __vitePreload(() => import("./UserSelectView-B3jYchWu.js"), true ? __vite__mapDeps([7,8]) : void 0, import.meta.url), "component")
         },
         {
           path: "server-start",
           name: "ServerStartView",
-          component: /* @__PURE__ */ __name(() => __vitePreload(() => import("./ServerStartView-CiO_acWT.js"), true ? __vite__mapDeps([9,8,10]) : void 0, import.meta.url), "component"),
+          component: /* @__PURE__ */ __name(() => __vitePreload(() => import("./ServerStartView-CIDTUh4x.js"), true ? __vite__mapDeps([9,8,10]) : void 0, import.meta.url), "component"),
           beforeEnter: guardElectronAccess
         },
         {
           path: "install",
           name: "InstallView",
-          component: /* @__PURE__ */ __name(() => __vitePreload(() => import("./InstallView-AV2llYNm.js"), true ? __vite__mapDeps([11,8,12]) : void 0, import.meta.url), "component"),
+          component: /* @__PURE__ */ __name(() => __vitePreload(() => import("./InstallView-CAcYt0HL.js"), true ? __vite__mapDeps([11,8,12]) : void 0, import.meta.url), "component"),
           beforeEnter: guardElectronAccess
         },
         {
           path: "welcome",
           name: "WelcomeView",
-          component: /* @__PURE__ */ __name(() => __vitePreload(() => import("./WelcomeView-CB7Th_kO.js"), true ? __vite__mapDeps([13,8,14]) : void 0, import.meta.url), "component"),
+          component: /* @__PURE__ */ __name(() => __vitePreload(() => import("./WelcomeView-N0ZXLjdi.js"), true ? __vite__mapDeps([13,8,14]) : void 0, import.meta.url), "component"),
           beforeEnter: guardElectronAccess
         },
         {
           path: "not-supported",
           name: "NotSupportedView",
-          component: /* @__PURE__ */ __name(() => __vitePreload(() => import("./NotSupportedView-CRaD8u74.js"), true ? __vite__mapDeps([15,8,16]) : void 0, import.meta.url), "component"),
+          component: /* @__PURE__ */ __name(() => __vitePreload(() => import("./NotSupportedView-Drz3x2d-.js"), true ? __vite__mapDeps([15,8,16]) : void 0, import.meta.url), "component"),
           beforeEnter: guardElectronAccess
         },
         {
           path: "download-git",
           name: "DownloadGitView",
-          component: /* @__PURE__ */ __name(() => __vitePreload(() => import("./DownloadGitView-DP1MIWYX.js"), true ? __vite__mapDeps([17,8]) : void 0, import.meta.url), "component"),
+          component: /* @__PURE__ */ __name(() => __vitePreload(() => import("./DownloadGitView-DeC7MBzG.js"), true ? __vite__mapDeps([17,8]) : void 0, import.meta.url), "component"),
           beforeEnter: guardElectronAccess
         },
         {
           path: "manual-configuration",
           name: "ManualConfigurationView",
-          component: /* @__PURE__ */ __name(() => __vitePreload(() => import("./ManualConfigurationView-BA4Vtud8.js"), true ? __vite__mapDeps([18,1,2,8,19]) : void 0, import.meta.url), "component"),
+          component: /* @__PURE__ */ __name(() => __vitePreload(() => import("./ManualConfigurationView-Bi_qHE-n.js"), true ? __vite__mapDeps([18,1,2,8,19]) : void 0, import.meta.url), "component"),
           beforeEnter: guardElectronAccess
         }
       ]
@@ -58027,7 +58027,7 @@ const _sfc_main$Z = /* @__PURE__ */ defineComponent({
 });
 const config$1 = {
   app_title: "ComfyUI",
-  app_version: "1.6.17"
+  app_version: "1.6.18"
 };
 /*!
   * shared v9.13.1
@@ -116940,7 +116940,11 @@ const useSettingStore = /* @__PURE__ */ defineStore("setting", () => {
   }
   __name(exists, "exists");
   async function set3(key, value4) {
-    const newValue2 = tryMigrateDeprecatedValue(settingsById.value[key], value4);
+    const clonedValue = _.cloneDeep(value4);
+    const newValue2 = tryMigrateDeprecatedValue(
+      settingsById.value[key],
+      clonedValue
+    );
     const oldValue2 = get3(key);
     if (newValue2 === oldValue2) return;
     onChange(settingsById.value[key], newValue2, oldValue2);
@@ -116949,7 +116953,7 @@ const useSettingStore = /* @__PURE__ */ defineStore("setting", () => {
   }
   __name(set3, "set");
   function get3(key) {
-    return settingValues.value[key] ?? getDefaultValue(key);
+    return _.cloneDeep(settingValues.value[key] ?? getDefaultValue(key));
   }
   __name(get3, "get");
   function getDefaultValue(key) {
@@ -117954,7 +117958,7 @@ const useSystemStatsStore = /* @__PURE__ */ defineStore("systemStats", () => {
   };
 });
 const useAboutPanelStore = /* @__PURE__ */ defineStore("aboutPanel", () => {
-  const frontendVersion = "1.6.17";
+  const frontendVersion = "1.6.18";
   const extensionStore = useExtensionStore();
   const systemStatsStore = useSystemStatsStore();
   const coreVersion = computed(
@@ -123467,13 +123471,13 @@ const _sfc_main$x = /* @__PURE__ */ defineComponent({
   setup(__props) {
     const props = __props;
     const KeybindingPanel = /* @__PURE__ */ defineAsyncComponent(
-      () => __vitePreload(() => import("./KeybindingPanel-CxaJ1IiJ.js"), true ? __vite__mapDeps([20,21,3,2,4,22]) : void 0, import.meta.url)
+      () => __vitePreload(() => import("./KeybindingPanel-Dc3C4lG1.js"), true ? __vite__mapDeps([20,21,3,2,4,22]) : void 0, import.meta.url)
     );
     const ExtensionPanel = /* @__PURE__ */ defineAsyncComponent(
-      () => __vitePreload(() => import("./ExtensionPanel-CxijYN47.js"), true ? __vite__mapDeps([23,21,3,2]) : void 0, import.meta.url)
+      () => __vitePreload(() => import("./ExtensionPanel-D4Phn0Zr.js"), true ? __vite__mapDeps([23,21,3,2]) : void 0, import.meta.url)
     );
     const ServerConfigPanel = /* @__PURE__ */ defineAsyncComponent(
-      () => __vitePreload(() => import("./ServerConfigPanel-TLv4HMGK.js"), true ? __vite__mapDeps([24,5]) : void 0, import.meta.url)
+      () => __vitePreload(() => import("./ServerConfigPanel-Be4StJmv.js"), true ? __vite__mapDeps([24,5]) : void 0, import.meta.url)
     );
     const aboutPanelNode = {
       key: "about",
@@ -124637,7 +124641,7 @@ const useWorkflowTemplatesStore = /* @__PURE__ */ defineStore(
     };
   }
 );
-const _withScopeId$e = /* @__PURE__ */ __name((n) => (pushScopeId("data-v-2d616ed7"), n = n(), popScopeId(), n), "_withScopeId$e");
+const _withScopeId$e = /* @__PURE__ */ __name((n) => (pushScopeId("data-v-fc26284b"), n = n(), popScopeId(), n), "_withScopeId$e");
 const _hoisted_1$w = {
   class: "flex h-96",
   "data-testid": "template-workflows-content"
@@ -124694,7 +124698,7 @@ const _sfc_main$u = /* @__PURE__ */ defineComponent({
       workflowLoading.value = id3;
       let json;
       if (selectedTab.value.moduleName === "default") {
-        json = await fetch(api.fileURL(`templates/${id3}.json`)).then(
+        json = await fetch(api.fileURL(`/templates/${id3}.json`)).then(
           (r) => r.json()
         );
       } else {
@@ -124751,7 +124755,7 @@ const _sfc_main$u = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const TemplateWorkflowsContent = /* @__PURE__ */ _export_sfc(_sfc_main$u, [["__scopeId", "data-v-2d616ed7"]]);
+const TemplateWorkflowsContent = /* @__PURE__ */ _export_sfc(_sfc_main$u, [["__scopeId", "data-v-fc26284b"]]);
 const useDialogService = /* @__PURE__ */ __name(() => {
   const dialogStore = useDialogStore();
   function showLoadWorkflowWarning(props) {
@@ -124946,6 +124950,14 @@ const useKeybindingStore = /* @__PURE__ */ defineStore("keybinding", () => {
   const defaultKeybindings = ref({});
   const userKeybindings = ref({});
   const userUnsetKeybindings = ref({});
+  function getUserKeybindings() {
+    return userKeybindings.value;
+  }
+  __name(getUserKeybindings, "getUserKeybindings");
+  function getUserUnsetKeybindings() {
+    return userUnsetKeybindings.value;
+  }
+  __name(getUserUnsetKeybindings, "getUserUnsetKeybindings");
   const keybindingByKeyCombo = computed(() => {
     const result = {
       ...defaultKeybindings.value
@@ -125065,8 +125077,8 @@ const useKeybindingStore = /* @__PURE__ */ defineStore("keybinding", () => {
   __name(isCommandKeybindingModified, "isCommandKeybindingModified");
   return {
     keybindings,
-    userKeybindings,
-    userUnsetKeybindings,
+    getUserKeybindings,
+    getUserUnsetKeybindings,
     getKeybinding,
     getKeybindingsByCommandId,
     getKeybindingByCommandId,
@@ -164042,7 +164054,7 @@ const useExtensionService = /* @__PURE__ */ __name(() => {
       settingStore.get("Comfy.Extension.Disabled")
     );
     const extensions = await api.getExtensions();
-    await __vitePreload(() => import("./index-5Sv744Dr.js"), true ? __vite__mapDeps([25,26]) : void 0, import.meta.url);
+    await __vitePreload(() => import("./index-Bordpmzt.js"), true ? __vite__mapDeps([25,26]) : void 0, import.meta.url);
     extensionStore.captureCoreExtensions();
     await Promise.all(
       extensions.filter((extension) => !extension.includes("extensions/core")).map(async (ext) => {
@@ -184710,4 +184722,4 @@ export {
   getOuterWidth as y,
   getOuterHeight as z
 };
-//# sourceMappingURL=index-C4Fk50Nx.js.map
+//# sourceMappingURL=index-DjNHn37O.js.map

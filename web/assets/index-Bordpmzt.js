@@ -1,6 +1,6 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-import { ca as ComfyDialog, cb as $el, cc as ComfyApp, h as app, a3 as LiteGraph, bd as LGraphCanvas, cd as useExtensionService, ce as processDynamicPrompt, cf as isElectron, c0 as electronAPI, bR as useDialogService, cg as t, ch as DraggableList, bt as useToastStore, ah as LGraphNode, ci as applyTextReplacements, cj as ComfyWidgets, ck as addValueControlWidgets, a6 as useNodeDefStore, cl as serialise, cm as deserialiseAndCreate, b8 as api, a as useSettingStore, ag as LGraphGroup, ad as nextTick } from "./index-C4Fk50Nx.js";
+import { ca as ComfyDialog, cb as $el, cc as ComfyApp, h as app, a3 as LiteGraph, bd as LGraphCanvas, cd as useExtensionService, ce as processDynamicPrompt, cf as isElectron, c0 as electronAPI, bR as useDialogService, cg as t, ch as DraggableList, bt as useToastStore, ah as LGraphNode, ci as applyTextReplacements, cj as ComfyWidgets, ck as addValueControlWidgets, a6 as useNodeDefStore, cl as serialise, cm as deserialiseAndCreate, b8 as api, a as useSettingStore, ag as LGraphGroup, ad as nextTick } from "./index-DjNHn37O.js";
 class ClipspaceDialog extends ComfyDialog {
   static {
     __name(this, "ClipspaceDialog");
@@ -53211,4 +53211,4 @@ app.registerExtension({
     });
   }
 });
-//# sourceMappingURL=index-5Sv744Dr.js.map
+//# sourceMappingURL=index-Bordpmzt.js.map
