@@ -18,7 +18,6 @@ modules_path = os.path.join(os.path.dirname(__file__), "modules")
 sys.path.append(modules_path)
 
 import impact.config
-import impact.sample_error_enhancer
 print(f"### Loading: ComfyUI-Impact-Pack ({impact.config.version})")
 
 # Core
