@@ -130,7 +130,8 @@ class SaveAnimatedWEBP:
             results.append({
                 "filename": file,
                 "subfolder": subfolder,
-                "type": self.type
+                "type": self.type,
+                "mime_type": "image/webp"
             })
             counter += 1
 

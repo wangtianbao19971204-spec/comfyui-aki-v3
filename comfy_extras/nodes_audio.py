@@ -192,7 +192,8 @@ class SaveAudio:
             results.append({
                 "filename": file,
                 "subfolder": subfolder,
-                "type": self.type
+                "type": self.type,
+                "mime_type": "audio/flac"
             })
             counter += 1
 

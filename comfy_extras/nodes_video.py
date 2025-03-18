@@ -68,7 +68,8 @@ class SaveWEBM:
         results: list[FileLocator] = [{
             "filename": file,
             "subfolder": subfolder,
-            "type": self.type
+            "type": self.type,
+            "mime_type": "video/webm"
         }]
 
         return {"ui": {"images": results, "animated": (True,)}}  # TODO: frontend side

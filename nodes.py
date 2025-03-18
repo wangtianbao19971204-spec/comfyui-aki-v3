@@ -483,7 +483,8 @@ class SaveLatent:
         results.append({
             "filename": file,
             "subfolder": subfolder,
-            "type": "output"
+            "type": "output",
+            "mime_type": "application/octet-stream"
         })
 
         file = os.path.join(full_output_folder, file)

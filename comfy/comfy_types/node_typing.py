@@ -330,3 +330,5 @@ class FileLocator(TypedDict):
     """The subfolder of the file."""
     type: Literal["input", "output", "temp"]
     """The root folder of the file."""
+    mime_type: str
+    """The mime type of the file."""
