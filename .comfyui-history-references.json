@@ -9,6 +9,16 @@
         "private_runtime_directory"
       ],
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 26,
+      "git_mode": "100644",
+      "object": "27d7e8ba392cefae8d3454c0d749208ec1ed71f2",
+      "path": ".env.example",
+      "reasons": [
+        "private_credential_file"
+      ],
+      "sha256": "03ef9d852242e0e0603e350bcf68c94f28b9d029612be09d146e8803700da376"
     }
   ],
   "original_payloads": "Retained only in the separate private original Git archive",
