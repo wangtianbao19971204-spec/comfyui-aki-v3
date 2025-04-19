@@ -1,3 +1,6 @@
+import logging
+import time
+from typing import Callable
 """
 API Client Framework for api.comfy.org.
 
@@ -108,26 +111,11 @@ from comfy.cli_args import args
 from comfy import utils
 from . import request_logger
 
+# Import models from your generated stubs
+
 T = TypeVar("T", bound=BaseModel)
 R = TypeVar("R", bound=BaseModel)
 P = TypeVar("P", bound=BaseModel)  # For poll response
-
-PROGRESS_BAR_MAX = 100
-
-
-class NetworkError(Exception):
-    """Base exception for network-related errors with diagnostic information."""
-    pass
-
-
-class LocalNetworkError(NetworkError):
-    """Exception raised when local network connectivity issues are detected."""
-    pass
-
-
-class ApiServerError(NetworkError):
-    """Exception raised when the API server is unreachable but internet is working."""
-    pass
 
 
 class EmptyRequest(BaseModel):
@@ -900,43 +888,21 @@ class PollingOperation(Generic[T, R]):
         completed_statuses: list,
         failed_statuses: list,
         status_extractor: Callable[[R], str],
-        progress_extractor: Callable[[R], float] = None,
-        result_url_extractor: Callable[[R], str] = None,
         request: Optional[T] = None,
-        api_base: str | None = None,
+        api_base: str = "https://stagingapi.comfy.org",
         auth_token: Optional[str] = None,
-        comfy_api_key: Optional[str] = None,
-        auth_kwargs: Optional[Dict[str,str]] = None,
-        poll_interval: float = 5.0,
-        max_poll_attempts: int = 120,  # Default max polling attempts (10 minutes with 5s interval)
-        max_retries: int = 3,  # Max retries per individual API call
-        retry_delay: float = 1.0,
-        retry_backoff_factor: float = 2.0,
-        estimated_duration: Optional[float] = None,
-        node_id: Optional[str] = None,
+        poll_interval: float = 1.0,
     ):
         self.poll_endpoint = poll_endpoint
         self.request = request
-        self.api_base: str = api_base or args.comfy_api_base
+        self.api_base = api_base
         self.auth_token = auth_token
-        self.comfy_api_key = comfy_api_key
-        if auth_kwargs is not None:
-            self.auth_token = auth_kwargs.get("auth_token", self.auth_token)
-            self.comfy_api_key = auth_kwargs.get("comfy_api_key", self.comfy_api_key)
         self.poll_interval = poll_interval
-        self.max_poll_attempts = max_poll_attempts
-        self.max_retries = max_retries
-        self.retry_delay = retry_delay
-        self.retry_backoff_factor = retry_backoff_factor
-        self.estimated_duration = estimated_duration
 
         # Polling configuration
         self.status_extractor = status_extractor or (
             lambda x: getattr(x, "status", None)
         )
-        self.progress_extractor = progress_extractor
-        self.result_url_extractor = result_url_extractor
-        self.node_id = node_id
         self.completed_statuses = completed_statuses
         self.failed_statuses = failed_statuses
 
@@ -950,47 +916,11 @@ class PollingOperation(Generic[T, R]):
             if client is None:
                 client = ApiClient(
                     base_url=self.api_base,
-                    auth_token=self.auth_token,
-                    comfy_api_key=self.comfy_api_key,
-                    max_retries=self.max_retries,
-                    retry_delay=self.retry_delay,
-                    retry_backoff_factor=self.retry_backoff_factor,
+                    api_key=self.auth_token,
                 )
             return self._poll_until_complete(client)
-        except LocalNetworkError as e:
-            # Provide clear message for local network issues
-            raise Exception(
-                f"Polling failed due to local network issues. Please check your internet connection. "
-                f"Details: {str(e)}"
-            ) from e
-        except ApiServerError as e:
-            # Provide clear message for API server issues
-            raise Exception(
-                f"Polling failed due to API server issues. The service may be experiencing problems. "
-                f"Please try again later. Details: {str(e)}"
-            ) from e
         except Exception as e:
             raise Exception(f"Error during polling: {str(e)}")
-
-    def _display_text_on_node(self, text: str):
-        """Sends text to the client which will be displayed on the node in the UI"""
-        if not self.node_id:
-            return
-
-        PromptServer.instance.send_progress_text(text, self.node_id)
-
-    def _display_time_progress_on_node(self, time_completed: int):
-        if not self.node_id:
-            return
-
-        if self.estimated_duration is not None:
-            estimated_time_remaining = max(
-                0, int(self.estimated_duration) - int(time_completed)
-            )
-            message = f"Task in progress: {time_completed:.0f}s (~{estimated_time_remaining:.0f}s remaining)"
-        else:
-            message = f"Task in progress: {time_completed:.0f}s"
-        self._display_text_on_node(message)
 
     def _check_task_status(self, response: R) -> TaskStatus:
         """Check task status using the status extractor function"""
@@ -1002,19 +932,13 @@ class PollingOperation(Generic[T, R]):
                 return TaskStatus.FAILED
             return TaskStatus.PENDING
         except Exception as e:
-            logging.error(f"Error extracting status: {e}")
+            logging.debug(f"Error extracting status: {e}")
             return TaskStatus.PENDING
 
     def _poll_until_complete(self, client: ApiClient) -> R:
         """Poll until the task is complete"""
         poll_count = 0
-        consecutive_errors = 0
-        max_consecutive_errors = min(5, self.max_retries * 2)  # Limit consecutive errors
-
-        if self.progress_extractor:
-            progress = utils.ProgressBar(PROGRESS_BAR_MAX)
-
-        while poll_count < self.max_poll_attempts:
+        while True:
             try:
                 poll_count += 1
                 logging.debug(f"[DEBUG] Polling attempt #{poll_count}")
@@ -1030,7 +954,7 @@ class PollingOperation(Generic[T, R]):
                         f"[DEBUG] Poll Request: {self.poll_endpoint.method.value} {self.poll_endpoint.path}"
                     )
                     logging.debug(
-                        f"[DEBUG] Poll Request Data: {json.dumps(request_dict, indent=2) if request_dict else 'None'}"
+                      f"[DEBUG] Poll Request Data: {json.dumps(request_dict, indent=2) if request_dict else 'None'}"
                     )
 
                 # Query task status
@@ -1038,11 +962,8 @@ class PollingOperation(Generic[T, R]):
                     method=self.poll_endpoint.method.value,
                     path=self.poll_endpoint.path,
                     params=self.poll_endpoint.query_params,
-                    data=request_dict,
+                    json=request_dict,
                 )
-
-                # Successfully got a response, reset consecutive error count
-                consecutive_errors = 0
 
                 # Parse response
                 response_obj = self.poll_endpoint.response_model.model_validate(resp)
@@ -1051,74 +972,20 @@ class PollingOperation(Generic[T, R]):
                 status = self._check_task_status(response_obj)
                 logging.debug(f"[DEBUG] Task Status: {status}")
 
-                # If progress extractor is provided, extract progress
-                if self.progress_extractor:
-                    new_progress = self.progress_extractor(response_obj)
-                    if new_progress is not None:
-                        progress.update_absolute(new_progress, total=PROGRESS_BAR_MAX)
-
                 if status == TaskStatus.COMPLETED:
-                    message = "Task completed successfully"
-                    if self.result_url_extractor:
-                        result_url = self.result_url_extractor(response_obj)
-                        if result_url:
-                            message = f"Result URL: {result_url}"
-                    else:
-                        message = "Task completed successfully!"
-                    logging.debug(f"[DEBUG] {message}")
-                    self._display_text_on_node(message)
+                    logging.debug("[DEBUG] Task completed successfully")
                     self.final_response = response_obj
-                    if self.progress_extractor:
-                        progress.update(100)
                     return self.final_response
                 elif status == TaskStatus.FAILED:
-                    message = f"Task failed: {json.dumps(resp)}"
-                    logging.error(f"[DEBUG] {message}")
-                    raise Exception(message)
+                    logging.debug(f"[DEBUG] Task failed: {json.dumps(resp)}")
+                    raise Exception(f"Task failed: {json.dumps(resp)}")
                 else:
                     logging.debug("[DEBUG] Task still pending, continuing to poll...")
 
                 # Wait before polling again
-                logging.debug(
-                    f"[DEBUG] Waiting {self.poll_interval} seconds before next poll"
-                )
-                for i in range(int(self.poll_interval)):
-                    time_completed = (poll_count * self.poll_interval) + i
-                    self._display_time_progress_on_node(time_completed)
-                    time.sleep(1)
-
-            except (LocalNetworkError, ApiServerError) as e:
-                # For network-related errors, increment error count and potentially abort
-                consecutive_errors += 1
-                if consecutive_errors >= max_consecutive_errors:
-                    raise Exception(
-                        f"Polling aborted after {consecutive_errors} consecutive network errors: {str(e)}"
-                    ) from e
-
-                # Log the error but continue polling
-                logging.warning(
-                    f"Network error during polling (attempt {poll_count}/{self.max_poll_attempts}): {str(e)}. "
-                    f"Will retry in {self.poll_interval} seconds."
-                )
+                logging.debug(f"[DEBUG] Waiting {self.poll_interval} seconds before next poll")
                 time.sleep(self.poll_interval)
 
             except Exception as e:
-                # For other errors, increment count and potentially abort
-                consecutive_errors += 1
-                if consecutive_errors >= max_consecutive_errors or status == TaskStatus.FAILED:
-                    raise Exception(
-                        f"Polling aborted after {consecutive_errors} consecutive errors: {str(e)}"
-                    ) from e
-
-                logging.error(f"[DEBUG] Polling error: {str(e)}")
-                logging.warning(
-                    f"Error during polling (attempt {poll_count}/{self.max_poll_attempts}): {str(e)}. "
-                    f"Will retry in {self.poll_interval} seconds."
-                )
-                time.sleep(self.poll_interval)
-
-        # If we've exhausted all polling attempts
-        raise Exception(
-            f"Polling timed out after {poll_count} attempts ({poll_count * self.poll_interval} seconds). "
-            f"The operation may still be running on the server but is taking longer than expected."
-        )
+                logging.debug(f"[DEBUG] Polling error: {str(e)}")
+                raise Exception(f"Error while polling: {str(e)}")
