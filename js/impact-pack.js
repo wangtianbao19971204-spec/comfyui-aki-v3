@@ -1,6 +1,13 @@
 import { ComfyApp, app } from "../../scripts/app.js";
 import { ComfyDialog, $el } from "../../scripts/ui.js";
 import { api } from "../../scripts/api.js";
+import { customAlert, isBeforeFrontendVersion } from "./common.js";
+
+const is_legacy_front = () => isBeforeFrontendVersion('1.16.9');
+
+if(is_legacy_front()) {
+	customAlert("An outdated version(<1.16.9) of the `comfyui-frontend-package` is installed. It is not compatible with the current version of the Impact Pack.");
+}
 
 let wildcards_list = [];
 async function load_wildcards() {
@@ -474,6 +481,11 @@ app.registerExtension({
 
 			const onConnectionsChange = nodeType.prototype.onConnectionsChange;
 			nodeType.prototype.onConnectionsChange = function (type, index, connected, link_info) {
+				const stackTrace = new Error().stack;
+				if(stackTrace.includes('LGraph.configure')) {
+					return;
+				}
+
 				if(!link_info)
 					return;
 
@@ -516,7 +528,7 @@ app.registerExtension({
 					if(this.inputs[0].type == '*'){
 						const node = app.graph.getNodeById(link_info.origin_id);
 						let origin_type = node.outputs[link_info.origin_slot]?.type;
-						if(link_info.target_slot == 0 && this.inputs.length > 1) {
+						if(link_info.target_slot == 0 && this.inputs.length > 3) {  // NOTE: widgets are regarded as input since new front
 								origin_type = this.inputs[1].type;
 								node.connect(link_info.origin_slot, node.id, 'input1');
 						}
@@ -541,13 +553,7 @@ app.registerExtension({
 				let select_slot = this.inputs.find(x => x.name == "select");
 				let mode_slot = this.inputs.find(x => x.name == "sel_mode");
 
-				let converted_count = 0;
-				converted_count += select_slot?1:0;
-				converted_count += mode_slot?1:0;
-
-				if (!connected && (this.inputs.length > 1+converted_count)) {
-					const stackTrace = new Error().stack;
-
+				if (!connected && (this.inputs.length > 3)) {
 					if(
 						!stackTrace.includes('LGraphNode.prototype.connect') && // for touch device
 						!stackTrace.includes('LGraphNode.connect') && // for mouse device
@@ -556,6 +562,7 @@ app.registerExtension({
 						    this.removeInput(index);
 					}
 				}
+
 
 				let slot_i = 1;
 				for (let i = 0; i < this.inputs.length; i++) {
@@ -567,11 +574,7 @@ app.registerExtension({
 				}
 
 				let last_slot = this.inputs[this.inputs.length - 1];
-				if (
-					(last_slot.name == 'select' && last_slot.name != 'sel_mode' && this.inputs[this.inputs.length - 2].link != undefined)
-					|| (last_slot.name != 'select' && last_slot.name != 'sel_mode' && last_slot.link != undefined)) {
-						this.addInput(`${input_name}${slot_i}`, this.outputs[0].type);
-				}
+				this.addInput(`${input_name}${slot_i}`, this.outputs[0].type);
 
 				if(this.widgets?.length) {
 					this.widgets[0].options.max = select_slot?this.inputs.length-1:this.inputs.length;
