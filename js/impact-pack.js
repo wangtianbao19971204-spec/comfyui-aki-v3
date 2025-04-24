@@ -483,6 +483,8 @@ app.registerExtension({
 			nodeType.prototype.onConnectionsChange = function (type, index, connected, link_info) {
 				const stackTrace = new Error().stack;
 				if(stackTrace.includes('LGraph.configure')) {
+					this.widgets[0].options.max = this.inputs.length-3;
+					this.widgets[0].value = Math.min(this.widgets[0].value, this.widgets[0].options.max);
 					return;
 				}
 
@@ -551,7 +553,6 @@ app.registerExtension({
 				}
 
 				let select_slot = this.inputs.find(x => x.name == "select");
-				let mode_slot = this.inputs.find(x => x.name == "sel_mode");
 
 				if (!connected && (this.inputs.length > 3)) {
 					if(
@@ -573,15 +574,12 @@ app.registerExtension({
 					}
 				}
 
-				let last_slot = this.inputs[this.inputs.length - 1];
-				this.addInput(`${input_name}${slot_i}`, this.outputs[0].type);
-
-				if(this.widgets?.length) {
-					this.widgets[0].options.max = select_slot?this.inputs.length-1:this.inputs.length;
-					this.widgets[0].value = Math.min(this.widgets[0].value, this.widgets[0].options.max);
-					if(this.widgets[0].options.max > 0 && this.widgets[0].value == 0)
-						this.widgets[0].value = 1;
+				if(connected) {
+					this.addInput(`${input_name}${slot_i}`, this.outputs[0].type);
 				}
+
+				this.widgets[0].options.max = this.inputs.length-3;
+				this.widgets[0].value = Math.min(this.widgets[0].value, this.widgets[0].options.max);
 			}
 		}
 	},
