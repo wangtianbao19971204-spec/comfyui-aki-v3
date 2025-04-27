@@ -606,8 +606,10 @@ app.registerExtension({
 					this.addInput(`${input_name}${slot_i}`, this.outputs[0].type);
 				}
 
-				this.widgets[0].options.max = this.inputs.length-3;
-				this.widgets[0].value = Math.min(this.widgets[0].value, this.widgets[0].options.max);
+				if(this.widgets) {
+					this.widgets[0].options.max = this.inputs.length-3;
+					this.widgets[0].value = Math.min(this.widgets[0].value, this.widgets[0].options.max);
+				}
 			}
 		}
 	},
