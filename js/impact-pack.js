@@ -508,7 +508,7 @@ app.registerExtension({
 			const onConnectionsChange = nodeType.prototype.onConnectionsChange;
 			nodeType.prototype.onConnectionsChange = function (type, index, connected, link_info) {
 				const stackTrace = new Error().stack;
-				if(stackTrace.includes('LGraph.configure')) {
+				if(stackTrace.includes('loadGraphData')) {
 					if(this.widgets) {
 						this.widgets[0].options.max = this.inputs.length-3;
 						this.widgets[0].value = Math.min(this.widgets[0].value, this.widgets[0].options.max);
