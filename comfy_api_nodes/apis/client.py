@@ -1,6 +1,9 @@
 import logging
 import time
 from typing import Callable
+
+from comfy.cli_args import args
+
 """
 API Client Framework for api.comfy.org.
 
@@ -787,11 +790,6 @@ class SynchronousOperation(Generic[T, R]):
         self.timeout = timeout
         self.verify_ssl = verify_ssl
         self.files = files
-        self.content_type = content_type
-        self.multipart_parser = multipart_parser
-        self.max_retries = max_retries
-        self.retry_delay = retry_delay
-        self.retry_backoff_factor = retry_backoff_factor
 
     def execute(self, client: Optional[ApiClient] = None) -> R:
         """Execute the API operation using the provided client or create one with retry support"""
@@ -893,13 +891,13 @@ class PollingOperation(Generic[T, R]):
         failed_statuses: list,
         status_extractor: Callable[[R], str],
         request: Optional[T] = None,
-        api_base: str = "https://stagingapi.comfy.org",
+        api_base: str | None = None,
         auth_token: Optional[str] = None,
         poll_interval: float = 1.0,
     ):
         self.poll_endpoint = poll_endpoint
         self.request = request
-        self.api_base = api_base
+        self.api_base: str = api_base or args.comfy_api_base
         self.auth_token = auth_token
         self.poll_interval = poll_interval
 
