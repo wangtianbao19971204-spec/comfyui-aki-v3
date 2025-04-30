@@ -231,6 +231,45 @@ class ApiClient:
             "headers": headers,
         }
 
+    def _create_json_payload_args(
+        self,
+        data: Optional[Dict[str, Any]] = None,
+        headers: Optional[Dict[str, str]] = None,
+    ) -> Dict[str, Any]:
+        return {
+            "json": data,
+            "headers": headers,
+        }
+
+    def _create_form_data_args(
+        self,
+        data: Dict[str, Any],
+        files: Dict[str, Any],
+        headers: Optional[Dict[str, str]] = None,
+    ) -> Dict[str, Any]:
+        if headers:
+            del headers["Content-Type"]
+
+        return {
+            "data": data,
+            "files": files,
+            "headers": headers,
+        }
+
+    def _create_urlencoded_form_data_args(
+        self,
+        data: Dict[str, Any],
+        headers: Optional[Dict[str, str]] = None,
+    ) -> Dict[str, Any]:
+        headers = headers or {}
+        headers["Content-Type"] = "application/x-www-form-urlencoded"
+
+        return {
+            "data": data,
+            "headers": headers,
+        }
+
+
     def get_headers(self) -> Dict[str, str]:
         """Get headers for API requests, including authentication if available"""
         headers = {"Content-Type": "application/json", "Accept": "application/json"}
@@ -301,8 +340,6 @@ class ApiClient:
         files: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
         content_type: str = "application/json",
-        multipart_parser: Callable = None,
-        retry_count: int = 0,  # Used internally for tracking retries
     ) -> Dict[str, Any]:
         """
         Make an HTTP request to the API with automatic retries for transient errors.
@@ -315,7 +352,6 @@ class ApiClient:
             files: Files to upload
             headers: Additional headers
             content_type: Content type of the request. Defaults to application/json.
-            retry_count: Internal parameter for tracking retries, do not set manually
 
         Returns:
             Parsed JSON response
@@ -341,24 +377,13 @@ class ApiClient:
         logging.debug(f"[DEBUG] Params: {params}")
         logging.debug(f"[DEBUG] Data: {data}")
 
-        if content_type == "application/x-www-form-urlencoded":
-            payload_args = self._create_urlencoded_form_data_args(data, request_headers)
-        elif content_type == "multipart/form-data":
-            payload_args = self._create_form_data_args(
-                data, files, request_headers, multipart_parser
-            )
-        else:
-            payload_args = self._create_json_payload_args(data, request_headers)
-
-        operation_id = self._generate_operation_id(path)
-        request_logger.log_request_response(
-            operation_id=operation_id,
-            request_method=method,
-            request_url=url,
-            request_headers=request_headers,
-            request_params=params,
-            request_data=data if content_type == "application/json" else "[form-data or other]"
-        )
+        match content_type:
+            case "application/x-www-form-urlencoded":
+                payload_args = self._create_urlencoded_form_data_args(data, request_headers)
+            case "multipart/form-data":
+                payload_args = self._create_form_data_args(data, files, request_headers)
+            case _:
+                payload_args = self._create_json_payload_args(data, request_headers)
 
         try:
             response = requests.request(
@@ -369,31 +394,6 @@ class ApiClient:
                 verify=self.verify_ssl,
                 **payload_args,
             )
-
-            # Check if we should retry based on status code
-            if (response.status_code in self.retry_status_codes and
-                retry_count < self.max_retries):
-
-                # Calculate delay with exponential backoff
-                delay = self.retry_delay * (self.retry_backoff_factor ** retry_count)
-
-                logging.warning(
-                    f"Request failed with status {response.status_code}. "
-                    f"Retrying in {delay:.2f}s ({retry_count + 1}/{self.max_retries})"
-                )
-
-                time.sleep(delay)
-                return self.request(
-                    method=method,
-                    path=path,
-                    params=params,
-                    data=data,
-                    files=files,
-                    headers=headers,
-                    content_type=content_type,
-                    multipart_parser=multipart_parser,
-                    retry_count=retry_count + 1,
-                )
 
             # Raise exception for error status codes
             response.raise_for_status()
@@ -806,10 +806,6 @@ class SynchronousOperation(Generic[T, R]):
         timeout: float = 604800.0,
         verify_ssl: bool = True,
         content_type: str = "application/json",
-        multipart_parser: Callable = None,
-        max_retries: int = 3,
-        retry_delay: float = 1.0,
-        retry_backoff_factor: float = 2.0,
     ):
         self.endpoint = endpoint
         self.request = request
@@ -824,6 +820,7 @@ class SynchronousOperation(Generic[T, R]):
         self.timeout = timeout
         self.verify_ssl = verify_ssl
         self.files = files
+        self.content_type = content_type
 
     def execute(self, client: Optional[ApiClient] = None) -> R:
         """Execute the API operation using the provided client or create one with retry support"""
@@ -863,7 +860,6 @@ class SynchronousOperation(Generic[T, R]):
                 params=self.endpoint.query_params,
                 files=self.files,
                 content_type=self.content_type,
-                multipart_parser=self.multipart_parser
             )
 
             # Debug log for response
