@@ -1,15 +1,9 @@
 from comfy.comfy_types.node_typing import IO, ComfyNodeABC, InputTypeDict
 from inspect import cleandoc
-from PIL import Image
-import numpy as np
-import io
-import torch
 from comfy_api_nodes.apis import (
     IdeogramGenerateRequest,
     IdeogramGenerateResponse,
     ImageRequest,
-    IdeogramV3Request,
-    IdeogramV3EditRequest,
 )
 
 from comfy_api_nodes.apis.client import (
@@ -21,11 +15,9 @@ from comfy_api_nodes.apis.client import (
 from comfy_api_nodes.apinode_utils import (
     download_url_to_bytesio,
     bytesio_to_image_tensor,
-    resize_mask_to_image,
 )
-from server import PromptServer
 
-V1_V1_RES_MAP = {
+RESOLUTION_MAPPING = {
   "Auto":"AUTO",
   "512 x 1536":"RESOLUTION_512_1536",
   "576 x 1408":"RESOLUTION_576_1408",
@@ -107,7 +99,7 @@ V1_V1_RES_MAP = {
   "1536 x 640":"RESOLUTION_1536_640",
 }
 
-V1_V2_RATIO_MAP = {
+ASPECT_RATIO_MAPPING = {
   "1:1":"ASPECT_1_1",
   "4:3":"ASPECT_4_3",
   "3:4":"ASPECT_3_4",
@@ -121,134 +113,20 @@ V1_V2_RATIO_MAP = {
   "5:4":"ASPECT_5_4",
 }
 
-V3_RATIO_MAP = {
-    "1:3":"1x3",
-    "3:1":"3x1",
-    "1:2":"1x2",
-    "2:1":"2x1",
-    "9:16":"9x16",
-    "16:9":"16x9",
-    "10:16":"10x16",
-    "16:10":"16x10",
-    "2:3":"2x3",
-    "3:2":"3x2",
-    "3:4":"3x4",
-    "4:3":"4x3",
-    "4:5":"4x5",
-    "5:4":"5x4",
-    "1:1":"1x1",
-}
+def download_and_process_image(image_url):
+    """Helper function to download and process image from URL"""
 
-V3_RESOLUTIONS= [
-    "Auto",
-    "512x1536",
-    "576x1408",
-    "576x1472",
-    "576x1536",
-    "640x1344",
-    "640x1408",
-    "640x1472",
-    "640x1536",
-    "704x1152",
-    "704x1216",
-    "704x1280",
-    "704x1344",
-    "704x1408",
-    "704x1472",
-    "736x1312",
-    "768x1088",
-    "768x1216",
-    "768x1280",
-    "768x1344",
-    "800x1280",
-    "832x960",
-    "832x1024",
-    "832x1088",
-    "832x1152",
-    "832x1216",
-    "832x1248",
-    "864x1152",
-    "896x960",
-    "896x1024",
-    "896x1088",
-    "896x1120",
-    "896x1152",
-    "960x832",
-    "960x896",
-    "960x1024",
-    "960x1088",
-    "1024x832",
-    "1024x896",
-    "1024x960",
-    "1024x1024",
-    "1088x768",
-    "1088x832",
-    "1088x896",
-    "1088x960",
-    "1120x896",
-    "1152x704",
-    "1152x832",
-    "1152x864",
-    "1152x896",
-    "1216x704",
-    "1216x768",
-    "1216x832",
-    "1248x832",
-    "1280x704",
-    "1280x768",
-    "1280x800",
-    "1312x736",
-    "1344x640",
-    "1344x704",
-    "1344x768",
-    "1408x576",
-    "1408x640",
-    "1408x704",
-    "1472x576",
-    "1472x640",
-    "1472x704",
-    "1536x512",
-    "1536x576",
-    "1536x640"
-]
+    # Using functions from apinode_utils.py to handle downloading and processing
+    image_bytesio = download_url_to_bytesio(image_url)  # Download image content to BytesIO
+    img_tensor = bytesio_to_image_tensor(image_bytesio, mode="RGB")  # Convert to torch.Tensor with RGB mode
 
-def download_and_process_images(image_urls):
-    """Helper function to download and process multiple images from URLs"""
-
-    # Initialize list to store image tensors
-    image_tensors = []
-
-    for image_url in image_urls:
-        # Using functions from apinode_utils.py to handle downloading and processing
-        image_bytesio = download_url_to_bytesio(image_url)  # Download image content to BytesIO
-        img_tensor = bytesio_to_image_tensor(image_bytesio, mode="RGB")  # Convert to torch.Tensor with RGB mode
-        image_tensors.append(img_tensor)
-
-    # Stack tensors to match (N, width, height, channels)
-    if image_tensors:
-        stacked_tensors = torch.cat(image_tensors, dim=0)
-    else:
-        raise Exception("No valid images were processed")
-
-    return stacked_tensors
-
-
-def display_image_urls_on_node(image_urls, node_id):
-    if node_id and image_urls:
-        if len(image_urls) == 1:
-            PromptServer.instance.send_progress_text(
-                f"Generated Image URL:\n{image_urls[0]}", node_id
-            )
-        else:
-            urls_text = "Generated Image URLs:\n" + "\n".join(
-                f"{i+1}. {url}" for i, url in enumerate(image_urls)
-            )
-            PromptServer.instance.send_progress_text(urls_text, node_id)
-
+    return img_tensor
 
 class IdeogramV1(ComfyNodeABC):
     """
-    Generates images using the Ideogram V1 model.
+    Generates images synchronously using the Ideogram V1 model.
+
+    Images links are available for a limited period of time; if you would like to keep the image, you must download it.
     """
 
     def __init__(self):
@@ -278,7 +156,7 @@ class IdeogramV1(ComfyNodeABC):
                 "aspect_ratio": (
                     IO.COMBO,
                     {
-                        "options": list(V1_V2_RATIO_MAP.keys()),
+                        "options": list(ASPECT_RATIO_MAPPING.keys()),
                         "default": "1:1",
                         "tooltip": "The aspect ratio for image generation.",
                     },
@@ -298,7 +176,6 @@ class IdeogramV1(ComfyNodeABC):
                         "min": 0,
                         "max": 2147483647,
                         "step": 1,
-                        "control_after_generate": True,
                         "display": "number",
                     },
                 ),
@@ -315,16 +192,12 @@ class IdeogramV1(ComfyNodeABC):
                     {"default": 1, "min": 1, "max": 8, "step": 1, "display": "number"},
                 ),
             },
-            "hidden": {
-                "auth_token": "AUTH_TOKEN_COMFY_ORG",
-                "comfy_api_key": "API_KEY_COMFY_ORG",
-                "unique_id": "UNIQUE_ID",
-            },
+            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
         }
 
     RETURN_TYPES = (IO.IMAGE,)
     FUNCTION = "api_call"
-    CATEGORY = "api node/image/Ideogram/v1"
+    CATEGORY = "api node/image/ideogram/v1"
     DESCRIPTION = cleandoc(__doc__ or "")
     API_NODE = True
 
@@ -337,11 +210,10 @@ class IdeogramV1(ComfyNodeABC):
         seed=0,
         negative_prompt="",
         num_images=1,
-        unique_id=None,
-        **kwargs,
+        auth_token=None,
     ):
         # Determine the model based on turbo setting
-        aspect_ratio = V1_V2_RATIO_MAP.get(aspect_ratio, None)
+        aspect_ratio = ASPECT_RATIO_MAPPING.get(aspect_ratio, None)
         model = "V_1_TURBO" if turbo else "V_1"
 
         operation = SynchronousOperation(
@@ -364,26 +236,26 @@ class IdeogramV1(ComfyNodeABC):
                     negative_prompt=negative_prompt if negative_prompt else None,
                 )
             ),
-            auth_kwargs=kwargs,
+            auth_token=auth_token,
         )
 
         response = operation.execute()
 
         if not response.data or len(response.data) == 0:
             raise Exception("No images were generated in the response")
+        image_url = response.data[0].url
 
-        image_urls = [image_data.url for image_data in response.data if image_data.url]
+        if not image_url:
+            raise Exception("No image URL was generated in the response")
 
-        if not image_urls:
-            raise Exception("No image URLs were generated in the response")
-
-        display_image_urls_on_node(image_urls, unique_id)
-        return (download_and_process_images(image_urls),)
+        return (download_and_process_image(image_url),)
 
 
 class IdeogramV2(ComfyNodeABC):
     """
-    Generates images using the Ideogram V2 model.
+    Generates images synchronously using the Ideogram V2 model.
+
+    Images links are available for a limited period of time; if you would like to keep the image, you must download it.
     """
 
     def __init__(self):
@@ -413,7 +285,7 @@ class IdeogramV2(ComfyNodeABC):
                 "aspect_ratio": (
                     IO.COMBO,
                     {
-                        "options": list(V1_V2_RATIO_MAP.keys()),
+                        "options": list(ASPECT_RATIO_MAPPING.keys()),
                         "default": "1:1",
                         "tooltip": "The aspect ratio for image generation. Ignored if resolution is not set to AUTO.",
                     },
@@ -421,7 +293,7 @@ class IdeogramV2(ComfyNodeABC):
                 "resolution": (
                     IO.COMBO,
                     {
-                        "options": list(V1_V1_RES_MAP.keys()),
+                        "options": list(RESOLUTION_MAPPING.keys()),
                         "default": "Auto",
                         "tooltip": "The resolution for image generation. If not set to AUTO, this overrides the aspect_ratio setting.",
                     },
@@ -441,14 +313,13 @@ class IdeogramV2(ComfyNodeABC):
                         "min": 0,
                         "max": 2147483647,
                         "step": 1,
-                        "control_after_generate": True,
                         "display": "number",
                     },
                 ),
                 "style_type": (
                     IO.COMBO,
                     {
-                        "options": ["AUTO", "GENERAL", "REALISTIC", "DESIGN", "RENDER_3D", "ANIME"],
+                        "options": ["NONE", "ANIME", "CINEMATIC", "CREATIVE", "DIGITAL_ART", "PHOTOGRAPHIC"],
                         "default": "NONE",
                         "tooltip": "Style type for generation (V2 only)",
                     },
@@ -474,16 +345,12 @@ class IdeogramV2(ComfyNodeABC):
                 #    },
                 #),
             },
-            "hidden": {
-                "auth_token": "AUTH_TOKEN_COMFY_ORG",
-                "comfy_api_key": "API_KEY_COMFY_ORG",
-                "unique_id": "UNIQUE_ID",
-            },
+            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
         }
 
     RETURN_TYPES = (IO.IMAGE,)
     FUNCTION = "api_call"
-    CATEGORY = "api node/image/Ideogram/v2"
+    CATEGORY = "api node/image/ideogram/v2"
     DESCRIPTION = cleandoc(__doc__ or "")
     API_NODE = True
 
@@ -499,11 +366,10 @@ class IdeogramV2(ComfyNodeABC):
         negative_prompt="",
         num_images=1,
         color_palette="",
-        unique_id=None,
-        **kwargs,
+        auth_token=None,
     ):
-        aspect_ratio = V1_V2_RATIO_MAP.get(aspect_ratio, None)
-        resolution = V1_V1_RES_MAP.get(resolution, None)
+        aspect_ratio = ASPECT_RATIO_MAPPING.get(aspect_ratio, None)
+        resolution = RESOLUTION_MAPPING.get(resolution, None)
         # Determine the model based on turbo setting
         model = "V_2_TURBO" if turbo else "V_2"
 
@@ -540,25 +406,26 @@ class IdeogramV2(ComfyNodeABC):
                     color_palette=color_palette if color_palette else None,
                 )
             ),
-            auth_kwargs=kwargs,
+            auth_token=auth_token,
         )
 
         response = operation.execute()
 
         if not response.data or len(response.data) == 0:
             raise Exception("No images were generated in the response")
+        image_url = response.data[0].url
 
-        image_urls = [image_data.url for image_data in response.data if image_data.url]
+        if not image_url:
+            raise Exception("No image URL was generated in the response")
 
-        if not image_urls:
-            raise Exception("No image URLs were generated in the response")
+        return (download_and_process_image(image_url),)
 
-        display_image_urls_on_node(image_urls, unique_id)
-        return (download_and_process_images(image_urls),)
 
 class IdeogramV3(ComfyNodeABC):
     """
-    Generates images using the Ideogram V3 model. Supports both regular image generation from text prompts and image editing with mask.
+    Generates images synchronously using the Ideogram V3 model.
+
+    Images links are available for a limited period of time; if you would like to keep the image, you must download it.
     """
 
     def __init__(self):
@@ -573,39 +440,17 @@ class IdeogramV3(ComfyNodeABC):
                     {
                         "multiline": True,
                         "default": "",
-                        "tooltip": "Prompt for the image generation or editing",
+                        "tooltip": "Prompt for the image generation",
                     },
                 ),
             },
             "optional": {
-                "image": (
-                    IO.IMAGE,
-                    {
-                        "default": None,
-                        "tooltip": "Optional reference image for image editing.",
-                    },
-                ),
-                "mask": (
-                    IO.MASK,
-                    {
-                        "default": None,
-                        "tooltip": "Optional mask for inpainting (white areas will be replaced)",
-                    },
-                ),
                 "aspect_ratio": (
                     IO.COMBO,
                     {
-                        "options": list(V3_RATIO_MAP.keys()),
+                        "options": list(ASPECT_RATIO_MAPPING.keys()),
                         "default": "1:1",
-                        "tooltip": "The aspect ratio for image generation. Ignored if resolution is not set to Auto.",
-                    },
-                ),
-                "resolution": (
-                    IO.COMBO,
-                    {
-                        "options": V3_RESOLUTIONS,
-                        "default": "Auto",
-                        "tooltip": "The resolution for image generation. If not set to Auto, this overrides the aspect_ratio setting.",
+                        "tooltip": "The aspect ratio for image generation.",
                     },
                 ),
                 "magic_prompt_option": (
@@ -623,7 +468,6 @@ class IdeogramV3(ComfyNodeABC):
                         "min": 0,
                         "max": 2147483647,
                         "step": 1,
-                        "control_after_generate": True,
                         "display": "number",
                     },
                 ),
@@ -631,171 +475,71 @@ class IdeogramV3(ComfyNodeABC):
                     IO.INT,
                     {"default": 1, "min": 1, "max": 8, "step": 1, "display": "number"},
                 ),
-                "rendering_speed": (
-                    IO.COMBO,
-                    {
-                        "options": ["BALANCED", "TURBO", "QUALITY"],
-                        "default": "BALANCED",
-                        "tooltip": "Controls the trade-off between generation speed and quality",
-                    },
-                ),
             },
-            "hidden": {
-                "auth_token": "AUTH_TOKEN_COMFY_ORG",
-                "comfy_api_key": "API_KEY_COMFY_ORG",
-                "unique_id": "UNIQUE_ID",
-            },
+            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
         }
 
     RETURN_TYPES = (IO.IMAGE,)
     FUNCTION = "api_call"
-    CATEGORY = "api node/image/Ideogram/v3"
+    CATEGORY = "api node/image/ideogram/v3"
     DESCRIPTION = cleandoc(__doc__ or "")
     API_NODE = True
 
     def api_call(
         self,
         prompt,
-        image=None,
-        mask=None,
-        resolution="Auto",
-        aspect_ratio="1:1",
+        aspect_ratio="ASPECT_1_1",
         magic_prompt_option="AUTO",
         seed=0,
         num_images=1,
-        rendering_speed="BALANCED",
-        unique_id=None,
-        **kwargs,
+        auth_token=None,
     ):
-        # Check if both image and mask are provided for editing mode
-        if image is not None and mask is not None:
-            # Edit mode
-            path = "/proxy/ideogram/ideogram-v3/edit"
+        aspect_ratio = ASPECT_RATIO_MAPPING.get(aspect_ratio, None)
+        # V3 model - no turbo option
+        model = "V_3"
 
-            # Process image and mask
-            input_tensor = image.squeeze().cpu()
-            # Resize mask to match image dimension
-            mask = resize_mask_to_image(mask, image, allow_gradient=False)
-            # Invert mask, as Ideogram API will edit black areas instead of white areas (opposite of convention).
-            mask = 1.0 - mask
+        operation = SynchronousOperation(
+            endpoint=ApiEndpoint(
+                path="/proxy/ideogram/generate",
+                method=HttpMethod.POST,
+                request_model=IdeogramGenerateRequest,
+                response_model=IdeogramGenerateResponse,
+            ),
+            request=IdeogramGenerateRequest(
+                image_request=ImageRequest(
+                    prompt=prompt,
+                    model=model,
+                    num_images=num_images,
+                    seed=seed,
+                    aspect_ratio=aspect_ratio if aspect_ratio != "ASPECT_1_1" else None,
+                    magic_prompt_option=(
+                        magic_prompt_option if magic_prompt_option != "AUTO" else None
+                    ),
+                )
+            ),
+            auth_token=auth_token,
+        )
 
-            # Validate mask dimensions match image
-            if mask.shape[1:] != image.shape[1:-1]:
-                raise Exception("Mask and Image must be the same size")
-
-            # Process image
-            img_np = (input_tensor.numpy() * 255).astype(np.uint8)
-            img = Image.fromarray(img_np)
-            img_byte_arr = io.BytesIO()
-            img.save(img_byte_arr, format="PNG")
-            img_byte_arr.seek(0)
-            img_binary = img_byte_arr
-            img_binary.name = "image.png"
-
-            # Process mask - white areas will be replaced
-            mask_np = (mask.squeeze().cpu().numpy() * 255).astype(np.uint8)
-            mask_img = Image.fromarray(mask_np)
-            mask_byte_arr = io.BytesIO()
-            mask_img.save(mask_byte_arr, format="PNG")
-            mask_byte_arr.seek(0)
-            mask_binary = mask_byte_arr
-            mask_binary.name = "mask.png"
-
-            # Create edit request
-            edit_request = IdeogramV3EditRequest(
-                prompt=prompt,
-                rendering_speed=rendering_speed,
-            )
-
-            # Add optional parameters
-            if magic_prompt_option != "AUTO":
-                edit_request.magic_prompt = magic_prompt_option
-            if seed != 0:
-                edit_request.seed = seed
-            if num_images > 1:
-                edit_request.num_images = num_images
-
-            # Execute the operation for edit mode
-            operation = SynchronousOperation(
-                endpoint=ApiEndpoint(
-                    path=path,
-                    method=HttpMethod.POST,
-                    request_model=IdeogramV3EditRequest,
-                    response_model=IdeogramGenerateResponse,
-                ),
-                request=edit_request,
-                files={
-                    "image": img_binary,
-                    "mask": mask_binary,
-                },
-                content_type="multipart/form-data",
-                auth_kwargs=kwargs,
-            )
-
-        elif image is not None or mask is not None:
-            # If only one of image or mask is provided, raise an error
-            raise Exception("Ideogram V3 image editing requires both an image AND a mask")
-        else:
-            # Generation mode
-            path = "/proxy/ideogram/ideogram-v3/generate"
-
-            # Create generation request
-            gen_request = IdeogramV3Request(
-                prompt=prompt,
-                rendering_speed=rendering_speed,
-            )
-
-            # Handle resolution vs aspect ratio
-            if resolution != "Auto":
-                gen_request.resolution = resolution
-            elif aspect_ratio != "1:1":
-                v3_aspect = V3_RATIO_MAP.get(aspect_ratio)
-                if v3_aspect:
-                    gen_request.aspect_ratio = v3_aspect
-
-            # Add optional parameters
-            if magic_prompt_option != "AUTO":
-                gen_request.magic_prompt = magic_prompt_option
-            if seed != 0:
-                gen_request.seed = seed
-            if num_images > 1:
-                gen_request.num_images = num_images
-
-            # Execute the operation for generation mode
-            operation = SynchronousOperation(
-                endpoint=ApiEndpoint(
-                    path=path,
-                    method=HttpMethod.POST,
-                    request_model=IdeogramV3Request,
-                    response_model=IdeogramGenerateResponse,
-                ),
-                request=gen_request,
-                auth_kwargs=kwargs,
-            )
-
-        # Execute the operation and process response
         response = operation.execute()
 
         if not response.data or len(response.data) == 0:
             raise Exception("No images were generated in the response")
+        image_url = response.data[0].url
 
-        image_urls = [image_data.url for image_data in response.data if image_data.url]
+        if not image_url:
+            raise Exception("No image URL was generated in the response")
 
-        if not image_urls:
-            raise Exception("No image URLs were generated in the response")
-
-        display_image_urls_on_node(image_urls, unique_id)
-        return (download_and_process_images(image_urls),)
+        return (download_and_process_image(image_url),)
 
 
 NODE_CLASS_MAPPINGS = {
     "IdeogramV1": IdeogramV1,
     "IdeogramV2": IdeogramV2,
-    "IdeogramV3": IdeogramV3,
+    #"IdeogramV3": IdeogramV3,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "IdeogramV1": "Ideogram V1",
     "IdeogramV2": "Ideogram V2",
-    "IdeogramV3": "Ideogram V3",
+    #"IdeogramV3": "Ideogram V3",
 }

@@ -21,13 +21,15 @@ from comfy_api_nodes.apis.client import (
 
 from comfy_api_nodes.apinode_utils import (
     downscale_image_tensor,
-    validate_and_cast_response,
-    validate_string,
+    validate_and_cast_response
 )
 
 class OpenAIDalle2(ComfyNodeABC):
     """
     Generates images synchronously via OpenAI's DALL·E 2 endpoint.
+
+    Uses the proxy at /proxy/openai/images/generations. Returned URLs are short‑lived,
+    so download or cache results if you need to keep them.
     """
 
     def __init__(self):
@@ -55,7 +57,6 @@ class OpenAIDalle2(ComfyNodeABC):
                         "max": 2**31 - 1,
                         "step": 1,
                         "display": "number",
-                        "control_after_generate": True,
                         "tooltip": "not implemented yet in backend",
                     },
                 ),
@@ -93,16 +94,12 @@ class OpenAIDalle2(ComfyNodeABC):
                     },
                 ),
             },
-            "hidden": {
-                "auth_token": "AUTH_TOKEN_COMFY_ORG",
-                "comfy_api_key": "API_KEY_COMFY_ORG",
-                "unique_id": "UNIQUE_ID",
-            },
+            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
         }
 
     RETURN_TYPES = (IO.IMAGE,)
     FUNCTION = "api_call"
-    CATEGORY = "api node/image/OpenAI"
+    CATEGORY = "api node/image/openai"
     DESCRIPTION = cleandoc(__doc__ or "")
     API_NODE = True
 
@@ -114,19 +111,15 @@ class OpenAIDalle2(ComfyNodeABC):
         mask=None,
         n=1,
         size="1024x1024",
-        unique_id=None,
-        **kwargs
+        auth_token=None,
     ):
-        validate_string(prompt, strip_whitespace=False)
         model = "dall-e-2"
         path = "/proxy/openai/images/generations"
-        content_type = "application/json"
         request_class = OpenAIImageGenerationRequest
         img_binary = None
 
         if image is not None and mask is not None:
             path = "/proxy/openai/images/edits"
-            content_type = "multipart/form-data"
             request_class = OpenAIImageEditRequest
 
             input_tensor = image.squeeze().cpu()
@@ -172,19 +165,21 @@ class OpenAIDalle2(ComfyNodeABC):
                 if img_binary
                 else None
             ),
-            content_type=content_type,
-            auth_kwargs=kwargs,
+            auth_token=auth_token,
         )
 
         response = operation.execute()
 
-        img_tensor = validate_and_cast_response(response, node_id=unique_id)
+        img_tensor = validate_and_cast_response(response)
         return (img_tensor,)
 
 
 class OpenAIDalle3(ComfyNodeABC):
     """
     Generates images synchronously via OpenAI's DALL·E 3 endpoint.
+
+    Uses the proxy at /proxy/openai/images/generations. Returned URLs are short‑lived,
+    so download or cache results if you need to keep them.
     """
 
     def __init__(self):
@@ -212,7 +207,6 @@ class OpenAIDalle3(ComfyNodeABC):
                         "max": 2**31 - 1,
                         "step": 1,
                         "display": "number",
-                        "control_after_generate": True,
                         "tooltip": "not implemented yet in backend",
                     },
                 ),
@@ -241,16 +235,12 @@ class OpenAIDalle3(ComfyNodeABC):
                     },
                 ),
             },
-            "hidden": {
-                "auth_token": "AUTH_TOKEN_COMFY_ORG",
-                "comfy_api_key": "API_KEY_COMFY_ORG",
-                "unique_id": "UNIQUE_ID",
-            },
+            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
         }
 
     RETURN_TYPES = (IO.IMAGE,)
     FUNCTION = "api_call"
-    CATEGORY = "api node/image/OpenAI"
+    CATEGORY = "api node/image/openai"
     DESCRIPTION = cleandoc(__doc__ or "")
     API_NODE = True
 
@@ -261,10 +251,8 @@ class OpenAIDalle3(ComfyNodeABC):
         style="natural",
         quality="standard",
         size="1024x1024",
-        unique_id=None,
-        **kwargs
+        auth_token=None,
     ):
-        validate_string(prompt, strip_whitespace=False)
         model = "dall-e-3"
 
         # build the operation
@@ -283,18 +271,21 @@ class OpenAIDalle3(ComfyNodeABC):
                 style=style,
                 seed=seed,
             ),
-            auth_kwargs=kwargs,
+            auth_token=auth_token,
         )
 
         response = operation.execute()
 
-        img_tensor = validate_and_cast_response(response, node_id=unique_id)
+        img_tensor = validate_and_cast_response(response)
         return (img_tensor,)
 
 
 class OpenAIGPTImage1(ComfyNodeABC):
     """
     Generates images synchronously via OpenAI's GPT Image 1 endpoint.
+
+    Uses the proxy at /proxy/openai/images/generations. Returned URLs are short‑lived,
+    so download or cache results if you need to keep them.
     """
 
     def __init__(self):
@@ -322,7 +313,6 @@ class OpenAIGPTImage1(ComfyNodeABC):
                         "max": 2**31 - 1,
                         "step": 1,
                         "display": "number",
-                        "control_after_generate": True,
                         "tooltip": "not implemented yet in backend",
                     },
                 ),
@@ -376,16 +366,12 @@ class OpenAIGPTImage1(ComfyNodeABC):
                     },
                 ),
             },
-            "hidden": {
-                "auth_token": "AUTH_TOKEN_COMFY_ORG",
-                "comfy_api_key": "API_KEY_COMFY_ORG",
-                "unique_id": "UNIQUE_ID",
-            },
+            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
         }
 
     RETURN_TYPES = (IO.IMAGE,)
     FUNCTION = "api_call"
-    CATEGORY = "api node/image/OpenAI"
+    CATEGORY = "api node/image/openai"
     DESCRIPTION = cleandoc(__doc__ or "")
     API_NODE = True
 
@@ -399,13 +385,10 @@ class OpenAIGPTImage1(ComfyNodeABC):
         mask=None,
         n=1,
         size="1024x1024",
-        unique_id=None,
-        **kwargs
+        auth_token=None,
     ):
-        validate_string(prompt, strip_whitespace=False)
         model = "gpt-image-1"
         path = "/proxy/openai/images/generations"
-        content_type="application/json"
         request_class = OpenAIImageGenerationRequest
         img_binaries = []
         mask_binary = None
@@ -414,7 +397,6 @@ class OpenAIGPTImage1(ComfyNodeABC):
         if image is not None:
             path = "/proxy/openai/images/edits"
             request_class = OpenAIImageEditRequest
-            content_type ="multipart/form-data"
 
             batch_size = image.shape[0]
 
@@ -437,10 +419,10 @@ class OpenAIGPTImage1(ComfyNodeABC):
                     files.append(("image[]", img_binary))
 
         if mask is not None:
-            if image is None:
-                raise Exception("Cannot use a mask without an input image")
             if image.shape[0] != 1:
                 raise Exception("Cannot use a mask with multiple image")
+            if image is None:
+                raise Exception("Cannot use a mask without an input image")
             if mask.shape[1:] != image.shape[1:-1]:
                 raise Exception("Mask and Image must be the same size")
             batch, height, width = mask.shape
@@ -476,13 +458,12 @@ class OpenAIGPTImage1(ComfyNodeABC):
                 size=size,
             ),
             files=files if files else None,
-            content_type=content_type,
-            auth_kwargs=kwargs,
+            auth_token=auth_token,
         )
 
         response = operation.execute()
 
-        img_tensor = validate_and_cast_response(response, node_id=unique_id)
+        img_tensor = validate_and_cast_response(response)
         return (img_tensor,)
 
 
