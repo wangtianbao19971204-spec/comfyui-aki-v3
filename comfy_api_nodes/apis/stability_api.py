@@ -51,50 +51,6 @@ class StabilityStylePreset(str, Enum):
     tile_texture = "tile-texture"
 
 
-class Stability_SD3_5_Model(str, Enum):
-    sd3_5_large = "sd3.5-large"
-    # sd3_5_large_turbo = "sd3.5-large-turbo"
-    sd3_5_medium = "sd3.5-medium"
-
-
-class Stability_SD3_5_GenerationMode(str, Enum):
-    text_to_image = "text-to-image"
-    image_to_image = "image-to-image"
-
-
-class StabilityStable3_5Request(BaseModel):
-    model: str = Field(...)
-    mode: str = Field(...)
-    prompt: str = Field(...)
-    negative_prompt: Optional[str] = Field(None)
-    aspect_ratio: Optional[str] = Field(None)
-    seed: Optional[int] = Field(None)
-    output_format: Optional[str] = Field(StabilityFormat.png.value)
-    image: Optional[str] = Field(None)
-    style_preset: Optional[str] = Field(None)
-    cfg_scale: float = Field(...)
-    strength: Optional[confloat(ge=0.0, le=1.0)] = Field(None)
-
-
-class StabilityUpscaleConservativeRequest(BaseModel):
-    prompt: str = Field(...)
-    negative_prompt: Optional[str] = Field(None)
-    seed: Optional[int] = Field(None)
-    output_format: Optional[str] = Field(StabilityFormat.png.value)
-    image: Optional[str] = Field(None)
-    creativity: Optional[confloat(ge=0.2, le=0.5)] = Field(None)
-
-
-class StabilityUpscaleCreativeRequest(BaseModel):
-    prompt: str = Field(...)
-    negative_prompt: Optional[str] = Field(None)
-    seed: Optional[int] = Field(None)
-    output_format: Optional[str] = Field(StabilityFormat.png.value)
-    image: Optional[str] = Field(None)
-    creativity: Optional[confloat(ge=0.1, le=0.5)] = Field(None)
-    style_preset: Optional[str] = Field(None)
-
-
 class StabilityStableUltraRequest(BaseModel):
     prompt: str = Field(...)
     negative_prompt: Optional[str] = Field(None)
@@ -111,17 +67,3 @@ class StabilityStableUltraResponse(BaseModel):
     finish_reason: Optional[str] = Field(None)
     seed: Optional[int] = Field(None)
 
-
-class StabilityResultsGetResponse(BaseModel):
-    image: Optional[str] = Field(None)
-    finish_reason: Optional[str] = Field(None)
-    seed: Optional[int] = Field(None)
-    id: Optional[str] = Field(None)
-    name: Optional[str] = Field(None)
-    errors: Optional[list[str]] = Field(None)
-    status: Optional[str] = Field(None)
-    result: Optional[str] = Field(None)
-
-
-class StabilityAsyncResponse(BaseModel):
-    id: Optional[str] = Field(None)
