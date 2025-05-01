@@ -2266,6 +2266,7 @@ def init_builtin_extra_nodes():
         "nodes_luma.py",
         "nodes_recraft.py",
         "nodes_pixverse.py",
+        "nodes_pika.py",
     ]
 
     import_failed = []
