@@ -188,8 +188,22 @@ class VideoFromFile(VideoInput):
                 )
 
             streams = container.streams
+            open_kwargs = {
+                "mode": "w",
+                "options": {"movflags": "use_metadata_tags"}
+            }
 
-            open_kwargs = get_open_write_kwargs(path, container_format, format)
+            if not isinstance(path, str):
+                # Explicit format is needed for non-path destinations (like BytesIO)
+                output_format_str = (
+                    format.value.lower()
+                    if format != VideoContainer.AUTO
+                    else container.format.name
+                )
+                if "," in output_format_str:
+                    output_format_str = output_format_str.split(",")[0]
+                open_kwargs["format"] = output_format_str
+
             with av.open(path, **open_kwargs) as output_container:
                 # Copy over the original metadata
                 for key, value in container.metadata.items():
