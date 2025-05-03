@@ -164,8 +164,7 @@ class ApiClient:
     def __init__(
         self,
         base_url: str,
-        auth_token: Optional[str] = None,
-        comfy_api_key: Optional[str] = None,
+        api_key: Optional[str] = None,
         timeout: float = 3600.0,
         verify_ssl: bool = True,
         max_retries: int = 3,
