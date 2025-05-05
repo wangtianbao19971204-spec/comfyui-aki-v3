@@ -1,11 +1,3 @@
-import logging
-import time
-from typing import Callable
-import io
-
-from comfy.cli_args import args
-from comfy import utils
-
 """
 API Client Framework for api.comfy.org.
 
@@ -98,28 +90,18 @@ operation = PollingOperation(
 result = operation.execute(client=api_client)  # Returns the final ImageGenerationResult when done
 """
 
-from typing import (
-    Dict,
-    Type,
-    Optional,
-    Any,
-    TypeVar,
-    Generic,
-)
-from pydantic import BaseModel, Field
+import logging
+import time
+import io
+from typing import Dict, Type, Optional, Any, TypeVar, Generic, Callable
 from enum import Enum
 import json
 import requests
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin
 from pydantic import BaseModel, Field
-import uuid # For generating unique operation IDs
 
-from server import PromptServer
 from comfy.cli_args import args
 from comfy import utils
-from . import request_logger
-
-# Import models from your generated stubs
 
 T = TypeVar("T", bound=BaseModel)
 R = TypeVar("R", bound=BaseModel)
@@ -898,7 +880,7 @@ class SynchronousOperation(Generic[T, R]):
             raise
 
         except Exception as e:
-            logging.error(f"[ERROR] API Exception: {str(e)}")
+            logging.error(f"[DEBUG] API Exception: {str(e)}")
             raise Exception(str(e))
 
     def _parse_response(self, resp):
@@ -977,7 +959,7 @@ class PollingOperation(Generic[T, R]):
                 return TaskStatus.FAILED
             return TaskStatus.PENDING
         except Exception as e:
-            logging.debug(f"Error extracting status: {e}")
+            logging.error(f"Error extracting status: {e}")
             return TaskStatus.PENDING
 
     def _poll_until_complete(self, client: ApiClient) -> R:
@@ -1032,8 +1014,9 @@ class PollingOperation(Generic[T, R]):
                         progress.update(100)
                     return self.final_response
                 elif status == TaskStatus.FAILED:
-                    logging.debug(f"[DEBUG] Task failed: {json.dumps(resp)}")
-                    raise Exception(f"Task failed: {json.dumps(resp)}")
+                    message = f"Task failed: {json.dumps(resp)}"
+                    logging.error(f"[DEBUG] {message}")
+                    raise Exception(message)
                 else:
                     logging.debug("[DEBUG] Task still pending, continuing to poll...")
 
@@ -1044,5 +1027,5 @@ class PollingOperation(Generic[T, R]):
                 time.sleep(self.poll_interval)
 
             except Exception as e:
-                logging.debug(f"[DEBUG] Polling error: {str(e)}")
+                logging.error(f"[DEBUG] Polling error: {str(e)}")
                 raise Exception(f"Error while polling: {str(e)}")
