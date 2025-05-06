@@ -753,7 +753,6 @@ class CLIPType(Enum):
     WAN = 13
     HIDREAM = 14
     CHROMA = 15
-    ACE = 16
 
 
 def load_clip(ckpt_paths, embedding_directory=None, clip_type=CLIPType.STABLE_DIFFUSION, model_options={}):

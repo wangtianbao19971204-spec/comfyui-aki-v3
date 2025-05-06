@@ -31,7 +31,6 @@ class T5TokenizerOptions:
             }
         }
 
-    CATEGORY = "_for_testing/conditioning"
     RETURN_TYPES = ("CLIP",)
     FUNCTION = "set_options"
 
