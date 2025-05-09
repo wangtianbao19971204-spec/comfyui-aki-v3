@@ -95,7 +95,7 @@ class KlingApiError(Exception):
     pass
 
 
-def poll_until_finished(auth_token: str, api_endpoint: ApiEndpoint[Any, R]) -> R:
+def poll_until_finished(auth_kwargs: dict[str,str], api_endpoint: ApiEndpoint[Any, R]) -> R:
     """Polls the Kling API endpoint until the task reaches a terminal state, then returns the response."""
     return PollingOperation(
         poll_endpoint=api_endpoint,
@@ -108,7 +108,7 @@ def poll_until_finished(auth_token: str, api_endpoint: ApiEndpoint[Any, R]) -> R
             if response.data and response.data.task_status
             else None
         ),
-        auth_token=auth_token,
+        auth_kwargs=auth_kwargs,
     ).execute()
 
 
@@ -387,16 +387,19 @@ class KlingTextToVideoNode(KlingNodeBase):
                     },
                 ),
             },
-            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
+            "hidden": {
+                "auth_token": "AUTH_TOKEN_COMFY_ORG",
+                "comfy_api_key": "API_KEY_COMFY_ORG",
+            },
         }
 
     RETURN_TYPES = ("VIDEO", "STRING", "STRING")
     RETURN_NAMES = ("VIDEO", "video_id", "duration")
     DESCRIPTION = "Kling Text to Video Node"
 
-    def get_response(self, task_id: str, auth_token: str) -> KlingText2VideoResponse:
+    def get_response(self, task_id: str, auth_kwargs: dict[str,str]) -> KlingText2VideoResponse:
         return poll_until_finished(
-            auth_token,
+            auth_kwargs,
             ApiEndpoint(
                 path=f"{PATH_TEXT_TO_VIDEO}/{task_id}",
                 method=HttpMethod.GET,
@@ -415,7 +418,7 @@ class KlingTextToVideoNode(KlingNodeBase):
         camera_control: Optional[KlingCameraControl] = None,
         model_name: Optional[str] = None,
         duration: Optional[str] = None,
-        auth_token: Optional[str] = None,
+        **kwargs,
     ) -> tuple[VideoFromFile, str, str]:
         validate_prompts(prompt, negative_prompt, MAX_PROMPT_LENGTH_T2V)
         if model_name is None:
@@ -437,14 +440,14 @@ class KlingTextToVideoNode(KlingNodeBase):
                 aspect_ratio=KlingVideoGenAspectRatio(aspect_ratio),
                 camera_control=camera_control,
             ),
-            auth_token=auth_token,
+            auth_kwargs=kwargs,
         )
 
         task_creation_response = initial_operation.execute()
         validate_task_creation_response(task_creation_response)
 
         task_id = task_creation_response.data.task_id
-        final_response = self.get_response(task_id, auth_token)
+        final_response = self.get_response(task_id, auth_kwargs=kwargs)
         validate_video_result_response(final_response)
 
         video = get_video_from_response(final_response)
@@ -491,7 +494,10 @@ class KlingCameraControlT2VNode(KlingTextToVideoNode):
                     },
                 ),
             },
-            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
+            "hidden": {
+                "auth_token": "AUTH_TOKEN_COMFY_ORG",
+                "comfy_api_key": "API_KEY_COMFY_ORG",
+            },
         }
 
     DESCRIPTION = "Transform text into cinematic videos with professional camera movements that simulate real-world cinematography. Control virtual camera actions including zoom, rotation, pan, tilt, and first-person view, while maintaining focus on your original text."
@@ -503,7 +509,7 @@ class KlingCameraControlT2VNode(KlingTextToVideoNode):
         cfg_scale: float,
         aspect_ratio: str,
         camera_control: Optional[KlingCameraControl] = None,
-        auth_token: Optional[str] = None,
+        **kwargs,
     ):
         return super().api_call(
             model_name=KlingVideoGenModelName.kling_v1,
@@ -514,7 +520,7 @@ class KlingCameraControlT2VNode(KlingTextToVideoNode):
             prompt=prompt,
             negative_prompt=negative_prompt,
             camera_control=camera_control,
-            auth_token=auth_token,
+            **kwargs,
         )
 
 
@@ -570,16 +576,19 @@ class KlingImage2VideoNode(KlingNodeBase):
                     enum_type=KlingVideoGenDuration,
                 ),
             },
-            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
+            "hidden": {
+                "auth_token": "AUTH_TOKEN_COMFY_ORG",
+                "comfy_api_key": "API_KEY_COMFY_ORG",
+            },
         }
 
     RETURN_TYPES = ("VIDEO", "STRING", "STRING")
     RETURN_NAMES = ("VIDEO", "video_id", "duration")
     DESCRIPTION = "Kling Image to Video Node"
 
-    def get_response(self, task_id: str, auth_token: str) -> KlingImage2VideoResponse:
+    def get_response(self, task_id: str, auth_kwargs: dict[str,str]) -> KlingImage2VideoResponse:
         return poll_until_finished(
-            auth_token,
+            auth_kwargs,
             ApiEndpoint(
                 path=f"{PATH_IMAGE_TO_VIDEO}/{task_id}",
                 method=HttpMethod.GET,
@@ -600,7 +609,7 @@ class KlingImage2VideoNode(KlingNodeBase):
         duration: str,
         camera_control: Optional[KlingCameraControl] = None,
         end_frame: Optional[torch.Tensor] = None,
-        auth_token: Optional[str] = None,
+        **kwargs,
     ) -> tuple[VideoFromFile]:
         validate_prompts(prompt, negative_prompt, MAX_PROMPT_LENGTH_I2V)
 
@@ -631,14 +640,14 @@ class KlingImage2VideoNode(KlingNodeBase):
                 duration=KlingVideoGenDuration(duration),
                 camera_control=camera_control,
             ),
-            auth_token=auth_token,
+            auth_kwargs=kwargs,
         )
 
         task_creation_response = initial_operation.execute()
         validate_task_creation_response(task_creation_response)
         task_id = task_creation_response.data.task_id
 
-        final_response = self.get_response(task_id, auth_token)
+        final_response = self.get_response(task_id, auth_kwargs=kwargs)
         validate_video_result_response(final_response)
 
         video = get_video_from_response(final_response)
@@ -688,7 +697,10 @@ class KlingCameraControlI2VNode(KlingImage2VideoNode):
                     },
                 ),
             },
-            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
+            "hidden": {
+                "auth_token": "AUTH_TOKEN_COMFY_ORG",
+                "comfy_api_key": "API_KEY_COMFY_ORG",
+            },
         }
 
     DESCRIPTION = "Transform still images into cinematic videos with professional camera movements that simulate real-world cinematography. Control virtual camera actions including zoom, rotation, pan, tilt, and first-person view, while maintaining focus on your original image."
@@ -701,7 +713,7 @@ class KlingCameraControlI2VNode(KlingImage2VideoNode):
         cfg_scale: float,
         aspect_ratio: str,
         camera_control: KlingCameraControl,
-        auth_token: Optional[str] = None,
+        **kwargs,
     ):
         return super().api_call(
             model_name=KlingVideoGenModelName.kling_v1_5,
@@ -713,7 +725,7 @@ class KlingCameraControlI2VNode(KlingImage2VideoNode):
             prompt=prompt,
             negative_prompt=negative_prompt,
             camera_control=camera_control,
-            auth_token=auth_token,
+            **kwargs,
         )
 
 
@@ -781,7 +793,10 @@ class KlingStartEndFrameNode(KlingImage2VideoNode):
                     },
                 ),
             },
-            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
+            "hidden": {
+                "auth_token": "AUTH_TOKEN_COMFY_ORG",
+                "comfy_api_key": "API_KEY_COMFY_ORG",
+            },
         }
 
     DESCRIPTION = "Generate a video sequence that transitions between your provided start and end images. The node creates all frames in between, producing a smooth transformation from the first frame to the last."
@@ -795,7 +810,7 @@ class KlingStartEndFrameNode(KlingImage2VideoNode):
         cfg_scale: float,
         aspect_ratio: str,
         mode: str,
-        auth_token: Optional[str] = None,
+        **kwargs,
     ):
         mode, duration, model_name = KlingStartEndFrameNode.get_mode_string_mapping()[
             mode
@@ -810,7 +825,7 @@ class KlingStartEndFrameNode(KlingImage2VideoNode):
             aspect_ratio=aspect_ratio,
             duration=duration,
             end_frame=end_frame,
-            auth_token=auth_token,
+            **kwargs,
         )
 
 
@@ -840,16 +855,19 @@ class KlingVideoExtendNode(KlingNodeBase):
                     IO.STRING, KlingVideoExtendRequest, "video_id", forceInput=True
                 ),
             },
-            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
+            "hidden": {
+                "auth_token": "AUTH_TOKEN_COMFY_ORG",
+                "comfy_api_key": "API_KEY_COMFY_ORG",
+            },
         }
 
     RETURN_TYPES = ("VIDEO", "STRING", "STRING")
     RETURN_NAMES = ("VIDEO", "video_id", "duration")
     DESCRIPTION = "Kling Video Extend Node. Extend videos made by other Kling nodes. The video_id is created by using other Kling Nodes."
 
-    def get_response(self, task_id: str, auth_token: str) -> KlingVideoExtendResponse:
+    def get_response(self, task_id: str, auth_kwargs: dict[str,str]) -> KlingVideoExtendResponse:
         return poll_until_finished(
-            auth_token,
+            auth_kwargs,
             ApiEndpoint(
                 path=f"{PATH_VIDEO_EXTEND}/{task_id}",
                 method=HttpMethod.GET,
@@ -864,7 +882,7 @@ class KlingVideoExtendNode(KlingNodeBase):
         negative_prompt: str,
         cfg_scale: float,
         video_id: str,
-        auth_token: Optional[str] = None,
+        **kwargs,
     ) -> tuple[VideoFromFile, str, str]:
         validate_prompts(prompt, negative_prompt, MAX_PROMPT_LENGTH_T2V)
         initial_operation = SynchronousOperation(
@@ -880,14 +898,14 @@ class KlingVideoExtendNode(KlingNodeBase):
                 cfg_scale=cfg_scale,
                 video_id=video_id,
             ),
-            auth_token=auth_token,
+            auth_kwargs=kwargs,
         )
 
         task_creation_response = initial_operation.execute()
         validate_task_creation_response(task_creation_response)
         task_id = task_creation_response.data.task_id
 
-        final_response = self.get_response(task_id, auth_token)
+        final_response = self.get_response(task_id, auth_kwargs=kwargs)
         validate_video_result_response(final_response)
 
         video = get_video_from_response(final_response)
@@ -900,9 +918,9 @@ class KlingVideoEffectsBase(KlingNodeBase):
     RETURN_TYPES = ("VIDEO", "STRING", "STRING")
     RETURN_NAMES = ("VIDEO", "video_id", "duration")
 
-    def get_response(self, task_id: str, auth_token: str) -> KlingVideoEffectsResponse:
+    def get_response(self, task_id: str, auth_kwargs: dict[str,str]) -> KlingVideoEffectsResponse:
         return poll_until_finished(
-            auth_token,
+            auth_kwargs,
             ApiEndpoint(
                 path=f"{PATH_VIDEO_EFFECTS}/{task_id}",
                 method=HttpMethod.GET,
@@ -920,7 +938,7 @@ class KlingVideoEffectsBase(KlingNodeBase):
         image_1: torch.Tensor,
         image_2: Optional[torch.Tensor] = None,
         mode: Optional[KlingVideoGenMode] = None,
-        auth_token: Optional[str] = None,
+        **kwargs,
     ):
         if dual_character:
             request_input_field = KlingDualCharacterEffectInput(
@@ -950,14 +968,14 @@ class KlingVideoEffectsBase(KlingNodeBase):
                 effect_scene=effect_scene,
                 input=request_input_field,
             ),
-            auth_token=auth_token,
+            auth_kwargs=kwargs,
         )
 
         task_creation_response = initial_operation.execute()
         validate_task_creation_response(task_creation_response)
         task_id = task_creation_response.data.task_id
 
-        final_response = self.get_response(task_id, auth_token)
+        final_response = self.get_response(task_id, auth_kwargs=kwargs)
         validate_video_result_response(final_response)
 
         video = get_video_from_response(final_response)
@@ -998,7 +1016,10 @@ class KlingDualCharacterVideoEffectNode(KlingVideoEffectsBase):
                     enum_type=KlingVideoGenDuration,
                 ),
             },
-            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
+            "hidden": {
+                "auth_token": "AUTH_TOKEN_COMFY_ORG",
+                "comfy_api_key": "API_KEY_COMFY_ORG",
+            },
         }
 
     DESCRIPTION = "Achieve different special effects when generating a video based on the effect_scene. First image will be positioned on left side, second on right side of the composite."
@@ -1013,7 +1034,7 @@ class KlingDualCharacterVideoEffectNode(KlingVideoEffectsBase):
         model_name: KlingCharacterEffectModelName,
         mode: KlingVideoGenMode,
         duration: KlingVideoGenDuration,
-        auth_token: Optional[str] = None,
+        **kwargs,
     ):
         video, _, duration = super().api_call(
             dual_character=True,
@@ -1023,7 +1044,7 @@ class KlingDualCharacterVideoEffectNode(KlingVideoEffectsBase):
             duration=duration,
             image_1=image_left,
             image_2=image_right,
-            auth_token=auth_token,
+            **kwargs,
         )
         return video, duration
 
@@ -1059,7 +1080,10 @@ class KlingSingleImageVideoEffectNode(KlingVideoEffectsBase):
                     enum_type=KlingVideoGenDuration,
                 ),
             },
-            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
+            "hidden": {
+                "auth_token": "AUTH_TOKEN_COMFY_ORG",
+                "comfy_api_key": "API_KEY_COMFY_ORG",
+            },
         }
 
     DESCRIPTION = "Achieve different special effects when generating a video based on the effect_scene."
@@ -1070,7 +1094,7 @@ class KlingSingleImageVideoEffectNode(KlingVideoEffectsBase):
         effect_scene: KlingSingleImageEffectsScene,
         model_name: KlingSingleImageEffectModelName,
         duration: KlingVideoGenDuration,
-        auth_token: Optional[str] = None,
+        **kwargs,
     ):
         return super().api_call(
             dual_character=False,
@@ -1078,7 +1102,7 @@ class KlingSingleImageVideoEffectNode(KlingVideoEffectsBase):
             model_name=model_name,
             duration=duration,
             image_1=image,
-            auth_token=auth_token,
+            **kwargs,
         )
 
 
@@ -1096,10 +1120,10 @@ class KlingLipSyncBase(KlingNodeBase):
                 f"Text is too long. Maximum length is {MAX_PROMPT_LENGTH_LIP_SYNC} characters."
             )
 
-    def get_response(self, task_id: str, auth_token: str) -> KlingLipSyncResponse:
+    def get_response(self, task_id: str, auth_kwargs: dict[str,str]) -> KlingLipSyncResponse:
         """Polls the Kling API endpoint until the task reaches a terminal state."""
         return poll_until_finished(
-            auth_token,
+            auth_kwargs,
             ApiEndpoint(
                 path=f"{PATH_LIP_SYNC}/{task_id}",
                 method=HttpMethod.GET,
@@ -1117,18 +1141,18 @@ class KlingLipSyncBase(KlingNodeBase):
         text: Optional[str] = None,
         voice_speed: Optional[float] = None,
         voice_id: Optional[str] = None,
-        auth_token: Optional[str] = None,
+        **kwargs
     ) -> tuple[VideoFromFile, str, str]:
         if text:
             self.validate_text(text)
 
         # Upload video to Comfy API and get download URL
-        video_url = upload_video_to_comfyapi(video, auth_token)
+        video_url = upload_video_to_comfyapi(video, auth_kwargs=kwargs)
         logging.info("Uploaded video to Comfy API. URL: %s", video_url)
 
         # Upload the audio file to Comfy API and get download URL
         if audio:
-            audio_url = upload_audio_to_comfyapi(audio, auth_token)
+            audio_url = upload_audio_to_comfyapi(audio, auth_kwargs=kwargs)
             logging.info("Uploaded audio to Comfy API. URL: %s", audio_url)
         else:
             audio_url = None
@@ -1152,14 +1176,14 @@ class KlingLipSyncBase(KlingNodeBase):
                     voice_id=voice_id,
                 ),
             ),
-            auth_token=auth_token,
+            auth_kwargs=kwargs,
         )
 
         task_creation_response = initial_operation.execute()
         validate_task_creation_response(task_creation_response)
         task_id = task_creation_response.data.task_id
 
-        final_response = self.get_response(task_id, auth_token)
+        final_response = self.get_response(task_id, auth_kwargs=kwargs)
         validate_video_result_response(final_response)
 
         video = get_video_from_response(final_response)
@@ -1182,7 +1206,10 @@ class KlingLipSyncAudioToVideoNode(KlingLipSyncBase):
                     enum_type=KlingLipSyncVoiceLanguage,
                 ),
             },
-            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
+            "hidden": {
+                "auth_token": "AUTH_TOKEN_COMFY_ORG",
+                "comfy_api_key": "API_KEY_COMFY_ORG",
+            },
         }
 
     DESCRIPTION = "Kling Lip Sync Audio to Video Node. Syncs mouth movements in a video file to the audio content of an audio file."
@@ -1192,14 +1219,14 @@ class KlingLipSyncAudioToVideoNode(KlingLipSyncBase):
         video: VideoInput,
         audio: AudioInput,
         voice_language: str,
-        auth_token: Optional[str] = None,
+        **kwargs,
     ):
         return super().api_call(
             video=video,
             audio=audio,
             voice_language=voice_language,
             mode="audio2video",
-            auth_token=auth_token,
+            **kwargs,
         )
 
 
@@ -1288,7 +1315,10 @@ class KlingLipSyncTextToVideoNode(KlingLipSyncBase):
                     IO.FLOAT, KlingLipSyncInputObject, "voice_speed", slider=True
                 ),
             },
-            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
+            "hidden": {
+                "auth_token": "AUTH_TOKEN_COMFY_ORG",
+                "comfy_api_key": "API_KEY_COMFY_ORG",
+            },
         }
 
     DESCRIPTION = "Kling Lip Sync Text to Video Node. Syncs mouth movements in a video file to a text prompt."
@@ -1299,7 +1329,7 @@ class KlingLipSyncTextToVideoNode(KlingLipSyncBase):
         text: str,
         voice: str,
         voice_speed: float,
-        auth_token: Optional[str] = None,
+        **kwargs,
     ):
         voice_id, voice_language = KlingLipSyncTextToVideoNode.get_voice_config()[voice]
         return super().api_call(
@@ -1309,7 +1339,7 @@ class KlingLipSyncTextToVideoNode(KlingLipSyncBase):
             voice_id=voice_id,
             voice_speed=voice_speed,
             mode="text2video",
-            auth_token=auth_token,
+            **kwargs,
         )
 
 
@@ -1346,16 +1376,19 @@ class KlingVirtualTryOnNode(KlingImageGenerationBase):
                     enum_type=KlingVirtualTryOnModelName,
                 ),
             },
-            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
+            "hidden": {
+                "auth_token": "AUTH_TOKEN_COMFY_ORG",
+                "comfy_api_key": "API_KEY_COMFY_ORG",
+            },
         }
 
     DESCRIPTION = "Kling Virtual Try On Node. Input a human image and a cloth image to try on the cloth on the human."
 
     def get_response(
-        self, task_id: str, auth_token: Optional[str] = None
+        self, task_id: str, auth_kwargs: dict[str,str] = None
     ) -> KlingVirtualTryOnResponse:
         return poll_until_finished(
-            auth_token,
+            auth_kwargs,
             ApiEndpoint(
                 path=f"{PATH_VIRTUAL_TRY_ON}/{task_id}",
                 method=HttpMethod.GET,
@@ -1369,7 +1402,7 @@ class KlingVirtualTryOnNode(KlingImageGenerationBase):
         human_image: torch.Tensor,
         cloth_image: torch.Tensor,
         model_name: KlingVirtualTryOnModelName,
-        auth_token: Optional[str] = None,
+        **kwargs,
     ):
         initial_operation = SynchronousOperation(
             endpoint=ApiEndpoint(
@@ -1383,14 +1416,14 @@ class KlingVirtualTryOnNode(KlingImageGenerationBase):
                 cloth_image=tensor_to_base64_string(cloth_image),
                 model_name=model_name,
             ),
-            auth_token=auth_token,
+            auth_kwargs=kwargs,
         )
 
         task_creation_response = initial_operation.execute()
         validate_task_creation_response(task_creation_response)
         task_id = task_creation_response.data.task_id
 
-        final_response = self.get_response(task_id, auth_token)
+        final_response = self.get_response(task_id, auth_kwargs=kwargs)
         validate_image_result_response(final_response)
 
         images = get_images_from_response(final_response)
@@ -1458,16 +1491,19 @@ class KlingImageGenerationNode(KlingImageGenerationBase):
             "optional": {
                 "image": (IO.IMAGE, {}),
             },
-            "hidden": {"auth_token": "AUTH_TOKEN_COMFY_ORG"},
+            "hidden": {
+                "auth_token": "AUTH_TOKEN_COMFY_ORG",
+                "comfy_api_key": "API_KEY_COMFY_ORG",
+            },
         }
 
     DESCRIPTION = "Kling Image Generation Node. Generate an image from a text prompt with an optional reference image."
 
     def get_response(
-        self, task_id: str, auth_token: Optional[str] = None
+        self, task_id: str, auth_kwargs: Optional[dict[str,str]] = None
     ) -> KlingImageGenerationsResponse:
         return poll_until_finished(
-            auth_token,
+            auth_kwargs,
             ApiEndpoint(
                 path=f"{PATH_IMAGE_GENERATIONS}/{task_id}",
                 method=HttpMethod.GET,
@@ -1487,7 +1523,7 @@ class KlingImageGenerationNode(KlingImageGenerationBase):
         n: int,
         aspect_ratio: KlingImageGenAspectRatio,
         image: Optional[torch.Tensor] = None,
-        auth_token: Optional[str] = None,
+        **kwargs,
     ):
         self.validate_prompt(prompt, negative_prompt)
 
@@ -1512,14 +1548,14 @@ class KlingImageGenerationNode(KlingImageGenerationBase):
                 n=n,
                 aspect_ratio=aspect_ratio,
             ),
-            auth_token=auth_token,
+            auth_kwargs=kwargs,
         )
 
         task_creation_response = initial_operation.execute()
         validate_task_creation_response(task_creation_response)
         task_id = task_creation_response.data.task_id
 
-        final_response = self.get_response(task_id, auth_token)
+        final_response = self.get_response(task_id, auth_kwargs=kwargs)
         validate_image_result_response(final_response)
 
         images = get_images_from_response(final_response)
