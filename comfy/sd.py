@@ -451,7 +451,7 @@ class VAE:
                 self.latent_dim = 2
                 self.process_output = lambda audio: audio
                 self.process_input = lambda audio: audio
-                self.working_dtypes = [torch.bfloat16, torch.float16, torch.float32]
+                self.working_dtypes = [torch.bfloat16, torch.float32]
                 self.disable_offload = True
                 self.extra_1d_channel = 16
             else:
@@ -753,6 +753,7 @@ class CLIPType(Enum):
     WAN = 13
     HIDREAM = 14
     CHROMA = 15
+    ACE = 16
 
 
 def load_clip(ckpt_paths, embedding_directory=None, clip_type=CLIPType.STABLE_DIFFUSION, model_options={}):
