@@ -13,7 +13,6 @@ import os
 import re
 from io import BytesIO
 from inspect import cleandoc
-import torch
 
 from comfy.comfy_types import FileLocator
 
