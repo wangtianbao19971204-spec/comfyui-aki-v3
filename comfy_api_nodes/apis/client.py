@@ -853,7 +853,7 @@ class PollingOperation(Generic[T, R]):
             estimated_time_remaining = max(
                 0, int(self.estimated_duration) - int(time_completed)
             )
-            message = f"Task in progress: {time_completed:.0f}s / ~{self.estimated_duration:.0f}s (~{estimated_time_remaining:.0f}s remaining)"
+            message = f"Task in progress: {time_completed:.0f}s (~{estimated_time_remaining:.0f}s remaining)"
         else:
             message = f"Task in progress: {time_completed:.0f}s"
         self._display_text_on_node(message)
@@ -920,10 +920,11 @@ class PollingOperation(Generic[T, R]):
                     message = "Task completed successfully"
                     if self.result_url_extractor:
                         result_url = self.result_url_extractor(response_obj)
-                        message = f"Result URL: {result_url}"
-                        logging.debug(f"[DEBUG] {message}")
+                        if result_url:
+                            message = f"Result URL: {result_url}"
                     else:
                         message = "Task completed successfully!"
+                    logging.debug(f"[DEBUG] {message}")
                     self._display_text_on_node(message)
                     self.final_response = response_obj
                     if self.progress_extractor:
