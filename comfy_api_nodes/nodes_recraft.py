@@ -1,5 +1,6 @@
 from __future__ import annotations
 from inspect import cleandoc
+from typing import Optional
 from comfy.utils import ProgressBar
 from comfy.comfy_types.node_typing import IO
 from comfy_api_nodes.apis.recraft_api import (
@@ -28,6 +29,8 @@ from comfy_api_nodes.apinode_utils import (
     resize_mask_to_image,
     validate_string,
 )
+from server import PromptServer
+
 import folder_paths
 import json
 import os
@@ -486,6 +489,7 @@ class RecraftTextToImageNode:
             "hidden": {
                 "auth_token": "AUTH_TOKEN_COMFY_ORG",
                 "comfy_api_key": "API_KEY_COMFY_ORG",
+                "unique_id": "UNIQUE_ID",
             },
         }
 
@@ -498,6 +502,7 @@ class RecraftTextToImageNode:
         recraft_style: RecraftStyle = None,
         negative_prompt: str = None,
         recraft_controls: RecraftControls = None,
+        unique_id: Optional[str] = None,
         **kwargs,
     ):
         validate_string(prompt, strip_whitespace=False, max_length=1000)
@@ -534,8 +539,14 @@ class RecraftTextToImageNode:
         )
         response: RecraftImageGenerationResponse = operation.execute()
         images = []
+        urls = []
         for data in response.data:
             with handle_recraft_image_output():
+                if unique_id and data.url:
+                    urls.append(data.url)
+                    PromptServer.instance.send_progress_text(
+                        f"Result URL: {'\n'.join(urls)}", unique_id
+                    )
                 image = bytesio_to_image_tensor(
                     download_url_to_bytesio(data.url, timeout=1024)
                 )
@@ -861,6 +872,7 @@ class RecraftTextToVectorNode:
             "hidden": {
                 "auth_token": "AUTH_TOKEN_COMFY_ORG",
                 "comfy_api_key": "API_KEY_COMFY_ORG",
+                "unique_id": "UNIQUE_ID",
             },
         }
 
@@ -873,6 +885,7 @@ class RecraftTextToVectorNode:
         seed,
         negative_prompt: str = None,
         recraft_controls: RecraftControls = None,
+        unique_id: Optional[str] = None,
         **kwargs,
     ):
         validate_string(prompt, strip_whitespace=False, max_length=1000)
@@ -907,7 +920,14 @@ class RecraftTextToVectorNode:
         )
         response: RecraftImageGenerationResponse = operation.execute()
         svg_data = []
+        urls = []
         for data in response.data:
+            if unique_id and data.url:
+                urls.append(data.url)
+                # Print result on each iteration in case of error
+                PromptServer.instance.send_progress_text(
+                    f"Result URL: {' '.join(urls)}", unique_id
+                )
             svg_data.append(download_url_to_bytesio(data.url, timeout=1024))
 
         return (SVG(svg_data),)
