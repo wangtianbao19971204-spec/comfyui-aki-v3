@@ -94,21 +94,40 @@ from __future__ import annotations
 import logging
 import time
 import io
-from typing import Dict, Type, Optional, Any, TypeVar, Generic, Callable
+import socket
+from typing import Dict, Type, Optional, Any, TypeVar, Generic, Callable, Tuple
 from enum import Enum
 import json
 import requests
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 from pydantic import BaseModel, Field
+import uuid # For generating unique operation IDs
+
 from server import PromptServer
 from comfy.cli_args import args
 from comfy import utils
+from . import request_logger
 
 T = TypeVar("T", bound=BaseModel)
 R = TypeVar("R", bound=BaseModel)
 P = TypeVar("P", bound=BaseModel)  # For poll response
 
 PROGRESS_BAR_MAX = 100
+
+
+class NetworkError(Exception):
+    """Base exception for network-related errors with diagnostic information."""
+    pass
+
+
+class LocalNetworkError(NetworkError):
+    """Exception raised when local network connectivity issues are detected."""
+    pass
+
+
+class ApiServerError(NetworkError):
+    """Exception raised when the API server is unreachable but internet is working."""
+    pass
 
 
 class EmptyRequest(BaseModel):
@@ -327,6 +346,7 @@ class ApiClient:
         headers: Optional[Dict[str, str]] = None,
         content_type: str = "application/json",
         multipart_parser: Callable = None,
+        retry_count: int = 0,  # Used internally for tracking retries
     ) -> Dict[str, Any]:
         """
         Make an HTTP request to the API with automatic retries for transient errors.
@@ -339,6 +359,7 @@ class ApiClient:
             files: Files to upload
             headers: Additional headers
             content_type: Content type of the request. Defaults to application/json.
+            retry_count: Internal parameter for tracking retries, do not set manually
 
         Returns:
             Parsed JSON response
@@ -373,6 +394,16 @@ class ApiClient:
         else:
             payload_args = self._create_json_payload_args(data, request_headers)
 
+        operation_id = self._generate_operation_id(path)
+        request_logger.log_request_response(
+            operation_id=operation_id,
+            request_method=method,
+            request_url=url,
+            request_headers=request_headers,
+            request_params=params,
+            request_data=data if content_type == "application/json" else "[form-data or other]"
+        )
+
         try:
             response = requests.request(
                 method=method,
@@ -382,6 +413,31 @@ class ApiClient:
                 verify=self.verify_ssl,
                 **payload_args,
             )
+
+            # Check if we should retry based on status code
+            if (response.status_code in self.retry_status_codes and
+                retry_count < self.max_retries):
+
+                # Calculate delay with exponential backoff
+                delay = self.retry_delay * (self.retry_backoff_factor ** retry_count)
+
+                logging.warning(
+                    f"Request failed with status {response.status_code}. "
+                    f"Retrying in {delay:.2f}s ({retry_count + 1}/{self.max_retries})"
+                )
+
+                time.sleep(delay)
+                return self.request(
+                    method=method,
+                    path=path,
+                    params=params,
+                    data=data,
+                    files=files,
+                    headers=headers,
+                    content_type=content_type,
+                    multipart_parser=multipart_parser,
+                    retry_count=retry_count + 1,
+                )
 
             # Raise exception for error status codes
             response.raise_for_status()
@@ -531,12 +587,7 @@ class ApiClient:
                     if len(raw_content) < 200: # Arbitrary limit for display
                         user_display_error_message = f"API Error (raw): {raw_content}"
                     else:
-                        error_message = f"API Error: {error_json}"
-            except Exception as json_error:
-                # If we can't parse the JSON, fall back to the original error message
-                logging.debug(
-                    f"[DEBUG] Failed to parse error response: {str(json_error)}"
-                )
+                        user_display_error_message = f"API Error (raw, status {status_code})"
 
             request_logger.log_request_response(
                 operation_id=operation_id,
@@ -602,26 +653,126 @@ class ApiClient:
         upload_url: str,
         file: io.BytesIO | str,
         content_type: str | None = None,
+        max_retries: int = 3,
+        retry_delay: float = 1.0,
+        retry_backoff_factor: float = 2.0,
     ):
-        """Upload a file to the API. Make sure the file has a filename equal to what the url expects.
+        """Upload a file to the API with retry logic.
 
         Args:
             upload_url: The URL to upload to
             file: Either a file path string, BytesIO object, or tuple of (file_path, filename)
-            mime_type: Optional mime type to set for the upload
+            content_type: Optional mime type to set for the upload
+            max_retries: Maximum number of retry attempts
+            retry_delay: Initial delay between retries in seconds
+            retry_backoff_factor: Multiplier for the delay after each retry
         """
         headers = {}
         if content_type:
             headers["Content-Type"] = content_type
 
+        # Prepare the file data
         if isinstance(file, io.BytesIO):
             file.seek(0)  # Ensure we're at the start of the file
             data = file.read()
-            return requests.put(upload_url, data=data, headers=headers)
         elif isinstance(file, str):
             with open(file, "rb") as f:
                 data = f.read()
-                return requests.put(upload_url, data=data, headers=headers)
+        else:
+            raise ValueError("File must be either a BytesIO object or a file path string")
+
+        # Try the upload with retries
+        last_exception = None
+        operation_id = f"upload_{upload_url.split('/')[-1]}_{uuid.uuid4().hex[:8]}" # Simplified ID for uploads
+
+        # Log initial attempt (without full file data for brevity)
+        request_logger.log_request_response(
+            operation_id=operation_id,
+            request_method="PUT",
+            request_url=upload_url,
+            request_headers=headers,
+            request_data=f"[File data of type {content_type or 'unknown'}, size {len(data)} bytes]"
+        )
+
+        for retry_attempt in range(max_retries + 1):
+            try:
+                response = requests.put(upload_url, data=data, headers=headers)
+                response.raise_for_status()
+                request_logger.log_request_response(
+                    operation_id=operation_id,
+                    request_method="PUT", request_url=upload_url, # For context
+                    response_status_code=response.status_code,
+                    response_headers=dict(response.headers),
+                    response_content="File uploaded successfully." # Or response.text if available
+                )
+                return response
+
+            except (requests.ConnectionError, requests.Timeout, requests.HTTPError) as e:
+                last_exception = e
+                error_message_for_log = f"{type(e).__name__}: {str(e)}"
+                response_content_for_log = None
+                status_code_for_log = None
+                headers_for_log = None
+
+                if hasattr(e, 'response') and e.response is not None:
+                    status_code_for_log = e.response.status_code
+                    headers_for_log = dict(e.response.headers)
+                    try:
+                        response_content_for_log = e.response.json()
+                    except json.JSONDecodeError:
+                        response_content_for_log = e.response.content
+
+
+                request_logger.log_request_response(
+                    operation_id=operation_id,
+                    request_method="PUT", request_url=upload_url,
+                    response_status_code=status_code_for_log,
+                    response_headers=headers_for_log,
+                    response_content=response_content_for_log,
+                    error_message=error_message_for_log
+                )
+
+                if retry_attempt < max_retries:
+                    delay = retry_delay * (retry_backoff_factor ** retry_attempt)
+                    logging.warning(
+                        f"File upload failed: {str(e)}. "
+                        f"Retrying in {delay:.2f}s ({retry_attempt + 1}/{max_retries})"
+                    )
+                    time.sleep(delay)
+                else:
+                    break # Max retries reached
+
+        # If we've exhausted all retries, determine the final error type and raise
+        final_error_message = f"Failed to upload file after {max_retries + 1} attempts. Error: {str(last_exception)}"
+        try:
+            # Check basic internet connectivity
+            check_response = requests.get("https://www.google.com", timeout=5.0, verify=True) # Assuming verify=True is desired
+            if check_response.status_code >= 500: # Google itself has an issue (rare)
+                 final_error_message = (f"Failed to upload file. Internet connectivity check to Google failed "
+                                       f"(status {check_response.status_code}). Original error: {str(last_exception)}")
+                 # Not raising LocalNetworkError here as Google itself might be down.
+            # If Google is reachable, the issue is likely with the upload server or a more specific local problem
+            # not caught by a simple Google ping (e.g., DNS for the specific upload URL, firewall).
+            # The original last_exception is probably most relevant.
+
+        except (requests.RequestException, socket.error) as conn_check_exc:
+            # Could not reach Google, likely a local network issue
+            final_error_message = (f"Failed to upload file due to network connectivity issues "
+                                   f"(cannot reach Google: {str(conn_check_exc)}). "
+                                   f"Original upload error: {str(last_exception)}")
+            request_logger.log_request_response( # Log final failure reason
+                operation_id=operation_id,
+                request_method="PUT", request_url=upload_url,
+                error_message=final_error_message
+            )
+            raise LocalNetworkError(final_error_message) from last_exception
+
+        request_logger.log_request_response( # Log final failure reason if not LocalNetworkError
+            operation_id=operation_id,
+            request_method="PUT", request_url=upload_url,
+            error_message=final_error_message
+        )
+        raise Exception(final_error_message) from last_exception
 
 
 class ApiEndpoint(Generic[T, R]):
@@ -669,6 +820,9 @@ class SynchronousOperation(Generic[T, R]):
         verify_ssl: bool = True,
         content_type: str = "application/json",
         multipart_parser: Callable = None,
+        max_retries: int = 3,
+        retry_delay: float = 1.0,
+        retry_backoff_factor: float = 2.0,
     ):
         self.endpoint = endpoint
         self.request = request
@@ -685,6 +839,10 @@ class SynchronousOperation(Generic[T, R]):
         self.files = files
         self.content_type = content_type
         self.multipart_parser = multipart_parser
+        self.max_retries = max_retries
+        self.retry_delay = retry_delay
+        self.retry_backoff_factor = retry_backoff_factor
+
     def execute(self, client: Optional[ApiClient] = None) -> R:
         """Execute the API operation using the provided client or create one with retry support"""
         try:
@@ -711,11 +869,6 @@ class SynchronousOperation(Generic[T, R]):
                 for key, value in request_dict.items():
                     if isinstance(value, Enum):
                         request_dict[key] = value.value
-
-            if request_dict:
-               for key, value in request_dict.items():
-                   if isinstance(value, Enum):
-                       request_dict[key] = value.value
 
             # Debug log for request
             logging.debug(
@@ -756,7 +909,7 @@ class SynchronousOperation(Generic[T, R]):
             raise
 
         except Exception as e:
-            logging.error(f"[DEBUG] API Exception: {str(e)}")
+            logging.error(f"[ERROR] API Exception: {str(e)}")
             raise Exception(str(e))
 
     def _parse_response(self, resp):
@@ -797,6 +950,10 @@ class PollingOperation(Generic[T, R]):
         comfy_api_key: Optional[str] = None,
         auth_kwargs: Optional[Dict[str,str]] = None,
         poll_interval: float = 5.0,
+        max_poll_attempts: int = 120,  # Default max polling attempts (10 minutes with 5s interval)
+        max_retries: int = 3,  # Max retries per individual API call
+        retry_delay: float = 1.0,
+        retry_backoff_factor: float = 2.0,
         estimated_duration: Optional[float] = None,
         node_id: Optional[str] = None,
     ):
@@ -809,6 +966,10 @@ class PollingOperation(Generic[T, R]):
             self.auth_token = auth_kwargs.get("auth_token", self.auth_token)
             self.comfy_api_key = auth_kwargs.get("comfy_api_key", self.comfy_api_key)
         self.poll_interval = poll_interval
+        self.max_poll_attempts = max_poll_attempts
+        self.max_retries = max_retries
+        self.retry_delay = retry_delay
+        self.retry_backoff_factor = retry_backoff_factor
         self.estimated_duration = estimated_duration
 
         # Polling configuration
@@ -833,8 +994,23 @@ class PollingOperation(Generic[T, R]):
                     base_url=self.api_base,
                     auth_token=self.auth_token,
                     comfy_api_key=self.comfy_api_key,
+                    max_retries=self.max_retries,
+                    retry_delay=self.retry_delay,
+                    retry_backoff_factor=self.retry_backoff_factor,
                 )
             return self._poll_until_complete(client)
+        except LocalNetworkError as e:
+            # Provide clear message for local network issues
+            raise Exception(
+                f"Polling failed due to local network issues. Please check your internet connection. "
+                f"Details: {str(e)}"
+            ) from e
+        except ApiServerError as e:
+            # Provide clear message for API server issues
+            raise Exception(
+                f"Polling failed due to API server issues. The service may be experiencing problems. "
+                f"Please try again later. Details: {str(e)}"
+            ) from e
         except Exception as e:
             raise Exception(f"Error during polling: {str(e)}")
 
@@ -874,10 +1050,13 @@ class PollingOperation(Generic[T, R]):
     def _poll_until_complete(self, client: ApiClient) -> R:
         """Poll until the task is complete"""
         poll_count = 0
+        consecutive_errors = 0
+        max_consecutive_errors = min(5, self.max_retries * 2)  # Limit consecutive errors
+
         if self.progress_extractor:
             progress = utils.ProgressBar(PROGRESS_BAR_MAX)
 
-        while True:
+        while poll_count < self.max_poll_attempts:
             try:
                 poll_count += 1
                 logging.debug(f"[DEBUG] Polling attempt #{poll_count}")
@@ -904,8 +1083,12 @@ class PollingOperation(Generic[T, R]):
                     data=request_dict,
                 )
 
+                # Successfully got a response, reset consecutive error count
+                consecutive_errors = 0
+
                 # Parse response
                 response_obj = self.poll_endpoint.response_model.model_validate(resp)
+
                 # Check if task is complete
                 status = self._check_task_status(response_obj)
                 logging.debug(f"[DEBUG] Task Status: {status}")
@@ -946,6 +1129,38 @@ class PollingOperation(Generic[T, R]):
                     self._display_time_progress_on_node(time_completed)
                     time.sleep(1)
 
+            except (LocalNetworkError, ApiServerError) as e:
+                # For network-related errors, increment error count and potentially abort
+                consecutive_errors += 1
+                if consecutive_errors >= max_consecutive_errors:
+                    raise Exception(
+                        f"Polling aborted after {consecutive_errors} consecutive network errors: {str(e)}"
+                    ) from e
+
+                # Log the error but continue polling
+                logging.warning(
+                    f"Network error during polling (attempt {poll_count}/{self.max_poll_attempts}): {str(e)}. "
+                    f"Will retry in {self.poll_interval} seconds."
+                )
+                time.sleep(self.poll_interval)
+
             except Exception as e:
+                # For other errors, increment count and potentially abort
+                consecutive_errors += 1
+                if consecutive_errors >= max_consecutive_errors or status == TaskStatus.FAILED:
+                    raise Exception(
+                        f"Polling aborted after {consecutive_errors} consecutive errors: {str(e)}"
+                    ) from e
+
                 logging.error(f"[DEBUG] Polling error: {str(e)}")
-                raise Exception(f"Error while polling: {str(e)}")
+                logging.warning(
+                    f"Error during polling (attempt {poll_count}/{self.max_poll_attempts}): {str(e)}. "
+                    f"Will retry in {self.poll_interval} seconds."
+                )
+                time.sleep(self.poll_interval)
+
+        # If we've exhausted all polling attempts
+        raise Exception(
+            f"Polling timed out after {poll_count} attempts ({poll_count * self.poll_interval} seconds). "
+            f"The operation may still be running on the server but is taking longer than expected."
+        )

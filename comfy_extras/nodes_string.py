@@ -8,8 +8,7 @@ class StringConcatenate():
         return {
             "required": {
                 "string_a": (IO.STRING, {"multiline": True}),
-                "string_b": (IO.STRING, {"multiline": True}),
-                "delimiter": (IO.STRING, {"multiline": False, "default": ""})
+                "string_b": (IO.STRING, {"multiline": True})
             }
         }
 
@@ -17,8 +16,8 @@ class StringConcatenate():
     FUNCTION = "execute"
     CATEGORY = "utils/string"
 
-    def execute(self, string_a, string_b, delimiter, **kwargs):
-        return delimiter.join((string_a, string_b)),
+    def execute(self, string_a, string_b, **kwargs):
+        return string_a + string_b,
 
 class StringSubstring():
     @classmethod
