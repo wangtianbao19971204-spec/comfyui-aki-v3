@@ -375,7 +375,7 @@ app.registerExtension({
 						}
 
 						if(this.outputs[0].type == '*'){
-							if(link_info.type == '*') {
+							if(link_info.type == '*' && app.graph.getNodeById(link_info.target_id).slots[link_info.target_slot].type != '*') {
 								app.graph._nodes_by_id[link_info.target_id].disconnectInput(link_info.target_slot);
 							}
 							else {
@@ -404,7 +404,7 @@ app.registerExtension({
 							return; // fallback
 						}
 
-						if(origin_type == '*') {
+						if(origin_type == '*' && app.graph.getNodeById(link_info.origin_id).slots[link_info.origin_slot].type != '*') {
 							this.disconnectInput(link_info.target_slot);
 							return;
 						}
@@ -428,8 +428,9 @@ app.registerExtension({
 						!stackTrace.includes('LGraphNode.prototype.connect') && // for touch device
 						!stackTrace.includes('LGraphNode.connect') && // for mouse device
 						!stackTrace.includes('loadGraphData')) {
-							if(this.outputs[link_info.origin_slot].links.length == 0)
+							if(this.outputs[link_info.origin_slot].links.length == 0) {
 								this.removeOutput(link_info.origin_slot);
+							}
 					}
 				}
 
@@ -442,9 +443,12 @@ app.registerExtension({
 					slot_i++;
 				}
 
-				let last_slot = this.outputs[this.outputs.length - 1];
-				if (last_slot.slot_index == link_info.origin_slot) {
-					this.addOutput(`output${slot_i}`, this.outputs[0].type);
+				if(connected) {
+					// NOTE: node.slot_index is different with link_info.origin_slot
+					let last_slot_index = this.outputs.length - 1;
+					if (last_slot_index == link_info.origin_slot) {
+						this.addOutput(`output${slot_i}`, this.outputs[0].type);
+					}
 				}
 
 				let select_slot = this.inputs.find(x => x.name == "select");
@@ -527,7 +531,7 @@ app.registerExtension({
 						}
 
 						if(this.outputs[0].type == '*'){
-							if(link_info.type == '*') {
+							if(link_info.type == '*' && app.graph.getNodeById(link_info.target_id).slots[link_info.target_slot].type != '*') {
 								app.graph._nodes_by_id[link_info.target_id].disconnectInput(link_info.target_slot);
 							}
 							else {
@@ -563,7 +567,7 @@ app.registerExtension({
 								node.connect(link_info.origin_slot, node.id, 'input1');
 						}
 						
-						if(origin_type == '*') {
+						if(origin_type == '*' && app.graph.getNodeById(link_info.origin_id).slots[link_info.origin_slot].type != '*') {
 							this.disconnectInput(link_info.target_slot);
 							return;
 						}
