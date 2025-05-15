@@ -370,7 +370,7 @@ app.registerExtension({
 				if(type == 2) {
 					// connect output
 					if(connected){
-						if(app.graph._nodes_by_id[link_info.target_id].type == 'Reroute') {
+						if(app.graph._nodes_by_id[link_info.target_id]?.type == 'Reroute') {
 							app.graph._nodes_by_id[link_info.target_id].disconnectInput(link_info.target_slot);
 						}
 
@@ -392,7 +392,7 @@ app.registerExtension({
 					}
 				}
 				else {
-					if(app.graph._nodes_by_id[link_info.origin_id].type == 'Reroute')
+					if(app.graph._nodes_by_id[link_info.origin_id]?.type == 'Reroute')
 						this.disconnectInput(link_info.target_slot);
 
 					// connect input
