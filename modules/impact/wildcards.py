@@ -8,6 +8,7 @@ import numpy as np
 import threading
 from impact import utils
 from impact import config
+import logging
 
 
 wildcards_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "wildcards"))
@@ -358,6 +359,7 @@ def extract_lora_values(string):
         lbw = None
         lbw_a = None
         lbw_b = None
+        loader = None
 
         if len(item) > 0:
             lora = item[0]
@@ -376,6 +378,8 @@ def extract_lora_values(string):
                             lbw_b = safe_float(lbw_item[2:].strip())
                         elif lbw_item.strip() != '':
                             lbw = lbw_item
+                elif sub_item.startswith("LOADER="):
+                    loader = sub_item[7:]
 
         if a is None:
             a = 1.0
@@ -383,7 +387,7 @@ def extract_lora_values(string):
             b = a
 
         if lora is not None and lora not in added:
-            result.append((lora, a, b, lbw, lbw_a, lbw_b))
+            result.append((lora, a, b, lbw, lbw_a, lbw_b, loader))
             added.add(lora)
 
     return result
@@ -407,6 +411,8 @@ def resolve_lora_name(lora_name_cache, name):
             if x.endswith(name):
                 return x
 
+    return None
+
 
 def process_with_loras(wildcard_opt, model, clip, clip_encoder=None, seed=None, processed=None):
     """
@@ -427,7 +433,7 @@ def process_with_loras(wildcard_opt, model, clip, clip_encoder=None, seed=None, 
     loras = extract_lora_values(pass1)
     pass2 = remove_lora_tags(pass1)
 
-    for lora_name, model_weight, clip_weight, lbw, lbw_a, lbw_b in loras:
+    for lora_name, model_weight, clip_weight, lbw, lbw_a, lbw_b, loader in loras:
         lora_name_ext = lora_name.split('.')
         if ('.'+lora_name_ext[-1]) not in folder_paths.supported_pt_extensions:
             lora_name = lora_name+".safetensors"
@@ -441,26 +447,36 @@ def process_with_loras(wildcard_opt, model, clip, clip_encoder=None, seed=None, 
             path = None
 
         if path is not None:
-            print(f"LOAD LORA: {lora_name}: {model_weight}, {clip_weight}, LBW={lbw}, A={lbw_a}, B={lbw_b}")
+            logging.info(f"LOAD LORA: {lora_name}: {model_weight}, {clip_weight}, LBW={lbw}, A={lbw_a}, B={lbw_b}, LOADER={loader}")
 
-            def default_lora():
-                return nodes.LoraLoader().load_lora(model, clip, lora_name, model_weight, clip_weight)
-
-            if lbw is not None:
-                if 'LoraLoaderBlockWeight //Inspire' not in nodes.NODE_CLASS_MAPPINGS:
-                    utils.try_install_custom_node(
-                        'https://github.com/ltdrdata/ComfyUI-Inspire-Pack',
-                        "To use 'LBW=' syntax in wildcards, 'Inspire Pack' extension is required.")
-
-                    print(f"'LBW(Lora Block Weight)' is given, but the 'Inspire Pack' is not installed. The LBW= attribute is being ignored.")
-                    model, clip = default_lora()
+            if loader is not None:
+                if loader == 'nunchaku':
+                    if 'NunchakuFluxLoraLoader' not in nodes.NODE_CLASS_MAPPINGS:
+                        logging.warning(f"To use `LOADER=nunchaku`, 'ComfyUI-nunchaku' is required. The LOADER= attribute is being ignored.")
+                    cls = nodes.NODE_CLASS_MAPPINGS['NunchakuFluxLoraLoader']
+                    model = cls().load_lora(model, lora_name, model_weight)[0]
                 else:
-                    cls = nodes.NODE_CLASS_MAPPINGS['LoraLoaderBlockWeight //Inspire']
-                    model, clip, _ = cls().doit(model, clip, lora_name, model_weight, clip_weight, False, 0, lbw_a, lbw_b, "", lbw)
+                    logging.warning(f"LORA LOADER NOT FOUND: '{loader}'")
             else:
-                model, clip = default_lora()
+                def default_lora():
+                    return nodes.LoraLoader().load_lora(model, clip, lora_name, model_weight, clip_weight)
+
+                if lbw is not None:
+                    if 'LoraLoaderBlockWeight //Inspire' not in nodes.NODE_CLASS_MAPPINGS:
+                        utils.try_install_custom_node(
+                            'https://github.com/ltdrdata/ComfyUI-Inspire-Pack',
+                            "To use 'LBW=' syntax in wildcards, 'Inspire Pack' extension is required.")
+
+                        logging.warning(f"'LBW(Lora Block Weight)' is given, but the 'Inspire Pack' is not installed. The LBW= attribute is being ignored.")
+                        model, clip = default_lora()
+                    else:
+                        cls = nodes.NODE_CLASS_MAPPINGS['LoraLoaderBlockWeight //Inspire']
+                        model, clip, _ = cls().doit(model, clip, lora_name, model_weight, clip_weight, False, 0, lbw_a, lbw_b, "", lbw)
+
+                else:
+                    model, clip = default_lora()
         else:
-            print(f"LORA NOT FOUND: {orig_lora_name}")
+            logging.warning(f"LORA NOT FOUND: {orig_lora_name}")
 
     pass3 = [x.strip() for x in pass2.split("BREAK")]
     pass3 = [x for x in pass3 if x != '']
@@ -469,7 +485,7 @@ def process_with_loras(wildcard_opt, model, clip, clip_encoder=None, seed=None, 
         pass3 = ['']
 
     pass3_str = [f'[{x}]' for x in pass3]
-    print(f"CLIP: {str.join(' + ', pass3_str)}")
+    logging.info(f"CLIP: {str.join(' + ', pass3_str)}")
 
     result = None
 
