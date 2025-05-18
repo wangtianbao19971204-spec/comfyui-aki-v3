@@ -68,7 +68,6 @@ def process_wrap(cmd_str, cwd=None, handler=None, env=None):
 
 
 try:
-    import platform
     from torchvision.datasets.utils import download_url
     import impact.config
 
@@ -99,7 +98,7 @@ try:
                 if not os.path.exists(os.path.join(sam_path, "sam_vit_b_01ec64.pth")):
                     download_url("https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth", sam_path)
             except:
-                print(f"[Impact Pack] Failed to auto-download model files. Please download them manually.")
+                print("[Impact Pack] Failed to auto-download model files. Please download them manually.")
 
         if not os.path.exists(onnx_path):
             print(f"### ComfyUI-Impact-Pack: onnx model directory created ({onnx_path})")
@@ -108,18 +107,21 @@ try:
         impact.config.write_config()
 
         # Remove legacy subpack
-        subpack_path = os.path.join(os.path.dirname(__file__), 'impact_subpack')
-        if os.path.exists(subpack_path):
-            shutil.rmtree(subpack_path)
-            print(f"Legacy subpack is detected. '{subpack_path}' is removed.")
-            
-        subpack_path = os.path.join(os.path.dirname(__file__), 'subpack')
-        if os.path.exists(subpack_path):
-            shutil.rmtree(subpack_path)
-            print(f"Legacy subpack is detected. '{subpack_path}' is removed.")
+        try:
+            subpack_path = os.path.join(os.path.dirname(__file__), 'impact_subpack')
+            if os.path.exists(subpack_path):
+                shutil.rmtree(subpack_path)
+                print(f"Legacy subpack is detected. '{subpack_path}' is removed.")
+                
+            subpack_path = os.path.join(os.path.dirname(__file__), 'subpack')
+            if os.path.exists(subpack_path):
+                shutil.rmtree(subpack_path)
+                print(f"Legacy subpack is detected. '{subpack_path}' is removed.")
+        except:
+            print(f"ERROT: Failed to delete legacy subpack '{subpack_path}'\nPlease delete the folder after terminate ComfyUI.")
 
     install()
 
-except Exception as e:
+except Exception:
     print("[ERROR] ComfyUI-Impact-Pack: Dependency installation has failed. Please install manually.")
     traceback.print_exc()
