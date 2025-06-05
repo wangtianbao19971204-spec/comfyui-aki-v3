@@ -1,15 +1,26 @@
 {
   "entries": [
     {
-      "bytes": 3184,
+      "bytes": 3209,
       "git_mode": "100644",
-      "object": "49796cfe7ddf0d97776fb6cf04668d287367e0f7",
+      "object": "1d148136da55a9955e21d5bc1c52aa7cebd2124e",
       "path": "DeepTranslatorNode/config.json",
       "reasons": [
         "credential_bearing_history_payload",
         "literal_credential_assignment"
       ],
-      "sha256": "759c1a536bd056b452075d88cf6bc5e08080da284ef7c64b209438c6e0025035"
+      "sha256": "626429e8c2431c81cadef29d8b87ec2fa710b306c8a3beb0aab79b1740f3a0b7"
+    },
+    {
+      "bytes": 3209,
+      "git_mode": "100644",
+      "object": "1d148136da55a9955e21d5bc1c52aa7cebd2124e",
+      "path": "DeepTranslatorNode/config.json.example",
+      "reasons": [
+        "credential_bearing_history_payload",
+        "literal_credential_assignment"
+      ],
+      "sha256": "626429e8c2431c81cadef29d8b87ec2fa710b306c8a3beb0aab79b1740f3a0b7"
     }
   ],
   "original_payloads": "Retained only in the separate private original Git archive",
