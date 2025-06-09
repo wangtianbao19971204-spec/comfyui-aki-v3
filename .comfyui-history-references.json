@@ -69,17 +69,6 @@
         "private_runtime_directory"
       ],
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-    },
-    {
-      "bytes": 561767,
-      "git_mode": "100644",
-      "object": "564112ed1ff146eb5fe4ce629e36ade8a13fe037",
-      "path": "dist/comfyui_manager-4.0.0b4.tar.gz",
-      "reasons": [
-        "nested_archive_requires_review",
-        "truncated_gzip_payload"
-      ],
-      "sha256": "1dd84175330252bfc85237b4f1c61a101c24c22a3dd6590076f260d9f0e8e82d"
     }
   ],
   "original_payloads": "Retained only in the separate private original Git archive",
