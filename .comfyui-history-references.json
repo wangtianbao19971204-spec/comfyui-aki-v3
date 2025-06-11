@@ -2,7 +2,7 @@
   "entries": [
     {
       "bytes": 7289,
-      "git_mode": "100755",
+      "git_mode": "100644",
       "object": "47e943cfacabf7040b4af8cf4084ab91177f1b88",
       "path": "src/custom_controlnet_aux/diffusion_edge/taming/modules/autoencoder/lpips/vgg.pth",
       "reasons": [
@@ -12,7 +12,7 @@
     },
     {
       "bytes": 21639,
-      "git_mode": "100755",
+      "git_mode": "100644",
       "object": "b67b782e1425f362b23ed978a64ae9573167caec",
       "path": "src/custom_mesh_graphormer/modeling/data/mano_195_adjmat_indices.pt",
       "reasons": [
@@ -22,7 +22,7 @@
     },
     {
       "bytes": 173,
-      "git_mode": "100755",
+      "git_mode": "100644",
       "object": "a9a25c3aeebc713dbe4c3dfcf47ac5346d453786",
       "path": "src/custom_mesh_graphormer/modeling/data/mano_195_adjmat_size.pt",
       "reasons": [
@@ -32,7 +32,7 @@
     },
     {
       "bytes": 5663,
-      "git_mode": "100755",
+      "git_mode": "100644",
       "object": "b642f6051081a3bb6ddfd79811d12422bb448ed8",
       "path": "src/custom_mesh_graphormer/modeling/data/mano_195_adjmat_values.pt",
       "reasons": [
@@ -42,7 +42,7 @@
     },
     {
       "bytes": 48423,
-      "git_mode": "100755",
+      "git_mode": "100644",
       "object": "07699e2c3109124731505405443904f14b9d3e2b",
       "path": "src/custom_mesh_graphormer/modeling/data/smpl_431_adjmat_indices.pt",
       "reasons": [
@@ -52,7 +52,7 @@
     },
     {
       "bytes": 175,
-      "git_mode": "100755",
+      "git_mode": "100644",
       "object": "c93200decae7d244d3882028a4258d013d5dee7a",
       "path": "src/custom_mesh_graphormer/modeling/data/smpl_431_adjmat_size.pt",
       "reasons": [
@@ -62,7 +62,7 @@
     },
     {
       "bytes": 12359,
-      "git_mode": "100755",
+      "git_mode": "100644",
       "object": "0489ebaeb0f7960a58e56889aa65519c4adc38cf",
       "path": "src/custom_mesh_graphormer/modeling/data/smpl_431_adjmat_values.pt",
       "reasons": [
