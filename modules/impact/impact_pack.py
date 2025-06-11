@@ -811,6 +811,26 @@ class CoreMLDetailerHookProvider:
         return (hook, )
 
 
+class CustomSamplerDetailerHookProvider:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {"required": {
+                    "sampler": ("SAMPLER", ),
+                    },
+                }
+
+    RETURN_TYPES = ("DETAILER_HOOK",)
+    FUNCTION = "doit"
+
+    CATEGORY = "ImpactPack/Detailer"
+    
+    DESCRIPTION = "Apply a hook that allows you to use a custom sampler in the Detailer nodes. When using `DetailerHookCombine`, the sampler from the first hook is applied."
+
+    def doit(self, sampler):
+        hook = hooks.CustomSamplerDetailerHookProvider(sampler)
+        return (hook, )
+
+
 class CfgScheduleHookProvider:
     schedules = ["simple"]
 

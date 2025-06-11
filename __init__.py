@@ -122,6 +122,7 @@ NODE_CLASS_MAPPINGS = {
     "UnsamplerHookProvider": UnsamplerHookProvider,
     "CoreMLDetailerHookProvider": CoreMLDetailerHookProvider,
     "PreviewDetailerHookProvider": PreviewDetailerHookProvider,
+    "CustomSamplerDetailerHookProvider": CustomSamplerDetailerHookProvider,
 
     "DetailerHookCombine": DetailerHookCombine,
     "NoiseInjectionDetailerHookProvider": NoiseInjectionDetailerHookProvider,

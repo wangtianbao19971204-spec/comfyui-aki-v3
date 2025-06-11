@@ -109,6 +109,12 @@ class DetailerHookCombine(PixelKSampleHookCombine):
         noise_2nd, is_touched = self.hook2.get_custom_noise(seed, noise, is_touched)
         return noise, is_touched
 
+    def get_custom_sampler():
+        if self.hook1.get_custom_sampler() is not None:
+            return self.hook1.get_custom_sampler()
+        else:
+            return self.hook2.get_custom_sampler()
+
 
 class SimpleCfgScheduleHook(PixelKSampleHook):
     target_cfg = 0
@@ -172,6 +178,18 @@ class DetailerHook(PixelKSampleHook):
 
     def get_custom_noise(self, seed, noise, is_touched):
         return noise, is_touched
+
+    def get_custom_sampler(self):
+        return None
+
+
+class CustomSamplerDetailerHookProvider(DetailerHook):
+    def __init__(self, sampler):
+        super().__init__()
+        self.sampler = sampler
+
+    def get_custom_sampler(self):
+        return self.sampler
 
 
 # class CustomNoiseDetailerHookProvider(DetailerHook):

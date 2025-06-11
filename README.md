@@ -189,6 +189,7 @@ NOTE: The UltralyticsDetectorProvider node is not part of the ComfyUI-Impact-Pac
   * `PreviewDetailerHook` - Connecting this hook node helps provide assistance for viewing previews whenever SEGS Detailing tasks are completed. When working with a large number of SEGS, such as Make Tile SEGS, it allows for monitoring the situation as improvements progress incrementally.
     * Since this is the hook applied when pasting onto the original image, it has no effect on nodes like `SEGSDetailer`.
   * `VariationNoiseDetailerHookProvider` - Apply variation seed to the detailer. It can be applied in multiple stages through combine.
+  * `CustomSamplerDetailerHookProvider` - Apply a hook that allows you to use a custom sampler in the Detailer nodes. When using `DetailerHookCombine`, the sampler from the first hook is applied.
 
 ### Iterative Upscale nodes
   * `Iterative Upscale (Latent/on Pixel Space)` - The upscaler takes the input upscaler and splits the scale_factor into steps, then iteratively performs upscaling. 
