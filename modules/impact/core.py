@@ -1086,7 +1086,7 @@ class ONNXDetector:
     def detect(self, image, threshold, dilation, crop_factor, drop_size=1, detailer_hook=None):
         drop_size = max(drop_size, 1)
         try:
-            import impact.onnx as onnx
+            import impact.impact_onnx as onnx
 
             h = image.shape[1]
             w = image.shape[2]
