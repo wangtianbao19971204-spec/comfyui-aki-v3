@@ -25,7 +25,7 @@ class PixelKSampleHook:
     def post_decode(self, pixels):
         return pixels
 
-    def post_upscale(self, pixels):
+    def post_upscale(self, pixels, mask=None):
         return pixels
 
     def post_encode(self, samples):
@@ -64,8 +64,8 @@ class PixelKSampleHookCombine(PixelKSampleHook):
     def post_decode(self, pixels):
         return self.hook2.post_decode(self.hook1.post_decode(pixels))
 
-    def post_upscale(self, pixels):
-        return self.hook2.post_upscale(self.hook1.post_upscale(pixels))
+    def post_upscale(self, pixels, mask=None):
+        return self.hook2.post_upscale(self.hook1.post_upscale(pixels, mask), mask)
 
     def post_encode(self, samples):
         return self.hook2.post_encode(self.hook1.post_encode(samples))
@@ -109,11 +109,14 @@ class DetailerHookCombine(PixelKSampleHookCombine):
         noise_2nd, is_touched = self.hook2.get_custom_noise(seed, noise, is_touched)
         return noise, is_touched
 
-    def get_custom_sampler():
+    def get_custom_sampler(self):
         if self.hook1.get_custom_sampler() is not None:
             return self.hook1.get_custom_sampler()
         else:
             return self.hook2.get_custom_sampler()
+
+    def get_skip_sampling(self):
+        return self.hook1.get_skip_sampling() and self.hook2.get_skip_sampling()
 
 
 class SimpleCfgScheduleHook(PixelKSampleHook):
@@ -181,6 +184,9 @@ class DetailerHook(PixelKSampleHook):
 
     def get_custom_sampler(self):
         return None
+
+    def get_skip_sampling(self):
+        return False
 
 
 class CustomSamplerDetailerHookProvider(DetailerHook):
@@ -502,6 +508,27 @@ class SEGSLabelFilterDetailerHook(DetailerHook):
 
     def post_detection(self, segs):
         return segs_nodes.SEGSLabelFilter().doit(segs, "", self.labels)[0]
+
+
+class LamaRemoverDetailerHook(DetailerHook):
+    def __init__(self, mask_threshold, gaussblur_radius, skip_sampling):
+        super().__init__()
+        self.mask_threshold = mask_threshold
+        self.gaussblur_radius = gaussblur_radius
+        self.skip_sampling = skip_sampling
+
+    def post_upscale(self, img, mask=None):
+        if "LamaRemover" in nodes.NODE_CLASS_MAPPINGS:
+            lama_remover_obj = nodes.NODE_CLASS_MAPPINGS['LamaRemover']()
+        else:
+            utils.try_install_custom_node('https://github.com/Layer-norm/comfyui-lama-remover',
+                                          "To use 'LAMARemoverDetailerHookProvider', 'comfyui-lama-remover' nodepack is required.")
+            raise Exception("'LamaRemover' node is not installed.")
+
+        return lama_remover_obj.lama_remover(img, masks=mask, mask_threshold=self.mask_threshold, gaussblur_radius=self.gaussblur_radius, invert_mask=False)[0]
+
+    def get_skip_sampling(self):
+        return self.skip_sampling
 
 
 class PreviewDetailerHook(DetailerHook):

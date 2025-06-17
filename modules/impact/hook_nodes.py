@@ -1,6 +1,8 @@
 import sys
 from . import hooks
 from . import defs
+from . import utils
+import nodes
 
 
 class SEGSOrderedFilterDetailerHookProvider:
@@ -83,3 +85,24 @@ class PreviewDetailerHookProvider:
     def doit(self, quality, unique_id):
         hook = hooks.PreviewDetailerHook(unique_id, quality)
         return hook, hook
+
+
+class LamaRemoverDetailerHookProvider:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "mask_threshold":("INT", {"default": 250, "min": 0, "max": 255, "step": 1, "display": "slider"}),
+                "gaussblur_radius": ("INT", {"default": 8, "min": 0, "max": 20, "step": 1, "display": "slider"}),
+                "skip_sampling": ("BOOLEAN", {"default": True}),
+            }
+        }
+
+    RETURN_TYPES = ("DETAILER_HOOK", )
+    FUNCTION = "doit"
+
+    CATEGORY = "ImpactPack/Util"
+
+    def doit(self, mask_threshold, gaussblur_radius, skip_sampling):
+        hook = hooks.LamaRemoverDetailerHook(mask_threshold, gaussblur_radius, skip_sampling)
+        return (hook, )

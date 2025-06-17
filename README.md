@@ -190,6 +190,9 @@ NOTE: The UltralyticsDetectorProvider node is not part of the ComfyUI-Impact-Pac
     * Since this is the hook applied when pasting onto the original image, it has no effect on nodes like `SEGSDetailer`.
   * `VariationNoiseDetailerHookProvider` - Apply variation seed to the detailer. It can be applied in multiple stages through combine.
   * `CustomSamplerDetailerHookProvider` - Apply a hook that allows you to use a custom sampler in the Detailer nodes. When using `DetailerHookCombine`, the sampler from the first hook is applied.
+  * `LamaRemoverDetailerHookProvider` – Applies Lama Remover to the upscaled image during the detailing stage. If `skip_sampling` is set to True, Lama Remover can be used alone without the detailing stage, allowing it to simply remove detected regions.
+      * Not applicable for **AnimateDiff** detailers. When using `DetailerHookCombine`, `skip_sampling` is only applied if it is set to `True` for all hooks.
+      * To use this node, the node pack at [Layer-norm/comfyui-lama-remover](https://github.com/Layer-norm/comfyui-lama-remover) must be installed.
 
 ### Iterative Upscale nodes
   * `Iterative Upscale (Latent/on Pixel Space)` - The upscaler takes the input upscaler and splits the scale_factor into steps, then iteratively performs upscaling. 
@@ -489,3 +492,5 @@ BlenderNeok/[ComfyUI_Noise](https://github.com/BlenderNeko/ComfyUI_Noise) - The 
 WASasquatch/[was-node-suite-comfyui](https://github.com/WASasquatch/was-node-suite-comfyui) - A powerful custom node extensions of ComfyUI.
 
 Trung0246/[ComfyUI-0246](https://github.com/Trung0246/ComfyUI-0246) - Nice bypass hack!
+
+Layer-norm/[comfyui-lama-remover](https://github.com/Layer-norm/comfyui-lama-remover) - Required for using `LamaRemoverDetailerHook`.
