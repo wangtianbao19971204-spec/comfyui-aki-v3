@@ -1,17 +1,15 @@
-import copy
 import os
 import warnings
 
-import numpy
 import torch
+from sam2.sam2_image_predictor import SAM2ImagePredictor
 from segment_anything import SamPredictor
 
 from comfy_extras.nodes_custom_sampler import Noise_RandomNoise
 from impact.utils import *
 from collections import namedtuple
 import numpy as np
-from skimage.measure import label
-from PIL import ImageOps
+from PIL import ImageOps, Image
 
 import nodes
 import comfy_extras.nodes_upscale_model as model_upscale
@@ -26,6 +24,9 @@ from impact import utils
 from impact import impact_sampling
 from concurrent.futures import ThreadPoolExecutor
 import inspect
+from collections import OrderedDict
+from sam2.build_sam import build_sam2, build_sam2_video_predictor
+import torch.nn.functional as F
 
 
 try:
@@ -83,7 +84,7 @@ def set_previewbridge_image(node_id, file, item):
 
 
 def erosion_mask(mask, grow_mask_by):
-    mask = make_2d_mask(mask)
+    mask = utils.make_2d_mask(mask)
 
     w = mask.shape[1]
     h = mask.shape[0]
@@ -139,7 +140,7 @@ def mix_noise(from_noise, to_noise, strength, variation_method):
 
 class REGIONAL_PROMPT:
     def __init__(self, mask, sampler, variation_seed=0, variation_strength=0.0, variation_method='linear'):
-        mask = make_2d_mask(mask)
+        mask = utils.make_2d_mask(mask)
 
         self.mask = mask
         self.sampler = sampler
@@ -199,7 +200,7 @@ def create_segmasks(results):
 
 
 def gen_detection_hints_from_mask_area(x, y, mask, threshold, use_negative):
-    mask = make_2d_mask(mask)
+    mask = utils.make_2d_mask(mask)
 
     points = []
     plabs = []
@@ -318,7 +319,7 @@ def enhance_detail(image, model, clip, vae, guide_size, guide_size_for_bbox, max
     print(f"Detailer: segment upscale for ({bbox_w, bbox_h}) | crop region {w, h} x {upscale} -> {new_w, new_h}")
 
     # upscale
-    upscaled_image = tensor_resize(image, new_w, new_h)
+    upscaled_image = utils.tensor_resize(image, new_w, new_h)
 
     if detailer_hook is not None:
         upscaled_image = detailer_hook.post_upscale(upscaled_image, noise_mask)
@@ -339,7 +340,7 @@ def enhance_detail(image, model, clip, vae, guide_size, guide_size_for_bbox, max
                 print(f"[Impact Pack] ComfyUI is an outdated version.")
                 positive, negative, latent_image = imc_encode(positive, negative, upscaled_image, vae, noise_mask)
         else:
-            latent_image = to_latent_image(upscaled_image, vae, vae_tiled_encode=vae_tiled_encode)
+            latent_image = utils.to_latent_image(upscaled_image, vae, vae_tiled_encode=vae_tiled_encode)
             if noise_mask is not None:
                 latent_image['noise_mask'] = noise_mask
 
@@ -398,7 +399,7 @@ def enhance_detail(image, model, clip, vae, guide_size, guide_size_for_bbox, max
         refined_image = detailer_hook.post_decode(refined_image)
 
     # downscale
-    refined_image = tensor_resize(refined_image, w, h)
+    refined_image = utils.tensor_resize(refined_image, w, h)
 
     # prevent mixing of device
     refined_image = refined_image.cpu()
@@ -493,10 +494,10 @@ def enhance_detail_for_animatediff(image_frames, model, clip, vae, guide_size, g
         image = torch.from_numpy(image).unsqueeze(0)
 
         # upscale
-        upscaled_image = tensor_resize(image, new_w, new_h)
+        upscaled_image = utils.tensor_resize(image, new_w, new_h)
 
         # ksampler
-        samples = to_latent_image(upscaled_image, vae)['samples']
+        samples = utils.to_latent_image(upscaled_image, vae)['samples']
 
         if latent_frames is None:
             latent_frames = samples
@@ -621,6 +622,118 @@ class SAMWrapper:
         return sam_predict(predictor, points, plabs, bbox, threshold)
 
 
+class SAM2Wrapper:
+    def __init__(self, config, modelname, is_auto_mode, safe_to_gpu=None, device_mode="AUTO"):
+        self.config = config
+        self.modelname = modelname
+        self.image_predictor = None
+        self.video_predictor = None
+        self.device_mode = device_mode
+        self.safe_to_gpu = safe_to_gpu if safe_to_gpu is not None else SafeToGPU_stub()
+        self.is_auto_mode = is_auto_mode
+
+    def prepare_device(self):
+        pass
+
+    def prepare_image_device(self):
+        if self.is_auto_mode:
+            device = comfy.model_management.get_torch_device()
+            self.safe_to_gpu.to_device(self.image_predictor.model, device=device)
+
+    def prepare_video_device(self):
+        if self.is_auto_mode:
+            device = comfy.model_management.get_torch_device()
+            self.safe_to_gpu.to_device(self.video_predictor, device=device)
+
+    def release_device(self):
+        if self.is_auto_mode:
+            if self.image_predictor:
+                self.image_predictor.model.to(device="cpu")
+            if self.video_predictor:
+                self.video_predictor.to(device="cpu")
+
+    def predict(self, image, points, plabs, bbox, threshold):
+        if self.image_predictor is None:
+            self.image_predictor = SAM2ImagePredictor(build_sam2(self.config, self.modelname))
+
+        self.prepare_image_device()
+
+        self.image_predictor.set_image(image)
+
+        return sam_predict(self.image_predictor, points, plabs, bbox, threshold)
+
+    def predict_video_segs(self, image_frames, segs):
+        if self.video_predictor is None:
+            self.video_predictor = build_sam2_video_predictor(self.config, self.modelname)
+
+        self.prepare_video_device()
+
+        orig_video_height = image_frames.shape[1]
+        orig_video_width = image_frames.shape[2]
+
+        image_frames, padding = utils.resize_with_padding(image_frames, self.video_predictor.image_size, self.video_predictor.image_size)
+        image_frames = image_frames.permute(0, 3, 1, 2)
+
+        inference_state = {}
+        inference_state["images"] = image_frames
+        inference_state["num_frames"] = len(image_frames)
+        inference_state["video_height"] = self.video_predictor.image_size
+        inference_state["video_width"] = self.video_predictor.image_size
+        inference_state["offload_video_to_cpu"] = True
+        inference_state["offload_state_to_cpu"] = self.device_mode == "CPU"
+        inference_state["device"] = self.video_predictor.device
+
+        if inference_state["offload_state_to_cpu"]:
+            inference_state["storage_device"] = torch.device("cpu")
+        else:
+            inference_state["storage_device"] = self.video_predictor.device
+
+        inference_state["point_inputs_per_obj"] = {}
+        inference_state["mask_inputs_per_obj"] = {}
+        inference_state["cached_features"] = {}
+        inference_state["constants"] = {}
+
+        inference_state["obj_id_to_idx"] = OrderedDict()
+        inference_state["obj_idx_to_id"] = OrderedDict()
+        inference_state["obj_ids"] = []
+
+        inference_state["output_dict_per_obj"] = {}
+        inference_state["temp_output_dict_per_obj"] = {}
+        inference_state["frames_tracked_per_obj"] = {}
+        self.video_predictor._get_image_feature(inference_state, frame_idx=0, batch_size=1)
+
+        temp_masks = {}
+        for i in range(0, len(segs[1])):
+            bbox = segs[1][i].bbox
+
+            adjusted_bbox = utils.adjust_bbox_after_resize(
+                bbox,
+                (orig_video_height, orig_video_width),
+                (self.video_predictor.image_size, self.video_predictor.image_size),
+                padding
+            )
+
+            print(f"bbox={bbox} / adjusted_bbox={adjusted_bbox}")
+
+            points = [utils.center_of_bbox(adjusted_bbox)]
+            plabs = [1]
+            self.video_predictor.add_new_points_or_box(inference_state=inference_state, frame_idx=0, obj_id=i, points=points, labels=plabs, box=adjusted_bbox)
+            temp_masks[i] = []
+
+        for frame_idx, object_ids, masks in self.video_predictor.propagate_in_video(inference_state):
+            for i in object_ids:
+                m = masks[i]
+                m = m.permute(1, 2, 0)
+                temp_masks[i].append(m)
+
+        result = {}
+        for k, v in temp_masks.items():
+            m = torch.stack(v, dim=0)
+            m = utils.remove_padding(m, padding)
+            result[k] = utils.resize_with_padding(m, orig_video_width, orig_video_height)[0]
+
+        return result
+
 class ESAMWrapper:
     def __init__(self, model, device):
         self.model = model
@@ -646,10 +759,15 @@ class ESAMWrapper:
 def make_sam_mask(sam, segs, image, detection_hint, dilation,
                   threshold, bbox_expansion, mask_hint_threshold, mask_hint_use_negative):
 
-    if not hasattr(sam, 'sam_wrapper'):
+    if not hasattr(sam, 'sam_wrapper') and not isinstance(sam, SAM2Wrapper):
         raise Exception("[Impact Pack] Invalid SAMLoader is connected. Make sure 'SAMLoader (Impact)'.\nKnown issue: The ComfyUI-YOLO node overrides the SAMLoader (Impact), making it unusable. You need to uninstall ComfyUI-YOLO.\n\n\n")
 
-    sam_obj = sam.sam_wrapper
+
+    if isinstance(sam, SAM2Wrapper):
+        sam_obj = sam
+    else:
+        sam_obj = sam.sam_wrapper
+
     sam_obj.prepare_device()
 
     try:
@@ -667,7 +785,7 @@ def make_sam_mask(sam, segs, image, detection_hint, dilation,
 
             for i in range(len(segs)):
                 bbox = segs[i].bbox
-                center = center_of_bbox(segs[i].bbox)
+                center = utils.center_of_bbox(segs[i].bbox)
                 points.append(center)
 
                 # small point is background, big point is foreground
@@ -682,7 +800,7 @@ def make_sam_mask(sam, segs, image, detection_hint, dilation,
         else:
             for i in range(len(segs)):
                 bbox = segs[i].bbox
-                center = center_of_bbox(bbox)
+                center = utils.center_of_bbox(bbox)
 
                 x1 = max(bbox[0] - bbox_expansion, 0)
                 y1 = max(bbox[1] - bbox_expansion, 0)
@@ -728,7 +846,7 @@ def make_sam_mask(sam, segs, image, detection_hint, dilation,
                     plabs = [1, 1, 1, 1]
 
                 elif detection_hint == "mask-point-bbox":
-                    center = center_of_bbox(segs[i].bbox)
+                    center = utils.center_of_bbox(segs[i].bbox)
                     points.append(center)
                     plabs = [1]
 
@@ -749,14 +867,14 @@ def make_sam_mask(sam, segs, image, detection_hint, dilation,
                 total_masks += detected_masks
 
         # merge every collected masks
-        mask = combine_masks2(total_masks)
+        mask = utils.combine_masks2(total_masks)
 
     finally:
         sam_obj.release_device()
 
     if mask is not None:
         mask = mask.float()
-        mask = dilate_mask(mask.cpu().numpy(), dilation)
+        mask = utils.dilate_mask(mask.cpu().numpy(), dilation)
         mask = torch.from_numpy(mask)
     else:
         size = image.shape[0], image.shape[1]
@@ -807,7 +925,7 @@ def generate_detection_hints(image, seg, center, detection_hint, dilated_bbox, m
         plabs = [1, 1, 1, 1]
 
     elif detection_hint == "mask-point-bbox":
-        center = center_of_bbox(seg.bbox)
+        center = utils.center_of_bbox(seg.bbox)
         points.append(center)
         plabs = [1]
 
@@ -897,7 +1015,7 @@ def segs_scale_match(segs, target_shape):
             cropped_mask = cropped_mask.squeeze(0).squeeze(0).numpy()
 
         if cropped_image is not None:
-            cropped_image = tensor_resize(cropped_image if isinstance(cropped_image, torch.Tensor) else torch.from_numpy(cropped_image), new_w, new_h)
+            cropped_image = utils.tensor_resize(cropped_image if isinstance(cropped_image, torch.Tensor) else torch.from_numpy(cropped_image), new_w, new_h)
             cropped_image = cropped_image.numpy()
 
         new_seg = SEG(cropped_image, cropped_mask, seg.confidence, crop_region, bbox, seg.label, seg.control_net_wrapper)
@@ -937,7 +1055,7 @@ def make_sam_mask_segmented(sam, segs, image, detection_hint, dilation,
 
             for i in range(len(segs)):
                 bbox = segs[i].bbox
-                center = center_of_bbox(bbox)
+                center = utils.center_of_bbox(bbox)
                 points.append(center)
 
                 # small point is background, big point is foreground
@@ -952,7 +1070,7 @@ def make_sam_mask_segmented(sam, segs, image, detection_hint, dilation,
         else:
             for i in range(len(segs)):
                 bbox = segs[i].bbox
-                center = center_of_bbox(bbox)
+                center = utils.center_of_bbox(bbox)
                 x1 = max(bbox[0] - bbox_expansion, 0)
                 y1 = max(bbox[1] - bbox_expansion, 0)
                 x2 = min(bbox[2] + bbox_expansion, image.shape[1])
@@ -969,7 +1087,7 @@ def make_sam_mask_segmented(sam, segs, image, detection_hint, dilation,
                 total_masks += detected_masks
 
         # merge every collected masks
-        mask = combine_masks2(total_masks)
+        mask = utils.combine_masks2(total_masks)
 
     finally:
         sam_obj.release_device()
@@ -978,7 +1096,7 @@ def make_sam_mask_segmented(sam, segs, image, detection_hint, dilation,
 
     if mask is not None:
         mask = mask.float()
-        mask = dilate_mask(mask.cpu().numpy(), dilation)
+        mask = utils.dilate_mask(mask.cpu().numpy(), dilation)
         mask = torch.from_numpy(mask)
         mask = mask.to(device=mask_working_device)
     else:
@@ -995,7 +1113,7 @@ def make_sam_mask_segmented(sam, segs, image, detection_hint, dilation,
 
 
 def segs_bitwise_and_mask(segs, mask):
-    mask = make_2d_mask(mask)
+    mask = utils.make_2d_mask(mask)
 
     if mask is None:
         print("[SegsBitwiseAndMask] Cannot operate: MASK is empty.")
@@ -1021,7 +1139,7 @@ def segs_bitwise_and_mask(segs, mask):
 
 
 def segs_bitwise_subtract_mask(segs, mask):
-    mask = make_2d_mask(mask)
+    mask = utils.make_2d_mask(mask)
 
     if mask is None:
         print("[SegsBitwiseSubtractMask] Cannot operate: MASK is empty.")
@@ -1077,7 +1195,7 @@ def dilate_segs(segs, factor):
 
     new_segs = []
     for seg in segs[1]:
-        new_mask = dilate_mask(seg.cropped_mask, factor)
+        new_mask = utils.dilate_mask(seg.cropped_mask, factor)
         new_seg = SEG(seg.cropped_image, new_mask, seg.confidence, seg.crop_region, seg.bbox, seg.label, seg.control_net_wrapper)
         new_segs.append(new_seg)
 
@@ -1109,7 +1227,7 @@ class ONNXDetector:
                     x1, y1, x2, y2 = item_bbox
 
                     if x2 - x1 > drop_size and y2 - y1 > drop_size:  # minimum dimension must be (2,2) to avoid squeeze issue
-                        crop_region = make_crop_region(w, h, item_bbox, crop_factor)
+                        crop_region = utils.make_crop_region(w, h, item_bbox, crop_factor)
 
                         if detailer_hook is not None:
                             crop_region = item_bbox.post_crop_region(w, h, item_bbox, crop_region)
@@ -1119,7 +1237,7 @@ class ONNXDetector:
                         # prepare cropped mask
                         cropped_mask = np.zeros((crop_y2 - crop_y1, crop_x2 - crop_x1))
                         cropped_mask[y1 - crop_y1:y2 - crop_y1, x1 - crop_x1:x2 - crop_x1] = 1
-                        cropped_mask = dilate_mask(cropped_mask, dilation)
+                        cropped_mask = utils.dilate_mask(cropped_mask, dilation)
 
                         # make items. just convert the integer label to a string
                         item = SEG(None, cropped_mask, scores[i], crop_region, item_bbox, str(labels[i]), None)
@@ -1194,7 +1312,7 @@ def mask_to_segs(mask, combined, crop_factor, bbox_fill, drop_size=1, label='A',
                     np.max(indices[1]),
                     np.max(indices[0]),
                 )
-                crop_region = make_crop_region(
+                crop_region = utils.make_crop_region(
                     mask_i.shape[1], mask_i.shape[0], bbox, crop_factor
                 )
                 x1, y1, x2, y2 = crop_region
@@ -1228,7 +1346,7 @@ def mask_to_segs(mask, combined, crop_factor, bbox_fill, drop_size=1, label='A',
 
                 x, y, w, h = cv2.boundingRect(contour)
                 bbox = x, y, x + w, y + h
-                crop_region = make_crop_region(
+                crop_region = utils.make_crop_region(
                     mask_i.shape[1], mask_i.shape[0], bbox, crop_factor, crop_min_size
                 )
 
@@ -1302,7 +1420,7 @@ def mediapipe_facemesh_to_segs(image, crop_factor, bbox_fill, crop_min_size, dro
                 tensor = torch.from_numpy(convex_segment)
                 mask_tensor = torch.any(tensor != 0, dim=-1).float()
                 mask_tensor = mask_tensor.squeeze(0)
-                mask_tensor = torch.from_numpy(dilate_mask(mask_tensor.numpy(), dilation))
+                mask_tensor = torch.from_numpy(utils.dilate_mask(mask_tensor.numpy(), dilation))
                 mask_list.append(mask_tensor.unsqueeze(0))
 
         return mask_list
@@ -1537,7 +1655,7 @@ class TwoSamplersForMaskUpscaler:
                  hook_full_opt=None,
                  tile_size=512):
 
-        mask = make_2d_mask(mask)
+        mask = utils.make_2d_mask(mask)
 
         mask = mask.reshape((-1, 1, mask.shape[-2], mask.shape[-1]))
 
@@ -1555,7 +1673,7 @@ class TwoSamplersForMaskUpscaler:
     def upscale(self, step_info, samples, upscale_factor, save_temp_prefix=None):
         scale_method, sample_schedule, use_tiled_vae, base_sampler, mask_sampler, mask, vae = self.params
 
-        mask = make_2d_mask(mask)
+        mask = utils.make_2d_mask(mask)
 
         self.prepare_hook(step_info)
 
@@ -1585,7 +1703,7 @@ class TwoSamplersForMaskUpscaler:
     def upscale_shape(self, step_info, samples, w, h, save_temp_prefix=None):
         scale_method, sample_schedule, use_tiled_vae, base_sampler, mask_sampler, mask, vae = self.params
 
-        mask = make_2d_mask(mask)
+        mask = utils.make_2d_mask(mask)
 
         self.prepare_hook(step_info)
 
@@ -1641,7 +1759,7 @@ class TwoSamplersForMaskUpscaler:
             return cur_step % 2 == 0 or cur_step >= total_step - 1
 
     def do_samples(self, step_info, base_sampler, mask_sampler, sample_schedule, mask, upscaled_latent):
-        mask = make_2d_mask(mask)
+        mask = utils.make_2d_mask(mask)
 
         if self.is_full_sample_time(step_info, sample_schedule):
             print(f"step_info={step_info} / full time")
@@ -2085,7 +2203,7 @@ class BBoxDetectorBasedOnCLIPSeg:
     def detect(self, image, bbox_threshold, bbox_dilation, bbox_crop_factor, drop_size=1, detailer_hook=None):
         mask = self.detect_combined(image, bbox_threshold, bbox_dilation)
 
-        mask = make_2d_mask(mask)
+        mask = utils.make_2d_mask(mask)
 
         segs = mask_to_segs(mask, False, bbox_crop_factor, True, drop_size, detailer_hook=detailer_hook)
 
@@ -2115,7 +2233,7 @@ class BBoxDetectorBasedOnCLIPSeg:
         prompt = self.aux if self.prompt == '' and self.aux is not None else self.prompt
 
         mask, _, _ = CLIPSeg().segment_image(image, prompt, self.blur, threshold, dilation_factor)
-        mask = to_binary_mask(mask)
+        mask = utils.to_binary_mask(mask)
         return mask
 
     def setAux(self, x):

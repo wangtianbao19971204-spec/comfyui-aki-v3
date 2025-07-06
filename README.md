@@ -8,6 +8,7 @@ This node pack helps to conveniently enhance images through Detector, Detailer, 
 NOTE: The UltralyticsDetectorProvider node is not part of the ComfyUI-Impact-Pack. To use the UltralyticsDetectorProvider node, please install the ComfyUI-Impact-Subpack separately.
 
 ## NOTICE 
+* V8.18: Support [facebookresearch/sam2](https://github.com/facebookresearch/sam2) models
 * V8.0: The `Impact Subpack` is no longer installed automatically. To use `UltralyticsDetectorProvider` nodes, please install the `Impact Subpack` separately.
 * V7.6: Automatic installation is no longer supported. Please install using ComfyUI-Manager, or manually install requirements.txt and run install.py to complete the installation.
 * V7.0: Supports Switch based on Execution Model Inversion.
@@ -59,7 +60,7 @@ NOTE: The UltralyticsDetectorProvider node is not part of the ComfyUI-Impact-Pac
 
 ## Custom Nodes
 ### [Detector nodes](https://github.com/ltdrdata/ComfyUI-extension-tutorials/blob/Main/ComfyUI-Impact-Pack/tutorial/detectors.md)
-  * `SAMLoader` - Loads the SAM model.
+  * `SAMLoader (Impact)` - Loads the SAM model.
   * `ONNXDetectorProvider` - Loads the ONNX model to provide BBOX_DETECTOR.
   * `CLIPSegDetectorProvider` - Wrapper for CLIPSeg to provide BBOX_DETECTOR.
     * You need to install the ComfyUI-CLIPSeg node extension.
@@ -70,6 +71,9 @@ NOTE: The UltralyticsDetectorProvider node is not part of the ComfyUI-Impact-Pac
     * As a result, it outputs the `combined_mask`, which is a unified mask, and `batch_masks`, which are multiple masks grouped together in batch form.
     * While `batch_masks` may not be completely separated, it provides functionality to perform some level of segmentation.
   * `Simple Detector (SEGS)` - Operating primarily with `BBOX_DETECTOR`, and with the additional provision of `SAM_MODEL` or `SEGM_DETECTOR`, this node internally generates improved SEGS through mask operations on both *bbox* and *silhouette*. It serves as a convenient tool to simplify a somewhat intricate workflow.
+  * `Simple Detector for Video (SEGS)` – Performs detection on videos composed of image frames. Instead of using a single mask, it performs detection individually on each image frame and generates a SEGS object with a batch of masks. 
+  * `SAM2 Video Detector (SEGS)` – Similar to `Simple Detector for Video (SEGS)`, but utilizes SAM2’s video tracking technology to generate a SEGS object with a batch of masks. 
+      * To use this node, you must select a SAM2 model in the SAMLoader.
 
 ### ControlNet, IPAdapter
   * `ControlNetApply (SEGS)` - To apply ControlNet in SEGS, you need to use the Preprocessor Provider node from the Inspire Pack to utilize this node.
@@ -101,7 +105,7 @@ NOTE: The UltralyticsDetectorProvider node is not part of the ComfyUI-Impact-Pac
   * `DetailerDebug (SEGS)` - Refines the image based on SEGS. Additionally, it provides the ability to monitor the cropped image and the refined image of the cropped image.
     * To prevent regeneration caused by the seed that does not change every time when using 'external_seed', please disable the 'seed random generate' option in the 'Detailer...' node.
   * `MASK to SEGS` - Generates SEGS based on the mask.
-  * `MASK to SEGS For AnimateDiff` - Generates SEGS based on the mask for AnimateDiff.
+  * `MASK to SEGS For Video` - Generates SEGS based on the mask for Video. (Renamed from `MASK to SEGS For AnimateDiff`)
     * When using a single mask, convert it to SEGS to apply it to the entire frame.
     * When using a batch mask, the contour fill feature is disabled.
   * `MediaPipe FaceMesh to SEGS` - Separate each landmark from the mediapipe facemesh image to create labeled SEGS.

@@ -67,6 +67,54 @@ def tensor_convert_rgb(image, prefer_copy=True):
     raise ValueError(f"illegal conversion (channels: {n_channel} -> 3)")
 
 
+def resize_with_padding(image, target_w: int, target_h: int):
+    _tensor_check_image(image)
+    b, h, w, c = image.shape
+    image = image.permute(0, 3, 1, 2)  # B, C, H, W
+
+    scale = min(target_w / w, target_h / h)
+    new_w, new_h = int(w * scale), int(h * scale)
+
+    image = F.interpolate(image, size=(new_h, new_w), mode="bilinear", align_corners=False)
+
+    pad_left = (target_w - new_w) // 2
+    pad_right = target_w - new_w - pad_left
+    pad_top = (target_h - new_h) // 2
+    pad_bottom = target_h - new_h - pad_top
+
+    image = F.pad(image, (pad_left, pad_right, pad_top, pad_bottom), mode='constant', value=0)
+
+    image = image.permute(0, 2, 3, 1)  # B, H, W, C
+    return image, (pad_top, pad_bottom, pad_left, pad_right)
+
+
+def remove_padding(image, padding):
+    pad_top, pad_bottom, pad_left, pad_right = padding
+    return image[:, pad_top:image.shape[1] - pad_bottom, pad_left:image.shape[2] - pad_right, :]
+
+
+def adjust_bbox_after_resize(bbox, original_size, target_size, padding):
+    """
+    bbox: (x1, y1, x2, y2) in original image
+    original_size: (original_h, original_w)
+    target_size: (target_h, target_w)
+    padding: (pad_top, pad_bottom, pad_left, pad_right)
+    """
+    orig_h, orig_w = original_size
+    target_h, target_w = target_size
+    pad_top, pad_bottom, pad_left, pad_right = padding
+
+    scale = min(target_w / orig_w, target_h / orig_h)
+
+    # Apply scale
+    x1 = int(bbox[0] * scale + pad_left)
+    y1 = int(bbox[1] * scale + pad_top)
+    x2 = int(bbox[2] * scale + pad_left)
+    y2 = int(bbox[3] * scale + pad_top)
+
+    return x1, y1, x2, y2
+
+
 def general_tensor_resize(image, w: int, h: int):
     _tensor_check_image(image)
     image = image.permute(0, 3, 1, 2)
