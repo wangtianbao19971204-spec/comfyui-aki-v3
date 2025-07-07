@@ -2,7 +2,6 @@ import os
 import warnings
 
 import torch
-from sam2.sam2_image_predictor import SAM2ImagePredictor
 from segment_anything import SamPredictor
 
 from comfy_extras.nodes_custom_sampler import Noise_RandomNoise
@@ -25,9 +24,18 @@ from impact import impact_sampling
 from concurrent.futures import ThreadPoolExecutor
 import inspect
 from collections import OrderedDict
-from sam2.build_sam import build_sam2, build_sam2_video_predictor
 import torch.nn.functional as F
+import logging
+import sys
+import importlib
 
+is_sam2_available = importlib.util.find_spec("sam2")
+sam2_unavailable_message = f"\n----------------------------------------------------------------------------\n[Impact Pack] The SAM2 functionality is unavailable because the `facebook/sam2` dependency is not installed.\n\nInstallation command:\n{sys.executable} -m pip install git+https://github.com/facebookresearch/sam2\n----------------------------------------------------------------------------\n"
+if is_sam2_available:
+    from sam2.sam2_image_predictor import SAM2ImagePredictor
+    from sam2.build_sam import build_sam2, build_sam2_video_predictor
+else:
+    logging.warning(sam2_unavailable_message)
 
 try:
     from comfy_extras import nodes_differential_diffusion
@@ -653,6 +661,9 @@ class SAM2Wrapper:
                 self.video_predictor.to(device="cpu")
 
     def predict(self, image, points, plabs, bbox, threshold):
+        if not is_sam2_available:
+            raise Exception(sam2_unavailable_message)
+
         if self.image_predictor is None:
             self.image_predictor = SAM2ImagePredictor(build_sam2(self.config, self.modelname))
 
@@ -663,6 +674,9 @@ class SAM2Wrapper:
         return sam_predict(self.image_predictor, points, plabs, bbox, threshold)
 
     def predict_video_segs(self, image_frames, segs):
+        if not is_sam2_available:
+            raise Exception(sam2_unavailable_message)
+
         if self.video_predictor is None:
             self.video_predictor = build_sam2_video_predictor(self.config, self.modelname)
 
@@ -712,8 +726,6 @@ class SAM2Wrapper:
                 (self.video_predictor.image_size, self.video_predictor.image_size),
                 padding
             )
-
-            print(f"bbox={bbox} / adjusted_bbox={adjusted_bbox}")
 
             points = [utils.center_of_bbox(adjusted_bbox)]
             plabs = [1]
