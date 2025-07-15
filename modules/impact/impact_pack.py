@@ -2468,7 +2468,7 @@ class ImpactSchedulerAdapter:
     def INPUT_TYPES(s):
         return {"required": {
             "scheduler": (comfy.samplers.KSampler.SCHEDULERS, {"defaultInput": True, }),
-            "extra_scheduler": (['None', 'AYS SDXL', 'AYS SD1', 'AYS SVD', 'GITS[coeff=1.2]', 'LTXV[default]', 'OSS FLUX', 'OSS Wan'],),
+            "extra_scheduler": (['None', 'AYS SDXL', 'AYS SD1', 'AYS SVD', 'GITS[coeff=1.2]', 'LTXV[default]', 'OSS FLUX', 'OSS Wan', 'OSS Chroma'],),
         }}
 
     CATEGORY = "ImpactPack/Util"
