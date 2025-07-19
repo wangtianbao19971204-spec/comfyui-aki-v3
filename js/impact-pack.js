@@ -594,7 +594,12 @@ app.registerExtension({
 
 				let select_slot = this.inputs.find(x => x.name == "select");
 
-				if (!connected && (this.inputs.length > 3)) {
+				let widget_count = 0;
+				if(nodeData.name == 'ImpactSwitch' || nodeData.name == 'LatentSwitch' || nodeData.name == 'SEGSSwitch') {
+					widget_count += 1;
+				}
+
+				if (!connected && (this.inputs.length > widget_count+1)) {
 					if(
 						!stackTrace.includes('LGraphNode.prototype.connect') && // for touch device
 						!stackTrace.includes('LGraphNode.connect') && // for mouse device

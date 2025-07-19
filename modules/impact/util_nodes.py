@@ -298,7 +298,7 @@ class ImpactDummyInput:
 class MasksToMaskList:
     @classmethod
     def INPUT_TYPES(s):
-        return {"required": {
+        return {"optional": {
                         "masks": ("MASK", ),
                       }
                 }
@@ -473,7 +473,7 @@ class NthItemOfAnyList:
 class MakeImageList:
     @classmethod
     def INPUT_TYPES(s):
-        return {"required": {"image1": ("IMAGE",), }}
+        return {"optional": {"image1": ("IMAGE",), }}
 
     RETURN_TYPES = ("IMAGE",)
     OUTPUT_IS_LIST = (True,)
@@ -493,7 +493,7 @@ class MakeImageList:
 class MakeImageBatch:
     @classmethod
     def INPUT_TYPES(s):
-        return {"required": {"image1": ("IMAGE",), }}
+        return {"optional": {"image1": ("IMAGE",), }}
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "doit"
@@ -501,14 +501,13 @@ class MakeImageBatch:
     CATEGORY = "ImpactPack/Util"
 
     def doit(self, **kwargs):
-        image1 = kwargs['image1']
-        del kwargs['image1']
         images = [value for value in kwargs.values()]
 
-        if len(images) == 0:
-            return (image1,)
+        if len(images) == 1:
+            return (images[0],)
         else:
-            for image2 in images:
+            image1 = images[0]
+            for image2 in images[1:]:
                 if image1.shape[1:] != image2.shape[1:]:
                     image2 = comfy.utils.common_upscale(image2.movedim(-1, 1), image1.shape[2], image1.shape[1], "lanczos", "center").movedim(1, -1)
                 image1 = torch.cat((image1, image2), dim=0)
@@ -518,7 +517,7 @@ class MakeImageBatch:
 class MakeMaskBatch:
     @classmethod
     def INPUT_TYPES(s):
-        return {"required": {"mask1": ("MASK",), }}
+        return {"optional": {"mask1": ("MASK",), }}
 
     RETURN_TYPES = ("MASK",)
     FUNCTION = "doit"
@@ -526,14 +525,13 @@ class MakeMaskBatch:
     CATEGORY = "ImpactPack/Util"
 
     def doit(self, **kwargs):
-        mask1 = kwargs['mask1']
-        del kwargs['mask1']
         masks = [make_3d_mask(value) for value in kwargs.values()]
 
-        if len(masks) == 0:
-            return (mask1,)
+        if len(masks) == 1:
+            return (masks[0],)
         else:
-            for mask2 in masks:
+            mask1 = masks[0]
+            for mask2 in masks[1:]:
                 if mask1.shape[1:] != mask2.shape[1:]:
                     mask2 = comfy.utils.common_upscale(mask2.movedim(-1, 1), mask1.shape[2], mask1.shape[1], "lanczos", "center").movedim(1, -1)
                 mask1 = torch.cat((mask1, mask2), dim=0)
