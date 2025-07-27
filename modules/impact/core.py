@@ -407,6 +407,11 @@ def enhance_detail(image, model, clip, vae, guide_size, guide_size_for_bbox, max
         refined_image = detailer_hook.post_decode(refined_image)
 
     # downscale
+
+    # workaround: support WAN as an i2i model
+    if len(refined_image.shape) == 5:
+        refined_image = refined_image.squeeze(0)
+
     refined_image = utils.tensor_resize(refined_image, w, h)
 
     # prevent mixing of device
