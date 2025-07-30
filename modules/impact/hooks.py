@@ -566,7 +566,8 @@ class PreviewDetailerHook(DetailerHook):
         PromptServer.instance.send_sync("impact-preview", {'node_id': self.node_id, 'item': item})
 
     def post_paste(self, image):
-        asyncio.run(self.send(image))
+        loop = asyncio.get_running_loop()
+        loop.create_task(self.send(image))
         return image
 
 
