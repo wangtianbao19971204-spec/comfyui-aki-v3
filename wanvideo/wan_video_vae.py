@@ -1022,7 +1022,7 @@ class VideoVAE_(nn.Module):
     def encode(self, x):
         self.clear_cache()
         ## cache
-        pbar = ProgressBar(z.shape[2])
+        pbar = ProgressBar(x.shape[2])
         t = x.shape[2]
         iter_ = 1 + (t - 1) // 4
 
