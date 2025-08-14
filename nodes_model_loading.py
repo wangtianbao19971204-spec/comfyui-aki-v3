@@ -1,4 +1,5 @@
 import torch
+import torch.nn as nn
 import os, gc, uuid
 from .utils import log, apply_lora
 import numpy as np
@@ -736,6 +737,7 @@ class WanVideoModelLoader:
                 "vace_model": ("VACEPATH", {"default": None, "tooltip": "VACE model to use when not using model that has it included"}),
                 "fantasytalking_model": ("FANTASYTALKINGMODEL", {"default": None, "tooltip": "FantasyTalking model https://github.com/Fantasy-AMAP"}),
                 "multitalk_model": ("MULTITALKMODEL", {"default": None, "tooltip": "Multitalk model"}),
+                "fantasyportrait_model": ("FANTASYPORTRAITMODEL", {"default": None, "tooltip": "FantasyPortrait model"}),
             }
         }
 
@@ -745,7 +747,8 @@ class WanVideoModelLoader:
     CATEGORY = "WanVideoWrapper"
 
     def loadmodel(self, model, base_precision, load_device,  quantization,
-                  compile_args=None, attention_mode="sdpa", block_swap_args=None, lora=None, vram_management_args=None, vace_model=None, fantasytalking_model=None, multitalk_model=None):
+                  compile_args=None, attention_mode="sdpa", block_swap_args=None, lora=None, vram_management_args=None, vace_model=None, 
+                  fantasytalking_model=None, multitalk_model=None, fantasyportrait_model=None):
         assert not (vram_management_args is not None and block_swap_args is not None), "Can't use both block_swap_args and vram_management_args at the same time"
         
         lora_low_mem_load = merge_loras = False
@@ -970,7 +973,6 @@ class WanVideoModelLoader:
         #ReCamMaster
         if "blocks.0.cam_encoder.weight" in sd:
             log.info("ReCamMaster model detected, patching model...")
-            import torch.nn as nn
             for block in transformer.blocks:
                 block.cam_encoder = nn.Linear(12, dim)
                 block.projector = nn.Linear(dim, dim)
@@ -983,11 +985,25 @@ class WanVideoModelLoader:
         if fantasytalking_model is not None:
             log.info("FantasyTalking model detected, patching model...")
             context_dim = fantasytalking_model["sd"]["proj_model.proj.weight"].shape[0]
-            import torch.nn as nn
             for block in transformer.blocks:
                 block.cross_attn.k_proj = nn.Linear(context_dim, dim, bias=False)
                 block.cross_attn.v_proj = nn.Linear(context_dim, dim, bias=False)
             sd.update(fantasytalking_model["sd"])
+
+        # FantasyPortrait https://github.com/Fantasy-AMAP/fantasy-portrait/
+        if fantasyportrait_model is not None:
+            log.info("FantasyPortrait model detected, patching model...")
+            context_dim = fantasyportrait_model["sd"]["ip_adapter.blocks.0.cross_attn.ip_adapter_single_stream_k_proj.weight"].shape[1]
+
+            for block in transformer.blocks:
+                block.cross_attn.ip_adapter_single_stream_k_proj = nn.Linear(context_dim, dim, bias=False)
+                block.cross_attn.ip_adapter_single_stream_v_proj = nn.Linear(context_dim, dim, bias=False)
+            ip_adapter_sd = {}
+            for k, v in fantasyportrait_model["sd"].items():
+                if k.startswith("ip_adapter."):
+                    ip_adapter_sd[k.replace("ip_adapter.", "")] = v
+            sd.update(ip_adapter_sd)
+
         if multitalk_model is not None:
             # init audio module
             from .multitalk.multitalk import SingleStreamMultiAttention
@@ -1286,7 +1302,6 @@ class WanVideoModelLoader:
         for model in mm.current_loaded_models:
             if model._model() == patcher:
                 mm.current_loaded_models.remove(model)
-
         return (patcher,)
     
 # class WanVideoSaveModel:

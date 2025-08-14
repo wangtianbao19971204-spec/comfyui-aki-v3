@@ -1,0 +1,27 @@
+{
+  "entries": [
+    {
+      "bytes": 370619,
+      "git_mode": "100644",
+      "object": "1a718a4b62d62cb78bdfb61dd0bc099418401701",
+      "path": "fantasyportrait/models/face_det.onnx",
+      "reasons": [
+        "model_weight_payload"
+      ],
+      "sha256": "7ea8de1da304c1459a11f637798bb1140805365aeb3cf6637ca6d61909720aec"
+    },
+    {
+      "bytes": 2865751,
+      "git_mode": "100644",
+      "object": "42f49159562dcc831593d7d0b79d415d2c292d80",
+      "path": "fantasyportrait/models/face_landmark.onnx",
+      "reasons": [
+        "model_weight_payload"
+      ],
+      "sha256": "463aaa48dd24b9d3b966c76accf9a27f7c590a73a3827d5002a975e46bd54995"
+    }
+  ],
+  "original_payloads": "Retained only in the separate private original Git archive",
+  "purpose": "Public history reference; not a runnable restored revision",
+  "schema": 1
+}

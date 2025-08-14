@@ -1513,7 +1513,7 @@ class WanVideoScheduler: #WIP
     @classmethod
     def INPUT_TYPES(s):
         return {"required": {
-                "scheduler": (scheduler_list, {"default": "uni_pc"}),
+                "scheduler": (scheduler_list, {"default": "unipc"}),
             },
         }
 
@@ -1539,7 +1539,7 @@ class WanVideoSampler:
                 "shift": ("FLOAT", {"default": 5.0, "min": 0.0, "max": 1000.0, "step": 0.01}),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
                 "force_offload": ("BOOLEAN", {"default": True, "tooltip": "Moves the model to the offload device after sampling"}),
-                "scheduler": (scheduler_list, {"default": "uni_pc",}),
+                "scheduler": (scheduler_list, {"default": "unipc",}),
                 "riflex_freq_index": ("INT", {"default": 0, "min": 0, "max": 1000, "step": 1, "tooltip": "Frequency index for RIFLEX, disabled when 0, default 6. Allows for new frames to be generated after without looping"}),
             },
             "optional": {
@@ -1946,6 +1946,18 @@ class WanVideoSampler:
 
             shapes = [tuple(e.shape) for e in multitalk_audio_embedding]
             log.info(f"Multitalk audio features shapes (per speaker): {shapes}")
+
+        # FantasyPortrait
+        fantasy_portrait_input = None
+        fantasy_portrait_embeds = image_embeds.get("portrait_embeds", None)
+        if fantasy_portrait_embeds is not None:
+            print("Using FantasyPortrait embeddings")
+            fantasy_portrait_input = {
+                "adapter_proj": fantasy_portrait_embeds.get("adapter_proj", None),
+                "strength": fantasy_portrait_embeds.get("strength", 1.0),
+                "start_percent": fantasy_portrait_embeds.get("start_percent", 0.0),
+                "end_percent": fantasy_portrait_embeds.get("end_percent", 1.0),
+            }
     
         # MiniMax Remover
         minimax_latents = minimax_mask_latents = None
@@ -2260,7 +2272,7 @@ class WanVideoSampler:
         #region model pred
         def predict_with_cfg(z, cfg_scale, positive_embeds, negative_embeds, timestep, idx, image_cond=None, clip_fea=None, 
                              control_latents=None, vace_data=None, unianim_data=None, audio_proj=None, control_camera_latents=None, 
-                             add_cond=None, cache_state=None, context_window=None, multitalk_audio_embeds=None):
+                             add_cond=None, cache_state=None, context_window=None, multitalk_audio_embeds=None, fantasy_portrait_input=None):
             nonlocal transformer
             z = z.to(dtype)
             with torch.autocast(device_type=mm.get_autocast_device(device), dtype=dtype, enabled=("fp8" in model["quantization"])):
@@ -2420,7 +2432,8 @@ class WanVideoSampler:
                     "multitalk_audio": multitalk_audio_input if multitalk_audio_embedding is not None else None,
                     "ref_target_masks": ref_target_masks if multitalk_audio_embedding is not None else None,
                     "inner_t": [shot_len] if shot_len else None,
-                    "standin_input": standin_input
+                    "standin_input": standin_input,
+                    "fantasy_portrait_input": fantasy_portrait_input,
                 }
 
                 batch_size = 1
@@ -2910,6 +2923,10 @@ class WanVideoSampler:
                             if fantasytalking_embeds is not None:
                                 partial_audio_proj = audio_proj[:, c]
 
+                            if fantasy_portrait_input is not None:
+                                partial_fantasy_portrait_input = fantasy_portrait_input.copy()
+                                partial_fantasy_portrait_input["adapter_proj"] = fantasy_portrait_input["adapter_proj"][:, c]
+
                             partial_latent_model_input = latent_model_input[:, c]
                             if latents_to_insert is not None and c[0] != 0:
                                 partial_latent_model_input[:, :1] = latents_to_insert
@@ -2942,7 +2959,7 @@ class WanVideoSampler:
                                 cfg[idx], positive, 
                                 text_embeds["negative_prompt_embeds"], 
                                 partial_timestep, idx, partial_img_emb, clip_fea, partial_control_latents, partial_vace_context, partial_unianim_data,partial_audio_proj,
-                                partial_control_camera_latents, partial_add_cond, current_teacache, context_window=c)
+                                partial_control_camera_latents, partial_add_cond, current_teacache, context_window=c, fantasy_portrait_input=partial_fantasy_portrait_input)
 
                             if cache_args is not None:
                                 self.window_tracker.cache_states[window_id] = new_teacache
@@ -3213,7 +3230,7 @@ class WanVideoSampler:
                             text_embeds["prompt_embeds"], 
                             text_embeds["negative_prompt_embeds"], 
                             timestep, idx, image_cond, clip_fea, control_latents, vace_data, unianim_data, audio_proj, control_camera_latents, add_cond,
-                            cache_state=self.cache_state)
+                            cache_state=self.cache_state, fantasy_portrait_input=fantasy_portrait_input)
 
                     if latent_shift_loop:
                         #reverse latent shift
