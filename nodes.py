@@ -2923,6 +2923,7 @@ class WanVideoSampler:
                             if fantasytalking_embeds is not None:
                                 partial_audio_proj = audio_proj[:, c]
 
+                            partial_fantasy_portrait_input = None
                             if fantasy_portrait_input is not None:
                                 partial_fantasy_portrait_input = fantasy_portrait_input.copy()
                                 partial_fantasy_portrait_input["adapter_proj"] = fantasy_portrait_input["adapter_proj"][:, c]
