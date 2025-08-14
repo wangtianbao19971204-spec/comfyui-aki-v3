@@ -425,7 +425,7 @@ class WanVideoLoraSelect:
         lora = {
             "path": lora_path,
             "strength": strength,
-            "name": lora.split(".")[0],
+            "name": os.path.splitext(lora)[0],
             "blocks": blocks.get("selected_blocks", {}),
             "layer_filter": blocks.get("layer_filter", ""),
             "low_mem_load": low_mem_load,
@@ -490,7 +490,7 @@ class WanVideoLoraSelectMulti:
             loras_list.append({
                 "path": folder_paths.get_full_path("loras", lora_name),
                 "strength": s,
-                "name": lora_name.split(".")[0],
+                "name": os.path.splitext(lora_name)[0],
                 "blocks": blocks.get("selected_blocks", {}),
                 "layer_filter": blocks.get("layer_filter", ""),
                 "low_mem_load": low_mem_load,
