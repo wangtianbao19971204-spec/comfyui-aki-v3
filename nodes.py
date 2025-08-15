@@ -1628,6 +1628,7 @@ class WanVideoSampler:
         seed_g.manual_seed(seed)
 
         #region Scheduler
+        sample_scheduler = None
         if scheduler != "multitalk":
             sample_scheduler, timesteps = get_scheduler(scheduler, steps, shift, device, transformer.dim, flowedit_args, denoise_strength, sigmas=sigmas)
             log.info(f"sigmas: {sample_scheduler.sigmas}")
@@ -1665,14 +1666,15 @@ class WanVideoSampler:
 
         log.info(f"timesteps: {timesteps}")
         
-        if hasattr(sample_scheduler, 'timesteps'):
-            sample_scheduler.timesteps = timesteps
+        if sample_scheduler is not None:
+            if hasattr(sample_scheduler, 'timesteps'):
+                sample_scheduler.timesteps = timesteps
 
-        scheduler_step_args = {"generator": seed_g}
-        step_sig = inspect.signature(sample_scheduler.step)
-        for arg in list(scheduler_step_args.keys()):
-            if arg not in step_sig.parameters:
-                scheduler_step_args.pop(arg)
+            scheduler_step_args = {"generator": seed_g}
+            step_sig = inspect.signature(sample_scheduler.step)
+            for arg in list(scheduler_step_args.keys()):
+                if arg not in step_sig.parameters:
+                    scheduler_step_args.pop(arg)
        
         control_latents = control_camera_latents = clip_fea = clip_fea_neg = end_image = recammaster = camera_embed = unianim_data = None
         vace_data = vace_context = vace_scale = None
