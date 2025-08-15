@@ -1737,7 +1737,6 @@ class WanVideoSampler:
 
             control_embeds = image_embeds.get("control_embeds", None)
             if control_embeds is not None:
-                print("control_embeds:", control_embeds)
                 if transformer.in_dim not in [52, 48, 36, 32]:
                     raise ValueError("Control signal only works with Fun-Control model")
 
@@ -1953,7 +1952,7 @@ class WanVideoSampler:
         fantasy_portrait_input = None
         fantasy_portrait_embeds = image_embeds.get("portrait_embeds", None)
         if fantasy_portrait_embeds is not None:
-            print("Using FantasyPortrait embeddings")
+            log.info("Using FantasyPortrait embeddings")
             fantasy_portrait_input = {
                 "adapter_proj": fantasy_portrait_embeds.get("adapter_proj", None),
                 "strength": fantasy_portrait_embeds.get("strength", 1.0),
