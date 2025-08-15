@@ -43,7 +43,7 @@ def get_emo_feature(frame_list, face_aligner, pd_fpg_motion, device):
     
 
     comfy_pbar = ProgressBar(3)
-    landmark_list = det_landmarks(face_aligner, frame_list, comfy_pbar)[1]
+    _, landmark_list, rect_list = det_landmarks(face_aligner, frame_list, comfy_pbar) 
     emo_list = get_drive_expression_pd_fgc(pd_fpg_motion, frame_list, landmark_list, device)
     comfy_pbar.update(1)
 
@@ -64,7 +64,7 @@ def get_emo_feature(frame_list, face_aligner, pd_fpg_motion, device):
     #emo_feat_all = torch.cat(emo_feat_list, dim=0).unsqueeze(0)
     head_emo_feat_all = torch.cat(head_emo_feat_list, dim=0).unsqueeze(0)
 
-    return head_emo_feat_all
+    return head_emo_feat_all, rect_list
 
 class FantasyPortraitFaceDetector:
     @classmethod
@@ -76,8 +76,8 @@ class FantasyPortraitFaceDetector:
             },
         }
 
-    RETURN_TYPES = ("PORTRAIT_EMBEDS",)
-    RETURN_NAMES = ("portrait_embeds", )
+    RETURN_TYPES = ("PORTRAIT_EMBEDS", "BBOX")
+    RETURN_NAMES = ("portrait_embeds", "bbox")
     FUNCTION = "detect"
     CATEGORY = "WanVideoWrapper"
 
@@ -109,7 +109,7 @@ class FantasyPortraitFaceDetector:
         face_aligner, pd_fpg_motion = load_pd_fgc_model(pd_fpg_sd)
 
         pd_fpg_motion.to(device)
-        head_emo_feat_all = get_emo_feature(numpy_list, face_aligner, pd_fpg_motion, device=device)
+        head_emo_feat_all, rect_list = get_emo_feature(numpy_list, face_aligner, pd_fpg_motion, device=device)
         log.info(f"FantasyPortraitFaceDetector: input frames: {num_frames}")
         log.info(f"FantasyPortraitFaceDetector: features extracted for {head_emo_feat_all.shape[1]} frames")
         pd_fpg_motion.to(offload_device)
@@ -123,7 +123,7 @@ class FantasyPortraitFaceDetector:
         pos_idx_range = portrait_model.split_audio_adapter_sequence(adapter_proj.size(1), num_frames=num_frames)
         proj_split, context_lens = portrait_model.split_tensor_with_padding(adapter_proj, pos_idx_range, expand_length=0)
 
-        return (proj_split,)
+        return (proj_split, rect_list)
 
 class WanVideoAddFantasyPortrait:
     @classmethod
