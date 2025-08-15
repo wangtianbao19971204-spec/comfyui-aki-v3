@@ -73,6 +73,9 @@ class FantasyPortraitFaceDetector:
             "required": {
                 "portrait_model": ("FANTASYPORTRAITMODEL",),
                 "images": ("IMAGE",),
+                "adapter_scale": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01, "tooltip": "Scale for the adapter projection"}),
+                "mouth_scale": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01, "tooltip": "Scale for the mouth projection"}),
+                "emo_scale": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01, "tooltip": "Scale for the emotion projection"}),
             },
         }
 
@@ -81,7 +84,7 @@ class FantasyPortraitFaceDetector:
     FUNCTION = "detect"
     CATEGORY = "WanVideoWrapper"
 
-    def detect(self, images, portrait_model):
+    def detect(self, images, portrait_model, adapter_scale=1.0, mouth_scale=1.0, emo_scale=1.0):
         B, H, W, C = images.shape
         num_frames = ((B - 1) // 4) * 4 + 1
         images = images.clone()[:num_frames]
@@ -117,7 +120,7 @@ class FantasyPortraitFaceDetector:
         portrait_model = portrait_model["proj_model"]
 
         portrait_model.to(device)
-        adapter_proj = portrait_model.get_adapter_proj(head_emo_feat_all.to(device, dtype=portrait_model.dtype))
+        adapter_proj = portrait_model.get_adapter_proj(head_emo_feat_all.to(device, dtype=portrait_model.dtype), adapter_scale=adapter_scale, mouth_scale=mouth_scale, emo_scale=emo_scale)
         portrait_model.to(offload_device)
 
         pos_idx_range = portrait_model.split_audio_adapter_sequence(adapter_proj.size(1), num_frames=num_frames)
