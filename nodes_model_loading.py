@@ -902,7 +902,7 @@ class WanVideoModelLoader:
                 vace_layers = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28]
             vace_in_dim = 96
 
-        log.info(f"Model type: {model_type}, num_heads: {num_heads}, num_layers: {num_layers}")
+        log.info(f"Model cross attention type: {model_type}, num_heads: {num_heads}, num_layers: {num_layers}")
 
         teacache_coefficients_map = {
             "1_3B": {
