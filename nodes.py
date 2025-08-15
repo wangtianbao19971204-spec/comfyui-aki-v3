@@ -757,6 +757,7 @@ class WanVideoAddStandInLatent:
         return {"required": {
                     "embeds": ("WANVIDIMAGE_EMBEDS",),
                     "ip_image_latent": ("LATENT", {"tooltip": "Reference image to encode"}),
+                    "freq_offset": ("INT", {"default": 1, "min": 0, "max": 100, "step": 1, "tooltip": "EXPERIMENTAL: RoPE frequency offset between the reference and rest of the sequence"}),
                     #"start_percent": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0, "step": 0.01, "tooltip": "Start percent to apply the ref "}),
                     #"end_percent": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.01, "tooltip": "End percent to apply the ref "}),
                 }
@@ -767,10 +768,11 @@ class WanVideoAddStandInLatent:
     FUNCTION = "add"
     CATEGORY = "WanVideoWrapper"
 
-    def add(self, embeds, ip_image_latent):
+    def add(self, embeds, ip_image_latent, freq_offset):
         # Prepare the new extra latent entry
         new_entry = {
             "ip_image_latent": ip_image_latent["samples"],
+            "freq_offset": freq_offset,
             #"ip_start_percent": start_percent,
             #"ip_end_percent": end_percent,
         }    
@@ -2581,10 +2583,6 @@ class WanVideoSampler:
                 
 
                 return noise_pred, [cache_state_cond, cache_state_uncond]
-            
-        log.info(f"Seq len: {seq_len}")
-           
-        
 
         if args.preview_method in [LatentPreviewMethod.Auto, LatentPreviewMethod.Latent2RGB]: #default for latent2rgb
             from latent_preview import prepare_callback
@@ -2592,6 +2590,7 @@ class WanVideoSampler:
             from .latent_preview import prepare_callback #custom for tiny VAE previews
         callback = prepare_callback(patcher, len(timesteps))
 
+        log.info(f"Input sequence length: {seq_len}")
         log.info(f"Sampling {(latent_video_length-1) * 4 + 1} frames at {latent.shape[3]*vae_upscale_factor}x{latent.shape[2]*vae_upscale_factor} with {steps} steps")
 
         intermediate_device = device
