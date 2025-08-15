@@ -18,9 +18,9 @@ alignment_model_path = os.path.join(script_directory, "models", "face_landmark.o
 det_model_path = os.path.join(script_directory, "models", "face_det.onnx")
 
 from .model import PortraitAdapter
-from .pdf import get_drive_expression_pd_fgc, det_landmarks, FanEncoder
-from .camer import CameraDemo
-from .face_align import FaceAlignment
+from .pd_fgc.pdf import get_drive_expression_pd_fgc, det_landmarks, FanEncoder
+from .pd_fgc.camer import CameraDemo
+from .pd_fgc.face_align import FaceAlignment
 
 def load_pd_fgc_model(state_dict):
     face_aligner = CameraDemo(

@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from tqdm import tqdm
-from ..utils import log
+from ...utils import log
 
 
 def np_bgr_to_tensor(img_np, dtype):
