@@ -78,10 +78,10 @@ class FantasyPortraitFaceDetector:
 
     RETURN_TYPES = ("PORTRAIT_EMBEDS",)
     RETURN_NAMES = ("portrait_embeds", )
-    FUNCTION = "loadmodel"
+    FUNCTION = "detect"
     CATEGORY = "WanVideoWrapper"
 
-    def loadmodel(self, images, portrait_model):
+    def detect(self, images, portrait_model):
         B, H, W, C = images.shape
         num_frames = ((B - 1) // 4) * 4 + 1
         images = images.clone()[:num_frames]
@@ -110,6 +110,8 @@ class FantasyPortraitFaceDetector:
 
         pd_fpg_motion.to(device)
         head_emo_feat_all = get_emo_feature(numpy_list, face_aligner, pd_fpg_motion, device=device)
+        log.info(f"FantasyPortraitFaceDetector: input frames: {num_frames}")
+        log.info(f"FantasyPortraitFaceDetector: features extracted for {head_emo_feat_all.shape[1]} frames")
         pd_fpg_motion.to(offload_device)
 
         portrait_model = portrait_model["proj_model"]
