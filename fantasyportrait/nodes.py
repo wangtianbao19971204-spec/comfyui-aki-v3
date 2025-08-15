@@ -73,10 +73,12 @@ class FantasyPortraitFaceDetector:
             "required": {
                 "portrait_model": ("FANTASYPORTRAITMODEL",),
                 "images": ("IMAGE",),
+            },
+            "optional": {
                 "adapter_scale": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01, "tooltip": "Scale for the adapter projection"}),
                 "mouth_scale": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01, "tooltip": "Scale for the mouth projection"}),
                 "emo_scale": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01, "tooltip": "Scale for the emotion projection"}),
-            },
+            }
         }
 
     RETURN_TYPES = ("PORTRAIT_EMBEDS", "BBOX", "LANDMARKS")
