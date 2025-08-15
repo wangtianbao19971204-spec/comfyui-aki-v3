@@ -1743,8 +1743,10 @@ class WanVideoSampler:
                 control_latents = control_embeds.get("control_images", None)
                 control_start_percent = control_embeds.get("start_percent", 0.0)
                 control_end_percent = control_embeds.get("end_percent", 1.0)
-                if transformer.control_adapter is not None:
-                    control_camera_latents = control_embeds.get("control_camera_latents", None)
+                control_camera_latents = control_embeds.get("control_camera_latents", None)
+                if control_camera_latents is not None:
+                    if transformer.control_adapter is None:
+                        raise ValueError("Control camera latents are only supported with Fun-Control-Camera model")
                     control_camera_start_percent = control_embeds.get("control_camera_start_percent", 0.0)
                     control_camera_end_percent = control_embeds.get("control_camera_end_percent", 1.0)
                 
@@ -1817,8 +1819,11 @@ class WanVideoSampler:
                 control_latents = control_embeds.get("control_images", None)
                 if control_latents is not None:
                     control_latents = control_latents.to(device)
-                if transformer.control_adapter is not None:
-                    control_camera_latents = control_embeds.get("control_camera_latents", None)
+
+                control_camera_latents = control_embeds.get("control_camera_latents", None)
+                if control_camera_latents is not None:
+                    if transformer.control_adapter is None:
+                        raise ValueError("Control camera latents are only supported with Fun-Control-Camera model")
                     control_camera_start_percent = control_embeds.get("control_camera_start_percent", 0.0)
                     control_camera_end_percent = control_embeds.get("control_camera_end_percent", 1.0)
 
