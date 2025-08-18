@@ -367,6 +367,13 @@ app.registerExtension({
 				if(!link_info)
 					return;
 
+				// HOTFIX: subgraph
+				const stackTrace = new Error().stack;
+
+				if(stackTrace.includes('convertToSubgraph')) {
+					return;
+				}
+
 				if(type == 2) {
 					// connect output
 					if(connected){
@@ -512,6 +519,12 @@ app.registerExtension({
 			const onConnectionsChange = nodeType.prototype.onConnectionsChange;
 			nodeType.prototype.onConnectionsChange = function (type, index, connected, link_info) {
 				const stackTrace = new Error().stack;
+
+				// HOTFIX: subgraph
+				if(stackTrace.includes('convertToSubgraph')) {
+					return;
+				}
+
 				if(stackTrace.includes('loadGraphData')) {
 					if(this.widgets?.[0]) {
 						this.widgets[0].options.max = this.inputs.length-3;
