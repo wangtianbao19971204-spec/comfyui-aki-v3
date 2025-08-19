@@ -2094,7 +2094,7 @@ class WanVideoSampler:
         if uni3c_embeds is not None:
             transformer.controlnet = uni3c_embeds["controlnet"]
             pcd_data = {
-                "render_latent": uni3c_embeds["render_latent"].to(dtype),
+                "render_latent": uni3c_embeds["render_latent"],
                 "render_mask": uni3c_embeds["render_mask"],
                 "camera_embedding": uni3c_embeds["camera_embedding"],
                 "controlnet_weight": uni3c_embeds["controlnet_weight"],
@@ -3047,7 +3047,7 @@ class WanVideoSampler:
                         if uni3c_embeds is not None:
                             transformer.controlnet = uni3c_embeds["controlnet"]
                             pcd_data = {
-                                "render_latent": uni3c_embeds["render_latent"].to(dtype),
+                                "render_latent": uni3c_embeds["render_latent"],
                                 "render_mask": uni3c_embeds["render_mask"],
                                 "camera_embedding": uni3c_embeds["camera_embedding"],
                                 "controlnet_weight": uni3c_embeds["controlnet_weight"],
@@ -3066,7 +3066,7 @@ class WanVideoSampler:
                             if mode == "infinitetalk":
                                 cond_image = original_images[:, :, current_condframe_index:current_condframe_index+1]
                                 log.info(f"current_condframe_index: {current_condframe_index}")
-                                log.info(f"audio_start_idx: {audio_start_idx}")
+                                log.info(f"audio_indices: {audio_start_idx}-{audio_end_idx}|{clip_length}")
                             if multitalk_embeds is not None:
                                 audio_embs = []
                                 # split audio with window size
@@ -3079,7 +3079,20 @@ class WanVideoSampler:
 
                             if uni3c_embeds is not None:
                                 vae.to(device)
-                                render_latent = vae.encode(original_images[:, :, audio_start_idx:audio_end_idx].to(device, vae.dtype), device=device, tiled=tiled_vae).to(dtype)
+                                print("original_images", original_images.shape)
+                                # Pad original_images if needed
+                                num_frames = original_images.shape[2]
+                                required_frames = audio_end_idx - audio_start_idx
+                                if audio_end_idx > num_frames:
+                                    pad_len = audio_end_idx - num_frames
+                                    last_frame = original_images[:, :, -1:].repeat(1, 1, pad_len, 1, 1)
+                                    padded_images = torch.cat([original_images, last_frame], dim=2)
+                                else:
+                                    padded_images = original_images
+                                render_latent = vae.encode(
+                                    padded_images[:, :, audio_start_idx:audio_end_idx].to(device, vae.dtype),
+                                    device=device, tiled=tiled_vae
+                                ).to(dtype)
                                 pcd_data['render_latent'] = render_latent
 
                             h, w = cond_image.shape[-2], cond_image.shape[-1]
@@ -3309,10 +3322,8 @@ class WanVideoSampler:
                         
                         del noise, latent
                         if force_offload:
-                            if model["manual_offloading"]:
-                                transformer.to(offload_device)
-                                mm.soft_empty_cache()
-                                gc.collect()
+                            if not model["auto_cpu_offload"]:
+                                offload_transformer(transformer)
                         try:
                             print_memory(device)
                             torch.cuda.reset_peak_memory_stats(device)
