@@ -3041,7 +3041,7 @@ class WanVideoSampler:
                         current_condframe_index = 0
                         
                         if multitalk_embeds is not None:
-                            total_frames = len(multitalk_audio_embedding)
+                            total_frames = len(multitalk_audio_embedding[0])
                         
                         pcd_data = pcd_data_input = None
                         if uni3c_embeds is not None:
