@@ -3010,6 +3010,25 @@ class WanVideoSampler:
                         target_w = image_embeds.get("target_w", None)
                         target_h = image_embeds.get("target_h", None)
 
+                        if len(multitalk_embeds['audio_features'])==2 and (multitalk_embeds['ref_target_masks'] is None):
+                            face_scale = 0.1
+                            x_min, x_max = int(target_h * face_scale), int(target_h * (1 - face_scale))
+                            background_mask = torch.zeros([target_h, target_w])
+                            background_mask = torch.zeros([target_h, target_w])
+                            human_mask1 = torch.zeros([target_h, target_w])
+                            human_mask2 = torch.zeros([target_h, target_w])
+                            lefty_min, lefty_max = int((target_w//2) * face_scale), int((target_w//2) * (1 - face_scale))
+                            righty_min, righty_max = int((target_w//2) * face_scale + (target_w//2)), int((target_w//2) * (1 - face_scale) + (target_w//2))
+                            human_mask1[x_min:x_max, lefty_min:lefty_max] = 1
+                            human_mask2[x_min:x_max, righty_min:righty_max] = 1
+                            background_mask += human_mask1
+                            background_mask += human_mask2
+                            human_masks = [human_mask1, human_mask2]
+                            background_mask = torch.where(background_mask > 0, torch.tensor(0), torch.tensor(1))
+                            human_masks.append(background_mask)
+                            ref_target_masks = torch.stack(human_masks, dim=0)
+                            multitalk_embeds['ref_target_masks'] = ref_target_masks
+
                         gen_video_list = []
                         is_first_clip = True
                         arrive_last_frame = False
