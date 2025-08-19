@@ -370,7 +370,7 @@ app.registerExtension({
 				// HOTFIX: subgraph
 				const stackTrace = new Error().stack;
 
-				if(stackTrace.includes('convertToSubgraph')) {
+				if(stackTrace.includes('convertToSubgraph') || stackTrace.includes('Subgraph.configure')) {
 					return;
 				}
 
@@ -521,7 +521,7 @@ app.registerExtension({
 				const stackTrace = new Error().stack;
 
 				// HOTFIX: subgraph
-				if(stackTrace.includes('convertToSubgraph')) {
+				if(stackTrace.includes('convertToSubgraph') || stackTrace.includes('Subgraph.configure')) {
 					return;
 				}
 
@@ -609,8 +609,6 @@ app.registerExtension({
 					}
 				}
 
-				let select_slot = this.inputs.find(x => x.name == "select");
-
 				let widget_count = 0;
 				if(nodeData.name == 'ImpactSwitch' || nodeData.name == 'LatentSwitch' || nodeData.name == 'SEGSSwitch') {
 					widget_count += 1;
@@ -625,7 +623,6 @@ app.registerExtension({
 						    this.removeInput(index);
 					}
 				}
-
 
 				let slot_i = 1;
 				for (let i = 0; i < this.inputs.length; i++) {
