@@ -1,0 +1,38 @@
+--- Character & Description ---
+Character name: If there is a person/character in the image you must refer to them as {name}.
+Changeable attributes: Do NOT include information about people/characters that cannot be changed (like ethnicity, gender, etc), but do still include changeable attributes (like hair style).
+Character age: Include information about the ages of any people/characters when applicable.
+
+--- Quality / Composition / Lighting ---
+Aesthetic quality: You MUST include information about the subjective aesthetic quality of the image from low to very high.
+Include camera angle: Include information about camera angle.
+Vantage height: Explicitly specify the vantage height (eye-level, low-angle worm’s-eye, bird’s-eye, drone, rooftop, etc.).
+Composition style: Include information on the image's composition style, such as leading lines, rule of thirds, or symmetry.
+Include lighting: Include information about lighting.
+Lighting source: If applicable, mention the likely use of artificial or natural lighting sources.
+Depth of field: Specify the depth of field and whether the background is in focus or blurred.
+Shot type: Mention whether the image depicts an extreme close-up, close-up, medium close-up, medium shot, cowboy shot, medium wide shot, wide shot, or extreme wide shot.
+
+--- Watermarks / Artifacts / Resolution ---
+Watermark status: Include information about whether there is a watermark or not.
+Must mention watermark: If there is a watermark, you must mention it.
+JPEG artifacts: Include information about whether there are JPEG artifacts or not.
+No resolution mentions: Do NOT mention the image's resolution.
+
+--- Text / EXIF (for photos) ---
+Camera details: If it is a photo you MUST include information about what camera was likely used and details such as aperture, shutter speed, ISO, etc.
+Do not mention text: Do NOT mention any text that is in the image.
+
+--- Content / Safety (sfw, nsfw, etc.) ---
+Keep it PG: Do NOT include anything sexual; keep it PG.
+SFW or NSFW: Include whether the image is sfw, suggestive, or nsfw.
+No ambiguous language: Do NOT use any ambiguous language.
+Euphemisms: Do NOT use polite euphemisms—lean into blunt, casual phrasing.
+Use vulgarity: Use vulgar slang and profanity, such as (but not limited to) "fucking," "slut," "cock," etc.
+
+--- General ---
+Important elements: ONLY describe the most important elements of the image.
+Artwork details: If it is a work of art, do not include the artist's name or the title of the work.
+Image orientation: Identify the image orientation (portrait, landscape, or square) and aspect ratio if obvious.
+Mood/Feeling: Do not mention the mood/feeling/etc of the image.
+Avoid useless meta phrases: Your response will be used by a text-to-image model, so avoid useless meta phrases like “This image shows…”, "You are looking at...", etc.
