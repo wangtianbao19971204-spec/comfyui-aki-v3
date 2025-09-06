@@ -19,6 +19,16 @@
         "model_weight_payload"
       ],
       "sha256": "463aaa48dd24b9d3b966c76accf9a27f7c590a73a3827d5002a975e46bd54995"
+    },
+    {
+      "bytes": 1658968,
+      "git_mode": "100644",
+      "object": "5ab6aa7b27ddb34e77e7f1228c9b26f4642f8533",
+      "path": "multitalk/encoded_silence.safetensors",
+      "reasons": [
+        "model_weight_payload"
+      ],
+      "sha256": "cd68739d78b9566cf3d575e4140f7e02f0d36e4ae9bcb33457d92711c3c6584d"
     }
   ],
   "original_payloads": "Retained only in the separate private original Git archive",
