@@ -280,7 +280,7 @@ app.registerExtension({
 				}
 				else {
 					const node = app.graph.getNodeById(link_info.origin_id);
-					slot_type = node.outputs[link_info.origin_slot]?.type;
+					slot_type = node?.outputs[link_info.origin_slot]?.type;
 				}
 
 				this.inputs[0].type = slot_type;
@@ -306,7 +306,7 @@ app.registerExtension({
 				}
 				else {
 					const node = app.graph.getNodeById(link_info.origin_id);
-					slot_type = node.outputs[link_info.origin_slot].type;
+					slot_type = node?.outputs[link_info.origin_slot].type;
 				}
 
 				this.inputs[0].type = slot_type;
@@ -324,7 +324,7 @@ app.registerExtension({
 
 				// assign type
 				const node = app.graph.getNodeById(link_info.origin_id);
-				let slot_type = node.outputs[link_info.origin_slot].type;
+				let slot_type = node?.outputs[link_info.origin_slot].type;
 
 				this.inputs[0].type = slot_type;
 				this.inputs[1].type = slot_type;
@@ -348,7 +348,7 @@ app.registerExtension({
 				}
 				else {
 					const node = app.graph.getNodeById(link_info.origin_id);
-					slot_type = node.outputs[link_info.origin_slot].type;
+					slot_type = node?.outputs[link_info.origin_slot].type;
 				}
 
 				this.inputs[0].type = slot_type;
@@ -405,7 +405,7 @@ app.registerExtension({
 					// connect input
 					if(this.inputs[0].type == '*'){
 						const node = app.graph.getNodeById(link_info.origin_id);
-						let origin_type = node.outputs[link_info.origin_slot]?.type;
+						let origin_type = node?.outputs[link_info.origin_slot]?.type;
 
 						if(origin_type==undefined) {
 							return; // fallback

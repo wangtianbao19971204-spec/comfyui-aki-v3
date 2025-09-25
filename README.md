@@ -317,6 +317,10 @@ NOTE: The UltralyticsDetectorProvider node is not part of the ComfyUI-Impact-Pac
   * Experimental set of nodes for implementing loop functionality (tutorial to be prepared later / [example workflow](test/loop-test.json)).
 
 
+### Limitation
+* Many nodes in the `Impact Pack` use a wildcard type to allow arbitrary input/output connections. This approach will be replaced once ComfyUI officially supports **dynamic types**. Until then, while it functions without issues, type validation may still produce error messages.
+
+
 ### HuggingFace nodes
   * These nodes provide functionalities based on HuggingFace repository models.
   * The path where the HuggingFace model cache is stored can be changed through the `HF_HOME` environment variable.
