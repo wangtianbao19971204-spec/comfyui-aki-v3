@@ -228,7 +228,7 @@ class DetailerForEach:
                     "steps": ("INT", {"default": 20, "min": 1, "max": 10000}),
                     "cfg": ("FLOAT", {"default": 8.0, "min": 0.0, "max": 100.0}),
                     "sampler_name": (comfy.samplers.KSampler.SAMPLERS,),
-                    "scheduler": (core.SCHEDULERS,),
+                    "scheduler": (core.get_schedulers(),),
                     "positive": ("CONDITIONING",),
                     "negative": ("CONDITIONING",),
                     "denoise": ("FLOAT", {"default": 0.5, "min": 0.0001, "max": 1.0, "step": 0.01}),
@@ -444,7 +444,7 @@ class DetailerForEachAutoRetry:
                     "steps": ("INT", {"default": 20, "min": 1, "max": 10000}),
                     "cfg": ("FLOAT", {"default": 8.0, "min": 0.0, "max": 100.0}),
                     "sampler_name": (comfy.samplers.KSampler.SAMPLERS,),
-                    "scheduler": (core.SCHEDULERS,),
+                    "scheduler": (core.get_schedulers(),),
                     "positive": ("CONDITIONING",),
                     "negative": ("CONDITIONING",),
                     "denoise": ("FLOAT", {"default": 0.5, "min": 0.0001, "max": 1.0, "step": 0.01}),
@@ -669,7 +669,7 @@ class DetailerForEachPipe:
                       "steps": ("INT", {"default": 20, "min": 1, "max": 10000}),
                       "cfg": ("FLOAT", {"default": 8.0, "min": 0.0, "max": 100.0}),
                       "sampler_name": (comfy.samplers.KSampler.SAMPLERS,),
-                      "scheduler": (core.SCHEDULERS,),
+                      "scheduler": (core.get_schedulers(),),
                       "denoise": ("FLOAT", {"default": 0.5, "min": 0.0001, "max": 1.0, "step": 0.01}),
                       "feather": ("INT", {"default": 5, "min": 0, "max": 100, "step": 1}),
                       "noise_mask": ("BOOLEAN", {"default": True, "label_on": "enabled", "label_off": "disabled"}),
@@ -747,7 +747,7 @@ class FaceDetailer:
                      "steps": ("INT", {"default": 20, "min": 1, "max": 10000}),
                      "cfg": ("FLOAT", {"default": 8.0, "min": 0.0, "max": 100.0}),
                      "sampler_name": (comfy.samplers.KSampler.SAMPLERS,),
-                     "scheduler": (core.SCHEDULERS,),
+                     "scheduler": (core.get_schedulers(),),
                      "positive": ("CONDITIONING",),
                      "negative": ("CONDITIONING",),
                      "denoise": ("FLOAT", {"default": 0.5, "min": 0.0001, "max": 1.0, "step": 0.01}),
@@ -1361,7 +1361,7 @@ class PixelKSampleUpscalerProvider:
                     "steps": ("INT", {"default": 20, "min": 1, "max": 10000}),
                     "cfg": ("FLOAT", {"default": 8.0, "min": 0.0, "max": 100.0}),
                     "sampler_name": (comfy.samplers.KSampler.SAMPLERS, ),
-                    "scheduler": (core.SCHEDULERS, ),
+                    "scheduler": (core.get_schedulers(), ),
                     "positive": ("CONDITIONING", ),
                     "negative": ("CONDITIONING", ),
                     "denoise": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.01}),
@@ -1399,7 +1399,7 @@ class PixelKSampleUpscalerProviderPipe(PixelKSampleUpscalerProvider):
                     "steps": ("INT", {"default": 20, "min": 1, "max": 10000}),
                     "cfg": ("FLOAT", {"default": 8.0, "min": 0.0, "max": 100.0}),
                     "sampler_name": (comfy.samplers.KSampler.SAMPLERS, ),
-                    "scheduler": (core.SCHEDULERS, ),
+                    "scheduler": (core.get_schedulers(), ),
                     "denoise": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.01}),
                     "use_tiled_vae": ("BOOLEAN", {"default": False, "label_on": "enabled", "label_off": "disabled"}),
                     "basic_pipe": ("BASIC_PIPE",),
@@ -1643,7 +1643,7 @@ class FaceDetailerPipe:
                     "steps": ("INT", {"default": 20, "min": 1, "max": 10000}),
                     "cfg": ("FLOAT", {"default": 8.0, "min": 0.0, "max": 100.0}),
                     "sampler_name": (comfy.samplers.KSampler.SAMPLERS,),
-                    "scheduler": (core.SCHEDULERS,),
+                    "scheduler": (core.get_schedulers(),),
                     "denoise": ("FLOAT", {"default": 0.5, "min": 0.0001, "max": 1.0, "step": 0.01}),
                     "feather": ("INT", {"default": 5, "min": 0, "max": 100, "step": 1}),
                     "noise_mask": ("BOOLEAN", {"default": True, "label_on": "enabled", "label_off": "disabled"}),
@@ -1749,7 +1749,7 @@ class MaskDetailerPipe:
                     "steps": ("INT", {"default": 20, "min": 1, "max": 10000}),
                     "cfg": ("FLOAT", {"default": 8.0, "min": 0.0, "max": 100.0}),
                     "sampler_name": (comfy.samplers.KSampler.SAMPLERS,),
-                    "scheduler": (core.SCHEDULERS,),
+                    "scheduler": (core.get_schedulers(),),
                     "denoise": ("FLOAT", {"default": 0.5, "min": 0.0001, "max": 1.0, "step": 0.01}),
 
                     "feather": ("INT", {"default": 5, "min": 0, "max": 100, "step": 1}),
@@ -2701,7 +2701,7 @@ class ImpactSchedulerAdapter:
 
     CATEGORY = "ImpactPack/Util"
 
-    RETURN_TYPES = (core.SCHEDULERS,)
+    RETURN_TYPES = (core.get_schedulers(),)
     RETURN_NAMES = ("scheduler",)
 
     FUNCTION = "doit"

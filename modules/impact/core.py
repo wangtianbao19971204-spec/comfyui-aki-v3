@@ -57,8 +57,10 @@ preview_bridge_last_mask_cache = {}
 
 current_prompt = None
 
-SCHEDULERS = comfy.samplers.KSampler.SCHEDULERS + ['AYS SDXL', 'AYS SD1', 'AYS SVD', 'GITS[coeff=1.2]', 'LTXV[default]', 'OSS FLUX', 'OSS Wan', 'OSS Chroma']
+ADDITIONAL_SCHEDULERS = ['AYS SDXL', 'AYS SD1', 'AYS SVD', 'GITS[coeff=1.2]', 'LTXV[default]', 'OSS FLUX', 'OSS Wan', 'OSS Chroma']
 
+def get_schedulers():
+    return list(comfy.samplers.SCHEDULER_HANDLERS) + ADDITIONAL_SCHEDULERS
 
 def is_execution_model_version_supported():
     try:
