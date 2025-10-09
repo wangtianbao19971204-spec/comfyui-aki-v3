@@ -10,7 +10,6 @@ import numpy as np
 from PIL import ImageOps, Image
 
 import nodes
-import comfy_extras.nodes_upscale_model as model_upscale
 from server import PromptServer
 import comfy
 import impact.wildcards as wildcards
@@ -1615,7 +1614,12 @@ def latent_upscale_on_pixel_space_with_model_shape2(samples, scale_method, upsca
     # upscale by model upscaler
     current_w = w
     while current_w < new_w:
-        pixels = model_upscale.ImageUpscaleWithModel().upscale(upscale_model, pixels)[0]
+        model_upscaler = nodes.NODE_CLASS_MAPPINGS['ImageUpscaleWithModel']()
+        if hasattr(model_upscaler, 'execute'):
+            pixels = model_upscaler.execute(upscale_model, pixels)[0]
+        else:
+            pixels = model_upscaler.upscale(upscale_model, pixels)[0]
+
         current_w = pixels.shape[2]
         if current_w == w:
             logging.info("[latent_upscale_on_pixel_space_with_model] x1 upscale model selected")
@@ -1651,7 +1655,12 @@ def latent_upscale_on_pixel_space_with_model2(samples, scale_method, upscale_mod
     # upscale by model upscaler
     current_w = w
     while current_w < new_w:
-        pixels = model_upscale.ImageUpscaleWithModel().upscale(upscale_model, pixels)[0]
+        model_upscaler = nodes.NODE_CLASS_MAPPINGS['ImageUpscaleWithModel']()
+        if hasattr(model_upscaler, 'execute'):
+            pixels = model_upscaler.execute(upscale_model, pixels)[0]
+        else:
+            pixels = model_upscaler.upscale(upscale_model, pixels)[0]
+
         current_w = pixels.shape[2]
         if current_w == w:
             logging.info("[latent_upscale_on_pixel_space_with_model] x1 upscale model selected")
