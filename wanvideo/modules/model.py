@@ -1279,39 +1279,39 @@ class WanAttentionBlock(nn.Module):
                     x = self.audio_cross_attn_wrapper(x, humo_audio_input, grid_sizes, humo_audio_scale)
 
 
-            # ffn
-            if self.rope_func == "comfy_chunked":
-                x_ffn = self.ffn_chunked(x, shift_mlp, scale_mlp)
-            else:
-                if zero_timestep:
-                    norm2_x = self.norm2(x)
-                    parts = []
-                    for i in range(2):
-                        parts.append(norm2_x[:, self.seg_idx[i]:self.seg_idx[i + 1]] *
-                                    (1 + scale_mlp[:, i:i + 1]) + shift_mlp[:, i:i + 1])
-                    norm2_x = torch.cat(parts, dim=1)
-                    x_ffn = self.ffn(norm2_x)
-                else:
-                    if not is_longcat:
-                        mod_x = torch.addcmul(shift_mlp, self.norm2(x.to(shift_mlp.dtype)), 1 + scale_mlp)
-                    else:
-                        mod_x = torch.addcmul(shift_mlp, self.norm2(x.view(B, -1, N//T, C).float()), 1 + scale_mlp).view(B, -1, C)
-                    x_ffn = self.ffn(mod_x.to(input_dtype))
-                del shift_mlp, scale_mlp
-            
-            # gate_mlp
+        # ffn
+        if self.rope_func == "comfy_chunked":
+            x_ffn = self.ffn_chunked(x, shift_mlp, scale_mlp)
+        else:
             if zero_timestep:
-                z = []
+                norm2_x = self.norm2(x)
+                parts = []
                 for i in range(2):
-                    z.append(x_ffn[:, self.seg_idx[i]:self.seg_idx[i + 1]] * gate_mlp[:, i:i + 1])
-                x_ffn = torch.cat(z, dim=1)
-                x = x.add(x_ffn)
+                    parts.append(norm2_x[:, self.seg_idx[i]:self.seg_idx[i + 1]] *
+                                (1 + scale_mlp[:, i:i + 1]) + shift_mlp[:, i:i + 1])
+                norm2_x = torch.cat(parts, dim=1)
+                x_ffn = self.ffn(norm2_x)
             else:
                 if not is_longcat:
-                    x = x.addcmul(x_ffn.to(gate_mlp.dtype), gate_mlp).to(input_dtype)
+                    mod_x = torch.addcmul(shift_mlp, self.norm2(x.to(shift_mlp.dtype)), 1 + scale_mlp)
                 else:
-                    x = x + (gate_mlp * x_ffn.view(B, -1, N//T, C).float()).to(input_dtype).view(B, -1, C)
-            del gate_mlp
+                    mod_x = torch.addcmul(shift_mlp, self.norm2(x.view(B, -1, N//T, C).float()), 1 + scale_mlp).view(B, -1, C)
+                x_ffn = self.ffn(mod_x.to(input_dtype))
+            del shift_mlp, scale_mlp
+        
+        # gate_mlp
+        if zero_timestep:
+            z = []
+            for i in range(2):
+                z.append(x_ffn[:, self.seg_idx[i]:self.seg_idx[i + 1]] * gate_mlp[:, i:i + 1])
+            x_ffn = torch.cat(z, dim=1)
+            x = x.add(x_ffn)
+        else:
+            if not is_longcat:
+                x = x.addcmul(x_ffn.to(gate_mlp.dtype), gate_mlp).to(input_dtype)
+            else:
+                x = x + (gate_mlp * x_ffn.view(B, -1, N//T, C).float()).to(input_dtype).view(B, -1, C)
+        del gate_mlp
 
         if x_ip is not None: #stand-in
             x_ip = x_ip.addcmul(y_ip, gate_msa_ip)
@@ -2566,7 +2566,17 @@ class WanModel(torch.nn.Module):
             
             e = e.to(self.offload_device, non_blocking=self.use_non_blocking)
 
-        
+        # clip vision embedding
+        clip_embed = None
+        if clip_fea is not None and hasattr(self, "img_emb"):
+            clip_fea = clip_fea.to(self.main_device)
+            if self.offload_img_emb:
+                self.img_emb.to(self.main_device)
+            clip_embed = self.img_emb(clip_fea)  # bs x 257 x dim
+            #context = torch.concat([context_clip, context], dim=1)
+            if self.offload_img_emb:
+                self.img_emb.to(self.offload_device, non_blocking=self.use_non_blocking)
+
         #context (text embedding)
         if hasattr(self, "text_embedding") and context != []:
             text_embed_dtype = self.text_embedding[0].weight.dtype
@@ -2606,18 +2616,13 @@ class WanModel(torch.nn.Module):
             
             if self.offload_txt_emb:
                 self.text_embedding.to(self.offload_device, non_blocking=self.use_non_blocking)
+
+            seq_chunks = max(context.shape[0], clip_embed.shape[0] if clip_embed is not None else 0)
+            chunked_self_attention = seq_chunks > 1 and current_step in self.video_attention_split_steps
         else:
             context = None
-
-        clip_embed = None
-        if clip_fea is not None and hasattr(self, "img_emb"):
-            clip_fea = clip_fea.to(self.main_device)
-            if self.offload_img_emb:
-                self.img_emb.to(self.main_device)
-            clip_embed = self.img_emb(clip_fea)  # bs x 257 x dim
-            #context = torch.concat([context_clip, context], dim=1)
-            if self.offload_img_emb:
-                self.img_emb.to(self.offload_device, non_blocking=self.use_non_blocking)
+            chunked_self_attention = False
+            seq_chunks = 0
 
         # MultiTalk
         if multitalk_audio is not None:
@@ -2795,8 +2800,6 @@ class WanModel(torch.nn.Module):
                     dwpose_emb = rearrange(unianim_data['dwpose'], 'b c f h w -> b (f h w) c').contiguous()
                     x.add_(dwpose_emb, alpha=unianim_data['strength'])
 
-            seq_chunks = max(context.shape[0], clip_embed.shape[0] if clip_embed is not None else 0)
-            chunked_self_attention = seq_chunks > 1 and current_step in self.video_attention_split_steps
             # arguments
             kwargs = dict(
                 e=e0,
