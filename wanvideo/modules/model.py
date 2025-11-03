@@ -1003,7 +1003,7 @@ class WanAttentionBlock(nn.Module):
             return torch.addcmul(shift_msa, norm_x, 1 + scale_msa)
     
     def ffn_chunked(self, x, shift_mlp, scale_mlp, num_chunks=4):
-        modulated_input = torch.addcmul(shift_mlp, self.norm2(x), 1 + scale_mlp)
+        modulated_input = torch.addcmul(shift_mlp, self.norm2(x.to(shift_mlp.dtype)), 1 + scale_mlp).to(x.dtype)
         
         result = torch.empty_like(x)
         seq_len = modulated_input.shape[1]
