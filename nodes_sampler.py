@@ -194,14 +194,16 @@ class WanVideoSampler:
                 if hasattr(block, 'audio_block'):
                     block.audio_block = None
 
-        if not transformer.patched_linear and patcher.model["sd"] is not None and len(patcher.patches) != 0:
-            transformer = _replace_linear(transformer, dtype, patcher.model["sd"])
+        if not transformer.patched_linear and patcher.model["sd"] is not None and len(patcher.patches) != 0 and gguf_reader is None:
+            transformer = _replace_linear(transformer, dtype, patcher.model["sd"], model["compile_args"])
             transformer.patched_linear = True
         if patcher.model["sd"] is not None and gguf_reader is None:
-            load_weights(patcher.model.diffusion_model, patcher.model["sd"], weight_dtype, base_dtype=dtype, transformer_load_device=device, block_swap_args=block_swap_args)
+            load_weights(patcher.model.diffusion_model, patcher.model["sd"], weight_dtype, base_dtype=dtype, transformer_load_device=device, 
+                         block_swap_args=block_swap_args, compile_args=model["compile_args"])
 
         if gguf_reader is not None: #handle GGUF
-            load_weights(transformer, patcher.model["sd"], base_dtype=dtype, transformer_load_device=device, patcher=patcher, gguf=True, reader=gguf_reader, block_swap_args=block_swap_args)
+            load_weights(transformer, patcher.model["sd"], base_dtype=dtype, transformer_load_device=device, patcher=patcher, gguf=True,
+                         reader=gguf_reader, block_swap_args=block_swap_args, compile_args=model["compile_args"])
             set_lora_params_gguf(transformer, patcher.patches)
             transformer.patched_linear = True
         elif len(patcher.patches) != 0: #handle patched linear layers (unmerged loras, fp8 scaled)
