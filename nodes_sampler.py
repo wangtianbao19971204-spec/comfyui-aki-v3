@@ -195,7 +195,7 @@ class WanVideoSampler:
                     block.audio_block = None
 
         if not transformer.patched_linear and patcher.model["sd"] is not None and len(patcher.patches) != 0 and gguf_reader is None:
-            transformer = _replace_linear(transformer, dtype, patcher.model["sd"], model["compile_args"])
+            transformer = _replace_linear(transformer, dtype, patcher.model["sd"], compile_args=model["compile_args"])
             transformer.patched_linear = True
         if patcher.model["sd"] is not None and gguf_reader is None:
             load_weights(patcher.model.diffusion_model, patcher.model["sd"], weight_dtype, base_dtype=dtype, transformer_load_device=device, 
