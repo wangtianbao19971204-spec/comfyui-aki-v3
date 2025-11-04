@@ -151,9 +151,6 @@ class CustomLinear(nn.Linear):
                 input = input * self.scale_weight
 
         weight = self._get_weight_with_lora(weight)
-        
-        if self.compute_dtype is not None:
-            weight = weight.to(self.compute_dtype)
 
         return torch.nn.functional.linear(input, weight, bias)
     
