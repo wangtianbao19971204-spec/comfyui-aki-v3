@@ -19,7 +19,7 @@ def load_gguf(model_path):
     return parsed_parameters, reader
 
 #based on https://github.com/huggingface/diffusers/blob/main/src/diffusers/quantizers/gguf/utils.py
-def _replace_with_gguf_linear(model, compute_dtype, state_dict, prefix="", modules_to_not_convert=[], patches=None):
+def _replace_with_gguf_linear(model, compute_dtype, state_dict, prefix="", modules_to_not_convert=[], patches=None, compile_args=None):
     def _should_convert_to_gguf(state_dict, prefix):
         weight_key = prefix + "weight"
         return weight_key in state_dict and isinstance(state_dict[weight_key], GGUFParameter)
@@ -27,10 +27,14 @@ def _replace_with_gguf_linear(model, compute_dtype, state_dict, prefix="", modul
     has_children = list(model.children())
     if not has_children:
         return
+    
+    allow_compile = False
 
     for name, module in model.named_children():
+        if compile_args is not None:
+            allow_compile = compile_args.get("allow_unmerged_lora_compile", False)
         module_prefix = prefix + name + "."
-        _replace_with_gguf_linear(module, compute_dtype, state_dict, module_prefix, modules_to_not_convert, patches)
+        _replace_with_gguf_linear(module, compute_dtype, state_dict, module_prefix, modules_to_not_convert, patches, compile_args)
 
         if (
             isinstance(module, nn.Linear)
@@ -46,7 +50,8 @@ def _replace_with_gguf_linear(model, compute_dtype, state_dict, prefix="", modul
                     in_features,
                     out_features,
                     module.bias is not None,
-                    compute_dtype=compute_dtype
+                    compute_dtype=compute_dtype,
+                    allow_compile=allow_compile
                 )
             
             model._modules[name].source_cls = type(module)
@@ -95,35 +100,43 @@ class GGUFLinear(nn.Linear):
         bias=False,
         compute_dtype=None,
         device=None,
+        allow_compile=False
     ) -> None:
         super().__init__(in_features, out_features, bias, device)
         self.compute_dtype = compute_dtype
         self.lora_diffs = []
         self.lora_strengths = []
         self.step = 0
+        self.allow_compile = allow_compile
+
+        if not allow_compile:
+            self._get_weight_with_lora = torch.compiler.disable()(self._get_weight_with_lora)
 
     def forward(self, inputs):
         weight = dequantize_gguf_tensor(self.weight).to(self.compute_dtype)
         bias = self.bias.to(self.compute_dtype) if self.bias is not None else None
 
-        if hasattr(self, f"lora_diff_0_0"):
-            weight = self.apply_lora(weight).to(self.compute_dtype)
+        weight = self._get_weight_with_lora(weight)#.to(self.compute_dtype)
 
         return torch.nn.functional.linear(inputs, weight, bias)
     
     def set_lora_diffs(self, lora_diffs, device=torch.device("cpu")):
         self.lora_diffs = []
         for i, diff in enumerate(lora_diffs):
-            if isinstance(diff, tuple):
-                self.register_buffer(f"lora_diff_{i}_0", diff[0].to(device))
-                self.register_buffer(f"lora_diff_{i}_1", diff[1].to(device))
+            if len(diff) > 1:
+                self.register_buffer(f"lora_diff_{i}_0", diff[0].to(device, self.compute_dtype))
+                self.register_buffer(f"lora_diff_{i}_1", diff[1].to(device, self.compute_dtype))
                 setattr(self, f"lora_diff_{i}_2", diff[2])
                 self.lora_diffs.append((f"lora_diff_{i}_0", f"lora_diff_{i}_1", f"lora_diff_{i}_2"))
             else:
-                self.register_buffer(f"lora_diff_{i}", diff.to(device))
-                self.lora_diffs.append(f"lora_diff_{i}")
+                self.register_buffer(f"lora_diff_{i}_0", diff[0].to(device, self.compute_dtype))
+                self.lora_diffs.append(f"lora_diff_{i}_0")
 
-    def apply_lora(self, weight):
+    def _get_weight_with_lora(self, weight):
+        """Apply LoRA outside compiled region"""
+        if not hasattr(self, "lora_diff_0_0"):
+            return weight
+        
         for lora_diff_names, lora_strength in zip(self.lora_diffs, self.lora_strengths):
             if isinstance(lora_strength, list):
                 lora_strength = lora_strength[self.step]
