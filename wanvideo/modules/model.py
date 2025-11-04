@@ -672,7 +672,7 @@ class WanT2VCrossAttention(WanSelfAttention):
 
         if is_longcat:
             if num_cond_latents is not None and num_cond_latents > 0:
-                num_cond_latents_thw = num_cond_latents * (s // grid_sizes[0][0])
+                num_cond_latents_thw = num_cond_latents * (s // num_latent_frames)
                 x = x[:, num_cond_latents_thw:]
             q = self.norm_q(self.q(x).view(b, -1, n, d))
         else:
@@ -1185,7 +1185,7 @@ class WanAttentionBlock(nn.Module):
             full_v = torch.cat([v, v_ip], dim=1)
             y = self.self_attn.forward(q, full_k, full_v, seq_lens)
         elif is_longcat and num_cond_latents is not None and num_cond_latents > 0:
-            num_cond_latents_thw = num_cond_latents * (N // grid_sizes[0][0])
+            num_cond_latents_thw = num_cond_latents * (N // num_latent_frames)
             # process the condition tokens
             x_cond = self.self_attn.forward(
                 q[:, :num_cond_latents_thw].contiguous(), 
