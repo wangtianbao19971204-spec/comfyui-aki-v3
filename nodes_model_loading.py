@@ -1481,7 +1481,7 @@ class WanVideoModelLoader:
         
         # Bindweave text_projection
         if "text_projection.0.weight" in sd:
-            log.info("Bindweave model detected, adding text_projector to the model")
+            log.info("Bindweave model detected, adding text_projection to the model")
             text_dim = sd["text_projection.0.weight"].shape[0]
             transformer.text_projection = nn.Sequential(nn.Linear(sd["text_projection.0.weight"].shape[1], text_dim), nn.GELU(approximate='tanh'), nn.Linear(text_dim, text_dim))
 
