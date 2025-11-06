@@ -820,7 +820,6 @@ class TextImageEncodeQwenVL():
         return {"required": {
                     "clip": ("CLIP",),
                     "prompt": ("STRING", {"default": "", "multiline": True}),
-                    "auto_resize": ("BOOLEAN", {"default": True, "tooltip": "Use the original code's image resize logic"}),
                 }, 
                 "optional": {
                     "image": ("IMAGE", ),
@@ -832,32 +831,25 @@ class TextImageEncodeQwenVL():
     FUNCTION = "add"
     CATEGORY = "WanVideoWrapper"
 
-    def add(cls, clip, prompt, auto_resize, image=None):
+    def add(cls, clip, prompt, image=None):
         if image is None:
-            input_images = []
+            images = []
         else:
-            if auto_resize:
-                total = int(1280 * 720)
-                width = image.shape[2]
-                height = image.shape[1]
+            samples = image.movedim(-1, 1)
+            total = int(1280 * 720)
 
-                if width * height > total:
-                    new_width = int(width * 0.3)
-                    new_height = int(height * 0.3)
-                else:
-                    new_width = int(width * 0.75)
-                    new_height = int(height * 0.75)
+            scale_by = math.sqrt(total / (samples.shape[3] * samples.shape[2]))
+            width = round(samples.shape[3] * scale_by)
+            height = round(samples.shape[2] * scale_by)
 
-                input_images = common_upscale(image.movedim(-1, 1), new_width, new_height, "area", "disabled").movedim(1, -1)
-                log.info(f"TextImageEncodeQwenVL: auto-resized image to: {new_width}x{new_height}")
-            else:
-                input_images = image
+            s = common_upscale(samples, width, height, "area", "disabled")
+            image = s.movedim(1, -1)
+            images = [image[:, :, :, :3]]
 
-        tokens = clip.tokenize(prompt, images=input_images[..., :3])
+        tokens = clip.tokenize(prompt, images=images)
         conditioning = clip.encode_from_tokens_scheduled(tokens)
         print("Qwen-VL embeds shape:", conditioning[0][0].shape)
-
-        return conditioning[0][0],
+        return (conditioning[0][0],)
 
 class WanVideoAddMTVMotion:
     @classmethod
