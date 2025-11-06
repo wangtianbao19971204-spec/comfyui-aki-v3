@@ -1426,7 +1426,7 @@ class WanVideoSampler:
                         #conditional (positive) pass
                         if pos_latent is not None: # for humo
                             base_params['x'] = [torch.cat([z[:, :-humo_reference_count], pos_latent], dim=1)]
-                        base_params["add_text_emb"] = qwenvl_embeds_pos.to(device) if qwenvl_embeds is not None else None # QwenVL embeddings for Bindweave
+                        base_params["add_text_emb"] = qwenvl_embeds_pos.to(device) if qwenvl_embeds_pos is not None else None # QwenVL embeddings for Bindweave
                         noise_pred_cond, noise_pred_ovi, cache_state_cond = transformer(
                             context=positive_embeds,
                             pred_id=cache_state[0] if cache_state else None,
