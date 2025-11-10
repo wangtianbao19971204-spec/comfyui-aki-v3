@@ -1137,6 +1137,16 @@ class WanVideoSampler:
             lynx_embeds["ref_buffer_uncond"] = lynx_ref_buffer_uncond if not math.isclose(cfg[0], 1.0) else None
             mm.soft_empty_cache()
 
+        # UniLumos
+        foreground_latents = image_embeds.get("foreground_latents", None)
+        if foreground_latents is not None:
+            log.info(f"UniLumos foreground latent input shape: {foreground_latents.shape}")
+            foreground_latents = foreground_latents.to(device, dtype)
+        background_latents = image_embeds.get("background_latents", None)
+        if background_latents is not None:
+            log.info(f"UniLumos background latent input shape: {background_latents.shape}")
+            background_latents = background_latents.to(device, dtype)
+
         #region model pred
         def predict_with_cfg(z, cfg_scale, positive_embeds, negative_embeds, timestep, idx, image_cond=None, clip_fea=None,
                              control_latents=None, vace_data=None, unianim_data=None, audio_proj=None, control_camera_latents=None,
@@ -1346,6 +1356,9 @@ class WanVideoSampler:
                     c_noise = (torch.sin(timestep) / (torch.cos(timestep) + torch.sin(timestep))) * 1000
                     z = z * c_in
                     timestep = c_noise
+
+                if background_latents is not None or foreground_latents is not None:
+                    z = torch.cat([z, foreground_latents.to(z), background_latents.to(z)], dim=0)
 
                 base_params = {
                     'x': [z], # latent

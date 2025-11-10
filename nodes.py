@@ -1158,6 +1158,46 @@ class WanVideoAnimateEmbeds:
         }
 
         return (image_embeds,)
+
+# region UniLumos
+class WanVideoUniLumosEmbeds:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {"required": {
+            "width": ("INT", {"default": 832, "min": 64, "max": 8096, "step": 8, "tooltip": "Width of the image to encode"}),
+            "height": ("INT", {"default": 480, "min": 64, "max": 8096, "step": 8, "tooltip": "Height of the image to encode"}),
+            "num_frames": ("INT", {"default": 81, "min": 1, "max": 10000, "step": 4, "tooltip": "Number of frames to encode"}),
+            },
+            "optional": {
+                "foreground_latents": ("LATENT", {"tooltip": "Video foreground latents"}),
+                "background_latents": ("LATENT", {"tooltip": "Video background latents"}),
+            }
+        }
+
+    RETURN_TYPES = ("WANVIDIMAGE_EMBEDS", )
+    RETURN_NAMES = ("image_embeds",)
+    FUNCTION = "process"
+    CATEGORY = "WanVideoWrapper"
+
+    def process(self, num_frames, width, height, foreground_latents=None, background_latents=None):
+        target_shape = (16, (num_frames - 1) // VAE_STRIDE[0] + 1,
+                        height // VAE_STRIDE[1],
+                        width // VAE_STRIDE[2])
+        
+        embeds = {
+            "target_shape": target_shape,
+            "num_frames": num_frames,
+        }
+        if foreground_latents is not None:
+            embeds["foreground_latents"] = foreground_latents["samples"][0]
+        else:
+            embeds["foreground_latents"] = torch.zeros(target_shape[0], target_shape[1], target_shape[2], target_shape[3], device=torch.device("cpu"), dtype=torch.float32)
+        if background_latents is not None:
+            embeds["background_latents"] = background_latents["samples"][0]
+        else:
+            embeds["background_latents"] = torch.zeros(target_shape[0], target_shape[1], target_shape[2], target_shape[3], device=torch.device("cpu"), dtype=torch.float32)
+
+        return (embeds,)
     
 class WanVideoEmptyEmbeds:
     @classmethod
@@ -2206,6 +2246,7 @@ NODE_CLASS_MAPPINGS = {
     "WanVideoAnimateEmbeds": WanVideoAnimateEmbeds,
     "WanVideoAddLucyEditLatents": WanVideoAddLucyEditLatents,
     "WanVideoSchedulerSA_ODE": WanVideoSchedulerSA_ODE,
+    "WanVideoUniLumosEmbeds": WanVideoUniLumosEmbeds,
     }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -2245,4 +2286,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "WanVideoAnimateEmbeds": "WanVideo Animate Embeds",
     "WanVideoAddLucyEditLatents": "WanVideo Add LucyEdit Latents",
     "WanVideoSchedulerSA_ODE": "WanVideo Scheduler SA-ODE",
+    "WanVideoUniLumosEmbeds": "WanVideo UniLumos Embeds",
 }
