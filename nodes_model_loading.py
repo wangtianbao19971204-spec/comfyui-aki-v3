@@ -1088,6 +1088,14 @@ class WanVideoModelLoader:
             sd, reader = load_gguf(model_path)
             gguf_reader.append(reader)
 
+        # Ovi
+        extra_audio_model = False
+        if any(key.startswith("video_model.") for key in sd.keys()):
+            sd = {key.replace("video_model.", "", 1).replace("modulation.modulation", "modulation"): value for key, value in sd.items()}
+            if any(key.startswith("audio_model.") for key in sd.keys()):
+                extra_audio_model = True
+                
+
         is_wananimate = "pose_patch_embedding.weight" in sd
         # rename WanAnimate face fuser block keys to insert into main blocks instead
         if is_wananimate:
@@ -1140,7 +1148,6 @@ class WanVideoModelLoader:
             raise ValueError("You are attempting to load a VACE module as a WanVideo model, instead you should use the vace_model input and matching T2V base model")
 
         # currently this can be VACE, MTV-Crafter, Lynx or Ovi-audio weights
-        extra_audio_model = False
         if extra_model is not None:
             for _model in extra_model:
                 print("Loading extra model: ", _model["path"])
