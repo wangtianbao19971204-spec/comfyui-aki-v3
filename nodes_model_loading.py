@@ -1092,8 +1092,8 @@ class WanVideoModelLoader:
         extra_audio_model = False
         if any(key.startswith("video_model.") for key in sd.keys()):
             sd = {key.replace("video_model.", "", 1).replace("modulation.modulation", "modulation"): value for key, value in sd.items()}
-            if any(key.startswith("audio_model.") for key in sd.keys()):
-                extra_audio_model = True
+        if any(key.startswith("audio_model.") for key in sd.keys()) and any(key.startswith("blocks.") for key in sd.keys()):
+            extra_audio_model = True
                 
 
         is_wananimate = "pose_patch_embedding.weight" in sd
