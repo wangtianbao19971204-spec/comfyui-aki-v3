@@ -765,6 +765,98 @@ class WanVideoAddStandInLatent:
         updated = dict(embeds)
         updated["standin_input"] = new_entry
         return (updated,)
+    
+class WanVideoAddBindweaveEmbeds:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {"required": {
+                    "embeds": ("WANVIDIMAGE_EMBEDS",),
+                    "reference_latents": ("LATENT", {"tooltip": "Reference image to encode"}),
+                }, 
+                "optional": {
+                    "ref_masks": ("MASK", {"tooltip": "Reference mask to encode"}),
+                    "qwenvl_embeds_pos": ("QWENVL_EMBEDS", {"tooltip": "Qwen-VL image embeddings for the reference image"}),
+                    "qwenvl_embeds_neg": ("QWENVL_EMBEDS", {"tooltip": "Qwen-VL image embeddings for the reference image"}),
+                }
+        }
+
+    RETURN_TYPES = ("WANVIDIMAGE_EMBEDS", "LATENT", "MASK",)
+    RETURN_NAMES = ("image_embeds", "image_embed_preview", "mask_preview",)
+    FUNCTION = "add"
+    CATEGORY = "WanVideoWrapper"
+
+    def add(self, embeds, reference_latents, ref_masks=None, qwenvl_embeds_pos=None, qwenvl_embeds_neg=None):
+        updated = dict(embeds)
+        image_embeds = embeds["image_embeds"]
+        max_refs = 4
+        num_refs = reference_latents["samples"].shape[0]
+        pad = torch.zeros(image_embeds.shape[0], max_refs-num_refs, image_embeds.shape[2], image_embeds.shape[3], device=image_embeds.device, dtype=image_embeds.dtype)
+        if num_refs < max_refs:
+            image_embeds = torch.cat([pad, image_embeds], dim=1)
+        ref_latents = [ref_latent for ref_latent in reference_latents["samples"]]
+        image_embeds = torch.cat([*ref_latents, image_embeds], dim=1)
+        
+        mask = embeds.get("mask", None)
+        if mask is not None:
+            mask_pad = torch.zeros(mask.shape[0], max_refs-num_refs, mask.shape[2], mask.shape[3], device=mask.device, dtype=mask.dtype)
+            if num_refs < max_refs:
+                mask = torch.cat([mask_pad, mask], dim=1)
+            if ref_masks is not None:
+                ref_mask_ = common_upscale(ref_masks.unsqueeze(1), mask.shape[3], mask.shape[2], "nearest", "disabled").movedim(0,1)
+                ref_mask_ = torch.cat([ref_mask_, torch.zeros(3, ref_mask_.shape[1], ref_mask_.shape[2], ref_mask_.shape[3], device=ref_mask_.device, dtype=ref_mask_.dtype)])
+                mask = torch.cat([ref_mask_, mask], dim=1)
+            else:
+                mask = torch.cat([torch.ones(mask.shape[0], num_refs, mask.shape[2], mask.shape[3], device=mask.device, dtype=mask.dtype), mask], dim=1)
+
+            updated["mask"] = mask
+
+        clip_embeds = updated.get("clip_context", None)
+        if clip_embeds is not None:
+            B, T, C = clip_embeds.shape
+            target_len = max_refs * 257  # 4 * 257 = 1028
+            if T < target_len:
+                pad = torch.zeros(B, target_len - T, C, device=clip_embeds.device, dtype=clip_embeds.dtype)
+                padded_embeds = torch.cat([clip_embeds, pad], dim=1)
+                log.info(f"Padded clip embeds from {clip_embeds.shape} to {padded_embeds.shape} for Bindweave")
+                updated["clip_context"] = padded_embeds
+            else:
+                updated["clip_context"] = clip_embeds
+
+        updated["image_embeds"] = image_embeds
+        updated["qwenvl_embeds_pos"] = qwenvl_embeds_pos
+        updated["qwenvl_embeds_neg"] = qwenvl_embeds_neg
+        return (updated, {"samples": image_embeds.unsqueeze(0)}, mask[0].float())
+    
+class TextImageEncodeQwenVL():
+    @classmethod
+    def INPUT_TYPES(s):
+        return {"required": {
+                    "clip": ("CLIP",),
+                    "prompt": ("STRING", {"default": "", "multiline": True}),
+                }, 
+                "optional": {
+                    "image": ("IMAGE", ),
+                }
+        }
+
+    RETURN_TYPES = ("QWENVL_EMBEDS",)
+    RETURN_NAMES = ("qwenvl_embeds",)
+    FUNCTION = "add"
+    CATEGORY = "WanVideoWrapper"
+
+    def add(cls, clip, prompt, image=None):
+        if image is None:
+            input_images = []
+            llama_template = None
+        else:
+            input_images = [image[:, :, :, :3]]
+
+            llama_template = "<|im_start|>system\nYou are a helpful assistant.<|im_end|>\n<|im_start|>user\n<|vision_start|><|image_pad|><|vision_end|>{}<|im_end|>\n<|im_start|>assistant\n"
+
+        tokens = clip.tokenize(prompt, images=input_images, llama_template=llama_template)
+        conditioning = clip.encode_from_tokens_scheduled(tokens)
+        print("Qwen-VL embeds shape:", conditioning[0][0].shape)
+        return (conditioning[0][0],)
 
 class WanVideoAddMTVMotion:
     @classmethod
@@ -835,10 +927,6 @@ class WanVideoImageToVideoEncode:
                 start_latent_strength, end_latent_strength, start_image=None, end_image=None, control_embeds=None, fun_or_fl2v_model=False, 
                 temporal_mask=None, extra_latents=None, clip_embeds=None, tiled_vae=False, add_cond_latents=None, vae=None):
         
-        if start_image is None and end_image is None and add_cond_latents is None:
-            return WanVideoEmptyEmbeds().process(
-                num_frames, width, height, control_embeds=control_embeds, extra_latents=extra_latents,
-            )
         if vae is None:
             raise ValueError("VAE is required for image encoding.")
         H = height
@@ -956,7 +1044,7 @@ class WanVideoImageToVideoEncode:
             gc.collect()
 
         image_embeds = {
-            "image_embeds": y,
+            "image_embeds": y.cpu(),
             "clip_context": clip_embeds.get("clip_embeds", None) if clip_embeds is not None else None,
             "negative_clip_context": clip_embeds.get("negative_clip_embeds", None) if clip_embeds is not None else None,
             "max_seq_len": max_seq_len,
@@ -968,7 +1056,7 @@ class WanVideoImageToVideoEncode:
             "fun_or_fl2v_model": fun_or_fl2v_model,
             "has_ref": has_ref,
             "add_cond_latents": add_cond_latents,
-            "mask": mask
+            "mask": mask.cpu()
         }
 
         return (image_embeds,)
@@ -2246,6 +2334,8 @@ NODE_CLASS_MAPPINGS = {
     "WanVideoAnimateEmbeds": WanVideoAnimateEmbeds,
     "WanVideoAddLucyEditLatents": WanVideoAddLucyEditLatents,
     "WanVideoSchedulerSA_ODE": WanVideoSchedulerSA_ODE,
+    "WanVideoAddBindweaveEmbeds": WanVideoAddBindweaveEmbeds,
+    "TextImageEncodeQwenVL": TextImageEncodeQwenVL,
     "WanVideoUniLumosEmbeds": WanVideoUniLumosEmbeds,
     }
 
@@ -2286,5 +2376,6 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "WanVideoAnimateEmbeds": "WanVideo Animate Embeds",
     "WanVideoAddLucyEditLatents": "WanVideo Add LucyEdit Latents",
     "WanVideoSchedulerSA_ODE": "WanVideo Scheduler SA-ODE",
+    "WanVideoAddBindweaveEmbeds": "WanVideo Add Bindweave Embeds",
     "WanVideoUniLumosEmbeds": "WanVideo UniLumos Embeds",
 }

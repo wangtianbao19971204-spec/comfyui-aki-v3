@@ -342,7 +342,8 @@ class WanVideoSampler:
                 dtype=torch.float32,
                 generator=seed_g,
                 device=torch.device("cpu"))
-            seq_len = image_embeds["max_seq_len"]
+            
+            seq_len = math.ceil((noise.shape[2] * noise.shape[3]) / 4 * noise.shape[1])
 
             control_embeds = image_embeds.get("control_embeds", None)
             if control_embeds is not None:
@@ -411,7 +412,7 @@ class WanVideoSampler:
                     dtype=torch.float32,
                     device=torch.device("cpu"),
                     generator=seed_g)
-
+            
             seq_len = math.ceil((noise.shape[2] * noise.shape[3]) / 4 * noise.shape[1])
 
             recammaster = image_embeds.get("recammaster", None)
@@ -915,6 +916,9 @@ class WanVideoSampler:
             rope_function = "default" #echoshot does not support comfy rope function
             log.info(f"Number of shots in prompt: {shot_num}, Shot token lengths: {shot_len}")
 
+        # Bindweave
+        qwenvl_embeds_pos = image_embeds.get("qwenvl_embeds_pos", None)
+        qwenvl_embeds_neg = image_embeds.get("qwenvl_embeds_neg", None)
 
         mm.unload_all_models()
         mm.soft_empty_cache()
@@ -1357,6 +1361,16 @@ class WanVideoSampler:
                     z = z * c_in
                     timestep = c_noise
 
+                if image_cond is not None:
+                    self.noise_front_pad_num = image_cond_input.shape[1] - z.shape[1]
+                    if self.noise_front_pad_num > 0:
+                        pad = torch.zeros((z.shape[0], self.noise_front_pad_num, z.shape[2], z.shape[3]), dtype=z.dtype, device=z.device)
+                        z = torch.concat([pad, z], dim=1)
+                        nonlocal seq_len
+                        seq_len = math.ceil((z.shape[2] * z.shape[3]) / 4 * z.shape[1])
+                else:
+                    self.noise_front_pad_num = 0
+
                 if background_latents is not None or foreground_latents is not None:
                     z = torch.cat([z, foreground_latents.to(z), background_latents.to(z)], dim=0)
 
@@ -1415,7 +1429,7 @@ class WanVideoSampler:
                     "ovi_negative_text_embeds": ovi_negative_text_embeds, # Audio latent model negative text embeds for Ovi
                     "flashvsr_LQ_latent": flashvsr_LQ_latent, # FlashVSR LQ latent for upsampling
                     "flashvsr_strength": flashvsr_strength, # FlashVSR strength
-                    "num_cond_latents": len(all_indices) if transformer.is_longcat else None # number of cond latents LongCat to separate attention
+                    "num_cond_latents": len(all_indices) if transformer.is_longcat else None,
                 }
 
                 batch_size = 1
@@ -1431,6 +1445,7 @@ class WanVideoSampler:
                         #conditional (positive) pass
                         if pos_latent is not None: # for humo
                             base_params['x'] = [torch.cat([z[:, :-humo_reference_count], pos_latent], dim=1)]
+                        base_params["add_text_emb"] = qwenvl_embeds_pos.to(device) if qwenvl_embeds_pos is not None else None # QwenVL embeddings for Bindweave
                         noise_pred_cond, noise_pred_ovi, cache_state_cond = transformer(
                             context=positive_embeds,
                             pred_id=cache_state[0] if cache_state else None,
@@ -1447,6 +1462,7 @@ class WanVideoSampler:
                         #unconditional (negative) pass
                         base_params['is_uncond'] = True
                         base_params['clip_fea'] = clip_fea_neg if clip_fea_neg is not None else clip_fea
+                        base_params["add_text_emb"] = qwenvl_embeds_neg.to(device) if qwenvl_embeds_neg is not None else None # QwenVL embeddings for Bindweave
                         if wananim_face_pixels is not None:
                             base_params['wananim_face_pixel_values'] = torch.zeros_like(wananim_face_pixels).to(device, torch.float32) - 1
                         if humo_audio_input_neg is not None:
@@ -2974,6 +2990,9 @@ class WanVideoSampler:
 
                     if flowedit_args is None:
                         latent = latent.to(intermediate_device)
+
+                        if self.noise_front_pad_num > 0:
+                            noise_pred = noise_pred[:, self.noise_front_pad_num:]
 
                         if use_tsr:
                             noise_pred = temporal_score_rescaling(noise_pred, latent, timestep, tsr_k, tsr_sigma)
