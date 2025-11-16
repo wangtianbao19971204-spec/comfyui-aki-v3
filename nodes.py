@@ -2083,6 +2083,49 @@ class WanVideoRoPEFunction:
             return (rope_func_dict,)
         return (rope_function,)
 
+#region TTM
+class WanVideoAddTTMLatents:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {"required": {
+            "embeds": ("WANVIDIMAGE_EMBEDS",),
+            "reference_latents": ("LATENT", {"tooltip": "Latents used as reference for TTM"}),
+            "mask": ("MASK", {"tooltip": "Mask used for TTM"}),
+            "start_step": ("INT", {"default": 0, "min": -1, "max": 1000, "step": 1, "tooltip": "Start step for whole denoising process"}),
+            "end_step": ("INT", {"default": 1, "min": 1, "max": 1000, "step": 1, "tooltip": "The step to stop applying TTM"}),
+            },
+        }
+
+    RETURN_TYPES = ("WANVIDIMAGE_EMBEDS", )
+    RETURN_NAMES = ("image_embeds", )
+    FUNCTION = "add"
+    CATEGORY = "WanVideoWrapper"
+    DESCRIPTION = "https://github.com/time-to-move/TTM"
+
+    def add(self, embeds, reference_latents, mask, start_step, end_step):
+
+        if end_step < max(0, start_step):
+            raise ValueError(f"`end_step` ({end_step}) must be >= `start_step` ({start_step}).")
+
+        mask_sampled = mask[::VAE_STRIDE[0]]
+        mask_sampled = mask_sampled.unsqueeze(1).unsqueeze(0)  # [1, T, 1, H, W]
+
+        # Upsample spatially to latent resolution
+        H_latent = mask_sampled.shape[-2] // VAE_STRIDE[1]
+        W_latent = mask_sampled.shape[-1] // VAE_STRIDE[1]
+        mask_latent = F.interpolate(
+            mask_sampled.float(),
+            size=(mask_sampled.shape[2], H_latent, W_latent),
+            mode="nearest"
+        )
+
+        updated = dict(embeds)
+        updated["ttm_reference_latents"] = reference_latents["samples"].squeeze(0)
+        updated["ttm_mask"] = mask_latent.squeeze(0).movedim(1, 0)  # [T, 1, H, W]
+        updated["ttm_start_step"] = start_step
+        updated["ttm_end_step"] = end_step
+
+        return (updated,)
 
 #region VideoDecode
 class WanVideoDecode:
@@ -2292,6 +2335,8 @@ class WanVideoEncode:
         if latent_strength != 1.0:
             latents *= latent_strength
 
+        latents = latents.cpu()
+
         log.info(f"WanVideoEncode: Encoded latents shape {latents.shape}")
         mm.soft_empty_cache()
  
@@ -2337,6 +2382,7 @@ NODE_CLASS_MAPPINGS = {
     "WanVideoAddBindweaveEmbeds": WanVideoAddBindweaveEmbeds,
     "TextImageEncodeQwenVL": TextImageEncodeQwenVL,
     "WanVideoUniLumosEmbeds": WanVideoUniLumosEmbeds,
+    "WanVideoAddTTMLatents": WanVideoAddTTMLatents,
     }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -2378,4 +2424,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "WanVideoSchedulerSA_ODE": "WanVideo Scheduler SA-ODE",
     "WanVideoAddBindweaveEmbeds": "WanVideo Add Bindweave Embeds",
     "WanVideoUniLumosEmbeds": "WanVideo UniLumos Embeds",
+    "WanVideoAddTTMLatents": "WanVideo Add TTMLatents",
 }

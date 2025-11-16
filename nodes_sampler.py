@@ -1151,6 +1151,23 @@ class WanVideoSampler:
             log.info(f"UniLumos background latent input shape: {background_latents.shape}")
             background_latents = background_latents.to(device, dtype)
 
+        #Time-to-move (TTM)
+        ttm_start_step = 0
+        ttm_reference_latents = image_embeds.get("ttm_reference_latents", None)
+        if ttm_reference_latents is not None:
+            motion_mask = image_embeds["ttm_mask"].to(device, dtype)
+            background_mask = 1 - motion_mask
+            ttm_start_step = image_embeds["ttm_start_step"]
+            ttm_end_step = image_embeds["ttm_end_step"]
+
+            log.info("Using Time-to-move (TTM)")
+            log.info(f"TTM reference latents shape: {ttm_reference_latents.shape}")
+            log.info(f"TTM motion mask shape: {motion_mask.shape}")
+            log.info(f"Applying TTM from step {ttm_start_step} to {ttm_end_step}")
+
+            tweak = torch.as_tensor(timesteps[ttm_start_step], device=device, dtype=torch.long).view(1)
+            latent = sample_scheduler.add_noise(ttm_reference_latents, noise, tweak).to(latent)
+
         #region model pred
         def predict_with_cfg(z, cfg_scale, positive_embeds, negative_embeds, timestep, idx, image_cond=None, clip_fea=None,
                              control_latents=None, vace_data=None, unianim_data=None, audio_proj=None, control_camera_latents=None,
@@ -1621,7 +1638,7 @@ class WanVideoSampler:
 
         if not multitalk_sampling and not framepack and not wananimate_loop:
             log.info(f"Input sequence length: {seq_len}")
-            log.info(f"Sampling {(latent_video_length-1) * 4 + 1} frames at {latent.shape[3]*vae_upscale_factor}x{latent.shape[2]*vae_upscale_factor} with {steps} steps")
+            log.info(f"Sampling {(latent_video_length-1) * 4 + 1} frames at {latent.shape[3]*vae_upscale_factor}x{latent.shape[2]*vae_upscale_factor} with {steps-ttm_start_step} steps")
 
         intermediate_device = device
 
@@ -1705,9 +1722,9 @@ class WanVideoSampler:
                 if pusa_noisy_steps == -1:
                     pusa_noisy_steps = len(timesteps)
             try:
-                pbar = ProgressBar(len(timesteps))
+                pbar = ProgressBar(len(timesteps) - ttm_start_step)
                 #region main loop start
-                for idx, t in enumerate(tqdm(timesteps, disable=multitalk_sampling or wananimate_loop)):
+                for idx, t in enumerate(tqdm(timesteps[ttm_start_step:], disable=multitalk_sampling or wananimate_loop)):
                     if flowedit_args is not None:
                         if idx < skip_steps:
                             continue
@@ -3058,6 +3075,16 @@ class WanVideoSampler:
                                 )
                                 mask = masks[idx].to(latent)
                                 latent = image_latent * mask + latent * (1-mask)
+                        
+                        # TTM
+                        if ttm_reference_latents is not None and (idx + ttm_start_step) < ttm_end_step:
+                            if idx + ttm_start_step + 1 < len(timesteps):
+                                prev_t = timesteps[idx + ttm_start_step + 1]
+                                prev_t = torch.as_tensor(prev_t, device=device, dtype=torch.long).view(1)
+                                noisy_latents = sample_scheduler.add_noise(ttm_reference_latents, noise, prev_t).to(latent)
+                                latent = latent * background_mask + noisy_latents * motion_mask
+                            else:
+                                latent = latent * background_mask + ttm_reference_latents.to(latent) * motion_mask
 
                         if freeinit_args is not None:
                             current_latent = latent.clone()
