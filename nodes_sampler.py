@@ -250,6 +250,7 @@ class WanVideoSampler:
         if isinstance(scheduler, dict):
             sample_scheduler = copy.deepcopy(scheduler["sample_scheduler"])
             timesteps = scheduler["timesteps"]
+            start_step = scheduler.get("start_step", start_step)
         elif scheduler != "multitalk":
             sample_scheduler, timesteps,_,_ = get_scheduler(scheduler, steps, start_step, end_step, shift, device, transformer.dim, flowedit_args, denoise_strength, sigmas=sigmas, log_timesteps=True)
             log.info(f"sigmas: {sample_scheduler.sigmas}")
@@ -1156,17 +1157,19 @@ class WanVideoSampler:
         ttm_reference_latents = image_embeds.get("ttm_reference_latents", None)
         if ttm_reference_latents is not None:
             motion_mask = image_embeds["ttm_mask"].to(device, dtype)
-            background_mask = 1 - motion_mask
-            ttm_start_step = image_embeds["ttm_start_step"]
-            ttm_end_step = image_embeds["ttm_end_step"]
+            ttm_start_step = max(image_embeds["ttm_start_step"] - start_step, 0)
+            ttm_end_step = image_embeds["ttm_end_step"] - start_step
 
-            log.info("Using Time-to-move (TTM)")
-            log.info(f"TTM reference latents shape: {ttm_reference_latents.shape}")
-            log.info(f"TTM motion mask shape: {motion_mask.shape}")
-            log.info(f"Applying TTM from step {ttm_start_step} to {ttm_end_step}")
+            if ttm_start_step > steps:
+                raise ValueError("TTM start step is beyond the total number of steps")
 
-            tweak = torch.as_tensor(timesteps[ttm_start_step], device=device, dtype=torch.long).view(1)
-            latent = sample_scheduler.add_noise(ttm_reference_latents, noise, tweak).to(latent)
+            if ttm_end_step > ttm_start_step:
+                log.info("Using Time-to-move (TTM)")
+                log.info(f"TTM reference latents shape: {ttm_reference_latents.shape}")
+                log.info(f"TTM motion mask shape: {motion_mask.shape}")
+                log.info(f"Applying TTM from step {ttm_start_step} to {ttm_end_step}")
+
+                latent = add_noise(ttm_reference_latents, noise, timesteps[ttm_start_step].to(noise.device)).to(latent)
 
         #region model pred
         def predict_with_cfg(z, cfg_scale, positive_embeds, negative_embeds, timestep, idx, image_cond=None, clip_fea=None,
@@ -3078,13 +3081,11 @@ class WanVideoSampler:
                         
                         # TTM
                         if ttm_reference_latents is not None and (idx + ttm_start_step) < ttm_end_step:
-                            if idx + ttm_start_step + 1 < len(timesteps):
-                                prev_t = timesteps[idx + ttm_start_step + 1]
-                                prev_t = torch.as_tensor(prev_t, device=device, dtype=torch.long).view(1)
-                                noisy_latents = sample_scheduler.add_noise(ttm_reference_latents, noise, prev_t).to(latent)
-                                latent = latent * background_mask + noisy_latents * motion_mask
+                            if idx + ttm_start_step + 1 < len(sample_scheduler.all_timesteps):
+                                noisy_latents = add_noise(ttm_reference_latents, noise, sample_scheduler.all_timesteps[idx + ttm_start_step + 1].to(noise.device)).to(latent)
+                                latent = latent * (1 - motion_mask) + noisy_latents * motion_mask
                             else:
-                                latent = latent * background_mask + ttm_reference_latents.to(latent) * motion_mask
+                                latent = latent * (1 - motion_mask) + ttm_reference_latents.to(latent) * motion_mask
 
                         if freeinit_args is not None:
                             current_latent = latent.clone()

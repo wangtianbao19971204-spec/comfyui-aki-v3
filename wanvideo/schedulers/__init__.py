@@ -156,6 +156,7 @@ def get_scheduler(scheduler, steps, start_step, end_step, shift, device, transfo
             end_idx = end_step - 1
 
     # Slice timesteps and sigmas once, based on indices
+    all_timesteps = timesteps
     timesteps = timesteps[start_idx:end_idx+1]
     sample_scheduler.full_sigmas = sample_scheduler.sigmas.clone()
     sample_scheduler.sigmas = sample_scheduler.sigmas[start_idx:start_idx+len(timesteps)+1]  # always one longer
@@ -167,5 +168,6 @@ def get_scheduler(scheduler, steps, start_step, end_step, shift, device, transfo
 
     if hasattr(sample_scheduler, 'timesteps'):
         sample_scheduler.timesteps = timesteps
+    setattr(sample_scheduler, 'all_timesteps', all_timesteps)
 
     return sample_scheduler, timesteps, start_idx, end_idx
