@@ -2431,7 +2431,7 @@ class WanModel(torch.nn.Module):
             if ip_image.dim() == 6 and ip_image.shape[3] == 1:
                 ip_image = ip_image.squeeze(1)
 
-            ip_image_patch = self.original_patch_embedding(ip_image.float()).to(self.base_dtype)
+            ip_image_patch = self.original_patch_embedding(ip_image.to(x.device).float()).to(self.base_dtype)
             f_ip, h_ip, w_ip = ip_image_patch.shape[2:]
             x_ip = ip_image_patch.flatten(2).transpose(1, 2)  # [B, N, D]
             freq_offset = standin_input["freq_offset"]
