@@ -181,6 +181,23 @@ async def wildcards_list(request):
     return web.json_response(data)
 
 
+@PromptServer.instance.routes.get("/impact/wildcards/list/loaded")
+async def wildcards_list_loaded(request):
+    """
+    Get list of actually loaded wildcards (progressive loading in on-demand mode).
+
+    Returns:
+        - In on-demand mode: only wildcards that have been loaded into memory
+        - In full cache mode: same as /wildcards/list (all wildcards)
+    """
+    data = {
+        'data': impact.wildcards.get_loaded_wildcard_list(),
+        'on_demand_mode': impact.wildcards.is_on_demand_mode(),
+        'total_available': 0 if impact.wildcards.is_on_demand_mode() else len(impact.wildcards.wildcard_dict)
+    }
+    return web.json_response(data)
+
+
 @PromptServer.instance.routes.post("/impact/wildcards")
 async def populate_wildcards(request):
     data = await request.json()
