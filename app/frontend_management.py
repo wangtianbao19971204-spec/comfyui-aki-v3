@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
 from typing import Dict, TypedDict, Optional
+from functools import lru_cache
 from aiohttp import web
 from importlib.metadata import version
 
@@ -258,6 +259,7 @@ comfyui-frontend-package is not installed.
             sys.exit(-1)
 
     @classmethod
+    @lru_cache(maxsize=1)
     def template_asset_map(cls) -> Optional[Dict[str, str]]:
         """Return a mapping of template asset names to their absolute paths."""
         try:
@@ -302,9 +304,6 @@ comfyui-workflow-templates is not installed.
 
         return asset_map
 
-    @classmethod
-    def templates_path(cls) -> Optional[Dict[str, str]]:
-        return cls.template_asset_map()
 
     @classmethod
     def legacy_templates_path(cls) -> Optional[str]:
