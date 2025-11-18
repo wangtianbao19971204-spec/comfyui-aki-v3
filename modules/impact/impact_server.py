@@ -1,29 +1,25 @@
+import io
+import logging
 import os
+import random
 import threading
 import traceback
+from io import BytesIO
 
-from aiohttp import web
-
-import impact
+import comfy
 import folder_paths
-
-import torchvision
-
+import impact
 import impact.core as core
 import impact.impact_pack as impact_pack
-from impact.utils import to_tensor
 import impact.utils as utils
-from segment_anything import SamPredictor, sam_model_registry
-import numpy as np
 import nodes
+import numpy as np
+import torchvision
+from aiohttp import web
+from impact.utils import to_tensor
 from PIL import Image
-import io
-import comfy
-from io import BytesIO
-import random
+from segment_anything import SamPredictor, sam_model_registry
 from server import PromptServer
-import logging
-
 
 sam_predictor = None
 default_sam_model_name = os.path.join(impact_pack.model_path, "sams", "sam_vit_b_01ec64.pth")
@@ -193,7 +189,7 @@ async def wildcards_list_loaded(request):
     data = {
         'data': impact.wildcards.get_loaded_wildcard_list(),
         'on_demand_mode': impact.wildcards.is_on_demand_mode(),
-        'total_available': 0 if impact.wildcards.is_on_demand_mode() else len(impact.wildcards.wildcard_dict)
+        'total_available': len(impact.wildcards.available_wildcards) if impact.wildcards.is_on_demand_mode() else len(impact.wildcards.wildcard_dict)
     }
     return web.json_response(data)
 

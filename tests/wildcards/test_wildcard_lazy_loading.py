@@ -10,7 +10,6 @@ import tempfile
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 
 from modules.impact import wildcards
-from modules.impact import config
 
 def test_lazy_loader():
     """Test LazyWildcardLoader class"""

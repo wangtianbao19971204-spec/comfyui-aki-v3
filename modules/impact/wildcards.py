@@ -1,15 +1,14 @@
-import re
-import random
-import os
-import nodes
-import folder_paths
-import yaml
-import numpy as np
-import threading
-from impact import utils
-from impact import config
 import logging
+import os
+import random
+import re
+import threading
 
+import folder_paths
+import nodes
+import numpy as np
+import yaml
+from impact import config, utils
 
 wildcards_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "wildcards"))
 
@@ -45,11 +44,11 @@ class LazyWildcardLoader:
         try:
             with open(self.file_path, 'r', encoding="ISO-8859-1") as f:
                 lines = f.read().splitlines()
-                return [x for x in lines if not x.strip().startswith('#')]
+                return [x for x in lines if x.strip() and not x.strip().startswith('#')]
         except (yaml.reader.ReaderError, UnicodeDecodeError):
             with open(self.file_path, 'r', encoding="UTF-8", errors="ignore") as f:
                 lines = f.read().splitlines()
-                return [x for x in lines if not x.strip().startswith('#')]
+                return [x for x in lines if x.strip() and not x.strip().startswith('#')]
 
     def _load_yaml(self):
         """Load .yaml/.yml wildcard file"""
@@ -308,6 +307,31 @@ def get_wildcard_value(key):
         # YAML files are already pre-loaded, so if not in cache, it doesn't exist
         file_path, is_yaml = find_wildcard_file(key)
         if file_path is None:
+            # Fallback: Try pattern matching to find wildcards at any depth
+            # Example: "dragon" matches "dragon.txt", "fantasy/dragon.txt", "dragon/fire.txt", etc.
+            matched_keys = []
+            for k in available_wildcards.keys():
+                if (k == key or
+                    k.endswith('/' + key) or
+                    k.startswith(key + '/') or
+                    ('/' + key + '/') in k):
+                    matched_keys.append(k)
+
+            if matched_keys:
+                # Collect all options from matched keys
+                all_options = []
+                for matched_key in matched_keys:
+                    # Load each matched wildcard
+                    value = get_wildcard_value(matched_key)
+                    if value:
+                        all_options.extend(value)
+
+                if all_options:
+                    # Cache the combined result
+                    loaded_wildcards[key] = all_options
+                    logging.info(f"[Impact Pack] Wildcard '{key}' resolved via depth-agnostic pattern matching to {len(matched_keys)} keys: {matched_keys}")
+                    return all_options
+
             return None
 
         # YAML files should already be loaded
@@ -338,11 +362,11 @@ def load_txt_wildcard(file_path):
     try:
         with open(file_path, 'r', encoding="ISO-8859-1") as f:
             lines = f.read().splitlines()
-            return [x for x in lines if not x.strip().startswith('#')]
+            return [x for x in lines if x.strip() and not x.strip().startswith('#')]
     except (yaml.reader.ReaderError, UnicodeDecodeError):
         with open(file_path, 'r', encoding="UTF-8", errors="ignore") as f:
             lines = f.read().splitlines()
-            return [x for x in lines if not x.strip().startswith('#')]
+            return [x for x in lines if x.strip() and not x.strip().startswith('#')]
 
 
 def load_yaml_wildcard(file_path, key_prefix=''):
@@ -458,11 +482,11 @@ def read_wildcard_dict(wildcard_path, on_demand=False):
                     try:
                         with open(file_path, 'r', encoding="ISO-8859-1") as f:
                             lines = f.read().splitlines()
-                            wildcard_dict[key] = [x for x in lines if not x.strip().startswith('#')]
+                            wildcard_dict[key] = [x for x in lines if x.strip() and not x.strip().startswith('#')]
                     except yaml.reader.ReaderError:
                         with open(file_path, 'r', encoding="UTF-8", errors="ignore") as f:
                             lines = f.read().splitlines()
-                            wildcard_dict[key] = [x for x in lines if not x.strip().startswith('#')]
+                            wildcard_dict[key] = [x for x in lines if x.strip() and not x.strip().startswith('#')]
             elif file.endswith('.yaml') or file.endswith('.yml'):
                 file_path = os.path.join(root, file)
 
@@ -642,31 +666,61 @@ def process(text, seed=None):
             keyword = match.lower()
             keyword = wildcard_normalize(keyword)
 
+            if '*' in keyword:
+                logging.info(f"[Impact Pack] [get_wildcard_options] Processing wildcard pattern: keyword={keyword}")
+
             # Use get_wildcard_value for on-demand loading support
             wildcard_value = get_wildcard_value(keyword)
 
             if wildcard_value is not None:
                 options.extend(wildcard_value)
             elif '*' in keyword:
-                subpattern = keyword.replace('*', '.*').replace('+', '\\+')
                 total_patterns = []
                 found = False
 
                 # For wildcard patterns, search through available wildcards
                 search_dict = available_wildcards if _on_demand_mode else local_wildcard_dict
-                for k in search_dict.keys():
-                    if re.match(subpattern, k) is not None or re.match(subpattern, k+'/') is not None:
-                        # Load on-demand if needed
-                        v = get_wildcard_value(k)
-                        if v:
-                            total_patterns += v
-                            found = True
+
+                # Special case: __*/name__ should match both 'name' and 'name/*' at any depth
+                if keyword.startswith('*/') and len(keyword) > 2:
+                    base_name = keyword[2:]  # Remove '*/' prefix
+
+                    logging.info(f"[Impact Pack] [get_wildcard_options] Pattern: keyword={keyword}, base={base_name}, on_demand={_on_demand_mode}, search_dict_size={len(search_dict)}")
+
+                    matched_count = 0
+                    for k in search_dict.keys():
+                        # Match if key ends with base_name or contains base_name/subdirs
+                        # Pattern matching examples for base_name="dragon":
+                        #   "dragon" -> match (exact)
+                        #   "fantasy/dragon" -> match (nested file)
+                        #   "dragon/fire" -> match (subfolder)
+                        #   "fantasy/dragon/fire" -> match (deeply nested)
+                        if (k == base_name or
+                            k.endswith('/' + base_name) or
+                            k.startswith(base_name + '/') or
+                            ('/' + base_name + '/') in k):
+                            logging.info(f"[Impact Pack] [get_wildcard_options] Matched: {k}")
+                            v = get_wildcard_value(k)
+                            if v:
+                                total_patterns += v
+                                found = True
+                                matched_count += 1
+
+                    logging.info(f"[Impact Pack] [get_wildcard_options] Result: matched={matched_count}, patterns={len(total_patterns)}")
+                else:
+                    # General wildcard pattern matching
+                    subpattern = keyword.replace('*', '.*').replace('+', '\\+')
+                    for k in search_dict.keys():
+                        if re.match(subpattern, k) is not None or re.match(subpattern, k+'/') is not None:
+                            # Load on-demand if needed
+                            v = get_wildcard_value(k)
+                            if v:
+                                total_patterns += v
+                                found = True
 
                 if found:
                     options.extend(total_patterns)
-            elif '/' not in keyword:
-                string_fallback = string.replace(f"__{match}__", f"__*/{match}__", 1)
-                options.extend(get_wildcard_options(string_fallback))
+            # Note: Fallback to __*/name__ is handled in replace_wildcard, not here
 
         return options
 
@@ -703,19 +757,41 @@ def process(text, seed=None):
                 replacements_found = True
                 string = string.replace(f"__{match}__", replacement, 1)
             elif '*' in keyword:
-                subpattern = keyword.replace('*', '.*').replace('+', '\\+')
                 total_patterns = []
                 found = False
 
                 # For wildcard patterns, search through available wildcards
                 search_dict = available_wildcards if _on_demand_mode else local_wildcard_dict
-                for k in search_dict.keys():
-                    if re.match(subpattern, k) is not None or re.match(subpattern, k+'/') is not None:
-                        # Load on-demand if needed
-                        v = get_wildcard_value(k)
-                        if v:
-                            total_patterns += v
-                            found = True
+
+                # Special case: __*/name__ should match both 'name' and 'name/*' at any depth
+                if keyword.startswith('*/') and len(keyword) > 2:
+                    base_name = keyword[2:]  # Remove '*/' prefix
+
+                    for k in search_dict.keys():
+                        # Match if key ends with base_name or contains base_name/subdirs
+                        # Pattern matching examples for base_name="dragon":
+                        #   "dragon" -> match (exact)
+                        #   "fantasy/dragon" -> match (nested file)
+                        #   "dragon/fire" -> match (subfolder)
+                        #   "fantasy/dragon/fire" -> match (deeply nested)
+                        if (k == base_name or
+                            k.endswith('/' + base_name) or
+                            k.startswith(base_name + '/') or
+                            ('/' + base_name + '/') in k):
+                            v = get_wildcard_value(k)
+                            if v:
+                                total_patterns += v
+                                found = True
+                else:
+                    # General wildcard pattern matching
+                    subpattern = keyword.replace('*', '.*').replace('+', '\\+')
+                    for k in search_dict.keys():
+                        if re.match(subpattern, k) is not None or re.match(subpattern, k+'/') is not None:
+                            # Load on-demand if needed
+                            v = get_wildcard_value(k)
+                            if v:
+                                total_patterns += v
+                                found = True
 
                 if found:
                     replacement = random_gen.choice(total_patterns)
@@ -1143,15 +1219,21 @@ def wildcard_load():
                         f"exceeds cache limit ({cache_limit / (1024*1024):.2f} MB). "
                         f"Using on-demand loading mode (TXT files loaded dynamically).")
 
-            # On-demand mode: Load YAML files immediately (limitation)
-            # TXT files will be discovered dynamically when accessed
+            # On-demand mode: Scan for TXT file metadata and load YAML files immediately
+            # Metadata scan discovers TXT files without loading their content
+            txt_count = scan_wildcard_metadata(wildcards_path)
+            if custom_wildcards_path and os.path.exists(custom_wildcards_path):
+                txt_count += scan_wildcard_metadata(custom_wildcards_path)
+
+            # Load YAML files immediately (limitation: YAML keys are inside file content)
             yaml_count = load_yaml_files_only(wildcards_path)
             if custom_wildcards_path and os.path.exists(custom_wildcards_path):
                 yaml_count += load_yaml_files_only(custom_wildcards_path)
 
             logging.info(f"[Impact Pack] On-demand mode active. "
+                        f"Discovered {txt_count} TXT wildcards (metadata only). "
                         f"Pre-loaded {yaml_count} YAML wildcards. "
-                        f"TXT wildcards will be loaded only when accessed.")
+                        f"TXT wildcard content will be loaded only when accessed.")
         else:
             logging.info(f"[Impact Pack] Wildcard total size ({total_size / (1024*1024):.2f} MB) "
                         f"is within cache limit ({cache_limit / (1024*1024):.2f} MB). "

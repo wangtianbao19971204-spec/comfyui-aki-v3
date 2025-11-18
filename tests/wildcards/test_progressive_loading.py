@@ -14,7 +14,6 @@ impact_pack_dir = os.path.dirname(test_dir)
 sys.path.insert(0, impact_pack_dir)
 
 from modules.impact import wildcards
-from modules.impact import config
 
 
 def test_early_termination():
@@ -39,7 +38,7 @@ def test_early_termination():
         limited_size = wildcards.calculate_directory_size(tmpdir, limit=50)
         print(f"✓ Size with 50 byte limit: {limited_size} bytes")
         assert limited_size >= 50, f"Expected >= 50 bytes, got {limited_size}"
-        assert limited_size <= total_size, f"Limited should not exceed total"
+        assert limited_size <= total_size, "Limited should not exceed total"
 
         print(f"✓ Early termination working (stopped at {limited_size} bytes)")
         print("\n✅ Early termination test PASSED\n")
@@ -83,7 +82,7 @@ def test_metadata_scan():
 
         # Verify that data is NOT loaded
         assert len(wildcards.loaded_wildcards) == 0, "Data should not be loaded yet"
-        print(f"✓ No data loaded (metadata only)")
+        print("✓ No data loaded (metadata only)")
 
         # Verify file paths are stored
         for key in wildcards.available_wildcards.keys():
@@ -152,7 +151,7 @@ def test_progressive_loading():
         print("\nRe-accessing wildcard1 (cached)...")
         data1_again = wildcards.get_wildcard_value("wildcard1")
         assert data1_again == data1, "Cached data should match"
-        print(f"✓ Cache hit, data matches")
+        print("✓ Cache hit, data matches")
         print(f"✓ Loaded count: {len(wildcards.loaded_wildcards)}")
         assert len(wildcards.loaded_wildcards) == 2, "Count should not increase on cache hit"
 
@@ -166,7 +165,7 @@ def test_progressive_loading():
 
         # Verify all loaded
         assert set(wildcards.loaded_wildcards.keys()) == {"wildcard1", "wildcard2", "wildcard3"}
-        print(f"✓ All wildcards loaded progressively")
+        print("✓ All wildcards loaded progressively")
 
         print("\n✅ Progressive loading test PASSED\n")
 
@@ -213,7 +212,7 @@ def test_wildcard_list_functions():
 
         # Verify loaded list is subset of available list
         assert set(loaded_wildcards_list).issubset(set(all_wildcards)), "Loaded should be subset of available"
-        print(f"✓ Loaded list is subset of available list")
+        print("✓ Loaded list is subset of available list")
 
         print("\n✅ Wildcard list functions test PASSED\n")
 

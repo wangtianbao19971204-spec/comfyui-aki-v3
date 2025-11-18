@@ -12,7 +12,6 @@ All three scenarios should produce identical wildcard lists and values.
 
 import sys
 import os
-import json
 
 # Add parent directory to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))

@@ -1,9 +1,8 @@
 import configparser
-import os
 import logging
+import os
 
-
-version_code = [8, 26]
+version_code = [8, 27]
 version = f"V{version_code[0]}.{version_code[1]}" + (f'.{version_code[2]}' if len(version_code) > 2 else '')
 
 my_path = os.path.dirname(__file__)
@@ -31,9 +30,14 @@ def read_config():
         config.read(config_path)
         default_conf = config['default']
 
-        if not os.path.exists(default_conf['custom_wildcards']):
-            logging.warning(f"[Impact Pack] custom_wildcards path not found: {default_conf['custom_wildcards']}. Using default path.")
-            default_conf['custom_wildcards'] = os.path.join(my_path, "..", "..", "custom_wildcards")
+        # Strip quotes from custom_wildcards path if present
+        custom_wildcards_path = default_conf.get('custom_wildcards', '').strip('\'"')
+
+        if not os.path.exists(custom_wildcards_path):
+            logging.warning(f"[Impact Pack] custom_wildcards path not found: {custom_wildcards_path}. Using default path.")
+            custom_wildcards_path = os.path.join(my_path, "..", "..", "custom_wildcards")
+
+        default_conf['custom_wildcards'] = custom_wildcards_path
 
         # Parse wildcard_cache_limit_mb with default value of 50MB
         cache_limit_mb = 50

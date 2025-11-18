@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Find deep transitive wildcard references (5+ levels)"""
 
-import os
 import re
 from pathlib import Path
-from collections import defaultdict, deque
+from collections import defaultdict
 
 # Auto-detect paths
 SCRIPT_DIR = Path(__file__).parent

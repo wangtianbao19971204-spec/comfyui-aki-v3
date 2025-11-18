@@ -11,9 +11,7 @@ Tests include:
 
 import subprocess
 import time
-import json
 import sys
-import os
 from pathlib import Path
 
 # Auto-detect paths
@@ -44,7 +42,7 @@ wildcard_cache_limit_mb = {cache_limit}
         f.write(config_content)
 
     # Start ComfyUI
-    print(f"Starting ComfyUI...")
+    print("Starting ComfyUI...")
     proc = subprocess.Popen(
         ['bash', 'run.sh', '--listen', '127.0.0.1', '--port', '8191'],
         cwd=str(COMFYUI_DIR),
@@ -60,9 +58,9 @@ wildcard_cache_limit_mb = {cache_limit}
     import requests
     try:
         response = requests.get('http://127.0.0.1:8191/')
-        print(f"✓ Server started successfully\n")
-    except:
-        print(f"✗ Server failed to start")
+        print("✓ Server started successfully\n")
+    except Exception:
+        print("✗ Server failed to start")
         proc.terminate()
         return {}
 
