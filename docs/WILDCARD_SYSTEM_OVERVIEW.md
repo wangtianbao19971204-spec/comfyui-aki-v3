@@ -9,9 +9,6 @@
 ### Core Documentation
 1. **[System Overview](#system-overview)** (This document) - Complete system architecture
 2. **[Testing Guide](WILDCARD_TESTING_GUIDE.md)** - Comprehensive testing documentation
-3. **[Progressive Loading](../tests/README_PROGRESSIVE_ONDEMAND.md)** - Progressive on-demand loading
-4. **[Design Document](DESIGN_WILDCARD_SYSTEM.md)** - Original design specifications
-5. **[PRD](PRD_WILDCARD_SYSTEM.md)** - Product requirements
 
 ### Quick Links
 - **[Quick Start](#quick-start)** - Get started in 5 minutes
@@ -111,6 +108,19 @@ or
 [Impact Pack] Wildcard total size (125.67 MB) exceeds cache limit (50.00 MB).
 Using on-demand loading mode (metadata scan only).
 ```
+
+### 5. Refresh Wildcards
+
+**When you add or modify wildcard files**:
+```bash
+# Call the refresh API endpoint
+curl http://127.0.0.1:8188/impact/wildcards/refresh
+```
+
+**What happens**:
+- All cached wildcards are cleared (both full cache and on-demand loaded)
+- System re-scans directories and re-determines loading mode
+- No need to restart ComfyUI
 
 ---
 
@@ -298,14 +308,18 @@ Process wildcard text and return populated result.
 
 ### GET `/impact/wildcards/refresh`
 
-Reload all wildcards (clears cache).
+Reload all wildcards (clears all cached data).
 
 **Response**: `200 OK`
 
 **Behavior**:
-- Re-scans wildcard directories
-- Clears both `wildcard_dict` and `loaded_wildcards`
-- Re-determines full cache vs on-demand mode
+- **Clears all cached data**: Both `wildcard_dict` and `loaded_wildcards` are completely cleared
+- **Re-scans wildcard directories**: Performs fresh metadata scan
+- **Re-determines loading mode**: Recalculates total size and chooses full cache vs on-demand mode
+- **On-demand impact**: Previously loaded wildcards are cleared and will reload on next access
+- **Use case**: Apply changes to wildcard files without restarting ComfyUI
+
+**Important**: In on-demand mode, all progressively loaded wildcards are cleared. The loaded count resets to 0 (YAML only), and TXT wildcards reload when accessed.
 
 ---
 
@@ -627,7 +641,7 @@ curl http://127.0.0.1:8188/impact/wildcards/list/loaded
 1. Verify on-demand mode is active
 2. Check `/list/loaded` count
 3. Look for memory leaks in logs
-4. Restart server to clear cache
+4. Use `/wildcards/refresh` to clear cache (preferred) or restart server
 
 ---
 
@@ -639,6 +653,25 @@ curl http://127.0.0.1:8188/impact/wildcards/list/loaded
 1. Check disk I/O (SSD recommended)
 2. Verify file system is not network-mounted
 3. Check wildcard file size (large files take longer)
+
+---
+
+### Wildcard Changes Not Appearing
+
+**Problem**: Added/modified wildcard files but changes don't show up in ComfyUI.
+
+**Solution**: Call the refresh endpoint to reload wildcards:
+```bash
+curl http://127.0.0.1:8188/impact/wildcards/refresh
+```
+
+**What refresh does**:
+- Clears all cached wildcards (full cache and on-demand loaded)
+- Re-scans wildcard directories
+- Re-determines loading mode based on current total size
+- In on-demand mode: loaded count resets, wildcards reload when accessed
+
+**Alternative**: Restart ComfyUI (but refresh is faster and preferred)
 
 ---
 
@@ -808,14 +841,8 @@ bash tests/test_progressive_ondemand.sh
 
 ### Documentation
 - **[Testing Guide](WILDCARD_TESTING_GUIDE.md)** - Complete testing documentation
-- **[Progressive Loading](../tests/README_PROGRESSIVE_ONDEMAND.md)** - Progressive on-demand loading
-- **[Design Document](DESIGN_WILDCARD_SYSTEM.md)** - Design specifications
-- **[PRD](PRD_WILDCARD_SYSTEM.md)** - Product requirements
-
-### Test Documentation
-- **[Lazy Load Tests](../tests/README_LAZY_LOAD_TEST.md)** - Lazy loading tests
-- **[Sequential Tests](../tests/SEQUENTIAL_LOADING_TESTS.md)** - Sequential/transitive tests
-- **[Versatile Prompts](../tests/VERSATILE_PROMPTS.md)** - Versatile prompt tests
+- **[Test Documentation](../tests/README.md)** - Test suite overview
+- **[Wildcard Tests](../tests/wildcards/README.md)** - Wildcard-specific tests
 
 ### Code
 - **Wildcard System**: `modules/impact/wildcards.py`
@@ -826,34 +853,25 @@ bash tests/test_progressive_ondemand.sh
 
 ## Changelog
 
-### v3.0 - Progressive On-Demand Loading ⭐ NEW
+### Progressive On-Demand Loading
 
 **Added**:
-- ✅ True progressive on-demand loading
+- ✅ Progressive on-demand loading
 - ✅ Early termination size calculation
 - ✅ Metadata-only scanning
 - ✅ `/impact/wildcards/list/loaded` API endpoint
+- ✅ Automatic mode detection
+- ✅ Cache size limits
 - ✅ Comprehensive test suite
 
 **Improved**:
-- ✅ Startup time: 20-60 min → < 1 min (large datasets)
-- ✅ Memory usage: GB → < 100MB (large datasets)
+- ✅ Startup time: < 1 min (vs 20-60 min for large datasets)
+- ✅ Memory usage: < 100MB initial (vs GB for large datasets)
 - ✅ Scalability: Supports tens of gigabytes
 
-**Fixed**:
-- ✅ Memory bloat in old "on-demand" mode
-- ✅ Slow startup for large datasets
+### Original Wildcard System
 
-### v2.0 - Lazy Loading (Previous)
-
-**Added**:
-- LazyWildcardLoader class
-- Automatic mode detection
-- Cache size limits
-
-### v1.0 - Original
-
-**Added**:
+**Features**:
 - Basic wildcard system
 - Dynamic prompts
 - YAML support
@@ -893,5 +911,4 @@ None currently.
 
 ---
 
-**Last Updated**: 2024-11-17
-**Version**: 3.0 (Progressive On-Demand Loading)
+**Last Updated**: 2025-11-18
