@@ -31,12 +31,12 @@ scheduler_list = [
     "multitalk",
     "sa_ode_stable",
     "rcm",
-    "vitb_unipc",
+    "vibt_unipc",
 ]
 
 def get_scheduler(scheduler, steps, start_step, end_step, shift, device, transformer_dim=5120, flowedit_args=None, denoise_strength=1.0, sigmas=None, log_timesteps=False, **kwargs):
     timesteps = None
-    if scheduler == 'vitb_unipc':
+    if scheduler == 'vibt_unipc':
         sample_scheduler = ViBTScheduler()
         sample_scheduler.set_parameters(shift=shift)
         sample_scheduler.set_timesteps(steps, device=device)
