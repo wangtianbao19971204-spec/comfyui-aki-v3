@@ -29,6 +29,10 @@ def validate_node_input(
     if received_type == IO.MatchType.io_type or input_type == IO.MatchType.io_type:
         return True
 
+    if isinstance(received_type, list) and IO.ComboOption.io_type in received_type:
+        if input_type == IO.Combo.io_type or isinstance(input_type, list):
+            return True
+
     # Not equal, and not strings
     if not isinstance(received_type, str) or not isinstance(input_type, str):
         return False

@@ -238,6 +238,11 @@ class ComfyTypeI(_ComfyType):
     class Input(Input):
         ...
 
+class ComfyTypeO(_ComfyType):
+    '''ComfyType subclass that only has a default Output class - intended for types that only have Outputs.'''
+    class Output(Output):
+        ...
+
 class ComfyTypeIO(ComfyTypeI):
     '''ComfyType subclass that has default Input and Output classes; useful for types with both Inputs and Outputs.'''
     class Output(Output):
@@ -337,6 +342,14 @@ class String(ComfyTypeIO):
                 "placeholder": self.placeholder,
                 "dynamicPrompts": self.dynamic_prompts,
             })
+
+@comfytype(io_type="COMBO_OPTION")
+class ComboOption(ComfyTypeO):
+    Type = str
+    class Output(Output):
+        @property
+        def io_type(self):
+            return [self.Parent.io_type, self.Parent.io_type]
 
 @comfytype(io_type="COMBO")
 class Combo(ComfyTypeIO):
@@ -1846,6 +1859,7 @@ __all__ = [
     "Int",
     "Float",
     "String",
+    "ComboOption",
     "Combo",
     "MultiCombo",
     "Image",

@@ -141,6 +141,21 @@ class AutogrowPrefixTestNode(io.ComfyNode):
         combined = ",".join([str(x) for x in vals])
         return io.NodeOutput(combined)
 
+class ComboOptionTestNode(io.ComfyNode):
+    @classmethod
+    def define_schema(cls):
+        return io.Schema(
+            node_id="ComboOptionTestNode",
+            display_name="ComboOptionTest",
+            category="logic",
+            inputs=[io.Combo.Input("combo", options=["option1", "option2", "option3"])],
+            outputs=[_io.ComboOption.Output()],
+        )
+
+    @classmethod
+    def execute(cls, combo: io.Combo.Type) -> io.NodeOutput:
+        return io.NodeOutput(combo)
+
 class LogicExtension(ComfyExtension):
     @override
     async def get_node_list(self) -> list[type[io.ComfyNode]]:
@@ -149,6 +164,7 @@ class LogicExtension(ComfyExtension):
             # DCTestNode,
             # AutogrowNamesTestNode,
             # AutogrowPrefixTestNode,
+            ComboOptionTestNode,
         ]
 
 async def comfy_entrypoint() -> LogicExtension:
