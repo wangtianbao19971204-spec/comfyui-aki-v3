@@ -1820,7 +1820,7 @@ class ImageScaleBy:
 
     @classmethod
     def INPUT_TYPES(s):
-        return {"required": { "image": ("IMAGE",), "upscale_method": ("COMBO", {"options": s.upscale_methods,}),
+        return {"required": { "image": ("IMAGE",), "upscale_method": (s.upscale_methods,),
                               "scale_by": ("FLOAT", {"default": 1.0, "min": 0.01, "max": 8.0, "step": 0.01}),}}
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "upscale"
