@@ -770,10 +770,13 @@ async def validate_inputs(prompt_id, prompt, item, validated):
     received_types = {}
 
     valid_inputs = set(class_inputs.get('required',{})).union(set(class_inputs.get('optional',{})))
+    combo_inputs = set()
 
     for x in valid_inputs:
         input_type, input_category, extra_info = get_input_info(obj_class, x, class_inputs)
         assert extra_info is not None
+        if input_type == io.Combo.io_type:
+            combo_inputs.add(x)
         if x not in inputs:
             if input_category == "required":
                 error = {
@@ -913,8 +916,9 @@ async def validate_inputs(prompt_id, prompt, item, validated):
                     errors.append(error)
                     continue
 
-                if isinstance(input_type, list):
-                    combo_options = input_type
+                if input_type == io.Combo.io_type and "remote" not in extra_info:
+                    combo_inputs.discard(x)
+                    combo_options = extra_info["options"]
                     if val not in combo_options:
                         input_config = info
                         list_info = ""
@@ -940,7 +944,7 @@ async def validate_inputs(prompt_id, prompt, item, validated):
                         errors.append(error)
                         continue
 
-    if len(validate_function_inputs) > 0 or validate_has_kwargs:
+    if len(validate_function_inputs) > 0 or validate_has_kwargs or len(combo_inputs) > 0:
         input_data_all, _, v3_data = get_input_data(inputs, obj_class, unique_id)
         input_filtered = {}
         for x in input_data_all:
@@ -949,25 +953,37 @@ async def validate_inputs(prompt_id, prompt, item, validated):
         if 'input_types' in validate_function_inputs:
             input_filtered['input_types'] = [received_types]
 
-        ret = await _async_map_node_over_list(prompt_id, unique_id, obj_class, input_filtered, validate_function_name, v3_data=v3_data)
-        ret = await resolve_map_node_over_list_results(ret)
         for x in input_filtered:
-            for i, r in enumerate(ret):
-                if r is not True and not isinstance(r, ExecutionBlocker):
-                    details = f"{x}"
-                    if r is not False:
-                        details += f" - {str(r)}"
+            combo_inputs.discard(x)
 
-                    error = {
-                        "type": "custom_validation_failed",
-                        "message": "Custom validation failed for node",
-                        "details": details,
-                        "extra_info": {
-                            "input_name": x,
+        if len(combo_inputs) > 0:
+            zzz = 10
+            combo_inputs.clear()
+
+
+        if len(validate_function_inputs) > 0 or validate_has_kwargs:
+            ret = await _async_map_node_over_list(prompt_id, unique_id, obj_class, input_filtered, validate_function_name, v3_data=v3_data)
+            ret = await resolve_map_node_over_list_results(ret)
+            for x in input_filtered:
+                for i, r in enumerate(ret):
+                    if r is not True and not isinstance(r, ExecutionBlocker):
+                        details = f"{x}"
+                        if r is not False:
+                            details += f" - {str(r)}"
+
+                        error = {
+                            "type": "custom_validation_failed",
+                            "message": "Custom validation failed for node",
+                            "details": details,
+                            "extra_info": {
+                                "input_name": x,
+                            }
                         }
-                    }
-                    errors.append(error)
-                    continue
+                        errors.append(error)
+                        continue
+
+    if len(combo_inputs) > 0:
+        zzz = 10
 
     if len(errors) > 0 or valid is not True:
         ret = (False, errors, unique_id)
