@@ -1090,6 +1090,7 @@ class WanVideoSampler:
             lynx_ref_latent = lynx_embeds.get("ref_latent", None)
             lynx_ref_latent_uncond = lynx_embeds.get("ref_latent_uncond", None)
             lynx_ref_text_embed = lynx_embeds.get("ref_text_embed", None)
+            lynx_ref_text_embed = dict_to_device(lynx_ref_text_embed, device)
             lynx_cfg_scale = lynx_embeds.get("cfg_scale", 1.0)
             if not isinstance(lynx_cfg_scale, list):
                 lynx_cfg_scale = [lynx_cfg_scale] * (steps + 1)
