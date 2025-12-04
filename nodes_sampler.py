@@ -1111,7 +1111,7 @@ class WanVideoSampler:
                 lynx_ref_buffer = transformer(
                     [lynx_ref_input.to(device, dtype)],
                     torch.tensor([0], device=device),
-                    lynx_ref_text_embed["prompt_embeds"],
+                    [emb.to(device) for emb in lynx_ref_text_embed["prompt_embeds"]],
                     seq_len=math.ceil((lynx_ref_latent.shape[2] * lynx_ref_latent.shape[3]) / 4 * lynx_ref_latent.shape[1]),
                     lynx_embeds=lynx_embeds
                 )
@@ -1125,7 +1125,7 @@ class WanVideoSampler:
                     lynx_ref_buffer_uncond = transformer(
                         [lynx_ref_input_uncond.to(device, dtype)],
                         torch.tensor([0], device=device),
-                        lynx_ref_text_embed["prompt_embeds"],
+                        [emb.to(device) for emb in lynx_ref_text_embed["prompt_embeds"]],
                         seq_len=math.ceil((lynx_ref_latent.shape[2] * lynx_ref_latent.shape[3]) / 4 * lynx_ref_latent.shape[1]),
                         lynx_embeds=lynx_embeds,
                         is_uncond=True
