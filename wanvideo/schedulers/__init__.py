@@ -1,5 +1,5 @@
 import torch
-from .fm_solvers import (FlowDPMSolverMultistepScheduler, get_sampling_sigmas, retrieve_timesteps)
+from .fm_solvers import (FlowDPMSolverMultistepScheduler)
 from .fm_solvers_unipc import FlowUniPCMultistepScheduler
 from .basic_flowmatch import FlowMatchScheduler
 from .flowmatch_pusa import FlowMatchSchedulerPusa
@@ -66,12 +66,9 @@ def get_scheduler(scheduler, steps, start_step, end_step, shift, device, transfo
         else:
             sample_scheduler = FlowMatchEulerDiscreteScheduler(shift=shift, use_beta_sigmas=(scheduler == 'euler/beta'))
         if sigmas is None:
-                if flowedit_args: #seems to work better
-                    timesteps, _ = retrieve_timesteps(sample_scheduler, device=device, sigmas=get_sampling_sigmas(steps, shift))
-            else:
                 sample_scheduler.set_timesteps(steps, device=device)
-            else:
-                _apply_custom_sigmas(sample_scheduler, sigmas, device)
+        else:
+            _apply_custom_sigmas(sample_scheduler, sigmas, device)
     elif 'dpm' in scheduler:
         if 'sde' in scheduler:
             algorithm_type = "sde-dpmsolver++"
@@ -162,7 +159,7 @@ def get_scheduler(scheduler, steps, start_step, end_step, shift, device, transfo
     end_idx = len(timesteps) - 1
 
     if log_timesteps:
-        log.info(f"------- Scheduler info -------")
+        log.info("------- Scheduler info -------")
         log.info(f"Total timesteps: {timesteps}")
 
     if isinstance(start_step, float):
@@ -190,7 +187,7 @@ def get_scheduler(scheduler, steps, start_step, end_step, shift, device, transfo
     if log_timesteps:
         log.info(f"Using timesteps: {timesteps}")
         log.info(f"Using sigmas: {sample_scheduler.sigmas}")
-        log.info(f"------------------------------")
+        log.info("------------------------------")
 
     if hasattr(sample_scheduler, 'timesteps'):
         sample_scheduler.timesteps = timesteps
