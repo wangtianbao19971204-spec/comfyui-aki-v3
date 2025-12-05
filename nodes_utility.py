@@ -514,7 +514,7 @@ class FaceMaskFromPoseKeypoints:
 
         np_frames = np.stack(np_frames, axis=0)
         tensor = torch.from_numpy(np_frames).float() / 255.
-        print("tensor.shape:", tensor.shape)
+        log.info(f"tensor.shape: {tensor.shape}")
         tensor = tensor[:, :, :, 0]
         return (tensor,)
 
@@ -806,4 +806,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "WanVideoPassImagesFromSamples": "WanVideo Pass Images From Samples",
     "FaceMaskFromPoseKeypoints": "Face Mask From Pose Keypoints",
     "DrawGaussianNoiseOnImage": "Draw Gaussian Noise On Image",
+    "WanVideoPreviewEmbeds": "WanVideo Preview Embeds",
 }
