@@ -2174,7 +2174,7 @@ class WanVideoDecode:
                     "tile_stride_y": ("INT", {"default": 128, "min": 32, "max": 2040, "step": 8, "tooltip": "Tile stride height in pixels. Smaller values use less VRAM but will introduce more seams."}),
                     },
                     "optional": {
-                        "normalization": (["default", "minmax"], {"advanced": True}),
+                        "normalization": (["default", "minmax", "none"], {"advanced": True}),
                     }
                 }
 
@@ -2217,23 +2217,24 @@ class WanVideoDecode:
         if drop_last:
             latents = latents[:, :, :-1]
 
-        if type(vae).__name__ == "TAEHV":      
+        if type(vae).__name__ == "TAEHV":
             images = vae.decode_video(latents.permute(0, 2, 1, 3, 4), cond=flashvsr_LQ_images.to(vae.dtype) if flashvsr_LQ_images is not None else None)[0].permute(1, 0, 2, 3)
             images = torch.clamp(images, 0.0, 1.0)
             images = images.permute(1, 2, 3, 0).cpu().float()
             return (images,)
         else:
             images = vae.decode(latents, device=device, end_=(end_image is not None), tiled=enable_vae_tiling, tile_size=(tile_x//8, tile_y//8), tile_stride=(tile_stride_x//8, tile_stride_y//8))[0]
-            
-        
+
+
         images = images.cpu().float()
 
-        if normalization == "minmax":
-            images.sub_(images.min()).div_(images.max() - images.min())
-        else:  
-            images.clamp_(-1.0, 1.0)
-            images.add_(1.0).div_(2.0)
-        
+        if normalization != "none":
+            if normalization == "minmax":
+                images.sub_(images.min()).div_(images.max() - images.min())
+            else:
+                images.clamp_(-1.0, 1.0)
+                images.add_(1.0).div_(2.0)
+
         if is_looped:
             temp_latents = torch.cat([latents[:, :, -3:]] + [latents[:, :, :2]], dim=2)
             temp_images = vae.decode(temp_latents, device=device, end_=(end_image is not None), tiled=enable_vae_tiling, tile_size=(tile_x//vae.upsampling_factor, tile_y//vae.upsampling_factor), tile_stride=(tile_stride_x//vae.upsampling_factor, tile_stride_y//vae.upsampling_factor))[0]
@@ -2244,7 +2245,7 @@ class WanVideoDecode:
         if end_image is not None: 
             images = images[:, 0:-1]
 
-        
+
         vae.to(offload_device)
         mm.soft_empty_cache()
 
@@ -2295,7 +2296,7 @@ class WanVideoEncodeLatentBatch:
                 latent = vae.encode(img.unsqueeze(0).unsqueeze(0).permute(0, 4, 1, 2, 3), device=device, tiled=enable_vae_tiling, tile_size=(tile_x//vae.upsampling_factor, tile_y//vae.upsampling_factor), tile_stride=(tile_stride_x//vae.upsampling_factor, tile_stride_y//vae.upsampling_factor))
             else:
                 latent = vae.encode(img.unsqueeze(0).unsqueeze(0).permute(0, 4, 1, 2, 3), device=device, tiled=enable_vae_tiling)
-            
+
             if latent_strength != 1.0:
                 latent *= latent_strength
             latent_list.append(latent.squeeze(0).cpu())
@@ -2355,7 +2356,7 @@ class WanVideoEncode:
             latents = latents.permute(0, 2, 1, 3, 4)
         else:
             latents = vae.encode(image * 2.0 - 1.0, device=device, tiled=enable_vae_tiling, tile_size=(tile_x//vae.upsampling_factor, tile_y//vae.upsampling_factor), tile_stride=(tile_stride_x//vae.upsampling_factor, tile_stride_y//vae.upsampling_factor))
-            
+
             vae.to(offload_device)
         if latent_strength != 1.0:
             latents *= latent_strength
@@ -2364,7 +2365,7 @@ class WanVideoEncode:
 
         log.info(f"WanVideoEncode: Encoded latents shape {latents.shape}")
         mm.soft_empty_cache()
- 
+
         return ({"samples": latents, "noise_mask": mask},)
 
 NODE_CLASS_MAPPINGS = {
