@@ -1761,7 +1761,7 @@ class WanVideoTinyVAELoader:
         model_path = folder_paths.get_full_path_or_raise("vae_approx", model_name)
         vae_sd = load_torch_file(model_path, safe_load=True)
 
-        vae = TAEHV(vae_sd, parallel=parallel, dtype=dtype)
+        vae = TAEHV(vae_sd, parallel=parallel, dtype=dtype, model_name=model_name)
 
         vae.to(device=offload_device, dtype=dtype)
 
