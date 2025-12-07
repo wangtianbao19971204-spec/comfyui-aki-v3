@@ -84,7 +84,7 @@ try:
 
     @sageattn_func_ultravico.register_fake
     def _(qkv, attn_mask=None, dropout_p=0.0, is_causal=False, multi_factor=0.9):
-        torch.empty_like(qkv[0]).contiguous()
+        return torch.empty_like(qkv[0]).contiguous()
     sageattn_func_ultravico = torch.ops.wanvideo.sageattn_ultravico
 except:
     sageattn_func_ultravico = attention_func_error
