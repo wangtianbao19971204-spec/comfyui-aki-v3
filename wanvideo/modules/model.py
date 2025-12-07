@@ -800,16 +800,16 @@ class WanHuMoCrossAttention(WanSelfAttention):
         self.attention_mode = attention_mode
 
     def forward(self, x, context, grid_sizes, **kwargs):
-    
+
         b, n, d = x.size(0), self.num_heads, self.head_dim
-        q = self.norm_q(self.q(x)).view(b, -1, n, d)
-        k = self.norm_k(self.k(context)).view(b, -1, n, d)
+        q = self.norm_q(self.q(x).to(self.norm_q.weight.dtype).to(x.dtype)).view(b, -1, n, d)
+        k = self.norm_k(self.k(context).to(self.norm_k.weight.dtype).to(context.dtype)).view(b, -1, n, d)
         v = self.v(context).view(b, -1, n, d)
 
         # Handle video spatial structure
         hlen_wlen = grid_sizes[0][1] * grid_sizes[0][2]
         q = q.reshape(-1, hlen_wlen, n, d)
-        
+
         # Handle audio temporal structure (16 tokens per frame)
         k = k.reshape(-1, 16, n, d)
         v = v.reshape(-1, 16, n, d)
@@ -820,7 +820,7 @@ class WanHuMoCrossAttention(WanSelfAttention):
         x = x_text
 
         return self.o(x)
-    
+
 class AudioCrossAttentionWrapper(nn.Module):
     def __init__(self, in_features, out_features, num_heads, qk_norm=True, eps=1e-6, kv_dim=None):
         super().__init__()
@@ -829,6 +829,7 @@ class AudioCrossAttentionWrapper(nn.Module):
         self.norm1_audio = WanLayerNorm(out_features, eps, elementwise_affine=True)
 
     def forward(self, x, audio, grid_sizes, humo_audio_scale=1.0):
+        x = x.to(self.norm1_audio.weight.dtype)
         x = x + self.audio_cross_attn(self.norm1_audio(x), audio, grid_sizes) * humo_audio_scale
         return x
 
