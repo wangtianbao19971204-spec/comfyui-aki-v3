@@ -1245,8 +1245,8 @@ class WanVideoSampler:
                         if image_cond is not None:
                             image_cond_input = image_cond.to(z)
                             if humo_reference_count > 0:
-                                image_cond_input = torch.cat([image_cond, humo_image_cond[:, -humo_reference_count:].to(z)], dim=1)
-                                humo_image_cond_neg_input = torch.cat([image_cond, humo_image_cond_neg[:, -humo_reference_count:].to(z)], dim=1)
+                                image_cond_input = torch.cat([image_cond_input, humo_image_cond[:, -humo_reference_count:].to(z)], dim=1)
+                                humo_image_cond_neg_input = torch.cat([image_cond_input, humo_image_cond_neg[:, -humo_reference_count:].to(z)], dim=1)
                         else:
                             image_cond_input = humo_image_cond.to(z)
                             humo_image_cond_neg_input = humo_image_cond_neg.to(z)
