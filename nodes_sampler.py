@@ -44,7 +44,7 @@ class MetaParameter(torch.nn.Parameter):
         self.quant_type = quant_type
         return self
 
-def offload_transformer(transformer):
+def offload_transformer(transformer, remove_lora=True):
     transformer.teacache_state.clear_all()
     transformer.magcache_state.clear_all()
     transformer.easycache_state.clear_all()
@@ -66,7 +66,8 @@ def offload_transformer(transformer):
                 setattr(module, attr_name, MetaParameter(param.data.dtype, quant_type))
             else:
                 pass
-        remove_lora_from_module(transformer)
+        if remove_lora:
+            remove_lora_from_module(transformer)
     else:
         transformer.to(offload_device)
 
@@ -2473,7 +2474,7 @@ class WanVideoSampler:
 
                             del noise, latent_motion_frames
                             if offload:
-                                offload_transformer(transformer)
+                                offload_transformer(transformer, remove_lora=False)
                                 offloaded = True
                             if humo_image_cond is not None and humo_reference_count > 0:
                                 latent = latent[:,:-humo_reference_count]
@@ -2784,7 +2785,7 @@ class WanVideoSampler:
 
                             if current_ref_images is not None or bg_images is not None or ref_latent is not None:
                                 if offload:
-                                    offload_transformer(transformer)
+                                    offload_transformer(transformer, remove_lora=False)
                                     offloaded = True
                                 vae.to(device)
                                 if wananim_ref_masks is not None:
@@ -2947,7 +2948,7 @@ class WanVideoSampler:
 
                             del noise
                             if offload:
-                                offload_transformer(transformer)
+                                offload_transformer(transformer, remove_lora=False)
                                 offloaded = True
 
                             vae.to(device)
