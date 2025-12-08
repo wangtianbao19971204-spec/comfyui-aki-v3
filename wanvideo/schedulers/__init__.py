@@ -65,10 +65,10 @@ def get_scheduler(scheduler, steps, start_step, end_step, shift, device, transfo
             sample_scheduler.set_timesteps(steps, device=device, sigmas=sigmas)
         else:
             sample_scheduler = FlowMatchEulerDiscreteScheduler(shift=shift, use_beta_sigmas=(scheduler == 'euler/beta'))
-        if sigmas is None:
+            if sigmas is None:
                 sample_scheduler.set_timesteps(steps, device=device)
-        else:
-            _apply_custom_sigmas(sample_scheduler, sigmas, device)
+            else:
+                _apply_custom_sigmas(sample_scheduler, sigmas, device)
     elif 'dpm' in scheduler:
         if 'sde' in scheduler:
             algorithm_type = "sde-dpmsolver++"
