@@ -1522,7 +1522,7 @@ class Head_adaLN(nn.Module):
         # modulation
         self.modulation = nn.Sequential(nn.SiLU(), nn.Linear(adaln_tembed_dim, 2 * self.dim, bias=True))
 
-    def forward(self, x, e, temp_length):
+    def forward(self, x, e, temp_length, **kwargs):
         r"""
         Args:
             x(Tensor): Shape [B, L1, C]
