@@ -2,7 +2,7 @@ import json
 import torch
 import torchvision.transforms.functional as TF
 from ..utils import log
-from .trajectory import create_pos_feature_map, draw_tracks_on_video
+from .trajectory import create_pos_feature_map, draw_tracks_on_video, replace_feature
 import os
 from comfy import model_management as mm
 device = mm.get_torch_device()
@@ -124,12 +124,65 @@ def parse_json_tracks(tracks):
 
     return tracks_data
 
+import node_helpers
+
+class WanMove_native:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {"required": {
+            "positive": ("CONDITIONING",),
+            "track_coords": ("STRING", {"forceInput": True, "tooltip": "JSON string or list of JSON strings representing the tracks"}),
+            },
+            "optional": {
+                "track_mask": ("MASK",),
+            }
+        }
+
+    RETURN_TYPES = ("CONDITIONING", "WANMOVETRACKS")
+    RETURN_NAMES = ("positive", "tracks")
+    FUNCTION = "patchcond"
+    CATEGORY = "WanVideoWrapper"
+
+    def patchcond(self, positive, track_coords, track_mask=None):
+
+        concat_latent_image = positive[0][1]["concat_latent_image"]
+        B, C, T, H, W = concat_latent_image.shape
+        num_frames = (T-1) * 4 + 1
+        width = W * 8
+        height = H * 8
+
+        tracks_data = parse_json_tracks(track_coords)
+        track_list = [
+            [[track[frame]['x'], track[frame]['y']] for track in tracks_data]
+            for frame in range(len(tracks_data[0]))
+        ]
+        track = torch.tensor(track_list, dtype=torch.float32, device=device)  # shape: (frames, num_tracks, 2)
+        track = track[:num_frames]
+
+        num_tracks = track.shape[-2]
+        if track_mask is None:
+            track_visibility = torch.ones((num_frames, num_tracks), dtype=torch.bool, device=device)
+        else:
+            track_visibility = (track_mask > 0).any(dim=(1, 2)).unsqueeze(-1)
+
+        feature_map, track_pos = create_pos_feature_map(track, track_visibility, VAE_STRIDE, height, width, 16, track_num=num_tracks, device=device)
+        wanmove_cond = replace_feature(concat_latent_image, track_pos.unsqueeze(0))
+        positive = node_helpers.conditioning_set_values(positive, {"concat_latent_image": wanmove_cond})
+
+        tracks_dict = {
+            "tracks": track,
+            "track_visibility": track_visibility,
+        }
+        return (positive, tracks_dict)
+
 
 NODE_CLASS_MAPPINGS = {
     "WanVideoAddWanMoveTracks": WanVideoAddWanMoveTracks,
     "WanVideoWanDrawWanMoveTracks": WanVideoWanDrawWanMoveTracks,
+    "WanMove_native": WanMove_native,
     }
 NODE_DISPLAY_NAME_MAPPINGS = {
     "WanVideoAddWanMoveTracks": "WanVideo Add WanMove Tracks",
     "WanVideoWanDrawWanMoveTracks": "WanVideo Draw WanMove Tracks",
+    "WanMove_native": "WanMove Native",
     }
