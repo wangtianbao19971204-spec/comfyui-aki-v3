@@ -14,10 +14,9 @@ class WanVideoWanDrawWanMoveTracks:
     @classmethod
     def INPUT_TYPES(s):
         return {"required": {
-            "tracks": ("WANMOVETRACKS",),
-            "width": ("INT", {"default": 832, "min": 64, "max": 2048, "step": 8, "tooltip": "Width of the image to encode"}),
-            "height": ("INT", {"default": 480, "min": 64, "max": 29048, "step": 8, "tooltip": "Height of the image to encode"}),
-            },
+                    "images": ("IMAGE",),
+                    "tracks": ("WANMOVETRACKS",),
+                },
         }
 
     RETURN_TYPES = ("IMAGE",)
@@ -25,12 +24,14 @@ class WanVideoWanDrawWanMoveTracks:
     FUNCTION = "execute"
     CATEGORY = "WanVideoWrapper"
 
-    def execute(self, tracks, width, height):
+    def execute(self, images, tracks):
+        if tracks is None or "tracks" not in tracks:
+            log.warning("WanVideoWanDrawWanMoveTracks: No tracks provided.")
+            return (images.float().cpu(), )
         track = tracks["tracks"].unsqueeze(0)
         track_visibility = tracks["track_visibility"].unsqueeze(0)
-
-        video = torch.zeros((track.shape[1], height, width, 3), device=device)
-        track_video = draw_tracks_on_video(video, track, track_visibility)
+        images_in = images * 255.0
+        track_video = draw_tracks_on_video(images_in, track, track_visibility)
         track_video = torch.stack([TF.to_tensor(frame) for frame in track_video], dim=0).movedim(1, -1)
 
         return (track_video.float().cpu(), )
@@ -80,7 +81,7 @@ class WanVideoAddWanMoveTracks:
         else:
             track_visibility = (track_mask > 0).any(dim=(1, 2)).unsqueeze(-1)
 
-        feature_map, track_pos = create_pos_feature_map(track, track_visibility, VAE_STRIDE, height, width, 16, track_num=1, device=device)
+        feature_map, track_pos = create_pos_feature_map(track, track_visibility, VAE_STRIDE, height, width, 16, track_num=num_tracks, device=device)
 
         updated.setdefault("wanmove_embeds", {})
         updated["wanmove_embeds"]["track_pos"] = track_pos * strength
