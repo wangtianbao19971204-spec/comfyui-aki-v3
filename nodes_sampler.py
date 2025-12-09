@@ -291,7 +291,7 @@ class WanVideoSampler:
         else:
             cfg = [cfg] * (steps + 1)
 
-        control_latents = control_camera_latents = clip_fea = clip_fea_neg = end_image = recammaster = camera_embed = unianim_data = mocha_embeds = None
+        control_latents = control_camera_latents = clip_fea = clip_fea_neg = end_image = recammaster = camera_embed = unianim_data = mocha_embeds = image_cond_neg =None
         vace_data = vace_context = vace_scale = None
         fun_or_fl2v_model = has_ref = drop_last = False
         phantom_latents = fun_ref_image = ATI_tracks = None
@@ -301,6 +301,15 @@ class WanVideoSampler:
         #I2V
         image_cond = image_embeds.get("image_embeds", None)
         if image_cond is not None:
+            # WanMove
+            wanmove_embeds = image_embeds.get("wanmove_embeds", None)
+            if wanmove_embeds is not None:
+                from .WanMove.trajectory import replace_feature
+                track_pos = wanmove_embeds["track_pos"]
+                if any(not math.isclose(c, 1.0) for c in cfg):
+                    image_cond_neg = torch.cat([image_embeds["mask"], image_cond])
+                image_cond = replace_feature(image_cond.unsqueeze(0), track_pos.unsqueeze(0))[0]
+
             if transformer.in_dim == 16:
                 raise ValueError("T2V (text to video) model detected, encoded images only work with I2V (Image to video) models")
             elif transformer.in_dim not in [48, 32]: # fun 2.1 models don't use the mask
@@ -1118,7 +1127,7 @@ class WanVideoSampler:
                     lynx_embeds=lynx_embeds
                 )
                 log.info(f"Extracted {len(lynx_ref_buffer)} cond ref buffers")
-                if not math.isclose(cfg[0], 1.0):
+                if any(not math.isclose(c, 1.0) for c in cfg):
                     log.info("Extracting Lynx ref uncond buffer...")
                     if transformer.in_dim == 36:
                         lynx_ref_input_uncond = torch.cat([lynx_ref_latent_uncond, empty_image_cond], dim=0)
@@ -1536,6 +1545,7 @@ class WanVideoSampler:
                         base_params['is_uncond'] = True
                         base_params['clip_fea'] = clip_fea_neg if clip_fea_neg is not None else clip_fea
                         base_params["add_text_emb"] = qwenvl_embeds_neg.to(device) if qwenvl_embeds_neg is not None else None # QwenVL embeddings for Bindweave
+                        base_params['y'] = image_cond_neg if image_cond_neg is not None else base_params['y']
                         if wananim_face_pixels is not None:
                             base_params['wananim_face_pixel_values'] = torch.zeros_like(wananim_face_pixels).to(device, torch.float32) - 1
                         if humo_audio_input_neg is not None:
