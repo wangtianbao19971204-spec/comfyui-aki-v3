@@ -211,58 +211,6 @@ def get_video_track_video(
 # Visualize functions
 # --------------------------
 
-def draw_overall_gradient_polyline_on_image(image, line_width, points, start_color, opacity=1.0):
-    """
-    - image (Image): target image to draw on.
-    - line_width (int): initial line width.
-    - points (list of tuples): list of points forming the polyline, each point is (x, y).
-    - start_color (tuple): starting color of the line (R, G, B).
-
-    Return:
-    - Image: original image with the gradient polyline drawn.
-    """
-
-    def get_distance(p1, p2):
-        return ((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2) ** 0.5
-
-    # Create a new image with the same size as the original
-    new_image = Image.new('RGBA', image.size)
-    draw = ImageDraw.Draw(new_image, 'RGBA')
-    points = points[::-1]
-
-    # Compute total length
-    total_length = sum(get_distance(points[i], points[i+1]) for i in range(len(points)-1))
-
-    # Accumulated length
-    accumulated_length = 0
-
-    # Draw the gradient polyline
-    for start_point, end_point in zip(points[:-1], points[1:]):
-        segment_length = get_distance(start_point, end_point)
-        steps = int(segment_length)
-
-        for i in range(steps):
-            # Current accumulated length
-            current_length = accumulated_length + (i / steps) * segment_length
-
-            # Alpha from fully opaque to fully transparent
-            alpha = int(255 * (1 - current_length / total_length) * opacity)
-            color = (*start_color, alpha)
-
-            # Interpolated coordinates
-            x = int(start_point[0] + (end_point[0] - start_point[0]) * i / steps)
-            y = int(start_point[1] + (end_point[1] - start_point[1]) * i / steps)
-
-            # Dynamic line width, decreasing from initial width to 1
-            dynamic_line_width = int(line_width * (1 - (current_length / total_length)))
-            dynamic_line_width = max(dynamic_line_width, 1)  # minimum width is 1 to avoid 0
-
-            draw.line([(x, y), (x + 1, y)], fill=color, width=dynamic_line_width)
-
-        accumulated_length += segment_length
-
-    return new_image
-
 def add_weighted(rgb, track):
     rgb = np.array(rgb) # [H, W, C] "RGB"
     track = np.array(track) # [H, W, C] "RGBA"
@@ -279,43 +227,36 @@ def add_weighted(rgb, track):
     return Image.fromarray(blend_img.astype(np.uint8))
 
 def draw_tracks_on_video(video, tracks, visibility=None, track_frame=24, circle_size=12, opacity=0.5, line_width=16):
-    color_map = [
-        (102, 153, 255),
-        (0, 255, 255),
-        (255, 255, 0),
-        (255, 102, 204),
-        (0, 255, 0)
-    ]
+    color_map = [(102, 153, 255), (0, 255, 255), (255, 255, 0), (255, 102, 204), (0, 255, 0)]
 
-    video = video.byte().cpu().numpy() # (81, 480, 832, 3)
+    video = video.byte().cpu().numpy()  # (81, 480, 832, 3)
     tracks = tracks[0].long().detach().cpu().numpy()
     if visibility is not None:
         visibility = visibility[0].detach().cpu().numpy()
-    # print(video.shape, tracks.shape)
+
+    num_frames, height, width = video.shape[:3]
+    num_tracks = tracks.shape[1]
+    alpha_opacity = int(255 * opacity)
 
     output_frames = []
-    # Process the video
-    for t in range(video.shape[0]):
-        # Extract current frame
-        frame = video[t]
-        frame = Image.fromarray(frame).convert("RGB")
+    for t in range(num_frames):
+        frame_rgb = video[t].astype(np.float32)
 
-        # Draw tracks
-        for n in range(tracks.shape[1]):
+        # Create a single RGBA overlay for all tracks in this frame
+        overlay = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+        draw_overlay = ImageDraw.Draw(overlay)
+
+        polyline_data = []
+
+        # Draw all circles on a single overlay
+        for n in range(num_tracks):
             if visibility is not None and visibility[t, n] == 0:
                 continue
 
-            # Track coordinate at current frame
             track_coord = tracks[t, n]
-            tracks_coord = tracks[max(t-track_frame, 0):t+1, n]
+            color = color_map[n % len(color_map)]
+            circle_color = color + (alpha_opacity,)
 
-            # Draw a circle
-            #draw = ImageDraw.Draw(frame)
-            #draw.ellipse((track_coord[0] - circle_size, track_coord[1] - circle_size, track_coord[0] + circle_size, track_coord[1] + circle_size), fill=color_map[n % len(color_map)])
-            # Draw a circle with opacity
-            overlay = Image.new("RGBA", frame.size, (0, 0, 0, 0))
-            draw_overlay = ImageDraw.Draw(overlay)
-            circle_color = color_map[n % len(color_map)] + (int(255 * opacity),)
             draw_overlay.ellipse(
                 (
                     track_coord[0] - circle_size,
@@ -325,12 +266,72 @@ def draw_tracks_on_video(video, tracks, visibility=None, track_frame=24, circle_
                 ),
                 fill=circle_color
             )
-            frame = add_weighted(frame, overlay)  # <-- Blend the circle overlay first
-            # Draw the polyline
-            track_image = draw_overall_gradient_polyline_on_image(frame, line_width, tracks_coord, color_map[n % len(color_map)], opacity=opacity)
-            frame = add_weighted(frame, track_image)
 
-        # Save current frame
-        output_frames.append(frame.convert("RGB"))
+            # Store polyline data for batch processing
+            tracks_coord = tracks[max(t - track_frame, 0):t + 1, n]
+            if len(tracks_coord) > 1:
+                polyline_data.append((tracks_coord, color))
+
+        # Blend circles overlay once
+        overlay_np = np.array(overlay)
+        alpha = overlay_np[:, :, 3:4] / 255.0
+        frame_rgb = overlay_np[:, :, :3] * alpha + frame_rgb * (1 - alpha)
+
+        # Draw all polylines on a single overlay
+        if polyline_data:
+            polyline_overlay = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+            for tracks_coord, color in polyline_data:
+                _draw_gradient_polyline_on_overlay(polyline_overlay, line_width, tracks_coord, color, opacity)
+
+            # Blend polylines overlay once
+            polyline_np = np.array(polyline_overlay)
+            alpha = polyline_np[:, :, 3:4] / 255.0
+            frame_rgb = polyline_np[:, :, :3] * alpha + frame_rgb * (1 - alpha)
+
+        output_frames.append(Image.fromarray(frame_rgb.astype(np.uint8)))
 
     return output_frames
+
+
+def _draw_gradient_polyline_on_overlay(overlay, line_width, points, start_color, opacity=1.0):
+    """
+    Draw a gradient polyline directly onto an existing RGBA overlay image.
+    This is an optimized version that doesn't create new images.
+    """
+    draw = ImageDraw.Draw(overlay, 'RGBA')
+    points = points[::-1]
+
+    # Compute total length
+    total_length = 0
+    segment_lengths = []
+    for i in range(len(points) - 1):
+        dx = points[i + 1][0] - points[i][0]
+        dy = points[i + 1][1] - points[i][1]
+        length = (dx * dx + dy * dy) ** 0.5
+        segment_lengths.append(length)
+        total_length += length
+
+    if total_length == 0:
+        return
+
+    accumulated_length = 0
+
+    # Draw the gradient polyline
+    for idx, (start_point, end_point) in enumerate(zip(points[:-1], points[1:])):
+        segment_length = segment_lengths[idx]
+        steps = max(int(segment_length), 1)
+
+        for i in range(steps):
+            current_length = accumulated_length + (i / steps) * segment_length
+            ratio = current_length / total_length
+
+            alpha = int(255 * (1 - ratio) * opacity)
+            color = (*start_color, alpha)
+
+            x = int(start_point[0] + (end_point[0] - start_point[0]) * i / steps)
+            y = int(start_point[1] + (end_point[1] - start_point[1]) * i / steps)
+
+            dynamic_line_width = max(int(line_width * (1 - ratio)), 1)
+            draw.line([(x, y), (x + 1, y)], fill=color, width=dynamic_line_width)
+
+        accumulated_length += segment_length
