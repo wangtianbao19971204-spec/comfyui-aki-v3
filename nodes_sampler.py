@@ -1547,7 +1547,7 @@ class WanVideoSampler:
                         base_params['is_uncond'] = True
                         base_params['clip_fea'] = clip_fea_neg if clip_fea_neg is not None else clip_fea
                         base_params["add_text_emb"] = qwenvl_embeds_neg.to(device) if qwenvl_embeds_neg is not None else None # QwenVL embeddings for Bindweave
-                        base_params['y'] = image_cond_neg if image_cond_neg is not None else base_params['y']
+                        base_params['y'] = [image_cond_neg.to(z)] if image_cond_neg is not None else base_params['y']
                         if wananim_face_pixels is not None:
                             base_params['wananim_face_pixel_values'] = torch.zeros_like(wananim_face_pixels).to(device, torch.float32) - 1
                         if humo_audio_input_neg is not None:
