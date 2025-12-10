@@ -15,7 +15,7 @@ class WanVideoWanDrawWanMoveTracks:
     def INPUT_TYPES(s):
         return {"required": {
                     "images": ("IMAGE",),
-                    "tracks": ("WANMOVETRACKS",),
+                    "tracks": ("TRACKS",),
                 },
                 "optional": {
                     "line_resolution": ("INT", {"default": 24, "min": 4, "max": 64, "step": 1, "tooltip": "Number of points to use for each line segment"}),
@@ -31,10 +31,10 @@ class WanVideoWanDrawWanMoveTracks:
     CATEGORY = "WanVideoWrapper"
 
     def execute(self, images, tracks, line_resolution=24, circle_size=10, opacity=0.5, line_width=14):
-        if tracks is None or "tracks" not in tracks:
+        if tracks is None or "track_path" not in tracks:
             log.warning("WanVideoWanDrawWanMoveTracks: No tracks provided.")
             return (images.float().cpu(), )
-        track = tracks["tracks"].unsqueeze(0)
+        track = tracks["track_path"].unsqueeze(0)
         track_visibility = tracks["track_visibility"].unsqueeze(0)
         images_in = images * 255.0
         if images_in.shape[0] != track.shape[1]:
@@ -51,21 +51,24 @@ class WanVideoAddWanMoveTracks:
     def INPUT_TYPES(s):
         return {"required": {
                     "image_embeds": ("WANVIDIMAGE_EMBEDS",),
-                    "track_coords": ("STRING", {"forceInput": True, "tooltip": "JSON string or list of JSON strings representing the tracks"}),
                     "strength": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01, "tooltip": "Strength of the reference embedding"}),
                 },
                 "optional": {
                     "track_mask": ("MASK",),
+                    "track_coords": ("STRING", {"forceInput": True, "tooltip": "JSON string or list of JSON strings representing the tracks"}),
+                    "tracks": ("TRACKS", {"tooltip": "Alternatively use Comfy Tracks dictionary"}),
                 }
         }
 
-    RETURN_TYPES = ("WANVIDIMAGE_EMBEDS", "WANMOVETRACKS")
+    RETURN_TYPES = ("WANVIDIMAGE_EMBEDS", "TRACKS")
     RETURN_NAMES = ("image_embeds", "tracks")
     FUNCTION = "add"
     CATEGORY = "WanVideoWrapper"
 
-    def add(self, image_embeds, track_coords, strength, track_mask=None):
+    def add(self, image_embeds, track_coords=None, tracks=None, strength=1.0, track_mask=None):
         updated = dict(image_embeds)
+
+        track_visibility = None
 
         target_shape = image_embeds.get("target_shape")
         if target_shape is not None:
@@ -76,27 +79,33 @@ class WanVideoAddWanMoveTracks:
             width = image_embeds["lat_w"] * VAE_STRIDE[2]
         num_frames = image_embeds["num_frames"]
 
-        tracks_data = parse_json_tracks(track_coords)
-        track_list = [
-            [[track[frame]['x'], track[frame]['y']] for track in tracks_data]
-            for frame in range(len(tracks_data[0]))
-        ]
-        track = torch.tensor(track_list, dtype=torch.float32, device=device)  # shape: (frames, num_tracks, 2)
+        if track_coords is not None:
+            tracks_data = parse_json_tracks(track_coords)
+            track_list = [
+                [[track[frame]['x'], track[frame]['y']] for track in tracks_data]
+                for frame in range(len(tracks_data[0]))
+            ]
+            track = torch.tensor(track_list, dtype=torch.float32, device=device)  # shape: (frames, num_tracks, 2)
+        elif tracks is not None and "track_path" in tracks:
+            track = tracks["track_path"]
+            if track_mask is None:
+                track_visibility = tracks.get("track_visibility", None)
         track = track[:num_frames]
 
         num_tracks = track.shape[-2]
-        if track_mask is None:
-            track_visibility = torch.ones((num_frames, num_tracks), dtype=torch.bool, device=device)
-        else:
-            track_visibility = (track_mask > 0).any(dim=(1, 2)).unsqueeze(-1)
-
+        if track_visibility is None:
+            if track_mask is None:
+                track_visibility = torch.ones((num_frames, num_tracks), dtype=torch.bool, device=device)
+            else:
+                track_visibility = (track_mask > 0).any(dim=(1, 2)).unsqueeze(-1)
         feature_map, track_pos = create_pos_feature_map(track, track_visibility, VAE_STRIDE, height, width, 16, track_num=num_tracks, device=device)
 
         updated.setdefault("wanmove_embeds", {})
-        updated["wanmove_embeds"]["track_pos"] = track_pos * strength
+        updated["wanmove_embeds"]["track_pos"] = track_pos
+        updated["wanmove_embeds"]["strength"] = strength
 
         tracks_dict = {
-            "tracks": track,
+            "track_path": track,
             "track_visibility": track_visibility,
         }
 
@@ -147,7 +156,7 @@ class WanMove_native:
             }
         }
 
-    RETURN_TYPES = ("CONDITIONING", "WANMOVETRACKS")
+    RETURN_TYPES = ("CONDITIONING", "TRACKS")
     RETURN_NAMES = ("positive", "tracks")
     FUNCTION = "patchcond"
     CATEGORY = "WanVideoWrapper"
@@ -179,7 +188,7 @@ class WanMove_native:
         positive = node_helpers.conditioning_set_values(positive, {"concat_latent_image": wanmove_cond})
 
         tracks_dict = {
-            "tracks": track,
+            "track_path": track,
             "track_visibility": track_visibility,
         }
         return (positive, tracks_dict)

@@ -308,7 +308,7 @@ class WanVideoSampler:
                 track_pos = wanmove_embeds["track_pos"]
                 if any(not math.isclose(c, 1.0) for c in cfg):
                     image_cond_neg = torch.cat([image_embeds["mask"], image_cond])
-                image_cond = replace_feature(image_cond.unsqueeze(0), track_pos.unsqueeze(0))[0]
+                image_cond = replace_feature(image_cond.unsqueeze(0).clone(), track_pos.unsqueeze(0), wanmove_embeds.get("strength", 1.0))[0]
 
             if transformer.in_dim == 16:
                 raise ValueError("T2V (text to video) model detected, encoded images only work with I2V (Image to video) models")

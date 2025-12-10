@@ -93,7 +93,7 @@ def create_pos_feature_map(
     tracks_idx = torch.randperm(n)[:track_num]
     tracks = pred_tracks[:, tracks_idx]
     visibility = pred_visibility[:, tracks_idx]
-    tracks_embs = get_pos_emb(torch.randperm(n)[:track_num], pos_emb_dim, device=device, dtype=dtype)
+    #tracks_embs = get_pos_emb(torch.randperm(n)[:track_num], pos_emb_dim, device=device, dtype=dtype)
 
     for t_idx in range(0, t, t_down):
         if t_down_strategy == "sample" or t_idx == 0:
@@ -108,7 +108,7 @@ def create_pos_feature_map(
                 continue
             x, y = cur_tracks[i]
             x, y = int(x // w_down), int(y // h_down)
-            feature_map[t_idx // t_down, y, x] += tracks_embs[i]
+            #feature_map[t_idx // t_down, y, x] += tracks_embs[i]
             track_pos[i, t_idx // t_down, 0], track_pos[i, t_idx // t_down, 1] = y, x
 
     return feature_map, track_pos
@@ -117,6 +117,7 @@ def create_pos_feature_map(
 def replace_feature(
     vae_feature: torch.Tensor,  # [B, C', T', H', W']
     track_pos: torch.Tensor,    # [B, N, T', 2]
+    strength: float = 1.0,
 ) -> torch.Tensor:
     b, _, t, h, w = vae_feature.shape
     assert b == track_pos.shape[0], "Batch size mismatch."
@@ -152,7 +153,9 @@ def replace_feature(
 
     # Get source features and assign to target positions
     src_features = vae_feature[batch_idx, :, 0, h_source, w_source]
-    vae_feature[batch_idx, :, t_target, h_target, w_target] = src_features
+    dst_features = vae_feature[batch_idx, :, t_target, h_target, w_target]
+
+    vae_feature[batch_idx, :, t_target, h_target, w_target] = dst_features + (src_features - dst_features) * strength
 
     return vae_feature
 
