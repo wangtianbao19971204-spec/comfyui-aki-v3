@@ -1202,12 +1202,14 @@ class WanVideoSampler:
             one_to_all_data = one_to_all_embeds.copy()
             one_to_all_data = dict_to_device(one_to_all_data, device, dtype)
             if one_to_all_embeds.get("pose_images") is not None:
+                transformer.input_hint_block.to(device)
                 pose_images_in = one_to_all_data.pop("pose_images")
                 pose_images = transformer.input_hint_block(pose_images_in)
                 if one_to_all_embeds.get("ref_latent_pos") is not None:
                     pose_prefix_image = transformer.input_hint_block(one_to_all_data.pop("pose_prefix_image"))
                     pose_images = torch.cat([pose_prefix_image, pose_images],dim=2)
                 one_to_all_data["controlnet_tokens"] = pose_images.flatten(2).transpose(1, 2)
+                transformer.input_hint_block.to(offload_device)
             prev_latents = one_to_all_data.get("prev_latents", None)
             if prev_latents is not None:
                 log.info(f"Using previous latents for One-to-All Animation with shape: {prev_latents.shape}")

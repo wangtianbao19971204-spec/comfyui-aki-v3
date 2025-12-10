@@ -2327,13 +2327,17 @@ class WanModel(torch.nn.Module):
             ref_cond_latent = one_to_all_input.get("ref_latent_pos", None) if not is_uncond else one_to_all_input.get("ref_latent_neg", None)
             if ref_cond_latent is not None and one_to_all_input['ref_start_percent'] <= current_step_percentage <= one_to_all_input['ref_end_percent']:
                 onetoall_ref_scale = one_to_all_input.get("ref_strength", 1.0)
+                self.image_to_cond.to(self.main_device)
                 image_cond = self.image_to_cond(ref_cond_latent.to(self.main_device, self.base_dtype))[0]
+                self.image_to_cond.to(self.offload_device)
                 x = [torch.cat([v, u], dim=1) for v, u in zip([image_cond], x)]
                 seq_len += math.ceil((image_cond.shape[-1] * image_cond.shape[-2]) / 4 * image_cond.shape[-3])
                 F += 1
                 prefix_frames = 1
                 suffix_frames += 1
+                self.refextractor.to(self.main_device)
                 onetoall_ref_block_samples, onetoall_freqs = self.refextractor(ref_cond_latent, timestep=t)
+                self.refextractor.to(self.offload_device)
             # pose controlnet
             controlnet_tokens = one_to_all_input.get("controlnet_tokens", None)
             if not is_uncond and controlnet_tokens is not None and one_to_all_input['controlnet_start_percent'] <= current_step_percentage <= one_to_all_input['controlnet_end_percent']:
