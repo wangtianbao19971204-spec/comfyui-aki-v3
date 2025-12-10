@@ -211,7 +211,7 @@ def get_video_track_video(
 # Visualize functions
 # --------------------------
 
-def draw_overall_gradient_polyline_on_image(image, line_width, points, start_color):
+def draw_overall_gradient_polyline_on_image(image, line_width, points, start_color, opacity=1.0):
     """
     - image (Image): target image to draw on.
     - line_width (int): initial line width.
@@ -246,7 +246,7 @@ def draw_overall_gradient_polyline_on_image(image, line_width, points, start_col
             current_length = accumulated_length + (i / steps) * segment_length
 
             # Alpha from fully opaque to fully transparent
-            alpha = int(255 * (1 - current_length / total_length))
+            alpha = int(255 * (1 - current_length / total_length) * opacity)
             color = (*start_color, alpha)
 
             # Interpolated coordinates
@@ -278,7 +278,7 @@ def add_weighted(rgb, track):
 
     return Image.fromarray(blend_img.astype(np.uint8))
 
-def draw_tracks_on_video(video, tracks, visibility=None, track_frame=24):
+def draw_tracks_on_video(video, tracks, visibility=None, track_frame=24, circle_size=12, opacity=0.5, line_width=16):
     color_map = [
         (102, 153, 255),
         (0, 255, 255),
@@ -286,8 +286,6 @@ def draw_tracks_on_video(video, tracks, visibility=None, track_frame=24):
         (255, 102, 204),
         (0, 255, 0)
     ]
-    circle_size = 12
-    line_width = 16
 
     video = video.byte().cpu().numpy() # (81, 480, 832, 3)
     tracks = tracks[0].long().detach().cpu().numpy()
@@ -312,10 +310,24 @@ def draw_tracks_on_video(video, tracks, visibility=None, track_frame=24):
             tracks_coord = tracks[max(t-track_frame, 0):t+1, n]
 
             # Draw a circle
-            draw = ImageDraw.Draw(frame)
-            draw.ellipse((track_coord[0] - circle_size, track_coord[1] - circle_size, track_coord[0] + circle_size, track_coord[1] + circle_size), fill=color_map[n % len(color_map)])
+            #draw = ImageDraw.Draw(frame)
+            #draw.ellipse((track_coord[0] - circle_size, track_coord[1] - circle_size, track_coord[0] + circle_size, track_coord[1] + circle_size), fill=color_map[n % len(color_map)])
+            # Draw a circle with opacity
+            overlay = Image.new("RGBA", frame.size, (0, 0, 0, 0))
+            draw_overlay = ImageDraw.Draw(overlay)
+            circle_color = color_map[n % len(color_map)] + (int(255 * opacity),)
+            draw_overlay.ellipse(
+                (
+                    track_coord[0] - circle_size,
+                    track_coord[1] - circle_size,
+                    track_coord[0] + circle_size,
+                    track_coord[1] + circle_size
+                ),
+                fill=circle_color
+            )
+            frame = add_weighted(frame, overlay)  # <-- Blend the circle overlay first
             # Draw the polyline
-            track_image = draw_overall_gradient_polyline_on_image(frame, line_width, tracks_coord, color_map[n % len(color_map)])
+            track_image = draw_overall_gradient_polyline_on_image(frame, line_width, tracks_coord, color_map[n % len(color_map)], opacity=opacity)
             frame = add_weighted(frame, track_image)
 
         # Save current frame

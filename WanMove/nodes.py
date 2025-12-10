@@ -17,6 +17,12 @@ class WanVideoWanDrawWanMoveTracks:
                     "images": ("IMAGE",),
                     "tracks": ("WANMOVETRACKS",),
                 },
+                "optional": {
+                    "line_resolution": ("INT", {"default": 24, "min": 4, "max": 64, "step": 1, "tooltip": "Number of points to use for each line segment"}),
+                    "circle_size": ("INT", {"default": 10, "min": 1, "max": 20, "step": 1, "tooltip": "Size of the circle to draw for each track point"}),
+                    "opacity": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.01, "tooltip": "Opacity of the circle to draw for each track point"}),
+                    "line_width": ("INT", {"default": 14, "min": 1, "max": 50, "step": 1, "tooltip": "Width of the line to draw for each track"}),
+                }
         }
 
     RETURN_TYPES = ("IMAGE",)
@@ -24,14 +30,14 @@ class WanVideoWanDrawWanMoveTracks:
     FUNCTION = "execute"
     CATEGORY = "WanVideoWrapper"
 
-    def execute(self, images, tracks):
+    def execute(self, images, tracks, line_resolution=24, circle_size=10, opacity=0.5, line_width=14):
         if tracks is None or "tracks" not in tracks:
             log.warning("WanVideoWanDrawWanMoveTracks: No tracks provided.")
             return (images.float().cpu(), )
         track = tracks["tracks"].unsqueeze(0)
         track_visibility = tracks["track_visibility"].unsqueeze(0)
         images_in = images * 255.0
-        track_video = draw_tracks_on_video(images_in, track, track_visibility)
+        track_video = draw_tracks_on_video(images_in, track, track_visibility, track_frame=line_resolution, circle_size=circle_size, opacity=opacity, line_width=line_width)
         track_video = torch.stack([TF.to_tensor(frame) for frame in track_video], dim=0).movedim(1, -1)
 
         return (track_video.float().cpu(), )
