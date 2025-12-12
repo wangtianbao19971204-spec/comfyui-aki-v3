@@ -1210,6 +1210,11 @@ class WanVideoSampler:
                     pose_images = torch.cat([pose_prefix_image, pose_images],dim=2)
                 one_to_all_data["controlnet_tokens"] = pose_images.flatten(2).transpose(1, 2)
                 transformer.input_hint_block.to(offload_device)
+
+                one_to_all_pose_cfg_scale = one_to_all_embeds.get("pose_cfg_scale", 1.0)
+                if not isinstance(one_to_all_pose_cfg_scale, list):
+                    one_to_all_pose_cfg_scale = [one_to_all_pose_cfg_scale] * (steps + 1)
+
             prev_latents = one_to_all_data.get("prev_latents", None)
             if prev_latents is not None:
                 log.info(f"Using previous latents for One-to-All Animation with shape: {prev_latents.shape}")
@@ -1514,6 +1519,7 @@ class WanVideoSampler:
                     "num_cond_latents": len(all_indices) if transformer.is_longcat else None,
                     "sdancer_input": sdancer_input, # SteadyDancer input
                     "one_to_all_input": one_to_all_data, # One-to-All input
+                    "one_to_all_controlnet_strength": one_to_all_data["controlnet_strength"] if one_to_all_data is not None else 0.0,
                 }
 
                 batch_size = 1
@@ -1608,7 +1614,7 @@ class WanVideoSampler:
                             noise_pred = (noise_pred_uncond + phantom_cfg_scale[idx] * (noise_pred_phantom[0] - noise_pred_uncond)
                                           + cfg_scale * (noise_pred_cond - noise_pred_phantom[0]))
                             return noise_pred, None,[cache_state_cond, cache_state_uncond, cache_state_phantom]
-                        #audio cfg (fantasytalking and multitalk)
+                        # audio cfg (fantasytalking and multitalk)
                         if (fantasytalking_embeds is not None or multitalk_audio_embeds is not None):
                             if not math.isclose(audio_cfg_scale[idx], 1.0):
                                 if cache_state is not None and len(cache_state) != 3:
@@ -1632,7 +1638,7 @@ class WanVideoSampler:
                                     + cfg_scale * (noise_pred_no_audio[0] - noise_pred_uncond)
                                     + audio_cfg_scale[idx] * (noise_pred_cond - noise_pred_no_audio[0]))
                                 return noise_pred, None,[cache_state_cond, cache_state_uncond, cache_state_audio]
-                        #lynx
+                        # lynx
                         if lynx_embeds is not None and not math.isclose(lynx_cfg_scale[idx], 1.0):
                             base_params['is_uncond'] = False
                             if cache_state is not None and len(cache_state) != 3:
@@ -1644,6 +1650,20 @@ class WanVideoSampler:
                             noise_pred = (noise_pred_uncond + lynx_cfg_scale[idx] * (noise_pred_lynx[0] - noise_pred_uncond)
                                           + cfg_scale * (noise_pred_cond - noise_pred_lynx[0]))
                             return noise_pred, None, [cache_state_cond, cache_state_uncond, cache_state_lynx]
+                        # one-to-all
+                        if one_to_all_data is not None and not math.isclose(one_to_all_pose_cfg_scale[idx], 1.0):
+                            tqdm.write("One-to-All pose CFG pass...")
+                            base_params['is_uncond'] = False
+                            base_params['one_to_all_controlnet_strength'] = 0.0
+                            if cache_state is not None and len(cache_state) != 3:
+                                cache_state.append(None)
+                            noise_pred_pose_uncond, _, cache_state_ref = transformer(
+                            context=negative_embeds, pred_id=cache_state[2] if cache_state else None, vace_data=None,
+                            **base_params)
+
+                            noise_pred = (noise_pred_uncond + one_to_all_pose_cfg_scale[idx] * (noise_pred_pose_uncond[0] - noise_pred_uncond)
+                                          + cfg_scale * (noise_pred_cond - noise_pred_pose_uncond[0]))
+                            return noise_pred, None, [cache_state_cond, cache_state_uncond, cache_state_ref]
 
                     #batched
                     else:
