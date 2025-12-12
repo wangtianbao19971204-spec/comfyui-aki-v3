@@ -68,6 +68,7 @@ class WanVideoAddOneToAllPoseEmbeds:
                 },
                 "optional": {
                     "pose_prefix_image": ("IMAGE",),
+                    "pose_cfg_scale": ("FLOAT", {"default": 1.5, "min": 0.0, "max": 10.0, "step": 0.01, "tooltip": "CFG scale for the pose control, has no effect if main cfg scale is 1.0"}),
                 }
         }
 
@@ -76,7 +77,7 @@ class WanVideoAddOneToAllPoseEmbeds:
     FUNCTION = "add"
     CATEGORY = "WanVideoWrapper"
 
-    def add(self, embeds, pose_images, strength, pose_prefix_image=None, start_percent=0.0, end_percent=1.0):
+    def add(self, embeds, pose_images, strength, pose_prefix_image=None, start_percent=0.0, end_percent=1.0, pose_cfg_scale=1.5):
         updated = dict(embeds)
         updated.setdefault("one_to_all_embeds", {})
         pose_images_in = pose_images[..., :3].unsqueeze(0).permute(0, 4, 1, 2, 3) * 2 - 1 # 1 B H W C -> B C 1 H W
@@ -89,6 +90,7 @@ class WanVideoAddOneToAllPoseEmbeds:
         updated["one_to_all_embeds"]["controlnet_strength"] = strength
         updated["one_to_all_embeds"]["controlnet_start_percent"] = start_percent
         updated["one_to_all_embeds"]["controlnet_end_percent"] = end_percent
+        updated["one_to_all_embeds"]["pose_cfg_scale"] = pose_cfg_scale
 
         return (updated,)
 
