@@ -2939,15 +2939,15 @@ class WanModel(torch.nn.Module):
             if uni3c_data is not None:
                 if (uni3c_data["start"] <= current_step_percentage <= uni3c_data["end"]) or \
                             (uni3c_data["end"] > 0 and current_step == 0 and current_step_percentage >= uni3c_data["start"]):
-                    self.controlnet.to(self.main_device)
+                    self.uni3c_controlnet.to(self.main_device)
                     with torch.autocast(device_type=mm.get_autocast_device(device), dtype=self.base_dtype, enabled=True):
-                        uni3c_controlnet_states = self.controlnet(
-                            render_latent=render_latent.to(self.main_device, self.controlnet.dtype), 
+                        uni3c_controlnet_states = self.uni3c_controlnet(
+                            render_latent=render_latent.to(self.main_device, self.uni3c_controlnet.dtype),
                             render_mask=uni3c_data["render_mask"], 
                             camera_embedding=uni3c_data["camera_embedding"], 
                             temb=e.to(self.main_device),
                             device=self.offload_device)
-                    self.controlnet.to(self.offload_device)
+                    self.uni3c_controlnet.to(self.offload_device)
 
             # Asynchronous block offloading with CUDA streams and events
             if torch.cuda.is_available():

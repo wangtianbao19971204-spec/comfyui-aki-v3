@@ -890,7 +890,7 @@ class WanVideoSampler:
         #uni3c
         uni3c_data = uni3c_data_input = None
         if uni3c_embeds is not None:
-            transformer.controlnet = uni3c_embeds["controlnet"]
+            transformer.uni3c_controlnet = uni3c_embeds["controlnet"]
             render_latent = uni3c_embeds["render_latent"].to(device)
             if render_latent.shape != noise.shape:
                 render_latent = torch.nn.functional.interpolate(render_latent, size=(noise.shape[1], noise.shape[2], noise.shape[3]), mode='trilinear', align_corners=False)
