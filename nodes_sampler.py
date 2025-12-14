@@ -1220,6 +1220,7 @@ class WanVideoSampler:
                 one_to_all_data["num_latent_frames_to_replace"] = latents_to_not_step
 
         # WanMove
+        wanmove_embeds = None
         if image_cond is not None:
             wanmove_embeds = image_embeds.get("wanmove_embeds", None)
             if wanmove_embeds is not None:
