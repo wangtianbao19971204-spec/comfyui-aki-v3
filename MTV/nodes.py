@@ -36,16 +36,17 @@ def check_jit_script_function():
                     f"this has been modified by another custom node. This may cause issues with the NLF model.")
             log.warning("--------------------------------")
 
+model_list = [
+    "https://github.com/isarandi/nlf/releases/download/v0.3.2/nlf_l_multi_0.3.2.torchscript",
+    "https://github.com/isarandi/nlf/releases/download/v0.2.2/nlf_l_multi_0.2.2.torchscript",
+]
+
 class DownloadAndLoadNLFModel:
     @classmethod
     def INPUT_TYPES(s):
         return {
             "required": {
-                "url": (
-                    [
-                    "https://github.com/isarandi/nlf/releases/download/v0.3.2/nlf_l_multi_0.3.2.torchscript"
-                    ],
-                )
+                "url": (model_list, {"default": "https://github.com/isarandi/nlf/releases/download/v0.3.2/nlf_l_multi_0.3.2.torchscript"}),
              },
              "optional": {
                  "warmup": ("BOOLEAN", {"default": True, "tooltip": "Whether to warmup the model after loading"}),
@@ -58,7 +59,8 @@ class DownloadAndLoadNLFModel:
     CATEGORY = "WanVideoWrapper"
 
     def loadmodel(self, url, warmup=True):
-
+        if url not in model_list:
+            raise ValueError(f"URL {url} is not in the list of allowed models.")
         check_jit_script_function()
 
         if not os.path.exists(local_model_path):
