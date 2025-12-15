@@ -1219,6 +1219,17 @@ class WanVideoSampler:
                 latents_to_not_step = prev_latents.shape[1]
                 one_to_all_data["num_latent_frames_to_replace"] = latents_to_not_step
 
+        # SCAIL
+        scail_embeds = image_embeds.get("scail_embeds", None)
+        scail_data = None
+        if scail_embeds is not None:
+            log.info("Using SCAIL embeddings:")
+            for k, v in scail_embeds.items():
+                log.info(f"  {k}: {v.shape if isinstance(v, torch.Tensor) else v}")
+            scail_data = scail_embeds.copy()
+            scail_data = dict_to_device(scail_data, device, dtype)
+
+
         # WanMove
         wanmove_embeds = None
         if image_cond is not None:
@@ -1468,6 +1479,16 @@ class WanVideoSampler:
                 if background_latents is not None or foreground_latents is not None:
                     z = torch.cat([z, foreground_latents.to(z), background_latents.to(z)], dim=0)
 
+                scail_data_in = None
+                if scail_data is not None:
+                    ref_concat_mask = torch.zeros_like(z[:4])
+                    z = torch.cat([z, ref_concat_mask])
+                    if context_window is not None:
+                        scail_data_in = scail_data.copy()
+                        scail_data_in["pose_latent"] = scail_data["pose_latent"][:, context_window]
+                    else:
+                        scail_data_in = scail_data
+
                 if wanmove_embeds is not None and context_window is not None:
                     image_cond_input = replace_feature(image_cond_input.unsqueeze(0), track_pos[:, context_window].unsqueeze(0), wanmove_embeds.get("strength", 1.0))[0]
 
@@ -1530,6 +1551,7 @@ class WanVideoSampler:
                     "sdancer_input": sdancer_input, # SteadyDancer input
                     "one_to_all_input": one_to_all_data, # One-to-All input
                     "one_to_all_controlnet_strength": one_to_all_data["controlnet_strength"] if one_to_all_data is not None else 0.0,
+                    "scail_input": scail_data_in, # SCAIL input
                 }
 
                 batch_size = 1
