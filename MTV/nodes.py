@@ -276,9 +276,13 @@ class NLFPredict:
         # Each box tensor is shape (1, 5) with [x_min, y_min, x_max, y_max, confidence]
         formatted_boxes = []
         for box in all_boxes:
-            # Extract first 4 values (x_min, y_min, x_max, y_max), drop confidence
-            bbox_values = box[0, :4].cpu().tolist()
-            formatted_boxes.append(bbox_values)
+            # Handle empty detections (no person detected in frame)
+            if box.numel() == 0 or box.shape[0] == 0:
+                formatted_boxes.append([0.0, 0.0, 0.0, 0.0])
+            else:
+                # Extract first 4 values (x_min, y_min, x_max, y_max), drop confidence
+                bbox_values = box[0, :4].cpu().tolist()
+                formatted_boxes.append(bbox_values)
 
         return (pose_results, formatted_boxes)
 
