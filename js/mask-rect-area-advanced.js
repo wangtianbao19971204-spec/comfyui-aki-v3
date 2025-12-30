@@ -1,4 +1,5 @@
 import { app } from "../../scripts/app.js";
+import { readLinkedNumber, getDrawColor, computeCanvasSize } from "./common.js";
 function showPreviewCanvas(node, app) {
 
     const widget = {
@@ -15,7 +16,7 @@ function showPreviewCanvas(node, app) {
             // If we are initially offscreen when created we wont have received a resize event
             // Calculate it here instead
             if (!node.canvasHeight) {
-                computeCanvasSize(node, node.size);
+                computeCanvasSize(node, node.size, 220, 240);
             }
 
             const visible = true;
@@ -202,7 +203,7 @@ function showPreviewCanvas(node, app) {
     };
 
     node.onResize = function (size) {
-        computeCanvasSize(node, size);
+        computeCanvasSize(node, size, 220, 240);
     };
 
     return {minWidth: 200, minHeight: 200, widget};
@@ -377,112 +378,6 @@ function CUSTOM_INT(node, inputName, val, func, config = {}) {
     };
 }
 
-function getDrawColor(percent, alpha) {
-    let h = 360 * percent;
-    let s = 50;
-    let l = 50;
-    l /= 100;
-    const a = s * Math.min(l, 1 - l) / 100;
-    const f = n => {
-        const k = (n + h / 30) % 12;
-        const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-        return Math.round(255 * color).toString(16).padStart(2, '0');
-    };
-    return `#${f(0)}${f(8)}${f(4)}${alpha}`;
-}
-
-function computeCanvasSize(node, size) {
-    if (node.widgets[0].last_y == null) {
-        return;
-    }
-
-    const MIN_HEIGHT = 220;
-    const MIN_WIDTH = 240;
-
-    // FIX: use real last_y from layout, not slot count
-    let y = node.widgets[0].last_y + 5;
-    let freeSpace = size[1] - y;
-
-    // Compute the height of all non-customCanvas widgets
-    let widgetHeight = 0;
-    for (let i = 0; i < node.widgets.length; i++) {
-        const w = node.widgets[i];
-        if (w.type !== "customCanvas") {
-            if (w.computeSize) {
-                widgetHeight += w.computeSize()[1] + 4;
-            } else {
-                widgetHeight += LiteGraph.NODE_WIDGET_HEIGHT + 5;
-            }
-        }
-    }
-
-    // Ensure there is enough vertical space
-    freeSpace -= widgetHeight;
-
-    // Minimum canvas height clamp
-    if (freeSpace < MIN_HEIGHT) {
-        freeSpace = MIN_HEIGHT;
-    }
-
-    // Allow the node height to grow and shrink
-    const targetHeight = y + widgetHeight + freeSpace;
-    if (node.size[1] !== targetHeight) {
-        node.size[1] = targetHeight;
-        node.graph.setDirtyCanvas(true);
-    }
-
-    // Ensure the node width meets the minimum width requirement
-    if (node.size[0] < MIN_WIDTH) {
-        node.size[0] = MIN_WIDTH;
-        node.graph.setDirtyCanvas(true);
-    }
-
-    // Position each of the widgets
-    for (const w of node.widgets) {
-        w.y = y;
-        if (w.type === "customCanvas") {
-            y += freeSpace;
-        } else if (w.computeSize) {
-            y += w.computeSize()[1] + 4;
-        } else {
-            y += LiteGraph.NODE_WIDGET_HEIGHT + 4;
-        }
-    }
-
-    node.canvasHeight = freeSpace;
-}
-
-// Reads a numeric value from a connected link by inspecting the origin node widget.
-// This is more reliable than getInputData() in ComfyUI's frontend execution model.
-function readLinkedNumber(node, inputName) {
-    try {
-        if (!node || !node.graph || !Array.isArray(node.inputs)) {
-            return null;
-        }
-        const inp = node.inputs.find(i => i && i.name === inputName);
-        if (!inp || inp.link == null) {
-            return null;
-        }
-
-        const link = node.graph.links && node.graph.links[inp.link];
-        if (!link) {
-            return null;
-        }
-
-        const originNode = node.graph.getNodeById ? node.graph.getNodeById(link.origin_id) : null;
-        if (!originNode || !Array.isArray(originNode.widgets) || originNode.widgets.length === 0) {
-            return null;
-        }
-
-        // Most "Int" nodes expose the value in the first widget named "value".
-        const w = originNode.widgets.find(ww => ww && ww.name === "value") || originNode.widgets[0];
-        const v = w ? w.value : null;
-
-        return (typeof v === "number") ? v : null;
-    } catch (e) {
-        return null;
-    }
-}
 function syncLinkedInputsToPropertiesAdvanced(node) {
     let changed = false;
 
