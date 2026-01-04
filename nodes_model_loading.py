@@ -830,7 +830,7 @@ def load_weights(transformer, sd=None, weight_dtype=None, base_dtype=None,
             all_tensors.extend(r.tensors)
         for tensor in all_tensors:
             name = rename_fuser_block(tensor.name)
-            if "glob" not in name and "audio_proj" in name:
+            if "glob" not in name and "multitalk_audio_proj" not in name and "audio_proj" in name:
                 name = name.replace("audio_proj", "multitalk_audio_proj")
             load_device = device
             if "vace_blocks." in name:
