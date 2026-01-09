@@ -1,6 +1,36 @@
 {
     "custom_nodes": [
         {
+            "author": "jchiotaka",
+            "title": "comfyui-tile-calculator",
+            "reference": "https://github.com/jchiotaka/comfyui-tile-calculator",
+            "files": [
+                "https://github.com/jchiotaka/comfyui-tile-calculator"
+            ],
+            "install_type": "git-clone",
+            "description": "ComfyUI custom node for calculating tile dimensions in upscaling workflows"
+        },
+        {
+            "author": "danielvw",
+            "title": "ComfyUI-WanMove-Adapter",
+            "reference": "https://github.com/danielvw/ComfyUI-WanMove-Adapter",
+            "files": [
+                "https://github.com/danielvw/ComfyUI-WanMove-Adapter"
+            ],
+            "install_type": "git-clone",
+            "description": "This custom node allows you to convert trajectories from JSON files directly into WanMove TRACKS."
+        },
+        {
+            "author": "Anzhc",
+            "title": "SDXL-Flux2VAE-ComfyUI-Node",
+            "reference": "https://github.com/Anzhc/SDXL-Flux2VAE-ComfyUI-Node",
+            "files": [
+                "https://github.com/Anzhc/SDXL-Flux2VAE-ComfyUI-Node"
+            ],
+            "install_type": "git-clone",
+            "description": "Simple node to patch ComfyUI generation with the SDXL Flux2VAE arch support."
+        },
+        {
             "author": "KrakenUnbound",
             "title": "Kraken Tools",
             "id": "kraken-tools",

@@ -2698,6 +2698,14 @@
             "title_aux": "ComfyUI UX Nodes"
         }
     ],
+    "https://github.com/Anzhc/SDXL-Flux2VAE-ComfyUI-Node": [
+        [
+            "EmptySDXLFlux2LatentImage"
+        ],
+        {
+            "title_aux": "SDXL-Flux2VAE-ComfyUI-Node"
+        }
+    ],
     "https://github.com/AonekoSS/ComfyUI-LoRA-Tuner": [
         [
             "LoraTuner"
@@ -8016,9 +8024,11 @@
     ],
     "https://github.com/FranckyB/ComfyUI-Prompt-Manager": [
         [
+            "ApplyLoRAStack",
             "PromptGenOptions",
             "PromptGenerator",
-            "PromptManager"
+            "PromptManager",
+            "PromptManagerAdvanced"
         ],
         {
             "title_aux": "ComfyUI-Prompt-Manager"
@@ -9814,9 +9824,9 @@
     "https://github.com/IAMCCS/IAMCCS-nodes": [
         [
             "IAMCCS_ModelWithLoRA",
+            "IAMCCS_WanImageMotion",
             "IAMCCS_WanLoRAStack",
-            "IAMCCS_WanLoRAStackModelIO",
-            "IAMCCS_qwenloraloader"
+            "IAMCCS_WanLoRAStackModelIO"
         ],
         {
             "title_aux": "IAMCCS-nodes"
@@ -10022,7 +10032,8 @@
     "https://github.com/ImagineerNL/ComfyUI-IMGNR-Utils": [
         [
             "CatchEditTextNode",
-            "PreviewImageBase64Node"
+            "PreviewImageBase64Node",
+            "Txt2ComboWriter"
         ],
         {
             "title_aux": "ComfyUI-IMGNR-Utils"
@@ -13615,6 +13626,7 @@
             "ConvertToPixelArt",
             "Crop to Content",
             "Farthest Color",
+            "Fast Image Preview",
             "Hex or 24 Bit Color",
             "Image Rotator",
             "Pixelation Dimensions",
@@ -19441,7 +19453,9 @@
     ],
     "https://github.com/TTPlanetPig/Comfyui_TTP_Toolset": [
         [
+            "LTXVContext_TTP",
             "LTXVFirstLastFrameControl_TTP",
+            "LTXVMiddleFrame_TTP",
             "TTP_CoordinateSplitter",
             "TTP_Expand_And_Mask",
             "TTP_Image_Assy",
@@ -19770,7 +19784,9 @@
     ],
     "https://github.com/Tinuva88/Comfy-UmiAI": [
         [
-            "UmiAIWildcardNode"
+            "UmiAIWildcardNode",
+            "UmiAIWildcardNodeLite",
+            "UmiSaveImage"
         ],
         {
             "title_aux": "Comfy-UmiAI"
@@ -26805,6 +26821,7 @@
             "Stack_pre_Mark2",
             "Stack_sample_data",
             "Stack_text",
+            "basicIn_Boolean",
             "basicIn_Remap_slide",
             "basicIn_Sampler",
             "basicIn_Scheduler",
@@ -26881,16 +26898,19 @@
             "excel_search_data",
             "excel_write_data",
             "excel_write_data_easy",
+            "flow_BooleanSwitch",
             "flow_QueueTrigger",
             "flow_ValueReceiver",
             "flow_ValueSender",
             "flow_auto_pixel",
             "flow_bridge_image",
             "flow_case_tentor",
-            "flow_judge",
+            "flow_judge_input",
+            "flow_judge_output",
             "flow_low_gpu",
             "flow_sch_control",
-            "flow_switch",
+            "flow_switch_input",
+            "flow_switch_output",
             "flow_tensor_Unify",
             "img_effect_CircleWarp",
             "img_effect_Liquify",
@@ -27959,6 +27979,7 @@
             "LayerFilter: AddGrain",
             "LayerFilter: ChannelShake",
             "LayerFilter: ColorMap",
+            "LayerFilter: DistortDisplace",
             "LayerFilter: Film",
             "LayerFilter: FilmV2",
             "LayerFilter: GaussianBlur",
@@ -28885,6 +28906,7 @@
             "PortraitSkinPrompt",
             "PreviewPrompt",
             "PromptTranslation",
+            "PromptTranslationHY",
             "RandomLinePrompt",
             "RandomsPrompt",
             "RandomsWeightPrompt",
@@ -29240,6 +29262,7 @@
             "InstructPixToPixConditioning",
             "InvertBooleanNode",
             "InvertMask",
+            "JoinAudioChannels",
             "JoinImageWithAlpha",
             "KSampler",
             "KSamplerAdvanced",
@@ -30521,6 +30544,14 @@
             "title_aux": "ComfyUI-TTS"
         }
     ],
+    "https://github.com/danielvw/ComfyUI-WanMove-Adapter": [
+        [
+            "CoordsToWanTracks"
+        ],
+        {
+            "title_aux": "ComfyUI-WanMove-Adapter"
+        }
+    ],
     "https://github.com/danielwolber-wood/ComfyUI-FString": [
         [
             "SimpleFStringNode"
@@ -30674,6 +30705,7 @@
     ],
     "https://github.com/daveand/ComfyUI-daveand-nodes": [
         [
+            "BatchResizer",
             "CascadedTileUpscaler",
             "CheckpointLoaderWithConfig",
             "DoubleKSampler",
@@ -33653,6 +33685,7 @@
         [
             "KIE_GetRemainingCredits",
             "KIE_GridSlice",
+            "KIE_Kling26Motion_I2V",
             "KIE_Kling26_I2V",
             "KIE_NanoBananaPro_Image",
             "KIE_Seedance15Pro_I2V",
@@ -36866,6 +36899,14 @@
             "title_aux": "fast_video_comfyui"
         }
     ],
+    "https://github.com/jchiotaka/comfyui-tile-calculator": [
+        [
+            "TileCalculator"
+        ],
+        {
+            "title_aux": "comfyui-tile-calculator"
+        }
+    ],
     "https://github.com/jeankassio/ComfyUI_MusicTools": [
         [
             "Music_AudioMixer",
@@ -38808,6 +38849,9 @@
             "Intrinsic_lora_sampling",
             "JoinStringMulti",
             "JoinStrings",
+            "LTXVAddGuideMulti",
+            "LTXVAddGuidesFromBatch",
+            "LTXVAudioVideoMask",
             "LTXVEnhanceAVideoKJ",
             "LatentInpaintTTM",
             "LazySwitchKJ",
@@ -38835,6 +38879,7 @@
             "PlotCoordinates",
             "PointsEditor",
             "PreviewAnimation",
+            "PreviewLatentNoiseMask",
             "RemapImageRange",
             "RemapMaskRange",
             "ReplaceImagesInBatch",
@@ -47059,14 +47104,6 @@
             "title_aux": "queuetools"
         }
     ],
-    "https://github.com/r3dial/redial-discomphy": [
-        [
-            "DiscordMessage"
-        ],
-        {
-            "title_aux": "Redial Discomphy - Discord Integration for ComfyUI"
-        }
-    ],
     "https://github.com/r3dsd/comfyui-template-loader": [
         [
             "TemplateLoader"
@@ -50567,6 +50604,7 @@
     ],
     "https://github.com/sonnybox/ComfyUI-SuperNodes": [
         [
+            "FaceBBoxToMask",
             "ImageMaskCrop",
             "ImageSizeCalculator",
             "RestoreMaskCrop",
@@ -50604,8 +50642,7 @@
     ],
     "https://github.com/soulctcher/TetriNode": [
         [
-            "TetriNode",
-            "TetriNodeOptions"
+            "TetriNode"
         ],
         {
             "title_aux": "TetriNode"
@@ -53307,6 +53344,8 @@
             "VRGDG_HumoReminderNode",
             "VRGDG_IndexedPromptChunker",
             "VRGDG_IndexedPromptChunkerV2",
+            "VRGDG_LLM_OutputSaver",
+            "VRGDG_LLM_PromptBatcher",
             "VRGDG_LoadAudioSplitDynamic",
             "VRGDG_LoadAudioSplitUpload",
             "VRGDG_LoadAudioSplit_HUMO",
@@ -53324,12 +53363,16 @@
             "VRGDG_PromptSplitter",
             "VRGDG_PromptSplitter2",
             "VRGDG_PromptSplitter4",
+            "VRGDG_PromptSplitterForFL",
             "VRGDG_PromptSplitterForFMML",
             "VRGDG_PromptSplitterForManual",
             "VRGDG_PromptSplitterJson",
             "VRGDG_PromptSplitterV2",
+            "VRGDG_PromptTemplateBuilder",
             "VRGDG_QueueTriggerFromAudio",
+            "VRGDG_SmartSplitTextTwo",
             "VRGDG_SpeechEmotionExtractor",
+            "VRGDG_SplitPrompt_T2I_I2V",
             "VRGDG_StringConcat",
             "VRGDG_ThemeSplitter",
             "VRGDG_TimecodeFromIndex",
@@ -55786,7 +55829,9 @@
     "https://github.com/yuvraj108c/ComfyUI-Video-Depth-Anything": [
         [
             "LoadVideoDepthAnythingModel",
-            "VideoDepthAnythingProcess"
+            "VideoDepthAnythingOutput",
+            "VideoDepthAnythingProcess",
+            "VideoDepthAnythingSaveEXR"
         ],
         {
             "title_aux": "ComfyUI Video Depth Anything"

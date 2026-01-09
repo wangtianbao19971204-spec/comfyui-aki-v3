@@ -428,6 +428,14 @@
             "title_aux": "comfyui-promptbymood [WIP]"
         }
     ],
+    "https://github.com/861289009/comfyui_video_node": [
+        [
+            "VideoFadeHex2In"
+        ],
+        {
+            "title_aux": "comfyui_video_node [WIP]"
+        }
+    ],
     "https://github.com/90cube/Comfyui-CBcanvas": [
         [
             "CBCanvasNode"
@@ -7025,6 +7033,7 @@
             "InstructPixToPixConditioning",
             "InvertBooleanNode",
             "InvertMask",
+            "JoinAudioChannels",
             "JoinImageWithAlpha",
             "KSampler",
             "KSamplerAdvanced",
@@ -8190,6 +8199,7 @@
     ],
     "https://github.com/flywhale-666/ComfyUI_pixel_snapping": [
         [
+            "FaceHandCrop",
             "PixelSnapping",
             "PowerfulMaskCrop",
             "PowerfulMaskRestore"
@@ -9369,6 +9379,15 @@
         ],
         {
             "title_aux": "ComfyUI-Midjourney"
+        }
+    ],
+    "https://github.com/jluo-github/comfyui-easy-resize": [
+        [
+            "EasyImageSize",
+            "EasyImageSizeLatent"
+        ],
+        {
+            "title_aux": "comfyui-easy-resize [WIP]"
         }
     ],
     "https://github.com/jn-jairo/jn_node_suite_comfyui": [

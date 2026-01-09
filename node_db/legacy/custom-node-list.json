@@ -1,8 +1,18 @@
 {
     "custom_nodes": [
         {
+            "author": "r3dial",
+            "title": "Redial Discomphy - Discord Integration for ComfyUI [REMOVED]",
+            "reference": "https://github.com/r3dial/redial-discomphy",
+            "files": [
+                "https://github.com/r3dial/redial-discomphy"
+            ],
+            "install_type": "git-clone",
+            "description": "A custom node for ComfyUI that enables direct posting of images, videos, and messages to Discord channels. This node seamlessly integrates your ComfyUI workflows with Discord communication, allowing you to automatically share your generated content."
+        },
+        {
             "author": "EricRorich",
-            "title": "ComfyUI-Parametric-Face-Canvas [WIP]",
+            "title": "ComfyUI-Parametric-Face-Canvas [REMOVED]",
             "reference": "https://github.com/EricRorich/ComfyUI-Parametric-Face-Canvas",
             "files": [
                 "https://github.com/EricRorich/ComfyUI-Parametric-Face-Canvas"
