@@ -577,6 +577,15 @@
             "title_aux": "GrsAI api in ComfyUI"
         }
     ],
+    "https://github.com/3R3BOS/ComfyUI-3R3BOS-Pack": [
+        [
+            "Image Comparer (3R3BOS)",
+            "Visual Gatekeeper (3R3BOS)"
+        ],
+        {
+            "title_aux": "ComfyUI-3R3BOS-Pack"
+        }
+    ],
     "https://github.com/3dgopnik/comfyui-arena-suite": [
         [
             "Arena_MakeTilesSegs",
@@ -10656,6 +10665,15 @@
             "title_aux": "FitDiT"
         }
     ],
+    "https://github.com/JasonHoku/ComfyUI-Ultimate-Auto-Sampler-Config-Grid-Testing-Suite": [
+        [
+            "UltimateGridDashboard",
+            "UltimateSamplerGrid"
+        ],
+        {
+            "title_aux": "ComfyUI Ultimate Auto Sampler Config Grid Testing Suite"
+        }
+    ],
     "https://github.com/JayLyu/blender-in-comfyui": [
         [
             "BL_Camera_Creator",
@@ -19722,6 +19740,14 @@
             "title_aux": "ComfyUI Image Size Tool"
         }
     ],
+    "https://github.com/TheMadDoctor007/ComfyUI-QwenCameraSelector": [
+        [
+            "QwenCameraSelector"
+        ],
+        {
+            "title_aux": "Qwen Camera Selector"
+        }
+    ],
     "https://github.com/TheMistoAI/ComfyUI-Anyline": [
         [
             "AnyLinePreprocessor"
@@ -23038,6 +23064,15 @@
         ],
         {
             "title_aux": "ComfyUI-HigherBitDepthSaveImage"
+        }
+    ],
+    "https://github.com/aimoviestudio/comfyui-promptbuilder": [
+        [
+            "TextPromptBuilder",
+            "TextPromptNode"
+        ],
+        {
+            "title_aux": "ComfyUI Prompt Builder"
         }
     ],
     "https://github.com/ainewsto/Comfyui-chatgpt-api": [
@@ -26527,7 +26562,7 @@
             "FMJ_SaveImageWithSnapshot"
         ],
         {
-            "title_aux": "FMJ Save Image + Versions"
+            "title_aux": "ComfyUI_FMJ_SaveImageVersions"
         }
     ],
     "https://github.com/burnsbert/ComfyUI-EBU-LMStudio": [
@@ -37175,6 +37210,15 @@
         ],
         {
             "title_aux": "Eigen AI FLUX API Plugin"
+        }
+    ],
+    "https://github.com/jianglinbin/ComfyUI-AnglesSelect": [
+        [
+            "AnglesSelector3D",
+            "SimpleAnglesSelector"
+        ],
+        {
+            "title_aux": "ComfyUI 3D Angles Selector"
         }
     ],
     "https://github.com/jiaqianjing/ComfyUI-MidjourneyHub": [
@@ -49554,6 +49598,14 @@
             "title_aux": "shinyakidoguchi301/LoRA Tag Loader for ComfyUI"
         }
     ],
+    "https://github.com/shmbatom/Comfyui-Image-Concat": [
+        [
+            "ImageConcatNode"
+        ],
+        {
+            "title_aux": "Comfyui-Image-Concat"
+        }
+    ],
     "https://github.com/shmbatom/Comfyui-ImageAB-Compare": [
         [
             "ImageABCompare"
@@ -53156,6 +53208,48 @@
             "title_aux": "Vantage-HunyuanFoley"
         }
     ],
+    "https://github.com/vantagewithai/Vantage-Nodes": [
+        [
+            "AdvancedCalculator",
+            "AppendImageBatch",
+            "AppendLatentBatch",
+            "CastAnyToIntStringFloat",
+            "ConditionalPassThrough",
+            "DelimiterSplit",
+            "IndexWrap",
+            "JoinImageBatch",
+            "JoinLatentBatch",
+            "RegexFilter",
+            "StringJoiner",
+            "StringListIndex",
+            "StringListRandom",
+            "StringListStepper",
+            "SwitchAny",
+            "SwitchAnyByIndex",
+            "SwitchImageByIndex",
+            "SwitchLatentByIndex",
+            "ValidateImageShape",
+            "VantageGGUFLoader",
+            "VantageWanBlockSwap"
+        ],
+        {
+            "title_aux": "Vantage-Nodes"
+        }
+    ],
+    "https://github.com/vantagewithai/Vantage-Step-Audio-EditX": [
+        [
+            "EditXModelLoader",
+            "EditXMultiVoiceCloner",
+            "EditXSingleVoiceCloner",
+            "EditXSingleVoiceClonerFromPath",
+            "EditXSingleVoiceEditor",
+            "EditXSingleVoiceEditorFromPath",
+            "LoadSpeakers"
+        ],
+        {
+            "title_aux": "Vantage-Step-Audio-EditX"
+        }
+    ],
     "https://github.com/vantagewithai/VantageLongWanVideo": [
         [
             "VantageI2VDualLooper",
@@ -53523,6 +53617,14 @@
         ],
         {
             "title_aux": "ComfyUI vsLinx Nodes"
+        }
+    ],
+    "https://github.com/vuhung3990/comfyui-nsfw-guard": [
+        [
+            "NSFWCheck"
+        ],
+        {
+            "title_aux": "NSFW Guard"
         }
     ],
     "https://github.com/vuongminh1907/ComfyUI_ZenID": [
@@ -56093,6 +56195,22 @@
         ],
         {
             "title_aux": "PromptCreatorNodetraumakom Prompt Generator"
+        }
+    ],
+    "https://github.com/zengxianyu/ComfyUIIntensityDepth": [
+        [
+            "IntensityDepthEstimation"
+        ],
+        {
+            "title_aux": "Intensity Fake Depth Node for ComfyUI"
+        }
+    ],
+    "https://github.com/zengxianyu/structured-noise": [
+        [
+            "StructuredNoise"
+        ],
+        {
+            "title_aux": "Phase-Preserving Noise"
         }
     ],
     "https://github.com/zentrocdot/ComfyUI-RealESRGAN_Upscaler": [

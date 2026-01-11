@@ -2291,6 +2291,15 @@
             "title_aux": "comfyui-genai-connectors [WIP]"
         }
     ],
+    "https://github.com/IO-AtelierTech/comfyui-video-utils": [
+        [
+            "GetVideoPath",
+            "SaveVideoGetPath"
+        ],
+        {
+            "title_aux": "comfyui-video-utils [NAME CONFLICT]"
+        }
+    ],
     "https://github.com/IXIWORKS-KIMJUNGHO/comfyui-ixiworks": [
         [
             "BuildCharacterPromptNode",
@@ -4039,6 +4048,25 @@
             "title_aux": "SAM3DObjects [UNSAFE]"
         }
     ],
+    "https://github.com/PozzettiAndrea/ComfyUI-TRELLIS2": [
+        [
+            "LoadTrellis2Models",
+            "Trellis2ExportGLB",
+            "Trellis2ExportTrimesh",
+            "Trellis2GetConditioning",
+            "Trellis2ImageToShape",
+            "Trellis2RasterizePBR",
+            "Trellis2RemoveBackground",
+            "Trellis2RenderPreview",
+            "Trellis2RenderVideo",
+            "Trellis2ShapeToTexturedMesh",
+            "Trellis2Simplify",
+            "Trellis2UVUnwrap"
+        ],
+        {
+            "title_aux": "ComfyUI-TRELLIS2 [NAME CONFLICT]"
+        }
+    ],
     "https://github.com/PozzettiAndrea/ComfyUI-UniRig": [
         [
             "UniRigApplyAnimation",
@@ -5751,6 +5779,17 @@
             "title_aux": "upload-to-azure"
         }
     ],
+    "https://github.com/ai-joe-git/ComfyUI-Chatterbox": [
+        [
+            "ChatterboxLoadReferenceAudio",
+            "ChatterboxPresets",
+            "ChatterboxSaveAudio",
+            "ChatterboxTTSNode"
+        ],
+        {
+            "title_aux": "ComfyUI-Chatterbox [NAME CONFLICT]"
+        }
+    ],
     "https://github.com/aiden1020/ComfyUI_Artcoder": [
         [
             "ArtCoder"
@@ -6659,6 +6698,17 @@
             "title_aux": "ComfyUI-Pixelsmith [WIP]"
         }
     ],
+    "https://github.com/cedarconnor/ComfyUI-DAP": [
+        [
+            "DAP_BatchFromFolder",
+            "DAP_Inference",
+            "DAP_SaveDepthBatch",
+            "DAP_Setup"
+        ],
+        {
+            "title_aux": "ComfyUI-DAP [UNSAFE/NAME CONFLICT]"
+        }
+    ],
     "https://github.com/cedarconnor/ComfyUI-HunyuanWorld-Mirror": [
         [
             "HWMInference",
@@ -6862,6 +6912,14 @@
         ],
         {
             "title_aux": "comfyui-boll-nodes"
+        }
+    ],
+    "https://github.com/colorAi/comfyui-prompt-manager": [
+        [
+            "PromptManagerNode"
+        ],
+        {
+            "title_aux": "comfyui-prompt-manager [NAME CONFLICT]"
         }
     ],
     "https://github.com/comfyanonymous/ComfyUI": [
@@ -12155,6 +12213,15 @@
         ],
         {
             "title_aux": "ComfyUI-Video-Utils"
+        }
+    ],
+    "https://github.com/satyam-fp/ComfyUI-GeminiImage": [
+        [
+            "GeminiImageEnhance",
+            "GeminiTextToImage"
+        ],
+        {
+            "title_aux": "ComfyUI-GeminiImage [NAME CONFLICT]"
         }
     ],
     "https://github.com/satyasairazole/ComfyUI-Turbandetection": [
