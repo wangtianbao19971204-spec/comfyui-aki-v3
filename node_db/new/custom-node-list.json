@@ -1,6 +1,17 @@
 {
     "custom_nodes": [
         {
+            "author": "vuhung3990",
+            "title": "NSFW Guard",
+            "id": "comfyui-nsfw-guard",
+            "reference": "https://github.com/vuhung3990/comfyui-nsfw-guard",
+            "files": [
+                "https://github.com/vuhung3990/comfyui-nsfw-guard"
+            ],
+            "install_type": "git-clone",
+            "description": "NSFW content detection node for ComfyUI - blocks inappropriate images automatically using YOLOv9 model."
+        },
+        {
             "author": "jchiotaka",
             "title": "comfyui-tile-calculator",
             "reference": "https://github.com/jchiotaka/comfyui-tile-calculator",

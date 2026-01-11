@@ -4041,7 +4041,9 @@
     ],
     "https://github.com/PozzettiAndrea/ComfyUI-UniRig": [
         [
+            "UniRigApplyAnimation",
             "UniRigApplySkinningMLNew",
+            "UniRigAutoRig",
             "UniRigExportPosedFBX",
             "UniRigExtractSkeletonNew",
             "UniRigLoadMesh",
@@ -6219,6 +6221,7 @@
             "EnvVarNode",
             "Eval",
             "JMESPathSelect",
+            "RescaleToDimensions",
             "WanVideoSize"
         ],
         {
@@ -7009,6 +7012,7 @@
             "ImageBlend",
             "ImageBlur",
             "ImageColorToMask",
+            "ImageCompare",
             "ImageCompositeMasked",
             "ImageCrop",
             "ImageFlip",
@@ -7409,6 +7413,10 @@
             "VeoVideoGenerationNode",
             "VideoLinearCFGGuidance",
             "VideoTriangleCFGGuidance",
+            "Vidu2ImageToVideoNode",
+            "Vidu2ReferenceVideoNode",
+            "Vidu2StartEndToVideoNode",
+            "Vidu2TextToVideoNode",
             "ViduImageToVideoNode",
             "ViduReferenceVideoNode",
             "ViduStartEndToVideoNode",
@@ -10756,6 +10764,7 @@
             "AddSingleObject",
             "AddSingleText",
             "ColorNode",
+            "Log",
             "PromptSelector",
             "SaveImageAndText"
         ],
@@ -13850,6 +13859,7 @@
             "FirstLastFrameXZ",
             "ImageResizeKJ",
             "ImageResizeXZ",
+            "SelfGuidance",
             "TextEncodeQwenImageEditSimpleXZ",
             "TextEncodeQwenImageEditXZ",
             "TripleCLIPLoaderXZ",
