@@ -717,9 +717,12 @@
     ],
     "https://github.com/7BEII/comfyui-PD_comfy-api-node": [
         [
-            "PDFluxKontextProOfficial",
-            "PDGeminiImageGenComfyKey",
-            "PDOpenAIGPTImageKey"
+            "PDGeminiImageGenAPIKey",
+            "PDGeminiImageGenAuthToken",
+            "PDGeminiProImageGenAPIKey",
+            "PDGeminiProImageGenAuthToken",
+            "PDOpenAIGPTImageAPIKey",
+            "PDOpenAIGPTImageAuthToken"
         ],
         {
             "title_aux": "comfyui-PD_comfy-api-node"
@@ -1110,6 +1113,7 @@
         [
             "ChatGPTNode",
             "CustomStringMerge",
+            "NSFWChecker",
             "OpenAIImageModeration",
             "SequentialImageLoader",
             "SequentialMediaLoader"
@@ -6683,29 +6687,46 @@
             "EmAySee_AnyPassthrough",
             "EmAySee_CalculateAspectRatio",
             "EmAySee_CheckboxFloatNode",
+            "EmAySee_ConditionalResize",
             "EmAySee_DateTimeStringNode",
+            "EmAySee_DimensionSwapper",
+            "EmAySee_DynamicRangeSlider",
             "EmAySee_DynamicStringSelectorNode",
+            "EmAySee_FloatToText",
+            "EmAySee_GeminiImageGen",
             "EmAySee_GetModelPath",
             "EmAySee_GreaterThanNode",
             "EmAySee_HostPinger",
             "EmAySee_ImageGetSize",
             "EmAySee_ImagePassthrough",
+            "EmAySee_ImagePreviewPassthrough",
             "EmAySee_IntegerStringSelectorNode",
             "EmAySee_IntegerStringSelectorNodeDynamic",
+            "EmAySee_LLMOutputCleaner",
             "EmAySee_LatentSwitch",
             "EmAySee_LoRA Metadata Extractor TagDrop",
             "EmAySee_LoRAMetadataExtractor",
             "EmAySee_LoRAMetadataExtractorTagDrop",
+            "EmAySee_LoraApplier",
             "EmAySee_LoraFilePicker",
+            "EmAySee_LoraLoaderFromInput",
+            "EmAySee_LoraNameSelector",
+            "EmAySee_LoraProcessor",
+            "EmAySee_LoraSelector",
+            "EmAySee_LoraStacker20",
             "EmAySee_MathExpression",
             "EmAySee_MetadataFormatter",
+            "EmAySee_MultiMaskToBBOX",
             "EmAySee_MultiplierNode",
+            "EmAySee_NineChoiceSelector",
             "EmAySee_PadImageForOutpainting",
             "EmAySee_ProbabilityStringSelectorNode",
+            "EmAySee_QwenPixelAligner",
             "EmAySee_RandomIntFromList",
             "EmAySee_RandomIntegerFromListNode",
             "EmAySee_RandomIntegerFromTogglesNode_PremadeLabels",
             "EmAySee_RandomLoraLoader",
+            "EmAySee_RandomStringSelector",
             "EmAySee_RandomStringSelectorNode",
             "EmAySee_RandomStringSelectorNodeFourChoice",
             "EmAySee_RandomStringSelectorNodeThreeChoice",
@@ -6716,15 +6737,22 @@
             "EmAySee_RepaintKSampler",
             "EmAySee_SaveImage",
             "EmAySee_SaveTextToFile",
+            "EmAySee_StringDetector",
             "EmAySee_StringPoseSelectorNode",
             "EmAySee_StringTupleInputNode",
             "EmAySee_SubmitToOobaboogaAPI",
             "EmAySee_SubmitToOobaboogaAPIWithKey",
+            "EmAySee_SubmitToOobaboogaAPIWithKeyThinker",
+            "EmAySee_SubmitToOobaboogaAPIWithKey_WithThinkParse",
+            "EmAySee_SubmitToOobaboogaAPIWithKey_test",
+            "EmAySee_TagPruner",
+            "EmAySee_TextCombiner",
             "EmAySee_ToggleIntNode",
             "EmAySee_VAECompatibleAspectRatioCalculator",
             "EmAySee_VarTextReplacer",
             "EmAySee_VeryUniqueStringSelectorNode",
-            "EmAySee_WD14TagFilter"
+            "EmAySee_WD14TagFilter",
+            "f"
         ],
         {
             "title_aux": "ComfyUI_EmAySee_CustomNodes"
@@ -8707,12 +8735,14 @@
             "GR Prompt Selector Multi",
             "GR Prompty",
             "GR Scroller",
+            "GR Sigma Presets",
             "GR Sigmas",
             "GR Stack Image",
             "GR Text Overlay",
             "GR Tile and Border Image",
             "GR Tile and Border Image Random Flip",
             "GRBatchLoader",
+            "GRImageSelector",
             "GRLoraLoader",
             "GRMenuHook",
             "GRPromptViewer"
@@ -13663,7 +13693,7 @@
             "Fast Image Preview",
             "Hex or 24 Bit Color",
             "Image Rotator",
-            "Match Palette to Master",
+            "Match Color Palette",
             "Pixelation Dimensions",
             "Pose Image Setup",
             "PreviewAsMarkdown",
@@ -13675,6 +13705,7 @@
             "Save To Zip",
             "SaveFolderAsZip",
             "Spritesheet Builder",
+            "Spritesheet Preview",
             "VideoMaskEditor",
             "WAN Frame Calculator"
         ],
@@ -16197,6 +16228,7 @@
             "Runware Media Upload",
             "Runware Midjourney Provider Settings",
             "Runware MiniMax Provider Settings",
+            "Runware Mirelo Provider Settings",
             "Runware Model Search",
             "Runware Multi Inference",
             "Runware OpenAI Provider Settings",
@@ -16243,6 +16275,7 @@
             "RunwareLumaProviderSettings",
             "RunwareMidjourneyProviderSettings",
             "RunwareMiniMaxProviderSettings",
+            "RunwareMireloProviderSettings",
             "RunwareOpenAIProviderSettings",
             "RunwarePixverseProviderSettings",
             "RunwareRunwayProviderSettings",
@@ -23241,6 +23274,9 @@
             "list_num_range",
             "math_Remap_data",
             "math_calculate",
+            "nsfwDetector",
+            "nsfwDetectorV2",
+            "raiseExceptionOnTrue",
             "sch_Prompt",
             "sch_Value",
             "sch_image",
@@ -30837,6 +30873,8 @@
             "PromptCameraSelector",
             "PromptConstructor",
             "PromptLightingSelector",
+            "TiledKSampler",
+            "TiledKSamplerWithUpscaler",
             "TrainingDatasetSaver"
         ],
         {
@@ -38989,6 +39027,7 @@
             "LTXVAddGuideMulti",
             "LTXVAddGuidesFromBatch",
             "LTXVAudioVideoMask",
+            "LTXVChunkFeedForward",
             "LTXVEnhanceAVideoKJ",
             "LatentInpaintTTM",
             "LazySwitchKJ",
@@ -40191,8 +40230,10 @@
     ],
     "https://github.com/lazyq666/gemini-3-simply-comfyui": [
         [
+            "Gemini3Camera3DPrompt",
             "Gemini3ProImagePreview",
-            "Gemini3ProPreviewText"
+            "Gemini3ProPreviewText",
+            "GeminiSeedInt32"
         ],
         {
             "title_aux": "gemini-3-simply-comfyui"
@@ -43045,15 +43086,21 @@
     ],
     "https://github.com/mcDandy/more_math": [
         [
+            "mrmth_AudioMathNode",
             "mrmth_AudioToImageSpectrogram",
             "mrmth_CLIPMathNode",
+            "mrmth_ConditioningMathNode",
             "mrmth_FloatMathNode",
             "mrmth_FloatToInt",
+            "mrmth_ImageMathNode",
             "mrmth_ImageSpectrogramToAudio",
             "mrmth_IntToFloat",
+            "mrmth_LatentMathNode",
+            "mrmth_MaskMathNode",
             "mrmth_ModelMathNode",
             "mrmth_NoiseMathNode",
-            "mrmth_VAEMathNode"
+            "mrmth_VAEMathNode",
+            "mrmth_VideoMathNode"
         ],
         {
             "title_aux": "More Math"
@@ -44108,6 +44155,8 @@
             "MaskDetailerPipeNode",
             "ModelPresetNode",
             "MultiStringConditioning",
+            "NestedDetailerNode",
+            "NestedDetailerPipeNode",
             "OpenCVDenoise",
             "PromptConditioningNode",
             "ResolutionSelector",
@@ -49671,12 +49720,17 @@
             "LoRAExtractQuantile",
             "LoRAExtractRatio",
             "LoRAMetaKeys",
+            "LoRAMultiMerge",
             "LoRAPruneKeys",
             "LoRARenameKeys",
             "LoRAResizeCumulative",
             "LoRAResizeFixed",
             "LoRAResizeFrobenius",
             "LoRAResizeRatio",
+            "LoRAResizeViaBaseCumulative",
+            "LoRAResizeViaBaseFixed",
+            "LoRAResizeViaBaseFrobenius",
+            "LoRAResizeViaBaseRatio",
             "LoRAThreeMerger",
             "LoRATwoMerger",
             "ModelMetaKeys",
@@ -52680,6 +52734,7 @@
     ],
     "https://github.com/ttulttul/Skoogeer-Noise": [
         [
+            "CombineLatentPhaseMagnitude",
             "ConditioningAddNoise",
             "ConditioningFrequencyMerge",
             "ConditioningFrequencySplit",
@@ -52687,6 +52742,7 @@
             "ConditioningScale",
             "FluidImageAdvection",
             "FluidLatentAdvection",
+            "FrequencySelectiveStructuredNoise",
             "ImageAddNoise",
             "ImageFractalBrownianMotion",
             "ImageMeshDrag",
@@ -52711,7 +52767,8 @@
             "LatentSimplexNoise",
             "LatentSmokeSimulation",
             "LatentSwirlNoise",
-            "LatentWorleyNoise"
+            "LatentWorleyNoise",
+            "SplitLatentPhaseMagnitude"
         ],
         {
             "title_aux": "Skoogeer-Noise"
@@ -54294,19 +54351,19 @@
     ],
     "https://github.com/wizdroid/wizdroid-character": [
         [
-            "BackgroundEditNode",
-            "CharacterPromptBuilder",
-            "ContestPromptGenerator",
-            "MetaPromptGenerator",
-            "SceneGeneratorNode",
+            "WizdroidBackground",
+            "WizdroidCharacterPrompt",
+            "WizdroidContestPrompt",
             "WizdroidImageEdit",
-            "WizdroidLoRADatasetExport",
+            "WizdroidLoRADataset",
             "WizdroidLoRADatasetValidator",
+            "WizdroidLoRATrainer",
             "WizdroidLoRAValidate",
+            "WizdroidMetaPrompt",
             "WizdroidMultiAngle",
-            "WizdroidPhotoAspectExtractor",
+            "WizdroidPhotoAspect",
             "WizdroidPromptCombiner",
-            "WizdroidSDXLLoRATrainer"
+            "WizdroidSceneGenerator"
         ],
         {
             "title_aux": "Wizdroid Character Nodes for ComfyUI"

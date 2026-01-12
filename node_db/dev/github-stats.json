@@ -164,6 +164,11 @@
         "last_update": "2025-02-19 09:41:02",
         "author_account_age_days": 1375
     },
+    "https://github.com/AhiruNeko/ComfyUI-MiniTools": {
+        "stars": 0,
+        "last_update": "2026-01-08 12:55:01",
+        "author_account_age_days": 1275
+    },
     "https://github.com/AkiEvansDev/ComfyUI-Tools": {
         "stars": 0,
         "last_update": "2025-06-28 14:48:29",
@@ -559,11 +564,6 @@
         "last_update": "2025-12-18 10:54:29",
         "author_account_age_days": 1667
     },
-    "https://github.com/EricRorich/ComfyUI-Parametric-Face-Canvas": {
-        "stars": 0,
-        "last_update": "2026-01-04 15:21:05",
-        "author_account_age_days": 1662
-    },
     "https://github.com/Estanislao-Oviedo/ComfyUI-CustomNodes": {
         "stars": 0,
         "last_update": "2025-11-19 02:44:52",
@@ -738,6 +738,11 @@
         "stars": 0,
         "last_update": "2025-12-16 02:31:50",
         "author_account_age_days": 66
+    },
+    "https://github.com/IO-AtelierTech/comfyui-video-utils": {
+        "stars": 0,
+        "last_update": "2025-12-16 02:37:32",
+        "author_account_age_days": 67
     },
     "https://github.com/IXIWORKS-KIMJUNGHO/comfyui-ixiworks": {
         "stars": 0,
@@ -933,11 +938,6 @@
         "stars": 1,
         "last_update": "2025-12-07 18:48:47",
         "author_account_age_days": 973
-    },
-    "https://github.com/LSDJesus/ComfyUI-Luna-Collection": {
-        "stars": 0,
-        "last_update": "2026-01-07 02:20:23",
-        "author_account_age_days": 843
     },
     "https://github.com/LZpenguin/ComfyUI-Text": {
         "stars": 23,
@@ -1299,6 +1299,11 @@
         "last_update": "2026-01-10 18:14:24",
         "author_account_age_days": 2258
     },
+    "https://github.com/PozzettiAndrea/ComfyUI-TRELLIS2": {
+        "stars": 290,
+        "last_update": "2026-01-10 12:39:43",
+        "author_account_age_days": 2259
+    },
     "https://github.com/PozzettiAndrea/ComfyUI-UniRig": {
         "stars": 257,
         "last_update": "2026-01-10 18:15:49",
@@ -1463,6 +1468,11 @@
         "stars": 0,
         "last_update": "2025-06-02 19:16:34",
         "author_account_age_days": 1029
+    },
+    "https://github.com/Sergey004/ComfyUI-Telegram-Sender": {
+        "stars": 0,
+        "last_update": "2026-01-10 18:28:49",
+        "author_account_age_days": 3929
     },
     "https://github.com/SergeyKarleev/comfyui-textutils": {
         "stars": 0,
@@ -1814,6 +1824,11 @@
         "last_update": "2025-06-06 09:23:19",
         "author_account_age_days": 1972
     },
+    "https://github.com/Yukinoshita-Yukinoe/ComfyUI-SenseVoice": {
+        "stars": 1,
+        "last_update": "2025-12-22 06:34:48",
+        "author_account_age_days": 1973
+    },
     "https://github.com/ZHO-ZHO-ZHO/ComfyUI-AuraSR-ZHO": {
         "stars": 96,
         "last_update": "2024-07-11 07:33:30",
@@ -1938,6 +1953,11 @@
         "stars": 0,
         "last_update": "2025-07-29 10:58:26",
         "author_account_age_days": 3499
+    },
+    "https://github.com/ai-joe-git/ComfyUI-Chatterbox": {
+        "stars": 0,
+        "last_update": "2026-01-09 00:43:44",
+        "author_account_age_days": 1627
     },
     "https://github.com/aiden1020/ComfyUI_Artcoder": {
         "stars": 2,
@@ -2309,6 +2329,11 @@
         "last_update": "2025-01-22 03:02:05",
         "author_account_age_days": 1097
     },
+    "https://github.com/cedarconnor/ComfyUI-DAP": {
+        "stars": 0,
+        "last_update": "2025-12-22 04:08:49",
+        "author_account_age_days": 4862
+    },
     "https://github.com/cedarconnor/ComfyUI-HunyuanWorld-Mirror": {
         "stars": 28,
         "last_update": "2025-11-21 06:21:42",
@@ -2408,6 +2433,11 @@
         "stars": 0,
         "last_update": "2025-10-02 23:27:02",
         "author_account_age_days": 2494
+    },
+    "https://github.com/colorAi/comfyui-prompt-manager": {
+        "stars": 8,
+        "last_update": "2026-01-02 07:56:28",
+        "author_account_age_days": 980
     },
     "https://github.com/comfyanonymous/ComfyUI": {
         "stars": 99809,
@@ -4393,6 +4423,11 @@
         "stars": 2,
         "last_update": "2024-05-15 00:55:17",
         "author_account_age_days": 5646
+    },
+    "https://github.com/satyam-fp/ComfyUI-GeminiImage": {
+        "stars": 0,
+        "last_update": "2026-01-08 09:57:19",
+        "author_account_age_days": 1335
     },
     "https://github.com/satyasairazole/ComfyUI-Turbandetection": {
         "stars": 0,

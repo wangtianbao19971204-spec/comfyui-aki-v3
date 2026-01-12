@@ -1,6 +1,16 @@
 {
     "custom_nodes": [
         {
+            "author": "LSDJesus",
+            "title": "ComfyUI-Luna-Collection [REMOVED]",
+            "reference": "https://github.com/LSDJesus/ComfyUI-Luna-Collection",
+            "files": [
+                "https://github.com/LSDJesus/ComfyUI-Luna-Collection"
+            ],
+            "install_type": "git-clone",
+            "description": "Collection of finetuned and custom nodes for Pyrite and I\nNOTE: The files in the repo are not organized."
+        },
+        {
             "author": "r3dial",
             "title": "Redial Discomphy - Discord Integration for ComfyUI [REMOVED]",
             "reference": "https://github.com/r3dial/redial-discomphy",
