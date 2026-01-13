@@ -1,6 +1,16 @@
 {
     "custom_nodes": [
         {
+            "author": "umisetokikaze",
+            "title": "comfyui_mergekit [REMOVED]",
+            "reference": "https://github.com/umisetokikaze/comfyui_mergekit",
+            "files": [
+                "https://github.com/umisetokikaze/comfyui_mergekit"
+            ],
+            "install_type": "git-clone",
+            "description": "Nodes:DefineSaveName, SetModels, get_skip, LoadLR, LoadTarget, SetTokenizer, Merge, SetLayer, SetModels"
+        },
+        {
             "author": "LSDJesus",
             "title": "ComfyUI-Luna-Collection [REMOVED]",
             "reference": "https://github.com/LSDJesus/ComfyUI-Luna-Collection",

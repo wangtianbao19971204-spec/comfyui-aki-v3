@@ -32,6 +32,56 @@
             "description": "Provide a simple interface to simplify prompt writing."
         },
         {
+            "author": "Suzu008",
+            "title": "ComfyUI-CryptIO",
+            "reference": "https://github.com/Suzu008/ComfyUI-CryptIO",
+            "files": [
+                "https://github.com/Suzu008/ComfyUI-CryptIO"
+            ],
+            "install_type": "git-clone",
+            "description": "A collection of custom nodes for ComfyUI"
+        },
+        {
+            "author": "IRCSS",
+            "title": "comfyUI-blender-wrapper",
+            "reference": "https://github.com/IRCSS/comfyUI-blender-wrapper",
+            "files": [
+                "https://github.com/IRCSS/comfyUI-blender-wrapper"
+            ],
+            "install_type": "git-clone",
+            "description": "ComfyUI Blender Wrapper lets you call Blender in headless mode from ComfyUI (or any Python environment), run reusable pipeline stages stored inside files, and pass configs in/out via JSON. It's meant for tech-art / asset-pipeline tasks like cleanup, decimation, unwrap, baking, rigging, etc."
+        },
+        {
+            "author": "calibancode",
+            "title": "ComfyUI-bevvy",
+            "reference": "https://github.com/calibancode/ComfyUI-bevvy",
+            "files": [
+                "https://github.com/calibancode/ComfyUI-bevvy"
+            ],
+            "install_type": "git-clone",
+            "description": "ComfyUI custom node that saves images as WebP."
+        },
+        {
+            "author": "GraftingRayman",
+            "title": "ComfyUI-Games",
+            "reference": "https://github.com/GraftingRayman/ComfyUI-Games",
+            "files": [
+                "https://github.com/GraftingRayman/ComfyUI-Games"
+            ],
+            "install_type": "git-clone",
+            "description": "ComfyUI node providing Tetris game functionality. (Description by CC)"
+        },
+        {
+            "author": "aicuai",
+            "title": "comfyui-save-image-watermark",
+            "reference": "https://github.com/aicuai/comfyui-save-image-watermark",
+            "files": [
+                "https://github.com/aicuai/comfyui-save-image-watermark"
+            ],
+            "install_type": "git-clone",
+            "description": "Save images with visible watermarks (logo/text), invisible watermarks (LSB steganography), and metadata embedding. Supports PNG/JPEG/WebP with browser download."
+        },
+        {
             "author": "migero",
             "title": "ComfyUI-Equirectangular-Strip",
             "reference": "https://github.com/migero/ComfyUI-Equirectangular-Strip",

@@ -12906,6 +12906,16 @@
             "description": "A visual ComfyUI latent canvas dimensions selector"
         },
         {
+            "author": "GraftingRayman",
+            "title": "ComfyUI-Games",
+            "reference": "https://github.com/GraftingRayman/ComfyUI-Games",
+            "files": [
+                "https://github.com/GraftingRayman/ComfyUI-Games"
+            ],
+            "install_type": "git-clone",
+            "description": "ComfyUI node providing Tetris game functionality. (Description by CC)"
+        },
+        {
             "author": "royceschultz",
             "title": "ComfyUI-Notifications",
             "reference": "https://github.com/royceschultz/ComfyUI-Notifications",
@@ -24747,6 +24757,16 @@
             ],
             "install_type": "git-clone",
             "description": "This repository contains custom nodes for Stability AI API which supports SD3.0 and 3.5."
+        },
+        {
+            "author": "aicuai",
+            "title": "comfyui-save-image-watermark",
+            "reference": "https://github.com/aicuai/comfyui-save-image-watermark",
+            "files": [
+                "https://github.com/aicuai/comfyui-save-image-watermark"
+            ],
+            "install_type": "git-clone",
+            "description": "Save images with visible watermarks (logo/text), invisible watermarks (LSB steganography), and metadata embedding. Supports PNG/JPEG/WebP with browser download."
         },
         {
             "author": "benda1989",
@@ -40317,16 +40337,6 @@
             "description": "A ComfyUI node that generates a VACE control video and mask for a smooth transition between two videos"
         },
         {
-            "author": "WASasquatch",
-            "title": "ComfyUI_Viewer",
-            "reference": "https://github.com/WASasquatch/ComfyUI_Viewer",
-            "files": [
-                "https://github.com/WASasquatch/ComfyUI_Viewer"
-            ],
-            "install_type": "git-clone",
-            "description": "Extensible content viewer for ComfyUI: HTML, Markdown (LaTeX, Mermaid, etc), Code, Images, and more"
-        },
-        {
             "author": "Xyc2016",
             "title": "Comfyui_Fd_Nodes",
             "reference": "https://github.com/Xyc2016/Comfyui_Fd_Nodes",
@@ -40445,16 +40455,6 @@
             ],
             "install_type": "git-clone",
             "description": "A minimal, opinionated ComfyUI custom node that emits portrait (0°) and/or landscape (90°) latent variants in a single run."
-        },
-        {
-            "author": "alexcong",
-            "title": "ComfyUI-SwinIR",
-            "reference": "https://github.com/alexcong/ComfyUI-SwinIR",
-            "files": [
-                "https://github.com/alexcong/ComfyUI-SwinIR"
-            ],
-            "install_type": "git-clone",
-            "description": "A ComfyUI custom node for SwinIR (Swin Transformer for Image Restoration) supporting image super-resolution and denoising."
         },
         {
             "author": "zisb",
@@ -41128,16 +41128,6 @@
             "description": "Automatically disables Load Image nodes without images, useful for workflows with optional reference images. (Description by CC)"
         },
         {
-            "author": "Enferlain",
-            "title": "ComfyUI-A1111-cond",
-            "reference": "https://github.com/Enferlain/ComfyUI-A1111-cond",
-            "files": [
-                "https://github.com/Enferlain/ComfyUI-A1111-cond"
-            ],
-            "install_type": "git-clone",
-            "description": "A custom ComfyUI node that implements A1111-style prompt handling with proper isolation and emphasis math."
-        },
-        {
             "author": "NickPittas",
             "title": "ComfyUI_CameraAngleSelector",
             "reference": "https://github.com/NickPittas/ComfyUI_CameraAngleSelector",
@@ -41238,10 +41228,36 @@
             "install_type": "git-clone",
             "description": "Provide a simple interface to simplify prompt writing."
         },
-
-
-
-
+        {
+            "author": "Suzu008",
+            "title": "ComfyUI-CryptIO",
+            "reference": "https://github.com/Suzu008/ComfyUI-CryptIO",
+            "files": [
+                "https://github.com/Suzu008/ComfyUI-CryptIO"
+            ],
+            "install_type": "git-clone",
+            "description": "A collection of custom nodes for ComfyUI"
+        },
+        {
+            "author": "IRCSS",
+            "title": "comfyUI-blender-wrapper",
+            "reference": "https://github.com/IRCSS/comfyUI-blender-wrapper",
+            "files": [
+                "https://github.com/IRCSS/comfyUI-blender-wrapper"
+            ],
+            "install_type": "git-clone",
+            "description": "ComfyUI Blender Wrapper lets you call Blender in headless mode from ComfyUI (or any Python environment), run reusable pipeline stages stored inside files, and pass configs in/out via JSON. It's meant for tech-art / asset-pipeline tasks like cleanup, decimation, unwrap, baking, rigging, etc."
+        },
+        {
+            "author": "calibancode",
+            "title": "ComfyUI-bevvy",
+            "reference": "https://github.com/calibancode/ComfyUI-bevvy",
+            "files": [
+                "https://github.com/calibancode/ComfyUI-bevvy"
+            ],
+            "install_type": "git-clone",
+            "description": "ComfyUI custom node that saves images as WebP."
+        },
 
 
 

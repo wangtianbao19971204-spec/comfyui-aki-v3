@@ -8718,6 +8718,14 @@
             "title_aux": "ComfyUI Visual Dimension Selector"
         }
     ],
+    "https://github.com/GraftingRayman/ComfyUI-Games": [
+        [
+            "TetrisNode"
+        ],
+        {
+            "title_aux": "ComfyUI-Games"
+        }
+    ],
     "https://github.com/GraftingRayman/ComfyUI-PuLID-Flux-GR": [
         [
             "GRApplyPulidFlux",
@@ -10019,6 +10027,49 @@
         ],
         {
             "title_aux": "Notification Bridge"
+        }
+    ],
+    "https://github.com/IRCSS/comfyUI-blender-wrapper": [
+        [
+            "BlenderGenericNode",
+            "CV2InpaintTexture",
+            "DownloadAndLoadHy3DDelightModel",
+            "DownloadAndLoadHy3DPaintModel",
+            "Hy3DApplyTexture",
+            "Hy3DBPT",
+            "Hy3DBakeFromMultiview",
+            "Hy3DCameraConfig",
+            "Hy3DDelightImage",
+            "Hy3DDiffusersSchedulerConfig",
+            "Hy3DExportMesh",
+            "Hy3DFastSimplifyMesh",
+            "Hy3DGenerateMesh",
+            "Hy3DGenerateMeshMultiView",
+            "Hy3DGetMeshPBRTextures",
+            "Hy3DIMRemesh",
+            "Hy3DLoadMesh",
+            "Hy3DMeshInfo",
+            "Hy3DMeshUVWrap",
+            "Hy3DMeshVerticeInpaintTexture",
+            "Hy3DModelLoader",
+            "Hy3DNvdiffrastRenderer",
+            "Hy3DPostprocessMesh",
+            "Hy3DRenderMultiView",
+            "Hy3DRenderMultiViewDepth",
+            "Hy3DRenderSingleView",
+            "Hy3DSampleMultiView",
+            "Hy3DSetMeshPBRAttributes",
+            "Hy3DSetMeshPBRTextures",
+            "Hy3DTorchCompileSettings",
+            "Hy3DUploadMesh",
+            "Hy3DVAEDecode",
+            "Hy3DVAELoader",
+            "Hy3D_2_1SimpleMeshGen",
+            "MESHToTrimesh",
+            "TrimeshToMESH"
+        ],
+        {
+            "title_aux": "comfyUI-blender-wrapper"
         }
     ],
     "https://github.com/ITurchenko/ComfyUI-SizeFromArray": [
@@ -19233,6 +19284,21 @@
             "title_aux": "Comfyroll Studio"
         }
     ],
+    "https://github.com/Suzu008/ComfyUI-CryptIO": [
+        [
+            "PreviewImageCryptIO",
+            "PreviewVideoCryptIO",
+            "SaveImageCryptIO",
+            "SaveVideoCryptIO",
+            "TextDecrypt",
+            "TextEncrypt",
+            "UploadImageCryptIO",
+            "UploadVideoCryptIO"
+        ],
+        {
+            "title_aux": "ComfyUI-CryptIO"
+        }
+    ],
     "https://github.com/SuzumiyaAkizuki/ComfyUI-LLM_Prompt_XML_Formatter": [
         [
             "LLM_Prompt_Formatter",
@@ -22946,6 +23012,16 @@
         ],
         {
             "title_aux": "aicu-comfyui-stability-ai-api"
+        }
+    ],
+    "https://github.com/aicuai/comfyui-save-image-watermark": [
+        [
+            "ExtractInvisibleWatermark",
+            "Local Save",
+            "LocalSaveImageWithWatermark"
+        ],
+        {
+            "title_aux": "comfyui-save-image-watermark"
         }
     ],
     "https://github.com/aidec/Comfyui_TextBatch_aidec": [
@@ -26859,6 +26935,14 @@
         ],
         {
             "title_aux": "Arc2Face ComfyUI Node Library"
+        }
+    ],
+    "https://github.com/calibancode/ComfyUI-bevvy": [
+        [
+            "SaveImageWebP"
+        ],
+        {
+            "title_aux": "ComfyUI-bevvy"
         }
     ],
     "https://github.com/camenduru/ComfyUI-TostAI": [

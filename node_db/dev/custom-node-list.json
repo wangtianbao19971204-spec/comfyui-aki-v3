@@ -1,6 +1,46 @@
 {
     "custom_nodes": [
         {
+            "author": "NakanoSanku",
+            "title": "ComfyUI-Gemini [NAME CONFLICT]",
+            "reference": "https://github.com/NakanoSanku/ComfyUI-Gemini",
+            "files": [
+                "https://github.com/NakanoSanku/ComfyUI-Gemini"
+            ],
+            "install_type": "git-clone",
+            "description": "Custom ComfyUI nodes for Google Gemini AI with text generation and image generation capabilities using the Python SDK."
+        },
+        {
+            "author": "Saganaki22",
+            "title": "ComfyUI-NovaSR",
+            "reference": "https://github.com/Saganaki22/ComfyUI-NovaSR",
+            "files": [
+                "https://github.com/Saganaki22/ComfyUI-NovaSR"
+            ],
+            "install_type": "git-clone",
+            "description": "ComfyUI node for NovaSR - Ultra-fast audio super resolution (3600x realtime, 50KB model)"
+        },
+        {
+            "author": "GokuHiki",
+            "title": "ComfyUI-Goku-Tools",
+            "reference": "https://github.com/GokuHiki/ComfyUI-Goku-Tools",
+            "files": [
+                "https://github.com/GokuHiki/ComfyUI-Goku-Tools"
+            ],
+            "install_type": "git-clone",
+            "description": "ComfyUI custom nodes including FirstNonFalse utility. (Description by CC)"
+        },
+        {
+            "author": "endman100",
+            "title": "ComfyUI_tensor_script [WIP]",
+            "reference": "https://github.com/endman100/ComfyUI_tensor_script",
+            "files": [
+                "https://github.com/endman100/ComfyUI_tensor_script"
+            ],
+            "install_type": "git-clone",
+            "description": "Utility nodes for tensor manipulation including squeeze, unsqueeze, and shape operations. (Description by CC)\nNOTE: The files in the repo are not organized."
+        },
+        {
             "author": "CarlMarkswx",
             "title": "ComfyUI-Mirror-Download [UNSAFE]",
             "reference": "https://github.com/CarlMarkswx/ComfyUI-Mirror-Download",
@@ -10219,16 +10259,6 @@
             ],
             "install_type": "git-clone",
             "description": "Nodes:CLIPTextEncodeAndEnhance.\nNOTE:Translation:This is a wrapper that simply makes it easy to install an existing node via git."
-        },
-        {
-            "author": "umisetokikaze",
-            "title": "comfyui_mergekit [WIP]",
-            "reference": "https://github.com/umisetokikaze/comfyui_mergekit",
-            "files": [
-                "https://github.com/umisetokikaze/comfyui_mergekit"
-            ],
-            "install_type": "git-clone",
-            "description": "Nodes:DefineSaveName, SetModels, get_skip, LoadLR, LoadTarget, SetTokenizer, Merge, SetLayer, SetModels"
         },
         {
             "author": "Video3DGenResearch",

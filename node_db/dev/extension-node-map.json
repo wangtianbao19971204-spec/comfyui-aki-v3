@@ -2127,6 +2127,14 @@
             "title_aux": "ComfyUI-GoddessLabs-NodePack"
         }
     ],
+    "https://github.com/GokuHiki/ComfyUI-Goku-Tools": [
+        [
+            "FirstNonFalse"
+        ],
+        {
+            "title_aux": "ComfyUI-Goku-Tools"
+        }
+    ],
     "https://github.com/Goldlionren/ComfyUI-CleanSlate": [
         [
             "CleanSlateCleanup"
@@ -4293,6 +4301,14 @@
         ],
         {
             "title_aux": "ComfyUI Port for Google's Prompt-to-Prompt"
+        }
+    ],
+    "https://github.com/Saganaki22/ComfyUI-NovaSR": [
+        [
+            "NovaSR"
+        ],
+        {
+            "title_aux": "ComfyUI-NovaSR"
         }
     ],
     "https://github.com/Saganaki22/ComfyUI-ytdl_nodes": [
@@ -8087,6 +8103,20 @@
         ],
         {
             "title_aux": "ComfyUI-augmentation"
+        }
+    ],
+    "https://github.com/endman100/ComfyUI_tensor_script": [
+        [
+            "LatentSqueeze",
+            "LatentUnsqueeze",
+            "TensorEmpty",
+            "TensorGetShape",
+            "TensorShowShape",
+            "TensorSqueeze",
+            "TensorUnsqueeze"
+        ],
+        {
+            "title_aux": "ComfyUI_tensor_script [WIP]"
         }
     ],
     "https://github.com/enlo/ComfyUI-CheckpointSettings": [
@@ -13444,27 +13474,6 @@
         ],
         {
             "title_aux": "ComfyUI_u5_EasyScripter [UNSAFE]"
-        }
-    ],
-    "https://github.com/umisetokikaze/comfyui_mergekit": [
-        [
-            "DefineSaveName",
-            "LoadLR",
-            "LoadTarget",
-            "Merge",
-            "SetLayer",
-            "SetModels",
-            "SetTokenizer",
-            "create models list",
-            "get skip layers",
-            "get_skip",
-            "load and save tokenizer",
-            "loding llm model",
-            "loding target model",
-            "str to parsed layers"
-        ],
-        {
-            "title_aux": "comfyui_mergekit [WIP]"
         }
     ],
     "https://github.com/unanan/ComfyUI-Dist": [
