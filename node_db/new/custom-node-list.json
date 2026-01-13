@@ -222,16 +222,6 @@
             "description": "A ComfyUI custom node package that provides two nodes for iterating through prompts and templates. Perfect for batch processing, testing multiple prompts, or creating variations."
         },
         {
-            "author": "bozkut",
-            "title": "ComfyUI-Prompt-Expander",
-            "reference": "https://github.com/bozkut/ComfyUI-Prompt-Expander",
-            "files": [
-                "https://github.com/bozkut/ComfyUI-Prompt-Expander"
-            ],
-            "install_type": "git-clone",
-            "description": "An LLM-powered prompt expansion node for ComfyUI. Transform simple prompts into detailed, high-quality image generation prompts."
-        },
-        {
             "author": "FemReiyaDev",
             "title": "ComfyUI-ReiyaNodes",
             "reference": "https://github.com/FemReiyaDev/ComfyUI-ReiyaNodes",

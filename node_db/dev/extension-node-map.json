@@ -6497,6 +6497,15 @@
             "title_aux": "ComfyUI-ACES-EXR-OCIOr [UNSAFE]"
         }
     ],
+    "https://github.com/bozkut/ComfyUI-Prompt-Expander": [
+        [
+            "PromptExpanderNode",
+            "PromptExpanderSimple"
+        ],
+        {
+            "title_aux": "ComfyUI-Prompt-Expander [NAME CONFLICT]"
+        }
+    ],
     "https://github.com/brace-great/comfyui-eim": [
         [
             "EncryptImage"
@@ -8520,24 +8529,18 @@
             "XIS_CoordinatePath",
             "XIS_CropImage",
             "XIS_CurveEditor",
+            "XIS_DynamicImageInputs",
             "XIS_DynamicKSampler",
+            "XIS_DynamicPackImages",
             "XIS_FloatSwitch",
             "XIS_Float_Slider",
-            "XIS_FromListGet1Color",
-            "XIS_FromListGet1Cond",
-            "XIS_FromListGet1Float",
-            "XIS_FromListGet1Image",
-            "XIS_FromListGet1Int",
-            "XIS_FromListGet1Latent",
-            "XIS_FromListGet1Mask",
-            "XIS_FromListGet1Model",
-            "XIS_FromListGet1String",
             "XIS_INT_Slider",
             "XIS_IPAStyleSettings",
             "XIS_IfDataIsNone",
             "XIS_ImageAdjustAndBlend",
             "XIS_ImageManager",
             "XIS_ImageMaskMirror",
+            "XIS_ImagePreview",
             "XIS_ImagePuzzle",
             "XIS_ImageSwitch",
             "XIS_IntSwitch",
@@ -8560,7 +8563,6 @@
             "XIS_PromptProcessor",
             "XIS_PromptsWithSwitches",
             "XIS_ReorderImageMaskGroups",
-            "XIS_ReorderImages",
             "XIS_ResizeImageOrMask",
             "XIS_ResizeToDivisible",
             "XIS_ResolutionSelector",

@@ -26354,14 +26354,6 @@
             "title_aux": "ComfyUI-AI-CustomURL"
         }
     ],
-    "https://github.com/bozkut/ComfyUI-Prompt-Expander": [
-        [
-            "PromptExpanderNode"
-        ],
-        {
-            "title_aux": "ComfyUI-Prompt-Expander"
-        }
-    ],
     "https://github.com/bpmpnaito/comfyui-imageviewer": [
         [
             "ImageViewer"
@@ -37338,6 +37330,14 @@
         ],
         {
             "title_aux": "ResAdapter for ComfyUI"
+        }
+    ],
+    "https://github.com/jinanlongen/ComfyUI-Prompt-Expander": [
+        [
+            "PromptExpanderNode"
+        ],
+        {
+            "title_aux": "ComfyUI Prompt Expander Node"
         }
     ],
     "https://github.com/jinchanz/ComfyUI-ADIC": [
@@ -51388,6 +51388,7 @@
     ],
     "https://github.com/stuttlepress/ComfyUI-Wan-VACE-Prep": [
         [
+            "WanVACEExtend",
             "WanVACEPrep"
         ],
         {

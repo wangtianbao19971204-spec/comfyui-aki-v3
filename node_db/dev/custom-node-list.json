@@ -1,6 +1,16 @@
 {
     "custom_nodes": [
         {
+            "author": "bozkut",
+            "title": "ComfyUI-Prompt-Expander [NAME CONFLICT]",
+            "reference": "https://github.com/bozkut/ComfyUI-Prompt-Expander",
+            "files": [
+                "https://github.com/bozkut/ComfyUI-Prompt-Expander"
+            ],
+            "install_type": "git-clone",
+            "description": "An LLM-powered prompt expansion node for ComfyUI. Transform simple prompts into detailed, high-quality image generation prompts."
+        },
+        {
             "author": "my-xz-org",
             "title": "comfyui_xz_nodes",
             "reference": "https://github.com/my-xz-org/comfyui_xz_nodes",
