@@ -1,6 +1,87 @@
 {
     "custom_nodes": [
         {
+            "author": "my-xz-org",
+            "title": "comfyui_xz_nodes",
+            "reference": "https://github.com/my-xz-org/comfyui_xz_nodes",
+            "files": [
+                "https://github.com/my-xz-org/comfyui_xz_nodes"
+            ],
+            "install_type": "git-clone",
+            "description": "NODES: XZImageToText"
+        },
+        {
+            "author": "tackcrypto1031",
+            "title": "[WIP] tk_comfyui_SimpleSize",
+            "reference": "https://github.com/tackcrypto1031/tk_comfyui_SimpleSize",
+            "files": [
+                "https://github.com/tackcrypto1031/tk_comfyui_SimpleSize"
+            ],
+            "install_type": "git-clone",
+            "description": "A professional and intelligent aspect ratio and resolution selector for ComfyUI.\nNOTE: The files in the repo are not organized."
+        },
+        {
+            "author": "hashms0a",
+            "title": "ComfyUI-Qwen-Multi-Angle-Camera-Nodes [WIP]",
+            "reference": "https://github.com/hashms0a/ComfyUI-Qwen-Multi-Angle-Camera-Nodes",
+            "files": [
+                "https://github.com/hashms0a/ComfyUI-Qwen-Multi-Angle-Camera-Nodes"
+            ],
+            "install_type": "git-clone",
+            "description": "Comprehensive custom nodes for controlling camera angles with Qwen-Image-Edit-2511-Multiple-Angles-LoRA, supporting all 96 camera positions with basic/advanced selection, orbital animation, elevation sweep, and pre-defined animation paths.\nNOTE: The files in the repo are not organized."
+        },
+        {
+            "author": "jceme",
+            "title": "Comfy_Extensions [WIP]",
+            "reference": "https://github.com/jceme/Comfy_Extensions",
+            "files": [
+                "https://github.com/jceme/Comfy_Extensions"
+            ],
+            "install_type": "git-clone",
+            "description": "ComfyUI extension pack offering image dimension handling, aspect ratio presets, FPS utilities, inpainting, and prompt customization. (Description by CC)\nNOTE: The files in the repo are not organized."
+        },
+        {
+            "author": "saltchicken",
+            "title": "ComfyUI-Interactive-Cropper",
+            "reference": "https://github.com/saltchicken/ComfyUI-Interactive-Cropper",
+            "files": [
+                "https://github.com/saltchicken/ComfyUI-Interactive-Cropper"
+            ],
+            "install_type": "git-clone",
+            "description": "Interactive image cropping node with visual interface. (Description by CC)"
+        },
+        {
+            "author": "shenymce",
+            "title": "ComfyUI-JsonViewer [WIP]",
+            "reference": "https://github.com/shenymce/ComfyUI-JsonViewer",
+            "files": [
+                "https://github.com/shenymce/ComfyUI-JsonViewer"
+            ],
+            "install_type": "git-clone",
+            "description": "OpenPose JSON data visualization for displaying pose keypoint data exported from ComfyUI workflow nodes. (Description by CC)\nNOTE: The files in the repo are not organized."
+        },
+        {
+            "author": "qimi-dev",
+            "title": "ComfyUI-Qimi-Tiler",
+            "reference": "https://github.com/qimi-dev/ComfyUI-Qimi-Tiler",
+            "files": [
+                "https://github.com/qimi-dev/ComfyUI-Qimi-Tiler"
+            ],
+            "install_type": "git-clone",
+            "description": "Image tiling utility nodes for splitting and combining image tiles in ComfyUI. (Description by CC)"
+        },
+        {
+            "author": "maTORIx",
+            "title": "ComfyUI-KeypointsToImage",
+            "reference": "https://github.com/maTORIx/ComfyUI-KeypointsToImage",
+            "files": [
+                "https://github.com/maTORIx/ComfyUI-KeypointsToImage"
+            ],
+            "install_type": "git-clone",
+            "description": "Node for converting keypoints to images. (Description by CC)"
+        },
+        
+        {
             "author": "IO-AtelierTech",
             "title": "comfyui-video-utils [NAME CONFLICT]",
             "reference": "https://github.com/IO-AtelierTech/comfyui-video-utils",

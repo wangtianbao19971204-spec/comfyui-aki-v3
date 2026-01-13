@@ -1697,6 +1697,7 @@
             "DonutLoRALibrary",
             "DonutLoRAStack",
             "DonutLoRAStackCivitAI",
+            "DonutLoraStackCombine",
             "DonutManualCleanup",
             "DonutModelSave",
             "DonutMultiModelSampler",
@@ -3995,15 +3996,14 @@
     ],
     "https://github.com/PozzettiAndrea/ComfyUI-UniRig": [
         [
+            "MIAAutoRig",
+            "MIALoadModel",
             "UniRigApplyAnimation",
-            "UniRigApplySkinningMLNew",
             "UniRigAutoRig",
             "UniRigExportPosedFBX",
-            "UniRigExtractSkeletonNew",
             "UniRigLoadMesh",
+            "UniRigLoadModel",
             "UniRigLoadRiggedMesh",
-            "UniRigLoadSkeletonModel",
-            "UniRigLoadSkinningModel",
             "UniRigPreviewRiggedMesh",
             "UniRigSaveMesh",
             "UniRigSaveSkeleton"
@@ -8193,7 +8193,7 @@
         [
             "FaceHandCrop",
             "PixelSnapping",
-            "PowerfulColorMatch",
+            "PowerfulColorAlignment",
             "PowerfulMaskCrop",
             "PowerfulMaskRestore"
         ],
@@ -8648,6 +8648,24 @@
         ],
         {
             "title_aux": "Comfyui-SadTalker"
+        }
+    ],
+    "https://github.com/hashms0a/ComfyUI-Qwen-Multi-Angle-Camera-Nodes": [
+        [
+            "QwenMultiAngleBatchSelector",
+            "QwenMultiAngleCameraAdvanced",
+            "QwenMultiAngleCameraBasic",
+            "QwenMultiAngleCameraDistanceTransition",
+            "QwenMultiAngleCameraElevationSweep",
+            "QwenMultiAngleCameraFromIndex",
+            "QwenMultiAngleCameraInfo",
+            "QwenMultiAngleCameraOrbit",
+            "QwenMultiAngleCameraPath",
+            "QwenMultiAngleCameraRandom",
+            "QwenMultiAnglePromptCombiner"
+        ],
+        {
+            "title_aux": "ComfyUI-Qwen-Multi-Angle-Camera-Nodes [WIP]"
         }
     ],
     "https://github.com/hay86/ComfyUI_AceNodes": [
@@ -9236,6 +9254,23 @@
         ],
         {
             "title_aux": "ComfyUI-DreamO"
+        }
+    ],
+    "https://github.com/jceme/Comfy_Extensions": [
+        [
+            "DimensionResize",
+            "FpsHelper",
+            "ImageAspectPresets",
+            "ImageAspectResize",
+            "ImageDim",
+            "ImageSizePresets",
+            "InpaintPrepare",
+            "InpaintRestore",
+            "NegativePromptCustomizer",
+            "PositivePromptCustomizer"
+        ],
+        {
+            "title_aux": "Comfy_Extensions [WIP]"
         }
     ],
     "https://github.com/jchiotaka/ComfyUI-ClarityAI-Upscaler": [
@@ -10590,6 +10625,14 @@
             "title_aux": "lyra-nodes"
         }
     ],
+    "https://github.com/maTORIx/ComfyUI-KeypointsToImage": [
+        [
+            "KeypointsToImage"
+        ],
+        {
+            "title_aux": "ComfyUI-KeypointsToImage"
+        }
+    ],
     "https://github.com/machinesarenotpeople/comfyui-energycost": [
         [
             "TimeCostEndNode",
@@ -10989,6 +11032,14 @@
         ],
         {
             "title_aux": "ComfyUI-Crop-Border"
+        }
+    ],
+    "https://github.com/my-xz-org/comfyui_xz_nodes": [
+        [
+            "XZImageToText"
+        ],
+        {
+            "title_aux": "comfyui_xz_nodes"
         }
     ],
     "https://github.com/naderzare/comfyui-inodes": [
@@ -11663,6 +11714,15 @@
             "title_aux": "comfyui-sd3-simple-simpletuner"
         }
     ],
+    "https://github.com/qimi-dev/ComfyUI-Qimi-Tiler": [
+        [
+            "Qimi-ImageToTiles",
+            "Qimi-TilesImage"
+        ],
+        {
+            "title_aux": "ComfyUI-Qimi-Tiler"
+        }
+    ],
     "https://github.com/qlikpetersen/ComfyUI-AI_Tools": [
         [
             "CreateListJSON",
@@ -12098,6 +12158,14 @@
             "title_aux": "ComfyUI-Identity-Mixer"
         }
     ],
+    "https://github.com/saltchicken/ComfyUI-Interactive-Cropper": [
+        [
+            "InteractiveCropNode"
+        ],
+        {
+            "title_aux": "ComfyUI-Interactive-Cropper"
+        }
+    ],
     "https://github.com/saltchicken/ComfyUI-Local-Loader": [
         [
             "LoadImageFromDir",
@@ -12255,6 +12323,14 @@
         ],
         {
             "title_aux": "comfyui-hydit"
+        }
+    ],
+    "https://github.com/shenymce/ComfyUI-JsonViewer": [
+        [
+            "JsonViewer"
+        ],
+        {
+            "title_aux": "ComfyUI-JsonViewer [WIP]"
         }
     ],
     "https://github.com/shinich39/comfyui-run-js": [
@@ -12867,6 +12943,14 @@
         ],
         {
             "title_aux": "ComfyUI-GoogleFX"
+        }
+    ],
+    "https://github.com/tackcrypto1031/tk_comfyui_SimpleSize": [
+        [
+            "TK_SimpleSize"
+        ],
+        {
+            "title_aux": "[WIP] tk_comfyui_SimpleSize"
         }
     ],
     "https://github.com/takoyaki1118/ComfyUI-Kakimoji-Layer": [
