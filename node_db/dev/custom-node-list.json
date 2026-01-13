@@ -1,6 +1,36 @@
 {
     "custom_nodes": [
         {
+            "author": "CarlMarkswx",
+            "title": "ComfyUI-Mirror-Download [UNSAFE]",
+            "reference": "https://github.com/CarlMarkswx/ComfyUI-Mirror-Download",
+            "files": [
+                "https://github.com/CarlMarkswx/ComfyUI-Mirror-Download"
+            ],
+            "install_type": "git-clone",
+            "description": "Plugin that adds a mirror download button for accessing Hugging Face models via Chinese mirror, with automatic detection and progress tracking. (Description by CC)[w/This nodepack contains a node that has a vulnerability allowing write to arbitrary file paths.]"
+        },
+        {
+            "author": "nekotxt",
+            "title": "ComfyUI-NTX-support-nodes [WIP]",
+            "reference": "https://github.com/nekotxt/ComfyUI-NTX-support-nodes",
+            "files": [
+                "https://github.com/nekotxt/ComfyUI-NTX-support-nodes"
+            ],
+            "install_type": "git-clone",
+            "description": "Utility nodes to support the creation of pipes\nNOTE: The files in the repo are not organized."
+        },
+        {
+            "author": "killshotttttt",
+            "title": "ComfyUI-killshotttttt [WIP]",
+            "reference": "https://github.com/killshotttttt/ComfyUI-killshotttttt",
+            "files": [
+                "https://github.com/killshotttttt/ComfyUI-killshotttttt"
+            ],
+            "install_type": "git-clone",
+            "description": "A custom node for ComfyUI that integrates with the Meshy AI API for Image-to-Image transformations using nano-banana models.\nNOTE: The files in the repo are not organized."
+        },
+        {
             "author": "bozkut",
             "title": "ComfyUI-Prompt-Expander [NAME CONFLICT]",
             "reference": "https://github.com/bozkut/ComfyUI-Prompt-Expander",

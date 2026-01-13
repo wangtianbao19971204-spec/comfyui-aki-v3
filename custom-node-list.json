@@ -41197,7 +41197,47 @@
             "install_type": "git-clone",
             "description": "Essential Nodes Pack for Images Processing for ComfyUI, with a live embedded preview inside the node (no queue) for supported chains."
         },
-
+        {
+            "author": "sinanzoo2nd",
+            "title": "ComfyUI Seed Wildcard Pack",
+            "reference": "https://github.com/sinanzoo2nd/ComfyUI-Seed-Wildcard-Pack",
+            "files": [
+                "https://github.com/sinanzoo2nd/ComfyUI-Seed-Wildcard-Pack"
+            ],
+            "install_type": "git-clone",
+            "description": "Advanced wildcard control with seed-based selection, LoRA stack support, and utilities.",
+            "nickname": "Seed Wildcard"
+        },
+        {
+            "author": "senhaicc",
+            "title": "Comfyui-WL-MainImageDesign",
+            "reference": "https://github.com/senhaicc/Comfyui-WL-MainImageDesign",
+            "files": [
+                "https://github.com/senhaicc/Comfyui-WL-MainImageDesign"
+            ],
+            "install_type": "git-clone",
+            "description": "Professional e-commerce main image prompt generator for motorcycle equipment (helmets, riding gear, protective gear) with 9 design styles and 2 canvas ratios. (Description by CC)"
+        },
+        {
+            "author": "migero",
+            "title": "ComfyUI-Equirectangular-Strip",
+            "reference": "https://github.com/migero/ComfyUI-Equirectangular-Strip",
+            "files": [
+                "https://github.com/migero/ComfyUI-Equirectangular-Strip"
+            ],
+            "install_type": "git-clone",
+            "description": "Custom nodes for ComfyUI to convert between equirectangular (360°) images and a strip of 6 cube faces (90° FOV each)."
+        },
+        {
+            "author": "0nikod",
+            "title": "ComfyUI-Simple-Prompt",
+            "reference": "https://github.com/0nikod/ComfyUI-Simple-Prompt",
+            "files": [
+                "https://github.com/0nikod/ComfyUI-Simple-Prompt"
+            ],
+            "install_type": "git-clone",
+            "description": "Provide a simple interface to simplify prompt writing."
+        },
 
 
 
@@ -41601,18 +41641,6 @@
             ],
             "install_type": "unzip",
             "description": "This is a node to convert an image into a CMYK Halftone dot image."
-		},
-
-		{
-      		"author": "sinanzoo2nd",
-      		"title": "ComfyUI Seed Wildcard Pack",
-      		"reference": "https://github.com/sinanzoo2nd/ComfyUI-Seed-Wildcard-Pack",
-      		"files": [
-        		"https://github.com/sinanzoo2nd/ComfyUI-Seed-Wildcard-Pack"
-      		],
-      		"install_type": "git-clone",
-      		"description": "Advanced wildcard control with seed-based selection, LoRA stack support, and utilities.",
-      		"nickname": "Seed Wildcard"
-    	}
+		}
     ]
 }

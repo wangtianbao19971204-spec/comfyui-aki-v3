@@ -18,6 +18,14 @@
             "title_aux": "mmaker/Color Enhance"
         }
     ],
+    "https://github.com/0nikod/ComfyUI-Simple-Prompt": [
+        [
+            "vue-basic"
+        ],
+        {
+            "title_aux": "ComfyUI-Simple-Prompt"
+        }
+    ],
     "https://github.com/0x-jerry/comfyui-rembg": [
         [
             "Load Rembg Model",
@@ -7188,7 +7196,8 @@
     ],
     "https://github.com/EricRorich/ComfyUI-face-shaper": [
         [
-            "RORICH-AI"
+            "RORICH-AI",
+            "Rorich"
         ],
         {
             "title_aux": "ComfyUI-face-shaper"
@@ -13043,6 +13052,7 @@
             "ImageChannelSeparate_makki",
             "ImageCountConcatenate_makki",
             "ImageHeigthStitch_makki",
+            "ImageTPSWarp_makki",
             "ImageWidthStitch_makki",
             "Image_Resize_makki",
             "MergeImageChannels_makki",
@@ -26861,6 +26871,7 @@
     ],
     "https://github.com/capitan01R/Capitan-ConditioningEnhancer": [
         [
+            "CapitanAdvancedEnhancer",
             "ConditioningEnhancer"
         ],
         {
@@ -43555,6 +43566,15 @@
             "title_aux": "StyledCLIPTextEncode"
         }
     ],
+    "https://github.com/migero/ComfyUI-Equirectangular-Strip": [
+        [
+            "EquirectToStrip90",
+            "Strip90ToEquirect"
+        ],
+        {
+            "title_aux": "ComfyUI-Equirectangular-Strip"
+        }
+    ],
     "https://github.com/mihaiiancu/ComfyUI_Inpaint": [
         [
             "InpaintMediapipe"
@@ -43583,9 +43603,14 @@
     "https://github.com/mikemojen/ComfyUI-HappNodeSet": [
         [
             "AutoCrop",
+            "CSVValueExtractor",
             "ColorQuantizer",
+            "DashedToSolidLine",
             "ExtractBlack",
             "ExtractBlackAdvanced",
+            "ExtractRed",
+            "LineDetector",
+            "NonWhiteToBlack",
             "RasterToUniformSVG",
             "RoundDownNode",
             "RoundUpNode",
@@ -49299,6 +49324,15 @@
             "title_aux": "ComfyUI-LMCQ"
         }
     ],
+    "https://github.com/senhaicc/Comfyui-WL-MainImageDesign": [
+        [
+            "WLMainImageGenerator",
+            "WLPromptBatchConverter"
+        ],
+        {
+            "title_aux": "Comfyui-WL-MainImageDesign"
+        }
+    ],
     "https://github.com/sergekatzmann/ComfyUI_Nimbus-Pack": [
         [
             "AdjustAndRoundDimensions",
@@ -49661,6 +49695,7 @@
     "https://github.com/shin131002/RandomLoRALoader": [
         [
             "FilteredRandomLoRALoader",
+            "FilteredRandomLoRALoaderLBW",
             "RandomLoRALoader"
         ],
         {
@@ -49897,6 +49932,18 @@
         ],
         {
             "title_aux": "ComfyUI Sigmoid Offset Scheduler"
+        }
+    ],
+    "https://github.com/sinanzoo2nd/ComfyUI-Seed-Wildcard-Pack": [
+        [
+            "DynamicTextConcatenate",
+            "ResizeByScale",
+            "SeedBasedWildcardImpact",
+            "SeedBasedWildcardLora",
+            "SeedGeneratorWithMin"
+        ],
+        {
+            "title_aux": "ComfyUI Seed Wildcard Pack"
         }
     ],
     "https://github.com/sipherxyz/comfyui-art-venture": [
@@ -54336,8 +54383,11 @@
             "CLIPTextEncode",
             "DebugMetadata",
             "KSamplerSelect",
+            "LoraDemoNode",
             "LoraManagerLoader",
             "LoraManagerTextLoader",
+            "LoraPoolNode",
+            "LoraRandomizerNode",
             "LoraStacker",
             "PromptLoraManager",
             "SamplerCustomAdvanced",
