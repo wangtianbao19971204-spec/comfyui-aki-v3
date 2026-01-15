@@ -1,6 +1,36 @@
 {
     "custom_nodes": [
         {
+            "author": "cosmicbuffalo",
+            "title": "comfyui-mobile-frontend",
+            "reference": "https://github.com/cosmicbuffalo/comfyui-mobile-frontend",
+            "files": [
+                "https://github.com/cosmicbuffalo/comfyui-mobile-frontend"
+            ],
+            "install_type": "git-clone",
+            "description": "An experimental dedicated mobile-first frontend for ComfyUI."
+        },
+        {
+            "author": "tdrminglin",
+            "title": "Comfyui-hymotionbridge",
+            "reference": "https://github.com/tdrminglin/Comfyui-hymotionbridge",
+            "files": [
+                "https://github.com/tdrminglin/Comfyui-hymotionbridge"
+            ],
+            "install_type": "git-clone",
+            "description": "NODES: HYMotionToNLFBridge, HYMotionToSCAILBridge"
+        },
+        {
+            "author": "joe002",
+            "title": "comfyui-rtx-remix [UNSAFE]",
+            "reference": "https://github.com/joe002/comfyui-rtx-remix",
+            "files": [
+                "https://github.com/joe002/comfyui-rtx-remix"
+            ],
+            "install_type": "git-clone",
+            "description": "RTX Remix texture pipeline integration nodes for ComfyUI[w/This nodepack contains a path traversal vulnerability.]"
+        },
+        {
             "author": "NakanoSanku",
             "title": "ComfyUI-Gemini [NAME CONFLICT]",
             "reference": "https://github.com/NakanoSanku/ComfyUI-Gemini",

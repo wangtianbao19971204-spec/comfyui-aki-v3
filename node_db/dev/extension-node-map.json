@@ -7197,6 +7197,13 @@
             "MaskComposite",
             "MaskPreview",
             "MaskToImage",
+            "MeshyAnimateModelNode",
+            "MeshyImageToModelNode",
+            "MeshyMultiImageToModelNode",
+            "MeshyRefineNode",
+            "MeshyRigModelNode",
+            "MeshyTextToModelNode",
+            "MeshyTextureNode",
             "MinimaxHailuoVideoNode",
             "MinimaxImageToVideoNode",
             "MinimaxSubjectToVideoNode",
@@ -9577,6 +9584,20 @@
         ],
         {
             "title_aux": "jn_node_suite_comfyui [WIP]"
+        }
+    ],
+    "https://github.com/joe002/comfyui-rtx-remix": [
+        [
+            "RTXRemixBatchLoader",
+            "RTXRemixGeneratePBR",
+            "RTXRemixHashLookup",
+            "RTXRemixIterateTextures",
+            "RTXRemixLoadCapture",
+            "RTXRemixProjectInfo",
+            "RTXRemixSaveToMod"
+        ],
+        {
+            "title_aux": "comfyui-rtx-remix [UNSAFE]"
         }
     ],
     "https://github.com/jonathan-bryant/ComfyUI-ImageStraightener": [
@@ -12554,6 +12575,7 @@
             "ImageBlendByMask",
             "Image_Color_Noise",
             "ModifyMask",
+            "SU_LoadImagePath",
             "SamplingParameters",
             "SystemMessagePresets",
             "TextEncodeFlux2SystemPrompt",
@@ -12710,21 +12732,19 @@
     ],
     "https://github.com/sprited-ai/sprited-comfyui-nodes": [
         [
+            "FlattenImageList",
             "LoopExtractorNodeV2",
-            "LoopMomentumNode",
-            "LoopTrimNode",
+            "LoopExtractorNodeV3",
+            "MakeGrid",
             "PixelRGBStats",
-            "PreviewVideo",
-            "ShotSplitByCutScore",
             "SliceBatch",
             "SliceLatents",
+            "SpriteDXAntiCorruptionV1",
+            "SpriteDX_ParseInt",
+            "SpritedMakeGrid",
             "URLToVideo",
             "VideoDownloader",
-            "VideoEvenShotSplitter",
-            "VideoShotSplitter",
-            "VideoShotSplitterV0",
-            "VideoShotSplitterV2",
-            "VideoShotSplitterV3"
+            "VideoEvenShotSplitter"
         ],
         {
             "title_aux": "Sprited ComfyUI Nodes [WIP]"
@@ -13121,6 +13141,15 @@
         ],
         {
             "title_aux": "ComfyUI_SceneSplitter"
+        }
+    ],
+    "https://github.com/tdrminglin/Comfyui-hymotionbridge": [
+        [
+            "HYMotionToNLFBridge",
+            "HYMotionToSCAILBridge"
+        ],
+        {
+            "title_aux": "Comfyui-hymotionbridge"
         }
     ],
     "https://github.com/techidsk/comfyui_molook_nodes": [
@@ -14108,6 +14137,7 @@
             "MultiplyNode",
             "NumberNode",
             "OutpaintingPadNode",
+            "PerfectPixelNode",
             "PrependTagsNode",
             "PrintAnyNode",
             "PrintImageNode",

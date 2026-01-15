@@ -1,6 +1,16 @@
 {
     "custom_nodes": [
         {
+            "author": "Wladimir Palant",
+            "title": "image-resize-comfyui [REMOVED]",
+            "reference": "https://github.com/ussoewwin/image_resize_comfyui",
+            "files": [
+                "https://github.com/ussoewwin/image_resize_comfyui"
+            ],
+            "install_type": "git-clone",
+            "description": "Advanced image resizing node for ComfyUI with aspect ratio preservation and mask support"
+        },
+        {
             "author": "umisetokikaze",
             "title": "comfyui_mergekit [REMOVED]",
             "reference": "https://github.com/umisetokikaze/comfyui_mergekit",
