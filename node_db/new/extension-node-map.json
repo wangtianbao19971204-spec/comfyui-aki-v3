@@ -13821,11 +13821,13 @@
             "Remove Background",
             "ReplaceAlpha",
             "Resize Image and Mask by Side",
+            "SEGS Normalize for Video",
             "Save Folder as ZIP",
             "Save To Zip",
             "SaveFolderAsZip",
             "Spritesheet Builder",
             "Spritesheet Preview",
+            "Stabilizer Trim",
             "VideoMaskEditor",
             "WAN Frame Calculator"
         ],
@@ -17402,6 +17404,19 @@
         ],
         {
             "title_aux": "HF-Flux-ComfyUI"
+        }
+    ],
+    "https://github.com/SergPoletaev/ComfyUI-SPoletNodes": [
+        [
+            "EnhancedVideoPreview",
+            "GetImageSizeWithPreview",
+            "Save Images & Preview",
+            "UltimateMemoryCleaner",
+            "Video Concat (FFmpeg)",
+            "VideoBatchCrossfade"
+        ],
+        {
+            "title_aux": "ComfyUI-SPoletNodes"
         }
     ],
     "https://github.com/ServiceStack/comfy-asset-downloader": [
@@ -24068,10 +24083,15 @@
             "XJSamplerAdapter",
             "XJSaveImageWithMetadata",
             "XJSchedulerAdapter",
+            "XJSegsAutoAdjustHookProvider",
+            "XJSegsColorCorrectHSVHookProvider",
+            "XJSegsColorCorrectRGBHookProvider",
+            "XJSegsColorMatchHookProvider",
             "XJSegsCount",
             "XJSegsExtractor",
             "XJSegsFilter",
             "XJSegsFilterByLabel",
+            "XJSegsMerge",
             "XJSegsPick",
             "XJSegsStitcher",
             "XJSegsWildcardPrompt",
@@ -30961,10 +30981,10 @@
     ],
     "https://github.com/danieljanata/ComfyUI-Prompting-System": [
         [
-            "ExportManager",
-            "PromptLibraryBrowser",
-            "PromptSaver",
-            "SmartTextInput"
+            "PS_MetadataCleaner",
+            "PS_MetadataReader",
+            "PS_PromptSaver",
+            "PS_SmartText"
         ],
         {
             "title_aux": "ComfyUI-Prompting-System"
@@ -41939,6 +41959,81 @@
         ],
         {
             "title_aux": "ComfyUI-Replace-First-Frame-Last-Frame"
+        }
+    ],
+    "https://github.com/loz2754/AUN-ComfyUI-Nodes": [
+        [
+            "AUNAddToPrompt",
+            "AUNAny",
+            "AUNBookmark",
+            "AUNBoolean",
+            "AUNCFG",
+            "AUNCheckpointLoaderWithClipSkip",
+            "AUNEmptyLatent",
+            "AUNExtractModelName",
+            "AUNExtractPowerLoras",
+            "AUNExtractWidgetValue",
+            "AUNGetActiveNodeTitle",
+            "AUNGetConnectedNodeTitles",
+            "AUNGraphScraper",
+            "AUNImageLoadResize",
+            "AUNImageResize",
+            "AUNImageSingleBatch3",
+            "AUNImg2Img",
+            "AUNImgLoader",
+            "AUNInputs",
+            "AUNInputsHybrid",
+            "AUNKSamplerPlusv3",
+            "AUNModelNamePass",
+            "AUNModelShorten",
+            "AUNMultiBypassIndex",
+            "AUNMultiGroupUniversal",
+            "AUNMultiMuteIndex",
+            "AUNMultiNegPrompt",
+            "AUNMultiUniversal",
+            "AUNNameCrop",
+            "AUNNodeStateController",
+            "AUNPathFilename",
+            "AUNPathFilenameVideo",
+            "AUNRandomAnySwitch",
+            "AUNRandomIndexSwitch",
+            "AUNRandomNumber",
+            "AUNRandomTextIndexSwitch",
+            "AUNSaveImage",
+            "AUNSaveVideo",
+            "AUNSetBypassByTitle",
+            "AUNSetBypassStateGroup",
+            "AUNSetCollapseAndBypassStateAdvanced",
+            "AUNSetMuteByTitle",
+            "AUNSetMuteStateGroup",
+            "AUNShowTextWithTitle",
+            "AUNSingleLabelSwitch",
+            "AUNStrip",
+            "AUNSwitchFloat",
+            "AUNTextIndexSwitch",
+            "AUNTextIndexSwitch3",
+            "AUNTitleImagePreview",
+            "AnyType(str)",
+            "AudioInputOptions",
+            "JNodes_AnyToString",
+            "JNodes_ConditioningInOut",
+            "JNodes_FloatLiteral",
+            "JNodes_GetCleanFilename",
+            "JNodes_GetComfyDirectory",
+            "JNodes_GetLeafDirectory",
+            "JNodes_GetOutputDirectory",
+            "JNodes_GetTempDirectory",
+            "JNodes_IntLiteral",
+            "JNodes_ModelInOut",
+            "JNodes_StringLiteral",
+            "JNodes_SubdirectorySelector",
+            "JoinVideosInDirectory",
+            "KSamplerInputs",
+            "MainFolderManualName",
+            "TextSwitch2InputWithTextOutput"
+        ],
+        {
+            "title_aux": "AUN ComfyUI Nodes"
         }
     ],
     "https://github.com/lquesada/ComfyUI-Inpaint-CropAndStitch": [
