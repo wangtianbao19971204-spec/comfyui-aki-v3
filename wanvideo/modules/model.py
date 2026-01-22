@@ -558,39 +558,48 @@ class WanSelfAttention(nn.Module):
         # output
         return self.o(x.flatten(2))
 
-    def normalized_attention_guidance(self, b, n, d, q, context, nag_context=None, nag_params={}):
+    def nag_attention(self, b, n, d, q, context, nag_context=None):
+        k_positive = self.norm_k(self.k(context).to(self.norm_k.weight.dtype)).view(b, -1, n, d).to(q.dtype)
+        v_positive = self.v(context).view(b, -1, n, d)
+        x_positive = attention(q, k_positive, v_positive, attention_mode=self.attention_mode, heads=self.num_heads)
+        del k_positive, v_positive
+
+        k_negative = self.norm_k(self.k(nag_context).to(self.norm_k.weight.dtype)).view(b, -1, n, d).to(q.dtype)
+        v_negative = self.v(nag_context).view(b, -1, n, d)
+        x_negative = attention(q, k_negative, v_negative, attention_mode=self.attention_mode, heads=self.num_heads)
+        del k_negative, v_negative
+
+        return x_positive.flatten(2), x_negative.flatten(2)
+
+    def normalized_attention_guidance(self, x_positive, x_negative,nag_params={}):
         # NAG text attention
-        context_positive = context
-        context_negative = nag_context
         nag_scale = nag_params['nag_scale']
         nag_alpha = nag_params['nag_alpha']
         nag_tau = nag_params['nag_tau']
 
-        k_positive = self.norm_k(self.k(context_positive).to(self.norm_k.weight.dtype)).view(b, -1, n, d).to(q.dtype)
-        v_positive = self.v(context_positive).view(b, -1, n, d)
-        k_negative = self.norm_k(self.k(context_negative).to(self.norm_k.weight.dtype)).view(b, -1, n, d).to(q.dtype)
-        v_negative = self.v(context_negative).view(b, -1, n, d)
+        #nag_guidance = x_positive * nag_scale - x_negative * (nag_scale - 1)
+        nag_guidance = x_negative.mul_(nag_scale - 1).neg_().add_(x_positive, alpha=nag_scale)
+        del x_negative
 
-        x_positive = attention(q, k_positive, v_positive, attention_mode=self.attention_mode, heads=self.num_heads)
-        x_positive = x_positive.flatten(2)
-
-        x_negative = attention(q, k_negative, v_negative, attention_mode=self.attention_mode, heads=self.num_heads)
-        x_negative = x_negative.flatten(2)
-
-        nag_guidance = x_positive * nag_scale - x_negative * (nag_scale - 1)
-        
         norm_positive = torch.norm(x_positive, p=1, dim=-1, keepdim=True)
         norm_guidance = torch.norm(nag_guidance, p=1, dim=-1, keepdim=True)
-        
+
         scale = norm_guidance / norm_positive
-        scale = torch.nan_to_num(scale, nan=10.0)
-        
+        torch.nan_to_num_(scale, nan=10.0)
         mask = scale > nag_tau
+        del scale
+
         adjustment = (norm_positive * nag_tau) / (norm_guidance + 1e-7)
-        nag_guidance = torch.where(mask, nag_guidance * adjustment, nag_guidance)
+        del norm_positive, norm_guidance
+
+        nag_guidance.mul_(torch.where(mask, adjustment, 1.0))
         del mask, adjustment
-        
-        return nag_guidance * nag_alpha + x_positive * (1 - nag_alpha)
+
+        nag_guidance.sub_(x_positive).mul_(nag_alpha).add_(x_positive)
+        #nag_guidance = nag_guidance * nag_alpha + x_positive * (1 - nag_alpha)
+        del x_positive
+
+        return nag_guidance
 
 class LoRALinearLayer(nn.Module):
     def __init__(
@@ -648,7 +657,10 @@ class WanT2VCrossAttention(WanSelfAttention):
             q = self.norm_q(self.q(x).to(self.norm_q.weight.dtype),num_chunks=2 if rope_func == "comfy_chunked" else 1).to(x.dtype).view(b, -1, n, d)
 
         if nag_context is not None:
-            x = self.normalized_attention_guidance(b, n, d, q, context, nag_context, nag_params)
+            x_positive, x_negative = self.nag_attention(b, n, d, q, context, nag_context)
+            del q
+            x = self.normalized_attention_guidance(x_positive, x_negative, nag_params)
+            del x_positive, x_negative
         else:
             if is_longcat:
                 k = self.norm_k(self.k(context).to(self.norm_k.weight.dtype).view(b, -1, n, d)).to(x.dtype)
