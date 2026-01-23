@@ -550,6 +550,9 @@ class WanVideoApplyNAG:
             "nag_tau": ("FLOAT", {"default": 2.5, "min": 0.0, "max": 10.0, "step": 0.1}),
             "nag_alpha": ("FLOAT", {"default": 0.25, "min": 0.0, "max": 1.0, "step": 0.01}),
             },
+            "optional": {
+                "inplace": ("BOOLEAN", {"default": True, "tooltip": "If true, modifies tensors in place to save memory. Leads to different numerical results which may change the output slightly."}),
+            }
         }
 
     RETURN_TYPES = ("WANVIDEOTEXTEMBEDS", )
@@ -558,7 +561,7 @@ class WanVideoApplyNAG:
     CATEGORY = "WanVideoWrapper"
     DESCRIPTION = "Adds NAG prompt embeds to original prompt embeds: 'https://github.com/ChenDarYen/Normalized-Attention-Guidance'"
 
-    def process(self, original_text_embeds, nag_text_embeds, nag_scale, nag_tau, nag_alpha):
+    def process(self, original_text_embeds, nag_text_embeds, nag_scale, nag_tau, nag_alpha, inplace=True):
         prompt_embeds_dict_copy = original_text_embeds.copy()
         prompt_embeds_dict_copy.update({
                 "nag_prompt_embeds": nag_text_embeds["prompt_embeds"],
@@ -566,6 +569,7 @@ class WanVideoApplyNAG:
                     "nag_scale": nag_scale,
                     "nag_tau": nag_tau,
                     "nag_alpha": nag_alpha,
+                    "inplace": inplace,
                 }
             })
         return (prompt_embeds_dict_copy,)

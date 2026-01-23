@@ -576,9 +576,12 @@ class WanSelfAttention(nn.Module):
         nag_scale = nag_params['nag_scale']
         nag_alpha = nag_params['nag_alpha']
         nag_tau = nag_params['nag_tau']
+        inplace = nag_params.get('inplace', True)
 
-        #nag_guidance = x_positive * nag_scale - x_negative * (nag_scale - 1)
-        nag_guidance = x_negative.mul_(nag_scale - 1).neg_().add_(x_positive, alpha=nag_scale)
+        if inplace:
+            nag_guidance = x_negative.mul_(nag_scale - 1).neg_().add_(x_positive, alpha=nag_scale)
+        else:
+            nag_guidance = x_positive * nag_scale - x_negative * (nag_scale - 1)
         del x_negative
 
         norm_positive = torch.norm(x_positive, p=1, dim=-1, keepdim=True)
@@ -595,8 +598,10 @@ class WanSelfAttention(nn.Module):
         nag_guidance.mul_(torch.where(mask, adjustment, 1.0))
         del mask, adjustment
 
-        nag_guidance.sub_(x_positive).mul_(nag_alpha).add_(x_positive)
-        #nag_guidance = nag_guidance * nag_alpha + x_positive * (1 - nag_alpha)
+        if inplace:
+            nag_guidance.sub_(x_positive).mul_(nag_alpha).add_(x_positive)
+        else:
+            nag_guidance = nag_guidance * nag_alpha + x_positive * (1 - nag_alpha)
         del x_positive
 
         return nag_guidance
