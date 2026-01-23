@@ -2201,7 +2201,7 @@ class WanModel(torch.nn.Module):
 
     def rope_encode_comfy(self, t, h, w, freq_offset=0, t_start=0, ref_frame_shape=None, pose_frame_shape=None,
                           steps_t=None, steps_h=None, steps_w=None, ntk_alphas=[1,1,1], device=None, dtype=None,
-                          ref_frame_index=10, longcat_num_ref_latents=0):
+                          ref_frame_index=10, longcat_num_ref_latents=0, num_memory_frames=3, rope_negative_offset=5):
 
         patch_size = self.patch_size
         t_len = ((t + (patch_size[0] // 2)) // patch_size[0])
@@ -2224,6 +2224,15 @@ class WanModel(torch.nn.Module):
                 torch.tensor([ref_frame_index], dtype=dtype, device=device),
                 torch.arange(0, steps_t - longcat_num_ref_latents, dtype=dtype, device=device)
             ], dim=0)
+            img_ids[:, :, :, 0] = img_ids[:, :, :, 0] + grid_t.reshape(-1, 1, 1)
+        elif num_memory_frames > 0 and rope_negative_offset > 0:
+            # Negative RoPE shift for memory frames
+            # Memory frames get negative indices: {-f_m*S, -(f_m-1)*S, ..., -S}
+            # Current video frames start from 0: {0, 1, ..., f-1}
+            memory_indices = torch.arange(-num_memory_frames * rope_negative_offset, 0, rope_negative_offset, dtype=dtype, device=device)
+            current_indices = torch.arange(0, steps_t - num_memory_frames, dtype=dtype, device=device)
+            grid_t = torch.cat([memory_indices, current_indices], dim=0)
+            log.info(f"{num_memory_frames} memory frames, temporal rope positions: {grid_t}")
             img_ids[:, :, :, 0] = img_ids[:, :, :, 0] + grid_t.reshape(-1, 1, 1)
         else:
             # Standard temporal encoding
@@ -2334,6 +2343,8 @@ class WanModel(torch.nn.Module):
         scail_input=None,  # SCAIL pose
         dual_control_input=None,  # LongVie2 dual controlnet
         transformer_options={},
+        rope_negative_offset=0,
+        num_memory_frames=0,
     ):
         r"""
         Forward pass through the diffusion model
@@ -2657,6 +2668,8 @@ class WanModel(torch.nn.Module):
                 self.rope_embedder.k,
                 tuple(ntk_alphas),
                 longcat_num_ref_latents,
+                rope_negative_offset,
+                num_memory_frames,
             )
 
             # Check cache using key comparison
@@ -2672,6 +2685,8 @@ class WanModel(torch.nn.Module):
                     ref_frame_shape=ref_frame_shape,
                     pose_frame_shape=pose_frame_shape,
                     longcat_num_ref_latents=longcat_num_ref_latents,
+                    rope_negative_offset=rope_negative_offset,
+                    num_memory_frames=num_memory_frames,
                     device=x.device,
                     dtype=x.dtype
                 )

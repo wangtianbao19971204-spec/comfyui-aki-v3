@@ -895,6 +895,8 @@ class WanVideoAddStoryMemLatents:
                     "vae": ("WANVAE",),
                     "embeds": ("WANVIDIMAGE_EMBEDS",),
                     "memory_images": ("IMAGE",),
+                    "rope_negative_offset": ("BOOLEAN", {"default": False, "tooltip": "Use positive RoPE frequency offset for the memory latents"}),
+                    "rope_negative_offset_frames": ("INT", {"default": 5, "min": 0, "max": 100, "step": 1, "tooltip": "RoPE frequency offset for the memory latents"}),
                 }
         }
 
@@ -903,10 +905,11 @@ class WanVideoAddStoryMemLatents:
     FUNCTION = "add"
     CATEGORY = "WanVideoWrapper"
 
-    def add(self, vae, embeds, memory_images):
+    def add(self, vae, embeds, memory_images, rope_negative_offset, rope_negative_offset_frames):
         updated = dict(embeds)
         story_mem_latents, = WanVideoEncodeLatentBatch().encode(vae, memory_images)
         updated["story_mem_latents"] = story_mem_latents["samples"].squeeze(2).permute(1, 0, 2, 3)  # [C, T, H, W]
+        updated["rope_negative_offset_frames"] = rope_negative_offset_frames if rope_negative_offset else 0
         return (updated,)
 
 
