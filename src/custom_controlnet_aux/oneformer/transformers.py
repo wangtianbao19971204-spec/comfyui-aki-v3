@@ -26,8 +26,12 @@ class OneformerSegmentor:
         from transformers import OneFormerProcessor, OneFormerForUniversalSegmentation
         
         self.model_name = model_name
-        self.processor = OneFormerProcessor.from_pretrained(model_name)
-        self.model = OneFormerForUniversalSegmentation.from_pretrained(model_name)
+        try:
+            self.processor = OneFormerProcessor.from_pretrained(model_name, local_files_only=True)
+            self.model = OneFormerForUniversalSegmentation.from_pretrained(model_name, local_files_only=True)
+        except Exception as e:
+            self.processor = OneFormerProcessor.from_pretrained(model_name)
+            self.model = OneFormerForUniversalSegmentation.from_pretrained(model_name)
         self.device = "cpu"
 
     @classmethod  

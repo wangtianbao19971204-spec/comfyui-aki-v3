@@ -16,8 +16,12 @@ class SamDetector:
         from transformers import SamModel, SamProcessor
         
         self.model_name = model_name
-        self.processor = SamProcessor.from_pretrained(model_name)
-        self.model = SamModel.from_pretrained(model_name)
+        try:
+            self.processor = SamProcessor.from_pretrained(model_name, local_files_only=True)
+            self.model = SamModel.from_pretrained(model_name, local_files_only=True)
+        except Exception as e:
+            self.processor = SamProcessor.from_pretrained(model_name)
+            self.model = SamModel.from_pretrained(model_name)
         self.device = "cpu"
 
     @classmethod  

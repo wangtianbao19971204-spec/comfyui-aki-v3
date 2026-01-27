@@ -15,7 +15,13 @@ class DepthAnythingDetector:
     
     def __init__(self, model_name="LiheYoung/depth-anything-large-hf"):
         """Initialize DepthAnything with specified model."""
-        self.pipe = pipeline(task="depth-estimation", model=model_name)
+        from transformers import AutoImageProcessor, AutoModelForDepthEstimation
+        try:
+            image_processor = AutoImageProcessor.from_pretrained(model_name, local_files_only=True)
+            model = AutoModelForDepthEstimation.from_pretrained(model_name, local_files_only=True)
+            self.pipe = pipeline(task="depth-estimation", model=model, image_processor=image_processor)
+        except Exception as e:
+            self.pipe = pipeline(task="depth-estimation", model=model_name)
         self.device = "cpu"
 
     @classmethod  
