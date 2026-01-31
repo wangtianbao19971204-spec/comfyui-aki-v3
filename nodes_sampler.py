@@ -185,11 +185,12 @@ class WanVideoSampler:
 
         is_pusa = "pusa" in sample_scheduler.__class__.__name__.lower()
 
-        scheduler_step_args = {"generator": seed_g}
-        step_sig = inspect.signature(sample_scheduler.step)
-        for arg in list(scheduler_step_args.keys()):
-            if arg not in step_sig.parameters:
-                scheduler_step_args.pop(arg)
+        if scheduler != "multitalk":
+            scheduler_step_args = {"generator": seed_g}
+            step_sig = inspect.signature(sample_scheduler.step)
+            for arg in list(scheduler_step_args.keys()):
+                if arg not in step_sig.parameters:
+                    scheduler_step_args.pop(arg)
 
         # Ovi
         if transformer.audio_model is not None: # temporary workaround (...nothing more permanent)
