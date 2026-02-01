@@ -340,6 +340,7 @@ def multitalk_loop(self, **kwargs):
             motion_add_noise = torch.randn(latent_motion_frames.shape, device=torch.device("cpu"), generator=seed_g).to(device).contiguous()
             add_latent = add_noise(latent_motion_frames, motion_add_noise, timesteps[0])
             latent[:, :add_latent.shape[1]] = add_latent
+            del motion_add_noise, add_latent
 
         if offloaded:
             # Load weights
@@ -452,6 +453,7 @@ def multitalk_loop(self, **kwargs):
                 motion_add_noise = torch.randn(latent_motion_frames.shape, device=torch.device("cpu"), generator=seed_g).to(device).contiguous()
                 add_latent = add_noise(latent_motion_frames, motion_add_noise, timesteps[i+1])
                 latent[:, :add_latent.shape[1]] = add_latent
+                del motion_add_noise, add_latent
             elif mode == "infinitetalk":
                 if humo_image_cond is None or not is_first_clip:
                     latent[:, :cur_motion_frames_latent_num] = latent_motion_frames
@@ -462,9 +464,9 @@ def multitalk_loop(self, **kwargs):
             offloaded = True
         if humo_image_cond is not None and humo_reference_count > 0:
             latent = latent[:,:-humo_reference_count]
+
         vae.to(device)
         videos = vae.decode(latent.unsqueeze(0).to(device, vae.dtype), device=device, tiled=tiled_vae, pbar=False)[0].cpu()
-
         vae.to(offload_device)
 
         sampling_pbar.close()
