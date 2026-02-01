@@ -2750,7 +2750,7 @@
         "Node name for S&R": "WanVideoModelLoader"
       },
       "widgets_values": [
-        "WanVideo\\SkyreelsV3\\Wan21_SkyReels-V3-R2V_fp8_scaled_mixed.safetensors",
+        "WanVideo\\SkyreelsV3\\Wan21_SkyReelsV3-A2V_fp8_scaled_mixed.safetensors",
         "fp16_fast",
         "disabled",
         "offload_device",
