@@ -102,8 +102,7 @@ class ZoeDetector:
     
     def to(self, device):
         """Move model to specified device."""
-        self.pipe.model = self.pipe.model.to(device)
-        self.pipe.device = device
+        self.pipe.model = self.pipe.model.to(device) 
         self.device = device
         return self
         
@@ -157,8 +156,7 @@ class ZoeDepthAnythingDetector:
     
     def to(self, device):
         """Move model to specified device."""
-        self.pipe.model = self.pipe.model.to(device)
-        self.pipe.device = device
+        self.pipe.model = self.pipe.model.to(device) 
         self.device = device
         return self
         
