@@ -436,7 +436,7 @@ def guess_onnx_input_shape_dtype(filename):
 if os.getenv('AUX_ORT_PROVIDERS'):
     ONNX_PROVIDERS = os.getenv('AUX_ORT_PROVIDERS').split(',')
 else:
-    ONNX_PROVIDERS = ["CUDAExecutionProvider", "DirectMLExecutionProvider", "OpenVINOExecutionProvider", "ROCMExecutionProvider", "MIGraphXExecutionProvider", "CPUExecutionProvider"]
+    ONNX_PROVIDERS = ["CUDAExecutionProvider", "DirectMLExecutionProvider", "OpenVINOExecutionProvider", "ROCMExecutionProvider", "CPUExecutionProvider"]
 def get_ort_providers() -> List[str]:
     providers = []
     try:
