@@ -265,6 +265,18 @@ class DwposeDetector:
         input_image, _ = resize_image_with_pad(input_image, 0, upscale_method)
         poses = self.detect_poses(input_image)
         
+        # Filter poses based on include_* parameters to match OpenPose behavior
+        # This ensures POSE_KEYPOINT output only contains requested features
+        filtered_poses = []
+        for pose in poses:
+            filtered_pose = PoseResult(
+                body=pose.body if include_body else BodyResult([None] * 18, 0.0, 0),
+                left_hand=pose.left_hand if include_hand else None,
+                right_hand=pose.right_hand if include_hand else None,
+                face=pose.face if include_face else None
+            )
+            filtered_poses.append(filtered_pose)
+        
         canvas = draw_poses(poses, input_image.shape[0], input_image.shape[1], draw_body=include_body, draw_hand=include_hand, draw_face=include_face, xinsr_stick_scaling=xinsr_stick_scaling)
         canvas, remove_pad = resize_image_with_pad(canvas, detect_resolution, upscale_method)
         detected_map = HWC3(remove_pad(canvas))
@@ -273,7 +285,7 @@ class DwposeDetector:
             detected_map = Image.fromarray(detected_map)
         
         if image_and_json:
-            return (detected_map, encode_poses_as_dict(poses, input_image.shape[0], input_image.shape[1]))
+            return (detected_map, encode_poses_as_dict(filtered_poses, input_image.shape[0], input_image.shape[1]))
         
         return detected_map
 
