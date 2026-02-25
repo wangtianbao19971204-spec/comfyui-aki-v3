@@ -23,7 +23,7 @@ from comfy.sd import load_lora_for_models
 try:
     from .gguf.gguf import _replace_with_gguf_linear, GGUFParameter
     from gguf import GGMLQuantizationType
-except:
+except Exception:
     pass
 
 script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -33,7 +33,7 @@ offload_device = mm.unet_offload_device()
 
 try:
     from server import PromptServer
-except:
+except Exception:
     PromptServer = None
 
 attention_modes = ["sdpa", "flash_attn_2", "flash_attn_3", "sageattn", "sageattn_3", "radial_sage_attention", "sageattn_compiled",
@@ -414,7 +414,7 @@ class WanVideoLoraSelect:
 
         try:
             lora_path = folder_paths.get_full_path_or_raise("loras", lora)
-        except:
+        except Exception:
             lora_path = lora
 
         # Load metadata from the safetensors file
@@ -1151,7 +1151,7 @@ class WanVideoModelLoader:
             try:
                 if hasattr(torch.backends.cuda.matmul, "allow_fp16_accumulation"):
                     torch.backends.cuda.matmul.allow_fp16_accumulation = False
-            except:
+            except Exception:
                 pass
 
 

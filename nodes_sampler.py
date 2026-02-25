@@ -1730,7 +1730,7 @@ class WanVideoSampler:
         gc.collect()
         try:
             torch.cuda.reset_peak_memory_stats(device)
-        except:
+        except Exception:
             pass
 
         # Main sampling loop with FreeInit iterations
@@ -2182,7 +2182,7 @@ class WanVideoSampler:
                         try:
                             print_memory(device)
                             torch.cuda.reset_peak_memory_stats(device)
-                        except:
+                        except Exception:
                             pass
                         return {"video": gen_video_samples},
                     # region wananimate loop
@@ -2483,7 +2483,7 @@ class WanVideoSampler:
                         try:
                             print_memory(device)
                             torch.cuda.reset_peak_memory_stats(device)
-                        except:
+                        except Exception:
                             pass
                         return {"video": gen_video_samples.permute(1, 2, 3, 0), "output_path": output_path},
 
@@ -2627,7 +2627,7 @@ class WanVideoSampler:
         try:
             print_memory(device)
             torch.cuda.reset_peak_memory_stats(device)
-        except:
+        except Exception:
             pass
         return ({
             "samples": latent.unsqueeze(0).cpu(),
@@ -2771,7 +2771,7 @@ class WanVideoScheduler:
             import io
             import base64
             import matplotlib.pyplot as plt
-        except:
+        except Exception:
             PromptServer = None
         if unique_id and PromptServer is not None:
             try:
