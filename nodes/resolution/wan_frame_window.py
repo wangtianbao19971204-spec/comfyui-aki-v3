@@ -102,10 +102,6 @@ class WanFrameWindowSize:
         "Tim x trong [min_window_size, max_window_size] cho it frame thua nhat.\n"
         "Khuyen nghi: 93 <= x <= 113 cho chat luong tot.\n"
         "frame_diff = output_frames - total_frames (so frame thua can trim)."
-    ) tối ưu cho WanAnimate.\n"
-        "Công thức đúng: output = 1 + n*(x-1)  (stride = x-1, overlap 1 frame).\n"
-        "Tìm x trong [min_window_size, 121] cho ít frame thừa nhất.\n"
-        "frame_diff = output_frames - total_frames (số frame thừa cần trim)."
     )
 
     def calculate(self, total_frames: int, min_window_size: int = 93, max_window_size: int = 113):
