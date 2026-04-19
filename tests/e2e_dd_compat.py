@@ -21,13 +21,6 @@ What it verifies:
 1. SEGSDetailer inference runs without AttributeError on DifferentialDiffusion.
 2. Output image differs slightly from input (detailer actually edited the face).
 3. Execution returns status=success.
-
-To verify the helper's .execute branch is actually taken on the current
-ComfyUI version, temporarily add a `logging.warning(...)` inside
-`modules/impact/utils.py::apply_differential_diffusion` and grep the server
-log for the marker. See
-`.claude/livecontext/analysis/2026-04-20_glarybot_v3_migration_proposal_review.md`
-for broader context on the DD compat story.
 """
 from playwright.sync_api import sync_playwright
 import json
