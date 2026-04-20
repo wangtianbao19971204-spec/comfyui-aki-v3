@@ -1,6 +1,9 @@
 import math
 import subprocess
-from typing import List, Tuple, Optional
+from typing import List, Optional, Tuple
+
+
+MIN_VALID_FRAMES = 5
 
 
 def _run_ffprobe_duration(path: str) -> Tuple[Optional[float], Optional[float], Optional[int]]:
@@ -8,13 +11,22 @@ def _run_ffprobe_duration(path: str) -> Tuple[Optional[float], Optional[float], 
     Returns (duration_sec, fps, nb_frames) if available.
     Uses ffprobe (fast, no decoding).
     """
-    # duration
     dur = None
     try:
         r = subprocess.run(
-            ["ffprobe", "-v", "error", "-show_entries", "format=duration",
-             "-of", "default=noprint_wrappers=1:nokey=1", path],
-            capture_output=True, text=True, check=False
+            [
+                "ffprobe",
+                "-v",
+                "error",
+                "-show_entries",
+                "format=duration",
+                "-of",
+                "default=noprint_wrappers=1:nokey=1",
+                path,
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
         )
         s = (r.stdout or "").strip()
         if s:
@@ -22,15 +34,25 @@ def _run_ffprobe_duration(path: str) -> Tuple[Optional[float], Optional[float], 
     except Exception:
         dur = None
 
-    # fps + nb_frames from video stream
     fps = None
     nb_frames = None
     try:
         r = subprocess.run(
-            ["ffprobe", "-v", "error", "-select_streams", "v:0",
-             "-show_entries", "stream=avg_frame_rate,r_frame_rate,nb_frames",
-             "-of", "default=noprint_wrappers=1:nokey=0", path],
-            capture_output=True, text=True, check=False
+            [
+                "ffprobe",
+                "-v",
+                "error",
+                "-select_streams",
+                "v:0",
+                "-show_entries",
+                "stream=avg_frame_rate,r_frame_rate,nb_frames",
+                "-of",
+                "default=noprint_wrappers=1:nokey=0",
+                path,
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
         )
         out = (r.stdout or "").strip().splitlines()
 
@@ -46,7 +68,8 @@ def _run_ffprobe_duration(path: str) -> Tuple[Optional[float], Optional[float], 
             if "/" in x:
                 a, b = x.split("/", 1)
                 try:
-                    a = float(a); b = float(b)
+                    a = float(a)
+                    b = float(b)
                     if b != 0:
                         return a / b
                 except Exception:
@@ -56,7 +79,6 @@ def _run_ffprobe_duration(path: str) -> Tuple[Optional[float], Optional[float], 
             except Exception:
                 return None
 
-        # prefer avg_frame_rate, fallback r_frame_rate
         fps = parse_rate(kv.get("avg_frame_rate", "")) or parse_rate(kv.get("r_frame_rate", ""))
 
         nf = kv.get("nb_frames", "")
@@ -73,7 +95,7 @@ def _run_ffprobe_duration(path: str) -> Tuple[Optional[float], Optional[float], 
 def _split_paths(multiline: str) -> List[str]:
     if not multiline:
         return []
-    # support newline list
+
     lines = []
     for ln in multiline.splitlines():
         ln = ln.strip()
@@ -85,7 +107,8 @@ def _split_paths(multiline: str) -> List[str]:
 
 class VHS_VideoFrameGuard:
     """
-    Guard node: checks videos total frames (fps_used * duration) <= max_frames.
+    Guard node: checks videos total frames (fps_used * duration) <= max_frames
+    and filters out clips that are too short for downstream interpolation.
     Designed for lists of paths like Show Text output.
     """
 
@@ -112,6 +135,7 @@ class VHS_VideoFrameGuard:
         invalid = []
         report_lines = []
         all_ok = True
+        over_limit = []
 
         for p in path_list:
             dur, fps_meta, nb_frames = _run_ffprobe_duration(p)
@@ -124,8 +148,16 @@ class VHS_VideoFrameGuard:
             else:
                 est_frames = max_frames + 1  # fail-safe: treat as too long
 
-            ok = est_frames <= int(max_frames)
-            status = "OK" if ok else "OVER"
+            too_short = est_frames < MIN_VALID_FRAMES
+            over_max = est_frames > int(max_frames)
+            ok = (not too_short) and (not over_max)
+
+            if too_short:
+                status = "SHORT"
+            elif over_max:
+                status = "OVER"
+            else:
+                status = "OK"
 
             report_lines.append(
                 f"{status} | frames={est_frames} | fps_used={fps_used:.3f} | dur={f'{dur:.3f}' if dur is not None else 'NA'} | {p}"
@@ -133,10 +165,13 @@ class VHS_VideoFrameGuard:
 
             if ok:
                 valid.append(p)
-            else:
-                invalid.append(p)
-                all_ok = False
-                # raise_on_fail=False → vẫn đưa vào valid để workflow tiếp tục xử lý
+                continue
+
+            invalid.append(p)
+            all_ok = False
+
+            if over_max:
+                over_limit.append(p)
                 if not raise_on_fail:
                     valid.append(p)
 
@@ -144,14 +179,15 @@ class VHS_VideoFrameGuard:
         invalid_s = "\n".join(invalid)
         report_s = "\n".join(report_lines)
 
-        if (not all_ok) and raise_on_fail:
-            # Stop workflow immediately to avoid OOM later
+        if over_limit and raise_on_fail:
             raise Exception(
-                f"[VideoFrameGuard] Found {len(invalid)} video(s) over {max_frames} frames.\n"
+                f"[VideoFrameGuard] Found {len(over_limit)} video(s) over {max_frames} frames.\n"
                 f"Set raise_on_fail=False if you want to continue.\n\n{invalid_s}"
             )
 
         return (all_ok, valid_s, invalid_s, report_s)
+
+
 class VHS_VideoPickMinFrames:
     """
     Pick the video path with the lowest estimated frames from a list of valid paths.
@@ -204,9 +240,7 @@ class VHS_VideoPickMinFrames:
                 best_frames = frames_est
                 best_path = p
 
-        # If everything was unknown and became huge, still return something deterministic
         if best_frames is None:
             return ("", 0, "Failed to evaluate any video.")
 
         return (best_path, int(best_frames), "\n".join(report_lines))
-
