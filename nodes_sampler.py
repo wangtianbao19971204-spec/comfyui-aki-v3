@@ -2593,10 +2593,10 @@ class WanVideoSampler:
 
             except Exception as e:
                 log.error(f"Error during sampling: {e}")
-                if force_offload:
-                    if not model["auto_cpu_offload"]:
-                        offload_transformer(transformer)
-                raise e
+                raise
+            finally:
+                if force_offload and not model["auto_cpu_offload"]:
+                    offload_transformer(transformer)
 
         if phantom_latents is not None:
             latent = latent[:,:-phantom_latents.shape[1]]
@@ -2619,10 +2619,6 @@ class WanVideoSampler:
                     "teacache_state": transformer.teacache_state,
                     "magcache_state": transformer.magcache_state,
                 }
-
-        if force_offload:
-            if not model["auto_cpu_offload"]:
-                offload_transformer(transformer)
 
         try:
             print_memory(device)
