@@ -182,6 +182,61 @@ class Preview3DAdvanced(IO.ComfyNode):
         )
 
 
+class PreviewPointCloudGaussianSplat(IO.ComfyNode):
+    @classmethod
+    def define_schema(cls):
+        return IO.Schema(
+            node_id="PreviewPointCloudGaussianSplat",
+            display_name="Preview Point Cloud & Gaussian Splat",
+            category="3d",
+            is_experimental=True,
+            is_output_node=True,
+            search_aliases=[
+                "view 3d",
+                "preview 3d",
+                "3d viewer",
+                "view point cloud",
+                "view pointcloud",
+                "view splat",
+                "view gaussian",
+                "view gaussian splat",
+                "preview gaussian",
+                "preview gaussian splat",
+                "preview point cloud",
+                "preview pointcloud",
+                "view 3dgs",
+                "preview 3dgs",
+                "preview ply",
+                "preview spz",
+                "preview ksplat",
+            ],
+            inputs=[
+                IO.MultiType.Input(
+                    "model_file",
+                    types=[
+                        IO.File3DPLY,
+                        IO.File3DSPLAT,
+                        IO.File3DSPZ,
+                        IO.File3DKSPLAT,
+                    ],
+                    tooltip="Point cloud or 3DGS file (.ply / .spz / .splat / .ksplat)",
+                ),
+                IO.Load3DCamera.Input("camera_info", optional=True, advanced=True),
+            ],
+            outputs=[
+                IO.File3DAny.Output(display_name="model_file"),
+                IO.Load3DCamera.Output(display_name="camera_info"),
+            ],
+        )
+
+    @classmethod
+    def execute(cls, model_file: Types.File3D, **kwargs) -> IO.NodeOutput:
+        filename = f"preview3d_{uuid.uuid4().hex}.{model_file.format}"
+        model_file.save_to(os.path.join(folder_paths.get_output_directory(), filename))
+        camera_info = kwargs.get("camera_info", None)
+        return IO.NodeOutput(model_file, camera_info, ui=UI.PreviewUI3D(filename, camera_info))
+
+
 class Load3DExtension(ComfyExtension):
     @override
     async def get_node_list(self) -> list[type[IO.ComfyNode]]:
@@ -189,6 +244,7 @@ class Load3DExtension(ComfyExtension):
             Load3D,
             Preview3D,
             Preview3DAdvanced,
+            PreviewPointCloudGaussianSplat,
         ]
 
 
