@@ -584,6 +584,7 @@ class WanVideoSampler:
             audio_scale = multitalk_embeds.get("audio_scale", 1.0)
             audio_cfg_scale = multitalk_embeds.get("audio_cfg_scale", 1.0)
             ref_target_masks = multitalk_embeds.get("ref_target_masks", None)
+            multitalk_audio_stride = multitalk_embeds.get("audio_stride", None)
             if not isinstance(audio_cfg_scale, list):
                 audio_cfg_scale = [audio_cfg_scale] * (steps + 1)
 
@@ -817,7 +818,11 @@ class WanVideoSampler:
                 latent_video_length += insert_len
             longcat_num_cond_latents = len(clean_latent_indices)
             log.info(f"LongCat num_cond_latents: {longcat_num_cond_latents} num_ref_latents: {longcat_num_ref_latents}")
-        audio_stride = 2 if transformer.is_longcat else 1
+        # v1.5 (Whisper) embeds set audio_stride=1; v1.0 (wav2vec2) uses 2 for LongCat
+        if multitalk_audio_stride is not None:
+            audio_stride = multitalk_audio_stride
+        else:
+            audio_stride = 2 if transformer.is_longcat else 1
 
         #controlnet
         controlnet_latents = controlnet = None
