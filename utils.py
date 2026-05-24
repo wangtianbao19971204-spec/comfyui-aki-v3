@@ -703,8 +703,9 @@ def check_duplicate_nodes():
 
     # Check all directories in custom_nodes
     for path in custom_nodes_dir.iterdir():
-        if (path.is_dir() and 
+        if (path.is_dir() and
             path != current_path and
+            not path.name.endswith('.disabled') and
             'wanvideo' in path.name.lower() and
             'wrapper' in path.name.lower()):
             wanvideo_dirs.append(str(path))
