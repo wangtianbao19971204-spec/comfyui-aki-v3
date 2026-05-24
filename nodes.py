@@ -327,7 +327,7 @@ class WanVideoTextEncode:
             try:
                 log.info(f"Moving video model to {offload_device}")
                 model_to_offload.model.to(offload_device)
-            except:
+            except Exception:
                 pass
 
         encoder = t5["model"]
@@ -502,7 +502,7 @@ class WanVideoTextEncodeSingle:
                     log.info(f"Moving video model to {offload_device}")
                     model_to_offload.model.to(offload_device)
                     mm.soft_empty_cache()
-            except:
+            except Exception:
                 pass
 
             encoder = t5["model"]
