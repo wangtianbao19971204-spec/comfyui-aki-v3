@@ -56,7 +56,7 @@ class _AssetAccumulator(TypedDict):
     refs: list[_RefInfo]
 
 
-RootType = Literal["models", "input", "output"]
+RootType = Literal["models", "input", "output", "temp"]
 
 
 def get_prefixes_for_root(root: RootType) -> list[str]:
@@ -69,12 +69,14 @@ def get_prefixes_for_root(root: RootType) -> list[str]:
         return [os.path.abspath(folder_paths.get_input_directory())]
     if root == "output":
         return [os.path.abspath(folder_paths.get_output_directory())]
+    if root == "temp":
+        return [os.path.abspath(folder_paths.get_temp_directory())]
     return []
 
 
 def get_all_known_prefixes() -> list[str]:
     """Get all known asset prefixes across all root types."""
-    all_roots: tuple[RootType, ...] = ("models", "input", "output")
+    all_roots: tuple[RootType, ...] = ("models", "input", "output", "temp")
     return [p for root in all_roots for p in get_prefixes_for_root(root)]
 
 
@@ -274,7 +276,18 @@ def collect_paths_for_roots(roots: tuple[RootType, ...]) -> list[str]:
         paths.extend(list_files_recursively(folder_paths.get_input_directory()))
     if "output" in roots:
         paths.extend(list_files_recursively(folder_paths.get_output_directory()))
-    return paths
+    if "temp" in roots:
+        paths.extend(list_files_recursively(folder_paths.get_temp_directory()))
+
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for path in paths:
+        abs_path = os.path.abspath(path)
+        if abs_path in seen:
+            continue
+        seen.add(abs_path)
+        deduped.append(abs_path)
+    return deduped
 
 
 def build_asset_specs(

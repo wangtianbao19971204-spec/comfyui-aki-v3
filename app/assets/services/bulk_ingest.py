@@ -125,6 +125,18 @@ def batch_insert_seed_assets(
     if not specs:
         return BulkInsertResult(inserted_refs=0, won_paths=0, lost_paths=0)
 
+    deduped_specs: list[SeedAssetSpec] = []
+    seen_paths: set[str] = set()
+    for spec in specs:
+        absolute_path = os.path.abspath(spec["abs_path"])
+        if absolute_path in seen_paths:
+            continue
+        seen_paths.add(absolute_path)
+        deduped_specs.append(spec)
+    specs = deduped_specs
+    if not specs:
+        return BulkInsertResult(inserted_refs=0, won_paths=0, lost_paths=0)
+
     current_time = get_utc_now()
     asset_rows: list[AssetRow] = []
     reference_rows: list[ReferenceRow] = []

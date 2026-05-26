@@ -2,15 +2,23 @@
 
 import os
 from decimal import Decimal
+from pathlib import Path
 from typing import Iterable, Sequence
 
 import sqlalchemy as sa
 from sqlalchemy import exists
 
+import folder_paths
 from app.assets.database.models import AssetReference, AssetReferenceMeta, AssetReferenceTag
-from app.assets.helpers import escape_sql_like_string, normalize_tags
+from app.assets.helpers import normalize_tags
 
 MAX_BIND_PARAMS = 800
+
+# Mirrors app.model_manager.MODEL_FOLDER_BLACKLIST: these names are bootstrapped
+# into folder_names_and_paths by core, but /api/experiment/models does not expose
+# them as model folders. Keep this local to avoid reintroducing the asset query
+# package initialization cycle from importing service/model-manager code here.
+_NON_MODEL_FOLDER_NAMES = frozenset({"configs", "custom_nodes"})
 
 
 def calculate_rows_per_statement(cols: int) -> int:
@@ -45,15 +53,95 @@ def build_visible_owner_clause(owner_id: str) -> sa.sql.ClauseElement:
 def build_prefix_like_conditions(
     prefixes: list[str],
 ) -> list[sa.sql.ColumnElement]:
-    """Build LIKE conditions for matching file paths under directory prefixes."""
+    """Build case-exact conditions for matching file paths under directory prefixes."""
     conds = []
     for p in prefixes:
         base = os.path.abspath(p)
         if not base.endswith(os.sep):
             base += os.sep
-        escaped, esc = escape_sql_like_string(base)
-        conds.append(AssetReference.file_path.like(escaped + "%", escape=esc))
+        conds.append(sa.func.substr(AssetReference.file_path, 1, len(base)) == base)
     return conds
+
+
+def _get_comfy_model_folders() -> list[tuple[str, list[str]]]:
+    """Return registered model folder names and roots without importing services.
+
+    This intentionally stays local to the query layer to avoid importing
+    ``app.assets.services`` from ``app.assets.database.queries.common``, which
+    creates a package initialization cycle.
+    """
+    targets: list[tuple[str, list[str]]] = []
+    for name, values in folder_paths.folder_names_and_paths.items():
+        if name in _NON_MODEL_FOLDER_NAMES:
+            continue
+        paths, _exts = values[0], values[1]
+        if paths:
+            targets.append((name, paths))
+    return targets
+
+
+def apply_asset_path_filters(
+    stmt: sa.sql.Select,
+    asset_type: str | None = None,
+    model_folder: str | None = None,
+) -> sa.sql.Select:
+    """Filter references using their real filesystem/root registration context."""
+    if asset_type is None and model_folder is None:
+        return stmt
+    if model_folder and asset_type != "model":
+        raise ValueError("model_folder can only be used with asset_type=model")
+
+    registered_model_folders = _get_comfy_model_folders()
+    prefixes: list[str] = []
+    exclude_prefixes: list[str] = []
+    if model_folder:
+        for folder_name, paths in registered_model_folders:
+            if folder_name == model_folder:
+                prefixes.extend(paths)
+                break
+        if not prefixes:
+            return stmt.where(sa.false())
+
+        target_bases = [os.path.abspath(path) for path in prefixes]
+        for folder_name, paths in registered_model_folders:
+            if folder_name == model_folder:
+                continue
+            for path in paths:
+                path_abs = os.path.abspath(path)
+                if any(
+                    Path(path_abs).is_relative_to(target_base)
+                    and path_abs != target_base
+                    for target_base in target_bases
+                ):
+                    exclude_prefixes.append(path)
+    elif asset_type == "model":
+        for _folder_name, paths in registered_model_folders:
+            prefixes.extend(paths)
+    elif asset_type == "input":
+        prefixes = [folder_paths.get_input_directory()]
+    elif asset_type == "output":
+        prefixes = [folder_paths.get_output_directory()]
+    elif asset_type == "temp":
+        prefixes = [folder_paths.get_temp_directory()]
+
+    conditions = build_prefix_like_conditions(prefixes)
+    if not conditions:
+        return stmt.where(sa.false())
+
+    clause = sa.or_(*conditions)
+    if asset_type in {"input", "output", "temp"}:
+        model_prefixes = [
+            path for _folder_name, paths in registered_model_folders for path in paths
+        ]
+        model_conditions = build_prefix_like_conditions(model_prefixes)
+        if model_conditions:
+            clause = sa.and_(clause, sa.not_(sa.or_(*model_conditions)))
+    elif exclude_prefixes:
+        exclude_conditions = build_prefix_like_conditions(exclude_prefixes)
+        if exclude_conditions:
+            clause = sa.and_(clause, sa.not_(sa.or_(*exclude_conditions)))
+
+    return stmt.where(clause)
 
 
 def apply_tag_filters(

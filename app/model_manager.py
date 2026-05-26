@@ -14,6 +14,9 @@ from io import BytesIO
 from folder_paths import map_legacy, filter_files_extensions, filter_files_content_types
 
 
+MODEL_FOLDER_BLACKLIST = frozenset({"configs", "custom_nodes"})
+
+
 class ModelFileManager:
     def __init__(self) -> None:
         self.cache: dict[str, tuple[list[dict], dict[str, float], float]] = {}
@@ -32,10 +35,9 @@ class ModelFileManager:
         @routes.get("/experiment/models")
         async def get_model_folders(request):
             model_types = list(folder_paths.folder_names_and_paths.keys())
-            folder_black_list = ["configs", "custom_nodes"]
             output_folders: list[dict] = []
             for folder in model_types:
-                if folder in folder_black_list:
+                if folder in MODEL_FOLDER_BLACKLIST:
                     continue
                 output_folders.append({"name": folder, "folders": folder_paths.get_folder_paths(folder)})
             return web.json_response(output_folders)

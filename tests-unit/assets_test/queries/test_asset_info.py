@@ -1,8 +1,13 @@
 import time
 import uuid
+from pathlib import Path
+from unittest.mock import patch
+
 import pytest
 from sqlalchemy.orm import Session
 
+from app.assets.api import schemas_in
+from app.assets.api.routes import _order_tags_for_legacy_path_compat
 from app.assets.database.models import Asset, AssetReference, AssetReferenceMeta
 from app.assets.database.queries import (
     reference_exists_for_asset_id,
@@ -23,6 +28,55 @@ from app.assets.database.queries import (
     add_tags_to_reference,
 )
 from app.assets.helpers import get_utc_now
+
+
+class TestListAssetsQueryPathFilters:
+    def test_model_folder_requires_model_asset_type(self):
+        with pytest.raises(ValueError, match="model_folder can only be used"):
+            schemas_in.ListAssetsQuery.model_validate({"model_folder": "checkpoints"})
+
+    def test_model_folder_accepts_explicit_model_asset_type(self):
+        query = schemas_in.ListAssetsQuery.model_validate(
+            {"asset_type": "model", "model_folder": "checkpoints"}
+        )
+
+        assert query.asset_type == "model"
+        assert query.model_folder == "checkpoints"
+
+    def test_model_folder_rejects_non_model_asset_type(self):
+        with pytest.raises(ValueError, match="model_folder can only be used"):
+            schemas_in.ListAssetsQuery.model_validate(
+                {"asset_type": "input", "model_folder": "checkpoints"}
+            )
+
+    def test_query_layer_rejects_model_folder_without_model_asset_type(
+        self, session: Session
+    ):
+        with pytest.raises(ValueError, match="model_folder can only be used"):
+            list_references_page(session, model_folder="checkpoints")
+
+    def test_upload_tags_preserve_model_folder_case_for_destination(self):
+        spec = schemas_in.UploadAssetSpec.model_validate(
+            {"tags": ['["models", "LLM", "SubDir"]']}
+        )
+
+        assert spec.tags == ["models", "LLM", "SubDir"]
+
+
+class TestLegacyPathTagOrdering:
+    def test_model_response_moves_models_and_model_folder_first(self):
+        assert _order_tags_for_legacy_path_compat(
+            ["blah", "checkpoints", "deep", "foo", "models"],
+            asset_type="model",
+            model_folder="checkpoints",
+        ) == ["models", "checkpoints", "blah", "deep", "foo"]
+
+    def test_non_model_response_moves_root_tag_first(self):
+        assert _order_tags_for_legacy_path_compat(
+            ["subdir", "output"],
+            asset_type="output",
+            model_folder=None,
+        ) == ["output", "subdir"]
 
 
 def _make_asset(session: Session, hash_val: str | None = None, size: int = 1024) -> Asset:
@@ -144,6 +198,369 @@ class TestListReferencesPage:
         refs, _, total = list_references_page(session, exclude_tags=["bad"])
         assert total == 1
         assert refs[0].name == "keep"
+
+    def test_model_folder_filter_uses_registered_paths(self, session: Session, tmp_path: Path):
+        checkpoints_dir = tmp_path / "models" / "checkpoints"
+        loras_dir = tmp_path / "models" / "loras"
+        checkpoints_dir.mkdir(parents=True)
+        loras_dir.mkdir(parents=True)
+
+        asset = _make_asset(session, "hash1")
+        checkpoint = _make_reference(session, asset, name="checkpoint")
+        checkpoint.file_path = str(checkpoints_dir / "model.safetensors")
+        lora = _make_reference(session, asset, name="lora")
+        lora.file_path = str(loras_dir / "model.safetensors")
+        session.commit()
+
+        with patch(
+            "app.assets.database.queries.common._get_comfy_model_folders",
+            return_value=[
+                ("checkpoints", [str(checkpoints_dir)]),
+                ("loras", [str(loras_dir)]),
+            ],
+        ):
+            refs, _, total = list_references_page(
+                session, asset_type="model", model_folder="checkpoints"
+            )
+
+        assert total == 1
+        assert refs[0].id == checkpoint.id
+
+    def test_model_folder_filter_includes_all_registered_roots_for_folder(
+        self, session: Session, tmp_path: Path
+    ):
+        checkpoints_a = tmp_path / "root_a" / "checkpoints"
+        checkpoints_b = tmp_path / "root_b" / "checkpoints"
+        checkpoints_a.mkdir(parents=True)
+        checkpoints_b.mkdir(parents=True)
+
+        asset = _make_asset(session, "hash1")
+        ref_a = _make_reference(session, asset, name="checkpoint-a")
+        ref_a.file_path = str(checkpoints_a / "a.safetensors")
+        ref_b = _make_reference(session, asset, name="checkpoint-b")
+        ref_b.file_path = str(checkpoints_b / "b.safetensors")
+        session.commit()
+
+        with patch(
+            "app.assets.database.queries.common._get_comfy_model_folders",
+            return_value=[("checkpoints", [str(checkpoints_a), str(checkpoints_b)])],
+        ):
+            refs, _, total = list_references_page(
+                session, asset_type="model", model_folder="checkpoints"
+            )
+
+        assert total == 2
+        assert {ref.id for ref in refs} == {ref_a.id, ref_b.id}
+
+    def test_same_named_files_under_multiple_roots_both_return_in_model_folder_filter(
+        self, session: Session, tmp_path: Path
+    ):
+        checkpoints_a = tmp_path / "root_a" / "checkpoints"
+        checkpoints_b = tmp_path / "root_b" / "checkpoints"
+        checkpoints_a.mkdir(parents=True)
+        checkpoints_b.mkdir(parents=True)
+
+        asset = _make_asset(session, "hash1")
+        ref_a = _make_reference(session, asset, name="checkpoint-a")
+        ref_a.file_path = str(checkpoints_a / "duplicate.safetensors")
+        ref_b = _make_reference(session, asset, name="checkpoint-b")
+        ref_b.file_path = str(checkpoints_b / "duplicate.safetensors")
+        session.commit()
+
+        with patch(
+            "app.assets.database.queries.common._get_comfy_model_folders",
+            return_value=[("checkpoints", [str(checkpoints_a), str(checkpoints_b)])],
+        ):
+            refs, _, total = list_references_page(
+                session, asset_type="model", model_folder="checkpoints"
+            )
+
+        assert total == 2
+        assert {ref.id for ref in refs} == {ref_a.id, ref_b.id}
+
+    def test_arbitrary_registered_folder_filter_works(
+        self, session: Session, tmp_path: Path
+    ):
+        controlnet_dir = tmp_path / "models" / "controlnet"
+        controlnet_dir.mkdir(parents=True)
+
+        asset = _make_asset(session, "hash1")
+        ref = _make_reference(session, asset, name="controlnet")
+        ref.file_path = str(controlnet_dir / "pose.safetensors")
+        session.commit()
+
+        with patch(
+            "app.assets.database.queries.common._get_comfy_model_folders",
+            return_value=[("controlnet", [str(controlnet_dir)])],
+        ):
+            refs, _, total = list_references_page(
+                session, asset_type="model", model_folder="controlnet"
+            )
+
+        assert total == 1
+        assert refs[0].id == ref.id
+
+    def test_unknown_model_folder_filter_returns_none_when_other_models_exist(
+        self, session: Session, tmp_path: Path
+    ):
+        checkpoints_dir = tmp_path / "models" / "checkpoints"
+        checkpoints_dir.mkdir(parents=True)
+
+        asset = _make_asset(session, "hash1")
+        ref = _make_reference(session, asset, name="checkpoint")
+        ref.file_path = str(checkpoints_dir / "model.safetensors")
+        session.commit()
+
+        with patch(
+            "app.assets.database.queries.common._get_comfy_model_folders",
+            return_value=[("checkpoints", [str(checkpoints_dir)])],
+        ):
+            refs, _, total = list_references_page(
+                session, asset_type="model", model_folder="controlnet"
+            )
+
+        assert total == 0
+        assert refs == []
+
+    def test_model_folder_filter_excludes_deeper_registered_model_folder(
+        self, session: Session, tmp_path: Path
+    ):
+        text_encoders_dir = tmp_path / "models" / "text_encoders"
+        clip_dir = text_encoders_dir / "clip"
+        clip_dir.mkdir(parents=True)
+
+        asset = _make_asset(session, "hash1")
+        text_encoder = _make_reference(session, asset, name="text_encoder")
+        text_encoder.file_path = str(text_encoders_dir / "t5xxl.safetensors")
+        clip = _make_reference(session, asset, name="clip")
+        clip.file_path = str(clip_dir / "clip_l.safetensors")
+        session.commit()
+
+        with patch(
+            "app.assets.database.queries.common._get_comfy_model_folders",
+            return_value=[
+                ("text_encoders", [str(text_encoders_dir)]),
+                ("text_encoders/clip", [str(clip_dir)]),
+            ],
+        ):
+            refs, _, total = list_references_page(
+                session, asset_type="model", model_folder="text_encoders"
+            )
+
+        assert total == 1
+        assert refs[0].id == text_encoder.id
+
+    def test_child_model_folder_filter_returns_only_child(
+        self, session: Session, tmp_path: Path
+    ):
+        text_encoders_dir = tmp_path / "models" / "text_encoders"
+        clip_dir = text_encoders_dir / "clip"
+        clip_dir.mkdir(parents=True)
+
+        asset = _make_asset(session, "hash1")
+        text_encoder = _make_reference(session, asset, name="text_encoder")
+        text_encoder.file_path = str(text_encoders_dir / "t5xxl.safetensors")
+        clip = _make_reference(session, asset, name="clip")
+        clip.file_path = str(clip_dir / "clip_l.safetensors")
+        session.commit()
+
+        with patch(
+            "app.assets.database.queries.common._get_comfy_model_folders",
+            return_value=[
+                ("text_encoders", [str(text_encoders_dir)]),
+                ("text_encoders/clip", [str(clip_dir)]),
+            ],
+        ):
+            refs, _, total = list_references_page(
+                session, asset_type="model", model_folder="text_encoders/clip"
+            )
+
+        assert total == 1
+        assert refs[0].id == clip.id
+
+    def test_model_asset_type_filter_includes_parent_and_child_registered_roots(
+        self, session: Session, tmp_path: Path
+    ):
+        text_encoders_dir = tmp_path / "models" / "text_encoders"
+        clip_dir = text_encoders_dir / "clip"
+        clip_dir.mkdir(parents=True)
+
+        asset = _make_asset(session, "hash1")
+        text_encoder = _make_reference(session, asset, name="text_encoder")
+        text_encoder.file_path = str(text_encoders_dir / "t5xxl.safetensors")
+        clip = _make_reference(session, asset, name="clip")
+        clip.file_path = str(clip_dir / "clip_l.safetensors")
+        session.commit()
+
+        with patch(
+            "app.assets.database.queries.common._get_comfy_model_folders",
+            return_value=[
+                ("text_encoders", [str(text_encoders_dir)]),
+                ("text_encoders/clip", [str(clip_dir)]),
+            ],
+        ):
+            refs, _, total = list_references_page(session, asset_type="model")
+
+        assert total == 2
+        assert {ref.id for ref in refs} == {text_encoder.id, clip.id}
+
+    def test_model_asset_type_filter_with_no_registered_paths_returns_none(
+        self, session: Session, tmp_path: Path
+    ):
+        asset = _make_asset(session, "hash1")
+        ref = _make_reference(session, asset, name="orphan")
+        ref.file_path = str(tmp_path / "models" / "checkpoints" / "model.safetensors")
+        session.commit()
+
+        with patch(
+            "app.assets.database.queries.common._get_comfy_model_folders",
+            return_value=[],
+        ):
+            refs, _, total = list_references_page(session, asset_type="model")
+
+        assert total == 0
+        assert refs == []
+
+    def test_model_asset_type_filter_excludes_unregistered_models_folder(
+        self, session: Session, tmp_path: Path
+    ):
+        checkpoints_dir = tmp_path / "models" / "checkpoints"
+        unregistered_dir = tmp_path / "models" / "unregistered"
+        checkpoints_dir.mkdir(parents=True)
+        unregistered_dir.mkdir(parents=True)
+
+        asset = _make_asset(session, "hash1")
+        checkpoint = _make_reference(session, asset, name="checkpoint")
+        checkpoint.file_path = str(checkpoints_dir / "model.safetensors")
+        unregistered = _make_reference(session, asset, name="unregistered")
+        unregistered.file_path = str(unregistered_dir / "model.safetensors")
+        session.commit()
+
+        with patch(
+            "app.assets.database.queries.common._get_comfy_model_folders",
+            return_value=[("checkpoints", [str(checkpoints_dir)])],
+        ):
+            refs, _, total = list_references_page(session, asset_type="model")
+
+        assert total == 1
+        assert refs[0].id == checkpoint.id
+
+    def test_model_asset_type_filter_respects_prefix_boundaries(
+        self, session: Session, tmp_path: Path
+    ):
+        checkpoints_dir = tmp_path / "models" / "checkpoints"
+        checkpoints_extra_dir = tmp_path / "models" / "checkpoints_extra"
+        checkpoints_dir.mkdir(parents=True)
+        checkpoints_extra_dir.mkdir(parents=True)
+
+        asset = _make_asset(session, "hash1")
+        checkpoint = _make_reference(session, asset, name="checkpoint")
+        checkpoint.file_path = str(checkpoints_dir / "model.safetensors")
+        checkpoints_extra = _make_reference(session, asset, name="checkpoints_extra")
+        checkpoints_extra.file_path = str(checkpoints_extra_dir / "model.safetensors")
+        session.commit()
+
+        with patch(
+            "app.assets.database.queries.common._get_comfy_model_folders",
+            return_value=[("checkpoints", [str(checkpoints_dir)])],
+        ):
+            refs, _, total = list_references_page(session, asset_type="model")
+
+        assert total == 1
+        assert refs[0].id == checkpoint.id
+
+    def test_model_asset_type_filter_is_case_exact(
+        self, session: Session, tmp_path: Path
+    ):
+        registered_dir = tmp_path / "models" / "checkpoints"
+        case_sibling_dir = tmp_path / "MODELS" / "checkpoints"
+        registered_dir.mkdir(parents=True)
+        case_sibling_dir.mkdir(parents=True)
+
+        asset = _make_asset(session, "hash1")
+        checkpoint = _make_reference(session, asset, name="checkpoint")
+        checkpoint.file_path = str(registered_dir / "model.safetensors")
+        case_sibling = _make_reference(session, asset, name="case_sibling")
+        case_sibling.file_path = str(case_sibling_dir / "model.safetensors")
+        session.commit()
+
+        with patch(
+            "app.assets.database.queries.common._get_comfy_model_folders",
+            return_value=[("checkpoints", [str(registered_dir)])],
+        ):
+            refs, _, total = list_references_page(session, asset_type="model")
+
+        assert total == 1
+        assert refs[0].id == checkpoint.id
+
+    def test_model_asset_type_filter_includes_output_backed_model_folder(
+        self, session: Session, tmp_path: Path
+    ):
+        output_checkpoints_dir = tmp_path / "output" / "checkpoints"
+        output_checkpoints_dir.mkdir(parents=True)
+
+        asset = _make_asset(session, "hash1")
+        checkpoint_ref = _make_reference(session, asset, name="checkpoint")
+        checkpoint_ref.file_path = str(output_checkpoints_dir / "saved.safetensors")
+        session.commit()
+
+        with patch(
+            "app.assets.database.queries.common._get_comfy_model_folders",
+            return_value=[("checkpoints", [str(output_checkpoints_dir)])],
+        ):
+            refs, _, total = list_references_page(session, asset_type="model")
+
+        assert total == 1
+        assert refs[0].id == checkpoint_ref.id
+
+    def test_asset_type_filter_uses_root_paths(self, session: Session, tmp_path: Path):
+        input_dir = tmp_path / "input"
+        output_dir = tmp_path / "output"
+        temp_dir = tmp_path / "temp"
+        for directory in (input_dir, output_dir, temp_dir):
+            directory.mkdir()
+
+        asset = _make_asset(session, "hash1")
+        input_ref = _make_reference(session, asset, name="input")
+        input_ref.file_path = str(input_dir / "image.png")
+        output_ref = _make_reference(session, asset, name="output")
+        output_ref.file_path = str(output_dir / "image.png")
+        session.commit()
+
+        with patch("app.assets.database.queries.common.folder_paths") as mock_fp:
+            mock_fp.get_input_directory.return_value = str(input_dir)
+            mock_fp.get_output_directory.return_value = str(output_dir)
+            mock_fp.get_temp_directory.return_value = str(temp_dir)
+
+            refs, _, total = list_references_page(session, asset_type="input")
+
+        assert total == 1
+        assert refs[0].id == input_ref.id
+
+    def test_output_asset_type_filter_excludes_output_backed_model_folders(
+        self, session: Session, tmp_path: Path
+    ):
+        output_dir = tmp_path / "output"
+        output_checkpoints_dir = output_dir / "checkpoints"
+        output_checkpoints_dir.mkdir(parents=True)
+
+        asset = _make_asset(session, "hash1")
+        output_ref = _make_reference(session, asset, name="output")
+        output_ref.file_path = str(output_dir / "image.png")
+        checkpoint_ref = _make_reference(session, asset, name="checkpoint")
+        checkpoint_ref.file_path = str(output_checkpoints_dir / "saved.safetensors")
+        session.commit()
+
+        with patch("app.assets.database.queries.common.folder_paths") as mock_fp:
+            mock_fp.get_output_directory.return_value = str(output_dir)
+            with patch(
+                "app.assets.database.queries.common._get_comfy_model_folders",
+                return_value=[("checkpoints", [str(output_checkpoints_dir)])],
+            ):
+                refs, _, total = list_references_page(session, asset_type="output")
+
+        assert total == 1
+        assert refs[0].id == output_ref.id
 
     def test_sorting(self, session: Session):
         asset = _make_asset(session, "hash1", size=100)

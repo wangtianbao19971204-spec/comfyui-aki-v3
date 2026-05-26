@@ -24,6 +24,7 @@ from app.assets.database.models import (
 )
 from app.assets.database.queries.common import (
     MAX_BIND_PARAMS,
+    apply_asset_path_filters,
     apply_metadata_filter,
     apply_tag_filters,
     build_prefix_like_conditions,
@@ -263,6 +264,8 @@ def list_references_page(
     name_contains: str | None = None,
     include_tags: Sequence[str] | None = None,
     exclude_tags: Sequence[str] | None = None,
+    asset_type: str | None = None,
+    model_folder: str | None = None,
     metadata_filter: dict | None = None,
     sort: str | None = None,
     order: str | None = None,
@@ -285,6 +288,7 @@ def list_references_page(
         base = base.where(AssetReference.name.ilike(f"%{escaped}%", escape=esc))
 
     base = apply_tag_filters(base, include_tags, exclude_tags)
+    base = apply_asset_path_filters(base, asset_type=asset_type, model_folder=model_folder)
     base = apply_metadata_filter(base, metadata_filter)
 
     sort = (sort or "created_at").lower()
@@ -315,6 +319,9 @@ def list_references_page(
             AssetReference.name.ilike(f"%{escaped}%", escape=esc)
         )
     count_stmt = apply_tag_filters(count_stmt, include_tags, exclude_tags)
+    count_stmt = apply_asset_path_filters(
+        count_stmt, asset_type=asset_type, model_folder=model_folder
+    )
     count_stmt = apply_metadata_filter(count_stmt, metadata_filter)
 
     total = int(session.execute(count_stmt).scalar_one() or 0)
