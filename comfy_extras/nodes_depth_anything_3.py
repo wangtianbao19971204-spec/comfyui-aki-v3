@@ -258,16 +258,17 @@ class DA3Inference(io.ComfyNode):
                                        options=["saddle_balanced", "saddle_sim_range",
                                                 "first", "middle"],
                                        default="saddle_balanced",
-                                               tooltip="Which view to use as the geometric anchor (only applied when S >= 3 and no extrinsics are provided).\n"
-                                               "- saddle_balanced: picks the view whose CLS-token features are closest to the median across similarity, norm and variance — best general choice.\n"
-                                               "- saddle_sim_range: picks the view with the widest similarity spread to other views — favours the most distinct viewpoint.\n"
-                                               "- first / middle: deterministic positional fallbacks."),
+                                               tooltip="Which view acts as the geometric anchor (only when S >= 3 and no extrinsics provided).\n"
+                                               "- saddle_balanced: the view most 'average' across all others — best general choice.\n"
+                                               "- saddle_sim_range: the view most visually distinct from the others.\n"
+                                               "- first / middle: fixed positional picks."),
                         io.Combo.Input("pose_method",
                                        options=["cam_dec", "ray_pose"],
                                        default="cam_dec",
-                                               tooltip="This seeting is ignored for Mono/Metric models."
-                                               "- cam_dec: small MLP on the final camera token.\n"
-                                               "- ray_pose: RANSAC over the DualDPT ray output."),
+                                               tooltip="How the camera field-of-view is estimated (ignored on Mono/Metric models).\n"
+                                               "- cam_dec: learned from image features.\n"
+                                               "- ray_pose: derived geometrically from the model's 3-D ray output.\n"
+                                               "Affects perspective correctness of the 3-D output. Try both if results look distorted."),
                     ]),
                 ]),
             ],
@@ -397,6 +398,8 @@ class DA3Inference(io.ComfyNode):
 
 
 class DA3Render(io.ComfyNode):
+    """Render a visualization from a DA3_GEOMETRY packet."""
+
     _DEPTH_RENDER_INPUTS = [
         io.Combo.Input("normalization",
                     options=["v2_style", "min_max", "raw"],
