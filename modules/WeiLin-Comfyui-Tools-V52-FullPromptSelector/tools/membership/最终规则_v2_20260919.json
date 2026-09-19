@@ -1,0 +1,132 @@
+[
+ {
+  "theme": "人物数量",
+  "sub": "在场人数",
+  "pattern": "\\b(1girl|2girls|3girls|multiple girls|1boy|2boys|multiple boys|boy and girl|yuri|pair|group|duo|solo)\\b|\\b(girl|boy|woman|man|female|male)\\b"
+ },
+ {
+  "theme": "画风",
+  "sub": "画质",
+  "pattern": "\\b(highres|absurdres|masterpiece|best quality|very aesthetic|perfect anatomy|official art|ultra detailed|8k|4k|high resolution)\\b"
+ },
+ {
+  "theme": "画风",
+  "sub": "画师",
+  "pattern": "(?:artist\\s*[:：]|<artist>|\\b画师\\b|\\bartist\\b)"
+ },
+ {
+  "theme": "外貌",
+  "sub": "面部",
+  "pattern": "\\b(face|eyes|eyelashes|hair between eyes|blush|smile|expression|looking at viewer|closed eyes|half closed|heterochromia|tears|eyebrows)\\b"
+ },
+ {
+  "theme": "外貌",
+  "sub": "发型",
+  "pattern": "\\b(hair|ponytail|twintails|braid|braids|bangs|headband|ahoge|hair ornament)\\b"
+ },
+ {
+  "theme": "外貌",
+  "sub": "身体",
+  "pattern": "\\b(huge breasts|large breasts|breasts|nipples|navel|skin|thighs|muscular|slim|skinny|belly|hips|butt|tall|short|petite|chubby|fat|abs|collarbone|shoulder|neck)\\b"
+ },
+ {
+  "theme": "服饰",
+  "sub": "上装",
+  "pattern": "\\b(shirt|tank top|sweater|hoodie|jacket|coat|blouse|bra|bikini top|corset|vest)\\b"
+ },
+ {
+  "theme": "服饰",
+  "sub": "下装",
+  "pattern": "\\b(skirt|pants|shorts|leggings|jeans|trousers|panties|thong)\\b"
+ },
+ {
+  "theme": "服饰",
+  "sub": "鞋袜",
+  "pattern": "\\b(socks|stockings|thighhighs|pantyhose|boots|heels|shoes|sneakers)\\b"
+ },
+ {
+  "theme": "服饰",
+  "sub": "配饰",
+  "pattern": "\\b(necklace|choker|collar|ribbon|bow|gloves|hat|cap|glasses|earrings|belt|bag|pendant|tiara|veil)\\b"
+ },
+ {
+  "theme": "服饰",
+  "sub": "通用",
+  "pattern": "\\b(dress|gown|uniform|costume|outfit|clothing|clothes|lingerie|swimsuit|bikini|kimono|yukata|hanfu|qipao|armor|suit|apron|robe)\\b"
+ },
+ {
+  "theme": "状态",
+  "sub": "半脱",
+  "pattern": "\\b(unbuttoned|undressing|open clothes|opened|pulled down|pulled up|slipped|shrugged off|discarded|removed|half[- ]dressed|torn clothes|wet clothes|clothes off)\\b"
+ },
+ {
+  "theme": "动作",
+  "sub": "姿态",
+  "pattern": "\\b(sitting|standing|lying|kneeling|crouching|squatting|on back|on stomach|upside down|handstand|bent over|leaning|spread legs|crossed legs|pose|plank|one leg|reaching|stretching|bending|turning|walking|running|jumping|flying|floating|dancing|kicking|punching|legs up|arms up|arms behind)\\b"
+ },
+ {
+  "theme": "动作",
+  "sub": "手部",
+  "pattern": "\\b(holding|holds|hand on|hands on|arm|arms|fingers|finger|grabbing|grabbing hold|pinching|caressing|thumbs up|peace sign|hand up|hands up)\\b"
+ },
+ {
+  "theme": "动作",
+  "sub": "腿部",
+  "pattern": "\\b(leg|legs|feet|foot|thigh|knee|knees|toes|armpits|barefoot)\\b"
+ },
+ {
+  "theme": "场景",
+  "sub": "室内",
+  "pattern": "\\b(indoors|interior|bedroom|bathroom|kitchen|office|classroom|room|sofa|bed|chair|table|floor|ceiling|mirror)\\b"
+ },
+ {
+  "theme": "场景",
+  "sub": "室外",
+  "pattern": "\\b(outdoors|street|forest|beach|pool|sky|cloud|clouds|city|bridge|road|temple|snow|field|mountain|river|lake|sea|tree|trees|grass|flower|flowers|moon|stars|sunset|sunrise|dusk|dawn)\\b"
+ },
+ {
+  "theme": "场景",
+  "sub": "背景",
+  "pattern": "\\b(background|scenery|wall|window|distant|horizon)\\b"
+ },
+ {
+  "theme": "成人",
+  "sub": "性交",
+  "pattern": "\\b(sex|vaginal|penetration|cowgirl position|mating press|from behind|missionary|straddling|spitroast)\\b"
+ },
+ {
+  "theme": "成人",
+  "sub": "前戏",
+  "pattern": "\\b(footjob|fellatio|oral|paizuri|handjob|foreplay|cum|cumshot)\\b"
+ },
+ {
+  "theme": "成人",
+  "sub": "露出",
+  "pattern": "\\b(nsfw|nude|naked|topless|bottomless|exposed|showing breasts|nipples visible)\\b"
+ },
+ {
+  "theme": "成人",
+  "sub": "特殊",
+  "pattern": "\\b(rape|bondage|restrained|tentacle|tentacles|futanari|futa|bestiality|corruption|transformed)\\b"
+ },
+ {
+  "theme": "道具",
+  "sub": "器物",
+  "pattern": "\\b(book|books|cup|glass|bottle|food|cake|fruit|camera|phone|umbrella|balloon|plant|knife|gun|sword|staff|box|bag|doll|teddy bear)\\b"
+ },
+ {
+  "theme": "角色",
+  "sub": "原作",
+  "pattern": "\\b(arknights|genshin|blue archive|bluearchive|fate|touhou|honkai|azur lane|nikke|vocaloid|project moon|girls frontline|splatoon|hololive)\\b"
+ },
+ {
+  "theme": "角色",
+  "sub": "种族",
+  "pattern": "\\b(dragon|elf|demon|angel|catgirl|fox girl|beast|monster|robot|mecha|slime|vampire|dragonborn|kemono|dog girl|animal ears)\\b"
+ },
+ {
+  "theme": "角色",
+  "sub": "职业",
+  "pattern": "\\b(maid|nurse|idol|teacher|student|knight|ninja|witch|police|office lady|flight attendant|scientist)\\b"
+ }
+]
