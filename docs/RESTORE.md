@@ -2,10 +2,10 @@
 
 ## Git bundle 恢复
 
-仅使用新验收回执列出的 `comfyui-public-ready-20261005.bundle`（后续版本用各自回执命名），校验 SHA 后执行。旧 `comfyui.bundle` 含历史凭证，只能私有归档，不能公开复用。
+仅使用对应验收回执列出的公开包。工作区整合版命名为 `comfyui-public-v3-20261005.bundle`，后续版本用各自回执命名，先校验 SHA 再执行。旧 `comfyui.bundle` 含历史凭证，只能私有归档，不能公开复用；v2 包也不包含本轮新增源码与插件历史。
 
 ```powershell
-git clone -c core.longpaths=true .\comfyui-public-ready-20261005.bundle .\comfyui
+git clone -c core.longpaths=true .\comfyui-public-v3-20261005.bundle .\comfyui
 git -C .\comfyui fsck --full
 cd .\comfyui
 python -X utf8 -B scripts\snapshot.py verify
@@ -20,7 +20,7 @@ Windows 必须在初次检出前使用上面的 `-c core.longpaths=true`：整�
 ## 只向全新目录物化
 
 ```powershell
-python -X utf8 -B scripts\snapshot.py materialize --dest G:\comfyui-restored-20261005
+python -X utf8 -B scripts\snapshot.py materialize --dest G:\ComfyUI-local\validation\comfyui-restored-20261005
 ```
 
 目标目录必须不存在。工具拒绝直接写回 manifest 原运行根、原 ComfyUI 树和 snapshot 内部。它不会启动服务、执行模型或覆盖现有文件。
@@ -36,8 +36,8 @@ python -X utf8 -B scripts\snapshot.py materialize --dest G:\comfyui-restored-202
 1. 按 environment.json 准备 Python、ComfyUI 前端分发包、Torch/CUDA 和插件依赖。该文件是已装版本清单，不是经过新机器冷装验收的锁文件，不要无审核整批安装或降级。
 2. 从原备份另行恢复完整模型目录及插件内权重，包含 config/tokenizer/processor 等伴随文件。
 3. 另行恢复 preview 与 preview_thumbnails，保持同名和相对路径，核对 library_media 清单。清单不是图片副本。
-4. 在新环境安全补齐 excluded_private_configs 中的机器/认证配置。不得把现用真实 key 写进 Git。
-5. 若需要当前 production 配置之外的旧插件、视频节点、训练 Forge、源网页原件或历史回滚媒资，从原环境单独迁移。本仓库记录上游但不保证这些全部打包。
+4. 根据仓外 `external-runtime` 清单安全补齐机器/认证配置，初版 `excluded_private_configs` 不是完整的后续清单。API key 不写进 Git；远端 LLM 启动器配置放在仓外 `private-config/remote-llm/config.json`。详见 EXTERNAL_STATE.md。
+5. 已补迁的插件、两套 Forge、Qwen Lab 与训练依赖源码以 manifest 和 PROJECT_MAP 为准；它们的模型、数据集、输出、依赖二进制及历史媒体仍需单独迁移。旧私有 Git、源网页原件和回滚材料仅供审查/恢复，不重新启用为开发来源。
 6. 静态检查工作流节点/模型引用和 profile；修复缺失必须保留工作流原意，不自动启用旁路分支或换底模。
 7. 用独立端口、隔离数据做启动/浏览器/中性样例验收；明确通过范围后再决定正式切换，不能直接覆盖正在运行的 8188。
 
