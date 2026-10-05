@@ -1,0 +1,458 @@
+{
+ "last_node_id": 104,
+ "last_link_id": 6,
+ "nodes": [
+  {
+   "id": 1,
+   "type": "LoadImage",
+   "title": "LoadImage",
+   "pos": [
+    40,
+    60
+   ],
+   "size": [
+    330,
+    210
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "image",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "image"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      1
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "MASK",
+     "type": "MASK",
+     "links": [],
+     "slot_index": 1
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "LoadImage"
+   },
+   "widgets_values": [
+    "_codex_qa/sam3_nsfw/towel_front.png",
+    "image"
+   ]
+  },
+  {
+   "id": 3,
+   "type": "UltralyticsDetectorProvider",
+   "title": "adetailerFootYolov8x_v20.pt",
+   "pos": [
+    40,
+    320
+   ],
+   "size": [
+    330,
+    78
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "model_name"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "BBOX_DETECTOR",
+     "type": "BBOX_DETECTOR",
+     "links": [
+      2
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "SEGM_DETECTOR",
+     "type": "SEGM_DETECTOR",
+     "links": [],
+     "slot_index": 1
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "UltralyticsDetectorProvider"
+   },
+   "widgets_values": [
+    "bbox/adetailerFootYolov8x_v20.pt"
+   ]
+  },
+  {
+   "id": 100,
+   "type": "BboxDetectorSEGS",
+   "title": "foot / bbox (阈值放宽 0.35)",
+   "pos": [
+    430,
+    60
+   ],
+   "size": [
+    330,
+    210
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "bbox_detector",
+     "type": "BBOX_DETECTOR",
+     "link": 2
+    },
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 1
+    },
+    {
+     "name": "threshold",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "threshold"
+     }
+    },
+    {
+     "name": "dilation",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "dilation"
+     }
+    },
+    {
+     "name": "crop_factor",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "crop_factor"
+     }
+    },
+    {
+     "name": "drop_size",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "drop_size"
+     }
+    },
+    {
+     "name": "labels",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "labels"
+     }
+    },
+    {
+     "name": "detailer_hook",
+     "type": "DETAILER_HOOK",
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "name": "SEGS",
+     "type": "SEGS",
+     "links": [
+      3
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BboxDetectorSEGS"
+   },
+   "widgets_values": [
+    0.35,
+    8,
+    3.0,
+    10,
+    "all"
+   ]
+  },
+  {
+   "id": 104,
+   "type": "ImpactSEGSOrderedFilter",
+   "title": "SEGS 排序 (area(=w*h))",
+   "pos": [
+    800,
+    60
+   ],
+   "size": [
+    330,
+    150
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "segs",
+     "type": "SEGS",
+     "link": 3
+    },
+    {
+     "name": "target",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "target"
+     }
+    },
+    {
+     "name": "order",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "order"
+     }
+    },
+    {
+     "name": "take_start",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "take_start"
+     }
+    },
+    {
+     "name": "take_count",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "take_count"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "filtered_SEGS",
+     "type": "SEGS",
+     "links": [
+      4
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "remained_SEGS",
+     "type": "SEGS",
+     "links": [],
+     "slot_index": 1
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ImpactSEGSOrderedFilter"
+   },
+   "widgets_values": [
+    "area(=w*h)",
+    true,
+    0,
+    4
+   ]
+  },
+  {
+   "id": 101,
+   "type": "SegsToCombinedMask",
+   "title": "SegsToCombinedMask",
+   "pos": [
+    1170,
+    60
+   ],
+   "size": [
+    330,
+    210
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "segs",
+     "type": "SEGS",
+     "link": 4
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MASK",
+     "type": "MASK",
+     "links": [
+      5
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SegsToCombinedMask"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 102,
+   "type": "MaskToImage",
+   "title": "MaskToImage",
+   "pos": [
+    1540,
+    60
+   ],
+   "size": [
+    330,
+    210
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "mask",
+     "type": "MASK",
+     "link": 5
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      6
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "MaskToImage"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 103,
+   "type": "SaveImage",
+   "title": "foot / 黑白蒙版",
+   "pos": [
+    1910,
+    60
+   ],
+   "size": [
+    330,
+    230
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 6
+    },
+    {
+     "name": "filename_prefix",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "filename_prefix"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "masks/parts_v2/foot_yolov8x"
+   ]
+  }
+ ],
+ "links": [
+  [
+   1,
+   1,
+   0,
+   100,
+   1,
+   "IMAGE"
+  ],
+  [
+   2,
+   3,
+   0,
+   100,
+   0,
+   "BBOX_DETECTOR"
+  ],
+  [
+   3,
+   100,
+   0,
+   104,
+   0,
+   "SEGS"
+  ],
+  [
+   4,
+   104,
+   0,
+   101,
+   0,
+   "SEGS"
+  ],
+  [
+   5,
+   101,
+   0,
+   102,
+   0,
+   "MASK"
+  ],
+  [
+   6,
+   102,
+   0,
+   103,
+   0,
+   "IMAGE"
+  ]
+ ],
+ "groups": [],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.55,
+   "offset": [
+    40,
+    40
+   ]
+  },
+  "mask_test_note": "Foot mask only. Detector bbox/adetailerFootYolov8x_v20.pt (Civitai 257904, class 'foot'), threshold relaxed to 0.35 because feet are small and often half out of frame. SEGSOrderedFilter keeps the 4 largest boxes. Review before use."
+ },
+ "version": 0.4
+}

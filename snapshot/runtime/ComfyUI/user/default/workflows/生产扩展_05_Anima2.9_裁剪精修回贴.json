@@ -1,0 +1,1043 @@
+{
+  "last_node_id": 900,
+  "last_link_id": 24,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UNETLoader",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        360,
+        320
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+        "default"
+      ],
+      "title": "模型选择"
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "pos": [
+        0,
+        520
+      ],
+      "size": [
+        360,
+        320
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            2,
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "anima_baseV10_txt.safetensors",
+        "stable_diffusion",
+        "default"
+      ],
+      "title": "文本编码器"
+    },
+    {
+      "id": 3,
+      "type": "ModelSamplingAuraFlow",
+      "pos": [
+        420,
+        0
+      ],
+      "size": [
+        360,
+        320
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ModelSamplingAuraFlow"
+      },
+      "widgets_values": [
+        3.0
+      ]
+    },
+    {
+      "id": 4,
+      "type": "CLIPTextEncode",
+      "pos": [
+        420,
+        520
+      ],
+      "size": [
+        360,
+        350
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            5
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "A full body illustration of an adult woman wearing a blue raincoat, dark trousers and yellow boots, standing beside a red bicycle on a quiet city street, soft overcast daylight, clear composition, detailed face and hands."
+      ],
+      "title": "编辑指令 / 正向提示词"
+    },
+    {
+      "id": 5,
+      "type": "CLIPTextEncode",
+      "pos": [
+        420,
+        1040
+      ],
+      "size": [
+        360,
+        350
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            6
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "low quality, blurry, malformed hands"
+      ],
+      "title": "负向提示词"
+    },
+    {
+      "id": 7,
+      "type": "KSampler",
+      "pos": [
+        1260,
+        0
+      ],
+      "size": [
+        360,
+        320
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 4
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 5
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 6
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            8
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        20260906,
+        "fixed",
+        28,
+        3.5,
+        "euler",
+        "sgm_uniform",
+        0.35
+      ],
+      "title": "采样参数"
+    },
+    {
+      "id": 8,
+      "type": "VAELoader",
+      "pos": [
+        0,
+        1040
+      ],
+      "size": [
+        360,
+        320
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            9,
+            14
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "qwen_image_vae.safetensors"
+      ],
+      "title": "VAE"
+    },
+    {
+      "id": 9,
+      "type": "VAEDecode",
+      "pos": [
+        1680,
+        0
+      ],
+      "size": [
+        360,
+        320
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 8
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 9
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            19
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "解码结果"
+    },
+    {
+      "id": 10,
+      "type": "SaveImage",
+      "pos": [
+        2520,
+        0
+      ],
+      "size": [
+        360,
+        460
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "production_extensions/05_crop_refine_paste"
+      ],
+      "title": "保存 PNG"
+    },
+    {
+      "id": 11,
+      "type": "LoadImage",
+      "pos": [
+        0,
+        1560
+      ],
+      "size": [
+        360,
+        320
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            11,
+            18
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "optimization_reference.png"
+      ],
+      "title": "输入图片"
+    },
+    {
+      "id": 12,
+      "type": "OlmDragCrop",
+      "pos": [
+        420,
+        1560
+      ],
+      "size": [
+        360,
+        470
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 11
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            13
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": []
+        },
+        {
+          "name": "CROP_JSON",
+          "type": "STRING",
+          "links": [
+            12
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "OlmDragCrop",
+        "crop_left": 128,
+        "crop_top": 128,
+        "crop_right": 128,
+        "crop_bottom": 384,
+        "crop_width": 512,
+        "crop_height": 512,
+        "actualImageWidth": 768,
+        "actualImageHeight": 1024,
+        "snapValue": "64",
+        "infoDisplayEnabled": true
+      },
+      "widgets_values": [
+        "init",
+        128,
+        128,
+        128,
+        384,
+        512,
+        512,
+        768,
+        1024
+      ]
+    },
+    {
+      "id": 13,
+      "type": "OlmCropInfoInterpreter",
+      "pos": [
+        840,
+        0
+      ],
+      "size": [
+        360,
+        320
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "crop_json",
+          "type": "STRING",
+          "link": 12,
+          "widget": {
+            "name": "crop_json"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "left",
+          "type": "INT",
+          "links": [
+            20
+          ]
+        },
+        {
+          "name": "top",
+          "type": "INT",
+          "links": [
+            21
+          ]
+        },
+        {
+          "name": "right",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "name": "bottom",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            15
+          ]
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            16
+          ]
+        },
+        {
+          "name": "csv",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "pretty",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "OlmCropInfoInterpreter"
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 14,
+      "type": "VAEEncode",
+      "pos": [
+        840,
+        520
+      ],
+      "size": [
+        360,
+        320
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "pixels",
+          "type": "IMAGE",
+          "link": 13
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 14
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            7
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEEncode"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 15,
+      "type": "SolidMask",
+      "pos": [
+        1260,
+        520
+      ],
+      "size": [
+        360,
+        320
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 15,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 16,
+          "widget": {
+            "name": "height"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            17
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SolidMask"
+      },
+      "widgets_values": [
+        1.0,
+        512,
+        512
+      ]
+    },
+    {
+      "id": 16,
+      "type": "FeatherMask",
+      "pos": [
+        1680,
+        520
+      ],
+      "size": [
+        360,
+        320
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 17
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            22
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FeatherMask"
+      },
+      "widgets_values": [
+        32,
+        32,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 17,
+      "type": "ImageCompositeMasked",
+      "pos": [
+        2100,
+        0
+      ],
+      "size": [
+        360,
+        320
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "destination",
+          "type": "IMAGE",
+          "link": 18
+        },
+        {
+          "name": "source",
+          "type": "IMAGE",
+          "link": 19
+        },
+        {
+          "name": "x",
+          "type": "INT",
+          "link": 20,
+          "widget": {
+            "name": "x"
+          }
+        },
+        {
+          "name": "y",
+          "type": "INT",
+          "link": 21,
+          "widget": {
+            "name": "y"
+          }
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 22
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            10,
+            23,
+            24
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageCompositeMasked"
+      },
+      "widgets_values": [
+        0,
+        0,
+        false
+      ]
+    },
+    {
+      "id": 80,
+      "type": "PreviewImage",
+      "pos": [
+        2520,
+        520
+      ],
+      "size": [
+        360,
+        460
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 23
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": [],
+      "title": "结果预览"
+    },
+    {
+      "id": 81,
+      "type": "VRAMCleanup",
+      "pos": [
+        2520,
+        1040
+      ],
+      "size": [
+        360,
+        320
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "type": "*",
+          "link": 24
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VRAMCleanup"
+      },
+      "widgets_values": [
+        false,
+        false
+      ],
+      "title": "可选显存释放（默认保留模型）"
+    },
+    {
+      "id": 900,
+      "type": "MarkdownNote",
+      "pos": [
+        0,
+        -470
+      ],
+      "size": [
+        1120,
+        380
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "# 05_Anima2.9_裁剪精修回贴\n\n先运行一次取得裁剪预览，再在 OlmDragCrop 拖动选区。精修后按实际裁剪坐标自动回贴；羽化 32 像素，选区外保持原图。默认 denoise 0.35。裁剪尺寸请用 64 的倍数。\n\n先另存为个人副本再改参数。参考图为本地验收生成图，可自行替换。固定种子用于复现；需要候选图时使用队列批次数量。"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      3,
+      0,
+      "MODEL"
+    ],
+    [
+      2,
+      2,
+      0,
+      4,
+      0,
+      "CLIP"
+    ],
+    [
+      3,
+      2,
+      0,
+      5,
+      0,
+      "CLIP"
+    ],
+    [
+      4,
+      3,
+      0,
+      7,
+      0,
+      "MODEL"
+    ],
+    [
+      5,
+      4,
+      0,
+      7,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      6,
+      5,
+      0,
+      7,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      7,
+      14,
+      0,
+      7,
+      3,
+      "LATENT"
+    ],
+    [
+      8,
+      7,
+      0,
+      9,
+      0,
+      "LATENT"
+    ],
+    [
+      9,
+      8,
+      0,
+      9,
+      1,
+      "VAE"
+    ],
+    [
+      10,
+      17,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ],
+    [
+      11,
+      11,
+      0,
+      12,
+      0,
+      "IMAGE"
+    ],
+    [
+      12,
+      12,
+      2,
+      13,
+      0,
+      "STRING"
+    ],
+    [
+      13,
+      12,
+      0,
+      14,
+      0,
+      "IMAGE"
+    ],
+    [
+      14,
+      8,
+      0,
+      14,
+      1,
+      "VAE"
+    ],
+    [
+      15,
+      13,
+      4,
+      15,
+      0,
+      "INT"
+    ],
+    [
+      16,
+      13,
+      5,
+      15,
+      1,
+      "INT"
+    ],
+    [
+      17,
+      15,
+      0,
+      16,
+      0,
+      "MASK"
+    ],
+    [
+      18,
+      11,
+      0,
+      17,
+      0,
+      "IMAGE"
+    ],
+    [
+      19,
+      9,
+      0,
+      17,
+      1,
+      "IMAGE"
+    ],
+    [
+      20,
+      13,
+      0,
+      17,
+      2,
+      "INT"
+    ],
+    [
+      21,
+      13,
+      1,
+      17,
+      3,
+      "INT"
+    ],
+    [
+      22,
+      16,
+      0,
+      17,
+      4,
+      "MASK"
+    ],
+    [
+      23,
+      17,
+      0,
+      80,
+      0,
+      "IMAGE"
+    ],
+    [
+      24,
+      17,
+      0,
+      81,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.6,
+      "offset": [
+        60,
+        490
+      ]
+    },
+    "optimization_release": "2026-09-06"
+  },
+  "version": 0.4
+}

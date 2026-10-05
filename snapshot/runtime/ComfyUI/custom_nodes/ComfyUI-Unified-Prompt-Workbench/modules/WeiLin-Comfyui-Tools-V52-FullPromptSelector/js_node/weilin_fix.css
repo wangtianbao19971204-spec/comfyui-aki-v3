@@ -1,0 +1,20 @@
+/* WeiLin ComfyUI 2.0 兼容性修复 */
+/* 仅作用于由 WeiLin 节点运行时打标的 dom-widget，禁止全局污染其他插件 */
+
+.dom-widget.weilin-owned-dom-widget {
+    pointer-events: none !important;
+    position: absolute !important;
+}
+
+.dom-widget.weilin-owned-dom-widget textarea,
+.dom-widget.weilin-owned-dom-widget input,
+.dom-widget.weilin-owned-dom-widget select,
+.dom-widget.weilin-owned-dom-widget button,
+.dom-widget.weilin-owned-dom-widget canvas,
+.dom-widget.weilin-owned-dom-widget iframe,
+.dom-widget.weilin-owned-dom-widget a,
+.dom-widget.weilin-owned-dom-widget [contenteditable='true'],
+.dom-widget.weilin-owned-dom-widget .weilin-prompt-ui-container,
+.dom-widget.weilin-owned-dom-widget .weilin-lora-manager-container {
+    pointer-events: auto !important;
+}

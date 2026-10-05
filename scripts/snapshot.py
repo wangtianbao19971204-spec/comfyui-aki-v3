@@ -1,0 +1,471 @@
+"""Local-only, read-only runtime capture; never deploys into the live installation."""
+from __future__ import annotations
+
+import argparse
+import contextlib
+import hashlib
+import importlib.metadata
+import json
+import os
+import platform
+import re
+import shutil
+import sqlite3
+import subprocess
+import sys
+import tempfile
+import urllib.request
+from datetime import datetime, timezone
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parents[1]
+WB = 'ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench'
+LIBRARY = WB + '/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/user_data'
+WEIGHTS = {'.safetensors', '.ckpt', '.pt', '.pth', '.onnx', '.gguf', '.bin', '.engine'}
+TEXT = {'.py', '.pyi', '.mako', '.js', '.mjs', '.cjs', '.ts', '.tsx', '.vue', '.svelte', '.css', '.scss', '.sass', '.less', '.html', '.json', '.jsonl', '.yaml', '.yml', '.toml', '.ini', '.cfg', '.md', '.rst', '.txt', '.csv', '.tsv', '.sql', '.xml', '.sh', '.ps1', '.psm1', '.bat', '.cmd', '.example', '.lock', '.map', '.in', '.c', '.cc', '.cpp', '.h', '.hpp', '.cu', '.cuh', '.glsl', '.frag', '.vert'}
+ASSETS = {'.png', '.jpg', '.jpeg', '.webp', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.otf', '.mp3', '.webmanifest', '.gz'}
+SKIP_DIRS = {'.git', '.hg', '.svn', '__pycache__', 'node_modules', '.cache', '.pytest_cache', '.hypothesis', '.agents', '.benchmarks', '.omo', '.specs', '.venv', 'venv', 'logs', 'temp', 'output', 'input', 'preview', 'preview_thumbnails', 'user_data', 'lora_userdatas', 'loras_userdatas', 'translate_userdatas', 'prompt_selector_data_backups', 'random_tag'}
+PRIVATE_NAME = re.compile(r'^(?:\.env(?:\..*)?|(?:.*[_-])?(?:credentials|secrets|cookies|accounts|auth|tokens|providers|settings)(?:\.(?:json|yaml|yml|ini|toml))|config\.(?:json|yaml|yml|ini))$', re.I)
+PRIVATE_PATHS = {WB + '/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/init.json'}
+PUBLIC_CONFIG_PATHS = {
+    'ComfyUI/.github/ISSUE_TEMPLATE/config.yml',
+    'ComfyUI/comfy/text_encoders/byt5_tokenizer/added_tokens.json',
+    'ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_mesh_graphormer/modeling/bert/bert-base-uncased/config.json',
+    *('ComfyUI/custom_nodes/comfyui-easy-use/locales/' + language + '/settings.json' for language in ('en', 'fr', 'ja', 'ko', 'ru', 'zh')),
+}
+# Reviewed synthetic URL/redaction fixtures. Any edit requires another review.
+REVIEWED_SECURITY_FIXTURES = {
+    'runtime/' + WB + '/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/tests/test_v53_legacy_security.py': '06d5f2680138c9fa4919fc13afd362fe3c969fe58c1c54d635380fe80181e7a1',
+    'runtime/' + WB + '/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/tests/test_v53_ssrf.py': '32a06d3f7d31f43c8d558f6f6223d9b8accf37c832b20181b2f8c5c1ef00c812',
+}
+TOKEN_PATTERNS = [re.compile(r'sk-(?:proj-)?[A-Za-z0-9_-]{30,}'), re.compile(r'gh[pousr]_[A-Za-z0-9]{30,}'), re.compile(r'-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----'), re.compile(r'(?i)https?://[^\s/:@]+:[^\s/@]{6,}@')]
+ASSIGNMENT = re.compile(r'''(?i)(?:api[_-]?key|access[_-]?token|refresh[_-]?token|password|client[_-]?secret|authorization|cookie)["']?\s*[:=]\s*(["'])([^"'\r\n]{16,})\1''')
+PLACEHOLDER = re.compile(r'(?i)(?:example|dummy|test|placeholder|your[_ -]|replace|redacted|changeme|xxx|\{\{|\$\{|<.*>)')
+CHUNK = 8 * 1024 * 1024
+
+
+def now():
+    return datetime.now(timezone.utc).isoformat()
+
+
+def digest(file):
+    result = hashlib.sha256()
+    with Path(file).open('rb') as stream:
+        for block in iter(lambda: stream.read(4 * 1024 * 1024), b''):
+            result.update(block)
+    return result.hexdigest()
+
+
+def database_state(file):
+    wal = Path(str(file) + '-wal')
+    return {'source_main_sha256': digest(file), 'source_wal_sha256': digest(wal) if wal.exists() else None}
+
+
+def is_link(path):
+    return path.is_symlink() or (hasattr(path, 'is_junction') and path.is_junction())
+
+
+def private_config(relative):
+    return relative in PRIVATE_PATHS or (relative not in PUBLIC_CONFIG_PATHS and bool(PRIVATE_NAME.fullmatch(Path(relative).name)))
+
+
+def payload_relative(source):
+    # Nested attributes would override byte-preserving rules on add/clone.
+    return 'runtime/' + source + ('.upstream' if Path(source).name == '.gitattributes' else '')
+
+
+def save(file, data):
+    file = Path(file)
+    file.parent.mkdir(parents=True, exist_ok=True)
+    file.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+
+def safe_path(root, relative):
+    relative = Path(relative)
+    if relative.is_absolute() or '..' in relative.parts:
+        raise ValueError('Unsafe relative path')
+    candidate = (root / relative).resolve()
+    if not candidate.is_relative_to(root.resolve()) or candidate == root.resolve():
+        raise ValueError('Path escaped target')
+    return candidate
+
+
+def walk(root, skip=SKIP_DIRS, skip_top=()):
+    for folder, dirs, files in os.walk(root, followlinks=False):
+        excluded = skip | set(skip_top) if Path(folder) == root else skip
+        dirs[:] = sorted(d for d in dirs if d not in excluded and not is_link(Path(folder, d)))
+        for name in sorted(files):
+            file = Path(folder, name)
+            if not is_link(file):
+                yield file
+
+
+def git(path, *args):
+    result = subprocess.run(['git', '-C', str(path), *args], capture_output=True, text=True, encoding='utf-8', errors='replace')
+    return result.stdout.strip() if result.returncode == 0 else None
+
+
+def upstream(path, root):
+    own_git = (path / '.git').exists()
+    url = git(path, 'remote', 'get-url', 'origin') if own_git else None
+    if url:
+        url = re.sub(r'(https?://)[^/@]+@', r'\1', url).split('?')[0].split('#')[0]
+    return {'path': path.relative_to(root).as_posix(), 'own_git': own_git,
+            'head': git(path, 'rev-parse', 'HEAD') if own_git else None,
+            'upstream': url, 'tracked_dirty': bool(git(path, 'status', '--porcelain', '--untracked-files=no')) if own_git else None}
+
+
+def health():
+    def get(route):
+        with urllib.request.urlopen('http://127.0.0.1:8188' + route, timeout=10) as response:
+            return json.load(response)
+    queue = get('/queue')
+    if queue['queue_running'] or queue['queue_pending']:
+        raise RuntimeError('Queue busy; capture was not started/completed')
+    status = get('/unified-workbench/status')
+    if status.get('degraded') or not all(m['ready'] for m in status['modules']):
+        raise RuntimeError('Workbench not ready')
+    import psutil
+    listeners = sorted({c.pid for c in psutil.net_connections(kind='tcp') if c.status == psutil.CONN_LISTEN and c.laddr.port == 8188})
+    return {'queue': {'running': 0, 'pending': 0}, 'listeners': [{'pid': pid, 'created': psutil.Process(pid).create_time()} for pid in listeners], 'modules': status['modules']}
+
+
+def selected_sources(root):
+    selected = {}
+    omitted = []
+    def offer(file):
+        rel = file.relative_to(root).as_posix()
+        name = file.name.lower()
+        if private_config(rel):
+            omitted.append({'path': rel, 'reason': 'private_or_machine_config'}); return
+        if any(word in name for word in ['.backup', '.before-', '.before_', '.bak', '.disabled']) or file.suffix.lower() in WEIGHTS:
+            return
+        tokenizer_asset = rel == 'ComfyUI/comfy/text_encoders/t5_pile_tokenizer/tokenizer.model'
+        if not tokenizer_asset and file.suffix.lower() not in TEXT | ASSETS and file.name not in {'LICENSE', 'COPYING', 'NOTICE', 'Dockerfile', '.gitignore', '.gitattributes', 'CODEOWNERS', 'put_blueprints_here'}:
+            return
+        if file.stat().st_size > 48 * 1024 * 1024:
+            omitted.append({'path': rel, 'reason': 'large_optional_source_asset', 'bytes': file.stat().st_size}); return
+        selected[rel] = file
+    core = root / 'ComfyUI'
+    for file in walk(core, SKIP_DIRS - {'input', 'output', 'temp'}, {'custom_nodes', 'models', 'user', 'web', 'input', 'output', 'temp'}):
+        offer(file)
+    # Frontend extensions here are distinct from the Python-package frontend distribution.
+    for file in walk(core / 'web'):
+        offer(file)
+    profiles = json.loads((root / 'production_tools/profiles.json').read_text(encoding='utf-8-sig'))
+    plugins = sorted(set(profiles['production']))
+    for name in plugins:
+        plugin = core / 'custom_nodes' / name
+        if not plugin.is_dir():
+            raise FileNotFoundError(plugin)
+        for file in walk(plugin):
+            offer(file)
+    # Small runtime-owned selector dictionaries may live outside user_data.
+    for folder in ['production_tools', 'benchmark_reports/source_update_flow']:
+        for file in walk(root / folder, SKIP_DIRS | {'state', 'templates'}):
+            offer(file)
+    for pattern in ['启动_ComfyUI_*.cmd', '停止_ComfyUI_*.cmd']:
+        for file in root.glob(pattern):
+            offer(file)
+    for file in (root / 'production_tools/templates').glob('*.json'):
+        selected[file.relative_to(root).as_posix()] = file
+    for file in (root / 'ComfyUI/user/default/workflows').glob('*.json'):
+        selected[file.relative_to(root).as_posix()] = file
+    for name in ['promptselector_user_overrides.json', 'promptselector_builder_config.json', 'promptselector_local_sort_review_builder.py', 'NSFWPromptSelector_LocalMerged.py', 'suozhang_html_unfiltered_importer.py']:
+        file = root / LIBRARY / name
+        if file.exists():
+            offer(file)
+    return selected, omitted, plugins
+
+
+def suspects(text):
+    found = []
+    for pattern in TOKEN_PATTERNS:
+        if any(not PLACEHOLDER.search(m.group()) for m in pattern.finditer(text)):
+            found.append('credential_pattern')
+    for match in ASSIGNMENT.finditer(text):
+        value = match.group(2)
+        if not PLACEHOLDER.search(value) and not re.search(r'[{}<>\s]', value) and re.search('[a-zA-Z]', value) and re.search('[0-9]', value):
+            found.append('literal_credential_assignment')
+    return sorted(set(found))
+
+
+def scan(file):
+    if Path(file).suffix.lower() not in TEXT | {'.part', '.svg'} and Path(file).name not in {'LICENSE', 'COPYING', 'NOTICE'}:
+        return []
+    found = set()
+    with Path(file).open('r', encoding='utf-8-sig', errors='replace') as stream:
+        tail = ''
+        while block := stream.read(1024 * 1024):
+            found.update(suspects(tail + block))
+            tail = block[-4096:]
+    return sorted(found)
+
+
+def split_file(source, out):
+    out.mkdir(parents=True, exist_ok=False)
+    parts = []
+    with Path(source).open('rb') as stream:
+        number = 0
+        while block := stream.read(CHUNK):
+            # Split at a nearby newline where possible without changing a single byte.
+            block += stream.readline(1024 * 1024)
+            file = out / f'{number:05d}.part'
+            file.write_bytes(block)
+            parts.append({'path': file.name, 'bytes': len(block), 'sha256': hashlib.sha256(block).hexdigest()})
+            number += 1
+    return parts
+
+
+def capture(root, out, offline=False):
+    root, out = root.resolve(), out.resolve()
+    if out.exists():
+        raise FileExistsError('Destination must be new; existing snapshots are never overwritten')
+    if root == out or out.is_relative_to(root / 'ComfyUI'):
+        raise ValueError('Capture must not target the running ComfyUI tree')
+    selected, omitted, plugins = selected_sources(root)
+    runtime_before = None if offline else health()
+    out.mkdir(parents=True)
+    entries = []
+    print('Capturing runtime source and workflows...', flush=True)
+    for rel, file in sorted(selected.items()):
+        target = safe_path(out, payload_relative(rel))
+        target.parent.mkdir(parents=True, exist_ok=True)
+        before = digest(file)
+        shutil.copyfile(file, target)
+        if digest(target) != before or digest(file) != before:
+            raise RuntimeError('Source changed during capture: ' + rel)
+        entries.append({'source': rel, 'path': target.relative_to(out).as_posix(), 'sha256': before, 'bytes': target.stat().st_size, 'kind': 'file'})
+    print('Capturing authoritative library bytes in reversible chunks...', flush=True)
+    library = root / LIBRARY
+    for name in ['data.json', 'default.json', 'semantic_projection.json', 'shared_pairs.json', 'shared_sync_log.json', 'STORE_OWNER.txt']:
+        source = library / 'prompt_selector' / name
+        if not source.exists():
+            raise FileNotFoundError(source)
+        before = digest(source)
+        destination = out / 'library/json' / name
+        parts = split_file(source, destination)
+        if digest(source) != before:
+            raise RuntimeError('Library changed during capture: ' + name)
+        entries.append({'source': source.relative_to(root).as_posix(), 'path': destination.relative_to(out).as_posix(), 'kind': 'chunks', 'sha256': before, 'bytes': source.stat().st_size, 'parts': parts})
+    print('Online-consistent SQLite backups and SQL exports...', flush=True)
+    for source in sorted(library.glob('*.db')):
+        before = database_state(source)
+        with tempfile.TemporaryDirectory(prefix='comfyui-sql-') as temp:
+            backup = Path(temp) / source.name
+            src = sqlite3.connect(source.as_uri() + '?mode=ro', uri=True)
+            target = sqlite3.connect(backup)
+            try:
+                src.backup(target, pages=1024)
+                if target.execute('PRAGMA integrity_check').fetchone()[0] != 'ok':
+                    raise RuntimeError('SQLite integrity check failed: ' + source.name)
+                dump = Path(temp) / 'dump.sql'
+                with dump.open('w', encoding='utf-8', newline='\n') as stream:
+                    for line in target.iterdump():
+                        stream.write(line + '\n')
+                tables = {}
+                for (table,) in target.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'"):
+                    tables[table] = target.execute('SELECT count(*) FROM "' + table.replace('"', '""') + '"').fetchone()[0]
+            finally:
+                target.close(); src.close()
+            destination = out / 'library/sql' / source.name
+            parts = split_file(dump, destination)
+            entries.append({'source': source.relative_to(root).as_posix(), 'path': destination.relative_to(out).as_posix(), 'kind': 'sqlite_sql', **before, 'sql_sha256': digest(dump), 'sql_bytes': dump.stat().st_size, 'tables': tables, 'parts': parts})
+        if database_state(source) != before:
+            raise RuntimeError('Database main/WAL changed during capture; retry a quiet interval')
+    print('Recording models and external library media (no weight/media copying)...', flush=True)
+    inventory = out / 'inventory'; inventory.mkdir()
+    model_files = []
+    for source in walk(root / 'ComfyUI/models', {'.git', '__pycache__', '.cache'}):
+        if source.suffix.lower() in WEIGHTS:
+            stat = source.stat()
+            model_files.append({'path': source.relative_to(root).as_posix(), 'bytes': stat.st_size, 'mtime_ns': stat.st_mtime_ns, 'sha256': None, 'verification': 'path_size_mtime_only'})
+    for name in plugins:
+        for source in walk(root / 'ComfyUI/custom_nodes' / name):
+            if source.suffix.lower() in WEIGHTS:
+                stat = source.stat()
+                model_files.append({'path': source.relative_to(root).as_posix(), 'bytes': stat.st_size, 'mtime_ns': stat.st_mtime_ns, 'sha256': None, 'verification': 'path_size_mtime_only'})
+    save(inventory / 'models.json', {'files': model_files, 'count': len(model_files), 'bytes': sum(f['bytes'] for f in model_files), 'weights_in_git': False, 'full_weight_hashes_computed': False})
+    media_count = media_bytes = 0
+    with (inventory / 'library_media.jsonl').open('w', encoding='utf-8', newline='\n') as stream:
+        for folder in ['preview', 'preview_thumbnails']:
+            for source in walk(library / 'prompt_selector' / folder, set()):
+                stat = source.stat()
+                stream.write(json.dumps({'path': source.relative_to(root).as_posix(), 'bytes': stat.st_size, 'mtime_ns': stat.st_mtime_ns}, ensure_ascii=False) + '\n')
+                media_count += 1; media_bytes += stat.st_size
+    save(inventory / 'library_media_summary.json', {'files': media_count, 'bytes': media_bytes, 'media_in_git': False, 'hashes_computed': False})
+    all_plugins = [p for p in (root / 'ComfyUI/custom_nodes').iterdir() if p.is_dir() and not p.name.startswith('.') and p.name != '__pycache__']
+    save(inventory / 'upstreams.json', {'core': upstream(root / 'ComfyUI', root), 'plugins': [{**upstream(p, root), 'production_profile': p.name in plugins, 'source_captured': p.name in plugins} for p in sorted(all_plugins)]})
+    save(inventory / 'excluded_private_configs.json', omitted)
+    save(inventory / 'environment.json', {'python': sys.version, 'platform': platform.platform(), 'packages': sorted([{'name':d.metadata.get('Name','unknown'), 'version':d.version} for d in importlib.metadata.distributions()], key=lambda x:x['name'].lower()), 'python_runtime_in_git':False})
+    references = []
+    for rel, file in sorted(selected.items()):
+        if not rel.startswith(('ComfyUI/user/default/workflows/', 'production_tools/templates/')) or file.suffix != '.json':
+            continue
+        data = json.loads(file.read_text(encoding='utf-8-sig'))
+        def strings(value):
+            if isinstance(value, str):
+                yield value
+            elif isinstance(value, list):
+                for item in value: yield from strings(item)
+            elif isinstance(value, dict):
+                for item in value.values(): yield from strings(item)
+        for value in sorted(set(v for v in strings(data) if len(v) < 500 and Path(v).suffix.lower() in WEIGHTS)):
+            normalized = value.replace('\\','/').lower()
+            matches = [m['path'] for m in model_files if m['path'].lower().endswith('/'+normalized) or Path(m['path']).name.lower()==Path(normalized).name]
+            references.append({'workflow':rel,'reference':value,'candidates':matches,'status':'resolved' if len(matches)==1 else 'missing' if not matches else 'ambiguous'})
+    save(inventory / 'workflow_models.json', references)
+    evidence = out / 'evidence'; evidence.mkdir()
+    scope = root / 'benchmark_reports/2026-10-04_part_refinement_pipeline'
+    state = json.loads((scope / 'STATE.json').read_text(encoding='utf-8-sig'))
+    for key in ['latest_receipt','latest_release_receipt','latest_workflow_release_receipt','latest_inference_receipt']:
+        receipt = Path(state[key])
+        dest = evidence / receipt.parent.name
+        for name in ['FINAL_DELIVERY.json','REPORT.txt']:
+            source = receipt.parent / name
+            if source.exists():
+                dest.mkdir(exist_ok=True); shutil.copyfile(source, dest / name)
+    shutil.copyfile(scope / 'STATE.json', evidence / 'production_STATE.json')
+    if not offline:
+        runtime_after = health()
+        if runtime_after != runtime_before:
+            raise RuntimeError('Runtime identity/readiness changed during capture')
+    else:
+        runtime_after = None
+    # Guard every captured source again after library export, not only at copy time.
+    for entry in entries:
+        source = root / entry['source']
+        if entry['kind'] == 'sqlite_sql':
+            matches = database_state(source) == {key: entry[key] for key in ('source_main_sha256', 'source_wal_sha256')}
+        else:
+            matches = digest(source) == entry['sha256']
+        if not matches:
+            raise RuntimeError('Runtime source drifted: ' + entry['source'])
+    metadata = [{'path': file.relative_to(out).as_posix(), 'sha256': digest(file), 'bytes': file.stat().st_size} for folder in [inventory, evidence] for file in walk(folder, set())]
+    save(out / 'manifest.json', {'schema':1,'created_at':now(),'source_root':str(root),'files':entries,'metadata_files':metadata,'production_plugins':plugins,'runtime_before':runtime_before,'runtime_after':runtime_after,'scope':'Core + production plugin sources + workflows + full authoritative prompt JSON and three logical SQL databases; external weights/media are inventories, not payloads'})
+    result = verify(out)
+    save(out / 'verification.json', result)
+    if not result['pass']:
+        raise RuntimeError('Capture verification failed; inspect verification.json')
+    print(json.dumps({'captured':str(out), 'files':len(entries), 'plugins':len(plugins), 'models':len(model_files), 'media':media_count, 'pass':True}),flush=True)
+
+
+def verify(snapshot):
+    snapshot = snapshot.resolve()
+    manifest = json.loads((snapshot / 'manifest.json').read_text(encoding='utf-8'))
+    failures = []
+    expected_paths = {'manifest.json', 'verification.json'}
+    reviewed_fixtures = []
+    for entry in manifest.get('metadata_files', []):
+        expected_paths.add(entry['path'])
+        target = safe_path(snapshot, entry['path'])
+        if not target.is_file() or digest(target) != entry['sha256']:
+            failures.append({'path':entry['path'],'reason':'metadata_hash_mismatch'})
+    for entry in manifest['files']:
+        target = safe_path(snapshot, entry['path'])
+        if entry['kind'] == 'file':
+            expected_paths.add(entry['path'])
+            if not target.is_file() or digest(target) != entry['sha256']:
+                failures.append({'path':entry['path'],'reason':'hash_mismatch'})
+        else:
+            total = hashlib.sha256()
+            for part in entry['parts']:
+                file = safe_path(target, part['path'])
+                expected_paths.add(file.relative_to(snapshot).as_posix())
+                if not file.is_file() or digest(file) != part['sha256']:
+                    failures.append({'path':file.relative_to(snapshot).as_posix(),'reason':'part_hash_mismatch'});continue
+                total.update(file.read_bytes())
+            if total.hexdigest() != entry.get('sha256', entry.get('sql_sha256')):
+                failures.append({'path':entry['path'],'reason':'joined_hash_mismatch'})
+    for folder, directories, files in os.walk(snapshot, followlinks=False):
+        for name in directories + files:
+            path = Path(folder, name)
+            if is_link(path):
+                failures.append({'path': path.relative_to(snapshot).as_posix(), 'reason': 'linked_payload'})
+        directories[:] = [name for name in directories if not is_link(Path(folder, name))]
+    for file in walk(snapshot, set()):
+        relative = file.relative_to(snapshot).as_posix()
+        if relative not in expected_paths:
+            failures.append({'path': relative, 'reason': 'unlisted_payload'})
+        if file.stat().st_size > 50 * 1024 * 1024:
+            failures.append({'path':file.relative_to(snapshot).as_posix(),'reason':'git_blob_too_large'})
+        if file.suffix.lower() in WEIGHTS | {'.db','.sqlite','.sqlite3','.pem','.key'}:
+            failures.append({'path':file.relative_to(snapshot).as_posix(),'reason':'forbidden_payload'})
+        if private_config(relative.removeprefix('runtime/')):
+            failures.append({'path': relative, 'reason': 'private_config_payload'})
+        if relative in REVIEWED_SECURITY_FIXTURES and REVIEWED_SECURITY_FIXTURES[relative] == digest(file):
+            reviewed_fixtures.append({'path': relative, 'sha256': digest(file), 'reason': 'reviewed_synthetic_security_test'})
+            continue
+        for reason in scan(file):
+            failures.append({'path':file.relative_to(snapshot).as_posix(),'reason':reason})
+    result={'time':now(),'pass':not failures,'entry_count':len(manifest['files']),'failures':failures,'reviewed_security_fixtures':reviewed_fixtures}
+    return result
+
+
+def materialize(snapshot, destination):
+    snapshot, destination = snapshot.resolve(), destination.resolve()
+    manifest=json.loads((snapshot/'manifest.json').read_text(encoding='utf-8'))
+    if destination.exists():
+        raise FileExistsError('Restore destination must not exist')
+    source_root=Path(manifest['source_root']).resolve()
+    if destination == source_root or destination.is_relative_to(source_root / 'ComfyUI') or destination.is_relative_to(snapshot):
+        raise ValueError('Refusing live runtime destination')
+    result=verify(snapshot)
+    if not result['pass']:
+        raise RuntimeError('Snapshot failed verification')
+    destination.mkdir(parents=True)
+    checks=[]
+    for entry in manifest['files']:
+        target=safe_path(destination,entry['source']);target.parent.mkdir(parents=True,exist_ok=True)
+        payload=safe_path(snapshot,entry['path'])
+        if entry['kind']=='file':
+            shutil.copyfile(payload,target)
+        else:
+            joined=target if entry['kind']=='chunks' else target.with_suffix(target.suffix+'.restore.sql')
+            with joined.open('xb') as stream:
+                for part in entry['parts']:
+                    with safe_path(payload,part['path']).open('rb') as source:
+                        shutil.copyfileobj(source,stream)
+            if entry['kind']=='sqlite_sql':
+                with contextlib.closing(sqlite3.connect(target)) as conn, joined.open(encoding='utf-8', newline='') as sql:
+                    statement=''
+                    for line in sql:
+                        statement+=line
+                        if sqlite3.complete_statement(statement):
+                            conn.execute(statement);statement=''
+                    if statement.strip():
+                        raise RuntimeError('Incomplete SQL dump')
+                    if conn.execute('PRAGMA integrity_check').fetchone()[0] != 'ok':
+                        raise RuntimeError('Restored SQLite integrity check failed')
+                    rows={table:conn.execute('SELECT count(*) FROM "'+table.replace('"','""')+'"').fetchone()[0] for table in entry['tables']}
+                    if rows!=entry['tables']:
+                        raise RuntimeError('Database row count mismatch')
+                    restored_hash=hashlib.sha256()
+                    for line in conn.iterdump():restored_hash.update((line+'\n').encode('utf-8'))
+                    if restored_hash.hexdigest()!=entry['sql_sha256']:
+                        raise RuntimeError('Restored logical SQL content mismatch')
+                checks.append({'path':entry['source'],'logical_sql_match':True,'rows':rows});continue
+        if digest(target)!=entry['sha256']:
+            raise RuntimeError('Restored file hash mismatch')
+        checks.append({'path':entry['source'],'sha256_match':True})
+    receipt={'time':now(),'pass':True,'snapshot_manifest_sha256':digest(snapshot/'manifest.json'),'snapshot_verification':result,'checks':checks,'external_assets_restored':False,'service_started':False}
+    save(destination/'RESTORE_RECEIPT.json',receipt)
+    print(json.dumps({'materialized':str(destination),'checks':len(checks),'pass':True}),flush=True)
+    return receipt
+
+
+def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    commands=parser.add_subparsers(dest='command',required=True)
+    cap=commands.add_parser('capture');cap.add_argument('--runtime',type=Path,required=True);cap.add_argument('--out',type=Path,required=True);cap.add_argument('--offline',action='store_true')
+    ver=commands.add_parser('verify');ver.add_argument('--snapshot',type=Path,default=REPO/'snapshot')
+    restore=commands.add_parser('materialize');restore.add_argument('--snapshot',type=Path,default=REPO/'snapshot');restore.add_argument('--dest',type=Path,required=True)
+    args=parser.parse_args()
+    if args.command=='capture':capture(args.runtime,args.out,args.offline)
+    elif args.command=='verify':
+        result=verify(args.snapshot);print(json.dumps({'pass':result['pass'],'entries':result['entry_count'],'failures':result['failures']}));sys.exit(0 if result['pass'] else 1)
+    else:materialize(args.snapshot,args.dest)
+
+
+if __name__=='__main__':
+    main()

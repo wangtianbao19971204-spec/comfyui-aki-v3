@@ -1,0 +1,1594 @@
+{
+ "last_node_id": 252,
+ "last_link_id": 16,
+ "nodes": [
+  {
+   "id": 1,
+   "type": "LoadImage",
+   "title": "LoadImage",
+   "pos": [
+    40,
+    60
+   ],
+   "size": [
+    330,
+    210
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "image",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "image"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      1,
+      4,
+      7,
+      10
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "MASK",
+     "type": "MASK",
+     "links": [],
+     "slot_index": 1
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "LoadImage"
+   },
+   "widgets_values": [
+    "_codex_qa/sam_yolo_parts_31a7/f_front.jpg",
+    "image"
+   ]
+  },
+  {
+   "id": 200,
+   "type": "ClothesSegment",
+   "title": "服装 (segformer_b2_clothes)",
+   "pos": [
+    430,
+    60
+   ],
+   "size": [
+    330,
+    130
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 1
+    },
+    {
+     "name": "Hat",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Hat"
+     }
+    },
+    {
+     "name": "Hair",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Hair"
+     }
+    },
+    {
+     "name": "Face",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Face"
+     }
+    },
+    {
+     "name": "Sunglasses",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Sunglasses"
+     }
+    },
+    {
+     "name": "Upper-clothes",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Upper-clothes"
+     }
+    },
+    {
+     "name": "Skirt",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Skirt"
+     }
+    },
+    {
+     "name": "Dress",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Dress"
+     }
+    },
+    {
+     "name": "Belt",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Belt"
+     }
+    },
+    {
+     "name": "Pants",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Pants"
+     }
+    },
+    {
+     "name": "Left-arm",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Left-arm"
+     }
+    },
+    {
+     "name": "Right-arm",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Right-arm"
+     }
+    },
+    {
+     "name": "Left-leg",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Left-leg"
+     }
+    },
+    {
+     "name": "Right-leg",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Right-leg"
+     }
+    },
+    {
+     "name": "Bag",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Bag"
+     }
+    },
+    {
+     "name": "Scarf",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Scarf"
+     }
+    },
+    {
+     "name": "Left-shoe",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Left-shoe"
+     }
+    },
+    {
+     "name": "Right-shoe",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Right-shoe"
+     }
+    },
+    {
+     "name": "Background",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Background"
+     }
+    },
+    {
+     "name": "process_res",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "process_res"
+     }
+    },
+    {
+     "name": "mask_blur",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "mask_blur"
+     }
+    },
+    {
+     "name": "mask_offset",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "mask_offset"
+     }
+    },
+    {
+     "name": "invert_output",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "invert_output"
+     }
+    },
+    {
+     "name": "background",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "background"
+     }
+    },
+    {
+     "name": "background_color",
+     "type": "COLORCODE",
+     "link": null,
+     "widget": {
+      "name": "background_color"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 0
+    },
+    {
+     "name": "MASK",
+     "type": "MASK",
+     "links": [
+      2,
+      14
+     ],
+     "slot_index": 1
+    },
+    {
+     "name": "MASK_IMAGE",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 2
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ClothesSegment"
+   },
+   "widgets_values": [
+    false,
+    false,
+    false,
+    false,
+    true,
+    true,
+    true,
+    true,
+    true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    512,
+    0,
+    0,
+    false,
+    "Alpha",
+    "#222222"
+   ]
+  },
+  {
+   "id": 201,
+   "type": "MaskToImage",
+   "title": "MaskToImage",
+   "pos": [
+    800,
+    60
+   ],
+   "size": [
+    330,
+    210
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "mask",
+     "type": "MASK",
+     "link": 2
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      3
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "MaskToImage"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 202,
+   "type": "SaveImage",
+   "title": "clothes / 黑白蒙版",
+   "pos": [
+    1170,
+    60
+   ],
+   "size": [
+    330,
+    230
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 3
+    },
+    {
+     "name": "filename_prefix",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "filename_prefix"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "masks/body_v2/clothes"
+   ]
+  },
+  {
+   "id": 220,
+   "type": "ClothesSegment",
+   "title": "头发 (segformer_b2_clothes)",
+   "pos": [
+    430,
+    360
+   ],
+   "size": [
+    330,
+    130
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 4
+    },
+    {
+     "name": "Hat",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Hat"
+     }
+    },
+    {
+     "name": "Hair",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Hair"
+     }
+    },
+    {
+     "name": "Face",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Face"
+     }
+    },
+    {
+     "name": "Sunglasses",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Sunglasses"
+     }
+    },
+    {
+     "name": "Upper-clothes",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Upper-clothes"
+     }
+    },
+    {
+     "name": "Skirt",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Skirt"
+     }
+    },
+    {
+     "name": "Dress",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Dress"
+     }
+    },
+    {
+     "name": "Belt",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Belt"
+     }
+    },
+    {
+     "name": "Pants",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Pants"
+     }
+    },
+    {
+     "name": "Left-arm",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Left-arm"
+     }
+    },
+    {
+     "name": "Right-arm",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Right-arm"
+     }
+    },
+    {
+     "name": "Left-leg",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Left-leg"
+     }
+    },
+    {
+     "name": "Right-leg",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Right-leg"
+     }
+    },
+    {
+     "name": "Bag",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Bag"
+     }
+    },
+    {
+     "name": "Scarf",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Scarf"
+     }
+    },
+    {
+     "name": "Left-shoe",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Left-shoe"
+     }
+    },
+    {
+     "name": "Right-shoe",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Right-shoe"
+     }
+    },
+    {
+     "name": "Background",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Background"
+     }
+    },
+    {
+     "name": "process_res",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "process_res"
+     }
+    },
+    {
+     "name": "mask_blur",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "mask_blur"
+     }
+    },
+    {
+     "name": "mask_offset",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "mask_offset"
+     }
+    },
+    {
+     "name": "invert_output",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "invert_output"
+     }
+    },
+    {
+     "name": "background",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "background"
+     }
+    },
+    {
+     "name": "background_color",
+     "type": "COLORCODE",
+     "link": null,
+     "widget": {
+      "name": "background_color"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 0
+    },
+    {
+     "name": "MASK",
+     "type": "MASK",
+     "links": [
+      5
+     ],
+     "slot_index": 1
+    },
+    {
+     "name": "MASK_IMAGE",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 2
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ClothesSegment"
+   },
+   "widgets_values": [
+    false,
+    true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    512,
+    0,
+    0,
+    false,
+    "Alpha",
+    "#222222"
+   ]
+  },
+  {
+   "id": 221,
+   "type": "MaskToImage",
+   "title": "MaskToImage",
+   "pos": [
+    800,
+    360
+   ],
+   "size": [
+    330,
+    210
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "mask",
+     "type": "MASK",
+     "link": 5
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      6
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "MaskToImage"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 222,
+   "type": "SaveImage",
+   "title": "hair / 黑白蒙版",
+   "pos": [
+    1170,
+    360
+   ],
+   "size": [
+    330,
+    230
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 6
+    },
+    {
+     "name": "filename_prefix",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "filename_prefix"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "masks/body_v2/hair"
+   ]
+  },
+  {
+   "id": 230,
+   "type": "ClothesSegment",
+   "title": "四肢 (segformer_b2_clothes)",
+   "pos": [
+    430,
+    660
+   ],
+   "size": [
+    330,
+    130
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 7
+    },
+    {
+     "name": "Hat",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Hat"
+     }
+    },
+    {
+     "name": "Hair",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Hair"
+     }
+    },
+    {
+     "name": "Face",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Face"
+     }
+    },
+    {
+     "name": "Sunglasses",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Sunglasses"
+     }
+    },
+    {
+     "name": "Upper-clothes",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Upper-clothes"
+     }
+    },
+    {
+     "name": "Skirt",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Skirt"
+     }
+    },
+    {
+     "name": "Dress",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Dress"
+     }
+    },
+    {
+     "name": "Belt",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Belt"
+     }
+    },
+    {
+     "name": "Pants",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Pants"
+     }
+    },
+    {
+     "name": "Left-arm",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Left-arm"
+     }
+    },
+    {
+     "name": "Right-arm",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Right-arm"
+     }
+    },
+    {
+     "name": "Left-leg",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Left-leg"
+     }
+    },
+    {
+     "name": "Right-leg",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Right-leg"
+     }
+    },
+    {
+     "name": "Bag",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Bag"
+     }
+    },
+    {
+     "name": "Scarf",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Scarf"
+     }
+    },
+    {
+     "name": "Left-shoe",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Left-shoe"
+     }
+    },
+    {
+     "name": "Right-shoe",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Right-shoe"
+     }
+    },
+    {
+     "name": "Background",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "Background"
+     }
+    },
+    {
+     "name": "process_res",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "process_res"
+     }
+    },
+    {
+     "name": "mask_blur",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "mask_blur"
+     }
+    },
+    {
+     "name": "mask_offset",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "mask_offset"
+     }
+    },
+    {
+     "name": "invert_output",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "invert_output"
+     }
+    },
+    {
+     "name": "background",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "background"
+     }
+    },
+    {
+     "name": "background_color",
+     "type": "COLORCODE",
+     "link": null,
+     "widget": {
+      "name": "background_color"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 0
+    },
+    {
+     "name": "MASK",
+     "type": "MASK",
+     "links": [
+      8
+     ],
+     "slot_index": 1
+    },
+    {
+     "name": "MASK_IMAGE",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 2
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ClothesSegment"
+   },
+   "widgets_values": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    true,
+    true,
+    true,
+    true,
+    false,
+    false,
+    true,
+    true,
+    false,
+    512,
+    0,
+    0,
+    false,
+    "Alpha",
+    "#222222"
+   ]
+  },
+  {
+   "id": 231,
+   "type": "MaskToImage",
+   "title": "MaskToImage",
+   "pos": [
+    800,
+    660
+   ],
+   "size": [
+    330,
+    210
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "mask",
+     "type": "MASK",
+     "link": 8
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      9
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "MaskToImage"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 232,
+   "type": "SaveImage",
+   "title": "limbs / 黑白蒙版",
+   "pos": [
+    1170,
+    660
+   ],
+   "size": [
+    330,
+    230
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 9
+    },
+    {
+     "name": "filename_prefix",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "filename_prefix"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "masks/body_v2/limbs"
+   ]
+  },
+  {
+   "id": 240,
+   "type": "BiRefNetRMBG",
+   "title": "人体前景 (BiRefNet_lite)",
+   "pos": [
+    430,
+    1260
+   ],
+   "size": [
+    330,
+    130
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 10
+    },
+    {
+     "name": "model",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "model"
+     }
+    },
+    {
+     "name": "mask_blur",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "mask_blur"
+     }
+    },
+    {
+     "name": "mask_offset",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "mask_offset"
+     }
+    },
+    {
+     "name": "invert_output",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "invert_output"
+     }
+    },
+    {
+     "name": "refine_foreground",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "refine_foreground"
+     }
+    },
+    {
+     "name": "background",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "background"
+     }
+    },
+    {
+     "name": "background_color",
+     "type": "COLORCODE",
+     "link": null,
+     "widget": {
+      "name": "background_color"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 0
+    },
+    {
+     "name": "MASK",
+     "type": "MASK",
+     "links": [
+      11,
+      13
+     ],
+     "slot_index": 1
+    },
+    {
+     "name": "MASK_IMAGE",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 2
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BiRefNetRMBG"
+   },
+   "widgets_values": [
+    "BiRefNet_lite",
+    0,
+    0,
+    false,
+    false,
+    "Alpha",
+    "#222222"
+   ]
+  },
+  {
+   "id": 241,
+   "type": "MaskToImage",
+   "title": "MaskToImage",
+   "pos": [
+    800,
+    1260
+   ],
+   "size": [
+    330,
+    210
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "mask",
+     "type": "MASK",
+     "link": 11
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      12
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "MaskToImage"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 242,
+   "type": "SaveImage",
+   "title": "person / 黑白蒙版",
+   "pos": [
+    1170,
+    1260
+   ],
+   "size": [
+    330,
+    230
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 12
+    },
+    {
+     "name": "filename_prefix",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "filename_prefix"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "masks/body_v2/person_birefnet"
+   ]
+  },
+  {
+   "id": 250,
+   "type": "MaskComposite",
+   "title": "MaskComposite (subtract)",
+   "pos": [
+    430,
+    960
+   ],
+   "size": [
+    330,
+    130
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "destination",
+     "type": "MASK",
+     "link": 13
+    },
+    {
+     "name": "source",
+     "type": "MASK",
+     "link": 14
+    },
+    {
+     "name": "x",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "x"
+     }
+    },
+    {
+     "name": "y",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "y"
+     }
+    },
+    {
+     "name": "operation",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "operation"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MASK",
+     "type": "MASK",
+     "links": [
+      15
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "MaskComposite"
+   },
+   "widgets_values": [
+    0,
+    0,
+    "subtract"
+   ]
+  },
+  {
+   "id": 251,
+   "type": "MaskToImage",
+   "title": "MaskToImage",
+   "pos": [
+    800,
+    960
+   ],
+   "size": [
+    330,
+    210
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "mask",
+     "type": "MASK",
+     "link": 15
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      16
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "MaskToImage"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 252,
+   "type": "SaveImage",
+   "title": "skin / 黑白蒙版 (人体−服装)",
+   "pos": [
+    1170,
+    960
+   ],
+   "size": [
+    330,
+    230
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 16
+    },
+    {
+     "name": "filename_prefix",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "filename_prefix"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "masks/body_v2/skin_person_minus_clothes"
+   ]
+  }
+ ],
+ "links": [
+  [
+   1,
+   1,
+   0,
+   200,
+   0,
+   "IMAGE"
+  ],
+  [
+   2,
+   200,
+   1,
+   201,
+   0,
+   "MASK"
+  ],
+  [
+   3,
+   201,
+   0,
+   202,
+   0,
+   "IMAGE"
+  ],
+  [
+   4,
+   1,
+   0,
+   220,
+   0,
+   "IMAGE"
+  ],
+  [
+   5,
+   220,
+   1,
+   221,
+   0,
+   "MASK"
+  ],
+  [
+   6,
+   221,
+   0,
+   222,
+   0,
+   "IMAGE"
+  ],
+  [
+   7,
+   1,
+   0,
+   230,
+   0,
+   "IMAGE"
+  ],
+  [
+   8,
+   230,
+   1,
+   231,
+   0,
+   "MASK"
+  ],
+  [
+   9,
+   231,
+   0,
+   232,
+   0,
+   "IMAGE"
+  ],
+  [
+   10,
+   1,
+   0,
+   240,
+   0,
+   "IMAGE"
+  ],
+  [
+   11,
+   240,
+   1,
+   241,
+   0,
+   "MASK"
+  ],
+  [
+   12,
+   241,
+   0,
+   242,
+   0,
+   "IMAGE"
+  ],
+  [
+   13,
+   240,
+   1,
+   250,
+   0,
+   "MASK"
+  ],
+  [
+   14,
+   200,
+   1,
+   250,
+   1,
+   "MASK"
+  ],
+  [
+   15,
+   250,
+   0,
+   251,
+   0,
+   "MASK"
+  ],
+  [
+   16,
+   251,
+   0,
+   252,
+   0,
+   "IMAGE"
+  ]
+ ],
+ "groups": [],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.55,
+   "offset": [
+    40,
+    40
+   ]
+  },
+  "mask_test_note": "Person / clothing layer, all from segformer_b2_clothes except the BiRefNet branch (same model family as lonecatone23 'LCPersonMask'). Branches: clothes / hair / limbs / person foreground / skin (= person - clothes via MaskComposite subtract). h=hair note: segformer also carries Hair, Left/Right-arm, Left/Right-leg and Left/Right-shoe, and those DO fire on anime (measured 3-9% hair, 1-15% limbs). The deeplabv3p LIP BodySegment was dropped: on anime it scored hair 0.14% and limbs 0.01%, and its 'Torso-skin' widget is actually LIP class 10 = Jumpsuits, not skin."
+ },
+ "version": 0.4
+}

@@ -1,0 +1,18 @@
+ComfyUI-Danbooru-Gallery V51 - Civitai 收藏 Tags 导出修复
+
+修复内容：
+1. Civitai 远端收藏 image.getInfinite 返回轻量条目、缺少 prompt/meta 时，
+   选中图片会继续调用 image.getGenerationData 获取生成数据。
+2. 同时尝试 tag.getVotableTags，补充 Civitai 图片公共 Tags。
+3. 新增 civitai_image_id，避免详情请求误用其他外层 ID。
+4. 修复前端导出逻辑：收藏图没有 prompt 但已有内容 Tags 时，
+   不再被 Model/Seed/Sampler 等元数据提前截断。
+5. Civitai 无 prompt 时，general 分类优先使用 civitai_content_tags，
+   避免把模型名、版本名误当作画面 Tags。
+6. 普通 Civitai 搜索、D/G/Y 站逻辑保持不变。
+
+安装：
+- 用本包完整替换 V50 GalleryOnly。
+- WeiLin V52 无需改动。
+- 重启 ComfyUI 后浏览器 Ctrl+F5。
+7. 详情接口优先使用 civitai_image_id；即使通用 id 是收藏包装 ID，也不会查错图片。

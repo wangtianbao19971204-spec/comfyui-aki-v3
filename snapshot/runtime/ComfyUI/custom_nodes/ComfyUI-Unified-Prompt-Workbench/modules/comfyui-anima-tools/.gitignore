@@ -1,0 +1,25 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE & Editor configs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS temporary files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Thumbnail cache (generated at runtime)
+.thumb_cache/
+
+# Antigravity CLI temporary workspace files
+.antigravitycli/
+.gemini/

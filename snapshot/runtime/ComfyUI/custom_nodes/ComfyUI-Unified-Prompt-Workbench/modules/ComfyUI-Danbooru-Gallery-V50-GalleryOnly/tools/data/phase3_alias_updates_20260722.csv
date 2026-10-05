@@ -1,0 +1,18 @@
+action,alias,canonical_tag,source_url,source_record_id,verified_at_utc,clear_identity_translation,expected_identity_translation,review_note
+delete,love_live!_hasu_no_sora_jogakuin_school_idol_club,link!_like!_love_live!,https://danbooru.donmai.us/wiki_pages/love_live!_hasu_no_sora_jogakuin_school_idol_club.json,,2026-07-22T14:51:19Z,false,,当前 canonical 不得再作为 alias
+delete,pokemon_sun_and_moon,pokemon_sm,https://danbooru.donmai.us/wiki_pages/pokemon_sun_and_moon.json,,2026-07-22T14:51:19Z,false,,当前 canonical 不得再作为 alias
+delete,pokemon_black_and_white,pokemon_bw,https://danbooru.donmai.us/wiki_pages/pokemon_black_and_white.json,,2026-07-22T14:51:19Z,false,,当前 canonical 不得再作为 alias
+delete,brown_socks,brown_legwear,https://danbooru.donmai.us/tag_aliases/7165.json,7165,2026-07-22T14:51:19Z,false,,旧合并 alias 当前状态为 deleted
+delete,brown_leggings,brown_legwear,https://danbooru.donmai.us/tag_aliases/7247.json,7247,2026-07-22T14:51:19Z,false,,旧合并 alias 当前状态为 deleted
+delete,brown_pantyhose,brown_legwear,https://danbooru.donmai.us/tag_aliases/7169.json,7169,2026-07-22T14:51:19Z,false,,旧合并 alias 当前状态为 deleted
+delete,brown_thighhighs,brown_legwear,https://danbooru.donmai.us/tag_aliases/7167.json,7167,2026-07-22T14:51:19Z,false,,旧合并 alias 当前状态为 deleted
+upsert,link!_like!_love_live!,love_live!_hasu_no_sora_jogakuin_school_idol_club,https://danbooru.donmai.us/tag_aliases/213176.json,213176,2026-07-22T14:51:19Z,false,,当前 active alias
+upsert,love_live!_hasunosora_jogakuin_school_idol_club,love_live!_hasu_no_sora_jogakuin_school_idol_club,https://danbooru.donmai.us/tag_aliases/138745.json,138745,2026-07-22T14:51:19Z,false,,当前 active alias 并扁平指向 canonical
+upsert,pokemon_sm,pokemon_sun_and_moon,https://danbooru.donmai.us/tag_aliases/207577.json,207577,2026-07-22T14:51:19Z,true,口袋妖怪SM,清除旧 identity 译文并改为当前 active alias
+upsert,pokemon_sun,pokemon_sun_and_moon,https://danbooru.donmai.us/tag_aliases/15206.json,15206,2026-07-22T14:51:19Z,false,,当前 active alias 并扁平指向 canonical
+upsert,pokemon_moon,pokemon_sun_and_moon,https://danbooru.donmai.us/tag_aliases/15207.json,15207,2026-07-22T14:51:19Z,false,,当前 active alias 并扁平指向 canonical
+upsert,pokemon_bw,pokemon_black_and_white,https://danbooru.donmai.us/tag_aliases/207561.json,207561,2026-07-22T14:51:19Z,true,宝可梦_bw,清除旧 identity 译文并改为当前 active alias
+upsert,pokemon_b&w,pokemon_black_and_white,https://danbooru.donmai.us/tag_aliases/8740.json,8740,2026-07-22T14:51:19Z,false,,当前 active alias 并扁平指向 canonical
+upsert,pokemon_black,pokemon_black_and_white,https://danbooru.donmai.us/tag_aliases/8741.json,8741,2026-07-22T14:51:19Z,false,,当前 active alias 并扁平指向 canonical
+upsert,pokemon_white,pokemon_black_and_white,https://danbooru.donmai.us/tag_aliases/8742.json,8742,2026-07-22T14:51:19Z,false,,当前 active alias 并扁平指向 canonical
+upsert,brown_kneehighs,brown_socks,https://danbooru.donmai.us/tag_aliases/59172.json,59172,2026-07-22T14:51:19Z,false,,当前 active alias 并直接指向独立 canonical

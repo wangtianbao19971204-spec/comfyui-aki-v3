@@ -1,0 +1,1051 @@
+[
+  {
+    "plugin": "civitai-toolkit",
+    "production": false,
+    "diagnostic": false,
+    "decision": "历史兼容；生产不加载",
+    "reason": "当前主生产图不依赖，生产白名单不加载；保留历史文件，不视作已经验证可运行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\civitai-toolkit",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [],
+    "declared_version": "4.1.3",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "9b9df85e5da23ba28c4d5d32069e4195b8f577580a74417d177b4b260b927d58",
+      "pyproject.toml": "8cb3687308590d11884f9712f746677844d9784104a0e081c8d3336c393a9081",
+      "requirements.txt": "5a1e80013eb691f17fd765e0cca4309b52e49f22db6c73649981e6a3bc129f5f"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI-Anima-LLLite",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 1 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Anima-LLLite",
+    "registered_backend_nodes": 1,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json",
+      "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "生产套件_02_Anima2.9B_动漫生产_v2.json"
+    ],
+    "declared_version": null,
+    "git_commit": "c8ad372b3adea39bb1aa37db9e278978bef2c222",
+    "identity_hashes": {
+      "__init__.py": "ecf4e66676adf5ec2ba9d5e3f72cfa7a852b6af878cb1e4ff126830e1f9bfd21"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "comfyui-anima-tools",
+    "production": false,
+    "diagnostic": false,
+    "decision": "统一工作台内置模块；同名顶层目录不加载",
+    "reason": "实现位于统一工作台 modules/comfyui-anima-tools；内置模块就绪、16 个节点。同名顶层目录仅为空兼容占位。",
+    "integrated_production": true,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": 16,
+    "served_extension_files": 23,
+    "primary_workflows": [],
+    "declared_version": "3.2.6",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "cabe4bdb59587c93b8dd6d31cd1cb2568c35939d13ae09562f2bcf26f6f801ce",
+      "pyproject.toml": "34e2872bc9c656c6a728505b1b62f74c812741dd089e945d3ba758bf84d2df42"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "comfyui-custom-scripts",
+    "production": false,
+    "diagnostic": false,
+    "decision": "统一工作台内置模块；同名顶层目录不加载",
+    "reason": "实现位于统一工作台 modules/comfyui-custom-scripts；内置模块就绪、13 个节点。同名顶层目录仅为空兼容占位。",
+    "integrated_production": true,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-custom-scripts",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": 13,
+    "served_extension_files": 36,
+    "primary_workflows": [],
+    "declared_version": "1.2.5",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "ced0aa0ea33f81d7d97b59b66ff0abc77b068bd17183f42480875e71708a0684",
+      "pyproject.toml": "4f22f2c2075881cfd27fda80678a70bbb86e4b2445b8bb005f5b768786e1e140"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI-Danbooru-Browser-Import",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 1 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Danbooru-Browser-Import",
+    "registered_backend_nodes": 1,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json",
+      "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "生产套件_03_Krea2_一体化生产_v2.json"
+    ],
+    "declared_version": null,
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "133714a9c0db7fb6a0095f48c3d87385910a0b11e69d0ada7e591df9017f2e12"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI-Danbooru-Gallery-V50-GalleryOnly",
+    "production": false,
+    "diagnostic": false,
+    "decision": "统一工作台内置模块；同名顶层目录不加载",
+    "reason": "实现位于统一工作台 modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly；内置模块就绪、22 个节点。同名顶层目录仅为空兼容占位。",
+    "integrated_production": true,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\ComfyUI-Danbooru-Gallery-V50-GalleryOnly",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": 22,
+    "served_extension_files": 51,
+    "primary_workflows": [],
+    "declared_version": "1.0.0",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "67a1ed5b1d5dfc8b84820726ee3efbf3a1e358b9eae2a10cb57d221ebf05fa6e",
+      "pyproject.toml": "8ce8d596da453a08b5f64e45c6b8e0e68521da65ebd027d7a884ab4743e94c32",
+      "requirements.txt": "7899dab906d386cd653a5b19e1b7eb4dc8e2bdbbed6061a90fd7932025aff9c2"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI-DazzleSwitch",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 1 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-DazzleSwitch",
+    "registered_backend_nodes": 1,
+    "builtin_module_nodes": null,
+    "served_extension_files": 1,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json",
+      "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "生产套件_03_Krea2_一体化生产_v2.json"
+    ],
+    "declared_version": "0.4.0",
+    "git_commit": "0c11da0fc65abb32b8f7584fd7d6ba449aec8c9a",
+    "identity_hashes": {
+      "__init__.py": "50d7f49b922b408c93482013b00571c8ec20fdcb7a3528d2d7037b19f42ff105",
+      "pyproject.toml": "594f2000785fe3f8c8668ae8fc2eaec7278a8392c551a859a20929799256a8ae",
+      "requirements.txt": "8a19877a435ca1d0a7987b33e1f244b277104b61de8960f31b741e9d823adee9"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "comfyui-dev-utils",
+    "production": false,
+    "diagnostic": true,
+    "decision": "独立维护或诊断",
+    "reason": "仅 diagnostic / legacy 配置使用；当前生产不加载。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\comfyui-dev-utils",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [],
+    "declared_version": "0.6.2",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "2e2d26d0d7430ffe7665a03dd20a172d044e7e070b91fed7b3a2c5bda41bd265",
+      "pyproject.toml": "0ae7276068e9a5b1bcdf2b12a36b5ed9b4342967bcf0b9df8ab7769ae3720586",
+      "requirements.txt": "6658cfcc547ab3cc8def7ccebe394eeb745177271ed8a31e3306974071b99e22"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI-Direct-LLM-Chat",
+    "production": false,
+    "diagnostic": false,
+    "decision": "历史兼容；生产不加载",
+    "reason": "当前主生产图不依赖，生产白名单不加载；保留历史文件，不视作已经验证可运行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Direct-LLM-Chat",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [],
+    "declared_version": null,
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "dfed311da2abb814fdebb1437907af4d3ec8487700e8d5eddf159b269d7af6c3"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "comfyui-easy-use",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 206 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\comfyui-easy-use",
+    "registered_backend_nodes": 206,
+    "builtin_module_nodes": null,
+    "served_extension_files": 8,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json",
+      "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "生产套件_03_Krea2_一体化生产_v2.json"
+    ],
+    "declared_version": "1.3.6",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "36d67c76cc51c7dd689f07642d43c7eaf97c3084fff1173ba2d28fb01232fdae",
+      "pyproject.toml": "0bc2411cc2531237354fa36a68dd1b8279b0e731d81a31e525caa872ed1538d1",
+      "requirements.txt": "292b3d278ba23f289f7a68fc1b36499ac5caf3b50a687d88bacd19f6b3105592"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI-GGUF",
+    "production": true,
+    "diagnostic": true,
+    "decision": "按场景使用；生产保留",
+    "reason": "量化模型加载器；已在生产白名单，当前四份主图无直接节点引用，保留按需使用。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-GGUF",
+    "registered_backend_nodes": 6,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [],
+    "declared_version": "2.0.0",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "6d64d9ffa5e0e0107805cef67a2e3b1329d4cc613505f5cba8e8c08b2131580a",
+      "pyproject.toml": "05df17550e375d558e28f099f8ebf7b833835a97d47bf1a071b49a37a7a5b3fa",
+      "requirements.txt": "7f044de2d008cd7a4db54c27efc206327517bca4eb3e0f0835cf769b98d9de6c"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI-Impact-Pack",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 197 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Impact-Pack",
+    "registered_backend_nodes": 197,
+    "builtin_module_nodes": null,
+    "served_extension_files": 7,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json",
+      "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "生产套件_03_Krea2_一体化生产_v2.json"
+    ],
+    "declared_version": "8.28.3",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "7304312fecb9e2ce53bcad557fe28522538e21526ba1d219323ebff6c3ae18c9",
+      "pyproject.toml": "0f4d967b57c3ccf6b693e65f250a757bcc09082d185f96a6a02ba9129df72b88",
+      "requirements.txt": "e7234b16c4bfcd8c31a113a5e3b01fd4e0aa966f756fcf95cc88cf57462efa31"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "comfyui-impact-subpack",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 1 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\comfyui-impact-subpack",
+    "registered_backend_nodes": 1,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json",
+      "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "生产套件_02_Anima2.9B_动漫生产_v2.json"
+    ],
+    "declared_version": "1.3.5",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "933ce6744ef3e29b6e1c79085403dea3df8d2c5fb99f3d8d599f262446a7979d",
+      "pyproject.toml": "247ecb59578cf5f0b5e9f55886991d1efe7ca9c9734d9954e3017dbc4d08bbb4",
+      "requirements.txt": "3db0229532a24748ab407e2ebd73740a583432b879122e293900eae72f62a07b"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "comfyui-kjnodes",
+    "production": true,
+    "diagnostic": true,
+    "decision": "按场景使用；生产保留",
+    "reason": "通用图像与节点工具；当前四份主图无直接节点引用，保留按需使用。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\comfyui-kjnodes",
+    "registered_backend_nodes": 236,
+    "builtin_module_nodes": null,
+    "served_extension_files": 24,
+    "primary_workflows": [],
+    "declared_version": "1.4.1",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "12347923b4dbbc1dc6d4f160b7a36ef56371580edabf91c7ff090e94fb827d0f",
+      "pyproject.toml": "4f710dce530bdf35c832d167cfe0eaa4bb4fe968cc7ac9a78b8a27a6ce1e0684",
+      "requirements.txt": "e8cc1fb089c6e74bb5f326e949fd89ea7653de0d193d7a385c38af44e66656bd"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "comfyui-krea2-controlnet",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 3 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\comfyui-krea2-controlnet",
+    "registered_backend_nodes": 3,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json",
+      "生产套件_03_Krea2_一体化生产_v2.json"
+    ],
+    "declared_version": null,
+    "git_commit": "79ebfd3bd80d2180b334dd7ce57f3c9ddaa0848f",
+    "identity_hashes": {
+      "__init__.py": "ecf4e66676adf5ec2ba9d5e3f72cfa7a852b6af878cb1e4ff126830e1f9bfd21"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "comfyui-krea2edit",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 2 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\comfyui-krea2edit",
+    "registered_backend_nodes": 2,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json"
+    ],
+    "declared_version": "1.2.5",
+    "git_commit": "86f886dac23013d88996e3a2e99093ba44d322fb",
+    "identity_hashes": {
+      "__init__.py": "587e161d158673042e7b9a008c2e8ab5e2019d99ce34ed9a3ae4ac0a52890116",
+      "pyproject.toml": "d31f7dfa31e5633938baabbb6fee4dae88cd3c17efb560173a611bef0fa65a1e"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "comfyui-lora-manager",
+    "production": false,
+    "diagnostic": false,
+    "decision": "统一工作台内置模块；同名顶层目录不加载",
+    "reason": "实现位于统一工作台 modules/comfyui-lora-manager；内置模块就绪、21 个节点。同名顶层目录仅为空兼容占位。",
+    "integrated_production": true,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-lora-manager",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": 21,
+    "served_extension_files": 31,
+    "primary_workflows": [],
+    "declared_version": "1.2.4",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "f0ec0aa80ee6f804fbb0985dfc18b4200a97ec472fe62622d2141e0a3904630f",
+      "pyproject.toml": "3b29d7813ae1cf070da8e418e0b1221117e34eb3611aee8049589fc9932040eb",
+      "package.json": "4aea4bd6db9e6f0aa3bfe974df714fca8530ff37859f9992c0ea00d2dd3cf6b3",
+      "requirements.txt": "c2c6cfc6d2f44c75d41fd7de6f6418bf7b9b002017fc6170f1f2ecb15eb44a56"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI-LTXVideo",
+    "production": false,
+    "diagnostic": false,
+    "decision": "历史兼容；生产不加载",
+    "reason": "历史视频插件，当前服务明确跳过；旧导入不兼容未在本轮隔离修复。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-LTXVideo",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [],
+    "declared_version": null,
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "d1c4fe5ad2b84622084f1e3cafa9de81314eb2852570051ea5a51fdbb7459327",
+      "requirements.txt": "9fb8ad40b931c05f09b704daa57f07ad7b0f34ad77e4aae985f6c446515bf212"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI-Manager",
+    "production": false,
+    "diagnostic": false,
+    "decision": "独立维护或诊断",
+    "reason": "仅 maintenance / legacy 配置使用；当前生产不加载。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Manager",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [],
+    "declared_version": "3.39",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "96664f14903314ba16d27db15d765671bb72412aa2791e713563d1d12aef9c2a",
+      "pyproject.toml": "752c136d68938bfe1bf50fa050b4ddb7a46e8cdfc91d82d81e3a12192310b9e0",
+      "requirements.txt": "6929c10371dbbbb120270d986b713a96634c46d192f536ffc4ecb85d70e7b34a"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI-Olm-DragCrop",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 2 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Olm-DragCrop",
+    "registered_backend_nodes": 2,
+    "builtin_module_nodes": null,
+    "served_extension_files": 16,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json"
+    ],
+    "declared_version": null,
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "3d4454a92d29be5f0e70e2c42f0d629486c2e86e3255a6ec74f45015b99ffb1a",
+      "requirements.txt": "8e576cddbdd2749dea966e5d1d2c790f73a345a15dcf8e90dc6be6e414db9401"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI-Olm-JoyCaption",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 2 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Olm-JoyCaption",
+    "registered_backend_nodes": 2,
+    "builtin_module_nodes": null,
+    "served_extension_files": 6,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json",
+      "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "生产套件_03_Krea2_一体化生产_v2.json"
+    ],
+    "declared_version": null,
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "41a56896eb23a2e7a3f0e25df4308040190b68676893190f567e1c74c92e55bb"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI-OpenPose-Studio",
+    "production": true,
+    "diagnostic": true,
+    "decision": "按场景使用；生产保留",
+    "reason": "姿态编辑入口；当前四份主图无直接节点引用，保留按需使用。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-OpenPose-Studio",
+    "registered_backend_nodes": 2,
+    "builtin_module_nodes": null,
+    "served_extension_files": 17,
+    "primary_workflows": [],
+    "declared_version": "1.8.0",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "88471303f1200a5002705395e6ee91490ea0af9501e3b47526b1f11d6ba5691b",
+      "pyproject.toml": "06f368660232bc0a8f03167e4bcfa74493144536061e712b7a16dc651b0f4f30"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI-PixAI-Tagger",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 1 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-PixAI-Tagger",
+    "registered_backend_nodes": 1,
+    "builtin_module_nodes": null,
+    "served_extension_files": 1,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json",
+      "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "生产套件_03_Krea2_一体化生产_v2.json"
+    ],
+    "declared_version": null,
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "f2b39a70b787e0d93ba4d596e4b897cff54a50339bba35ef80b4c66fddd87b02"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI-RMBG",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 42 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-RMBG",
+    "registered_backend_nodes": 42,
+    "builtin_module_nodes": null,
+    "served_extension_files": 2,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json"
+    ],
+    "declared_version": "3.0.0",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "aea651390f03ab9b9361c84846fe5551c76e8cf1c52f64a011194335ea604dc1",
+      "pyproject.toml": "fef046a09290f9e157c3790ab5e631b3c1b8d77348900313153c42a6962ab69c",
+      "requirements.txt": "5d3b23d9413a476d2f9badf7b8072c616819b25b3757440f07d090fb50b0f928"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "comfyui-sortlist",
+    "production": false,
+    "diagnostic": false,
+    "decision": "历史兼容；生产不加载",
+    "reason": "生产不加载，RAMCleanup 由 comfyui_memory_cleanup 提供，避免同名入口竞争。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\comfyui-sortlist",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [],
+    "declared_version": "0.1.0",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "53fc058ac0314cf0b413e9a77321bae4c0318222a359da70270d15c8713b68bf",
+      "pyproject.toml": "1be93333f665a765a5983e679248c66832734680d836b05a91fc14decf4167ac",
+      "requirements.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI-Unified-Prompt-Workbench",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 76 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench",
+    "registered_backend_nodes": 76,
+    "builtin_module_nodes": null,
+    "served_extension_files": 23,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json",
+      "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "生产套件_03_Krea2_一体化生产_v2.json"
+    ],
+    "declared_version": null,
+    "git_commit": "cc3bc63d55843f94b79f4e16042e03eccbfcc56e",
+    "identity_hashes": {
+      "__init__.py": "dcbf75ec175ba2fa45f50ecec66c8cd9782979c75cf0453bd3aeedc6aad43025"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI-VideoHelperSuite",
+    "production": false,
+    "diagnostic": false,
+    "decision": "历史兼容；生产不加载",
+    "reason": "当前主生产图不依赖，生产白名单不加载；保留历史文件，不视作已经验证可运行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-VideoHelperSuite",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [],
+    "declared_version": "1.7.9",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "c51233bb8aa8b1fe68f5df0b2008f9f83d579c9484178ace4602ca6d7c011114",
+      "pyproject.toml": "5f2d0dfb43a7e52e2687e1d9f725c1f79cdce4c002185ff97261ef249eb7d3ef",
+      "requirements.txt": "aa01f3ae51d8411260300f55edad85a2475415035a14fae5ec43a004af2a2621"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI-WanVideoWrapper",
+    "production": false,
+    "diagnostic": false,
+    "decision": "历史兼容；生产不加载",
+    "reason": "当前主生产图不依赖，生产白名单不加载；保留历史文件，不视作已经验证可运行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-WanVideoWrapper",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [],
+    "declared_version": "1.4.7",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "7508ebee8b533653fadae1dbce94a208d10dbf0011ab47fd7e5b1025a901a789",
+      "pyproject.toml": "ea0a922b64477f8b786b48dda6a1e3afc491bf04b0d1aad8f41f60a9eb257d68",
+      "requirements.txt": "9d26256db166f26594595754b6eedf100dbc370c0d85146b87b5bc8fbc12fb95"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "comfyui-wd14-tagger.disabled",
+    "production": false,
+    "diagnostic": false,
+    "decision": "停用回滚包",
+    "reason": "已由 PixAI 替代；节点和前端均不注册，保留停用文件供回滚。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\comfyui-wd14-tagger.disabled",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [],
+    "declared_version": "1.0.1",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "627762f27f3def58f865196bf08b7b8900252cfccdc5ade6dce81dd6ca0f3e9b",
+      "pyproject.toml": "5882c816a5850268425f9e9b6cbda245fe7ca87f6049b4150275efbf1f7c6529",
+      "requirements.txt": "8eeceae1fd9f7aad4f66a0203c14f8abd56964912d14f01e8e17cbd7af53a677"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI_Comfyroll_CustomNodes",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 199 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI_Comfyroll_CustomNodes",
+    "registered_backend_nodes": 199,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json",
+      "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "生产套件_03_Krea2_一体化生产_v2.json"
+    ],
+    "declared_version": null,
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "33cd9259beeaf218c506fc8cba8f1a603e4e26467cd5f3f7ca1772e6b732937e"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "comfyui_controlnet_aux",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 64 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux",
+    "registered_backend_nodes": 64,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json",
+      "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "生产套件_03_Krea2_一体化生产_v2.json"
+    ],
+    "declared_version": "1.1.5",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "1fb14fe566f77a2fee27c77e259f09d96fc3bada9ec56f5446919b6bb98f14d0",
+      "pyproject.toml": "e8ec5486ae4d2fd82192e56efbbcecaa80e27f217ba06c216b10fac6ef147894",
+      "requirements.txt": "3ed811fd0028017752d455366feee1a22f055885a1cac5ffce837d6dea2a26a3"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI_Custom_Nodes_AlekPet",
+    "production": false,
+    "diagnostic": false,
+    "decision": "历史兼容；生产不加载",
+    "reason": "当前主生产图不依赖，生产白名单不加载；保留历史文件，不视作已经验证可运行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI_Custom_Nodes_AlekPet",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [],
+    "declared_version": "1.1.7",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "ddeb6f217b7d900c187fbdf21dee1b7eda69adaab194ea4c8561c5253a64fc8f",
+      "pyproject.toml": "3986632ebe4ef426c6e5080a7a49611c48785433df2901813b6e1c3b60c1c4c0"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI_IPAdapter_plus",
+    "production": false,
+    "diagnostic": false,
+    "decision": "历史兼容；生产不加载",
+    "reason": "当前主生产图不依赖，生产白名单不加载；保留历史文件，不视作已经验证可运行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI_IPAdapter_plus",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [],
+    "declared_version": "2.0.0",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "b11b6feced87e43ebcc4a2665737f94680bebf7f5ddcc5840a7d0ecbd570df41",
+      "pyproject.toml": "1f7db239f494a9190078d6eda7f9ec11bbf93091455877d6d98b95caeffda0c0"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "comfyui_llm_party",
+    "production": false,
+    "diagnostic": false,
+    "decision": "历史兼容；生产不加载",
+    "reason": "当前主生产图不依赖，生产白名单不加载；保留历史文件，不视作已经验证可运行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\comfyui_llm_party",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [],
+    "declared_version": "1.4.1",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "4bb0bd18c383c21b73d02c1cfc5fe84dbce7cb7c08cdc1c58c08eb51e52aa068",
+      "pyproject.toml": "509207ce6c2ecc6478f96ccc08fe79b46a56bb25e184a19a83fd6dac2d94aa66",
+      "requirements.txt": "59e02800fb17b8bfcb6e34deec1ac406abcb6fec73e0fb254f1204c580f42fb7"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "comfyui_memory_cleanup",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 2 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\comfyui_memory_cleanup",
+    "registered_backend_nodes": 2,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json",
+      "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "生产套件_03_Krea2_一体化生产_v2.json"
+    ],
+    "declared_version": "1.1.3",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "ff33d58fc77bcb3b99c6930398117ddeb8a1e4f235b667a2f5a3a4818096ddc8",
+      "pyproject.toml": "e3c52451b1de6cfd6717ea570f65a712ef8ddca02209a6ca3503602da6830a67",
+      "requirements.txt": "7240e8aa42534e6daf716950d72b5e33262a023496e4424cbf73128876ae2e60"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI_Mira",
+    "production": false,
+    "diagnostic": false,
+    "decision": "历史兼容；生产不加载",
+    "reason": "当前主生产图不依赖，生产白名单不加载；保留历史文件，不视作已经验证可运行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI_Mira",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [],
+    "declared_version": null,
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "144cedc359eaf0245fdd32f80038ef3346d90e18edc15862c4573498c9227a61",
+      "requirements.txt": "f17aa13c16e6d94c0200909cfa805da26ffc0e635f72f95b7c8b5588396f72bd"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "ComfyUI_UltimateSDUpscale",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 3 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI_UltimateSDUpscale",
+    "registered_backend_nodes": 3,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json",
+      "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "生产套件_03_Krea2_一体化生产_v2.json"
+    ],
+    "declared_version": "1.7.2",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "8b12e6c779d5b57e4b80fb72064301766d0769e95a7c2891cc37afc483b02d7c",
+      "pyproject.toml": "c88b11b5506a2ef9352d36e4c1551f40e052accc532c0f43179c9b459713ddf2"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "llama-cpp_vllm",
+    "production": false,
+    "diagnostic": false,
+    "decision": "历史兼容；生产不加载",
+    "reason": "历史本地 LLM 插件，当前服务明确跳过；旧 DLL 问题未在本轮隔离修复。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\llama-cpp_vllm",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [],
+    "declared_version": "1.2.6",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "b18de9dc0005d53c6f3d873b501fc60dee4a6810b74a3722dd0f9420633a04e8",
+      "pyproject.toml": "26f8db1440e293a50f686669e6dd9702dbb025d4b755645166c0d99b610693b9",
+      "requirements.txt": "3e56500a695d1d7bcb750fdd5d92d5d2ecfd5e1cd9ed57b8488a45faa3beb053"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "nsfwprompt",
+    "production": false,
+    "diagnostic": false,
+    "decision": "历史兼容；生产不加载",
+    "reason": "当前主生产图不依赖，生产白名单不加载；保留历史文件，不视作已经验证可运行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\nsfwprompt",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [],
+    "declared_version": null,
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "b6c9b46988125d80bcad7ba450610ca595e56ed6e7b873edd7e21eeaf6c09bc8"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "prompt-assistant",
+    "production": true,
+    "diagnostic": true,
+    "decision": "按场景使用；生产保留",
+    "reason": "可选提示词辅助入口；当前四份主图无直接节点引用，保留现有配置。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\prompt-assistant",
+    "registered_backend_nodes": 5,
+    "builtin_module_nodes": null,
+    "served_extension_files": 27,
+    "primary_workflows": [],
+    "declared_version": "2.0.6",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "3f91b0c1510449277e6a580321a4bd95c3bb7110e34549a8ade5c440520b599a",
+      "pyproject.toml": "d971254b3034f53d7ef0c0cf7a6f4bae6de33a4056e41fa82069d638a98eb9a4",
+      "requirements.txt": "e49c33e54c521d8882dd437da0c0e3d7e387ebd9a962820c97b98bbf90ac6a42"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "rgthree-comfy",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 24 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\rgthree-comfy",
+    "registered_backend_nodes": 24,
+    "builtin_module_nodes": null,
+    "served_extension_files": 53,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json",
+      "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "生产套件_03_Krea2_一体化生产_v2.json"
+    ],
+    "declared_version": "1.0.2605082257",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "06174f22e7246b2b0771961cc0681846f452b853ccb927ca507e074f340abc61",
+      "pyproject.toml": "9cee2c6c6ac87d484a21d9fb04143b3cb08a8cd063d19dffe3dae0c8963c1b2a",
+      "package.json": "5d4e53fe0bfa6f879a2336544c179aed99998de5b25612b4cac61b18ccf44964",
+      "requirements.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 4 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters",
+    "registered_backend_nodes": 4,
+    "builtin_module_nodes": null,
+    "served_extension_files": 1,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json",
+      "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "生产套件_03_Krea2_一体化生产_v2.json"
+    ],
+    "declared_version": null,
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "e30b16f574222d079e5142e0b664778a31fa78e20f5f31d196464bcf8aabcfe3"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "vnccs",
+    "production": false,
+    "diagnostic": false,
+    "decision": "历史兼容；生产不加载",
+    "reason": "当前主生产图不依赖，生产白名单不加载；保留历史文件，不视作已经验证可运行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\vnccs",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": null,
+    "served_extension_files": 0,
+    "primary_workflows": [],
+    "declared_version": "2.1.0",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "822152beaff9d6728e68384d2a8fc940a9a211bfd633dd0f31461ce1822c526c",
+      "pyproject.toml": "c273eb5b3b781b93ca205e79cdf040fb10c3f6a63e04abfecc78e6fd7c441135",
+      "requirements.txt": "78961bae5881957ff40ee4bba144eb3d7baf446c50234d11ff6f28069672f81a"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "vnccs-utils",
+    "production": true,
+    "diagnostic": true,
+    "decision": "生产工作流必需",
+    "reason": "UAP v2 或独立 01–03 主套件依赖；当前后端注册 8 类节点。包含可选分支，不表示每次出图都会执行。",
+    "integrated_production": false,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\vnccs-utils",
+    "registered_backend_nodes": 8,
+    "builtin_module_nodes": null,
+    "served_extension_files": 13,
+    "primary_workflows": [
+      "UAP统一生产工作台_v2.json",
+      "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "生产套件_03_Krea2_一体化生产_v2.json"
+    ],
+    "declared_version": "0.5.3",
+    "git_commit": "1908ddfa8a5084a360783ca596f27678743c5496",
+    "identity_hashes": {
+      "__init__.py": "6a558087a50ecb9dbe9b085795e9dd035b4630691a243b0c1c12962bc76f630c",
+      "pyproject.toml": "a736f4f644372bc5b17d92a22e013d0ae7c8743346a902e7f0e3d11341a83fa3",
+      "requirements.txt": "66a60eede4e4d27e9da68d36f5194c959be9efc8c21d69a38a217d0abe151da0"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  },
+  {
+    "plugin": "WeiLin-Comfyui-Tools-V52-FullPromptSelector",
+    "production": false,
+    "diagnostic": false,
+    "decision": "统一工作台内置模块；同名顶层目录不加载",
+    "reason": "实现位于统一工作台 modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector；内置模块就绪、4 个节点。同名顶层目录仅为空兼容占位。",
+    "integrated_production": true,
+    "effective_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\WeiLin-Comfyui-Tools-V52-FullPromptSelector",
+    "registered_backend_nodes": 0,
+    "builtin_module_nodes": 4,
+    "served_extension_files": 9,
+    "primary_workflows": [],
+    "declared_version": "0.0.75",
+    "git_commit": null,
+    "identity_hashes": {
+      "__init__.py": "332c085d3aae1493e6b6be88d72c38568568cba1bf71b5c854ec4387646289b4",
+      "pyproject.toml": "e738e670e45bc85ef550dad3d634691fa8be607f71322774e5ddb99ff7ea777e",
+      "requirements.txt": "4c89df4089ca439a51d5e40b43c619535589a595b3a30f4e76f883b9c5a976bf"
+    },
+    "audited_at": "2026-10-04T09:04:59.101142+08:00",
+    "evidence": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/acceptance_summary.json"
+  }
+]

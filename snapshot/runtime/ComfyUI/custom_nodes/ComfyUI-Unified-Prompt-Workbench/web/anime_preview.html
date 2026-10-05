@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN" class="dark-theme" data-uw-theme="anime">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>晴空手帖 · 白天 / 夜间 / 多色</title>
+<link rel="stylesheet" href="./workbench.css">
+<link id="uw-studio-style" rel="stylesheet" href="./studio.css?v=20260928-variants">
+<style>
+body{margin:0;background:#dadce1;color:var(--uw-text);font-family:'Segoe UI','Microsoft YaHei',sans-serif}
+:root[data-uw-theme=dark] body,:root.dark-theme[data-uw-theme=anime] body{background:#1e1f22}
+.preview-strip{display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:14px 24px;background:var(--uw-panel);border-bottom:1px solid var(--uw-border)}
+.preview-strip label{margin-left:auto;font-size:13px}
+.preview-strip :is(button,select){font:inherit;background:var(--uw-input);color:var(--uw-text);border:1px solid var(--uw-border);border-radius:7px;padding:7px 10px}
+.preview-canvas{min-height:calc(100vh - 110px);padding:28px;box-sizing:border-box;background-image:linear-gradient(#8888880a 1px,transparent 1px),linear-gradient(90deg,#8888880a 1px,transparent 1px);background-size:24px 24px}
+.preview-canvas #uap-workbench-nav{position:static;width:fit-content;max-width:100%;box-sizing:border-box}
+.preview-canvas .uap-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.preview-canvas .uap-stages{margin-top:10px}
+.preview-nodes{display:grid;grid-template-columns:1fr .85fr 1.5fr;gap:38px;align-items:start;margin:64px auto 30px;max-width:1250px}
+.preview-node{min-width:0;background:var(--uw-panel);border:1px solid var(--uw-border);border-radius:10px;box-shadow:var(--uw-card-shadow);overflow:hidden}
+.preview-node>h3{font-size:13px;margin:0;padding:10px 14px;background:var(--uw-raised);border-bottom:1px solid var(--uw-border)}
+.preview-node>p{padding:0 14px;color:var(--uw-muted);font-size:13px;line-height:1.8}
+.preview-node .danbooru-gallery{padding:10px}
+.preview-node .v53-gallery-tablist{display:flex;gap:6px;padding:6px;border-radius:6px}
+.preview-node .danbooru-image-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px;margin-top:10px}
+.preview-node .danbooru-image-grid img{width:100%;height:170px;object-fit:cover;border-radius:6px}
+.preview-canvas-note{color:var(--uw-muted);font-size:12px;text-align:center}
+@media(max-width:900px){.preview-nodes{grid-template-columns:1fr 1fr;margin-top:30px;gap:16px}.preview-node:last-child{grid-column:1/-1}.preview-canvas{padding:16px}.preview-strip{padding:12px 16px}}
+@media(max-width:520px){.preview-nodes{grid-template-columns:1fr}.preview-strip label{margin-left:0}}
+.preview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.preview-grid article{overflow:hidden;background:var(--uw-panel);border:1px solid var(--uw-border);border-radius:14px;box-shadow:var(--uw-card-shadow)}
+.preview-grid > article > img{width:100%;height:180px;object-fit:cover;display:block}
+.preview-grid > article > h3,.preview-grid > article > p{margin:12px 16px}
+.preview-grid p{color:var(--uw-muted);font-size:13px}
+.preview-form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.preview-form label{display:grid;gap:7px}
+.preview-form textarea{width:100%;min-height:100px}.preview-note{color:var(--uw-muted);font-size:12px}
+@media(max-width:720px){.preview-form{grid-template-columns:1fr}}
+</style>
+<header class="preview-strip"><strong>晴空手帖 · 同图、同布局，三种配色</strong><span id="canvas-theme-slot"></span><label>多色版工作流底色 <select id="canvas-tone" aria-label="预览工作流底色"><option value="dark">深色</option><option value="light">亮色</option></select></label><button id="open-workbench-preview">打开工作台预览</button><button id="open-identities-preview">查看 13 类标识</button></header>
+<div class="preview-canvas">
+<section id="uap-workbench-nav" aria-label="UAP 导航外观示意"><div class="uap-row"><strong>UAP</strong><select aria-label="分支示意" disabled><option>Anima 原版生产</option></select><button id="open-console-preview">常用控制台</button><span class="uap-status">白天 / 夜间 / 多色 · 同一套界面</span></div><div class="uap-row uap-stages"><button aria-pressed="true" disabled>1 日常总控</button><button disabled>2 参考与反推</button><button disabled>3 提示词工具</button><button disabled>4 模型配置</button></div></section>
+<div class="preview-nodes"><article class="preview-node"><h3>提示词 · 画面描述</h3><p>海边创作室，蓝天与樱花<br>轻柔光线，细腻线条</p></article><article class="preview-node"><h3>生成参数</h3><p>画幅　1024 × 1024<br>采样步数　28<br>种子　随机</p></article><article class="preview-node"><h3>图库 · 浏览与收藏</h3><div class="danbooru-gallery"><div class="v53-gallery-navigation"><div class="v53-gallery-tablist"><button class="v53-gallery-tab" aria-selected="true" disabled>浏览</button><button disabled>搜索</button><button disabled>收藏</button></div></div><div class="danbooru-image-grid"><img src="./assets/anime/studio.png" alt="创作室示例图片"><img src="./assets/anime/library.png" alt="书库示例图片"></div></div></article></div>
+<p class="preview-canvas-note">静态外观示意 · 用于比较底色与控件的协调性，实际工作流请回到 ComfyUI</p>
+</div>
+<section id="unified-workbench" data-page="workspace">
+<header class="uw-header"><strong>晴空手帖</strong><input type="search" placeholder="外观预览 · 搜索框示意" aria-label="搜索示意"><span id="theme-slot"></span><button id="show-identities-preview">13 类标识</button><button id="close-workbench-preview">查看画布预览</button></header>
+<nav class="uw-nav" aria-label="预览页面"><button data-page="workspace" aria-current="page">工作区</button><button data-page="library">资料库</button><button data-page="models">模型</button><button data-page="gallery">图库</button></nav>
+<div class="uw-body"><aside class="uw-sidebar"><div id="preview-purpose"></div><small>同一套界面 · 三种配色</small><p class="preview-note">白天：清浅纸色<br>夜间：石墨灰底<br>多色：蓝紫、樱粉点缀<br><br>顶部可切换配色，资料库内可查看全部功能标识与六种选择器。</p></aside>
+<main class="uw-main"><div class="uw-anime-intro"><div class="uw-anime-copy"><small>晴空手帖 / CREATIVE STUDIO</small><h2>工作区 · 编排与生成</h2><p>编辑提示词，检查参数，运行当前工作流。</p></div></div>
+<section id="preview-workspace" class="uw-page"><div id="uap-daily-desk" style="position:static;width:auto;max-width:none;box-shadow:none"><div class="desk-head"><strong>常用控制台</strong><small>调整提示词与生成参数</small></div><section><h3>画面与氛围</h3><div class="preview-form"><label>正向提示词<textarea>海边的创作室，晴空，轻柔的樱花，午后的光</textarea></label><label>画面说明<textarea>柔和色彩，细腻线条，安静而明亮的日常</textarea></label></div></section><section><h3>生成参数</h3><div class="preview-form"><label>宽度<input type="number" value="1024"></label><label>采样步数<input type="number" value="28"></label></div></section><button data-uw="run" disabled>开始创作 · 预览示意</button></div></section>
+<section id="preview-library" class="uw-page" hidden><div class="uw-toolbar"><h2>提示词与 Tag</h2><input type="search" aria-label="筛选示意" placeholder="按关键词或分类查找…"></div><div class="preview-grid"><article><h3>提示词片段</h3><p>保存并组合一段画面描述</p><p>海边创作室，樱花，午后的光</p><p>分类：场景 / 室内</p></article><article><h3>Tag 词条</h3><p>检索与使用一个标签</p><p>blue sky · 蓝天</p><p>分类：背景 / 天空</p></article></div><h2 id="identities" tabindex="-1">13 类功能标识 · 三种配色共用</h2><p class="preview-note">每个图形对应一种用途。切换白天、夜间、多色时，插画、文字和卡片位置保持一致。</p><h3>页面与工具 · 7 类</h3><div id="preview-identities" class="preview-grid"></div><h3>选择器 · 6 类</h3><div id="preview-selectors" class="preview-grid"></div></section>
+<section id="preview-models" class="uw-page" hidden><h2>模型 · 选择与组合</h2><div class="preview-grid"><article><h3>基础模型</h3><p>选择生成图像的基础模型。</p></article><article><h3>LoRA</h3><p>选择附加模型，并在工作流中调整强度。</p></article><article><h3>模型组合</h3><p>浏览和管理已保存的模型搭配。</p></article></div></section>
+<section id="preview-gallery" class="uw-page" hidden><h2>图库 · 浏览与收藏</h2><div class="preview-grid"><article><img src="./assets/anime/studio.png" alt="海边创作室示例作品"><h3>海边创作室</h3><p>查看大图 · 查看标签 · 收藏</p></article><article><img src="./assets/anime/library.png" alt="晴空书库示例作品"><h3>晴空书库</h3><p>查看大图 · 查看标签 · 收藏</p></article><article><img src="./assets/anime/seaside.png" alt="樱花与海岸示例作品"><h3>樱花与海岸</h3><p>查看大图 · 查看标签 · 收藏</p></article></div></section></main></div>
+<footer class="uw-footer"><span class="uw-status">主题外观预览 · 示例操作不会修改工作流</span><a href="/">回到 ComfyUI</a></footer>
+</section>
+<script type="module">
+import {mountThemeToggle} from './ui_theme.js';
+import {toolIdentity,mountFunctionCard,mountFunctionIcon} from './ui_identity.js';
+mountThemeToggle(document.querySelector('#theme-slot'));
+mountThemeToggle(document.querySelector('#canvas-theme-slot'));
+const root=document.querySelector('#unified-workbench');
+document.querySelector('#canvas-tone').onchange=event=>document.documentElement.classList.toggle('dark-theme',event.target.value==='dark');
+let previewOpener=document.querySelector('#open-workbench-preview');
+function openPreview(event){previewOpener=event.currentTarget;root.hidden=false;document.querySelector('#close-workbench-preview').focus();}
+function closePreview(){root.hidden=true;previewOpener?.focus();}
+document.querySelector('#open-workbench-preview').onclick=openPreview;
+document.querySelector('#open-console-preview').onclick=openPreview;
+document.querySelector('#close-workbench-preview').onclick=closePreview;
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!root.hidden)closePreview();});
+const purpose=document.querySelector('#preview-purpose');
+function showPage(page){
+ root.dataset.page=page;purpose.replaceChildren();mountFunctionCard(purpose,page);
+ for(const item of document.querySelectorAll('.uw-nav button'))item.setAttribute('aria-current',item.dataset.page===page?'page':'false');
+ for(const key of ['workspace','library','models','gallery'])document.querySelector('#preview-'+key).hidden=key!==page;
+ const info=toolIdentity[page];document.querySelector('.uw-anime-copy small').textContent='晴空手帖';document.querySelector('.uw-anime-copy h2').textContent=info.title;document.querySelector('.uw-anime-copy p').textContent=info.purpose;
+}
+for(const button of document.querySelectorAll('.uw-nav button')){mountFunctionIcon(button,button.dataset.page);button.title=toolIdentity[button.dataset.page].purpose;button.onclick=()=>showPage(button.dataset.page);}
+for(const kind of ['character','clothing','pose','artist','background','style_quality']){const host=document.createElement('article');document.querySelector('#preview-selectors').append(host);mountFunctionCard(host,kind);}
+for(const kind of ['workspace','library','models','gallery','console','prompts','tags']){const host=document.createElement('article');document.querySelector('#preview-identities').append(host);mountFunctionCard(host,kind);}
+function showIdentities(event){
+ if(root.hidden)openPreview(event);
+ showPage('library');
+ const heading=document.querySelector('#identities');heading.focus({preventScroll:true});heading.scrollIntoView({block:'start'});
+}
+document.querySelector('#show-identities-preview').onclick=showIdentities;
+document.querySelector('#open-identities-preview').onclick=showIdentities;
+const requestedPage=new URLSearchParams(location.search).get('page');
+showPage(['workspace','library','models','gallery'].includes(requestedPage)?requestedPage:'workspace');
+if(location.hash==='#identities')showIdentities();
+</script>
+</html>

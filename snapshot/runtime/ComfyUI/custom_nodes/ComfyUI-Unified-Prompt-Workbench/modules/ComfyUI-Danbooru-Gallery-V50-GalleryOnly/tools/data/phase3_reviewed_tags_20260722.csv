@@ -1,0 +1,62 @@
+tag,category,post_count,translation_cn,evidence_url,evidence_kind,confidence,review_note
+spoilers,5,45848,剧透,https://danbooru.donmai.us/wiki_pages/spoilers.json,danbooru_wiki_manual_zh,A,剧情或结局剧透
+self-datamine,5,44337,上传者自行提取的游戏资源,https://danbooru.donmai.us/wiki_pages/self-datamine.json,danbooru_wiki_manual_zh,A,上传者从游戏自行提取
+check_translation,5,43304,译文待校对,https://danbooru.donmai.us/wiki_pages/check_translation.json,danbooru_wiki_manual_zh,A,已有译文需要第二意见
+visual_novel_cg,5,42535,视觉小说CG,https://danbooru.donmai.us/wiki_pages/visual_novel_cg.json,danbooru_wiki_manual_zh,A,视觉小说对话背景图
+pixiv_commission,5,41997,Pixiv付费约稿,https://danbooru.donmai.us/wiki_pages/pixiv_commission.json,danbooru_wiki_manual_zh,A,通过Pixiv Requests委托
+protected_link,5,35648,受限访问的来源链接,https://danbooru.donmai.us/wiki_pages/protected_link.json,danbooru_wiki_manual_zh,A,来源仅对部分用户可见
+source_request,5,34162,来源待补,https://danbooru.donmai.us/wiki_pages/source_request.json,danbooru_wiki_manual_zh,A,未知来源且希望补充
+resolution_mismatch,5,32230,来源分辨率不一致,https://danbooru.donmai.us/wiki_pages/resolution_mismatch.json,danbooru_wiki_manual_zh,A,站内图与来源图分辨率不同
+self-upload,5,28799,作者本人上传,https://danbooru.donmai.us/wiki_pages/self-upload.json,danbooru_wiki_manual_zh,A,创作者本人上传
+third-party_edit,5,27538,第三方编辑,https://danbooru.donmai.us/wiki_pages/third-party_edit.json,danbooru_wiki_manual_zh,A,非原作者进行编辑
+inactive_account,5,27063,作者账号已停用,https://danbooru.donmai.us/wiki_pages/inactive_account.json,danbooru_wiki_manual_zh,A,账号暂停注销或删除
+pixel-perfect_duplicate,5,26758,像素级完全重复,https://danbooru.donmai.us/wiki_pages/pixel-perfect_duplicate.json,danbooru_wiki_manual_zh,A,逐像素完全相同
+bad_fc2_link,5,26690,FC2链接失效,https://danbooru.donmai.us/tags.json?search%5Bname%5D=bad_fc2_link,danbooru_tag_api_manual_zh,A,当前活跃Meta标签且含义无歧义
+textless_version,5,26234,原作者无文字版本,https://danbooru.donmai.us/wiki_pages/textless_version.json,danbooru_wiki_manual_zh,A,原作者发布的无文字版本
+bad_source,5,25982,来源未直达原图或原帖,https://danbooru.donmai.us/wiki_pages/bad_source.json,danbooru_wiki_manual_zh,A,来源链接未直达内容
+bad_tumblr_id,5,24461,Tumblr来源已失效,https://danbooru.donmai.us/wiki_pages/bad_tumblr_id.json,danbooru_wiki_manual_zh,A,Tumblr帖子或图片不可用
+derivative_work,5,24218,基于参考作品的衍生图,https://danbooru.donmai.us/wiki_pages/derivative_work.json,danbooru_wiki_manual_zh,A,部分或全部源于参考作品
+partially_translated,5,23113,部分已翻译,https://danbooru.donmai.us/wiki_pages/partially_translated.json,danbooru_wiki_manual_zh,A,仅部分文字已有翻译
+check_commentary,5,22168,作者注释译文待校对,https://danbooru.donmai.us/wiki_pages/check_commentary.json,danbooru_wiki_manual_zh,A,作者注释译文需要第二意见
+ugoira,5,22004,Pixiv Ugoira动画,https://danbooru.donmai.us/wiki_pages/ugoira.json,danbooru_wiki_manual_zh,A,Pixiv自定义动画格式
+dated_commentary,5,20617,作者注释含创作日期,https://danbooru.donmai.us/wiki_pages/dated_commentary.json,danbooru_wiki_manual_zh,A,注释中写有图片创作日期
+ai-generated,5,17100,完全由AI生成,https://danbooru.donmai.us/wiki_pages/ai-generated.json,danbooru_wiki_manual_zh,A,完全AI生成且至多轻微修饰
+source_smaller,5,17046,来源图分辨率更小,https://danbooru.donmai.us/wiki_pages/source_smaller.json,danbooru_wiki_manual_zh,A,来源图分辨率低于站内图
+anime_screenshot,5,15627,动画截图,https://danbooru.donmai.us/wiki_pages/anime_screenshot.json,danbooru_wiki_manual_zh,A,从动画提取的静帧或序列
+alt_text,5,14674,图片替代文本(Alt Text),https://danbooru.donmai.us/wiki_pages/alt_text.json,danbooru_wiki_manual_zh,A,图片附带的替代文本
+promotional_art,5,14399,宣传图,https://danbooru.donmai.us/wiki_pages/promotional_art.json,danbooru_wiki_manual_zh,A,用于作品或活动宣传
+painttool_sai_(medium),5,14392,PaintTool SAI制作,https://danbooru.donmai.us/wiki_pages/painttool_sai_(medium).json,danbooru_wiki_manual_zh,A,使用PaintTool SAI创作或编辑
+source_larger,5,13715,来源图分辨率更大,https://danbooru.donmai.us/wiki_pages/source_larger.json,danbooru_wiki_manual_zh,A,来源图分辨率高于站内图
+making-of_available,5,13230,有制作过程资料,https://danbooru.donmai.us/wiki_pages/making-of_available.json,danbooru_wiki_manual_zh,A,存在制作过程视频或图片
+commissioner_upload,5,13183,委托者本人上传,https://danbooru.donmai.us/wiki_pages/commissioner_upload.json,danbooru_wiki_manual_zh,A,由委托者本人上传
+imageboard_desourced,5,13180,图板来源被改写,https://danbooru.donmai.us/wiki_pages/imageboard_desourced.json,danbooru_wiki_manual_zh,A,历史图板来源被站点改写
+clip_studio_paint_(medium),5,12631,CLIP STUDIO PAINT制作,https://danbooru.donmai.us/wiki_pages/clip_studio_paint_(medium).json,danbooru_wiki_manual_zh,A,使用CLIP STUDIO PAINT创作或编辑
+photo-referenced,5,11931,参考照片绘制,https://danbooru.donmai.us/wiki_pages/photo-referenced.json,danbooru_wiki_manual_zh,A,以照片或视频作为参考
+corrupted_twitter_file,5,11214,Twitter文件局部损坏,https://danbooru.donmai.us/wiki_pages/corrupted_twitter_file.json,danbooru_wiki_manual_zh,A,Twitter导致的局部像素损坏
+image_sample,5,10957,网站压缩样图,https://danbooru.donmai.us/wiki_pages/image_sample.json,danbooru_wiki_manual_zh,A,网站生成的压缩或缩小样图
+artist_collaboration,5,10285,多位艺术家合作创作,https://danbooru.donmai.us/wiki_pages/artist_collaboration.json,danbooru_wiki_manual_zh,A,多位艺术家共同完成一张图
+orange_hat,0,7880,橙色帽子,https://danbooru.donmai.us/wiki_pages/orange_hat.json,danbooru_wiki_manual_zh,A,当前独立标签且旧合并别名已删除
+brown_socks,0,5448,棕色袜子,https://danbooru.donmai.us/wiki_pages/brown_socks.json,danbooru_wiki_manual_zh,A,当前独立标签且旧合并别名已删除
+rabbit_boy,0,5409,兔子男孩,https://danbooru.donmai.us/wiki_pages/rabbit_boy.json,danbooru_wiki_manual_zh,A,具有真实兔耳或兔尾特征的男孩
+love_live!_hasu_no_sora_jogakuin_school_idol_club,3,34923,Love Live! 莲之空女学院学园偶像俱乐部,https://danbooru.donmai.us/wiki_pages/love_live!_hasu_no_sora_jogakuin_school_idol_club.json,danbooru_wiki_entity_review,A,当前长canonical并经公开中文名称复核
+pokemon_sun_and_moon,3,23968,宝可梦 太阳/月亮,https://danbooru.donmai.us/wiki_pages/pokemon_sun_and_moon.json,danbooru_wiki_entity_review,A,当前长canonical并按现有宝可梦词库格式统一
+real_life,3,20241,真实人物,https://danbooru.donmai.us/wiki_pages/real_life.json,danbooru_wiki_manual_zh,A,非虚构的知名现实人物
+pokemon_black_and_white,3,18955,宝可梦 黑/白,https://danbooru.donmai.us/wiki_pages/pokemon_black_and_white.json,danbooru_wiki_entity_review,A,当前长canonical并按现有宝可梦词库格式统一
+nier_(series),3,16621,尼尔系列,https://danbooru.donmai.us/wiki_pages/nier_(series).json,danbooru_wiki_entity_review,A,作品系列名
+tsukihime,3,15444,月姬,https://danbooru.donmai.us/wiki_pages/tsukihime.json,danbooru_wiki_entity_review,A,公开中文作品名
+kirby_(series),3,15209,星之卡比系列,https://danbooru.donmai.us/wiki_pages/kirby_(series).json,danbooru_wiki_entity_review,A,公开中文系列名
+dc_comics,3,13761,DC漫画,https://danbooru.donmai.us/wiki_pages/dc_comics.json,danbooru_wiki_entity_review,A,品牌通用中文名
+magia_record:_mahou_shoujo_madoka_magica_gaiden,3,12921,魔法纪录 魔法少女小圆外传,https://danbooru.donmai.us/wiki_pages/magia_record%3A_mahou_shoujo_madoka_magica_gaiden.json|https://www.taptap.cn/app/198852/topic,danbooru_wiki_plus_cn_official_review,A,简中运营名称复核
+eiyuu_densetsu,3,12530,英雄传说系列,https://danbooru.donmai.us/wiki_pages/eiyuu_densetsu.json|https://www.falcom.co.jp/license/overseas,danbooru_wiki_plus_official_review,A,官方中文系列名复核
+kamen_rider,3,12314,假面骑士系列,https://danbooru.donmai.us/wiki_pages/kamen_rider.json,danbooru_wiki_entity_review,A,公开中文系列名
+nikki_(series),3,11403,暖暖系列,https://danbooru.donmai.us/wiki_pages/nikki_(series).json|https://www.papegames.com.cn/home,danbooru_wiki_plus_official_review,A,叠纸官方系列名称复核
+the_legend_of_zelda:_breath_of_the_wild,3,10757,塞尔达传说 旷野之息,https://danbooru.donmai.us/wiki_pages/the_legend_of_zelda%3A_breath_of_the_wild.json,danbooru_wiki_entity_review,A,公开简体中文作品名
+tamamo_no_mae_(fate),4,9067,玉藻前(Fate),https://danbooru.donmai.us/wiki_pages/tamamo_no_mae_(fate).json,danbooru_wiki_entity_review,A,角色名与作品限定词
+caelus_(honkai:_star_rail),4,8451,穹(崩坏:星穹铁道),https://danbooru.donmai.us/wiki_pages/caelus_(honkai%3A_star_rail).json|https://sr.mihoyo.com/main?nav=home,danbooru_wiki_plus_official_review,A,官方主角名与作品名
+female_byleth_(fire_emblem),4,7231,贝雷丝(火焰纹章),https://danbooru.donmai.us/wiki_pages/female_byleth_(fire_emblem).json|https://guide.fire-emblem-heroes.com/zh/12001002000402/,danbooru_wiki_plus_official_review,A,任天堂官方繁中名转简体
+ako_(blue_archive),4,6886,天雨亚子(蔚蓝档案),https://danbooru.donmai.us/wiki_pages/ako_(blue_archive).json,danbooru_wiki_entity_review,A,角色全名与简中作品名
+kaguya_(cho_kaguya-hime!),4,6560,辉夜(超时空辉夜姬!),https://danbooru.donmai.us/wiki_pages/kaguya_(cho_kaguya-hime!).json|https://danbooru.donmai.us/wiki_pages/cho_kaguya-hime!.json,danbooru_wiki_entity_review,A,角色名与作品限定词
+mydei_(honkai:_star_rail),4,6286,万敌(崩坏:星穹铁道),https://danbooru.donmai.us/wiki_pages/mydei_(honkai%3A_star_rail).json|https://sr.mihoyo.com/main?nav=home,danbooru_wiki_plus_official_review,A,官方角色名与作品名
+gojo_satoru,4,5527,五条悟,https://danbooru.donmai.us/wiki_pages/gojo_satoru.json,danbooru_wiki_entity_review,A,唯一角色名
+narukami_yu,4,5505,鸣上悠,https://danbooru.donmai.us/wiki_pages/narukami_yu.json|https://store.steampowered.com/app/1602010/4/?l=schinese,danbooru_wiki_plus_localized_release,A,官方衍生作品中文名复核
+cyrene_(demiurge)_(honkai:_star_rail),4,5425,昔涟(德谬歌)(崩坏:星穹铁道),https://danbooru.donmai.us/wiki_pages/cyrene_(demiurge)_(honkai%3A_star_rail).json|https://hsr.hoyoverse.com/zh-cn/news/161539,danbooru_wiki_plus_official_review,A,区分普通昔涟与德谬歌形态

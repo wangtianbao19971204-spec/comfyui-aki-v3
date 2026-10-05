@@ -1,0 +1,5 @@
+旧 data.json -> user_data\prompt_selector\data.json
+旧 preview 目录中的全部图片 -> user_data\prompt_selector\preview\
+
+不要修改图片文件名。
+Prompt Selector 的节点、界面、后端、词库和预览图现在全部归 WeiLin 管理。

@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>TB Multi API Caption V17 - 多供应商配置</title>
+<style>
+:root { color-scheme: dark; }
+body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: #111; color: #eee; }
+header { padding: 14px 18px; background: #1e1e1e; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 5; }
+h1 { margin: 0; font-size: 18px; }
+main { padding: 18px; max-width: 1280px; margin: 0 auto; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+button { background: #2f6feb; color: white; border: 0; border-radius: 8px; padding: 8px 12px; cursor: pointer; }
+button.secondary { background: #333; }
+button.danger { background: #9b2c2c; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+.card { border: 1px solid #333; border-radius: 12px; padding: 14px; background: #1a1a1a; margin: 14px 0; }
+.card h2 { margin: 0 0 10px 0; font-size: 16px; }
+label { display: block; margin: 10px 0 4px; color: #bbb; font-size: 13px; }
+input, textarea, select { width: 100%; box-sizing: border-box; background: #0e0e0e; color: #eee; border: 1px solid #444; border-radius: 8px; padding: 8px; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+textarea { min-height: 90px; resize: vertical; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+small { color: #999; }
+code { color: #b9d7ff; }
+pre { white-space: pre-wrap; background: #080808; border: 1px solid #333; padding: 10px; border-radius: 10px; max-height: 300px; overflow: auto; }
+.model-list { min-height: 150px; }
+.note { border-left: 3px solid #2f6feb; padding: 8px 12px; background: #161b22; border-radius: 6px; }
+@media (max-width: 900px) { .grid, .grid-3 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="row">
+    <h1>TB Multi API Caption · 多供应商视觉适配版 V17</h1>
+    <button id="saveBtn">保存 providers.json</button>
+    <button id="reloadBtn" class="secondary">重新读取</button>
+    <button id="addBtn" class="secondary">添加 Provider</button>
+  </div>
+</header>
+<main>
+  <div class="note">
+    <small>
+      <b>协议按实际 API 入口选择，不按模型名称选择。</b>
+      中转站的 <code>/chat/completions</code> 使用 <code>openai_chat</code>；只有直连 Anthropic、Gemini 或 Responses 入口时才选择对应原生协议。
+      API Key 推荐写成 <code>env:变量名</code>。
+    </small>
+  </div>
+  <div id="providers"></div>
+  <h2>状态</h2>
+  <pre id="log"></pre>
+</main>
+<script>
+const $ = (sel) => document.querySelector(sel);
+const providersEl = $("#providers");
+const logEl = $("#log");
+let data = {providers: []};
+
+const PROTOCOLS = [
+  ["openai_chat", "OpenAI Chat / OpenAI-compatible"],
+  ["openai_responses", "OpenAI Responses / xAI Responses"],
+  ["anthropic_messages", "Anthropic Messages 原生"],
+  ["gemini_generate_content", "Gemini generateContent 原生"],
+];
+
+function log(x){ logEl.textContent = typeof x === "string" ? x : JSON.stringify(x, null, 2); }
+function escapeHtml(s){ return String(s ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+function optionsHtml(items, selected){
+  return items.map(([value, label]) => `<option value="${escapeHtml(value)}" ${String(selected)===String(value)?"selected":""}>${escapeHtml(label)}</option>`).join("");
+}
+
+function providerTemplate() {
+  return {
+    name: "New Provider",
+    type: "openai_compatible",
+    protocol: "openai_chat",
+    base_url: "",
+    path: "/chat/completions",
+    models_endpoint: "/models",
+    api_key: "env:YOUR_API_KEY",
+    models: [],
+    image_order: "image_first",
+    image_format: "jpeg",
+    max_image_side: 1536,
+    jpeg_quality: 92,
+    max_image_bytes: 6000000,
+    max_tokens_field: "max_tokens",
+    supports_vision: true,
+    fail_on_missing_image: true,
+    model_overrides: [],
+    headers: {},
+    extra_payload: {}
+  };
+}
+
+function withDefaults(p){ return Object.assign(providerTemplate(), p || {}); }
+
+function render(){
+  providersEl.innerHTML = "";
+  data.providers = (data.providers || []).map(withDefaults);
+  data.providers.forEach((p, i) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="row">
+        <h2>Provider ${i+1} · ${escapeHtml(p.name)}</h2>
+        <button class="secondary" data-action="fetch" data-i="${i}">联网获取模型</button>
+        <button class="secondary" data-action="copy" data-i="${i}">复制</button>
+        <button class="danger" data-action="delete" data-i="${i}">删除</button>
+      </div>
+
+      <div class="grid-3">
+        <div><label>name</label><input data-k="name" data-i="${i}" value="${escapeHtml(p.name)}"></div>
+        <div><label>protocol（实际请求协议）</label><select data-k="protocol" data-i="${i}">${optionsHtml(PROTOCOLS, p.protocol)}</select></div>
+        <div><label>type（旧配置兼容字段）</label><input data-k="type" data-i="${i}" value="${escapeHtml(p.type)}"></div>
+      </div>
+
+      <div class="grid">
+        <div><label>base_url</label><input data-k="base_url" data-i="${i}" value="${escapeHtml(p.base_url)}"></div>
+        <div><label>request path（Gemini 可用 {model}）</label><input data-k="path" data-i="${i}" value="${escapeHtml(p.path)}"></div>
+        <div><label>models_endpoint</label><input data-k="models_endpoint" data-i="${i}" value="${escapeHtml(p.models_endpoint)}"></div>
+        <div><label>api_key</label><input data-k="api_key" data-i="${i}" value="${escapeHtml(p.api_key)}"></div>
+      </div>
+
+      <div class="grid-3">
+        <div><label>image_order</label><select data-k="image_order" data-i="${i}">${optionsHtml([["image_first","图片在前"],["text_first","文字在前"]], p.image_order)}</select></div>
+        <div><label>image_format</label><select data-k="image_format" data-i="${i}">${optionsHtml([["jpeg","JPEG"],["png","PNG"],["webp","WebP"],["auto","自动"]], p.image_format)}</select></div>
+        <div><label>supports_vision</label><select data-k="supports_vision" data-kind="bool" data-i="${i}">${optionsHtml([["true","true"],["false","false"]], String(p.supports_vision))}</select></div>
+        <div><label>max_image_side（0=不限制）</label><input type="number" data-k="max_image_side" data-kind="int" data-i="${i}" value="${escapeHtml(p.max_image_side)}"></div>
+        <div><label>jpeg_quality / webp quality</label><input type="number" min="20" max="100" data-k="jpeg_quality" data-kind="int" data-i="${i}" value="${escapeHtml(p.jpeg_quality)}"></div>
+        <div><label>max_image_bytes（0=不限制）</label><input type="number" data-k="max_image_bytes" data-kind="int" data-i="${i}" value="${escapeHtml(p.max_image_bytes)}"></div>
+        <div><label>max_tokens_field（Chat 接口）</label><input data-k="max_tokens_field" data-i="${i}" value="${escapeHtml(p.max_tokens_field)}"></div>
+        <div><label>fail_on_missing_image</label><select data-k="fail_on_missing_image" data-kind="bool" data-i="${i}">${optionsHtml([["true","true：标记 NOIMG"],["false","false：仍算成功"]], String(p.fail_on_missing_image))}</select></div>
+        <div><label>image_detail（可留空）</label><select data-k="image_detail" data-i="${i}">${optionsHtml([["","不发送"],["auto","auto"],["low","low"],["high","high"]], p.image_detail || "")}</select></div>
+      </div>
+
+      <label>models，每行一个</label>
+      <textarea class="model-list" data-k="models_text" data-i="${i}">${escapeHtml((p.models || []).join("\n"))}</textarea>
+
+      <div class="grid">
+        <div><label>model_overrides JSON</label><textarea data-k="model_overrides_text" data-i="${i}">${escapeHtml(JSON.stringify(p.model_overrides || [], null, 2))}</textarea></div>
+        <div><label>headers JSON</label><textarea data-k="headers_text" data-i="${i}">${escapeHtml(JSON.stringify(p.headers || {}, null, 2))}</textarea></div>
+        <div><label>extra_payload JSON</label><textarea data-k="extra_payload_text" data-i="${i}">${escapeHtml(JSON.stringify(p.extra_payload || {}, null, 2))}</textarea></div>
+        <div>
+          <label>model_overrides 示例</label>
+          <pre>[{
+  "match": "claude",
+  "set": {
+    "image_order": "image_first"
+  }
+}, {
+  "match": "text-only-model",
+  "set": {
+    "supports_vision": false
+  }
+}]</pre>
+        </div>
+      </div>
+    `;
+    providersEl.appendChild(card);
+  });
+}
+
+function parseJsonField(el, fallback){
+  try { return JSON.parse(el.value || JSON.stringify(fallback)); }
+  catch(e) { throw new Error(`${el.dataset.k} JSON 格式错误：${e.message}`); }
+}
+
+function syncFromForm(){
+  document.querySelectorAll("[data-k]").forEach(el => {
+    const i = Number(el.dataset.i);
+    const k = el.dataset.k;
+    const p = data.providers[i];
+    if (!p) return;
+    if (k === "models_text") p.models = el.value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+    else if (k === "headers_text") p.headers = parseJsonField(el, {});
+    else if (k === "extra_payload_text") p.extra_payload = parseJsonField(el, {});
+    else if (k === "model_overrides_text") p.model_overrides = parseJsonField(el, []);
+    else if (el.dataset.kind === "int") p[k] = Number.parseInt(el.value || "0", 10);
+    else if (el.dataset.kind === "bool") p[k] = el.value === "true";
+    else p[k] = el.value;
+  });
+}
+
+async function load(){
+  const r = await fetch("/tb_multi_api_caption_v16/api/providers");
+  data = await r.json();
+  if (!data.providers) data.providers = [];
+  render();
+  log("已读取 V17 多协议配置。旧工作流节点 ID 保持兼容。 ");
+}
+
+async function save(){
+  try { syncFromForm(); }
+  catch(e) { log(String(e)); return; }
+  const r = await fetch("/tb_multi_api_caption_v16/api/providers", {
+    method:"POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(data, null, 2)
+  });
+  log(await r.json());
+}
+
+async function fetchModels(i){
+  try { syncFromForm(); }
+  catch(e) { log(String(e)); return; }
+  const p = data.providers[i];
+  const r = await fetch("/tb_multi_api_caption_v16/api/fetch_models", {
+    method:"POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({provider: p.name})
+  });
+  const out = await r.json();
+  log(out);
+  if (out.ok && Array.isArray(out.models)) {
+    const existing = new Set(p.models || []);
+    out.models.forEach(m => existing.add(m));
+    p.models = Array.from(existing).sort();
+    render();
+  }
+}
+
+providersEl.addEventListener("click", async (e) => {
+  const btn = e.target.closest("button[data-action]");
+  if (!btn) return;
+  const i = Number(btn.dataset.i);
+  try { syncFromForm(); } catch(err) { log(String(err)); return; }
+  if (btn.dataset.action === "delete") data.providers.splice(i, 1);
+  if (btn.dataset.action === "copy") data.providers.splice(i+1, 0, JSON.parse(JSON.stringify(data.providers[i])));
+  if (btn.dataset.action === "fetch") { await fetchModels(i); return; }
+  render();
+});
+
+$("#addBtn").onclick = () => { try { syncFromForm(); } catch(e) { log(String(e)); return; } data.providers.push(providerTemplate()); render(); };
+$("#saveBtn").onclick = save;
+$("#reloadBtn").onclick = load;
+load().catch(e => log(String(e)));
+</script>
+</body>
+</html>

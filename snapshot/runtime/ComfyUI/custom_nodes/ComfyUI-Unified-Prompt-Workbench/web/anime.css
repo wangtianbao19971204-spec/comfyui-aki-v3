@@ -1,0 +1,178 @@
+/* One illustration set and component layout, with day/night/color palettes. */
+:root[data-uw-theme] {
+    --uw-art-studio: url('./assets/anime/studio.png');
+    --uw-art-library: url('./assets/anime/library.png');
+    --uw-petal: #8b869c;
+    --uw-anime-hero: #292d38;
+    --uw-anime-header: linear-gradient(110deg, var(--uw-panel), var(--uw-sidebar));
+    --uw-art-filter: brightness(.72) saturate(.78);
+    --uw-accent-end: #636c99;
+}
+:root[data-uw-theme=light] {
+    --uw-petal: #d5d9e6;
+    --uw-anime-hero: #edf2f8;
+    --uw-art-filter: brightness(1.03) saturate(.88);
+    --uw-accent-end: #6476a0;
+}
+:root[data-uw-theme=anime] {
+    --uw-petal: #ead2e1;
+    --uw-anime-hero: #edf2fe;
+    --uw-anime-header: linear-gradient(110deg, var(--uw-panel), var(--uw-sidebar) 65%, color-mix(in srgb, var(--uw-panel) 78%, var(--uw-petal)));
+    --uw-art-filter: saturate(1.08);
+    --uw-accent-end: #8b628c;
+}
+:root.dark-theme[data-uw-theme=anime] {
+    --uw-petal: #bd96b3;
+    --uw-anime-hero: #303348;
+    --uw-anime-header: linear-gradient(110deg, var(--uw-panel), #2b3244 65%, #3b2e40);
+    --uw-art-filter: brightness(.78) saturate(1.05);
+}
+:root[data-uw-theme] body #unified-workbench {
+    --uw-page-art: var(--uw-art-studio);
+    border: 1px solid var(--uw-border); border-radius: 16px;
+    background: var(--uw-bg);
+}
+:root[data-uw-theme] #unified-workbench[data-page=library] { --uw-page-art: var(--uw-art-library); }
+:root[data-uw-theme] body #unified-workbench .uw-header {
+    background: var(--uw-anime-header);
+    border-bottom: 1px solid var(--uw-border);
+}
+:root[data-uw-theme] body #unified-workbench .uw-nav {
+    background: var(--uw-panel); gap: 10px; padding-block: 10px;
+}
+:root[data-uw-theme] body #unified-workbench .uw-nav button[aria-current=page] {
+    background: var(--uw-accent-bg) !important;
+    border-color: var(--uw-border-strong) !important; box-shadow: inset 0 -2px var(--uw-accent);
+}
+:root[data-uw-theme] body #unified-workbench .uw-sidebar {
+    background: var(--uw-sidebar);
+}
+:root[data-uw-theme] body #unified-workbench .uw-main {
+    background-image: radial-gradient(color-mix(in srgb, var(--uw-border) 30%, transparent) .7px, transparent .7px);
+    background-size: 9px 9px;
+}
+:root[data-uw-theme] body #unified-workbench .uw-anime-intro {
+    display: flex; align-items: center; position: relative; isolation: isolate;
+    min-height: 164px; margin: 0 0 18px; overflow: hidden;
+    border: 1px solid var(--uw-border); border-radius: 16px;
+    background: var(--uw-anime-hero); box-shadow: var(--uw-card-shadow);
+}
+:root[data-uw-theme] body #unified-workbench .uw-anime-intro::before {
+    content: ''; position: absolute; inset: 0; z-index: -2;
+    background-image: var(--uw-page-art); background-repeat: no-repeat;
+    background-size: auto 380px; background-position: right 27%; pointer-events: none;
+}
+:root[data-uw-theme] body #unified-workbench .uw-anime-intro::after {
+    content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background: linear-gradient(90deg, var(--uw-anime-hero) 22%, color-mix(in srgb, var(--uw-anime-hero) 96%, transparent) 40%, color-mix(in srgb, var(--uw-anime-hero) 40%, transparent) 65%, transparent 86%);
+}
+:root[data-uw-theme] body #unified-workbench .uw-anime-intro::before {
+    filter: var(--uw-art-filter);
+}
+:root[data-uw-theme] body #unified-workbench .uw-anime-copy { padding: 24px 28px; max-width: 62%; }
+:root[data-uw-theme] body #unified-workbench .uw-anime-copy small {
+    color: var(--uw-accent); font-size: 10px; font-weight: 700; letter-spacing: .13em;
+}
+:root[data-uw-theme] body #unified-workbench .uw-anime-copy h2 {
+    margin: 8px 0; font-size: clamp(20px, 2vw, 27px); font-weight: 700; letter-spacing: .06em; color: var(--uw-text);
+}
+:root[data-uw-theme] body #unified-workbench .uw-anime-copy p {
+    color: var(--uw-muted); font-size: 12px; margin: 0; line-height: 1.7;
+}
+:root[data-uw-theme] body #unified-workbench .uw-page:not(.uw-gallery-page) { min-height: 0; }
+/* Image-heavy pages keep their full content height; their illustration lives in the sidebar. */
+:root[data-uw-theme] body #unified-workbench:is([data-page=gallery],[data-page=models]) .uw-anime-intro { display: none; }
+:root[data-uw-theme] body #unified-workbench :is(.uw-prompt-card,.uw-settings-grid>section,.uw-result-section,.uw-run-history) {
+    border-color: var(--uw-border); box-shadow: var(--uw-card-shadow);
+}
+:root[data-uw-theme] body :is(#unified-workbench,#uap-daily-desk) h3 {
+    border-left: 3px solid var(--uw-border-strong); padding-left: 9px;
+}
+:root[data-uw-theme] body #unified-workbench [data-uw=run] {
+    background: linear-gradient(120deg, var(--uw-accent-strong), var(--uw-accent-end)) !important;
+    color: var(--uw-on-accent) !important; border-color: var(--uw-border-strong); box-shadow: var(--uw-card-shadow);
+}
+:root[data-uw-theme] body #unified-workbench .uw-footer { background: var(--uw-panel); }
+:root[data-uw-theme] body #unified-workbench-entry {
+    background: var(--uw-anime-header); border-color: var(--uw-border-strong);
+}
+
+/* Canvas controls share the graph's light/dark appearance. */
+:root[data-uw-theme] body #uap-workbench-nav {
+    background: var(--uw-anime-header) !important;
+    border-color: var(--uw-border); box-shadow: var(--uw-card-shadow);
+}
+:root[data-uw-theme] body #uap-daily-desk .desk-head {
+    min-height: 86px; padding: 14px 16px; border: 1px solid var(--uw-border); border-radius: 12px;
+    background: var(--uw-anime-header);
+}
+:root[data-uw-theme] body #uap-daily-desk section { box-shadow: var(--uw-card-shadow); }
+:root[data-uw-theme] body #uap-daily-desk .desk-parameters { border-top: 3px solid var(--uw-border-strong); }
+:root[data-uw-theme] body #uap-daily-desk .desk-find-bar input { border-radius: 20px; }
+
+/* Library cards resemble mounted illustration prints; original previews remain untouched. */
+:root[data-uw-theme] body :is(#tb-shared-preset-panel .tb-spm-card,#unified-tag-manager .ut-card,.ps-library-modal .ps-prompt-list-item) {
+    box-shadow: var(--uw-card-shadow); border-color: var(--uw-border);
+}
+:root[data-uw-theme] body :is(#tb-shared-preset-panel .tb-spm-card,#unified-tag-manager .ut-card):hover {
+    border-color: var(--uw-accent); box-shadow: var(--uw-card-shadow);
+}
+:root[data-uw-theme] body #tb-shared-preset-panel .tb-spm-img-wrap { border-bottom: 2px solid var(--uw-petal); }
+:root[data-uw-theme] body #unified-tag-manager .ut-card-img { border-radius: 9px; border: 3px solid var(--uw-input); }
+:root[data-uw-theme] body #tb-shared-preset-panel :is(.tb-spm-card-selected,.tb-spm-card:has(input[type=checkbox]:checked)),
+:root[data-uw-theme] body #unified-tag-manager .ut-card:has(input[type=checkbox]:checked) {
+    border-color: var(--uw-accent); box-shadow: inset 0 0 0 2px var(--uw-accent);
+}
+:root[data-uw-theme] body #tb-shared-preset-panel:not(.tb-spm-embedded) .tb-spm-head,
+:root[data-uw-theme] body .ps-library-modal .ps-library-header {
+    background: var(--uw-anime-header) !important;
+    min-height: 80px; box-sizing: border-box;
+}
+:root[data-uw-theme] body .ps-library-modal .ps-category-tree::before {
+    content: ''; display: block; height: 120px; margin: 10px; border: 1px solid var(--uw-border);
+    border-radius: 10px; background: url('./assets/functions/prompts.svg') center / auto 108px no-repeat, var(--uw-raised);
+    box-shadow: var(--uw-card-shadow); pointer-events: none;
+}
+:root[data-uw-theme] body .prompt-selector-main-container .ps-header {
+    background: var(--uw-anime-header); border-bottom: 1px solid var(--uw-border);
+}
+
+/* Functional cards in each selector identify the selected kind; headers stay quiet. */
+:root[data-uw-theme] body .uw-selector-panel > div:first-child {
+    background: var(--uw-anime-header) !important;
+    border-bottom: 1px solid var(--uw-border) !important; box-sizing: border-box;
+}
+:root[data-uw-theme] body .uw-selector-sidebar { background: var(--uw-sidebar) !important; flex-shrink: 0; }
+:root[data-uw-theme] body .uw-selector :is(.anima-shared-resource-card,[class$=-card]) {
+    border-color: var(--uw-border) !important; box-shadow: var(--uw-card-shadow); border-radius: 12px !important;
+}
+:root[data-uw-theme] body .uw-selector :is(.anima-shared-resource-card,.anima-character-card,.anima-artist-card,.anima-background-card).selected {
+    border-color: var(--uw-accent) !important; outline: 2px solid var(--uw-accent); outline-offset: -2px;
+}
+:root[data-uw-theme] body .danbooru-gallery .v53-gallery-navigation {
+    background: var(--uw-anime-header); border: 1px solid var(--uw-border);
+}
+:root[data-uw-theme] body .danbooru-gallery .danbooru-image-wrapper { box-shadow: var(--uw-card-shadow); }
+:root[data-uw-theme] body :is(.qgn-panel,.qgn-group-item) { border-color: var(--uw-border); }
+
+@media (max-width: 1050px) {
+    :root[data-uw-theme] body #unified-workbench .uw-anime-copy { padding: 20px; max-width: 66%; }
+}
+@media (max-height: 760px) {
+    :root[data-uw-theme] body #unified-workbench .uw-anime-intro { min-height: 122px; }
+    :root[data-uw-theme] body #unified-workbench .uw-anime-copy { padding-block: 16px; }
+}
+@media (max-width: 720px) {
+    :root[data-uw-theme] body #unified-workbench .uw-anime-intro { min-height: 104px; margin-bottom: 12px; }
+    :root[data-uw-theme] body #unified-workbench .uw-anime-intro::before { background-size: auto 280px; }
+    :root[data-uw-theme] body #unified-workbench .uw-anime-copy { max-width: 76%; padding: 16px; }
+    :root[data-uw-theme] body #unified-workbench .uw-anime-copy small { font-size: 9px; letter-spacing: .04em; }
+    :root[data-uw-theme] body #unified-workbench .uw-anime-copy h2 { font-size: 19px; margin: 5px 0; }
+    :root[data-uw-theme] body #unified-workbench .uw-anime-copy p { display: none; }
+    :root[data-uw-theme] body .ps-library-modal .ps-category-tree::before { display: none; }
+    :root[data-uw-theme] body .uw-selector-panel > div:first-child,
+    :root[data-uw-theme] body #uap-daily-desk .desk-head,
+    :root[data-uw-theme] body .ps-library-modal .ps-library-header { min-height: 0; }
+}
+:root[data-uw-theme] body #unified-workbench[data-density=compact] .uw-anime-intro { min-height: 108px; }
+:root[data-uw-theme] body #unified-workbench[data-density=compact] .uw-anime-copy { padding-block: 14px; }

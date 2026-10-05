@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+
+.agents/
+.codex/
+
+Krea-2-controlnet/
+*.safetensors
+*.ckpt
+*.pt
+*.pth

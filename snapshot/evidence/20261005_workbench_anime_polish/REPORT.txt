@@ -1,0 +1,41 @@
+彩色动漫风 UI 增强 · 已发布并完成有边界验收
+时间：2026-10-05T02:06:49.090Z
+
+本轮结果
+1. 共享视觉层改为蓝紫深底，配合薄荷、浅蓝、奶油金、薰衣草、蜜桃与淡绿的功能配色。标题和快捷入口使用淡彩底，不只保留细边线。
+2. 原有 13 个 SVG 功能图标替换为统一 48×48 圆角彩色贴纸；角色为简洁动漫头像、服装为水手领、姿势为动作骨架、画师为调色板、背景为山景、风格/细化为魔法棒。
+3. 原有主题选择保留：白天、夜间、多色；多色的明暗变体均实页检查，不强制修改用户默认选择。主运行按钮使用靛蓝至莓紫渐变。
+4. 标题图标使用正方形比例，标题左对齐，侧栏图标按屏幕高度缩至 54px；保持文字名称与功能含义，不新增工具栏、动效、远程素材、依赖或网络路径。
+5. 保留上一轮 Ctrl/Cmd+K、搜索 Escape 恢复、区域定位高亮和焦点等便利功能；本轮未修改这些交互逻辑。
+
+发布范围
+17 文件：studio.css、ui_identity.css、ui_identity.js、ui_theme.js、assets/functions 下 13 SVG。两个 JS 仅改资源缓存版本。
+正式工作流与模板未修改；提示词、LoRA、种子、采样/检测/二放参数、默认开关、资料与收藏保护项保持不变。
+正式/模板/HTTP 工作流 SHA256：c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a
+
+验证
+- 75 项源码、语法、SVG 安全/XML、配色对比度检查通过。四个调色板正常文字与淡彩标题对比度至少 4.5；运行按钮包含 hover 渐变采样。
+- 23 项最终浏览器分组检查通过：1280×720、1024×640、760×900；常用台/完整台；三主题及多色明暗；三主线只读浏览；搜索/定位/返回；角色与服装选择器。
+- 13 图标以 28px / 56px 的临时展示夹具检查加载与视觉，随后移除；该图标拼图是验收夹具，不是新功能页。
+- 临时页节点参数/连线/定义和 localStorage 快照前后相同；没有 /prompt、/free 或 /interrupt 尝试。已有插件初始化及主题存储写请求由隔离层阻止，不算生产操作。
+- 82 文件保护清单：65 个非本轮修改文件保持不变，17 个当前 HTTP 资源哈希全部匹配发布文件。回滚备份校验通过。
+- 收尾队列 0/0，8188 PID53232、Qwen PID51312 及启动时间保持不变，5 模块 ready。无推理、显存释放、清队列或重启。
+- 两个自建测试页关闭，viewport 已复原，未关闭用户页；自己的锁已归档。
+
+证据边界与过程说明
+本轮仅 UI 验收，不是图像质量、完整九分支推理、全部可选开关或物理 IME 验收。ext05 裁剪回贴与 ext07 扩图融合的旧画质问题仍开放。
+首次新页参数快照过早触发了尚未就绪的 app.js；该加载状态已丢弃，页面重新载入并完成初始化后才记录本轮最终参数基线，最终验收来自恢复后的页面。
+前轮 20261005_workbench_visual_polish/final_guard.json 曾在本轮开始时被旧 verify 脚本刷新至 2026-10-05T01:48:44.342Z；这是前轮版本仍在生产时的实时复核，不是前轮历史验收时间。前轮 baseline、release_manifest、REPORT 与 FINAL_DELIVERY 未改写。此后验证只使用本轮脚本与清单。
+
+使用与回滚
+先保存未保存编辑，再打开全新 ComfyUI 页面即可看到本轮外观；旧页面可能保留旧模块/资源缓存。主题在现有“界面主题”中切换。
+只读回滚预检：node "G:\ComfyUI-aki-v3\benchmark_reports\2026-10-04_part_refinement_pipeline\runs\20261005_workbench_anime_polish\manage.cjs" rollback-check
+真正回滚：node "G:\ComfyUI-aki-v3\benchmark_reports\2026-10-04_part_refinement_pipeline\runs\20261005_workbench_anime_polish\manage.cjs" rollback
+只恢复本轮 17 文件；保留原始 before/、baseline.json 与 release_manifest.json。后续源文件漂移、忙队列或服务身份改变时拒绝回滚。
+
+主要证据
+daily_final_1280.png：正式页面夜间新外观
+daily_anime_light_1280.png / daily_anime_dark_1280.png：多色明暗
+workbench_dark_1280.png / workbench_dark_1024.png / workbench_dark_760.png：完整工作台
+icon_size_fixture.png：13 图标两档大小展示夹具
+unit_results.json / browser_acceptance.json / final_guard.json / rollback-check_receipt.json / browser_cleanup.json

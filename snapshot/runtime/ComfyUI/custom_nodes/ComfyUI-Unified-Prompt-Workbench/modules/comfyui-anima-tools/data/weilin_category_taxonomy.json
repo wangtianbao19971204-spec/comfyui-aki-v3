@@ -1,0 +1,2673 @@
+{
+  "schema_version": 1,
+  "taxonomy_version": "2026-08-24.style-quality-selector-v1",
+  "path_strategy": "source_directory_without_codex_root",
+  "source_sha256": "3ae5a68e0471439da451ff9ed6eb104cb069e67deb4cb03aa80cf89deae1bde0",
+  "source_last_modified": "2026-08-24T08:11:51.402368+08:00",
+  "prefix_contracts": {
+    "Anima/角色": {
+      "kind": "character",
+      "path": [
+        "用户角色分类"
+      ]
+    },
+    "Anima/场景": {
+      "kind": "background",
+      "path": [
+        "用户场景分类"
+      ]
+    },
+    "Anima/背景": {
+      "kind": "background",
+      "path": [
+        "用户场景分类"
+      ]
+    },
+    "Anima/动作": {
+      "kind": "pose",
+      "path": [
+        "用户动作分类"
+      ]
+    },
+    "Anima/姿势": {
+      "kind": "pose",
+      "path": [
+        "用户动作分类"
+      ]
+    },
+    "Anima/服装": {
+      "kind": "clothing",
+      "path": [
+        "用户服装分类"
+      ]
+    },
+    "待归类/Anima复核/画风质量镜头": {
+      "kind": "style_quality",
+      "path": [
+        "画风质量镜头"
+      ]
+    }
+  },
+  "routes": {},
+  "mappings": {},
+  "prompt_routes": {},
+  "prompt_hashes": {},
+  "prompt_route_categories": {},
+  "quarantined_prompts": {},
+  "audit": {
+    "source_category_count": 259,
+    "canonical_category_count": 259,
+    "duplicate_category_alias_count": 0,
+    "source_prompt_count": 16442,
+    "anima_category_count": 246,
+    "anima_leaf_category_count": 242,
+    "anima_prompt_count": 15951,
+    "classified_prompt_count": 15951,
+    "assignment_sha256": "0385c74278ccdd27fd061820e833bf67c04521f8490708fc680d3d4dff70dc1c",
+    "root_prompt_counts": {
+      "pose": 9738,
+      "character": 1430,
+      "clothing": 3577,
+      "background": 1206
+    },
+    "leaf_soft_limit": 200,
+    "leaf_hard_limit": 300,
+    "leaf_route_count": 242,
+    "leaf_max_prompt_count": 200,
+    "leaf_over_soft_limit_count": 0,
+    "leaf_over_hard_limit_count": 0,
+    "leaf_counts": [
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "城市与日常"
+        ],
+        "count": 35,
+        "source_category": "Anima/背景/正常/城市与日常"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "单纯场景"
+        ],
+        "count": 61,
+        "source_category": "Anima/背景/正常/单纯场景"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "幻想童话"
+        ],
+        "count": 162,
+        "source_category": "Anima/背景/正常/幻想童话"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "节庆与舞台"
+        ],
+        "count": 42,
+        "source_category": "Anima/背景/正常/节庆与舞台"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "恐怖扭曲",
+          "废墟与灵异"
+        ],
+        "count": 7,
+        "source_category": "Anima/背景/正常/恐怖扭曲/废墟与灵异"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "恐怖扭曲",
+          "怪物与追逐"
+        ],
+        "count": 19,
+        "source_category": "Anima/背景/正常/恐怖扭曲/怪物与追逐"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "恐怖扭曲",
+          "诡异与超现实"
+        ],
+        "count": 8,
+        "source_category": "Anima/背景/正常/恐怖扭曲/诡异与超现实"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "恐怖扭曲",
+          "血肉与身体恐怖"
+        ],
+        "count": 113,
+        "source_category": "Anima/背景/正常/恐怖扭曲/血肉与身体恐怖"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "恐怖扭曲",
+          "综合恐怖"
+        ],
+        "count": 52,
+        "source_category": "Anima/背景/正常/恐怖扭曲/综合恐怖"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "人物环境",
+          "室内人物场景"
+        ],
+        "count": 5,
+        "source_category": "Anima/背景/正常/人物环境/室内人物场景"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "人物环境",
+          "室外人物场景"
+        ],
+        "count": 29,
+        "source_category": "Anima/背景/正常/人物环境/室外人物场景"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "人物环境",
+          "综合人物环境"
+        ],
+        "count": 131,
+        "source_category": "Anima/背景/正常/人物环境/综合人物环境"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "食物与静物"
+        ],
+        "count": 17,
+        "source_category": "Anima/背景/正常/食物与静物"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "室内",
+          "厨房与居家"
+        ],
+        "count": 22,
+        "source_category": "Anima/背景/正常/室内/厨房与居家"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "室内",
+          "教室与办公"
+        ],
+        "count": 24,
+        "source_category": "Anima/背景/正常/室内/教室与办公"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "室内",
+          "卧室与酒店"
+        ],
+        "count": 48,
+        "source_category": "Anima/背景/正常/室内/卧室与酒店"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "室内",
+          "浴室与更衣"
+        ],
+        "count": 15,
+        "source_category": "Anima/背景/正常/室内/浴室与更衣"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "室内",
+          "综合室内"
+        ],
+        "count": 112,
+        "source_category": "Anima/背景/正常/室内/综合室内"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "室外与自然",
+          "海滩与水边"
+        ],
+        "count": 56,
+        "source_category": "Anima/背景/正常/室外与自然/海滩与水边"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "室外与自然",
+          "花园与田野"
+        ],
+        "count": 45,
+        "source_category": "Anima/背景/正常/室外与自然/花园与田野"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "室外与自然",
+          "森林与山野"
+        ],
+        "count": 25,
+        "source_category": "Anima/背景/正常/室外与自然/森林与山野"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "室外与自然",
+          "天气与夜景"
+        ],
+        "count": 30,
+        "source_category": "Anima/背景/正常/室外与自然/天气与夜景"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "室外与自然",
+          "综合户外"
+        ],
+        "count": 88,
+        "source_category": "Anima/背景/正常/室外与自然/综合户外"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "正常",
+          "未来科幻"
+        ],
+        "count": 24,
+        "source_category": "Anima/背景/正常/未来科幻"
+      },
+      {
+        "kind": "background",
+        "path": [
+          "R18",
+          "成人场所"
+        ],
+        "count": 36,
+        "source_category": "Anima/背景/R18/成人场所"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "人物模板",
+          "成熟与写实"
+        ],
+        "count": 10,
+        "source_category": "Anima/角色/正常/人物模板/成熟与写实"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "人物模板",
+          "可爱与Q版"
+        ],
+        "count": 7,
+        "source_category": "Anima/角色/正常/人物模板/可爱与Q版"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "人物模板",
+          "奇幻人物模板"
+        ],
+        "count": 21,
+        "source_category": "Anima/角色/正常/人物模板/奇幻人物模板"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "人物模板",
+          "通用人物模板",
+          "身份气质"
+        ],
+        "count": 24,
+        "source_category": "Anima/角色/正常/人物模板/通用人物模板/身份气质"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "人物模板",
+          "通用人物模板",
+          "体型与肤色"
+        ],
+        "count": 27,
+        "source_category": "Anima/角色/正常/人物模板/通用人物模板/体型与肤色"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "人物模板",
+          "通用人物模板",
+          "外貌与发型"
+        ],
+        "count": 151,
+        "source_category": "Anima/角色/正常/人物模板/通用人物模板/外貌与发型"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "人物模板",
+          "通用人物模板",
+          "综合人物"
+        ],
+        "count": 129,
+        "source_category": "Anima/角色/正常/人物模板/通用人物模板/综合人物"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "身份与职业",
+          "常规职业"
+        ],
+        "count": 64,
+        "source_category": "Anima/角色/正常/身份与职业/常规职业"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "身份与职业",
+          "非常规职业"
+        ],
+        "count": 32,
+        "source_category": "Anima/角色/正常/身份与职业/非常规职业"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "身份与职业",
+          "魔法角色"
+        ],
+        "count": 24,
+        "source_category": "Anima/角色/正常/身份与职业/魔法角色"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "身份与职业",
+          "野族角色"
+        ],
+        "count": 1,
+        "source_category": "Anima/角色/正常/身份与职业/野族角色"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "身份与职业",
+          "运动人员"
+        ],
+        "count": 2,
+        "source_category": "Anima/角色/正常/身份与职业/运动人员"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "外观与转化",
+          "人物外观"
+        ],
+        "count": 2,
+        "source_category": "Anima/角色/正常/外观与转化/人物外观"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "外观与转化",
+          "人物转化"
+        ],
+        "count": 92,
+        "source_category": "Anima/角色/正常/外观与转化/人物转化"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "外观与转化",
+          "身体装饰"
+        ],
+        "count": 20,
+        "source_category": "Anima/角色/正常/外观与转化/身体装饰"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "种族与形态",
+          "动物娘化"
+        ],
+        "count": 89,
+        "source_category": "Anima/角色/正常/种族与形态/动物娘化"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "种族与形态",
+          "动物与生物"
+        ],
+        "count": 5,
+        "source_category": "Anima/角色/正常/种族与形态/动物与生物"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "种族与形态",
+          "类人种族"
+        ],
+        "count": 63,
+        "source_category": "Anima/角色/正常/种族与形态/类人种族"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "种族与形态",
+          "魔物与人外"
+        ],
+        "count": 134,
+        "source_category": "Anima/角色/正常/种族与形态/魔物与人外"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "种族与形态",
+          "人工造物",
+          "机器人与机甲"
+        ],
+        "count": 172,
+        "source_category": "Anima/角色/正常/种族与形态/人工造物/机器人与机甲"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "种族与形态",
+          "人工造物",
+          "人偶与手办"
+        ],
+        "count": 26,
+        "source_category": "Anima/角色/正常/种族与形态/人工造物/人偶与手办"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "种族与形态",
+          "人工造物",
+          "综合人工造物"
+        ],
+        "count": 5,
+        "source_category": "Anima/角色/正常/种族与形态/人工造物/综合人工造物"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "作品角色",
+          "单机角色"
+        ],
+        "count": 23,
+        "source_category": "Anima/角色/正常/作品角色/单机角色"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "作品角色",
+          "动漫角色"
+        ],
+        "count": 9,
+        "source_category": "Anima/角色/正常/作品角色/动漫角色"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "作品角色",
+          "端游角色"
+        ],
+        "count": 23,
+        "source_category": "Anima/角色/正常/作品角色/端游角色"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "作品角色",
+          "手游角色"
+        ],
+        "count": 17,
+        "source_category": "Anima/角色/正常/作品角色/手游角色"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "作品角色",
+          "网络角色"
+        ],
+        "count": 9,
+        "source_category": "Anima/角色/正常/作品角色/网络角色"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "正常",
+          "作品角色",
+          "文化作品角色"
+        ],
+        "count": 34,
+        "source_category": "Anima/角色/正常/作品角色/文化作品角色"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "R18",
+          "成人身份",
+          "扶她"
+        ],
+        "count": 95,
+        "source_category": "Anima/角色/R18/成人身份/扶她"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "R18",
+          "成人身份",
+          "伪娘与男娘"
+        ],
+        "count": 67,
+        "source_category": "Anima/角色/R18/成人身份/伪娘与男娘"
+      },
+      {
+        "kind": "character",
+        "path": [
+          "R18",
+          "成人种族",
+          "魔物娘与人外"
+        ],
+        "count": 53,
+        "source_category": "Anima/角色/R18/成人种族/魔物娘与人外"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "地域与时代",
+          "日本"
+        ],
+        "count": 133,
+        "source_category": "Anima/服装/正常/地域与时代/日本"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "地域与时代",
+          "中东"
+        ],
+        "count": 29,
+        "source_category": "Anima/服装/正常/地域与时代/中东"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "地域与时代",
+          "中国",
+          "汉服"
+        ],
+        "count": 84,
+        "source_category": "Anima/服装/正常/地域与时代/中国/汉服"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "地域与时代",
+          "中国",
+          "其他传统服饰"
+        ],
+        "count": 43,
+        "source_category": "Anima/服装/正常/地域与时代/中国/其他传统服饰"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "地域与时代",
+          "中国",
+          "旗袍"
+        ],
+        "count": 105,
+        "source_category": "Anima/服装/正常/地域与时代/中国/旗袍"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "地域与时代",
+          "中国",
+          "仙侠与古风"
+        ],
+        "count": 2,
+        "source_category": "Anima/服装/正常/地域与时代/中国/仙侠与古风"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "地域与时代",
+          "中近世纪"
+        ],
+        "count": 48,
+        "source_category": "Anima/服装/正常/地域与时代/中近世纪"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "地域与时代",
+          "中外经典"
+        ],
+        "count": 13,
+        "source_category": "Anima/服装/正常/地域与时代/中外经典"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "幻想与主题",
+          "魔法少女"
+        ],
+        "count": 82,
+        "source_category": "Anima/服装/正常/幻想与主题/魔法少女"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "幻想与主题",
+          "特殊服装"
+        ],
+        "count": 58,
+        "source_category": "Anima/服装/正常/幻想与主题/特殊服装"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "幻想与主题",
+          "兔女郎"
+        ],
+        "count": 98,
+        "source_category": "Anima/服装/正常/幻想与主题/兔女郎"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "幻想与主题",
+          "未来科幻"
+        ],
+        "count": 27,
+        "source_category": "Anima/服装/正常/幻想与主题/未来科幻"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "幻想与主题",
+          "舞娘"
+        ],
+        "count": 19,
+        "source_category": "Anima/服装/正常/幻想与主题/舞娘"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "幻想与主题",
+          "西幻奇幻"
+        ],
+        "count": 72,
+        "source_category": "Anima/服装/正常/幻想与主题/西幻奇幻"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "幻想与主题",
+          "野族服装"
+        ],
+        "count": 26,
+        "source_category": "Anima/服装/正常/幻想与主题/野族服装"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "幻想与主题",
+          "游戏服装"
+        ],
+        "count": 25,
+        "source_category": "Anima/服装/正常/幻想与主题/游戏服装"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "日常与季节",
+          "冬装"
+        ],
+        "count": 50,
+        "source_category": "Anima/服装/正常/日常与季节/冬装"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "日常与季节",
+          "日常服"
+        ],
+        "count": 163,
+        "source_category": "Anima/服装/正常/日常与季节/日常服"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "日常与季节",
+          "室内服"
+        ],
+        "count": 55,
+        "source_category": "Anima/服装/正常/日常与季节/室内服"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "日常与季节",
+          "完整穿搭",
+          "裤装与休闲"
+        ],
+        "count": 34,
+        "source_category": "Anima/服装/正常/日常与季节/完整穿搭/裤装与休闲"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "日常与季节",
+          "完整穿搭",
+          "裙装与连衣裙"
+        ],
+        "count": 80,
+        "source_category": "Anima/服装/正常/日常与季节/完整穿搭/裙装与连衣裙"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "日常与季节",
+          "完整穿搭",
+          "外套与叠穿"
+        ],
+        "count": 87,
+        "source_category": "Anima/服装/正常/日常与季节/完整穿搭/外套与叠穿"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "日常与季节",
+          "完整穿搭",
+          "综合成套"
+        ],
+        "count": 113,
+        "source_category": "Anima/服装/正常/日常与季节/完整穿搭/综合成套"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "日常与季节",
+          "夏装"
+        ],
+        "count": 64,
+        "source_category": "Anima/服装/正常/日常与季节/夏装"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "制服与职业",
+          "节庆礼服"
+        ],
+        "count": 99,
+        "source_category": "Anima/服装/正常/制服与职业/节庆礼服"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "制服与职业",
+          "军装"
+        ],
+        "count": 47,
+        "source_category": "Anima/服装/正常/制服与职业/军装"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "制服与职业",
+          "舞台服"
+        ],
+        "count": 48,
+        "source_category": "Anima/服装/正常/制服与职业/舞台服"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "制服与职业",
+          "校服"
+        ],
+        "count": 141,
+        "source_category": "Anima/服装/正常/制服与职业/校服"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "制服与职业",
+          "运动服"
+        ],
+        "count": 54,
+        "source_category": "Anima/服装/正常/制服与职业/运动服"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "制服与职业",
+          "职业制服",
+          "办公商务"
+        ],
+        "count": 11,
+        "source_category": "Anima/服装/正常/制服与职业/职业制服/办公商务"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "制服与职业",
+          "职业制服",
+          "女仆与服务"
+        ],
+        "count": 60,
+        "source_category": "Anima/服装/正常/制服与职业/职业制服/女仆与服务"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "制服与职业",
+          "职业制服",
+          "其他职业制服"
+        ],
+        "count": 142,
+        "source_category": "Anima/服装/正常/制服与职业/职业制服/其他职业制服"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "制服与职业",
+          "职业制服",
+          "医疗"
+        ],
+        "count": 23,
+        "source_category": "Anima/服装/正常/制服与职业/职业制服/医疗"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "制服与职业",
+          "职业制服",
+          "治安与公共职业"
+        ],
+        "count": 21,
+        "source_category": "Anima/服装/正常/制服与职业/职业制服/治安与公共职业"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "正常",
+          "组件与配饰"
+        ],
+        "count": 120,
+        "source_category": "Anima/服装/正常/组件与配饰"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "暴露与改造",
+          "恶堕服装"
+        ],
+        "count": 34,
+        "source_category": "Anima/服装/R18/暴露与改造/恶堕服装"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "暴露与改造",
+          "幻想改造"
+        ],
+        "count": 123,
+        "source_category": "Anima/服装/R18/暴露与改造/幻想改造"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "暴露与改造",
+          "裸体遮盖"
+        ],
+        "count": 121,
+        "source_category": "Anima/服装/R18/暴露与改造/裸体遮盖"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "暴露与改造",
+          "日常改造",
+          "敞开与解扣"
+        ],
+        "count": 23,
+        "source_category": "Anima/服装/R18/暴露与改造/日常改造/敞开与解扣"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "暴露与改造",
+          "日常改造",
+          "破损与透视"
+        ],
+        "count": 76,
+        "source_category": "Anima/服装/R18/暴露与改造/日常改造/破损与透视"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "暴露与改造",
+          "日常改造",
+          "下拉与半脱"
+        ],
+        "count": 2,
+        "source_category": "Anima/服装/R18/暴露与改造/日常改造/下拉与半脱"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "暴露与改造",
+          "日常改造",
+          "掀衣展示"
+        ],
+        "count": 22,
+        "source_category": "Anima/服装/R18/暴露与改造/日常改造/掀衣展示"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "暴露与改造",
+          "日常改造",
+          "综合日常改造"
+        ],
+        "count": 104,
+        "source_category": "Anima/服装/R18/暴露与改造/日常改造/综合日常改造"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "暴露与改造",
+          "职业改造"
+        ],
+        "count": 88,
+        "source_category": "Anima/服装/R18/暴露与改造/职业改造"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "暴露与改造",
+          "综合成人穿搭"
+        ],
+        "count": 5,
+        "source_category": "Anima/服装/R18/暴露与改造/综合成人穿搭"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "材质与紧身",
+          "高腰紧身衣"
+        ],
+        "count": 25,
+        "source_category": "Anima/服装/R18/材质与紧身/高腰紧身衣"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "材质与紧身",
+          "连体胶衣"
+        ],
+        "count": 118,
+        "source_category": "Anima/服装/R18/材质与紧身/连体胶衣"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "内衣与泳装",
+          "内衣",
+          "连裤袜与吊带"
+        ],
+        "count": 37,
+        "source_category": "Anima/服装/R18/内衣与泳装/内衣/连裤袜与吊带"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "内衣与泳装",
+          "内衣",
+          "情趣内衣"
+        ],
+        "count": 93,
+        "source_category": "Anima/服装/R18/内衣与泳装/内衣/情趣内衣"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "内衣与泳装",
+          "内衣",
+          "胸罩与内裤"
+        ],
+        "count": 43,
+        "source_category": "Anima/服装/R18/内衣与泳装/内衣/胸罩与内裤"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "内衣与泳装",
+          "内衣",
+          "综合内衣"
+        ],
+        "count": 23,
+        "source_category": "Anima/服装/R18/内衣与泳装/内衣/综合内衣"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "内衣与泳装",
+          "睡衣"
+        ],
+        "count": 56,
+        "source_category": "Anima/服装/R18/内衣与泳装/睡衣"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "内衣与泳装",
+          "泳装",
+          "比基尼"
+        ],
+        "count": 126,
+        "source_category": "Anima/服装/R18/内衣与泳装/泳装/比基尼"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "内衣与泳装",
+          "泳装",
+          "连体与竞赛泳装"
+        ],
+        "count": 49,
+        "source_category": "Anima/服装/R18/内衣与泳装/泳装/连体与竞赛泳装"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "内衣与泳装",
+          "泳装",
+          "特殊泳装"
+        ],
+        "count": 6,
+        "source_category": "Anima/服装/R18/内衣与泳装/泳装/特殊泳装"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "内衣与泳装",
+          "泳装",
+          "校泳与运动泳装"
+        ],
+        "count": 25,
+        "source_category": "Anima/服装/R18/内衣与泳装/泳装/校泳与运动泳装"
+      },
+      {
+        "kind": "clothing",
+        "path": [
+          "R18",
+          "Cosplay与角色服装"
+        ],
+        "count": 102,
+        "source_category": "Anima/服装/R18/Cosplay与角色服装"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "表情与情绪",
+          "悲伤与哭泣"
+        ],
+        "count": 73,
+        "source_category": "Anima/姿势/正常/表情与情绪/悲伤与哭泣"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "表情与情绪",
+          "愤怒与厌恶"
+        ],
+        "count": 51,
+        "source_category": "Anima/姿势/正常/表情与情绪/愤怒与厌恶"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "表情与情绪",
+          "害羞与慌张"
+        ],
+        "count": 65,
+        "source_category": "Anima/姿势/正常/表情与情绪/害羞与慌张"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "表情与情绪",
+          "惊讶与困惑"
+        ],
+        "count": 25,
+        "source_category": "Anima/姿势/正常/表情与情绪/惊讶与困惑"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "表情与情绪",
+          "开心与得意"
+        ],
+        "count": 45,
+        "source_category": "Anima/姿势/正常/表情与情绪/开心与得意"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "表情与情绪",
+          "夸张颜艺",
+          "搞怪与漫画"
+        ],
+        "count": 59,
+        "source_category": "Anima/姿势/正常/表情与情绪/夸张颜艺/搞怪与漫画"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "表情与情绪",
+          "夸张颜艺",
+          "冷淡与无语"
+        ],
+        "count": 38,
+        "source_category": "Anima/姿势/正常/表情与情绪/夸张颜艺/冷淡与无语"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "表情与情绪",
+          "夸张颜艺",
+          "欲望与失神"
+        ],
+        "count": 34,
+        "source_category": "Anima/姿势/正常/表情与情绪/夸张颜艺/欲望与失神"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "表情与情绪",
+          "夸张颜艺",
+          "综合颜艺",
+          "口部与舌头"
+        ],
+        "count": 35,
+        "source_category": "Anima/姿势/正常/表情与情绪/夸张颜艺/综合颜艺/口部与舌头"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "表情与情绪",
+          "夸张颜艺",
+          "综合颜艺",
+          "眼神与视线"
+        ],
+        "count": 128,
+        "source_category": "Anima/姿势/正常/表情与情绪/夸张颜艺/综合颜艺/眼神与视线"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "表情与情绪",
+          "夸张颜艺",
+          "综合颜艺",
+          "综合表情"
+        ],
+        "count": 84,
+        "source_category": "Anima/姿势/正常/表情与情绪/夸张颜艺/综合颜艺/综合表情"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "单人动作",
+          "生活动作"
+        ],
+        "count": 78,
+        "source_category": "Anima/姿势/正常/单人动作/生活动作"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "单人动作",
+          "运动与舞蹈"
+        ],
+        "count": 18,
+        "source_category": "Anima/姿势/正常/单人动作/运动与舞蹈"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "单人动作",
+          "整理与穿脱"
+        ],
+        "count": 25,
+        "source_category": "Anima/姿势/正常/单人动作/整理与穿脱"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "单人动作",
+          "综合动作"
+        ],
+        "count": 168,
+        "source_category": "Anima/姿势/正常/单人动作/综合动作"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "多人互动",
+          "抱起与背负"
+        ],
+        "count": 5,
+        "source_category": "Anima/姿势/正常/多人互动/抱起与背负"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "多人互动",
+          "牵手与陪伴"
+        ],
+        "count": 29,
+        "source_category": "Anima/姿势/正常/多人互动/牵手与陪伴"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "多人互动",
+          "亲吻与拥抱"
+        ],
+        "count": 110,
+        "source_category": "Anima/姿势/正常/多人互动/亲吻与拥抱"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "多人互动",
+          "群体与合影"
+        ],
+        "count": 181,
+        "source_category": "Anima/姿势/正常/多人互动/群体与合影"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "基础姿态",
+          "手势与持物"
+        ],
+        "count": 15,
+        "source_category": "Anima/姿势/正常/基础姿态/手势与持物"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "基础姿态",
+          "躺卧与趴伏"
+        ],
+        "count": 165,
+        "source_category": "Anima/姿势/正常/基础姿态/躺卧与趴伏"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "基础姿态",
+          "站立与行走"
+        ],
+        "count": 93,
+        "source_category": "Anima/姿势/正常/基础姿态/站立与行走"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "基础姿态",
+          "综合姿态"
+        ],
+        "count": 44,
+        "source_category": "Anima/姿势/正常/基础姿态/综合姿态"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "基础姿态",
+          "坐姿与跪姿",
+          "地面坐姿"
+        ],
+        "count": 12,
+        "source_category": "Anima/姿势/正常/基础姿态/坐姿与跪姿/地面坐姿"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "基础姿态",
+          "坐姿与跪姿",
+          "蹲姿与屈膝"
+        ],
+        "count": 33,
+        "source_category": "Anima/姿势/正常/基础姿态/坐姿与跪姿/蹲姿与屈膝"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "基础姿态",
+          "坐姿与跪姿",
+          "跪姿与正坐"
+        ],
+        "count": 31,
+        "source_category": "Anima/姿势/正常/基础姿态/坐姿与跪姿/跪姿与正坐"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "基础姿态",
+          "坐姿与跪姿",
+          "椅凳与座位"
+        ],
+        "count": 39,
+        "source_category": "Anima/姿势/正常/基础姿态/坐姿与跪姿/椅凳与座位"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "基础姿态",
+          "坐姿与跪姿",
+          "综合坐姿"
+        ],
+        "count": 73,
+        "source_category": "Anima/姿势/正常/基础姿态/坐姿与跪姿/综合坐姿"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "战斗与动态",
+          "高速与冲击"
+        ],
+        "count": 37,
+        "source_category": "Anima/姿势/正常/战斗与动态/高速与冲击"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "战斗与动态",
+          "魔法与技能"
+        ],
+        "count": 100,
+        "source_category": "Anima/姿势/正常/战斗与动态/魔法与技能"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "战斗与动态",
+          "枪械与远程"
+        ],
+        "count": 54,
+        "source_category": "Anima/姿势/正常/战斗与动态/枪械与远程"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "战斗与动态",
+          "武器近战"
+        ],
+        "count": 118,
+        "source_category": "Anima/姿势/正常/战斗与动态/武器近战"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "正常",
+          "战斗与动态",
+          "综合战斗姿态"
+        ],
+        "count": 148,
+        "source_category": "Anima/姿势/正常/战斗与动态/综合战斗姿态"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "单人表现",
+          "暴露",
+          "公共场所暴露"
+        ],
+        "count": 91,
+        "source_category": "Anima/姿势/R18/单人表现/暴露/公共场所暴露"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "单人表现",
+          "暴露",
+          "裸体展示"
+        ],
+        "count": 166,
+        "source_category": "Anima/姿势/R18/单人表现/暴露/裸体展示"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "单人表现",
+          "暴露",
+          "掀衣与敞开"
+        ],
+        "count": 24,
+        "source_category": "Anima/姿势/R18/单人表现/暴露/掀衣与敞开"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "单人表现",
+          "暴露",
+          "意外走光"
+        ],
+        "count": 26,
+        "source_category": "Anima/姿势/R18/单人表现/暴露/意外走光"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "单人表现",
+          "隐秘展示与直播"
+        ],
+        "count": 122,
+        "source_category": "Anima/姿势/R18/单人表现/隐秘展示与直播"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "单人表现",
+          "诱惑",
+          "表情与视线"
+        ],
+        "count": 94,
+        "source_category": "Anima/姿势/R18/单人表现/诱惑/表情与视线"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "单人表现",
+          "诱惑",
+          "服装与半脱"
+        ],
+        "count": 32,
+        "source_category": "Anima/姿势/R18/单人表现/诱惑/服装与半脱"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "单人表现",
+          "诱惑",
+          "身体展示"
+        ],
+        "count": 44,
+        "source_category": "Anima/姿势/R18/单人表现/诱惑/身体展示"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "单人表现",
+          "诱惑",
+          "邀请姿态"
+        ],
+        "count": 178,
+        "source_category": "Anima/姿势/R18/单人表现/诱惑/邀请姿态"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "单人表现",
+          "自慰",
+          "摩擦与隔衣"
+        ],
+        "count": 10,
+        "source_category": "Anima/姿势/R18/单人表现/自慰/摩擦与隔衣"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "单人表现",
+          "自慰",
+          "手指自慰"
+        ],
+        "count": 5,
+        "source_category": "Anima/姿势/R18/单人表现/自慰/手指自慰"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "单人表现",
+          "自慰",
+          "玩具自慰"
+        ],
+        "count": 70,
+        "source_category": "Anima/姿势/R18/单人表现/自慰/玩具自慰"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "单人表现",
+          "自慰",
+          "综合自慰"
+        ],
+        "count": 148,
+        "source_category": "Anima/姿势/R18/单人表现/自慰/综合自慰"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "多人互动",
+          "百合",
+          "多人百合"
+        ],
+        "count": 47,
+        "source_category": "Anima/姿势/R18/多人互动/百合/多人百合"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "多人互动",
+          "百合",
+          "口舌与亲吻"
+        ],
+        "count": 86,
+        "source_category": "Anima/姿势/R18/多人互动/百合/口舌与亲吻"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "多人互动",
+          "百合",
+          "摩擦与玩具"
+        ],
+        "count": 54,
+        "source_category": "Anima/姿势/R18/多人互动/百合/摩擦与玩具"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "多人互动",
+          "百合",
+          "胸臀爱抚"
+        ],
+        "count": 24,
+        "source_category": "Anima/姿势/R18/多人互动/百合/胸臀爱抚"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "多人互动",
+          "百合",
+          "综合亲密互动",
+          "双人姿态"
+        ],
+        "count": 111,
+        "source_category": "Anima/姿势/R18/多人互动/百合/综合亲密互动/双人姿态"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "多人互动",
+          "百合",
+          "综合亲密互动",
+          "拥抱与贴贴"
+        ],
+        "count": 23,
+        "source_category": "Anima/姿势/R18/多人互动/百合/综合亲密互动/拥抱与贴贴"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "多人互动",
+          "百合",
+          "综合亲密互动",
+          "综合百合"
+        ],
+        "count": 73,
+        "source_category": "Anima/姿势/R18/多人互动/百合/综合亲密互动/综合百合"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "多人互动",
+          "多人强制"
+        ],
+        "count": 93,
+        "source_category": "Anima/姿势/R18/多人互动/多人强制"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "多人互动",
+          "双飞与多人"
+        ],
+        "count": 129,
+        "source_category": "Anima/姿势/R18/多人互动/双飞与多人"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "多人互动",
+          "协作侍奉"
+        ],
+        "count": 152,
+        "source_category": "Anima/姿势/R18/多人互动/协作侍奉"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "非插入互动",
+          "口交与颜射",
+          "常规口交",
+          "躺卧与骑脸"
+        ],
+        "count": 47,
+        "source_category": "Anima/姿势/R18/非插入互动/口交与颜射/常规口交/躺卧与骑脸"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "非插入互动",
+          "口交与颜射",
+          "常规口交",
+          "站坐姿势"
+        ],
+        "count": 36,
+        "source_category": "Anima/姿势/R18/非插入互动/口交与颜射/常规口交/站坐姿势"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "非插入互动",
+          "口交与颜射",
+          "常规口交",
+          "综合口交"
+        ],
+        "count": 144,
+        "source_category": "Anima/姿势/R18/非插入互动/口交与颜射/常规口交/综合口交"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "非插入互动",
+          "口交与颜射",
+          "跪姿口交"
+        ],
+        "count": 49,
+        "source_category": "Anima/姿势/R18/非插入互动/口交与颜射/跪姿口交"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "非插入互动",
+          "口交与颜射",
+          "深喉与强制口交"
+        ],
+        "count": 125,
+        "source_category": "Anima/姿势/R18/非插入互动/口交与颜射/深喉与强制口交"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "非插入互动",
+          "口交与颜射",
+          "舔阴与女性口交"
+        ],
+        "count": 10,
+        "source_category": "Anima/姿势/R18/非插入互动/口交与颜射/舔阴与女性口交"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "非插入互动",
+          "口交与颜射",
+          "颜射与口内"
+        ],
+        "count": 150,
+        "source_category": "Anima/姿势/R18/非插入互动/口交与颜射/颜射与口内"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "非插入互动",
+          "乳交"
+        ],
+        "count": 102,
+        "source_category": "Anima/姿势/R18/非插入互动/乳交"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "非插入互动",
+          "身体摩擦"
+        ],
+        "count": 91,
+        "source_category": "Anima/姿势/R18/非插入互动/身体摩擦"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "非插入互动",
+          "手交"
+        ],
+        "count": 156,
+        "source_category": "Anima/姿势/R18/非插入互动/手交"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "非插入互动",
+          "足交"
+        ],
+        "count": 113,
+        "source_category": "Anima/姿势/R18/非插入互动/足交"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "拘束",
+          "宠物调教"
+        ],
+        "count": 40,
+        "source_category": "Anima/姿势/R18/拘束/宠物调教"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "拘束",
+          "监禁放置"
+        ],
+        "count": 146,
+        "source_category": "Anima/姿势/R18/拘束/监禁放置"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "拘束",
+          "拘束凌辱"
+        ],
+        "count": 105,
+        "source_category": "Anima/姿势/R18/拘束/拘束凌辱"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "拘束",
+          "捆绑位置"
+        ],
+        "count": 68,
+        "source_category": "Anima/姿势/R18/拘束/捆绑位置"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "拘束",
+          "捆绑用具"
+        ],
+        "count": 88,
+        "source_category": "Anima/姿势/R18/拘束/捆绑用具"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "拘束",
+          "捆绑姿势",
+          "跪坐与躺卧拘束"
+        ],
+        "count": 37,
+        "source_category": "Anima/姿势/R18/拘束/捆绑姿势/跪坐与躺卧拘束"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "拘束",
+          "捆绑姿势",
+          "绳缚与龟甲缚"
+        ],
+        "count": 35,
+        "source_category": "Anima/姿势/R18/拘束/捆绑姿势/绳缚与龟甲缚"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "拘束",
+          "捆绑姿势",
+          "四肢固定"
+        ],
+        "count": 125,
+        "source_category": "Anima/姿势/R18/拘束/捆绑姿势/四肢固定"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "拘束",
+          "捆绑姿势",
+          "悬吊与倒挂"
+        ],
+        "count": 107,
+        "source_category": "Anima/姿势/R18/拘束/捆绑姿势/悬吊与倒挂"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "拘束",
+          "捆绑姿势",
+          "综合拘束姿态"
+        ],
+        "count": 67,
+        "source_category": "Anima/姿势/R18/拘束/捆绑姿势/综合拘束姿态"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "拘束",
+          "肉便器"
+        ],
+        "count": 28,
+        "source_category": "Anima/姿势/R18/拘束/肉便器"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "情境",
+          "成人日常",
+          "单人"
+        ],
+        "count": 151,
+        "source_category": "Anima/姿势/R18/情境/成人日常/单人"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "情境",
+          "成人日常",
+          "双人"
+        ],
+        "count": 22,
+        "source_category": "Anima/姿势/R18/情境/成人日常/双人"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "情境",
+          "催眠"
+        ],
+        "count": 104,
+        "source_category": "Anima/姿势/R18/情境/催眠"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "情境",
+          "节庆献礼"
+        ],
+        "count": 21,
+        "source_category": "Anima/姿势/R18/情境/节庆献礼"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "情境",
+          "NTR"
+        ],
+        "count": 164,
+        "source_category": "Anima/姿势/R18/情境/NTR"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "身体构图",
+          "背身"
+        ],
+        "count": 42,
+        "source_category": "Anima/姿势/R18/身体构图/背身"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "身体构图",
+          "腿足",
+          "腿部与大腿"
+        ],
+        "count": 20,
+        "source_category": "Anima/姿势/R18/身体构图/腿足/腿部与大腿"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "身体构图",
+          "腿足",
+          "鞋袜与足部"
+        ],
+        "count": 11,
+        "source_category": "Anima/姿势/R18/身体构图/腿足/鞋袜与足部"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "身体构图",
+          "腿足",
+          "综合腿足构图"
+        ],
+        "count": 8,
+        "source_category": "Anima/姿势/R18/身体构图/腿足/综合腿足构图"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "身体构图",
+          "腿足",
+          "足底与脚趾"
+        ],
+        "count": 193,
+        "source_category": "Anima/姿势/R18/身体构图/腿足/足底与脚趾"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "身体构图",
+          "臀裆部"
+        ],
+        "count": 200,
+        "source_category": "Anima/姿势/R18/身体构图/臀裆部"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "身体构图",
+          "胸腹部"
+        ],
+        "count": 128,
+        "source_category": "Anima/姿势/R18/身体构图/胸腹部"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "双人互动",
+          "调戏与猥亵",
+          "腿足与腋下"
+        ],
+        "count": 23,
+        "source_category": "Anima/姿势/R18/双人互动/调戏与猥亵/腿足与腋下"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "双人互动",
+          "调戏与猥亵",
+          "臀裆触摸"
+        ],
+        "count": 116,
+        "source_category": "Anima/姿势/R18/双人互动/调戏与猥亵/臀裆触摸"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "双人互动",
+          "调戏与猥亵",
+          "胸部爱抚"
+        ],
+        "count": 101,
+        "source_category": "Anima/姿势/R18/双人互动/调戏与猥亵/胸部爱抚"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "双人互动",
+          "调戏与猥亵",
+          "综合爱抚"
+        ],
+        "count": 105,
+        "source_category": "Anima/姿势/R18/双人互动/调戏与猥亵/综合爱抚"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "双人互动",
+          "攻守反转"
+        ],
+        "count": 63,
+        "source_category": "Anima/姿势/R18/双人互动/攻守反转"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "双人互动",
+          "事后",
+          "疲惫与余韵"
+        ],
+        "count": 107,
+        "source_category": "Anima/姿势/R18/双人互动/事后/疲惫与余韵"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "双人互动",
+          "事后",
+          "体表痕迹"
+        ],
+        "count": 29,
+        "source_category": "Anima/姿势/R18/双人互动/事后/体表痕迹"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "双人互动",
+          "事后",
+          "体内与流出"
+        ],
+        "count": 158,
+        "source_category": "Anima/姿势/R18/双人互动/事后/体内与流出"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "双人互动",
+          "事后",
+          "颜面与口内痕迹"
+        ],
+        "count": 39,
+        "source_category": "Anima/姿势/R18/双人互动/事后/颜面与口内痕迹"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "双人互动",
+          "睡眠侵犯"
+        ],
+        "count": 38,
+        "source_category": "Anima/姿势/R18/双人互动/睡眠侵犯"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "双人互动",
+          "偷窥与直视"
+        ],
+        "count": 32,
+        "source_category": "Anima/姿势/R18/双人互动/偷窥与直视"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "双人互动",
+          "胁迫与强制"
+        ],
+        "count": 175,
+        "source_category": "Anima/姿势/R18/双人互动/胁迫与强制"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "体位",
+          "后入与背后位",
+          "侧卧与躺卧"
+        ],
+        "count": 33,
+        "source_category": "Anima/姿势/R18/体位/后入与背后位/侧卧与躺卧"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "体位",
+          "后入与背后位",
+          "俯卧后入"
+        ],
+        "count": 57,
+        "source_category": "Anima/姿势/R18/体位/后入与背后位/俯卧后入"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "体位",
+          "后入与背后位",
+          "跪趴后入"
+        ],
+        "count": 65,
+        "source_category": "Anima/姿势/R18/体位/后入与背后位/跪趴后入"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "体位",
+          "后入与背后位",
+          "其他背后位"
+        ],
+        "count": 77,
+        "source_category": "Anima/姿势/R18/体位/后入与背后位/其他背后位"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "体位",
+          "后入与背后位",
+          "站立后入"
+        ],
+        "count": 117,
+        "source_category": "Anima/姿势/R18/体位/后入与背后位/站立后入"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "体位",
+          "火车便当"
+        ],
+        "count": 13,
+        "source_category": "Anima/姿势/R18/体位/火车便当"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "体位",
+          "骑乘位"
+        ],
+        "count": 151,
+        "source_category": "Anima/姿势/R18/体位/骑乘位"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "体位",
+          "站立位"
+        ],
+        "count": 57,
+        "source_category": "Anima/姿势/R18/体位/站立位"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "体位",
+          "正身位"
+        ],
+        "count": 130,
+        "source_category": "Anima/姿势/R18/体位/正身位"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "体位",
+          "种付位"
+        ],
+        "count": 50,
+        "source_category": "Anima/姿势/R18/体位/种付位"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "体位",
+          "坐身位"
+        ],
+        "count": 79,
+        "source_category": "Anima/姿势/R18/体位/坐身位"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "重口",
+          "暴力",
+          "暴虐与过激"
+        ],
+        "count": 182,
+        "source_category": "Anima/姿势/R18/重口/暴力/暴虐与过激"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "重口",
+          "暴力",
+          "截肢与人棍"
+        ],
+        "count": 106,
+        "source_category": "Anima/姿势/R18/重口/暴力/截肢与人棍"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "重口",
+          "暴力",
+          "杀害"
+        ],
+        "count": 119,
+        "source_category": "Anima/姿势/R18/重口/暴力/杀害"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "重口",
+          "暴力",
+          "食人"
+        ],
+        "count": 29,
+        "source_category": "Anima/姿势/R18/重口/暴力/食人"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "重口",
+          "暴力",
+          "血肉内脏"
+        ],
+        "count": 13,
+        "source_category": "Anima/姿势/R18/重口/暴力/血肉内脏"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "重口",
+          "机械"
+        ],
+        "count": 57,
+        "source_category": "Anima/姿势/R18/重口/机械"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "重口",
+          "排泄物"
+        ],
+        "count": 50,
+        "source_category": "Anima/姿势/R18/重口/排泄物"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "重口",
+          "异种互动",
+          "触手",
+          "插入与侵入"
+        ],
+        "count": 57,
+        "source_category": "Anima/姿势/R18/重口/异种互动/触手/插入与侵入"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "重口",
+          "异种互动",
+          "触手",
+          "覆盖与服装"
+        ],
+        "count": 6,
+        "source_category": "Anima/姿势/R18/重口/异种互动/触手/覆盖与服装"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "重口",
+          "异种互动",
+          "触手",
+          "拘束与缠绕"
+        ],
+        "count": 24,
+        "source_category": "Anima/姿势/R18/重口/异种互动/触手/拘束与缠绕"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "重口",
+          "异种互动",
+          "触手",
+          "口部互动"
+        ],
+        "count": 92,
+        "source_category": "Anima/姿势/R18/重口/异种互动/触手/口部互动"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "重口",
+          "异种互动",
+          "触手",
+          "综合触手互动"
+        ],
+        "count": 55,
+        "source_category": "Anima/姿势/R18/重口/异种互动/触手/综合触手互动"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "重口",
+          "异种互动",
+          "昆虫"
+        ],
+        "count": 17,
+        "source_category": "Anima/姿势/R18/重口/异种互动/昆虫"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "重口",
+          "异种互动",
+          "人形魔物"
+        ],
+        "count": 63,
+        "source_category": "Anima/姿势/R18/重口/异种互动/人形魔物"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "重口",
+          "异种互动",
+          "史莱姆"
+        ],
+        "count": 36,
+        "source_category": "Anima/姿势/R18/重口/异种互动/史莱姆"
+      },
+      {
+        "kind": "pose",
+        "path": [
+          "R18",
+          "重口",
+          "异种互动",
+          "兽类"
+        ],
+        "count": 69,
+        "source_category": "Anima/姿势/R18/重口/异种互动/兽类"
+      }
+    ],
+    "review_category_count": 7,
+    "review_prompt_count": 442,
+    "review_buckets": {
+      "待归类/Anima复核/画风质量镜头/负面词与排除项": 16,
+      "待归类/Anima复核/画风质量镜头/画师与作品风格": 81,
+      "待归类/Anima复核/画风质量镜头/界面排版与画面特效": 43,
+      "待归类/Anima复核/画风质量镜头/镜头构图与光影": 83,
+      "待归类/Anima复核/画风质量镜头/媒介与渲染风格": 140,
+      "待归类/Anima复核/画风质量镜头/质量与正向参数": 78,
+      "待归类/Anima复核/画风质量镜头/综合画面控制": 1
+    },
+    "legacy_category_count": 6,
+    "legacy_prompt_count": 49,
+    "canonical_prompt_count": 16369,
+    "duplicate_prompt_group_count": 69,
+    "duplicate_prompt_extra_count": 73,
+    "referenced_image_count": 15909,
+    "no_image_count": 533,
+    "preview_file_count": 15881,
+    "missing_preview_file_count": 29,
+    "missing_preview_files": [
+      "百合接吻分享_1781867058.jpeg",
+      "百合拥吻坐姿指交_1781866429.jpeg",
+      "半躺桌上床上双手抱腿展示_1781867044.jpg",
+      "碧蓝航线奇尔沙治_1781867146.webp",
+      "插入前特写_1781867011.jpeg",
+      "纯白婚纱_1781867492.webp",
+      "单女抬脚自慰_1782034520.png",
+      "经典女上牛仔_1781866017.png",
+      "路人女主校服_1781867117.webp",
+      "露肩装_1781867461.webp",
+      "裸体舒展_1781865873.jpg",
+      "鸣潮爱弥斯_1781867088.webp",
+      "鸣潮达妮娅_1781867101.webp",
+      "女半躺掰开展示阴唇_1781866281.png",
+      "女高抬腿一字马靠墙展示_1782011326.png",
+      "女靠墙竖腿性交_1781866664.png",
+      "女悬浮7字后入_1781866096.png",
+      "趴床后入即将插入_1782009264.jpeg",
+      "森雅露露卡_1781867237.webp",
+      "双v口交后女特写_1781866404.png",
+      "抬腿过头双v展示阴部_1781866417.jpg",
+      "性感透明蕾丝露肩内衣_1781867138.webp",
+      "修女莉亚_1781867070.png",
+      "学生服_1781867423.webp",
+      "长风天青胜玉A Sky Blue Eclipsing Jade_1781867075.png",
+      "褶边粉色比基尼_1781868670.png",
+      "嘴含避孕套整理头发_1781970640.png",
+      "ol服装_1781867389.png",
+      "preset_1780206728.webp"
+    ],
+    "orphan_preview_file_count": 1,
+    "orphan_preview_files": [
+      "README.txt"
+    ]
+  },
+  "anima_only_manual_categories": true,
+  "updated_by": "codex",
+  "updated_reason": "Sync managed Anima categories and expose the reviewed style-quality branch through its dedicated selector."
+}

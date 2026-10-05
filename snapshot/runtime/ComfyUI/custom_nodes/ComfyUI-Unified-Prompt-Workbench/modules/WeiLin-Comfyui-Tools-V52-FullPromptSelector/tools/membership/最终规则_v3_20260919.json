@@ -1,0 +1,127 @@
+[
+ {
+  "theme": "人物数量",
+  "sub": "在场人数",
+  "pattern": "\\b(1girl|2girls|3girls|multiple girls|1boy|2boys|multiple boys|boy and girl|yuri|pair|group|duo|solo)\\b|\\b(girl|boy|woman|man|female|male)\\b"
+ },
+ {
+  "theme": "画风",
+  "sub": "画质",
+  "pattern": "\\b(highres|absurdres|masterpiece|best quality|very aesthetic|perfect anatomy|official art|ultra detailed|8k|4k|high resolution)\\b"
+ },
+ {
+  "theme": "画风",
+  "sub": "画师",
+  "pattern": "(?:artist\\s*[:：]|<artist>|\\b画师\\b|\\bartist\\b)"
+ },
+ {
+  "theme": "外貌",
+  "sub": "面部",
+  "pattern": "\\b(face|eyes|eyelashes|hair between eyes|blush|smile|expression|looking at viewer|closed eyes|half closed|heterochromia|tears|eyebrows)\\b"
+ },
+ {
+  "theme": "外貌",
+  "sub": "发型",
+  "pattern": "\\b(hair|ponytail|twintails|braid|braids|bangs|headband|ahoge|hair ornament)\\b"
+ },
+ {
+  "theme": "外貌",
+  "sub": "身体",
+  "pattern": "\\b(huge breasts|large breasts|breasts|nipples|navel|skin|thighs|muscular|slim|skinny|belly|hips|butt|tall|short|petite|chubby|fat|abs|collarbone|shoulder|neck)\\b"
+ },
+ {
+  "theme": "服饰",
+  "sub": "上装",
+  "pattern": "\\b(shirt|tank top|sweater|hoodie|jacket|coat|blouse|bra|bikini top|corset|vest)\\b"
+ },
+ {
+  "theme": "服饰",
+  "sub": "下装",
+  "pattern": "\\b(skirt|pants|shorts|leggings|jeans|trousers|panties|thong)\\b"
+ },
+ {
+  "theme": "服饰",
+  "sub": "鞋袜",
+  "pattern": "\\b(socks|stockings|thighhighs|pantyhose|boots|heels|shoes|sneakers)\\b"
+ },
+ {
+  "theme": "服饰",
+  "sub": "配饰",
+  "pattern": "\\b(necklace|choker|collar|ribbon|bow|gloves|hat|cap|glasses|earrings|belt|bag|pendant|tiara|veil)\\b"
+ },
+ {
+  "theme": "服饰",
+  "sub": "通用",
+  "pattern": "\\b(dress|gown|uniform|costume|outfit|clothing|clothes|lingerie|swimsuit|bikini|kimono|yukata|hanfu|qipao|armor|suit|apron|robe)\\b"
+ },
+ {
+  "theme": "状态",
+  "sub": "半脱",
+  "pattern": "\\b(unbuttoned|undressing|open clothes|opened|pulled down|pulled up|slipped|shrugged off|discarded|removed|half[- ]dressed|torn clothes|wet clothes|clothes off)\\b"
+ },
+ {
+  "theme": "成人",
+  "sub": "性交",
+  "pattern": "\\b(sex|vaginal|penetration|cowgirl position|mating press|from behind|missionary|straddling|spitroast)\\b"
+ },
+ {
+  "theme": "成人",
+  "sub": "前戏",
+  "pattern": "\\b(footjob|fellatio|oral|paizuri|handjob|foreplay|cum|cumshot)\\b"
+ },
+ {
+  "theme": "成人",
+  "sub": "露出",
+  "pattern": "\\b(nsfw|nude|naked|topless|bottomless|exposed|showing breasts|nipples visible)\\b"
+ },
+ {
+  "theme": "成人",
+  "sub": "特殊",
+  "pattern": "\\b(rape|bondage|restrained|tentacle|tentacles|futanari|futa|bestiality|corruption|transformed)\\b"
+ },
+ {
+  "theme": "道具",
+  "sub": "器物",
+  "pattern": "\\b(book|books|cup|glass|bottle|food|cake|fruit|camera|phone|umbrella|balloon|plant|knife|gun|sword|staff|box|bag|doll|teddy bear)\\b"
+ },
+ {
+  "theme": "角色",
+  "sub": "原作",
+  "pattern": "\\b(arknights|genshin|blue archive|bluearchive|fate|touhou|honkai|azur lane|nikke|vocaloid|project moon|girls frontline|splatoon|hololive)\\b"
+ },
+ {
+  "theme": "角色",
+  "sub": "种族",
+  "pattern": "\\b(dragon|elf|demon|angel|catgirl|fox girl|beast|monster|robot|mecha|slime|vampire|dragonborn|kemono|dog girl|animal ears)\\b"
+ },
+ {
+  "theme": "角色",
+  "sub": "职业",
+  "pattern": "\\b(maid|nurse|idol|teacher|student|knight|ninja|witch|police|office lady|flight attendant|scientist)\\b"
+ },
+ {
+  "theme": "动作",
+  "sub": "姿态",
+  "pattern": "(?<![a-z0-9])(?:inugami\\-ke[ _]+no[ _]+ichizoku[ _]+pose|knees[ _]+apart[ _]+feet[ _]+together|knees[ _]+together[ _]+feet[ _]+apart|revolved[ _]+head\\-to\\-knee[ _]+pose|looking[ _]+to[ _]+the[ _]+side|standing[ _]+on[ _]+one[ _]+leg|jonathan[ _]+joestar's[ _]+pose|carrying[ _]+over[ _]+shoulder|giorno[ _]+giovanna's[ _]+pose|chest[ _]+stand[ _]+handstand|spread[ _]+eagle[ _]+position|symmetrical[ _]+hand[ _]+pose|head[ _]+and[ _]+hip[ _]+pose|z\\-move[ _]+trainer[ _]+pose|standing[ _]+on[ _]+shoulder|carried[ _]+breast[ _]+rest|sitting[ _]+on[ _]+shoulder|hand[ _]+on[ _]+own[ _]+ear|hand[ _]+on[ _]+own[ _]+ass|figure[ _]+four[ _]+sitting|own[ _]+hands[ _]+together|kujo[ _]+jotaro's[ _]+pose|carrying[ _]+under[ _]+arm|dio[ _]+brando's[ _]+pose|looking[ _]+at[ _]+viewer|stroking[ _]+own[ _]+chin|own[ _]+hands[ _]+clasped|sitting[ _]+on[ _]+person|arms[ _]+behind[ _]+back|top\\-down[ _]+bottom\\-up|arms[ _]+behind[ _]+head|hugging[ _]+own[ _]+legs|kujou[ _]+karen[ _]+pose|hug[ _]+from[ _]+behind|sitting[ _]+on[ _]+head|arm[ _]+behind[ _]+head|walking[ _]+on[ _]+wall|interlocked[ _]+fingers|arm[ _]+behind[ _]+back|sitting[ _]+on[ _]+lap|battoujutsu[ _]+stance|hand[ _]+in[ _]+pocket|forehead\\-to\\-forehead|praise[ _]+the[ _]+sun|legs[ _]+over[ _]+head|shoulder\\-to\\-shoulder|knees[ _]+to[ _]+chest|list[ _]+of[ _]+poses|butterfly[ _]+sitting|over[ _]+the[ _]+knee|outstretched[ _]+arms|outstretched[ _]+hand|arms[ _]+at[ _]+sides|superhero[ _]+landing|superman[ _]+exposure|head[ _]+on[ _]+chest|circle[ _]+formation|outstretched[ _]+leg|outstretched[ _]+arm|upright[ _]+straddle|thigh[ _]+straddling|fighting[ _]+stance|ojou\\-sama[ _]+pose|leaning[ _]+forward|arm[ _]+at[ _]+side|fireman's[ _]+carry|plantar[ _]+flexion|on[ _]+one[ _]+knee|shoulder[ _]+carry|standing[ _]+split|princess[ _]+carry|v[ _]+over[ _]+eye|hugging[ _]+object|uneven[ _]+footing|bras[ _]+d'honneur|heads[ _]+together|fetal[ _]+position|nipple\\-to\\-nipple|charizard[ _]+pose|lotus[ _]+position|idle[ _]+animation|bowlegged[ _]+pose|crossed[ _]+ankles|noses[ _]+touching|twisted[ _]+torso|scorpion[ _]+pose|airplane[ _]+arms|cheek\\-to\\-breast|full[ _]+scorpion|holding[ _]+hands|bear[ _]+position|belly\\-to\\-belly|villain[ _]+pose|victory[ _]+pose|crossed[ _]+arms|watson[ _]+cross|leaning[ _]+back|finger[ _]+frame|saboten[ _]+pose|hugging[ _]+tail|dojikko[ _]+pose|looking[ _]+afar|indian[ _]+style|crossed[ _]+legs|henshin[ _]+pose|cheek\\-to\\-cheek|archer[ _]+pose|human[ _]+chair|locked[ _]+arms|letter[ _]+pose|arched[ _]+back|spread[ _]+legs|tiptoe[ _]+kiss|heart[ _]+hands|rabbit[ _]+pose|eye[ _]+contact|pigeon[ _]+pose|spread[ _]+arms|arm[ _]+support|gendou[ _]+pose|toe[ _]+scrunch|zombie[ _]+pose|body[ _]+bridge|chest[ _]+stand|kongou[ _]+pose|child[ _]+carry|horns[ _]+pose|legs[ _]+apart|ghost[ _]+pose|walk[ _]+cycle|baby[ _]+carry|back\\-to\\-back|star[ _]+hands|face\\-to\\-face|on[ _]+stomach|head[ _]+down|head[ _]+tilt|sway[ _]+back|waist[ _]+hug|group[ _]+hug|all[ _]+fours|bent[ _]+over|tail[ _]+lock|head[ _]+rest|head[ _]+back|claw[ _]+pose|bent[ _]+back|jojo[ _]+pose|pin[ _]+legs|pigeon\\-toed|carry[ _]+me|upside\\-down|contrapposto|ass\\-to\\-ass|wing[ _]+hug|dorsiflexion|leg[ _]+lock|leg[ _]+lift|paw[ _]+pose|knees[ _]+up|prostration|legs[ _]+up|arm[ _]+hug|arms[ _]+up|crucifixion|knee[ _]+up|on[ _]+side|on[ _]+back|leg[ _]+up|arm[ _]+up|stretching|triplefold|ruppelbend|straddling|v[ _]+arms|w[ _]+arms|yokozuwari|piggyback|reclining|squatting|slouching|balancing|shrugging|handstand|headstand|faceplant|cowering|shushing|kneeling|reaching|pouncing|quadfold|carrying|standing|crawling|falling|jumping|t\\-pose|hopping|running|sitting|walking|tiptoes|a\\-pose|flexing|midair|akanbe|wariza|waving|salute|flying|seiza|lying)(?![a-z0-9])(?![ _]+(?:scarf|hair|hair_strand|strand|strands|cloth|clothes|clothing|skirt|dress|sleeve|sleeves|ribbon|petal|petals|leaf|leaves|paper|light|spark|sparks|sparkle|sparkles|feather|feathers|fabric|bubble|bubbles|smoke|cloud|clouds|snow|dust|sand|ash|flame|flames|particle|particles|string|strings|rope|chair|mat|towel|umbrella|eyes)(?![a-z0-9]))"
+ },
+ {
+  "theme": "动作",
+  "sub": "手势",
+  "pattern": "(?<![a-z0-9])(?:tsuki[ _]+ni[ _]+kawatte[ _]+oshioki[ _]+yo|che[ _]+vuoi\\?[ _]+\\(italian[ _]+gesture\\)|double[ _]+number[ _]+four[ _]+\\(asl\\)|pointing[ _]+spider\\-man[ _]+\\(meme\\)|slit[ _]+throat[ _]+\\(gesture\\)|index[ _]+fingers[ _]+together|holding[ _]+with[ _]+gesture|saturday[ _]+night[ _]+fever|distress[ _]+hand[ _]+signal|number[ _]+four[ _]+\\(asl\\)|hand[ _]+of[ _]+benediction|heart[ _]+hands[ _]+quartet|pointing[ _]+at[ _]+another|index[ _]+finger[ _]+raised|double[ _]+thumbs[ _]+down|pointing[ _]+at[ _]+viewer|double[ _]+finger[ _]+gun|fox[ _]+shadow[ _]+puppet|stroking[ _]+own[ _]+chin|own[ _]+hands[ _]+clasped|hand[ _]+gesture[ _]+duo|heart[ _]+hands[ _]+trio|double[ _]+thumbs[ _]+up|straight\\-arm[ _]+salute|pointing[ _]+at[ _]+self|palm\\-fist[ _]+greeting|cunnilingus[ _]+gesture|heart[ _]+hands[ _]+duo|kitsune[ _]+no[ _]+mado|penetration[ _]+gesture|shocker[ _]+\\(gesture\\)|two\\-finger[ _]+salute|heart[ _]+tail[ _]+duo|list[ _]+of[ _]+poses|tribadism[ _]+gesture|v[ _]+over[ _]+mouth|stop[ _]+\\(gesture\\)|pointing[ _]+forward|fellatio[ _]+gesture|steepled[ _]+fingers|fist[ _]+in[ _]+hand|pinching[ _]+gesture|oral[ _]+invitation|finger[ _]+counting|handjob[ _]+gesture|crossed[ _]+fingers|triangle[ _]+hands|v[ _]+over[ _]+eye|curled[ _]+fingers|orchid[ _]+fingers|palm\\-fist[ _]+tap|spread[ _]+fingers|no[ _]+\\(gesture\\)|clenched[ _]+hands|groping[ _]+motion|vulcan[ _]+salute|shadow[ _]+puppet|middle[ _]+finger|cupping[ _]+hands|pointing[ _]+down|money[ _]+gesture|twirling[ _]+hair|clenched[ _]+hand|victory[ _]+pose|finger[ _]+heart|finger[ _]+frame|dojikko[ _]+pose|circle[ _]+hands|hand[ _]+glasses|double[ _]+\\\\m/|kamina[ _]+pose|double[ _]+\\\\n/|heart[ _]+hands|rabbit[ _]+pose|pinky[ _]+swear|thumbs[ _]+down|pointing[ _]+up|raised[ _]+fist|finger[ _]+gun|horns[ _]+pose|air[ _]+quotes|power[ _]+fist|air[ _]+guitar|star[ _]+hands|heart[ _]+arms|shaka[ _]+sign|heart[ _]+tail|open[ _]+hands|open[ _]+hand|thumbs[ _]+up|pinky[ _]+out|fist[ _]+pump|ohikaenasutte|x[ _]+fingers|fist[ _]+bump|claw[ _]+pose|high[ _]+five|carry[ _]+me|fig[ _]+sign|double[ _]+v|middle[ _]+w|inward[ _]+v|double[ _]+l|paw[ _]+pose|gyaru[ _]+v|ok[ _]+sign|hat[ _]+tip|x[ _]+arms|l[ _]+hand|shrugging|beckoning|fidgeting|shushing|pointing|facepalm|reaching|kuji\\-in|curtsey|akanbe|waving|salute|bowing|noogie)(?![a-z0-9])(?![ _]+(?:scarf|hair|hair_strand|strand|strands|cloth|clothes|clothing|skirt|dress|sleeve|sleeves|ribbon|petal|petals|leaf|leaves|paper|light|spark|sparks|sparkle|sparkles|feather|feathers|fabric|bubble|bubbles|smoke|cloud|clouds|snow|dust|sand|ash|flame|flames|particle|particles|string|strings|rope|chair|mat|towel|umbrella|eyes)(?![a-z0-9]))"
+ },
+ {
+  "theme": "动作",
+  "sub": "腿部",
+  "pattern": "(?<![a-z0-9])(?:knees[ _]+apart[ _]+feet[ _]+together|knees[ _]+together[ _]+feet[ _]+apart|legs[ _]+over[ _]+head|knees[ _]+to[ _]+chest|outstretched[ _]+leg|plantar[ _]+flexion|standing[ _]+split|crossed[ _]+ankles|uneven[ _]+footing|watson[ _]+cross|pigeon[ _]+pose|spread[ _]+legs|tiptoe[ _]+kiss|toe[ _]+scrunch|pin[ _]+legs|pigeon\\-toed|leg[ _]+lift|knees[ _]+up|dorsiflexion|legs[ _]+up|knee[ _]+up|leg[ _]+up|tiptoes)(?![a-z0-9])(?![ _]+(?:scarf|hair|hair_strand|strand|strands|cloth|clothes|clothing|skirt|dress|sleeve|sleeves|ribbon|petal|petals|leaf|leaves|paper|light|spark|sparks|sparkle|sparkles|feather|feathers|fabric|bubble|bubbles|smoke|cloud|clouds|snow|dust|sand|ash|flame|flames|particle|particles|string|strings|rope|chair|mat|towel|umbrella|eyes)(?![a-z0-9]))"
+ },
+ {
+  "theme": "场景",
+  "sub": "室内",
+  "pattern": "(?<![a-z0-9])(?:shower[ _]+\\(place\\)|public[ _]+restroom|wrestling[ _]+ring|changing[ _]+room|dressing[ _]+room|gym[ _]+storeroom|dance[ _]+studio|storage[ _]+room|fitting[ _]+room|toilet[ _]+stall|living[ _]+room|boxing[ _]+ring|dining[ _]+room|fitness[ _]+gym|prison[ _]+cell|locker[ _]+room|school[ _]+gym|otaku[ _]+room|hotel[ _]+room|messy[ _]+room|staff[ _]+room|conservatory|laboratory|classroom|cafeteria|infirmary|courtroom|backstage|bathroom|workshop|poolside|clubroom|ballroom|library|bathtub|kitchen|dungeon|cubicle|bedroom|hallway|closet|genkan|armory|morgue|aisle|sauna)(?![a-z0-9])(?![ _]+(?:scarf|hair|hair_strand|strand|strands|cloth|clothes|clothing|skirt|dress|sleeve|sleeves|ribbon|petal|petals|leaf|leaves|paper|light|spark|sparks|sparkle|sparkles|feather|feathers|fabric|bubble|bubbles|smoke|cloud|clouds|snow|dust|sand|ash|flame|flames|particle|particles|string|strings|rope|chair|mat|towel|umbrella|eyes)(?![a-z0-9]))"
+ },
+ {
+  "theme": "场景",
+  "sub": "室外",
+  "pattern": "(?<![a-z0-9])(?:floating[ _]+island|bamboo[ _]+forest|salt[ _]+flats|grasslands|wasteland|waterfall|seafloor|mountain|savannah|outdoors|volcano|wetland|glacier|desert|jungle|tundra|meadow|island|geyser|canyon|forest|shore|oasis|cliff|river|ocean|beach|hill|lake|pond|mesa|cave)(?![a-z0-9])(?![ _]+(?:scarf|hair|hair_strand|strand|strands|cloth|clothes|clothing|skirt|dress|sleeve|sleeves|ribbon|petal|petals|leaf|leaves|paper|light|spark|sparks|sparkle|sparkles|feather|feathers|fabric|bubble|bubbles|smoke|cloud|clouds|snow|dust|sand|ash|flame|flames|particle|particles|string|strings|rope|chair|mat|towel|umbrella|eyes)(?![a-z0-9]))"
+ }
+]

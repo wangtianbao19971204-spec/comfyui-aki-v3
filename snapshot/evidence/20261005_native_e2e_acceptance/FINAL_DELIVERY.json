@@ -1,0 +1,49 @@
+{
+  "status": "neutral_native_acceptance_complete_with_findings",
+  "time": "2026-10-05T09:16:42.897699+08:00",
+  "owner_thread": "01a1061f-c0b3-7f40-8168-1bc0ca82582c",
+  "run": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261005_native_e2e_acceptance",
+  "production_sha256": "c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a",
+  "production_files_changed": 0,
+  "backend_jobs": 12,
+  "backend_success": 12,
+  "visual_limited_pass": 10,
+  "visual_failed_cases": [
+    "ext07",
+    "ext05"
+  ],
+  "all_image_quality_passed": false,
+  "resource_warning": {
+    "peak_whole_gpu_mib": 31449.0,
+    "min_system_available_gib": 0.392
+  },
+  "visual_statuses": {
+    "ext09": "pass_with_quality_notes",
+    "ext07": "fail_visual_acceptance",
+    "ext08": "pass_with_quality_notes",
+    "ext05": "fail_visual_acceptance",
+    "ext06": "pass_with_quality_notes",
+    "ext04": "pass_with_quality_notes",
+    "k2_full": "pass_with_quality_notes",
+    "a29_full": "pass_with_quality_notes",
+    "a1_full": "pass_with_quality_notes",
+    "a1_smoke": "pass_with_quality_notes",
+    "k2_smoke": "pass_with_quality_notes",
+    "a29_smoke": "pass_with_quality_notes"
+  },
+  "evidence": {
+    "guard": "final_runtime_check.json",
+    "metrics": "measurements.json",
+    "visual_review": "visual_review.json",
+    "report": "REPORT.txt"
+  },
+  "known_limits": [
+    "One neutral sample and one seed per case; not cross-scene reliability or LoRA compatibility acceptance.",
+    "Regional detailer branches are excluded; no adult-region inference was performed.",
+    "Native browser export plus API submission; this is not a new end-to-end browser click/lifecycle/cancellation test.",
+    "Full-chain enables only hand, foot, face, eyes and upscale; disabled controls and other optional modes were not exercised.",
+    "Ext07 exercised current left/right defaults only, not all four directions.",
+    "Visible image-quality findings are documented; backend success does not mean guaranteed correction."
+  ],
+  "lock_archive": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261005_native_e2e_acceptance\\run.lock.completed.json"
+}

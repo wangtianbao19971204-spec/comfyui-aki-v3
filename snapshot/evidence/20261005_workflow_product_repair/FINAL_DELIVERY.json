@@ -1,0 +1,109 @@
+{
+  "status": "published_ui_structural_acceptance_pass",
+  "time": "2026-10-05T01:04:04.668520+08:00",
+  "owner_thread": "01a1061f-c0b3-7f40-8168-1bc0ca82582c",
+  "run": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261005_workflow_product_repair",
+  "production_sha256": "c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a",
+  "changed_files": [
+    {
+      "path": "production_tools\\merge_unified_workflow.py",
+      "before": "fce2c64c2e00c34db58adfff0f6504bd8d1668e978c3e483a18869a24731e245",
+      "after": "a57c4efb58037035b05b594b005eacc69b554193601aaa979ce08cc463f86641"
+    },
+    {
+      "path": "production_tools\\templates\\UAP统一生产工作台_v2.json",
+      "before": "36965b32baad0f86552a0fd7dbb1f989b12155bcbcee156b9389ed4591f9b61b",
+      "after": "c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a"
+    },
+    {
+      "path": "ComfyUI\\user\\default\\workflows\\UAP统一生产工作台_v2.json",
+      "before": "36965b32baad0f86552a0fd7dbb1f989b12155bcbcee156b9389ed4591f9b61b",
+      "after": "c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a"
+    },
+    {
+      "path": "ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\refinement_controls.js",
+      "before": null,
+      "after": "2b264651f3c6c2922d8db8529a0ddc80a46092f8dc4a726b28768558fa7204a9"
+    },
+    {
+      "path": "ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\resource_actions.js",
+      "before": "24851d4cbf3ecc4641afc50502610d9ddeee8391e7971c5839b191f7878d51a6",
+      "after": "29eb4fa506ede9b5f7f3db14a07d4bd169de3d3c8a584d9bd9a901034c09652c"
+    },
+    {
+      "path": "ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\runtime_controls.js",
+      "before": "16db3548ee0cff9a3c8374dfccff79d98eb6a1feb95c34523aec08945be33a83",
+      "after": "d60d9c712a3d2ed5715096de2f4275bf7192248ef699cf9c2050f1944446e76b"
+    },
+    {
+      "path": "ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\studio.css",
+      "before": "b2eec0f45dab52d5829c9646811faddcadb97f1148e3216387f2f69a366723db",
+      "after": "cf38da6411eb9f8e573a60e600ca6d5043d15940db13de46c6a2a3bddbe09948"
+    },
+    {
+      "path": "ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\task_activity.js",
+      "before": "e30a1a15248e4cf199dd5cd42bedc3ee1a72067dc53e9b68c63962ae005dc488",
+      "after": "e3b68ebcf1dc99cb4aa00bcdb3dad593a24db02bfda87212bf4b7e868f4750e7"
+    },
+    {
+      "path": "ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\workbench.css",
+      "before": "019f301542f96a82885f361a72d64d3951066c88c20b76e23ec8683d4c2a5069",
+      "after": "9fc38efb37118c2865285a00bd5756c2dc3a616b384bf28e297fe4fcc4c71f91"
+    },
+    {
+      "path": "ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\workspace.js",
+      "before": "55bed6b23e363ca855b19cf181adcc4eca656b832a88b5eef9be424e73b62534",
+      "after": "1c9540aecfb6f9facb236ff4b4623fa0da3dc50e673bc01c2e7ffcd50d53ab33"
+    },
+    {
+      "path": "ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\ComfyUI-Danbooru-Gallery-V50-GalleryOnly\\js\\quick_group_navigation\\uap_daily_controls.js",
+      "before": "9128e8d5521959361072d7f9205155b142149899b11da48f1a115cd34da5d1ba",
+      "after": "02a37c248888f1d0ee43412948b7bc712614c7ae780e874dc0b04739500dfdb2"
+    },
+    {
+      "path": "ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\ComfyUI-Danbooru-Gallery-V50-GalleryOnly\\js\\quick_group_navigation\\uap_workbench.js",
+      "before": "558f742dc8c48a574d5ed99711e236aa6bdb2c926906410377b775c80d930a99",
+      "after": "98d551955f3767494f99114567534b89a1013247bf075dd6d1c0a1958033b908"
+    }
+  ],
+  "counts": {
+    "workflow_files": 2,
+    "frontend_files": 9,
+    "builder_files": 1,
+    "protected_baseline_files": 68,
+    "unchanged_baseline_files": 57,
+    "nodes": 471,
+    "links": 685,
+    "subgraphs": 22,
+    "unit_checks": 83,
+    "structure_checks": 1156,
+    "browser_checks": 32,
+    "backend_jobs": 0
+  },
+  "acceptance": {
+    "guard": "final_guard.json",
+    "browser": "browser_acceptance.json",
+    "cleanup": "browser_cleanup.json",
+    "rollback_check": "rollback_dry_run.json",
+    "full_nine_branch_inference": false
+  },
+  "rollback": {
+    "script": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261005_workflow_product_repair\\release.py",
+    "check_argument": "rollback-check",
+    "apply_argument": "rollback",
+    "scope": "Only this 12-file release; prior Krea2 repair retained",
+    "safety": "Refuses later file drift, a busy queue or changed service identity"
+  },
+  "known_limits": [
+    "No backend inference, paid or online model API calls, uploads, queue clearing, memory release or service restart in this repair.",
+    "Nine branches were switched and serialized; this is not full nine-branch GPU or image-quality acceptance.",
+    "Two native/daily requests and one earlier daily request were intercepted locally at /api/prompt; no prompt was submitted.",
+    "Execution lifecycle checks used synthetic local EventTarget events, not live detection, redraw or cancellation evidence.",
+    "Upstream nodes do not supply hit/redraw counts here; the UI reports observed lifecycle only and does not invent counts.",
+    "Model contracts are a static allowlist from locally inspected model headers, not a per-submission file-content check; new or replaced model files need review. LoRA compatibility and quality are not guaranteed.",
+    "Formal prompts, LoRAs, sampler/detector/upscale values, seeds and default off/mute/bypass modes are unchanged.",
+    "Historical standalone sources remain snapshots; only the canonical UAP v2 template is the default build source.",
+    "Optional low-priority graph cleanup, repeated SAM loader profiling, cross-scene quality regression and physical IME were not performed."
+  ],
+  "lock_archive": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261005_workflow_product_repair\\run.lock.completed.json"
+}

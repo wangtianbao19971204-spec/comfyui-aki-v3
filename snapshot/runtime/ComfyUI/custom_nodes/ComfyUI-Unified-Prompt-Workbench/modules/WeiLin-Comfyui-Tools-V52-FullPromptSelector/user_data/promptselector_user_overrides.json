@@ -1,0 +1,40 @@
+{
+  "说明": "运行时覆盖文件。生成的 PromptSelector.py 会读取它。改完后重启 ComfyUI 或刷新节点定义。",
+  "add": {
+    "额外标签": [
+      {
+        "display": "示例自定义标签 (example custom tag)",
+        "prompt": "example custom tag",
+        "note": "删除这一项或改成你自己的。"
+      }
+    ]
+  },
+  "hide": [],
+  "replace": {
+    "示例重复旧词": "示例保留新词"
+  },
+  "move": {
+    "示例要移动的词": "姿态动作"
+  },
+  "rename_display": {
+    "示例英文词": "新的中文显示名 (example english tag)"
+  },
+  "alias_groups": [],
+  "sort": {
+    "global_mode": "保持当前顺序",
+    "category_modes": {
+      "示例分类名": "显示名升序"
+    },
+    "pins": {
+      "示例分类名": [
+        "示例要置顶的 prompt"
+      ]
+    },
+    "ranks": {}
+  },
+  "pin": {
+    "示例分类名": [
+      "示例要置顶的 prompt"
+    ]
+  }
+}

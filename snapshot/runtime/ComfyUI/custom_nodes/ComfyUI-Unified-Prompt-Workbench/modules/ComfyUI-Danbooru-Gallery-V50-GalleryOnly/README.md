@@ -1,0 +1,135 @@
+# V53 多站排行与分类浏览
+
+本包为 GalleryOnly 拆分版。V53 在保留原有搜索、卡片、输出设置和本地收藏行为的基础上，新增能力驱动的“浏览 / 搜索 / 收藏”导航，以及“最新 / 排行 / 分类”浏览：
+
+- Danbooru、Gelbooru、Yande.re、Civitai 四站统一 V2 合同与游标分页。
+- 每站只显示公开 API 能真实支持的排行指标、周期、分类和筛选条件。
+- 失败、限流、认证、游标过期等错误有稳定分类；旧请求不会覆盖新请求。
+- 新增 SSRF 防护、凭据脱敏、并发预算、single-flight 和短时成功缓存。
+- 新增 Gallery × WeiLin 只读分类词库：短 tag 可加入站点筛选，长提示词逐字保留并独立分页浏览，artist 不进入整合层。
+- `gallery_new_ui_enabled`、`v2_routes_enabled` 和逐站 Provider 开关支持快速回滚。
+
+完整能力矩阵、已知限制、测试证据与恢复方法见 `V53_RANKING_CATEGORY_RELEASE_CN.md`；WeiLin 合一边界与 API 见 `WEILIN_TAG_CATALOG_INTEGRATION_CN.md`；设计与核验流程见 `V53_RANKING_CATEGORY_UPDATE_PLAN_CN.md`。V52 的 Civitai 收藏优化仍然保留，详见 `V52_CIVITAI_FAVORITES_FAST_CACHE_README_CN.md`。
+
+---
+
+# 🎨 ComfyUI-Danbooru-Gallery
+
+🇨🇳 本节点专为 [ShiQi_Workflow](https://github.com/Aaalice233/ShiQi_Workflow) 工作流打造，聚焦中文用户的实际使用场景与体验。
+
+✨ 面向 ComfyUI 的实用节点集合，重点覆盖 Danbooru 图像检索、提示词编辑/清洗、缓存管理、Krita 联动与工作流辅助工具。
+
+## 📌 当前状态
+
+- ✅ 当前注册节点数：`22`（以 ComfyUI `--quick-test-for-ci` 实测为准）
+- 🧩 前端扩展：包含若干 JS 面板与交互增强（如快速组导航）
+- 🗂️ 已移除的旧节点不再列出
+
+## 🚀 安装
+
+1. 进入 ComfyUI 自定义节点目录：
+
+```bash
+cd ComfyUI/custom_nodes
+```
+
+2. 克隆仓库：
+
+```bash
+git clone https://github.com/Aaalice233/ComfyUI-Danbooru-Gallery.git
+```
+
+3. 安装依赖：
+
+```bash
+cd ComfyUI-Danbooru-Gallery
+pip install -r requirements.txt
+```
+
+4. 重启 ComfyUI。
+
+## 🛠️ 依赖与环境
+
+- Python `>=3.8`
+- 主要依赖：`requests`、`aiohttp`、`aiosqlite`、`psutil`、`Pillow`、`torch`、`numpy`
+
+## 🧠 节点清单（当前有效）
+
+### 🖼️ 图像与提示词核心
+
+- `DanbooruGalleryNode`：D站画廊 (Danbooru Gallery)
+- `PromptCleaningMaid`：提示词清洁女仆 (Prompt Cleaning Maid)
+- `CharacterFeatureSwapNode`：角色特征交换 (Character Feature Swap)
+- `MultiCharacterEditorNode`：多角色编辑器 (Multi Character Editor)
+
+### 📂 图像输入输出与文件
+
+- `SimpleLoadImage`：简易加载图像 (Simple Load Image)
+- `SaveImagePlus`：保存图像增强版 (Save Image Plus)
+- `SimpleImageCompare`：简易图像对比 (Simple Image Compare)
+- `SimpleCheckpointLoaderWithName`：简易Checkpoint加载器 (Simple Checkpoint Loader)
+- `ModelNameExtractor`：模型名称提取器 (Model Name Extractor)
+
+### 🔧 工作流控制与字符串工具
+
+- `ParameterControlPanel`：参数控制面板 (Parameter Control Panel)
+- `ParameterBreak`：参数展开 (Parameter Break)
+- `SimpleStringSplit`：简易字符串分隔 (Simple String Split)
+- `SimpleValueSwitch`：简易值切换 (Simple Value Switch)
+- `EnumSwitch`：枚举切换 (Enum Switch)
+- `WorkflowDescription`：工作流说明 (Workflow Description)
+- `SimpleNotify`：简易通知 (Simple Notify)
+- `ResolutionMasterSimplify`：分辨率大师简化版 (Resolution Master Simplify)
+
+### 🧷 组管理相关
+
+- `GroupMuteManager`：组静音管理器 (Group Mute Manager)
+- `GroupIgnoreManager`：组忽略管理器 (Group Ignore Manager)
+- `GroupIsEnabled`：组是否启用 (Group Is Enabled)
+
+### 🎨 Krita 联动
+
+- `OpenInKrita`：从Krita获取数据 (Fetch From Krita)
+- `FetchFromKrita`：从Krita获取数据 (Fetch From Krita)
+
+## 🧩 非节点型前端扩展
+
+以下功能以 JS 扩展形态存在，不会在节点列表中单独占一个节点名：
+
+- `Quick Group Navigation`（快速组导航）
+- 部分节点的设置弹窗、缓存面板、多语言与日志上报能力
+
+## 📎 兼容与说明
+
+- 本项目是 [ShiQi_Workflow](https://github.com/Aaalice233/ShiQi_Workflow) 的配套节点集，也可独立使用。
+- 部分节点（如多角色编辑相关）可能依赖额外生态插件，请按节点 UI 提示安装。
+- 若从旧版本升级，请以本 README 的“节点清单（当前有效）”为准，旧文档中的已删除节点不再维护。
+
+## ❓ 常见问题
+
+### 1. 🔍 节点没出现
+
+- 确认仓库路径为 `ComfyUI/custom_nodes/ComfyUI-Danbooru-Gallery`
+- 确认依赖安装完成后重启 ComfyUI
+- 查看 ComfyUI 控制台是否有导入异常日志
+
+### 2. 🖥️ 前端面板没加载
+
+- 检查 `WEB_DIRECTORY` 是否成功注册（插件初始化日志会输出）
+- 清理浏览器缓存后刷新 ComfyUI 页面
+
+### 3. 🧪 Krita 功能不可用
+
+- 检查 Krita 插件安装状态
+- 查看节点内的安装/重装按钮日志提示
+
+## 🧑‍💻 开发
+
+- 代码入口：`__init__.py`
+- Python 节点：`py/`
+- 前端扩展：`js/`
+- 工具脚本：`tools/`
+
+## 📄 许可证
+
+[MIT](LICENSE)

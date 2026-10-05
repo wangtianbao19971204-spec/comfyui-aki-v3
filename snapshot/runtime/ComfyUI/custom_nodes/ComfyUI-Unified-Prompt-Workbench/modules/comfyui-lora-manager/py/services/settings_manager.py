@@ -1,0 +1,3396 @@
+import asyncio
+import copy
+import json
+import math
+import os
+import posixpath
+import shutil
+import tempfile
+import logging
+from pathlib import Path
+from datetime import datetime, timezone
+from threading import Lock, RLock, get_ident as _current_thread_id
+from typing import (
+    Any,
+    Awaitable,
+    Coroutine,
+    Dict,
+    Iterable,
+    List,
+    Mapping,
+    Optional,
+    Sequence,
+    Set,
+    Tuple,
+)
+
+from platformdirs import user_config_dir
+
+from ..utils.constants import (
+    DEFAULT_DOWNLOAD_PATH_TEMPLATES,
+    DEFAULT_ENABLED_OTHER_SUB_TYPES,
+    DEFAULT_HASH_CHUNK_SIZE_MB,
+    DEFAULT_PRIORITY_TAG_CONFIG,
+    OTHER_SUB_TYPE_FOLDER_KEYS,
+    SUPPORTED_DOWNLOAD_SKIP_BASE_MODELS,
+    VALID_OTHER_SUB_TYPES,
+    normalize_other_sub_types,
+)
+from ..utils.preview_selection import VALID_MATURE_BLUR_LEVELS
+from ..utils.settings_paths import (
+    APP_NAME,
+    _portable_env_override,
+    ensure_settings_file,
+    get_legacy_settings_path,
+    get_settings_dir_override,
+    is_settings_dir_pinned,
+)
+from ..utils.tag_priorities import (
+    PriorityTagEntry,
+    collect_canonical_tags,
+    is_civitai_meta_tag,
+    is_usable_path_tag,
+    parse_priority_tag_string,
+    resolve_priority_tag,
+)
+
+logger = logging.getLogger(__name__)
+
+
+class RestoreCoordinationError(RuntimeError):
+    """Raised when restore coordination is misused or cannot proceed."""
+
+
+class RestoreValidationError(RestoreCoordinationError):
+    """Raised when a restore payload fails validation."""
+
+
+class StaleRestoreContextError(RestoreCoordinationError):
+    """Raised when a restore context token is no longer current."""
+
+
+class RestoreCommitStatusError(RestoreCoordinationError):
+    """Raised when the executor did not acknowledge a successful replacement."""
+
+
+_RESTORE_STATUS_SUCCESS = "success"
+_RESTORE_STATUS_FAILED = "failed"
+_RESTORE_STATUS_UNKNOWN = "unknown"
+_VALID_RESTORE_STATUSES = frozenset(
+    {_RESTORE_STATUS_SUCCESS, _RESTORE_STATUS_FAILED, _RESTORE_STATUS_UNKNOWN}
+)
+
+
+CORE_USER_SETTING_KEYS: Tuple[str, ...] = (
+    "civitai_api_key",
+    "folder_paths",
+)
+
+# Threshold for aggressive cleanup: if file contains this many default keys, clean it up
+DEFAULT_KEYS_CLEANUP_THRESHOLD = 10
+
+
+DEFAULT_SETTINGS: Dict[str, Any] = {
+    "civitai_api_key": "",
+    "huggingface_api_key": "",
+    "civitai_host": "civitai.com",
+    "download_backend": "python",
+    "aria2c_path": "",
+    "use_portable_settings": False,
+    "hash_chunk_size_mb": DEFAULT_HASH_CHUNK_SIZE_MB,
+    "language": "en",
+    "show_only_sfw": False,
+    "onboarding_completed": False,
+    "dismissed_banners": [],
+    "enable_metadata_archive_db": False,
+    "enable_civarchive_api": True,
+    "metadata_provider_order": "civitai_archive_sqlite",
+    "rate_limit_gate_enabled": True,
+    "rate_limit_max_wait_seconds": 300,
+    "rate_limit_min_interval_seconds": 0.75,
+    "proxy_enabled": False,
+    "proxy_host": "",
+    "proxy_port": "",
+    "proxy_username": "",
+    "proxy_password": "",
+    "proxy_type": "http",
+    "default_lora_root": "",
+    "default_checkpoint_root": "",
+    "default_unet_root": "",
+    "default_embedding_root": "",
+    "default_other_roots": {},
+    # Other Models management is opt-in: nothing is scanned, shown or offered
+    # for download until the user turns the feature on.
+    "enable_other_models": False,
+    "enabled_other_sub_types": list(DEFAULT_ENABLED_OTHER_SUB_TYPES),
+    "recipes_path": "",
+    "base_model_path_mappings": {},
+    "download_path_templates": {},
+    "download_filename_templates": {},
+    "folder_paths": {},
+    "extra_folder_paths": {},
+    "example_images_path": "",
+    "example_images_open_mode": "system",
+    "example_images_local_root": "",
+    "example_images_open_uri_template": "",
+    "optimize_example_images": True,
+    "auto_download_example_images": False,
+    "blur_mature_content": True,
+    "mature_blur_level": "R",
+    "autoplay_on_hover": False,
+    "display_density": "default",
+    "recipes_layout": "grid",
+    "card_info_display": "always",
+    "include_trigger_words": False,
+    "compact_mode": False,
+    "priority_tags": DEFAULT_PRIORITY_TAG_CONFIG.copy(),
+    "model_name_display": "model_name",
+    "lora_syntax_format": "legacy",
+    "model_card_footer_action": "replace_preview",
+    "show_version_on_card": True,
+    "version_grouping": "same_base",
+    "auto_organize_exclusions": [],
+    "metadata_refresh_skip_paths": [],
+    "skip_previously_downloaded_model_versions": False,
+    "download_skip_base_models": [],
+    "backup_auto_enabled": True,
+    "backup_retention_count": 5,
+    "use_new_license_icons": True,
+    "group_by_model": False,
+    "sticky_controls": False,
+    # AI / LLM provider configuration (BYOK)
+    "llm_provider": "openai",  # "openai" | "ollama" | "custom"
+    "llm_api_key": "",
+    "llm_api_base": "",  # empty = provider default
+    "llm_model": "",  # e.g. "gpt-4o-mini"
+}
+
+
+def _normalize_root_identity(path: str) -> str:
+    """Normalize a root path for equality checks across slash styles."""
+
+    normalized = posixpath.normpath(path.strip().replace("\\", "/"))
+    if len(normalized) >= 2 and normalized[1] == ":":
+        return normalized.lower()
+    return normalized
+
+
+class SettingsManager:
+    def __init__(self):
+        self._restore_lock = RLock()
+        self._settings_revision = 0
+        self._active_restore_context: Optional["RestoreContext"] = None
+        self._active_restore_thread: Optional[int] = None
+        self.settings_file = ensure_settings_file(logger)
+        self._pending_portable_switch: Optional[Dict[str, str]] = None
+        self._standalone_mode = self._detect_standalone_mode()
+        self._startup_messages: List[Dict[str, Any]] = []
+        self._needs_initial_save = False
+        self._bootstrap_reason: Optional[str] = None
+        self._seed_template: Optional[Dict[str, Any]] = None
+        self._template_payload_cache: Optional[Dict[str, Any]] = None
+        self._template_payload_cache_loaded = False
+        self._original_disk_payload: Optional[Dict[str, Any]] = None
+        self._preserve_disk_template = False
+        self._template_path = (
+            Path(__file__).resolve().parents[2] / "settings.json.example"
+        )
+        # Known placeholder value in settings.json.example; any file containing
+        # this value should be treated as "not configured".
+        self._TEMPLATE_PLACEHOLDER_API_KEY = "your_civitai_api_key_here"
+        self.settings = self._load_settings()
+        self._migrate_setting_keys()
+        self._ensure_default_settings()
+        self._migrate_to_library_registry()
+        self._migrate_download_path_template()
+        self._auto_set_default_roots()
+        self._check_environment_variables()
+        self._collect_configuration_warnings()
+
+        portable_override = _portable_env_override()
+        if portable_override is True and not is_settings_dir_pinned():
+            if not self.settings.get("use_portable_settings"):
+                self.settings["use_portable_settings"] = True
+                self._save_settings()
+        elif portable_override is False and self.settings.get(
+            "use_portable_settings"
+        ):
+            # Explicit opt-out from a persisted portable mode: clear the flag so
+            # later runs go back to the shared settings directory instead of
+            # requiring a manual edit of settings.json.
+            logger.info(
+                "Clearing the persisted portable-mode flag because %s=0",
+                "LORA_MANAGER_PORTABLE",
+            )
+            self.settings["use_portable_settings"] = False
+            self._save_settings()
+
+        if self._needs_initial_save:
+            self._save_settings()
+            self._needs_initial_save = False
+        else:
+            # Clean up existing settings file by removing default values
+            self._cleanup_default_values_from_disk()
+
+    def _detect_standalone_mode(self) -> bool:
+        """Return ``True`` when running in standalone mode."""
+
+        return os.environ.get("LORA_MANAGER_STANDALONE") == "1"
+
+    def _load_settings(self) -> Dict[str, Any]:
+        """Load settings from file"""
+        if os.path.exists(self.settings_file):
+            try:
+                with open(self.settings_file, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                if isinstance(data, dict):
+                    self._original_disk_payload = copy.deepcopy(data)
+                    if self._matches_template_payload(data):
+                        self._preserve_disk_template = True
+                    # Clean up the template placeholder so it is not treated
+                    # as a real key (affects both the frontend boolean and
+                    # the downloader's Authorization header).
+                    placeholder = self._TEMPLATE_PLACEHOLDER_API_KEY
+                    if data.get("civitai_api_key") == placeholder:
+                        data["civitai_api_key"] = ""
+                return data
+            except json.JSONDecodeError as exc:
+                logger.error("Failed to parse settings.json: %s", exc)
+                self._add_startup_message(
+                    code="settings-json-invalid",
+                    title="Settings file could not be parsed",
+                    message=(
+                        "LoRA Manager could not parse settings.json. Default settings "
+                        "will be used for this session."
+                    ),
+                    severity="error",
+                    actions=self._default_settings_actions(),
+                    details=str(exc),
+                    dismissible=False,
+                )
+                self._needs_initial_save = True
+                self._bootstrap_reason = "invalid"
+            except Exception as exc:  # pragma: no cover - defensive guard
+                logger.error("Unexpected error loading settings: %s", exc)
+                self._add_startup_message(
+                    code="settings-json-unreadable",
+                    title="Settings file could not be read",
+                    message="LoRA Manager could not read settings.json. Default settings will be used for this session.",
+                    severity="error",
+                    actions=self._default_settings_actions(),
+                    details=str(exc),
+                    dismissible=False,
+                )
+                self._needs_initial_save = True
+                self._bootstrap_reason = "unreadable"
+
+        if not os.path.exists(self.settings_file):
+            self._needs_initial_save = True
+            self._bootstrap_reason = "missing"
+            seeded = self._load_settings_template()
+            if seeded is not None:
+                defaults = self._get_default_settings()
+                merged = self._merge_template_with_defaults(defaults, seeded)
+                return merged
+        return self._get_default_settings()
+
+    def _load_settings_template(self) -> Optional[Dict[str, Any]]:
+        """Load the bundled template when no user settings are found."""
+
+        payload = self._read_template_payload()
+        if payload is None:
+            return None
+
+        self._seed_template = copy.deepcopy(payload)
+        return copy.deepcopy(payload)
+
+    def _read_template_payload(self) -> Optional[Dict[str, Any]]:
+        """Return the cached contents of ``settings.json.example`` when available."""
+
+        if self._template_payload_cache_loaded:
+            if self._template_payload_cache is None:
+                return None
+            return copy.deepcopy(self._template_payload_cache)
+
+        self._template_payload_cache_loaded = True
+
+        try:
+            with self._template_path.open("r", encoding="utf-8") as handle:
+                data = json.load(handle)
+        except FileNotFoundError:
+            logger.debug("settings.json.example not found at %s", self._template_path)
+            return None
+        except json.JSONDecodeError as exc:
+            logger.warning("Failed to parse settings.json.example: %s", exc)
+            return None
+
+        if not isinstance(data, dict):
+            logger.debug(
+                "settings.json.example is not a JSON object; ignoring template"
+            )
+            return None
+
+        self._template_payload_cache = copy.deepcopy(data)
+        return copy.deepcopy(self._template_payload_cache)
+
+    def _matches_template_payload(self, payload: Mapping[str, Any]) -> bool:
+        """Return ``True`` when ``payload`` matches the bundled template."""
+
+        template = self._read_template_payload()
+        if template is None:
+            return False
+
+        return payload == template
+
+    def get_template_folder_path_placeholders(self) -> Set[str]:
+        """Placeholder folder_paths values shipped in settings.json.example.
+
+        A fresh standalone install is seeded from the template, so its
+        documentation-only placeholder paths end up in the live settings
+        file. The Model Paths settings UI hides them; the first real save
+        overwrites them via ``set("folder_paths")``.
+        """
+
+        template = self._read_template_payload()
+        if not template:
+            return set()
+
+        folder_paths = template.get("folder_paths")
+        if not isinstance(folder_paths, Mapping):
+            return set()
+
+        placeholders: Set[str] = set()
+        for value in folder_paths.values():
+            paths = value if isinstance(value, list) else [value]
+            placeholders.update(p for p in paths if isinstance(p, str) and p)
+        return placeholders
+
+    def _merge_template_with_defaults(
+        self, defaults: Dict[str, Any], template: Mapping[str, Any]
+    ) -> Dict[str, Any]:
+        """Merge template values into the in-memory defaults."""
+
+        merged = copy.deepcopy(defaults)
+        for key, value in template.items():
+            if key == "folder_paths" and isinstance(value, Mapping):
+                merged[key] = self._normalize_folder_paths(value)
+            else:
+                merged[key] = copy.deepcopy(value)
+
+        merged.setdefault("language", "en")
+        merged.setdefault("folder_paths", {})
+        library_name = merged.get("active_library") or "default"
+        merged["libraries"] = {
+            library_name: self._build_library_payload(
+                folder_paths=merged.get("folder_paths", {}),
+                default_lora_root=merged.get("default_lora_root"),
+                default_checkpoint_root=merged.get("default_checkpoint_root"),
+                default_unet_root=merged.get("default_unet_root"),
+                default_embedding_root=merged.get("default_embedding_root"),
+                default_other_roots=merged.get("default_other_roots"),
+                recipes_path=merged.get("recipes_path"),
+            )
+        }
+        merged["active_library"] = library_name
+        return merged
+
+    def _ensure_default_settings(self) -> None:
+        """Ensure all default settings keys exist in memory (but don't save defaults to disk)"""
+        defaults = self._get_default_settings()
+        updated_existing = False
+        inserted_defaults = False
+
+        if "priority_tags" in self.settings:
+            normalized_priority = self._normalize_priority_tag_config(
+                self.settings.get("priority_tags")
+            )
+            if normalized_priority != self.settings.get("priority_tags"):
+                self.settings["priority_tags"] = normalized_priority
+                updated_existing = True
+        else:
+            self.settings["priority_tags"] = copy.deepcopy(
+                defaults.get("priority_tags", DEFAULT_PRIORITY_TAG_CONFIG)
+            )
+            inserted_defaults = True
+
+        if "auto_organize_exclusions" in self.settings:
+            normalized_exclusions = self.normalize_auto_organize_exclusions(
+                self.settings.get("auto_organize_exclusions")
+            )
+            if normalized_exclusions != self.settings.get("auto_organize_exclusions"):
+                self.settings["auto_organize_exclusions"] = normalized_exclusions
+                updated_existing = True
+        else:
+            self.settings["auto_organize_exclusions"] = []
+            inserted_defaults = True
+
+        if "metadata_refresh_skip_paths" in self.settings:
+            normalized_skip_paths = self.normalize_metadata_refresh_skip_paths(
+                self.settings.get("metadata_refresh_skip_paths")
+            )
+            if normalized_skip_paths != self.settings.get(
+                "metadata_refresh_skip_paths"
+            ):
+                self.settings["metadata_refresh_skip_paths"] = normalized_skip_paths
+                updated_existing = True
+        else:
+            self.settings["metadata_refresh_skip_paths"] = []
+            inserted_defaults = True
+
+        if "download_skip_base_models" in self.settings:
+            normalized_skip_base_models = self.normalize_download_skip_base_models(
+                self.settings.get("download_skip_base_models")
+            )
+            if normalized_skip_base_models != self.settings.get(
+                "download_skip_base_models"
+            ):
+                self.settings["download_skip_base_models"] = normalized_skip_base_models
+                updated_existing = True
+        else:
+            self.settings["download_skip_base_models"] = []
+            inserted_defaults = True
+
+        if "skip_previously_downloaded_model_versions" not in self.settings:
+            self.settings["skip_previously_downloaded_model_versions"] = False
+            inserted_defaults = True
+
+        had_mature_level = "mature_blur_level" in self.settings
+        raw_mature_level = self.settings.get("mature_blur_level")
+        normalized_mature_level = self.normalize_mature_blur_level(raw_mature_level)
+        if normalized_mature_level != raw_mature_level:
+            self.settings["mature_blur_level"] = normalized_mature_level
+            if had_mature_level:
+                updated_existing = True
+            else:
+                inserted_defaults = True
+
+        for key, value in defaults.items():
+            if key == "priority_tags":
+                continue
+            if key not in self.settings:
+                if isinstance(value, dict):
+                    self.settings[key] = copy.deepcopy(value)
+                else:
+                    self.settings[key] = value
+                inserted_defaults = True
+
+        # Save only if existing values were normalized/updated
+        if updated_existing:
+            self._save_settings()
+        # Note: inserted_defaults no longer triggers save - defaults stay in memory only
+
+    def _migrate_to_library_registry(self) -> None:
+        """Ensure settings include the multi-library registry structure."""
+        libraries = self.settings.get("libraries")
+        active_name = self.settings.get("active_library")
+        initial_bootstrap = self._bootstrap_reason == "missing"
+
+        raw_top_level_paths = self.settings.get("folder_paths", {})
+        normalized_top_level_paths: Dict[str, List[str]] = {}
+        if isinstance(raw_top_level_paths, Mapping):
+            normalized_top_level_paths = self._normalize_folder_paths(
+                raw_top_level_paths
+            )
+            if normalized_top_level_paths != raw_top_level_paths:
+                self.settings["folder_paths"] = copy.deepcopy(
+                    normalized_top_level_paths
+                )
+
+        top_level_has_paths = self._has_configured_paths(normalized_top_level_paths)
+
+        needs_library_bootstrap = not isinstance(libraries, dict) or not libraries
+
+        if (
+            not needs_library_bootstrap
+            and top_level_has_paths
+            and isinstance(libraries, Mapping)
+            and len(libraries) == 1
+        ):
+            only_library_payload = next(iter(libraries.values()))
+            if isinstance(only_library_payload, Mapping):
+                folder_payload = only_library_payload.get("folder_paths")
+                if not self._has_configured_paths(folder_payload):
+                    needs_library_bootstrap = True
+
+        if needs_library_bootstrap:
+            library_name = active_name or "default"
+            library_payload = self._build_library_payload(
+                folder_paths=normalized_top_level_paths,
+                default_lora_root=self.settings.get("default_lora_root", ""),
+                default_checkpoint_root=self.settings.get(
+                    "default_checkpoint_root", ""
+                ),
+                default_unet_root=self.settings.get("default_unet_root", ""),
+                default_embedding_root=self.settings.get("default_embedding_root", ""),
+                default_other_roots=self.settings.get("default_other_roots"),
+                recipes_path=self.settings.get("recipes_path", ""),
+            )
+            libraries = {library_name: library_payload}
+            self.settings["libraries"] = libraries
+            self.settings["active_library"] = library_name
+            self._sync_active_library_to_root(save=False)
+            if not initial_bootstrap and not self._preserve_disk_template:
+                self._save_settings()
+            return
+
+        seed_library_name: Optional[str] = None
+        if top_level_has_paths and isinstance(libraries, dict):
+            target_name: Optional[str] = None
+            if active_name and active_name in libraries:
+                target_name = active_name
+            elif len(libraries) == 1:
+                target_name = next(iter(libraries.keys()))
+
+            if target_name:
+                candidate_payload = libraries.get(target_name)
+                if isinstance(
+                    candidate_payload, Mapping
+                ) and not self._has_configured_paths(
+                    candidate_payload.get("folder_paths")
+                ):
+                    seed_library_name = target_name
+
+        if not isinstance(libraries, dict) or not libraries:
+            return
+
+        sanitized_libraries: Dict[str, Dict[str, Any]] = {}
+        changed = False
+        for name, data in libraries.items():
+            if not isinstance(data, dict):
+                data = {}
+                changed = True
+
+            candidate_folder_paths = data.get("folder_paths")
+            if (
+                seed_library_name == name
+                and not self._has_configured_paths(candidate_folder_paths)
+                and top_level_has_paths
+            ):
+                candidate_folder_paths = normalized_top_level_paths
+
+            payload = self._build_library_payload(
+                folder_paths=candidate_folder_paths,
+                default_lora_root=data.get("default_lora_root"),
+                default_checkpoint_root=data.get("default_checkpoint_root"),
+                default_unet_root=data.get("default_unet_root"),
+                default_embedding_root=data.get("default_embedding_root"),
+                default_other_roots=data.get("default_other_roots"),
+                recipes_path=data.get("recipes_path"),
+                metadata=data.get("metadata"),
+                base=data,
+            )
+            sanitized_libraries[name] = payload
+            if payload is not data:
+                changed = True
+
+        if changed:
+            self.settings["libraries"] = sanitized_libraries
+
+        if not active_name or active_name not in sanitized_libraries:
+            changed = True
+            if sanitized_libraries:
+                self.settings["active_library"] = next(iter(sanitized_libraries.keys()))
+            else:
+                self.settings["active_library"] = "default"
+
+        self._sync_active_library_to_root(save=changed and not initial_bootstrap)
+        if changed and initial_bootstrap:
+            self._needs_initial_save = True
+
+    def _sync_active_library_to_root(self, *, save: bool = False) -> None:
+        """Update top-level folder path settings to mirror the active library."""
+        libraries = self.settings.get("libraries", {})
+        active_name = self.settings.get("active_library")
+        if not libraries:
+            return
+
+        if active_name not in libraries:
+            active_name = next(iter(libraries.keys()))
+            self.settings["active_library"] = active_name
+
+        active_library = libraries.get(active_name, {})
+        folder_paths = copy.deepcopy(active_library.get("folder_paths", {}))
+        self.settings["folder_paths"] = folder_paths
+        self.settings["extra_folder_paths"] = copy.deepcopy(
+            active_library.get("extra_folder_paths", {})
+        )
+        self.settings["default_lora_root"] = active_library.get("default_lora_root", "")
+        self.settings["default_checkpoint_root"] = active_library.get(
+            "default_checkpoint_root", ""
+        )
+        self.settings["default_unet_root"] = active_library.get("default_unet_root", "")
+        self.settings["default_embedding_root"] = active_library.get(
+            "default_embedding_root", ""
+        )
+        self.settings["default_other_roots"] = self._normalize_default_other_roots(
+            active_library.get("default_other_roots", {})
+        )
+        self.settings["recipes_path"] = active_library.get("recipes_path", "")
+
+        if save:
+            self._save_settings()
+
+    def _current_timestamp(self) -> str:
+        return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+
+    def _build_library_payload(
+        self,
+        *,
+        folder_paths: Optional[Mapping[str, Iterable[str]]] = None,
+        extra_folder_paths: Optional[Mapping[str, Iterable[str]]] = None,
+        default_lora_root: Optional[str] = None,
+        default_checkpoint_root: Optional[str] = None,
+        default_unet_root: Optional[str] = None,
+        default_embedding_root: Optional[str] = None,
+        default_other_roots: Optional[Mapping[str, str]] = None,
+        recipes_path: Optional[str] = None,
+        metadata: Optional[Mapping[str, Any]] = None,
+        base: Optional[Mapping[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        payload: Dict[str, Any] = dict(base or {})
+        timestamp = self._current_timestamp()
+
+        if folder_paths is not None:
+            payload["folder_paths"] = self._normalize_folder_paths(folder_paths)
+        else:
+            payload.setdefault("folder_paths", {})
+
+        if extra_folder_paths is not None:
+            payload["extra_folder_paths"] = self._normalize_folder_paths(
+                extra_folder_paths
+            )
+        else:
+            payload.setdefault("extra_folder_paths", {})
+
+        if default_lora_root is not None:
+            payload["default_lora_root"] = default_lora_root
+        else:
+            payload.setdefault("default_lora_root", "")
+
+        if default_checkpoint_root is not None:
+            payload["default_checkpoint_root"] = default_checkpoint_root
+        else:
+            payload.setdefault("default_checkpoint_root", "")
+
+        if default_unet_root is not None:
+            payload["default_unet_root"] = default_unet_root
+        else:
+            payload.setdefault("default_unet_root", "")
+
+        if default_embedding_root is not None:
+            payload["default_embedding_root"] = default_embedding_root
+        else:
+            payload.setdefault("default_embedding_root", "")
+
+        if default_other_roots is not None:
+            payload["default_other_roots"] = self._normalize_default_other_roots(
+                default_other_roots
+            )
+        else:
+            payload["default_other_roots"] = self._normalize_default_other_roots(
+                payload.get("default_other_roots", {})
+            )
+
+        if recipes_path is not None:
+            payload["recipes_path"] = recipes_path
+        else:
+            payload.setdefault("recipes_path", "")
+
+        if metadata:
+            merged_meta = dict(payload.get("metadata", {}))
+            merged_meta.update(metadata)
+            payload["metadata"] = merged_meta
+
+        payload.setdefault("created_at", timestamp)
+        payload["updated_at"] = timestamp
+        return payload
+
+    def _normalize_folder_paths(
+        self, folder_paths: Mapping[str, Any]
+    ) -> Dict[str, List[str]]:
+        normalized: Dict[str, List[str]] = {}
+        for key, values in folder_paths.items():
+            if not isinstance(values, Iterable):
+                continue
+            cleaned: List[str] = []
+            seen = set()
+            for value in values:
+                if not isinstance(value, str):
+                    continue
+                stripped = value.strip()
+                if not stripped:
+                    continue
+                if stripped not in seen:
+                    cleaned.append(stripped)
+                    seen.add(stripped)
+            normalized[key] = cleaned
+        return normalized
+
+    def _normalize_default_other_roots(
+        self, value: Any, *, strict: bool = False
+    ) -> Dict[str, str]:
+        """Normalize a ``default_other_roots`` mapping ({sub_type: root path}).
+
+        Unknown sub_type keys and non-string/empty paths are dropped; with
+        ``strict=True`` unknown sub_type keys raise instead (used by ``set()``
+        so typos in API payloads surface as errors).
+        """
+        if not isinstance(value, Mapping):
+            if strict and value is not None:
+                raise ValueError("default_other_roots must be a mapping")
+            return {}
+        normalized: Dict[str, str] = {}
+        for sub_type, path in value.items():
+            if sub_type not in VALID_OTHER_SUB_TYPES:
+                if strict:
+                    raise ValueError(
+                        f"Unknown other-model sub-type '{sub_type}'; "
+                        f"expected one of {sorted(VALID_OTHER_SUB_TYPES)}"
+                    )
+                continue
+            if not isinstance(path, str):
+                continue
+            stripped = path.strip()
+            if stripped:
+                normalized[sub_type] = stripped
+        return normalized
+
+    def is_other_models_enabled(self) -> bool:
+        """Return True when the opt-in Other Models management is enabled."""
+        return bool(self.settings.get("enable_other_models", False))
+
+    def get_enabled_other_sub_types(self) -> List[str]:
+        """Return the enabled other-model sub_types (empty when the feature is off)."""
+        if not self.is_other_models_enabled():
+            return []
+        return normalize_other_sub_types(self.settings.get("enabled_other_sub_types"))
+
+    def is_other_sub_type_enabled(self, sub_type: Optional[str]) -> bool:
+        """Return True when ``sub_type`` is currently managed."""
+        if not sub_type:
+            return False
+        return sub_type in self.get_enabled_other_sub_types()
+
+    def _apply_other_model_settings_change(self) -> None:
+        """Rebuild other-model roots and refresh the other scanner after a toggle."""
+        try:
+            from ..config import config  # Local import to avoid circular dependency
+
+            config.refresh_other_roots()
+        except Exception as exc:  # pragma: no cover - defensive logging
+            logger.debug("Failed to refresh other-model roots: %s", exc)
+
+        try:
+            from .service_registry import ServiceRegistry  # pyright: ignore[reportImportCycles]
+
+            scanner = ServiceRegistry.get_service_sync("other_scanner")
+            if scanner is not None and hasattr(scanner, "on_library_changed"):
+                # reconcile=True lets the scanner pick up newly enabled roots and
+                # purge rows for folders that are no longer managed.
+                scanner.on_library_changed(reconcile=True)
+        except Exception as exc:  # pragma: no cover - defensive logging
+            logger.debug("Failed to refresh other scanner after settings change: %s", exc)
+
+    def _has_configured_paths(self, folder_paths: Any) -> bool:
+        if not isinstance(folder_paths, Mapping):
+            return False
+
+        for values in folder_paths.values():
+            if isinstance(values, str):
+                candidate_values = [values]
+            else:
+                try:
+                    candidate_values = list(values)  # pyright: ignore[reportArgumentType]
+                except TypeError:
+                    continue
+
+            for path in candidate_values:
+                if isinstance(path, str) and path.strip():
+                    return True
+
+        return False
+
+    @staticmethod
+    def _normalize_path_set(paths: Iterable[str]) -> set[str]:
+        """Normalize an iterable of paths for set-based overlap comparison.
+
+        Resolves symlinks via ``os.path.realpath`` when the path exists on disk,
+        then applies ``os.path.normcase`` + ``os.path.normpath`` for consistent
+        cross-platform comparison.  Non-string / empty entries are skipped.
+        """
+        result: set[str] = set()
+        for p in paths:
+            if not isinstance(p, str):
+                continue
+            stripped = p.strip()
+            if not stripped:
+                continue
+            if os.path.exists(stripped):
+                stripped = os.path.normpath(os.path.realpath(stripped))
+            result.add(os.path.normcase(stripped))
+        return result
+
+    def _validate_folder_paths(
+        self,
+        library_name: str,
+        folder_paths: Mapping[str, Any],
+    ) -> None:
+        """Ensure folder paths do not overlap with other libraries.
+
+        Also detects checkpoints ↔ unet path overlap within the same library
+        (including via symlink resolution), which is a configuration error since
+        these model types must use separate physical folders.
+        """
+        libraries = self.settings.get("libraries", {})
+        normalized_new: Dict[str, Dict[str, str]] = {}
+        for key, values in folder_paths.items():
+            path_map: Dict[str, str] = {}
+            for value in values:
+                if not isinstance(value, str):
+                    continue
+                stripped = value.strip()
+                if not stripped:
+                    continue
+                normalized_value = os.path.normcase(os.path.normpath(stripped))
+                path_map[normalized_value] = stripped
+            if path_map:
+                normalized_new[key] = path_map
+
+        if not normalized_new:
+            return
+
+        for other_name, other in libraries.items():
+            if other_name == library_name:
+                continue
+            other_paths = other.get("folder_paths", {})
+            for key, new_paths in normalized_new.items():
+                existing = {
+                    os.path.normcase(os.path.normpath(path))
+                    for path in other_paths.get(key, [])
+                    if isinstance(path, str) and path
+                }
+                overlap = existing.intersection(new_paths.keys())
+                if overlap:
+                    collisions = ", ".join(
+                        sorted(new_paths[value] for value in overlap)
+                    )
+                    raise ValueError(
+                        f"Folder path(s) {collisions} already assigned to library '{other_name}'"
+                    )
+
+        # Checkpoints ↔ unet overlap within the same library
+        ckpt_paths = folder_paths.get("checkpoints", []) or []
+        unet_paths = folder_paths.get("unet", []) or []
+        if ckpt_paths and unet_paths:
+            ckpt_real = self._normalize_path_set(ckpt_paths)
+            unet_real = self._normalize_path_set(unet_paths)
+            overlap = ckpt_real & unet_real
+            if overlap:
+                collisions = ", ".join(sorted(overlap))
+                raise ValueError(
+                    f"Path(s) {collisions} are configured for both "
+                    f"'checkpoints' and 'unet' (diffusion models). "
+                    f"These model types must use separate physical folders. "
+                    f"Please remove one of the conflicting entries."
+                )
+
+    def _update_active_library_entry(
+        self,
+        *,
+        folder_paths: Optional[Mapping[str, Iterable[str]]] = None,
+        extra_folder_paths: Optional[Mapping[str, Iterable[str]]] = None,
+        default_lora_root: Optional[str] = None,
+        default_checkpoint_root: Optional[str] = None,
+        default_unet_root: Optional[str] = None,
+        default_embedding_root: Optional[str] = None,
+        default_other_roots: Optional[Mapping[str, str]] = None,
+        recipes_path: Optional[str] = None,
+    ) -> bool:
+        libraries = self.settings.get("libraries", {})
+        active_name = self.settings.get("active_library")
+        if not active_name or active_name not in libraries:
+            return False
+
+        library = libraries[active_name]
+        changed = False
+
+        if folder_paths is not None:
+            normalized_paths = self._normalize_folder_paths(folder_paths)
+            if library.get("folder_paths") != normalized_paths:
+                library["folder_paths"] = normalized_paths
+                changed = True
+
+        if extra_folder_paths is not None:
+            normalized_extra_paths = self._normalize_folder_paths(extra_folder_paths)
+            if library.get("extra_folder_paths") != normalized_extra_paths:
+                library["extra_folder_paths"] = normalized_extra_paths
+                changed = True
+
+        if (
+            default_lora_root is not None
+            and library.get("default_lora_root") != default_lora_root
+        ):
+            library["default_lora_root"] = default_lora_root
+            changed = True
+
+        if (
+            default_checkpoint_root is not None
+            and library.get("default_checkpoint_root") != default_checkpoint_root
+        ):
+            library["default_checkpoint_root"] = default_checkpoint_root
+            changed = True
+
+        if (
+            default_unet_root is not None
+            and library.get("default_unet_root") != default_unet_root
+        ):
+            library["default_unet_root"] = default_unet_root
+            changed = True
+
+        if (
+            default_embedding_root is not None
+            and library.get("default_embedding_root") != default_embedding_root
+        ):
+            library["default_embedding_root"] = default_embedding_root
+            changed = True
+
+        if default_other_roots is not None:
+            normalized_other_roots = self._normalize_default_other_roots(
+                default_other_roots
+            )
+            if library.get("default_other_roots") != normalized_other_roots:
+                library["default_other_roots"] = normalized_other_roots
+                changed = True
+
+        if recipes_path is not None and library.get("recipes_path") != recipes_path:
+            library["recipes_path"] = recipes_path
+            changed = True
+
+        if changed:
+            library.setdefault("created_at", self._current_timestamp())
+            library["updated_at"] = self._current_timestamp()
+
+        return changed
+
+    def _migrate_setting_keys(self) -> None:
+        """Migrate legacy camelCase setting keys to snake_case"""
+        key_migrations = {
+            "optimizeExampleImages": "optimize_example_images",
+            "autoDownloadExampleImages": "auto_download_example_images",
+            "blurMatureContent": "blur_mature_content",
+            "matureBlurLevel": "mature_blur_level",
+            "autoplayOnHover": "autoplay_on_hover",
+            "displayDensity": "display_density",
+            "cardInfoDisplay": "card_info_display",
+            "includeTriggerWords": "include_trigger_words",
+            "compactMode": "compact_mode",
+            "modelCardFooterAction": "model_card_footer_action",
+            "update_flag_strategy": "version_grouping",
+        }
+
+        updated = False
+        for old_key, new_key in key_migrations.items():
+            if old_key in self.settings:
+                if new_key not in self.settings:
+                    self.settings[new_key] = self.settings[old_key]
+                del self.settings[old_key]
+                updated = True
+
+        if updated:
+            logger.info("Migrated legacy setting keys to snake_case")
+            self._save_settings()
+
+    def _migrate_download_path_template(self):
+        """Migrate old download_path_template to new download_path_templates"""
+        old_template = self.settings.get("download_path_template")
+        templates = self.settings.get("download_path_templates")
+
+        # If old template exists and new templates don't exist, migrate
+        if old_template is not None and not templates:
+            logger.info("Migrating download_path_template to download_path_templates")
+            self.settings["download_path_templates"] = {
+                "lora": old_template,
+                "checkpoint": old_template,
+                "embedding": old_template,
+            }
+            # Remove old setting
+            del self.settings["download_path_template"]
+            self._save_settings()
+            logger.info("Migration completed")
+
+    def _auto_set_default_roots(self):
+        """Ensure default root paths always point at a current valid root.
+
+        Empty or stale defaults are repaired to the first configured root.
+        Skips auto-setting when the settings file matches the template
+        (user hasn't customized yet).
+        """
+        # Skip auto-setting if the user hasn't customized settings yet (template preserved)
+        if self._preserve_disk_template:
+            return
+
+        updated = False
+
+        def _check_and_auto_set(key: str, setting_key: str) -> bool:
+            """Repair default roots when empty or no longer present."""
+            current = self.settings.get(setting_key, "")
+            primary_candidates = self._get_valid_root_candidates(key)
+            if not primary_candidates:
+                return False
+
+            allowed_roots = self._get_allowed_roots(key)
+            if current and _normalize_root_identity(current) in allowed_roots:
+                return False
+
+            self.settings[setting_key] = primary_candidates[0]
+            if current:
+                logger.info(
+                    "Repaired stale %s from '%s' to '%s' because it is not present in primary or extra roots",
+                    setting_key,
+                    current,
+                    primary_candidates[0],
+                )
+            else:
+                logger.info("Auto-set %s to '%s'", setting_key, primary_candidates[0])
+            return True
+
+        # Process all model types
+        updated = _check_and_auto_set("loras", "default_lora_root") or updated
+        updated = (
+            _check_and_auto_set("checkpoints", "default_checkpoint_root") or updated
+        )
+        updated = _check_and_auto_set("unet", "default_unet_root") or updated
+        updated = _check_and_auto_set("embeddings", "default_embedding_root") or updated
+
+        # Other-model default roots: one entry per enabled sub_type; candidates
+        # are the union of that sub_type's folder_paths keys (text_encoder
+        # merges the legacy 'clip' key with 'text_encoders'). When the opt-in
+        # feature is off the existing mapping is left untouched.
+        other_roots = self._normalize_default_other_roots(
+            self.settings.get("default_other_roots")
+        )
+        if self.is_other_models_enabled():
+            for sub_type in self.get_enabled_other_sub_types():
+                candidates: List[str] = []
+                candidate_identities: set[str] = set()
+                for folder_key in OTHER_SUB_TYPE_FOLDER_KEYS.get(sub_type, []):
+                    for candidate in self._get_valid_root_candidates(folder_key):
+                        identity = _normalize_root_identity(candidate)
+                        if identity in candidate_identities:
+                            continue
+                        candidate_identities.add(identity)
+                        candidates.append(candidate)
+                if not candidates:
+                    continue
+                current = other_roots.get(sub_type, "")
+                if current and _normalize_root_identity(current) in candidate_identities:
+                    continue
+                other_roots[sub_type] = candidates[0]
+                if current:
+                    logger.info(
+                        "Repaired stale default_other_roots[%s] from '%s' to '%s' because it is not present in primary or extra roots",
+                        sub_type,
+                        current,
+                        candidates[0],
+                    )
+                else:
+                    logger.info(
+                        "Auto-set default_other_roots[%s] to '%s'",
+                        sub_type,
+                        candidates[0],
+                    )
+                updated = True
+
+        if updated:
+            self.settings["default_other_roots"] = other_roots
+            self._update_active_library_entry(
+                default_lora_root=self.settings.get("default_lora_root"),
+                default_checkpoint_root=self.settings.get("default_checkpoint_root"),
+                default_unet_root=self.settings.get("default_unet_root"),
+                default_embedding_root=self.settings.get("default_embedding_root"),
+                default_other_roots=other_roots,
+            )
+            if self._bootstrap_reason == "missing":
+                self._needs_initial_save = True
+            else:
+                self._save_settings()
+
+    def _get_valid_root_candidates(self, key: str) -> List[str]:
+        """Return stable root candidates, preferring primary roots over extra roots."""
+
+        candidates: List[str] = []
+        seen: set[str] = set()
+        for mapping_key in ("folder_paths", "extra_folder_paths"):
+            raw_paths = self.settings.get(mapping_key, {})
+            if not isinstance(raw_paths, Mapping):
+                continue
+            values = raw_paths.get(key, [])
+            if not isinstance(values, list):
+                continue
+            for value in values:
+                if not isinstance(value, str):
+                    continue
+                normalized = value.strip()
+                if not normalized:
+                    continue
+                identity = _normalize_root_identity(normalized)
+                if identity in seen:
+                    continue
+                seen.add(identity)
+                candidates.append(normalized)
+        return candidates
+
+    def _get_allowed_roots(self, key: str) -> set[str]:
+        """Return all valid roots for a model type, including extra roots."""
+
+        return {_normalize_root_identity(path) for path in self._get_valid_root_candidates(key)}
+
+    def _check_environment_variables(self) -> None:
+        """Check for environment variables and update settings if needed"""
+        env_api_key = os.environ.get("CIVITAI_API_KEY")
+        if env_api_key:  # Check if the environment variable exists and is not empty
+            logger.info("Found CIVITAI_API_KEY environment variable")
+            # Always use the environment variable if it exists
+            self.settings["civitai_api_key"] = env_api_key
+            self._save_settings()
+
+        # Hugging Face accepts either of its conventional variable names
+        env_hf_token = os.environ.get("HF_TOKEN") or os.environ.get(
+            "HUGGING_FACE_HUB_TOKEN"
+        )
+        if env_hf_token:
+            logger.info("Found HF_TOKEN environment variable")
+            self.settings["huggingface_api_key"] = env_hf_token
+            self._save_settings()
+
+        # LLM provider overrides
+        llm_env_map = {
+            "LLM_API_KEY": "llm_api_key",
+            "LLM_MODEL": "llm_model",
+            "LLM_API_BASE": "llm_api_base",
+            "LLM_PROVIDER": "llm_provider",
+        }
+        llm_changed = False
+        for env_var, settings_key in llm_env_map.items():
+            env_val = os.environ.get(env_var)
+            if env_val:
+                logger.info("Found %s environment variable", env_var)
+                self.settings[settings_key] = env_val
+                llm_changed = True
+        if llm_changed:
+            self._save_settings()
+
+    def _default_settings_actions(self) -> List[Dict[str, Any]]:
+        return [
+            {
+                "action": "open-settings-location",
+                "label": "Open settings folder",
+                "type": "primary",
+                "icon": "fas fa-folder-open",
+            }
+        ]
+
+    def _add_startup_message(
+        self,
+        *,
+        code: str,
+        title: str,
+        message: str,
+        severity: str = "info",
+        actions: Optional[List[Dict[str, Any]]] = None,
+        details: Optional[str] = None,
+        dismissible: bool = False,
+    ) -> None:
+        if any(existing.get("code") == code for existing in self._startup_messages):
+            return
+
+        payload: Dict[str, Any] = {
+            "code": code,
+            "title": title,
+            "message": message,
+            "severity": severity.lower(),
+            "dismissible": bool(dismissible),
+        }
+
+        if actions:
+            payload["actions"] = [dict(action) for action in actions]
+        if details:
+            payload["details"] = details
+        payload["settings_file"] = self.settings_file
+
+        self._startup_messages.append(payload)
+
+    def _cleanup_default_values_from_disk(self) -> None:
+        """Remove default values from existing settings.json to keep it clean.
+
+        Only performs cleanup if the file contains a significant number of default
+        values (indicating it's "bloated"). Small files (like template-based configs)
+        are preserved as-is to avoid unexpected changes.
+        """
+        # Only cleanup existing files (not new ones)
+        if self._bootstrap_reason == "missing" or self._original_disk_payload is None:
+            return
+
+        defaults = self._get_default_settings()
+        disk_keys = set(self._original_disk_payload.keys())
+
+        # Count how many keys on disk are set to their default values
+        default_value_keys = set()
+        for key in disk_keys:
+            if key in CORE_USER_SETTING_KEYS:
+                continue  # Core keys don't count as "cleanup candidates"
+            disk_value = self._original_disk_payload.get(key)
+            default_value = defaults.get(key)
+            # Compare using JSON serialization for complex objects
+            if json.dumps(disk_value, sort_keys=True, default=str) == json.dumps(
+                default_value, sort_keys=True, default=str
+            ):
+                default_value_keys.add(key)
+
+        # Only cleanup if there are "many" default keys (indicating a bloated file)
+        # This preserves small/template-based configs while cleaning up legacy bloated files
+        if len(default_value_keys) >= DEFAULT_KEYS_CLEANUP_THRESHOLD:
+            logger.info(
+                "Cleaning up %d default value(s) from settings.json to keep it minimal",
+                len(default_value_keys),
+            )
+            self._save_settings()
+            # Update original payload to match what we just saved
+            self._original_disk_payload = self._serialize_settings_for_disk()
+
+    def _collect_configuration_warnings(self) -> None:
+        if not self._standalone_mode:
+            return
+
+        folder_paths = self.settings.get("folder_paths", {}) or {}
+        monitored_keys = ("loras", "checkpoints", "embeddings")
+
+        has_valid_paths = False
+        for key in monitored_keys:
+            raw_paths = folder_paths.get(key) or []
+            if isinstance(raw_paths, str):
+                raw_paths = [raw_paths]
+            try:
+                iterator = list(raw_paths)
+            except TypeError:
+                continue
+            if any(
+                isinstance(path, str) and path and os.path.exists(path)
+                for path in iterator
+            ):
+                has_valid_paths = True
+                break
+
+        if not has_valid_paths:
+            if self._bootstrap_reason == "missing":
+                message = (
+                    "LoRA Manager created a default settings.json because no configuration was found. "
+                    "Open Settings → Model Paths to add your model directories so library scanning can run."
+                )
+            else:
+                message = (
+                    "LoRA Manager could not locate any configured model directories. "
+                    "Open Settings → Model Paths to add your model folders so library scanning can run."
+                )
+            self._add_startup_message(
+                code="missing-model-paths",
+                title="Model folders need setup",
+                message=message,
+                severity="warning",
+                actions=[
+                    {
+                        "action": "open-model-paths-settings",
+                        "label": "Configure model folders",
+                        "type": "primary",
+                        "icon": "fas fa-cog",
+                    },
+                    *self._default_settings_actions(),
+                ],
+                dismissible=False,
+            )
+
+    def refresh_environment_variables(self) -> None:
+        """Refresh settings from environment variables"""
+        with self._restore_lock:
+            self._ensure_no_active_restore(action="refresh environment variables")
+            before = copy.deepcopy(self.settings)
+            self._check_environment_variables()
+            if self.settings != before:
+                self._settings_revision += 1
+
+    def _get_default_settings(self) -> Dict[str, Any]:
+        """Return default settings"""
+        defaults = copy.deepcopy(DEFAULT_SETTINGS)
+        defaults["base_model_path_mappings"] = {}
+        defaults["download_path_templates"] = {}
+        defaults["download_filename_templates"] = {}
+        defaults["priority_tags"] = DEFAULT_PRIORITY_TAG_CONFIG.copy()
+        defaults.setdefault("folder_paths", {})
+        defaults.setdefault("extra_folder_paths", {})
+        defaults["auto_organize_exclusions"] = []
+        defaults["metadata_refresh_skip_paths"] = []
+
+        library_name = defaults.get("active_library") or "default"
+        default_library = self._build_library_payload(
+            folder_paths=defaults.get("folder_paths", {}),
+            extra_folder_paths=defaults.get("extra_folder_paths", {}),
+            default_lora_root=defaults.get("default_lora_root"),
+            default_checkpoint_root=defaults.get("default_checkpoint_root"),
+            default_unet_root=defaults.get("default_unet_root"),
+            default_embedding_root=defaults.get("default_embedding_root"),
+            recipes_path=defaults.get("recipes_path"),
+        )
+        defaults["libraries"] = {library_name: default_library}
+        defaults["active_library"] = library_name
+        return defaults
+
+    def _normalize_priority_tag_config(self, value: Any) -> Dict[str, str]:
+        normalized: Dict[str, str] = {}
+        if isinstance(value, Mapping):
+            for key, raw in value.items():
+                if not isinstance(key, str) or not isinstance(raw, str):
+                    continue
+                normalized[key] = raw.strip()
+
+        for model_type, default_value in DEFAULT_PRIORITY_TAG_CONFIG.items():
+            normalized.setdefault(model_type, default_value)
+
+        return normalized
+
+    def normalize_mature_blur_level(self, value: Any) -> str:
+        if isinstance(value, str):
+            normalized = value.strip().upper()
+            if normalized in VALID_MATURE_BLUR_LEVELS:
+                return normalized
+        return "R"
+
+    def normalize_auto_organize_exclusions(self, value: Any) -> List[str]:
+        if value is None:
+            return []
+
+        if isinstance(value, str):
+            candidates: Iterable[Any] = (
+                value.replace("\n", ",").replace(";", ",").split(",")
+            )
+        elif isinstance(value, Sequence) and not isinstance(
+            value, (bytes, bytearray, str)
+        ):
+            candidates = value
+        else:
+            return []
+
+        patterns: List[str] = []
+        for raw in candidates:
+            if isinstance(raw, str):
+                token = raw.strip()
+                if token:
+                    patterns.append(token)
+
+        unique_patterns: List[str] = []
+        seen = set()
+        for pattern in patterns:
+            if pattern not in seen:
+                seen.add(pattern)
+                unique_patterns.append(pattern)
+
+        return unique_patterns
+
+    def get_priority_tag_config(self) -> Dict[str, str]:
+        with self._restore_lock:
+            self._ensure_no_active_restore(action="normalize priority tags")
+            stored_value = self.settings.get("priority_tags")
+            normalized = self._normalize_priority_tag_config(stored_value)
+            if normalized != stored_value:
+                self.settings["priority_tags"] = normalized
+                self._settings_revision += 1
+                self._save_settings()
+            return copy.deepcopy(normalized)
+
+    def get_auto_organize_exclusions(self) -> List[str]:
+        with self._restore_lock:
+            self._ensure_no_active_restore(action="normalize auto organize exclusions")
+            exclusions = self.normalize_auto_organize_exclusions(
+                self.settings.get("auto_organize_exclusions")
+            )
+            if exclusions != self.settings.get("auto_organize_exclusions"):
+                self.settings["auto_organize_exclusions"] = exclusions
+                self._settings_revision += 1
+                self._save_settings()
+            return list(exclusions)
+
+    def normalize_metadata_refresh_skip_paths(self, value: Any) -> List[str]:
+        if value is None:
+            return []
+
+        if isinstance(value, str):
+            candidates: Iterable[Any] = (
+                value.replace("\n", ",").replace(";", ",").split(",")
+            )
+        elif isinstance(value, Sequence) and not isinstance(
+            value, (bytes, bytearray, str)
+        ):
+            candidates = value
+        else:
+            return []
+
+        paths: List[str] = []
+        for raw in candidates:
+            if isinstance(raw, str):
+                token = raw.replace("\\", "/").strip().strip("/")
+                if token:
+                    paths.append(token)
+
+        unique_paths: List[str] = []
+        seen = set()
+        for path in paths:
+            if path not in seen:
+                seen.add(path)
+                unique_paths.append(path)
+
+        return unique_paths
+
+    def get_metadata_refresh_skip_paths(self) -> List[str]:
+        with self._restore_lock:
+            self._ensure_no_active_restore(action="normalize metadata refresh skip paths")
+            skip_paths = self.normalize_metadata_refresh_skip_paths(
+                self.settings.get("metadata_refresh_skip_paths")
+            )
+            if skip_paths != self.settings.get("metadata_refresh_skip_paths"):
+                self.settings["metadata_refresh_skip_paths"] = skip_paths
+                self._settings_revision += 1
+                self._save_settings()
+            return list(skip_paths)
+
+    def normalize_download_skip_base_models(self, value: Any) -> List[str]:
+        if value is None:
+            return []
+
+        if isinstance(value, str):
+            candidates: Iterable[Any] = (
+                value.replace("\n", ",").replace(";", ",").split(",")
+            )
+        elif isinstance(value, Sequence) and not isinstance(
+            value, (bytes, bytearray, str)
+        ):
+            candidates = value
+        else:
+            return []
+
+        base_models: List[str] = []
+        seen = set()
+        for raw in candidates:
+            if not isinstance(raw, str):
+                continue
+            token = raw.strip()
+            if not token or token not in SUPPORTED_DOWNLOAD_SKIP_BASE_MODELS:
+                continue
+            if token in seen:
+                continue
+            seen.add(token)
+            base_models.append(token)
+
+        return base_models
+
+    def get_download_skip_base_models(self) -> List[str]:
+        with self._restore_lock:
+            self._ensure_no_active_restore(action="normalize download skip base models")
+            base_models = self.normalize_download_skip_base_models(
+                self.settings.get("download_skip_base_models")
+            )
+            if base_models != self.settings.get("download_skip_base_models"):
+                self.settings["download_skip_base_models"] = base_models
+                self._settings_revision += 1
+                self._save_settings()
+            return list(base_models)
+
+    def get_skip_previously_downloaded_model_versions(self) -> bool:
+        with self._restore_lock:
+            self._ensure_no_active_restore(
+                action="normalize skip previously downloaded model versions"
+            )
+            value = self.settings.get(
+                "skip_previously_downloaded_model_versions", False
+            )
+            if isinstance(value, bool):
+                return value
+            normalized = False
+            if isinstance(value, str):
+                normalized = value.strip().lower() in {"1", "true", "yes", "on"}
+            self.settings["skip_previously_downloaded_model_versions"] = normalized
+            self._settings_revision += 1
+            self._save_settings()
+            return normalized
+
+    def get_extra_folder_paths(self) -> Dict[str, List[str]]:
+        """Get extra folder paths for the active library.
+
+        These paths are only used by LoRA Manager and not shared with ComfyUI.
+        Returns a dictionary with keys like 'loras', 'checkpoints', 'embeddings', 'unet'.
+        """
+        with self._restore_lock:
+            self._ensure_no_active_restore(action="normalize extra folder paths")
+            extra_paths = self.settings.get("extra_folder_paths", {})
+            if not isinstance(extra_paths, dict):
+                return {}
+            return self._normalize_folder_paths(extra_paths)
+
+    def update_extra_folder_paths(
+        self,
+        extra_folder_paths: Mapping[str, Iterable[str]],
+    ) -> None:
+        """Update extra folder paths for the active library.
+
+        These paths are only used by LoRA Manager and not shared with ComfyUI.
+        Validates that extra paths don't overlap with other libraries' paths.
+        """
+        with self._restore_lock:
+            self._ensure_no_active_restore(action="update extra folder paths")
+            self._update_extra_folder_paths_locked(extra_folder_paths)
+
+    def get_startup_messages(self) -> List[Dict[str, Any]]:
+        return [message.copy() for message in self._startup_messages]
+
+    def get_priority_tag_entries(self, model_type: str) -> List[PriorityTagEntry]:
+        config = self.get_priority_tag_config()
+        raw_config = config.get(model_type, "")
+        return parse_priority_tag_string(raw_config)
+
+    def resolve_priority_tag_for_model(
+        self, tags: Sequence[str] | Iterable[str], model_type: str
+    ) -> str:
+        entries = self.get_priority_tag_entries(model_type)
+        resolved = resolve_priority_tag(tags, entries)
+        if resolved:
+            return resolved
+
+        # Fall back to the first tag that is usable as a folder name. The raw
+        # tag list can contain keyword dumps that would become unusable folders
+        # and break path length limits, and Civitai mixes in structural labels
+        # like "base model" that mean nothing as a folder, so skip both (#1119).
+        for tag in tags:
+            if is_civitai_meta_tag(tag):
+                continue
+            if is_usable_path_tag(tag):
+                return tag.strip()
+        return ""
+
+    def get_priority_tag_suggestions(self) -> Dict[str, List[str]]:
+        suggestions: Dict[str, List[str]] = {}
+        config = self.get_priority_tag_config()
+        for model_type, raw_value in config.items():
+            entries = parse_priority_tag_string(raw_value)
+            suggestions[model_type] = collect_canonical_tags(entries)
+        return suggestions
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """Get setting value"""
+        return self.settings.get(key, default)
+
+    def _normalize_recipes_path_value(self, value: Any) -> str:
+        """Return a normalized absolute recipes path or an empty string."""
+
+        if not isinstance(value, str):
+            value = "" if value is None else str(value)
+
+        stripped = value.strip()
+        if not stripped:
+            return ""
+
+        return os.path.abspath(os.path.normpath(os.path.expanduser(stripped)))
+
+    def _get_effective_recipes_dir(self, recipes_path: Optional[str] = None) -> str:
+        """Resolve the effective recipes directory for the active library."""
+
+        normalized_custom = self._normalize_recipes_path_value(
+            self.settings.get("recipes_path", "")
+            if recipes_path is None
+            else recipes_path
+        )
+        if normalized_custom:
+            return normalized_custom
+
+        folder_paths = self.settings.get("folder_paths", {})
+        configured_lora_roots = []
+        if isinstance(folder_paths, Mapping):
+            raw_lora_roots = folder_paths.get("loras", [])
+            if isinstance(raw_lora_roots, Sequence) and not isinstance(
+                raw_lora_roots, (str, bytes)
+            ):
+                configured_lora_roots = [
+                    path
+                    for path in raw_lora_roots
+                    if isinstance(path, str) and path.strip()
+                ]
+
+        if configured_lora_roots:
+            lora_root = sorted(configured_lora_roots, key=str.casefold)[0]
+            return os.path.abspath(os.path.join(lora_root, "recipes"))
+
+        config_lora_roots = [
+            path
+            for path in getattr(config, "loras_roots", []) or []
+            if isinstance(path, str) and path.strip()
+        ]
+        if not config_lora_roots:
+            return ""
+
+        return os.path.abspath(
+            os.path.join(sorted(config_lora_roots, key=str.casefold)[0], "recipes")
+        )
+
+    def _validate_recipes_storage_path(self, normalized_path: str) -> None:
+        """Ensure the recipes storage target is usable before saving it."""
+
+        if not normalized_path:
+            return
+
+        if os.path.exists(normalized_path) and not os.path.isdir(normalized_path):
+            raise ValueError("Recipes path must point to a directory")
+
+        try:
+            os.makedirs(normalized_path, exist_ok=True)
+        except Exception as exc:
+            raise ValueError(f"Unable to create recipes directory: {exc}") from exc
+
+        try:
+            fd, probe_path = tempfile.mkstemp(
+                prefix=".lora-manager-recipes-", dir=normalized_path
+            )
+            os.close(fd)
+            os.remove(probe_path)
+        except Exception as exc:
+            raise ValueError(f"Recipes path is not writable: {exc}") from exc
+
+    def _migrate_recipes_directory(self, source_dir: str, target_dir: str) -> None:
+        """Move existing recipe files to a new recipes root and rewrite JSON paths."""
+
+        source = os.path.abspath(os.path.normpath(source_dir)) if source_dir else ""
+        target = os.path.abspath(os.path.normpath(target_dir)) if target_dir else ""
+        if not source or not target or source == target:
+            return
+
+        if not os.path.exists(source):
+            os.makedirs(target, exist_ok=True)
+            return
+
+        if os.path.exists(target) and not os.path.isdir(target):
+            raise ValueError("Recipes path must point to a directory")
+
+        try:
+            common_root = os.path.commonpath([source, target])
+        except ValueError:
+            # Windows: paths on different drives share no common root.
+            # A cross-drive move is valid, so treat it as no common root.
+            common_root = None
+
+        if common_root is not None and common_root == source:
+            raise ValueError("Recipes path cannot be moved into a nested directory")
+
+        planned_recipe_updates: Dict[str, Dict[str, Any]] = {}
+        file_pairs: List[Tuple[str, str]] = []
+
+        for root, _, files in os.walk(source):
+            for filename in files:
+                source_path = os.path.normpath(os.path.join(root, filename))
+                relative_path = os.path.relpath(source_path, source)
+                target_path = os.path.normpath(os.path.join(target, relative_path))
+                file_pairs.append((source_path, target_path))
+
+                if not filename.endswith(".recipe.json"):
+                    continue
+
+                try:
+                    with open(source_path, "r", encoding="utf-8") as handle:
+                        payload = json.load(handle)
+                except Exception as exc:
+                    raise ValueError(
+                        f"Unable to read recipe metadata during migration: {source_path}: {exc}"
+                    ) from exc
+
+                if not isinstance(payload, dict):
+                    continue
+
+                file_path = payload.get("file_path")
+                if isinstance(file_path, str) and file_path.strip():
+                    normalized_file_path = os.path.abspath(
+                        os.path.normpath(os.path.expanduser(file_path))
+                    )
+                    source_candidates = [source]
+                    real_source = os.path.abspath(
+                        os.path.normpath(os.path.realpath(source_dir))
+                    )
+                    if real_source not in source_candidates:
+                        source_candidates.append(real_source)
+
+                    rewritten = False
+                    for source_candidate in source_candidates:
+                        try:
+                            file_common_root = os.path.commonpath(
+                                [normalized_file_path, source_candidate]
+                            )
+                        except ValueError:
+                            continue
+
+                        if file_common_root != source_candidate:
+                            continue
+
+                        image_relative_path = os.path.relpath(
+                            normalized_file_path, source_candidate
+                        )
+                        payload["file_path"] = os.path.normpath(
+                            os.path.join(target, image_relative_path)
+                        )
+                        rewritten = True
+                        break
+
+                    if not rewritten and source_candidates:
+                        logger.debug(
+                            "Skipping recipe file_path rewrite during migration for %s",
+                            normalized_file_path,
+                        )
+
+                planned_recipe_updates[target_path] = payload
+
+        for _, target_path in file_pairs:
+            if os.path.exists(target_path):
+                raise ValueError(
+                    f"Recipes path already contains conflicting file: {target_path}"
+                )
+
+        os.makedirs(target, exist_ok=True)
+
+        for source_path, target_path in file_pairs:
+            os.makedirs(os.path.dirname(target_path), exist_ok=True)
+            shutil.move(source_path, target_path)
+
+        for target_path, payload in planned_recipe_updates.items():
+            with open(target_path, "w", encoding="utf-8") as handle:
+                json.dump(payload, handle, indent=4, ensure_ascii=False)
+
+        for root, dirs, files in os.walk(source, topdown=False):
+            if dirs or files:
+                continue
+            try:
+                os.rmdir(root)
+            except OSError:
+                pass
+
+    def set(self, key: str, value: Any) -> None:
+        """Set setting value and save"""
+        with self._restore_lock:
+            self._ensure_no_active_restore(action='mutate settings')
+            if key == "auto_organize_exclusions":
+                value = self.normalize_auto_organize_exclusions(value)
+            elif key == "metadata_refresh_skip_paths":
+                value = self.normalize_metadata_refresh_skip_paths(value)
+            elif key == "download_skip_base_models":
+                value = self.normalize_download_skip_base_models(value)
+            elif key == "mature_blur_level":
+                value = self.normalize_mature_blur_level(value)
+            elif key == "default_other_roots":
+                value = self._normalize_default_other_roots(value, strict=True)
+            elif key == "enabled_other_sub_types":
+                value = normalize_other_sub_types(value)
+            elif key == "enable_other_models":
+                value = bool(value)
+            elif key == "recipes_path":
+                current_recipes_dir = self._get_effective_recipes_dir()
+                value = self._normalize_recipes_path_value(value)
+                target_recipes_dir = self._get_effective_recipes_dir(value)
+                self._validate_recipes_storage_path(target_recipes_dir)
+                self._migrate_recipes_directory(current_recipes_dir, target_recipes_dir)
+            self.settings[key] = value
+            self._settings_revision += 1
+            portable_switch_pending = False
+            if key == "use_portable_settings" and isinstance(value, bool):
+                portable_switch_pending = True
+                self._prepare_portable_switch(value)
+            if key == "folder_paths" and isinstance(value, Mapping):
+                active_name = self.get_active_library_name()
+                self._validate_folder_paths(active_name, value)
+                self._update_active_library_entry(folder_paths=value)  # pyright: ignore[reportArgumentType]
+            elif key == "extra_folder_paths" and isinstance(value, Mapping):
+                active_name = self.get_active_library_name()
+                self._validate_folder_paths(active_name, value)
+                self._update_active_library_entry(extra_folder_paths=value)  # pyright: ignore[reportArgumentType]
+            elif key == "default_lora_root":
+                self._update_active_library_entry(default_lora_root=str(value))
+            elif key == "default_checkpoint_root":
+                self._update_active_library_entry(default_checkpoint_root=str(value))
+            elif key == "default_unet_root":
+                self._update_active_library_entry(default_unet_root=str(value))
+            elif key == "default_embedding_root":
+                self._update_active_library_entry(default_embedding_root=str(value))
+            elif key == "default_other_roots":
+                self._update_active_library_entry(default_other_roots=value)
+            elif key == "recipes_path":
+                self._update_active_library_entry(recipes_path=str(value))
+            elif key == "model_name_display":
+                self._notify_model_name_display_change(value)
+            self._save_settings()
+            if key == "recipes_path":
+                self._notify_library_change(self.get_active_library_name())
+            if key in ("enable_other_models", "enabled_other_sub_types"):
+                self._apply_other_model_settings_change()
+            if portable_switch_pending:
+                self._finalize_portable_switch()
+
+    def delete(self, key: str) -> None:
+        """Delete setting key and save"""
+        with self._restore_lock:
+            self._ensure_no_active_restore(action="delete settings")
+            if key in self.settings:
+                del self.settings[key]
+                self._settings_revision += 1
+                self._save_settings()
+                logger.info(f"Deleted setting: {key}")
+
+    def keys(self) -> Iterable[str]:
+        """Return all setting keys."""
+        return self.settings.keys()
+
+    def _prepare_portable_switch(self, use_portable: bool) -> None:
+        """Prepare switching the settings storage location."""
+
+        if is_settings_dir_pinned():
+            logger.info(
+                "Portable-mode switch ignored: settings directory is pinned via "
+                "%s/--settings-path (%s)",
+                "LORA_MANAGER_SETTINGS_DIR",
+                get_settings_dir_override(),
+            )
+            return
+
+        legacy_path = get_legacy_settings_path()
+        user_dir = self._get_user_config_directory()
+        user_settings_path = os.path.join(user_dir, "settings.json")
+
+        target_path = legacy_path if use_portable else user_settings_path
+        other_path = user_settings_path if use_portable else legacy_path
+        target_dir = os.path.dirname(target_path)
+        os.makedirs(target_dir, exist_ok=True)
+
+        previous_path = self.settings_file or target_path
+        previous_dir = os.path.dirname(previous_path) or target_dir
+
+        if os.path.abspath(previous_path) != os.path.abspath(target_path):
+            self._migrate_settings_directory_content(previous_dir, target_dir)
+            logger.info("Switching settings file to: %s", target_path)
+
+        self._pending_portable_switch = {"other_path": other_path}
+        self.settings_file = target_path
+
+    def _finalize_portable_switch(self) -> None:
+        """Mirror the latest settings file to the secondary location."""
+
+        info = self._pending_portable_switch
+        if not info:
+            return
+
+        other_path = info.get("other_path")
+        current_path = self.settings_file
+
+        if not other_path or not current_path:
+            self._pending_portable_switch = None
+            return
+
+        if os.path.abspath(other_path) == os.path.abspath(current_path):
+            self._pending_portable_switch = None
+            return
+
+        other_dir = os.path.dirname(other_path) or os.path.dirname(current_path)
+        if other_dir:
+            os.makedirs(other_dir, exist_ok=True)
+
+        try:
+            shutil.copy2(current_path, other_path)
+        except Exception as exc:
+            logger.warning("Failed to mirror settings.json to %s: %s", other_path, exc)
+        finally:
+            self._pending_portable_switch = None
+
+    def _migrate_settings_directory_content(
+        self, source_dir: str, target_dir: str
+    ) -> None:
+        """Migrate settings directory subdirectories when switching storage locations.
+
+        Copies the canonical subdirectories (cache, backups, logs, stats, wildcards)
+        from the old settings directory to the new one. Legacy cache artifacts
+        (model_cache, recipe_cache, etc.) are migrated lazily by
+        ``resolve_cache_path_with_migration`` on first access.
+
+        Args:
+            source_dir: The previous settings directory path.
+            target_dir: The new settings directory path.
+        """
+
+        if not source_dir or not target_dir:
+            return
+
+        def _copy_dir(name: str) -> None:
+            source = os.path.join(source_dir, name)
+            target = os.path.join(target_dir, name)
+            if os.path.isdir(source) and os.path.abspath(source) != os.path.abspath(
+                target
+            ):
+                try:
+                    shutil.copytree(
+                        source,
+                        target,
+                        dirs_exist_ok=True,
+                        ignore=shutil.ignore_patterns("*.sqlite-shm", "*.sqlite-wal"),
+                    )
+                except Exception as exc:
+                    logger.warning(
+                        "Failed to copy directory %s from %s to %s: %s",
+                        name,
+                        source,
+                        target,
+                        exc,
+                    )
+
+        # Managed subdirectories under settings_dir
+        _copy_dir("cache")
+        _copy_dir("backups")
+        _copy_dir("logs")
+        _copy_dir("stats")
+        _copy_dir("wildcards")
+
+    def _get_user_config_directory(self) -> str:
+        """Return the user configuration directory, falling back to ~/.config."""
+
+        try:
+            config_dir = user_config_dir(APP_NAME, appauthor=False) or ""
+        except Exception as exc:  # pragma: no cover - defensive fallback
+            logger.warning("Failed to determine user config directory: %s", exc)
+            config_dir = ""
+
+        if not config_dir:
+            config_dir = os.path.join(os.path.expanduser("~"), f".config/{APP_NAME}")
+
+        try:
+            os.makedirs(config_dir, exist_ok=True)
+        except Exception as exc:
+            logger.warning(
+                "Failed to create user config directory %s: %s", config_dir, exc
+            )
+
+        return config_dir
+
+    def _notify_model_name_display_change(self, value: Any) -> None:
+        """Trigger cache resorting when the model name display preference updates."""
+
+        try:
+            from .service_registry import ServiceRegistry  # pyright: ignore[reportImportCycles]
+        except Exception:  # pragma: no cover - registry optional in some contexts
+            return
+
+        display_mode = value if isinstance(value, str) else "model_name"
+        pending: List[Tuple[Optional[asyncio.AbstractEventLoop], Coroutine[Any, Any, Any]]] = []
+
+        def _resolve_service_loop(service: Any) -> Optional[asyncio.AbstractEventLoop]:
+            loop = getattr(service, "loop", None)
+            if loop is None:
+                loop = getattr(service, "_loop", None)
+            return loop if isinstance(loop, asyncio.AbstractEventLoop) else None
+
+        for service_name in (
+            "lora_scanner",
+            "checkpoint_scanner",
+            "embedding_scanner",
+            "other_scanner",
+            "recipe_scanner",
+        ):
+            service = ServiceRegistry.get_service_sync(service_name)
+            if not service or not hasattr(service, "on_model_name_display_changed"):
+                continue
+
+            try:
+                result = service.on_model_name_display_changed(display_mode)
+            except Exception as exc:  # pragma: no cover - defensive guard
+                logger.debug(
+                    "Service %s failed to schedule name display update: %s",
+                    service_name,
+                    exc,
+                )
+                continue
+
+            if asyncio.iscoroutine(result):
+                service_loop = _resolve_service_loop(service)
+                pending.append((service_loop, result))
+
+        if not pending:
+            return
+
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = None
+
+        for service_loop, coroutine in pending:
+            target_loop = service_loop or loop
+
+            if target_loop is None:
+                try:
+                    asyncio.run(coroutine)
+                except RuntimeError:
+                    logger.debug(
+                        "Skipping name display update due to missing event loop"
+                    )
+                continue
+
+            if loop is not None and target_loop is loop:
+                target_loop.create_task(coroutine)
+                continue
+
+            if target_loop.is_running():
+                try:
+                    asyncio.run_coroutine_threadsafe(coroutine, target_loop)
+                except Exception as exc:  # pragma: no cover - defensive guard
+                    logger.debug("Failed to dispatch name display update: %s", exc)
+                continue
+
+            try:
+                asyncio.run(coroutine)
+            except RuntimeError:
+                logger.debug("Skipping name display update due to closed loop")
+
+    def _save_settings(self) -> None:
+        """Save settings to file"""
+        with self._restore_lock:
+            self._ensure_no_active_restore(action="save settings")
+            try:
+                payload = self._serialize_settings_for_disk()
+                with open(self.settings_file, "w", encoding="utf-8") as f:
+                    json.dump(payload, f, indent=2)
+            except Exception as e:
+                logger.error(f"Error saving settings: {e}")
+            else:
+                if self._bootstrap_reason == "missing":
+                    self._bootstrap_reason = None
+                self._seed_template = None
+
+    def _serialize_settings_for_disk(self) -> Dict[str, Any]:
+        """Return the settings payload that should be persisted to disk.
+
+        Only saves settings that differ from defaults, keeping the config file
+        clean and focused on user customizations. Default values are still
+        available at runtime via _get_default_settings().
+        """
+
+        if self._bootstrap_reason == "missing":
+            minimal: Dict[str, Any] = {}
+            for key in CORE_USER_SETTING_KEYS:
+                if key in self.settings:
+                    minimal[key] = copy.deepcopy(self.settings[key])
+
+            if self.settings.get("use_portable_settings"):
+                minimal["use_portable_settings"] = True
+
+            if self._seed_template:
+                for key, value in self._seed_template.items():
+                    minimal.setdefault(key, copy.deepcopy(value))
+
+            return minimal
+
+        # Only save settings that differ from defaults
+        defaults = self._get_default_settings()
+        minimal = {}
+
+        for key, value in self.settings.items():
+            default_value = defaults.get(key)
+
+            # Core settings are always saved (even if equal to default)
+            if key in CORE_USER_SETTING_KEYS:
+                minimal[key] = copy.deepcopy(value)
+            # Complex objects need deep comparison
+            elif isinstance(value, (dict, list)) and default_value is not None:
+                if json.dumps(value, sort_keys=True, default=str) != json.dumps(
+                    default_value, sort_keys=True, default=str
+                ):
+                    minimal[key] = copy.deepcopy(value)
+            # Simple values use direct comparison
+            elif value != default_value:
+                minimal[key] = copy.deepcopy(value)
+
+        return minimal
+
+    def get_libraries(self) -> Dict[str, Dict[str, Any]]:
+        """Return a copy of the registered libraries."""
+        libraries = self.settings.get("libraries", {})
+        return copy.deepcopy(libraries)
+
+    def get_active_library_name(self) -> str:
+        """Return the currently active library name."""
+        libraries = self.settings.get("libraries", {})
+        active_name = self.settings.get("active_library")
+        if active_name and active_name in libraries:
+            return active_name
+        if libraries:
+            return next(iter(libraries.keys()))
+        return "default"
+
+    def get_active_library(self) -> Dict[str, Any]:
+        """Return a copy of the active library configuration."""
+        libraries = self.settings.get("libraries", {})
+        active_name = self.get_active_library_name()
+        return copy.deepcopy(libraries.get(active_name, {}))
+
+    def activate_library(self, library_name: str) -> None:
+        """Activate a library by name and refresh dependent services."""
+        with self._restore_lock:
+            self._ensure_no_active_restore(action="activate library")
+            libraries = self.settings.get("libraries", {})
+            if library_name not in libraries:
+                raise KeyError(f"Library '{library_name}' does not exist")
+
+            current_active = self.get_active_library_name()
+            if current_active == library_name:
+                # Ensure root settings stay in sync even if already active
+                self._sync_active_library_to_root(save=False)
+                self._save_settings()
+                self._notify_library_change(library_name)
+                return
+
+            self.settings["active_library"] = library_name
+            self._settings_revision += 1
+            self._sync_active_library_to_root(save=False)
+            self._save_settings()
+            self._notify_library_change(library_name)
+
+    def upsert_library(
+        self,
+        library_name: str,
+        *,
+        folder_paths: Optional[Mapping[str, Iterable[str]]] = None,
+        extra_folder_paths: Optional[Mapping[str, Iterable[str]]] = None,
+        default_lora_root: Optional[str] = None,
+        default_checkpoint_root: Optional[str] = None,
+        default_unet_root: Optional[str] = None,
+        default_embedding_root: Optional[str] = None,
+        default_other_roots: Optional[Mapping[str, str]] = None,
+        recipes_path: Optional[str] = None,
+        metadata: Optional[Mapping[str, Any]] = None,
+        activate: bool = False,
+    ) -> Dict[str, Any]:
+        """Create or update a library definition."""
+
+        with self._restore_lock:
+            self._ensure_no_active_restore(action='upsert library')
+            name = library_name.strip()
+            if not name:
+                raise ValueError("Library name cannot be empty")
+
+            if folder_paths is not None:
+                self._validate_folder_paths(name, folder_paths)
+
+            if extra_folder_paths is not None:
+                self._validate_folder_paths(name, extra_folder_paths)
+
+            libraries = self.settings.setdefault("libraries", {})
+            existing = libraries.get(name, {})
+
+            payload = self._build_library_payload(
+                folder_paths=folder_paths
+                if folder_paths is not None
+                else existing.get("folder_paths"),
+                extra_folder_paths=extra_folder_paths
+                if extra_folder_paths is not None
+                else existing.get("extra_folder_paths"),
+                default_lora_root=default_lora_root
+                if default_lora_root is not None
+                else existing.get("default_lora_root"),
+                default_checkpoint_root=(
+                    default_checkpoint_root
+                    if default_checkpoint_root is not None
+                    else existing.get("default_checkpoint_root")
+                ),
+                default_unet_root=(
+                    default_unet_root
+                    if default_unet_root is not None
+                    else existing.get("default_unet_root")
+                ),
+                default_embedding_root=(
+                    default_embedding_root
+                    if default_embedding_root is not None
+                    else existing.get("default_embedding_root")
+                ),
+                default_other_roots=(
+                    default_other_roots
+                    if default_other_roots is not None
+                    else existing.get("default_other_roots")
+                ),
+                recipes_path=(
+                    recipes_path
+                    if recipes_path is not None
+                    else existing.get("recipes_path")
+                ),
+                metadata=metadata if metadata is not None else existing.get("metadata"),
+                base=existing,
+            )
+
+            libraries[name] = payload
+            self._settings_revision += 1
+
+            if activate or not self.settings.get("active_library"):
+                self.settings["active_library"] = name
+
+            self._sync_active_library_to_root(save=False)
+            self._save_settings()
+
+            if self.settings.get("active_library") == name:
+                self._notify_library_change(name)
+
+            return payload
+
+    def create_library(
+        self,
+        library_name: str,
+        *,
+        folder_paths: Mapping[str, Iterable[str]],
+        extra_folder_paths: Optional[Mapping[str, Iterable[str]]] = None,
+        default_lora_root: str = "",
+        default_checkpoint_root: str = "",
+        default_unet_root: str = "",
+        default_embedding_root: str = "",
+        default_other_roots: Optional[Mapping[str, str]] = None,
+        recipes_path: str = "",
+        metadata: Optional[Mapping[str, Any]] = None,
+        activate: bool = False,
+    ) -> Dict[str, Any]:
+        """Create a new library entry."""
+
+        with self._restore_lock:
+            self._ensure_no_active_restore(action='create library')
+            libraries = self.settings.get("libraries", {})
+            if library_name in libraries:
+                raise ValueError(f"Library '{library_name}' already exists")
+
+            return self.upsert_library(
+                library_name,
+                folder_paths=folder_paths,
+                extra_folder_paths=extra_folder_paths,
+                default_lora_root=default_lora_root,
+                default_checkpoint_root=default_checkpoint_root,
+                default_unet_root=default_unet_root,
+                default_embedding_root=default_embedding_root,
+                default_other_roots=default_other_roots,
+                recipes_path=recipes_path,
+                metadata=metadata,
+                activate=activate,
+            )
+
+    def rename_library(self, old_name: str, new_name: str) -> None:
+        """Rename an existing library."""
+
+        with self._restore_lock:
+            self._ensure_no_active_restore(action="rename library")
+            libraries = self.settings.get("libraries", {})
+            if old_name not in libraries:
+                raise KeyError(f"Library '{old_name}' does not exist")
+            new_name_stripped = new_name.strip()
+            if not new_name_stripped:
+                raise ValueError("New library name cannot be empty")
+            if new_name_stripped in libraries:
+                raise ValueError(f"Library '{new_name_stripped}' already exists")
+
+            libraries[new_name_stripped] = libraries.pop(old_name)
+            if self.settings.get("active_library") == old_name:
+                self.settings["active_library"] = new_name_stripped
+                active_name = new_name_stripped
+            else:
+                active_name = self.settings.get("active_library")
+
+            self._settings_revision += 1
+            self._sync_active_library_to_root(save=False)
+            self._save_settings()
+
+            if active_name == new_name_stripped:
+                self._notify_library_change(new_name_stripped)
+
+    def delete_library(self, library_name: str) -> None:
+        """Remove a library definition."""
+
+        with self._restore_lock:
+            self._ensure_no_active_restore(action="delete library")
+            libraries = self.settings.get("libraries", {})
+            if library_name not in libraries:
+                raise KeyError(f"Library '{library_name}' does not exist")
+            if len(libraries) == 1:
+                raise ValueError("At least one library must remain")
+
+            was_active = self.settings.get("active_library") == library_name
+            libraries.pop(library_name)
+
+            if was_active:
+                new_active = next(iter(libraries.keys()))
+                self.settings["active_library"] = new_active
+            self._settings_revision += 1
+            self._sync_active_library_to_root(save=False)
+            self._save_settings()
+
+            if was_active:
+                self._notify_library_change(self.settings["active_library"])
+
+    def update_active_library_paths(
+        self,
+        folder_paths: Mapping[str, Iterable[str]],
+        *,
+        extra_folder_paths: Optional[Mapping[str, Iterable[str]]] = None,
+        default_lora_root: Optional[str] = None,
+        default_checkpoint_root: Optional[str] = None,
+        default_unet_root: Optional[str] = None,
+        default_embedding_root: Optional[str] = None,
+        default_other_roots: Optional[Mapping[str, str]] = None,
+        recipes_path: Optional[str] = None,
+    ) -> None:
+        """Update folder paths for the active library."""
+
+        with self._restore_lock:
+            self._ensure_no_active_restore(action='update active library paths')
+            active_name = self.get_active_library_name()
+            self.upsert_library(
+                active_name,
+                folder_paths=folder_paths,
+                extra_folder_paths=extra_folder_paths,
+                default_lora_root=default_lora_root,
+                default_checkpoint_root=default_checkpoint_root,
+                default_unet_root=default_unet_root,
+                default_embedding_root=default_embedding_root,
+                default_other_roots=default_other_roots,
+                recipes_path=recipes_path,
+                activate=True,
+            )
+
+    def _notify_library_change(self, library_name: str) -> None:
+        """Notify dependent services that the active library changed."""
+        libraries = self.settings.get("libraries", {})
+        library_config = libraries.get(library_name, {})
+        library_snapshot = copy.deepcopy(library_config)
+
+        try:
+            from ..config import config  # Local import to avoid circular dependency
+
+            config.apply_library_settings(library_snapshot)
+        except Exception as exc:  # pragma: no cover - defensive logging
+            logger.debug("Failed to apply library settings to config: %s", exc)
+
+        try:
+            from .service_registry import ServiceRegistry  # pyright: ignore[reportImportCycles]
+
+            for service_name in (
+                "lora_scanner",
+                "checkpoint_scanner",
+                "embedding_scanner",
+                "other_scanner",
+                "recipe_scanner",
+                "model_update_service",
+            ):
+                service = ServiceRegistry.get_service_sync(service_name)
+                if service and hasattr(service, "on_library_changed"):
+                    try:
+                        service.on_library_changed()
+                    except (
+                        Exception
+                    ) as service_exc:  # pragma: no cover - defensive logging
+                        logger.debug(
+                            "Service %s failed to handle library change: %s",
+                            service_name,
+                            service_exc,
+                        )
+        except Exception as exc:  # pragma: no cover - defensive logging
+            logger.debug("Failed to notify services about library change: %s", exc)
+
+    def get_download_path_template(self, model_type: str) -> str:
+        """Get download path template for specific model type
+
+        Args:
+            model_type: The type of model ('lora', 'checkpoint', 'embedding',
+                'other')
+
+        Returns:
+            Template string for the model type. Falls back to the per-type
+            default in ``DEFAULT_DOWNLOAD_PATH_TEMPLATES``; unknown model types
+            resolve to an empty string (flat layout) rather than silently
+            nesting downloads under an unconfigured subfolder.
+        """
+        with self._restore_lock:
+            self._ensure_no_active_restore(action='normalize download path templates')
+            templates = self.settings.get("download_path_templates", {})
+
+            # Handle edge case where templates might be stored as JSON string
+            if isinstance(templates, str):
+                try:
+                    # Try to parse JSON string
+                    parsed_templates = json.loads(templates)
+                    if isinstance(parsed_templates, dict):
+                        # Update settings with parsed dictionary
+                        self.settings["download_path_templates"] = parsed_templates
+                        self._settings_revision += 1
+                        self._save_settings()
+                        templates = parsed_templates
+                        logger.info(
+                            "Successfully parsed download_path_templates from JSON string"
+                        )
+                    else:
+                        raise ValueError("Parsed JSON is not a dictionary")
+                except (json.JSONDecodeError, ValueError) as e:
+                    # If parsing fails, set default values
+                    logger.warning(
+                        f"Failed to parse download_path_templates JSON string: {e}. Setting default values."
+                    )
+                    templates = dict(DEFAULT_DOWNLOAD_PATH_TEMPLATES)
+                    self.settings["download_path_templates"] = templates
+                    self._settings_revision += 1
+                    self._save_settings()
+
+            # Ensure templates is a dictionary
+            if not isinstance(templates, dict):
+                templates = dict(DEFAULT_DOWNLOAD_PATH_TEMPLATES)
+                self.settings["download_path_templates"] = templates
+                self._settings_revision += 1
+                self._save_settings()
+
+            return templates.get(
+                model_type, DEFAULT_DOWNLOAD_PATH_TEMPLATES.get(model_type, "")
+            )
+
+    def get_download_filename_template(self, model_type: str) -> str:
+        """Get the download filename template for a specific model type.
+
+        Args:
+            model_type: The type of model ('lora', 'checkpoint', 'embedding',
+                'other')
+
+        Returns:
+            Template string for the model type. Empty string (the default for
+            every model type) means downloaded files keep their original
+            filename.
+        """
+        with self._restore_lock:
+            self._ensure_no_active_restore(action='normalize download filename templates')
+            templates = self.settings.get("download_filename_templates", {})
+
+            # Handle edge case where templates might be stored as JSON string
+            if isinstance(templates, str):
+                try:
+                    parsed_templates = json.loads(templates)
+                    if isinstance(parsed_templates, dict):
+                        self.settings["download_filename_templates"] = parsed_templates
+                        self._settings_revision += 1
+                        self._save_settings()
+                        templates = parsed_templates
+                        logger.info(
+                            "Successfully parsed download_filename_templates from JSON string"
+                        )
+                    else:
+                        raise ValueError("Parsed JSON is not a dictionary")
+                except (json.JSONDecodeError, ValueError) as e:
+                    logger.warning(
+                        f"Failed to parse download_filename_templates JSON string: {e}. Resetting to empty templates."
+                    )
+                    templates = {}
+                    self.settings["download_filename_templates"] = templates
+                    self._settings_revision += 1
+                    self._save_settings()
+
+            if not isinstance(templates, dict):
+                templates = {}
+                self.settings["download_filename_templates"] = templates
+                self._settings_revision += 1
+                self._save_settings()
+
+            template = templates.get(model_type, "")
+            return template if isinstance(template, str) else ""
+
+
+    def _update_extra_folder_paths_locked(
+        self,
+        extra_folder_paths: Mapping[str, Iterable[str]],
+    ) -> None:
+        active_name = self.get_active_library_name()
+        self._validate_folder_paths(active_name, extra_folder_paths)
+
+        active_library = self.get_active_library()
+        active_folder_paths = active_library.get("folder_paths", {})
+        active_lora_paths = active_folder_paths.get("loras", []) or []
+        requested_extra_lora_paths = extra_folder_paths.get("loras", []) or []
+
+        primary_real_paths = set()
+        for path in active_lora_paths:
+            if not isinstance(path, str):
+                continue
+            stripped = path.strip()
+            if not stripped:
+                continue
+            normalized = os.path.normcase(os.path.normpath(stripped))
+            if os.path.exists(stripped):
+                normalized = os.path.normcase(
+                    os.path.normpath(os.path.realpath(stripped))
+                )
+            primary_real_paths.add(normalized)
+
+        primary_symlink_targets = set()
+        for path in active_lora_paths:
+            if not isinstance(path, str):
+                continue
+            stripped = path.strip()
+            if not stripped or not os.path.isdir(stripped):
+                continue
+            try:
+                with os.scandir(stripped) as iterator:
+                    for entry in iterator:
+                        try:
+                            if not entry.is_symlink():
+                                continue
+                            target_path = os.path.realpath(entry.path)
+                            if not os.path.isdir(target_path):
+                                continue
+                            primary_symlink_targets.add(
+                                os.path.normcase(os.path.normpath(target_path))
+                            )
+                        except Exception:
+                            continue
+            except Exception:
+                continue
+
+        overlapping_paths = []
+        for path in requested_extra_lora_paths:
+            if not isinstance(path, str):
+                continue
+            stripped = path.strip()
+            if not stripped:
+                continue
+            normalized = os.path.normcase(os.path.normpath(stripped))
+            if os.path.exists(stripped):
+                normalized = os.path.normcase(
+                    os.path.normpath(os.path.realpath(stripped))
+                )
+            if (
+                normalized in primary_real_paths
+                or normalized in primary_symlink_targets
+            ):
+                overlapping_paths.append(stripped)
+
+        if overlapping_paths:
+            collisions = ", ".join(sorted(set(overlapping_paths)))
+            # Settings writes should reject new conflicting configuration instead of tolerating it.
+            raise ValueError(
+                f"Extra LoRA path(s) {collisions} overlap with the active library's primary LoRA roots"
+            )
+
+        normalized_paths = self._normalize_folder_paths(extra_folder_paths)
+        self.settings["extra_folder_paths"] = normalized_paths
+        self._settings_revision += 1
+        self._update_active_library_entry(extra_folder_paths=normalized_paths)
+        self._save_settings()
+        logger.info("Updated extra folder paths for library '%s'", active_name)
+
+
+    def _validate_detached_json_value(
+        self, value: Any, *, path: str = "$root"
+    ) -> None:
+        """Recursively reject non-JSON-compatible structures before normalization.
+
+        Ensures mapping keys are strings, does not coerce non-string keys, and
+        rejects non-finite numeric values and other values that cannot be
+        represented as JSON data.
+        """
+
+        if value is None or isinstance(value, (str, bool, int)):
+            return
+        if isinstance(value, float):
+            if not math.isfinite(value):
+                raise RestoreValidationError(
+                    f"Non-finite numeric value at {path}"
+                )
+            return
+        if isinstance(value, Mapping):
+            for key, item in value.items():
+                if not isinstance(key, str):
+                    raise RestoreValidationError(
+                        f"JSON object key at {path} must be a string"
+                    )
+                self._validate_detached_json_value(
+                    item, path=f"{path}.{key}"
+                )
+            return
+        if isinstance(value, Sequence) and not isinstance(
+            value, (str, bytes, bytearray)
+        ):
+            for index, item in enumerate(value):
+                self._validate_detached_json_value(
+                    item, path=f"{path}[{index}]"
+                )
+            return
+        if isinstance(value, (bytes, bytearray)):
+            raise RestoreValidationError(
+                f"Binary value at {path} is not valid JSON data"
+            )
+        raise RestoreValidationError(
+            f"Value at {path} is not valid JSON data"
+        )
+
+
+    def _ensure_no_active_restore(self, *, action: str) -> None:
+        """Raise when a restore is active in this thread, or in any thread.
+
+        ``RLock`` serializes other threads but permits same-thread reentry.
+        The active context also rejects reentrant mutations before they
+        affect settings memory or the settings file.
+        """
+        active = self._active_restore_context
+        if active is None:
+            return
+        thread_id = getattr(active, "_owner_thread_id", None)
+        if thread_id is not None and thread_id == _current_thread_id():
+            raise RestoreCoordinationError(
+                f"Cannot {action} while a restore context is active"
+            )
+        raise RestoreCoordinationError(
+            f"Cannot {action} while a restore context is active in another thread"
+        )
+
+
+    def refresh_restored_runtime(self, *, restored_owners):
+        """Re-apply restored runtime state after a committed restore.
+
+        ``restored_owners`` is an iterable of committed native-kind strings from
+        ``{"settings", "symlink_map", "model_update", "download_history"}``.
+        Strings/bytes and unknown entries are rejected before any effect.  The
+        return value reports per-owner status; ``scan_completion_verified`` is
+        always ``False`` (accepted invalidation is not background scan
+        completion).
+        """
+        allowed_owners = (
+            "settings",
+            "symlink_map",
+            "model_update",
+            "download_history",
+            "usage_stats",
+        )
+
+        if isinstance(restored_owners, (str, bytes)):
+            raise TypeError(
+                "restored_owners must be an iterable of owner name strings"
+            )
+        try:
+            owner_names = list(restored_owners)
+        except TypeError as exc:
+            raise TypeError(
+                "restored_owners must be an iterable of owner name strings"
+            ) from exc
+        for owner in owner_names:
+            if not isinstance(owner, str):
+                raise TypeError("restored_owners entries must be strings")
+            if owner not in allowed_owners:
+                raise ValueError(f"Unknown restored owner: {owner!r}")
+
+        owners_result: Dict[str, Dict[str, Any]] = {"config": {"status": "unchanged"}}
+        complete = True
+        blocked_remaining = False
+
+        def _record(name, status, error=None):
+            nonlocal complete
+            entry = {"status": status}
+            if error:
+                entry["error"] = error
+            owners_result[name] = entry
+            if status not in ("applied", "unchanged", "skipped", "unregistered"):
+                complete = False
+
+        with self._restore_lock:
+            self._ensure_no_active_restore(action="refresh restored runtime")
+
+            library_snapshot = copy.deepcopy(self.settings.get("libraries", {}))
+            active_library_name = self.settings.get("active_library")
+            active_library_snapshot = copy.deepcopy(
+                library_snapshot.get(active_library_name, {})
+            )
+
+            from ..config import config
+            from .service_registry import ServiceRegistry
+
+            service_names = (
+                "lora_scanner",
+                "checkpoint_scanner",
+                "embedding_scanner",
+                "other_scanner",
+                "recipe_scanner",
+                "model_update_service",
+                "downloaded_version_history_service",
+            )
+            services = {}
+            lookup_failed = False
+            for service_name in service_names:
+                try:
+                    services[service_name] = ServiceRegistry.get_service_sync(
+                        service_name
+                    )
+                except Exception as exc:
+                    services[service_name] = None
+                    lookup_failed = True
+                    _record(service_name, "failed", str(exc)[:200])
+
+            mu = services.get("model_update_service")
+            if mu is not None and bool(
+                getattr(mu, "_restore_suspended", False)
+            ):
+                _record(
+                    "model_update_service", "failed", "_restore_suspended is True"
+                )
+                lookup_failed = True
+            hist = services.get("downloaded_version_history_service")
+            if hist is not None and bool(getattr(hist, "_suspended", False)):
+                _record(
+                    "downloaded_version_history_service",
+                    "failed",
+                    "_suspended is True",
+                )
+                lookup_failed = True
+
+            needs_config = (
+                "settings" in owner_names or "symlink_map" in owner_names
+            )
+
+            if lookup_failed:
+                blocked_remaining = True
+                if needs_config:
+                    _record(
+                        "config", "failed", "guard or lookup failure blocked"
+                    )
+                    if "settings" in owner_names:
+                        _record("settings", "failed", "blocked")
+                    if "symlink_map" in owner_names:
+                        _record("symlink_map", "failed", "blocked")
+                return {
+                    "complete": False,
+                    "owners": owners_result,
+                    "scan_completion_verified": False,
+                    "blocked_remaining": blocked_remaining,
+                }
+
+            config_applied = False
+            config_error = None
+            if needs_config:
+                try:
+                    config.apply_library_settings(
+                        active_library_snapshot,
+                        symlink_cache_policy="restore_no_write",
+                    )
+                    config_applied = True
+                    _record("config", "applied")
+                except Exception as exc:
+                    config_error = str(exc)[:200]
+                    config_applied = False
+                    _record("config", "failed", config_error)
+
+            if "settings" in owner_names:
+                _record(
+                    "settings", "applied" if config_applied else "failed", config_error
+                )
+            if "symlink_map" in owner_names:
+                _record(
+                    "symlink_map", "applied" if config_applied else "failed", config_error
+                )
+
+            if "settings" in owner_names and not needs_config:
+                _record("settings", "unchanged")
+            if "symlink_map" in owner_names and not needs_config:
+                _record("symlink_map", "unchanged")
+
+            library_only = False
+            if not needs_config and (
+                "model_update" in owner_names
+                or "download_history" in owner_names
+            ):
+                library_only = True
+
+            if needs_config and config_applied:
+                callbacks = {
+                    "lora_scanner": "on_library_changed",
+                    "checkpoint_scanner": "on_library_changed",
+                    "embedding_scanner": "on_library_changed",
+                    "other_scanner": "on_library_changed",
+                    "recipe_scanner": "on_library_changed",
+                    "model_update_service": "on_library_changed",
+                }
+                for name, cb_name in callbacks.items():
+                    service = services.get(name)
+                    if service is None:
+                        _record(name, "unregistered")
+                        continue
+                    callback = getattr(service, cb_name, None)
+                    if not callable(callback):
+                        _record(name, "skipped")
+                        continue
+                    try:
+                        callback()
+                        _record(name, "applied")
+                    except Exception as exc:
+                        _record(name, "failed", str(exc)[:200])
+            elif needs_config and not config_applied:
+                for _cb_name in (
+                    "lora_scanner",
+                    "checkpoint_scanner",
+                    "embedding_scanner",
+                "other_scanner",
+                    "recipe_scanner",
+                    "model_update_service",
+                ):
+                    _record(_cb_name, "skipped", "config failure")
+                blocked_remaining = True
+
+            if library_only:
+                if "model_update" in owner_names:
+                    _record("model_update_service", "unchanged")
+                if "download_history" in owner_names:
+                    _record("downloaded_version_history_service", "unchanged")
+
+            if "usage_stats" in owner_names:
+                # The async restore coordinator reloads this owner before releasing it.
+                _record("usage_stats", "applied")
+
+        return {
+            "complete": complete,
+            "owners": owners_result,
+            "scan_completion_verified": False,
+        }
+
+
+    def readonly_preflight(self, serialized_payload: Mapping[str, Any]) -> Dict[str, Any]:
+        """Side-effect-free validation/normalization of a native settings payload.
+
+        Returns a dict with ``serialized_payload`` and ``runtime_candidate``,
+        both deep copies. Never calls ``_load_settings``, migrations,
+        ``_save_settings``, filesystem migration, portable switch preparation,
+        notifications, or any other side-effecting helper.
+        """
+        if not isinstance(serialized_payload, Mapping):
+            raise RestoreValidationError(
+                "Restore payload must be a mapping (native settingsJSON object)"
+            )
+
+        detached_serialized = copy.deepcopy(dict(serialized_payload))
+        # Reject malformed known fields instead of silently coercing them.
+        if "folder_paths" in detached_serialized:
+            self._normalize_folder_paths_strict(detached_serialized["folder_paths"])
+        if "extra_folder_paths" in detached_serialized:
+            self._normalize_folder_paths_strict(
+                detached_serialized["extra_folder_paths"]
+            )
+        if "libraries" in detached_serialized:
+            libraries = detached_serialized["libraries"]
+            if not isinstance(libraries, Mapping):
+                raise RestoreValidationError("Top-level 'libraries' must be a JSON object")
+            for name, payload in libraries.items():
+                if not isinstance(name, str) or not name:
+                    raise RestoreValidationError(
+                        "Library names must be non-empty strings"
+                    )
+                if not isinstance(payload, Mapping):
+                    raise RestoreValidationError(
+                        f"Library '{name}' payload must be a mapping"
+                    )
+        candidate = self._build_detached_candidate(detached_serialized)
+        return {
+            "serialized_payload": detached_serialized,
+            "runtime_candidate": candidate,
+        }
+
+
+    def begin_restore(
+        self,
+        serialized_payload: Mapping[str, Any],
+    ) -> "RestoreContext":
+        """Acquire an owner restore context.
+
+        The candidate is built detached from the live settings object. The
+        returned context holds the reentrant restore lock until the context is
+        published or aborted; use it as a context manager or call
+        ``publish``/``abort`` explicitly.
+        """
+        # Enforce the same readonly_preflight validation used by the executor
+        # before taking the lock, so a bad payload never leaves the manager
+        # with an active context. Failures here raise without side effects.
+        preflight = self.readonly_preflight(serialized_payload)
+        detached_serialized = copy.deepcopy(preflight["serialized_payload"])
+        candidate = copy.deepcopy(preflight["runtime_candidate"])
+
+        lock = self._restore_lock
+        lock.acquire()
+        try:
+            if self._active_restore_context is not None:
+                raise RestoreCoordinationError(
+                    "A restore context is already active"
+                )
+
+            captured_revision = self._settings_revision
+            serialized_path = self.settings_file
+            context = RestoreContext(
+                manager=self,
+                serialized_settings_path=serialized_path,
+                serialized_payload=detached_serialized,
+                runtime_candidate=candidate,
+                captured_revision=captured_revision,
+            )
+            self._active_restore_context = context
+            self._active_restore_thread = _current_thread_id()
+            return context
+        except Exception:
+            lock.release()
+            raise
+
+
+    def _build_detached_candidate(
+        self, serialized_payload: Mapping[str, Any]
+    ) -> Dict[str, Any]:
+        """Build a detached normalized runtime candidate from a serialized payload.
+
+        Uses read-only helpers only. Does not touch the live ``self.settings``
+        object, the filesystem, or any service. Migrations, portable switch
+        preparation, recipes directory migration and notifications are never
+        invoked.
+        """
+
+        if not isinstance(serialized_payload, Mapping):
+            raise RestoreValidationError("Serialized payload must be a mapping")
+
+        serialized = copy.deepcopy(dict(serialized_payload))
+        self._validate_detached_json_value(serialized)
+        try:
+            json.dumps(serialized, allow_nan=False)
+        except (TypeError, ValueError) as exc:
+            raise RestoreValidationError(
+                f"Serialized payload must be JSON-serializable with finite values: {exc}"
+            ) from exc
+        defaults = self._get_default_settings()
+        candidate: Dict[str, Any] = copy.deepcopy(defaults)
+
+        # Layer serialized values on top of the in-memory defaults (native
+        # complete settings legitimate to omit defaults).
+        for key, value in serialized.items():
+            if key == "folder_paths":
+                candidate[key] = self._normalize_folder_paths_strict(value)
+            elif key == "extra_folder_paths":
+                candidate[key] = self._normalize_folder_paths_strict(value)
+            elif key == "recipes_path":
+                if value is not None and not isinstance(value, str):
+                    raise RestoreValidationError("'recipes_path' must be a string")
+                candidate[key] = self._normalize_recipes_path_value(value)
+            elif key in (
+                "default_lora_root",
+                "default_checkpoint_root",
+                "default_unet_root",
+                "default_embedding_root",
+            ):
+                if not isinstance(value, str):
+                    raise RestoreValidationError(f"'{key}' must be a string")
+                candidate[key] = value
+            elif key == "use_portable_settings":
+                if not isinstance(value, bool):
+                    raise RestoreValidationError(
+                        "'use_portable_settings' must be a boolean"
+                    )
+                candidate[key] = value
+            elif key in (
+                "default_lora_root",
+                "default_checkpoint_root",
+                "default_unet_root",
+                "default_embedding_root",
+            ):
+                if not isinstance(value, str):
+                    raise RestoreValidationError(f"'{key}' must be a string")
+                candidate[key] = value
+            else:
+                candidate[key] = copy.deepcopy(value)
+
+        # Normalize known owned value shapes on the detached candidate.
+        candidate["priority_tags"] = self._normalize_priority_tag_config(
+            candidate.get("priority_tags")
+        )
+        candidate["auto_organize_exclusions"] = (
+            self.normalize_auto_organize_exclusions(
+                candidate.get("auto_organize_exclusions")
+            )
+        )
+        candidate["metadata_refresh_skip_paths"] = (
+            self.normalize_metadata_refresh_skip_paths(
+                candidate.get("metadata_refresh_skip_paths")
+            )
+        )
+        candidate["download_skip_base_models"] = (
+            self.normalize_download_skip_base_models(
+                candidate.get("download_skip_base_models")
+            )
+        )
+        candidate["mature_blur_level"] = self.normalize_mature_blur_level(
+            candidate.get("mature_blur_level")
+        )
+
+        sanitized_libraries: Dict[str, Dict[str, Any]] = {}
+        serialized_libraries = serialized.get("libraries")
+
+        if isinstance(serialized_libraries, Mapping) and serialized_libraries:
+            for name, raw_payload in serialized_libraries.items():
+                sanitized_libraries[name] = self._normalize_library_payload_detached(
+                    raw_payload
+                )
+        else:
+            # Legacy top-level payload: mirror native migration precedence by using
+            # serialized top-level fields (falling back to native defaults for a
+            # genuinely absent field), not the synthesized default library already
+            # inserted into ``candidate`` by ``_get_default_settings``.
+            default_library_name = "default"
+            library_name = serialized.get("active_library") or default_library_name
+            if not isinstance(library_name, str) or not library_name:
+                raise RestoreValidationError(
+                    "Top-level 'active_library' must be a non-empty string"
+                )
+
+            def _legacy_value(key: str) -> Any:
+                if key in serialized:
+                    return serialized[key]
+                return candidate.get(key)
+
+            sanitized_libraries[library_name] = (
+                self._normalize_library_payload_detached(
+                    {
+                        "folder_paths": _legacy_value("folder_paths"),
+                        "extra_folder_paths": _legacy_value("extra_folder_paths"),
+                        "default_lora_root": _legacy_value("default_lora_root"),
+                        "default_checkpoint_root": _legacy_value(
+                            "default_checkpoint_root"
+                        ),
+                        "default_unet_root": _legacy_value("default_unet_root"),
+                        "default_embedding_root": _legacy_value(
+                            "default_embedding_root"
+                        ),
+                        "default_other_roots": _legacy_value("default_other_roots"),
+                        "recipes_path": _legacy_value("recipes_path"),
+                    }
+                )
+            )
+
+        candidate["libraries"] = sanitized_libraries
+        active_name = candidate.get("active_library")
+        if not isinstance(active_name, str) or active_name not in sanitized_libraries:
+            if serialized_libraries:
+                raise RestoreValidationError(
+                    "Active library reference does not exist in the serialized payload"
+                )
+            active_name = next(iter(sanitized_libraries)) if sanitized_libraries else "default"
+        candidate["active_library"] = active_name
+
+        # Keep top-level mirrors aligned with the active library in the detached
+        # candidate, using pure read-only logic.
+        active_payload = sanitized_libraries.get(active_name, {})
+        candidate["folder_paths"] = copy.deepcopy(
+            active_payload.get("folder_paths", {})
+        )
+        candidate["extra_folder_paths"] = copy.deepcopy(
+            active_payload.get("extra_folder_paths", {})
+        )
+        candidate["default_lora_root"] = active_payload.get("default_lora_root", "")
+        candidate["default_checkpoint_root"] = active_payload.get(
+            "default_checkpoint_root", ""
+        )
+        candidate["default_unet_root"] = active_payload.get(
+            "default_unet_root", ""
+        )
+        candidate["default_embedding_root"] = active_payload.get(
+            "default_embedding_root", ""
+        )
+        candidate["default_other_roots"] = copy.deepcopy(active_payload.get("default_other_roots", {}))
+        candidate["recipes_path"] = active_payload.get("recipes_path", "")
+
+        return candidate
+
+
+    def _normalize_folder_paths_strict(self, folder_paths: Any) -> Dict[str, List[str]]:
+        """Native-load-equivalent normalization that rejects malformed values.
+
+        Native loading only accepts a mapping of model type -> list of path
+        strings. Strings/bytes are rejected explicitly so a scalar path is not
+        splatted into characters. Non-string entries are rejected rather than
+        silently dropped.
+        """
+        if not isinstance(folder_paths, Mapping):
+            raise RestoreValidationError(
+                "Folder path collections must be JSON objects mapping model types to lists"
+            )
+
+        normalized: Dict[str, List[str]] = {}
+        for key, values in folder_paths.items():
+            if not isinstance(key, str):
+                raise RestoreValidationError("Folder path model type keys must be strings")
+            if isinstance(values, (str, bytes, bytearray)) or not isinstance(
+                values, Sequence
+            ):
+                raise RestoreValidationError(
+                    f"Folder paths for '{key}' must be a list of strings"
+                )
+            cleaned: List[str] = []
+            seen = set()
+            for value in values:
+                if not isinstance(value, str):
+                    raise RestoreValidationError(
+                        f"Folder path entry for '{key}' must be a string"
+                    )
+                stripped = value.strip()
+                if not stripped:
+                    raise RestoreValidationError(
+                        f"Folder path entry for '{key}' must not be empty"
+                    )
+                if stripped not in seen:
+                    cleaned.append(stripped)
+                    seen.add(stripped)
+            normalized[key] = cleaned
+        return normalized
+
+
+    def _normalize_library_payload_detached(
+        self, raw_payload: Mapping[str, Any]
+    ) -> Dict[str, Any]:
+        """Pure normalization for a detached library entry.
+
+        Mirrors native load semantics without generating timestamps. Existing
+        valid ``created_at``/``updated_at`` strings are preserved exactly; the
+        established create/update-library path remains the only place that
+        stamps new timestamp values.
+        """
+
+        payload: Dict[str, Any] = copy.deepcopy(dict(raw_payload))
+        payload["folder_paths"] = self._normalize_folder_paths_strict(
+            payload.get("folder_paths", {})
+        )
+        payload["extra_folder_paths"] = self._normalize_folder_paths_strict(
+            payload.get("extra_folder_paths", {})
+        )
+        for key in (
+            "default_lora_root",
+            "default_checkpoint_root",
+            "default_unet_root",
+            "default_embedding_root",
+        ):
+            value = payload.get(key, "")
+            if value is None:
+                value = ""
+            if not isinstance(value, str):
+                raise RestoreValidationError(f"'{key}' must be a string")
+            payload[key] = value.strip()
+        payload["default_other_roots"] = self._normalize_default_other_roots(payload.get("default_other_roots"))
+        payload["recipes_path"] = self._normalize_recipes_path_value(
+            payload.get("recipes_path", "")
+        )
+        return payload
+
+
+    def _publish_restore_candidate(
+        self,
+        candidate: Mapping[str, Any],
+        *,
+        captured_revision: int,
+    ) -> None:
+        """Atomically replace live settings with the detached candidate.
+
+        Must be called while holding the restore lock. Verifies the captured
+        revision is still current; otherwise raises
+        :class:`StaleRestoreContextError` and leaves live state untouched.
+        """
+
+        if captured_revision != self._settings_revision:
+            raise StaleRestoreContextError(
+                "Restore context is stale: a newer committed mutation has occurred"
+            )
+        self.settings = copy.deepcopy(dict(candidate))
+        self._settings_revision += 1
+
+
+
+class RestoreContext:
+    """Owner-side restore coordination context.
+
+    Holds the reentrant restore lock until ``publish`` or ``abort`` is called.
+    The context carries:
+
+    * ``serialized_settings_path``: path retained unchanged during restore.
+    * ``serialized_payload``: detached serialized native settings payload.
+    * ``runtime_candidate``: detached normalized runtime candidate.
+    * ``captured_revision``: revision token captured at acquisition.
+
+    The external executor is responsible for atomically replacing the original
+    settings file. ``publish`` only proceeds after the executor acknowledges
+    ``"success"``; the SettingsManager never rewrites the file itself here.
+    """
+
+    def __init__(
+        self,
+        *,
+        manager: "SettingsManager",
+        serialized_settings_path: str,
+        serialized_payload: Dict[str, Any],
+        runtime_candidate: Dict[str, Any],
+        captured_revision: int,
+    ) -> None:
+        self._manager = manager
+        self._serialized_settings_path = serialized_settings_path
+        self._serialized_payload = serialized_payload
+        self._runtime_candidate = runtime_candidate
+        self._captured_revision = captured_revision
+        self._released = False
+        self._published = False
+        self._owner_thread_id = _current_thread_id()
+
+    @property
+    def serialized_settings_path(self) -> str:
+        return self._serialized_settings_path
+
+    @property
+    def serialized_payload(self) -> Dict[str, Any]:
+        return copy.deepcopy(self._serialized_payload)
+
+    @property
+    def captured_revision(self) -> int:
+        return self._captured_revision
+
+    @property
+    def runtime_candidate(self) -> Dict[str, Any]:
+        return copy.deepcopy(self._runtime_candidate)
+
+    def __enter__(self) -> "RestoreContext":
+        self._ensure_owner_thread("enter")
+        return self
+
+    def __exit__(self, exc_type, exc, tb) -> None:
+        self.abort()
+
+    @property
+    def closed(self) -> bool:
+        return self._released
+
+    def publish(self, *, executor_status: str, context_token: object = None) -> None:
+        """Publish the runtime candidate after trusted executor acknowledgement.
+
+        Requires an explicit trusted ownership token confirming the executor
+        replaced *this* context's captured path with the captured serialized
+        payload, plus committed-disk verification of that exact path and parsed
+        content. Any mismatch raises and leaves runtime settings unchanged.
+        """
+
+        if self._released:
+            raise RestoreCoordinationError(
+                "Restore context has already been released"
+            )
+
+        self._ensure_owner_thread("publish")
+        if self._manager._active_restore_context is not self:
+            raise RestoreCommitStatusError(
+                "Restore context is not the active restore context"
+            )
+        if self._manager.settings_file != self._serialized_settings_path:
+            raise RestoreCommitStatusError(
+                "Captured settings path no longer matches the manager path"
+            )
+
+        try:
+            if not isinstance(executor_status, str) or (
+                executor_status not in _VALID_RESTORE_STATUSES
+            ):
+                raise RestoreCommitStatusError(
+                    f"Unknown executor replacement status: {executor_status!r}"
+                )
+            if executor_status != _RESTORE_STATUS_SUCCESS:
+                raise RestoreCommitStatusError(
+                    f"Executor did not acknowledge successful replacement: {executor_status}"
+                )
+            if context_token is not self:
+                raise RestoreCommitStatusError(
+                    "Trusted executor ownership token did not match this restore context"
+                )
+
+            expected_path = self._serialized_settings_path
+            if not expected_path or not os.path.isfile(expected_path):
+                raise RestoreCommitStatusError(
+                    "Committed settings file is missing at the captured path"
+                )
+            try:
+                with open(expected_path, "r", encoding="utf-8") as handle:
+                    committed = json.load(handle)
+            except Exception as exc:
+                raise RestoreCommitStatusError(
+                    f"Committed settings file could not be parsed: {exc}"
+                ) from exc
+
+            if committed != self._serialized_payload:
+                raise RestoreCommitStatusError(
+                    "Committed settings file does not match the captured serialized payload"
+                )
+
+            self._manager._publish_restore_candidate(
+                self._runtime_candidate,
+                captured_revision=self._captured_revision,
+            )
+            self._published = True
+        finally:
+            self._release()
+
+    def abort(self) -> None:
+        """Idempotently release the restore guard without publishing."""
+        if self._released:
+            return
+        self._ensure_owner_thread("abort")
+        self._release()
+
+    def _ensure_owner_thread(self, action: str) -> None:
+        """Reject foreign-thread use without mutating context state."""
+        if self._owner_thread_id != _current_thread_id():
+            raise RestoreCoordinationError(
+                f"Cannot {action} restore context from a different thread"
+            )
+
+    def _release(self) -> None:
+        if self._released:
+            return
+        self._ensure_owner_thread("release")
+        self._released = True
+        manager = self._manager
+        if manager._active_restore_context is self:
+            manager._active_restore_context = None
+        manager._restore_lock.release()
+
+
+_SETTINGS_MANAGER: Optional["SettingsManager"] = None
+_SETTINGS_MANAGER_LOCK = Lock()
+# Legacy module-level alias for backwards compatibility with callers that
+# monkeypatch ``py.services.settings_manager.settings`` during tests.
+settings: Optional["SettingsManager"] = None
+
+
+def get_settings_manager() -> "SettingsManager":
+    """Return the lazily initialised global :class:`SettingsManager`."""
+
+    global _SETTINGS_MANAGER, settings
+    if settings is not None:
+        return settings
+
+    if _SETTINGS_MANAGER is None:
+        with _SETTINGS_MANAGER_LOCK:
+            if _SETTINGS_MANAGER is None:
+                _SETTINGS_MANAGER = SettingsManager()
+
+    settings = _SETTINGS_MANAGER
+    return _SETTINGS_MANAGER
+
+
+def reset_settings_manager() -> None:
+    """Reset the cached settings manager instance.
+
+    Primarily intended for tests so they can configure the settings
+    directory before the manager touches the filesystem.
+    """
+
+    global _SETTINGS_MANAGER, settings
+    with _SETTINGS_MANAGER_LOCK:
+        _SETTINGS_MANAGER = None
+        settings = None

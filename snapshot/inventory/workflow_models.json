@@ -1,0 +1,2518 @@
+[
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/Anima-2.9B/anima29B_v10_bf16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "anima-lllite-any-test-like-v2.safetensors",
+    "candidates": [
+      "ComfyUI/models/controlnet/anima-lllite-any-test-like-v2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "anima_baseV10_txt.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "depth_anything_v2_vitl.pth",
+    "candidates": [
+      "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/depth-anything/Depth-Anything-V2-Large/depth_anything_v2_vitl.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "https://huggingface.co/Comfy-Org/Krea-2/resolve/main/text_encoders/qwen3vl_4b_fp8_scaled.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "https://huggingface.co/Comfy-Org/sam3.1/resolve/main/checkpoints/sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "krea2\\krea2MuseByStable_v15TurboFp8.gguf",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "qwen3vl_4b_fp8_scaled.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "qwen3vl_4b_heretic_fp8.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "segm/NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "segm/NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "segm/NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+    "reference": "segm/NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "Anima\\animayume_v10.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "anima-lllite-any-test-like-v2.safetensors",
+    "candidates": [
+      "ComfyUI/models/controlnet/anima-lllite-any-test-like-v2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "anima_baseV10_txt.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "depth_anything_v2_vitl.pth",
+    "candidates": [
+      "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/depth-anything/Depth-Anything-V2-Large/depth_anything_v2_vitl.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "https://huggingface.co/Comfy-Org/Krea-2/resolve/main/text_encoders/qwen3vl_4b_fp8_scaled.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "https://huggingface.co/Comfy-Org/sam3.1/resolve/main/checkpoints/sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "krea2\\krea2MuseByStable_v15TurboFp8.gguf",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "qwen3vl_4b_fp8_scaled.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "qwen3vl_4b_heretic_fp8.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "segm/NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "segm/NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "segm/NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+    "reference": "segm/NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "Anima\\animayume_v10.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "anima-lllite-any-test-like-v2.safetensors",
+    "candidates": [
+      "ComfyUI/models/controlnet/anima-lllite-any-test-like-v2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "anima_baseV10_txt.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "depth_anything_v2_vitl.pth",
+    "candidates": [
+      "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/depth-anything/Depth-Anything-V2-Large/depth_anything_v2_vitl.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "https://huggingface.co/Comfy-Org/Krea-2/resolve/main/text_encoders/qwen3vl_4b_fp8_scaled.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "https://huggingface.co/Comfy-Org/sam3.1/resolve/main/checkpoints/sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "krea2\\krea2MuseByStable_v15TurboFp8.gguf",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "qwen3vl_4b_fp8_scaled.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "qwen3vl_4b_heretic_fp8.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "segm/NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "segm/NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "segm/NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+    "reference": "segm/NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Krea2_图生图_改图_v1.json",
+    "reference": "Krea2-Control\\depth-control-lora.safetensors",
+    "candidates": [
+      "ComfyUI/models/loras/Krea2-Control/depth-control-lora.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Krea2_图生图_改图_v1.json",
+    "reference": "Krea2\\Krea2-MuseByStable_v15Turbo_fp8.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Krea2_图生图_改图_v1.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Krea2_图生图_改图_v1.json",
+    "reference": "depth_anything_v2_vitl.pth",
+    "candidates": [
+      "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/depth-anything/Depth-Anything-V2-Large/depth_anything_v2_vitl.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Krea2_图生图_改图_v1.json",
+    "reference": "krea2RealVae_v10.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/krea2RealVae_v10.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Krea2_图生图_改图_v1.json",
+    "reference": "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/krea2/DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Krea2_图生图_改图_v1.json",
+    "reference": "qwen3vl_4b_heretic_fp8.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Krea2_工作流.json",
+    "reference": "Krea2-Control\\depth-control-lora.safetensors",
+    "candidates": [
+      "ComfyUI/models/loras/Krea2-Control/depth-control-lora.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Krea2_工作流.json",
+    "reference": "Krea2\\Krea2-MuseByStable_v15Turbo_fp8.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Krea2_工作流.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Krea2_工作流.json",
+    "reference": "depth_anything_v2_vitl.pth",
+    "candidates": [
+      "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/depth-anything/Depth-Anything-V2-Large/depth_anything_v2_vitl.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Krea2_工作流.json",
+    "reference": "krea2RealVae_v10.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/krea2RealVae_v10.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Krea2_工作流.json",
+    "reference": "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/krea2/DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/Krea2_工作流.json",
+    "reference": "qwen3vl_4b_heretic_fp8.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/Anima-2.9B/anima29B_v10_bf16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "Anima\\anima_baseV10.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "Krea2-Control\\depth-control-lora.safetensors",
+    "candidates": [
+      "ComfyUI/models/loras/Krea2-Control/depth-control-lora.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "anima-lllite-any-test-like-v2.safetensors",
+    "candidates": [
+      "ComfyUI/models/controlnet/anima-lllite-any-test-like-v2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "anima-lllite-inpainting-v2.safetensors",
+    "candidates": [
+      "ComfyUI/models/controlnet/anima-lllite-inpainting-v2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "anima_baseV10_txt.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "depth_anything_v2_vitl.pth",
+    "candidates": [
+      "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/depth-anything/Depth-Anything-V2-Large/depth_anything_v2_vitl.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "https://huggingface.co/Comfy-Org/sam3.1/resolve/main/checkpoints/sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "krea2RealVae_v10.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/krea2RealVae_v10.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/krea2/DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "krea2\\控制与编辑\\krea2_identity_edit_v1_2.safetensors",
+    "candidates": [
+      "ComfyUI/models/loras/krea2/控制与编辑/krea2_identity_edit_v1_2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "qwen3-vl-4b-heretic.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/qwen3-vl-4b-heretic.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "segm/NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "segm/NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "segm/NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
+    "reference": "segm/NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/Anima-2.9B/anima29B_v10_bf16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "Anima\\animayume_v15Base.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/Anima/animayume_v15Base.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "Krea2-Control\\depth-control-lora.safetensors",
+    "candidates": [
+      "ComfyUI/models/loras/Krea2-Control/depth-control-lora.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "anima-lllite-any-test-like-v2.safetensors",
+    "candidates": [
+      "ComfyUI/models/controlnet/anima-lllite-any-test-like-v2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "anima-lllite-inpainting-v2.safetensors",
+    "candidates": [
+      "ComfyUI/models/controlnet/anima-lllite-inpainting-v2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "anima_baseV10_txt.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "bbox/Eyeful_v2-Individual.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/Eyeful_v2-Individual.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "bbox/adetailerFootYolov8x_v20.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/adetailerFootYolov8x_v20.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "bbox/face_yolov9c.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/face_yolov9c.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "bbox/hand_yolov9c.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/hand_yolov9c.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "depth_anything_v2_vitl.pth",
+    "candidates": [
+      "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/depth-anything/Depth-Anything-V2-Large/depth_anything_v2_vitl.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "https://huggingface.co/Comfy-Org/sam3.1/resolve/main/checkpoints/sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "krea2RealVae_v10.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/krea2RealVae_v10.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/krea2/DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "krea2\\控制与编辑\\krea2_identity_edit_v1_2.safetensors",
+    "candidates": [
+      "ComfyUI/models/loras/krea2/控制与编辑/krea2_identity_edit_v1_2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "qwen3-vl-4b-heretic.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/qwen3-vl-4b-heretic.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "sam_vit_b_01ec64.pth",
+    "candidates": [
+      "ComfyUI/models/sams/sam_vit_b_01ec64.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "segm/NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "segm/NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "segm/NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "reference": "segm/NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/▶▷Krea2-高清生图优化流(整合).json",
+    "reference": "Krea2-功能\\Krea2-亚洲asianMix_v1-bf16.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/▶▷Krea2-高清生图优化流(整合).json",
+    "reference": "Krea2-风格\\Krea2-2D动漫Anime_Flat_V20_nnegret.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/▶▷Krea2-高清生图优化流(整合).json",
+    "reference": "Krea2\\Krea2-MuseByStable_v15Turbo_GGUF_Q4.gguf",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/▶▷Krea2-高清生图优化流(整合).json",
+    "reference": "Krea2\\Krea2-MuseByStable_v15Turbo_fp8.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/▶▷Krea2-高清生图优化流(整合).json",
+    "reference": "Krea2\\Krea2-TurboNSWAIO_v10_fp8.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/▶▷Krea2-高清生图优化流(整合).json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/▶▷Krea2-高清生图优化流(整合).json",
+    "reference": "anima_baseV10_txt.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/▶▷Krea2-高清生图优化流(整合).json",
+    "reference": "https://huggingface.co/Comfy-Org/Krea-2/resolve/main/diffusion_models/krea2_turbo_fp8_scaled.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/▶▷Krea2-高清生图优化流(整合).json",
+    "reference": "https://huggingface.co/Comfy-Org/Krea-2/resolve/main/text_encoders/qwen3vl_4b_fp8_scaled.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/▶▷Krea2-高清生图优化流(整合).json",
+    "reference": "https://huggingface.co/Comfy-Org/Krea-2/resolve/main/vae/qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/▶▷Krea2-高清生图优化流(整合).json",
+    "reference": "krea2RealVae_v10.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/krea2RealVae_v10.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/▶▷Krea2-高清生图优化流(整合).json",
+    "reference": "krea2\\DasiwaKrea2_mirroredskiesV1Turbo.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/▶▷Krea2-高清生图优化流(整合).json",
+    "reference": "krea2\\krea2MuseByStable_v15TurboFp8.gguf",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/▶▷Krea2-高清生图优化流(整合).json",
+    "reference": "krea2_turbo_fp8_scaled.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/▶▷Krea2-高清生图优化流(整合).json",
+    "reference": "qwen3vl_4b_fp8_scaled.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/▶▷Krea2-高清生图优化流(整合).json",
+    "reference": "qwen3vl_4b_heretic_fp8.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/▶▷Krea2-高清生图优化流(整合).json",
+    "reference": "qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/实验模板_04_SAM31_提示词候选_仅蒙版.json",
+    "reference": "sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/检测模板_01_SAM31_五部位_仅蒙版.json",
+    "reference": "sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/检测模板_02_YOLO_五部位_仅蒙版.json",
+    "reference": "segm/NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/检测模板_03_YOLO_男性专用_仅蒙版.json",
+    "reference": "segm/NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/检测模板_05_脸手眼_仅蒙版.json",
+    "reference": "Eyeful_v2-Individual.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/Eyeful_v2-Individual.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/检测模板_05_脸手眼_仅蒙版.json",
+    "reference": "bbox/Eyeful_v2-Individual.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/Eyeful_v2-Individual.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/检测模板_05_脸手眼_仅蒙版.json",
+    "reference": "bbox/face_yolov9c.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/face_yolov9c.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/检测模板_05_脸手眼_仅蒙版.json",
+    "reference": "bbox/hand_yolov9c.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/hand_yolov9c.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/检测模板_05_脸手眼_仅蒙版.json",
+    "reference": "face_yolov9c.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/face_yolov9c.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/检测模板_05_脸手眼_仅蒙版.json",
+    "reference": "hand_yolov9c.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/hand_yolov9c.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/检测模板_07_脚_仅蒙版.json",
+    "reference": "adetailerFootYolov8x_v20.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/adetailerFootYolov8x_v20.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/检测模板_07_脚_仅蒙版.json",
+    "reference": "bbox/adetailerFootYolov8x_v20.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/adetailerFootYolov8x_v20.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "Anima\\animayume_v15Base.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/Anima/animayume_v15Base.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "anima-lllite-any-test-like-v2.safetensors",
+    "candidates": [
+      "ComfyUI/models/controlnet/anima-lllite-any-test-like-v2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "anima_baseV10_txt.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "depth_anything_v2_vitl.pth",
+    "candidates": [
+      "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/depth-anything/Depth-Anything-V2-Large/depth_anything_v2_vitl.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "https://huggingface.co/Comfy-Org/sam3.1/resolve/main/checkpoints/sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "segm/NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "segm/NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "segm/NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "segm/NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/Anima-2.9B/anima29B_v10_bf16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "anima-lllite-any-test-like-v2.safetensors",
+    "candidates": [
+      "ComfyUI/models/controlnet/anima-lllite-any-test-like-v2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "anima_baseV10_txt.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "depth_anything_v2_vitl.pth",
+    "candidates": [
+      "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/depth-anything/Depth-Anything-V2-Large/depth_anything_v2_vitl.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "https://huggingface.co/Comfy-Org/sam3.1/resolve/main/checkpoints/sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "segm/NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "segm/NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "segm/NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "segm/NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
+    "reference": "Krea2-Control\\depth-control-lora.safetensors",
+    "candidates": [
+      "ComfyUI/models/loras/Krea2-Control/depth-control-lora.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
+    "reference": "Krea2\\Krea2-MuseByStable_v15Turbo_fp8.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
+    "reference": "depth_anything_v2_vitl.pth",
+    "candidates": [
+      "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/depth-anything/Depth-Anything-V2-Large/depth_anything_v2_vitl.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
+    "reference": "krea2RealVae_v10.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/krea2RealVae_v10.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
+    "reference": "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/krea2/DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
+    "reference": "qwen3-vl-4b-heretic.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/qwen3-vl-4b-heretic.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_04_Krea2_指令编辑.json",
+    "reference": "krea2RealVae_v10.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/krea2RealVae_v10.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_04_Krea2_指令编辑.json",
+    "reference": "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/krea2/DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_04_Krea2_指令编辑.json",
+    "reference": "krea2\\控制与编辑\\krea2_identity_edit_v1_2.safetensors",
+    "candidates": [
+      "ComfyUI/models/loras/krea2/控制与编辑/krea2_identity_edit_v1_2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_04_Krea2_指令编辑.json",
+    "reference": "qwen3-vl-4b-heretic.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/qwen3-vl-4b-heretic.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_05_Anima2.9_裁剪精修回贴.json",
+    "reference": "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/Anima-2.9B/anima29B_v10_bf16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_05_Anima2.9_裁剪精修回贴.json",
+    "reference": "anima_baseV10_txt.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_05_Anima2.9_裁剪精修回贴.json",
+    "reference": "qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_07_Anima原版_左右扩图.json",
+    "reference": "Anima\\animayume_v15Base.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/Anima/animayume_v15Base.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_07_Anima原版_左右扩图.json",
+    "reference": "anima-lllite-inpainting-v2.safetensors",
+    "candidates": [
+      "ComfyUI/models/controlnet/anima-lllite-inpainting-v2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_07_Anima原版_左右扩图.json",
+    "reference": "anima_baseV10_txt.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_07_Anima原版_左右扩图.json",
+    "reference": "qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_08_超分_二倍交付.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_09_超分_四倍素材.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
+    "reference": "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/Anima-2.9B/anima29B_v10_bf16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
+    "reference": "NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
+    "reference": "NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
+    "reference": "anima_baseV10_txt.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
+    "reference": "bbox/Eyeful_v2-Individual.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/Eyeful_v2-Individual.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
+    "reference": "bbox/adetailerFootYolov8x_v20.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/adetailerFootYolov8x_v20.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
+    "reference": "bbox/face_yolov9c.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/face_yolov9c.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
+    "reference": "bbox/hand_yolov9c.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/hand_yolov9c.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
+    "reference": "qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
+    "reference": "sam_vit_b_01ec64.pth",
+    "candidates": [
+      "ComfyUI/models/sams/sam_vit_b_01ec64.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
+    "reference": "segm/NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
+    "reference": "segm/NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
+    "reference": "segm/NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
+    "reference": "segm/NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/Anima-2.9B/anima29B_v10_bf16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "Anima\\anima_baseV10.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "Krea2-Control\\depth-control-lora.safetensors",
+    "candidates": [
+      "ComfyUI/models/loras/Krea2-Control/depth-control-lora.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "anima-lllite-any-test-like-v2.safetensors",
+    "candidates": [
+      "ComfyUI/models/controlnet/anima-lllite-any-test-like-v2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "anima-lllite-inpainting-v2.safetensors",
+    "candidates": [
+      "ComfyUI/models/controlnet/anima-lllite-inpainting-v2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "anima_baseV10_txt.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "depth_anything_v2_vitl.pth",
+    "candidates": [
+      "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/depth-anything/Depth-Anything-V2-Large/depth_anything_v2_vitl.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "https://huggingface.co/Comfy-Org/sam3.1/resolve/main/checkpoints/sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "krea2RealVae_v10.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/krea2RealVae_v10.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/krea2/DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "krea2\\edit\\krea2_identity_edit_v1_2.safetensors",
+    "candidates": [
+      "ComfyUI/models/loras/krea2/控制与编辑/krea2_identity_edit_v1_2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "qwen3-vl-4b-heretic.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/qwen3-vl-4b-heretic.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "segm/NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "segm/NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "segm/NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v1.json",
+    "reference": "segm/NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/Anima-2.9B/anima29B_v10_bf16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "Anima\\animayume_v15Base.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/Anima/animayume_v15Base.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "Krea2-Control\\depth-control-lora.safetensors",
+    "candidates": [
+      "ComfyUI/models/loras/Krea2-Control/depth-control-lora.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "anima-lllite-any-test-like-v2.safetensors",
+    "candidates": [
+      "ComfyUI/models/controlnet/anima-lllite-any-test-like-v2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "anima-lllite-inpainting-v2.safetensors",
+    "candidates": [
+      "ComfyUI/models/controlnet/anima-lllite-inpainting-v2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "anima_baseV10_txt.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "bbox/Eyeful_v2-Individual.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/Eyeful_v2-Individual.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "bbox/adetailerFootYolov8x_v20.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/adetailerFootYolov8x_v20.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "bbox/face_yolov9c.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/face_yolov9c.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "bbox/hand_yolov9c.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/bbox/hand_yolov9c.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "depth_anything_v2_vitl.pth",
+    "candidates": [
+      "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/depth-anything/Depth-Anything-V2-Large/depth_anything_v2_vitl.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "https://huggingface.co/Comfy-Org/sam3.1/resolve/main/checkpoints/sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "krea2RealVae_v10.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/krea2RealVae_v10.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/krea2/DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "krea2\\控制与编辑\\krea2_identity_edit_v1_2.safetensors",
+    "candidates": [
+      "ComfyUI/models/loras/krea2/控制与编辑/krea2_identity_edit_v1_2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "qwen3-vl-4b-heretic.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/qwen3-vl-4b-heretic.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "sam_vit_b_01ec64.pth",
+    "candidates": [
+      "ComfyUI/models/sams/sam_vit_b_01ec64.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "segm/NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "segm/NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "segm/NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/UAP统一生产工作台_v2.json",
+    "reference": "segm/NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "Anima\\animayume_v15Base.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/Anima/animayume_v15Base.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "anima-lllite-any-test-like-v2.safetensors",
+    "candidates": [
+      "ComfyUI/models/controlnet/anima-lllite-any-test-like-v2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "anima_baseV10_txt.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "depth_anything_v2_vitl.pth",
+    "candidates": [
+      "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/depth-anything/Depth-Anything-V2-Large/depth_anything_v2_vitl.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "https://huggingface.co/Comfy-Org/sam3.1/resolve/main/checkpoints/sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "segm/NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "segm/NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "segm/NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+    "reference": "segm/NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/Anima-2.9B/anima29B_v10_bf16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "anima-lllite-any-test-like-v2.safetensors",
+    "candidates": [
+      "ComfyUI/models/controlnet/anima-lllite-any-test-like-v2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "anima_baseV10_txt.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "depth_anything_v2_vitl.pth",
+    "candidates": [
+      "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/depth-anything/Depth-Anything-V2-Large/depth_anything_v2_vitl.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "https://huggingface.co/Comfy-Org/sam3.1/resolve/main/checkpoints/sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "sam3.1_multiplex_fp16.safetensors",
+    "candidates": [
+      "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "segm/NSFW_01_女性-半写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "segm/NSFW_02_女性-动漫_v5.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "segm/NSFW_03_男性-2D动漫_v2.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+    "reference": "segm/NSFW_04_男性-真人写实_v1.pt",
+    "candidates": [
+      "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
+    "reference": "Krea2-Control\\depth-control-lora.safetensors",
+    "candidates": [
+      "ComfyUI/models/loras/Krea2-Control/depth-control-lora.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
+    "reference": "Krea2\\Krea2-MuseByStable_v15Turbo_fp8.safetensors",
+    "candidates": [],
+    "status": "missing"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
+    "reference": "depth_anything_v2_vitl.pth",
+    "candidates": [
+      "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/depth-anything/Depth-Anything-V2-Large/depth_anything_v2_vitl.pth"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
+    "reference": "krea2RealVae_v10.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/krea2RealVae_v10.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
+    "reference": "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/krea2/DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
+    "reference": "qwen3-vl-4b-heretic.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/qwen3-vl-4b-heretic.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产扩展_04_Krea2_指令编辑.json",
+    "reference": "krea2RealVae_v10.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/krea2RealVae_v10.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产扩展_04_Krea2_指令编辑.json",
+    "reference": "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/krea2/DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产扩展_04_Krea2_指令编辑.json",
+    "reference": "krea2\\edit\\krea2_identity_edit_v1_2.safetensors",
+    "candidates": [
+      "ComfyUI/models/loras/krea2/控制与编辑/krea2_identity_edit_v1_2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产扩展_04_Krea2_指令编辑.json",
+    "reference": "qwen3-vl-4b-heretic.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/qwen3-vl-4b-heretic.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产扩展_05_Anima2.9_裁剪精修回贴.json",
+    "reference": "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/Anima-2.9B/anima29B_v10_bf16.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产扩展_05_Anima2.9_裁剪精修回贴.json",
+    "reference": "anima_baseV10_txt.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产扩展_05_Anima2.9_裁剪精修回贴.json",
+    "reference": "qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产扩展_07_Anima原版_左右扩图.json",
+    "reference": "Anima\\animayume_v15Base.safetensors",
+    "candidates": [
+      "ComfyUI/models/diffusion_models/Anima/animayume_v15Base.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产扩展_07_Anima原版_左右扩图.json",
+    "reference": "anima-lllite-inpainting-v2.safetensors",
+    "candidates": [
+      "ComfyUI/models/controlnet/anima-lllite-inpainting-v2.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产扩展_07_Anima原版_左右扩图.json",
+    "reference": "anima_baseV10_txt.safetensors",
+    "candidates": [
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产扩展_07_Anima原版_左右扩图.json",
+    "reference": "qwen_image_vae.safetensors",
+    "candidates": [
+      "ComfyUI/models/vae/qwen_image_vae.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产扩展_08_超分_二倍交付.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  },
+  {
+    "workflow": "production_tools/templates/生产扩展_09_超分_四倍素材.json",
+    "reference": "OmniSR_X4_DIV2K.safetensors",
+    "candidates": [
+      "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors"
+    ],
+    "status": "resolved"
+  }
+]

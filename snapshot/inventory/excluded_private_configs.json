@@ -1,0 +1,30 @@
+[
+  {
+    "path": "ComfyUI/custom_nodes/ComfyUI-DazzleSwitch/.vscode/settings.json",
+    "reason": "private_or_machine_config"
+  },
+  {
+    "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/config.json",
+    "reason": "private_or_machine_config"
+  },
+  {
+    "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/py/character_feature_swap/llm_settings.json",
+    "reason": "private_or_machine_config"
+  },
+  {
+    "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/py/multi_character_editor/settings/editor_settings.json",
+    "reason": "private_or_machine_config"
+  },
+  {
+    "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/init.json",
+    "reason": "private_or_machine_config"
+  },
+  {
+    "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/.arts/settings.json",
+    "reason": "private_or_machine_config"
+  },
+  {
+    "path": "ComfyUI/custom_nodes/TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters/providers.json",
+    "reason": "private_or_machine_config"
+  }
+]

@@ -1,0 +1,11 @@
+# Preserve captured bytes; hashes must survive a Windows clone.
+* -text -filter -ident -working-tree-encoding
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.gz binary

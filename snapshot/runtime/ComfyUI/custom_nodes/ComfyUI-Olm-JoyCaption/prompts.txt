@@ -1,0 +1,57 @@
+-- Descriptive Caption --
+Long detailed: Write a long detailed description for this image.
+Word limit: Write a detailed description for this image in {word_count} words or less.
+Length: Write a {length} detailed description for this image.
+Casual: Write a descriptive caption for this image in a casual tone.
+Casual + words: Write a descriptive caption for this image in a casual tone within {word_count} words.
+Casual + length: Write a {length} descriptive caption for this image in a casual tone.
+
+-- Straightforward Caption --
+Strict, objective: Write a straightforward caption for this image. Begin with the main subject and medium. Mention pivotal elements—people, objects, scenery—using confident, definite language. Focus on concrete details like color, shape, texture, and spatial relationships. Show how elements interact. Omit mood and speculative wording. If text is present, quote it exactly. Note any watermarks, signatures, or compression artifacts. Never mention what's absent, resolution, or unobservable details. Vary your sentence structure and keep the description concise, without starting with “This image is…” or similar phrasing.
+Strict, word limit: Write a straightforward caption for this image within {word_count} words. Begin with the main subject and medium. Mention pivotal elements—people, objects, scenery—using confident, definite language. Focus on concrete details like color, shape, texture, and spatial relationships. Show how elements interact. Omit mood and speculative wording. If text is present, quote it exactly. Note any watermarks, signatures, or compression artifacts. Never mention what's absent, resolution, or unobservable details. Vary your sentence structure and keep the description concise, without starting with “This image is…” or similar phrasing.
+Strict, length: Write a {length} straightforward caption for this image. Begin with the main subject and medium. Mention pivotal elements—people, objects, scenery—using confident, definite language. Focus on concrete details like color, shape, texture, and spatial relationships. Show how elements interact. Omit mood and speculative wording. If text is present, quote it exactly. Note any watermarks, signatures, or compression artifacts. Never mention what's absent, resolution, or unobservable details. Vary your sentence structure and keep the description concise, without starting with “This image is…” or similar phrasing.
+
+-- Stable Diffusion Prompt --
+SD style: Output a stable diffusion prompt that is indistinguishable from a real stable diffusion prompt.
+SD style + words: Output a stable diffusion prompt that is indistinguishable from a real stable diffusion prompt. {word_count} words or less.
+SD style + length: Output a {length} stable diffusion prompt that is indistinguishable from a real stable diffusion prompt.
+
+-- MidJourney Prompt --
+MJ: Write a MidJourney prompt for this image.
+MJ + words: Write a MidJourney prompt for this image within {word_count} words.
+MJ + length: Write a {length} MidJourney prompt for this image.
+
+-- Danbooru Tag List --
+Danbooru: Generate only comma-separated Danbooru tags (lowercase_underscores). Strict order: artist:, copyright:, character:, meta:, then general tags. Include counts (1girl), appearance, clothing, accessories, pose, expression, actions, background. Use precise Danbooru syntax. No extra text.
+Danbooru + words: Generate only comma-separated Danbooru tags (lowercase_underscores). Strict order: artist:, copyright:, character:, meta:, then general tags. Include counts (1girl), appearance, clothing, accessories, pose, expression, actions, background. Use precise Danbooru syntax. No extra text. {word_count} words or less.
+Danbooru + length: Generate only comma-separated Danbooru tags (lowercase_underscores). Strict order: artist:, copyright:, character:, meta:, then general tags. Include counts (1girl), appearance, clothing, accessories, pose, expression, actions, background. Use precise Danbooru syntax. No extra text. {length} length.
+
+-- e621 Tag List --
+e621: Write a comma-separated list of e621 tags in alphabetical order for this image. Start with the artist, copyright, character, species, meta, and lore tags (if any), prefixed by 'artist:', 'copyright:', 'character:', 'species:', 'meta:', and 'lore:'. Then all the general tags.
+e621 + words: Write a comma-separated list of e621 tags in alphabetical order for this image. Start with the artist, copyright, character, species, meta, and lore tags (if any), prefixed by 'artist:', 'copyright:', 'character:', 'species:', 'meta:', and 'lore:'. Then all the general tags. Keep it under {word_count} words.
+e621 + length: Write a {length} comma-separated list of e621 tags in alphabetical order for this image. Start with the artist, copyright, character, species, meta, and lore tags (if any), prefixed by 'artist:', 'copyright:', 'character:', 'species:', 'meta:', and 'lore:'. Then all the general tags.
+
+-- Rule34 Tag List --
+Rule34: Write a comma-separated list of rule34 tags in alphabetical order for this image. Start with the artist, copyright, character, and meta tags (if any), prefixed by 'artist:', 'copyright:', 'character:', and 'meta:'. Then all the general tags.
+Rule34 + words: Write a comma-separated list of rule34 tags in alphabetical order for this image. Start with the artist, copyright, character, and meta tags (if any), prefixed by 'artist:', 'copyright:', 'character:', and 'meta:'. Then all the general tags. Keep it under {word_count} words.
+Rule34 + length: Write a {length} comma-separated list of rule34 tags in alphabetical order for this image. Start with the artist, copyright, character, and meta tags (if any), prefixed by 'artist:', 'copyright:', 'character:', and 'meta:'. Then all the general tags.
+
+-- Booru-like Tags --
+Booru-like: Write a list of Booru-like tags for this image.
+Booru-like + words: Write a list of Booru-like tags for this image within {word_count} words.
+Booru-like + length: Write a {length} list of Booru-like tags for this image.
+
+-- Art Critic --
+Art critic: Analyze this image like an art critic would with information about its composition, style, symbolism, the use of color, light, any artistic movement it might belong to, etc.
+Art critic + words: Analyze this image like an art critic would... Keep it within {word_count} words.
+Art critic + length: Analyze this image like an art critic would... Keep it {length}.
+
+-- Product Listing --
+Product listing: Write a caption for this image as though it were a product listing.
+Product listing + words: Write a caption for this image as though it were a product listing. Keep it under {word_count} words.
+Product listing + length: Write a {length} caption for this image as though it were a product listing.
+
+-- Social Media --
+Social: Write a caption for this image as if it were being used for a social media post.
+Social + words: Write a caption for this image as if it were being used for a social media post. Limit the caption to {word_count} words.
+Social + length: Write a {length} caption for this image as if it were being used for a social media post.

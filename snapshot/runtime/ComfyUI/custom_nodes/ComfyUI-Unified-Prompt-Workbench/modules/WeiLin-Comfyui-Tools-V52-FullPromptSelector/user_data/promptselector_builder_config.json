@@ -1,0 +1,70 @@
+{
+  "version": "2026.05.19-universal-local-v3-sort-review",
+  "说明": "这个文件可选。你可以用它指定扫描目录、排序模式、手动添加、隐藏、合并、移动分类。保存后重新运行生成器。",
+  "sources": {
+    "scan_roots": [
+      "."
+    ],
+    "explicit_files": [],
+    "base_promptselector_py": "",
+    "recursive": true,
+    "max_depth": 5,
+    "include_file_types": [
+      "sqlite",
+      "json",
+      "csv",
+      "txt",
+      "py"
+    ],
+    "exclude_globs": [
+      "**/__pycache__/**",
+      "**/*.pyc",
+      "**/*-wal",
+      "**/*-shm",
+      "**/node_modules/**",
+      "**/NSFWPromptSelector_LocalMerged*.py",
+      "**/promptselector_*_review.csv",
+      "**/promptselector_duplicates_review.csv",
+      "**/promptselector_excluded_tags.csv"
+    ]
+  },
+  "filters": {
+    "max_per_category": 500,
+    "fuzzy_threshold": 1.0,
+    "enable_fuzzy_dedupe": false,
+    "sort_mode": "quality",
+    "danbooru_min_hot": 0,
+    "danbooru_limit": 6000,
+    "include_general_danbooru": false,
+    "include_general_weilin_tags": false,
+    "include_generic_sqlite_without_allow_hint": false,
+    "min_prompt_length": 1,
+    "max_prompt_length": 120
+  },
+  "manual_merge": {
+    "replace": {},
+    "alias_groups": [],
+    "hide": [],
+    "category_overrides": {
+      "示例：某个英文tag": "姿态动作"
+    },
+    "display_renames": {
+      "示例：某个英文tag": "新的中文显示名 (english tag)"
+    },
+    "add": {
+      "额外标签": [
+        {
+          "display": "示例标签 (example tag)",
+          "prompt": "example tag"
+        }
+      ]
+    }
+  },
+  "output": {
+    "file": "NSFWPromptSelector_LocalMerged.py",
+    "overwrite": false,
+    "legacy_node_key": false,
+    "runtime_override_file": "promptselector_user_overrides.json",
+    "node_display_name": "NSFW 提示词选择器 · 本地合并版"
+  }
+}

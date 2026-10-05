@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "phase": "delivery",
+  "historical_replay": true,
+  "observations": {
+    "web_release": "r-01892afa9f19ef14c255",
+    "web_rows": 40386,
+    "web_imaged_rows": 38408,
+    "document_rows": 18506,
+    "original_documents": "仅有历史提取收据；新批次必须提供原件路径和哈希",
+    "source_registry_rows": 40386,
+    "included_imaged_rows": 36069,
+    "excluded_imaged_rows": 2339,
+    "additional_source_images": 4186,
+    "stage_data_sha256": "68eaa214ec65ba477ffa38d0558de39ec43139bae5a2a65fcb35131d93074fe6",
+    "first_preview_rows": 36069,
+    "release_phase": "accepted",
+    "current_release": "r-9a4bf4049f141be7d4d9",
+    "source_drift": true,
+    "scope_note": "本次只证明固定版本；当前网页新增内容需要新批次",
+    "current_new_image_rows": 816
+  },
+  "errors": []
+}

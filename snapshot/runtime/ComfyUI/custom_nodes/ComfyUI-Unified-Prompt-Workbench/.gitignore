@@ -1,0 +1,20 @@
+# 只跟踪代码，不跟踪数据/素材/第三方模块
+user_data/
+lora_userdatas/
+translate_userdatas/
+random_tag/
+**/preview/
+**/preview_thumbnails/
+**/__pycache__/
+*.pyc
+*.log
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.safetensors
+*.zip
+modules/comfyui-lora-manager/
+modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/
+modules/comfyui-custom-scripts/

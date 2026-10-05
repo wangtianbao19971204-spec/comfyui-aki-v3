@@ -1,0 +1,26 @@
+[project]
+name = "comfyui-anima-tools"
+version = "3.2.6"
+description = "ComfyUI nodes for anime artist, character, clothing, background, random prompt composition, and Anima LoRA search, download, and loading workflows"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "nnegret" }
+]
+keywords = ["comfyui", "anime", "artist-style", "character-tags", "lora-loader", "prompt-generator"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.9"
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/nregret/Comfyui-Anima-Tools"
+
+[tool.comfy]
+PublisherId = "nnegret"
+DisplayName = "Anima-Tools"
+Icon = ""
+Banner = ""

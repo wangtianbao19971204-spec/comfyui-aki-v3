@@ -1,0 +1,2696 @@
+{
+  "files": [
+    {
+      "path": "ComfyUI/models/LLM/Huihui-Qwen3.8-27B-abliterated-Q8_0.gguf",
+      "bytes": 29047084320,
+      "mtime_ns": 1789709119877549600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/LLM/Qwen3-VL-8B-Instruct-abliterated-v2.0.Q6_K.gguf",
+      "bytes": 6725901408,
+      "mtime_ns": 1778921362622100700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/LLM/Qwen3-VL-8B-Instruct-abliterated-v2.0.mmproj-f16.gguf",
+      "bytes": 1159030368,
+      "mtime_ns": 1778918866712043100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/LLM/mmproj-model-bf16.gguf",
+      "bytes": 931145888,
+      "mtime_ns": 1789709160323703300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/RMBG/BiRefNet/BiRefNet_lite.safetensors",
+      "bytes": 177634392,
+      "mtime_ns": 1788626449929543900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/RMBG/body_segment/deeplabv3p-resnet50-human.onnx",
+      "bytes": 47210581,
+      "mtime_ns": 1791108599199442300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/RMBG/segformer_clothes/model.safetensors",
+      "bytes": 189029000,
+      "mtime_ns": 1791108614077022200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/birefnet/BiRefNet_lite/model.safetensors",
+      "bytes": 177634392,
+      "mtime_ns": 1782562042166608500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors",
+      "bytes": 1745546848,
+      "mtime_ns": 1786176725672001600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/checkpoints/Anima/silvermoonmixAnimaEvolved_v23.safetensors",
+      "bytes": 4182218328,
+      "mtime_ns": 1790846791990217200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/clip_vision/CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+      "bytes": 2528373448,
+      "mtime_ns": 1777783969813239000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/controlnet/anima-lllite-any-test-like-v2.safetensors",
+      "bytes": 16403008,
+      "mtime_ns": 1782354903434590700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/controlnet/anima-lllite-inpainting-v2.safetensors",
+      "bytes": 65772872,
+      "mtime_ns": 1782354829803817000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/qwen-image-2.1-UC-BF16.gguf",
+      "bytes": 14230272800,
+      "mtime_ns": 1791087483912987400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/Anima/BSSANIRLANIMASemi_v20.safetensors",
+      "bytes": 5628209458,
+      "mtime_ns": 1783252878351021000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/Anima/JANIMA_v10.safetensors",
+      "bytes": 4182229976,
+      "mtime_ns": 1782744609444413400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/Anima/animayume_v15Base.safetensors",
+      "bytes": 4182218328,
+      "mtime_ns": 1789123992774854000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/Anima/chosenIrisesMix_v20Anima.safetensors",
+      "bytes": 4182239456,
+      "mtime_ns": 1787484582758956400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/Anima/miaomiaoHarem_anima16.safetensors",
+      "bytes": 4182218328,
+      "mtime_ns": 1789135591724680600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/Anima/oneObsessionAnima_v40.safetensors",
+      "bytes": 4182229969,
+      "mtime_ns": 1790849761300594800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/Anima-2.9B/JANIMAAnima_v1029B_bf16.safetensors",
+      "bytes": 5843204174,
+      "mtime_ns": 1789134672058735000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/Anima-2.9B/anima29B_v10_bf16.safetensors",
+      "bytes": 5843204206,
+      "mtime_ns": 1787572502773432400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/Anima-2.9B/miaomiaoHarem_29BBETA11.safetensors",
+      "bytes": 5843203272,
+      "mtime_ns": 1790744019946830600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/Anima-2.9B/silvermoonmixAnimaEvolved_v2329B_bf16.safetensors",
+      "bytes": 5843204174,
+      "mtime_ns": 1790846432431993600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/krea2/DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+      "bytes": 26283336795,
+      "mtime_ns": 1784896432710005400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/krea2/DasiwaKrea2TurboRaw_darkdesireV3TurboUC_bf16.safetensors",
+      "bytes": 26283336596,
+      "mtime_ns": 1790746868927855400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/krea2/DasiwaKrea2TurboRaw_darkdesireV3TurboUC_fp8Mixed.safetensors",
+      "bytes": 13784925704,
+      "mtime_ns": 1790747121743721100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/krea2/Krea2-Anime__v2.0__BF16__cv3357716.safetensors",
+      "bytes": 26283332608,
+      "mtime_ns": 1790553736080436500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/krea2/Krea2-Anime__v2.0__INT8__cv3357716.safetensors",
+      "bytes": 13492686480,
+      "mtime_ns": 1790553847306813200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/krea2/Krea2-Moody-Mix-premium_int8_convrot.safetensors",
+      "bytes": 14125456360,
+      "mtime_ns": 1789333416503605800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/krea2/krea2CatTower_v10TurboINT8Convrot.safetensors",
+      "bytes": 14132238608,
+      "mtime_ns": 1786896970170988900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/ipadapter/ip-adapter-plus-face_sdxl_vit-h.safetensors",
+      "bytes": 847517512,
+      "mtime_ns": 1777783694370043700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/ipadapter/ip-adapter-plus_sdxl_vit-h.safetensors",
+      "bytes": 847517512,
+      "mtime_ns": 1777783701078232100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/Krea2-Control/depth-control-lora.safetensors",
+      "bytes": 861995928,
+      "mtime_ns": 1784124341090553300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/光影与色彩/anima-灯光概念.safetensors",
+      "bytes": 148902616,
+      "mtime_ns": 1779465069944685700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/光影与色彩/lighting_base10-000100.safetensors",
+      "bytes": 91851376,
+      "mtime_ns": 1783151812642942500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/姿势与动作/1nv3rt3d_0r4l.safetensors",
+      "bytes": 91856664,
+      "mtime_ns": 1791046463068483400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/姿势与动作/E38182E3828CE3828C.ckIe.safetensors",
+      "bytes": 45980496,
+      "mtime_ns": 1784132426695161100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/姿势与动作/FemPOVAnima (1).safetensors",
+      "bytes": 132320392,
+      "mtime_ns": 1779297202828376900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/姿势与动作/HighHeel_SoundingANIMA.safetensors",
+      "bytes": 138663792,
+      "mtime_ns": 1786167739962795000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/姿势与动作/arched_back_epoch_10.safetensors",
+      "bytes": 138663776,
+      "mtime_ns": 1785077940846567500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/姿势与动作/arched_back_kiss_anima_anima_3263769.safetensors",
+      "bytes": 138663776,
+      "mtime_ns": 1789824950753084600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/姿势与动作/ed_anima5-step00001200.safetensors",
+      "bytes": 138721088,
+      "mtime_ns": 1780229747897951900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/姿势与动作/finger_frame_over_eye_anima_1_final.safetensors",
+      "bytes": 73503416,
+      "mtime_ns": 1781355563993740800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/姿势与动作/laoc-anima_v1_1024_8gb_bf16.safetensors",
+      "bytes": 91855680,
+      "mtime_ns": 1779296926820655800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/姿势与动作/leg lock_anima_V1.0.safetensors",
+      "bytes": 138729352,
+      "mtime_ns": 1779297203540444600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/姿势与动作/manguri_anima_V1.0.safetensors",
+      "bytes": 138762112,
+      "mtime_ns": 1778894758446384400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/姿势与动作/midis_FootWorship_V0.5[Anima].safetensors",
+      "bytes": 138749204,
+      "mtime_ns": 1778894810856499000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/姿势与动作/tribadism_anima_V1.0.safetensors",
+      "bytes": 138729792,
+      "mtime_ns": 1780229759627083500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/29MVYE5CJFM15VMAY217PE8Z20.safetensors",
+      "bytes": 138663792,
+      "mtime_ns": 1782742170520998900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/AF_AllureForbidden_Opalescent_ANI.safetensors",
+      "bytes": 183606752,
+      "mtime_ns": 1785931990897307100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/Anima_LoDresss_Style1_v1.safetensors",
+      "bytes": 69446064,
+      "mtime_ns": 1783745702854061000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/ChromaticFateboundSea_Anima-000013.safetensors",
+      "bytes": 138742984,
+      "mtime_ns": 1783149823898676900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/CloudboundFlight_Anima.safetensors",
+      "bytes": 138820200,
+      "mtime_ns": 1787066770297394400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/GoddessDressAnima.safetensors",
+      "bytes": 33205400,
+      "mtime_ns": 1784995355939350600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/GraceinMotion_Anima.safetensors",
+      "bytes": 179170416,
+      "mtime_ns": 1782229103574738400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/Jirai Kei Mahou Shoujo.safetensors",
+      "bytes": 183606088,
+      "mtime_ns": 1781332309493597300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/LetterCraneCourier_Anima.safetensors",
+      "bytes": 138835736,
+      "mtime_ns": 1787847811703258100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/LettersAfterglow_Anima.safetensors",
+      "bytes": 138846000,
+      "mtime_ns": 1781822419193323100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/RibbonOfVenusCorsetAnima.safetensors",
+      "bytes": 33204000,
+      "mtime_ns": 1782229030254427100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/RoroririQipaoanima.safetensors",
+      "bytes": 69444400,
+      "mtime_ns": 1783096309659860300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/Sexy bondage outfit2 03102424142a.safetensors",
+      "bytes": 68917992,
+      "mtime_ns": 1786181743970190300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/SheerCamisoleBeachDressAnima.safetensors",
+      "bytes": 33204184,
+      "mtime_ns": 1791046707821885700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/SweetheartDriveThruPuffyRedDressAnima.safetensors",
+      "bytes": 33201880,
+      "mtime_ns": 1787363026446791900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/VelvetBardotRuffleBodyconDressAnima.safetensors",
+      "bytes": 33202488,
+      "mtime_ns": 1791046683286264100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/VelvetHeartCroptopAnima.safetensors",
+      "bytes": 33202192,
+      "mtime_ns": 1783745823527251400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/WidowGothicLaceGownAnima.safetensors",
+      "bytes": 33203656,
+      "mtime_ns": 1783745811963970100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/babydoll.safetensors",
+      "bytes": 138737976,
+      "mtime_ns": 1778894733239276800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/brownbolerodress_anima.safetensors",
+      "bytes": 77520768,
+      "mtime_ns": 1782827123361635100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/chinese style sexy lingerie2 03152424142a_15.safetensors",
+      "bytes": 91856320,
+      "mtime_ns": 1786032965770921800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/clothes_india_dancer.safetensors",
+      "bytes": 132297208,
+      "mtime_ns": 1785647394975348000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/clothes_whale_dream.safetensors",
+      "bytes": 132296776,
+      "mtime_ns": 1785647415065819800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/costume_pia3_anima_base1_pr6432_bat10_1024_V2_1-step00000600.safetensors",
+      "bytes": 183627952,
+      "mtime_ns": 1782913566708589700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/deep black pantyhose_anima_V1.0.safetensors",
+      "bytes": 138724216,
+      "mtime_ns": 1780659661658217800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/dtKillerEregantBlackChinaDress_anima.safetensors",
+      "bytes": 138663848,
+      "mtime_ns": 1791046867331923900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/flowyminidress_anima.safetensors",
+      "bytes": 77520280,
+      "mtime_ns": 1783096278979611600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/garter belt_anima_V1.0.safetensors",
+      "bytes": 138732456,
+      "mtime_ns": 1778894803116994300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/girl clothes_anima_V1.0.safetensors",
+      "bytes": 138736280,
+      "mtime_ns": 1782055615935738600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/high slit wedding dress03153232142a_10.safetensors",
+      "bytes": 91856424,
+      "mtime_ns": 1781859589175136800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/jiraikei_anima_V1.0.safetensors",
+      "bytes": 138743408,
+      "mtime_ns": 1778894785234512300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/knmp057_15_dtkiller2.safetensors",
+      "bytes": 69442272,
+      "mtime_ns": 1786182370754419400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/lace_clothing__outfit__epoch_10.safetensors",
+      "bytes": 138663776,
+      "mtime_ns": 1784890232437086400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/lacefloralthighhigh_anima.safetensors",
+      "bytes": 77520232,
+      "mtime_ns": 1781535789557640700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/maid bikini_anima_V1.0.safetensors",
+      "bytes": 138738624,
+      "mtime_ns": 1791046792626985800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/qixiong ruqunV2-best-000004.safetensors",
+      "bytes": 138736888,
+      "mtime_ns": 1791046569745423700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/serafuku_anima_V1.0.safetensors",
+      "bytes": 138733496,
+      "mtime_ns": 1791046809199307600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/sheercollardress_anima.safetensors",
+      "bytes": 77519888,
+      "mtime_ns": 1782827128185497600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/sheerlacelingerie_anima.safetensors",
+      "bytes": 77520024,
+      "mtime_ns": 1781535814447484600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/truelight_cheongsam_v1.safetensors",
+      "bytes": 138663768,
+      "mtime_ns": 1782742388500264200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/tullelayeredbabydoll_anima.safetensors",
+      "bytes": 77520264,
+      "mtime_ns": 1781862677335453000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/wedding dress_anima_V1.0.safetensors",
+      "bytes": 138737360,
+      "mtime_ns": 1778894791549698600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/x micro bikini_anima_V1.0.safetensors",
+      "bytes": 138724424,
+      "mtime_ns": 1778894757737587300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/服装与配饰/诱欲禁区 Allure Forbidden - 玉纱罗曼 Jasmine Romance__Anima__cv3121661.safetensors",
+      "bytes": 183606568,
+      "mtime_ns": 1783855877806108300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/概念与效果/NSFW Petite__Anima__cv3323084.safetensors",
+      "bytes": 138663832,
+      "mtime_ns": 1790703696317957100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/概念与效果/anima-真实皮肤.safetensors",
+      "bytes": 183610104,
+      "mtime_ns": 1781182271183932500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/概念与效果/anima_vagina_detail_v1.safetensors",
+      "bytes": 137737160,
+      "mtime_ns": 1782530262176194700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/概念与效果/cas-2-next-b1-32.safetensors",
+      "bytes": 74518360,
+      "mtime_ns": 1779380603751883400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/概念与效果/meme_mutsukiface_animaBaseV1-000012.safetensors",
+      "bytes": 15681832,
+      "mtime_ns": 1780229963035468900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/概念与效果/pussy juice_anima_V1.0.safetensors",
+      "bytes": 138735904,
+      "mtime_ns": 1780229909756242300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/概念与效果/sidenippleslip_anima_v1.safetensors",
+      "bytes": 91876664,
+      "mtime_ns": 1786253756272391600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/滑块与调节/AngleAdjustment高低上下角度滑块.safetensors",
+      "bytes": 69390344,
+      "mtime_ns": 1782049715755664100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/滑块与调节/Deepthroat slider__Anima__cv3059807.safetensors",
+      "bytes": 12885424,
+      "mtime_ns": 1783185662678206000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/滑块与调节/Nipple-size-slider4.safetensors",
+      "bytes": 33089528,
+      "mtime_ns": 1783613410561700200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/滑块与调节/POV_SliderPOV滑块.safetensors",
+      "bytes": 17434936,
+      "mtime_ns": 1782049701287067200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/滑块与调节/Penis-size-slider4.safetensors",
+      "bytes": 33089528,
+      "mtime_ns": 1782661727153849100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/滑块与调节/Rotation_SliderLeft_RightV2左右平滑旋转滑块.safetensors",
+      "bytes": 17434944,
+      "mtime_ns": 1782049724307949000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/滑块与调节/cumSliderV2.safetensors",
+      "bytes": 17434928,
+      "mtime_ns": 1785048183032167000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/滑块与调节/cum_slider.safetensors",
+      "bytes": 34753392,
+      "mtime_ns": 1782049721055183200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/4s2iilll-watermark-step00003000.safetensors",
+      "bytes": 91858192,
+      "mtime_ns": 1786035783040922800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/4x2style_v2_epoch32.safetensors",
+      "bytes": 24598184,
+      "mtime_ns": 1789577049678537800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/4x6_Ani_v1.safetensors",
+      "bytes": 23074176,
+      "mtime_ns": 1789577053961946700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/@sabotenman_v02.safetensors",
+      "bytes": 91878192,
+      "mtime_ns": 1789576915886943700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/@sby1_epoch14.safetensors",
+      "bytes": 91851184,
+      "mtime_ns": 1787363237834444400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/AI style まがき magaki__v1.0__cv3361888.safetensors",
+      "bytes": 138836176,
+      "mtime_ns": 1790702692949892800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/ANMRurudot_F4H_1530.safetensors",
+      "bytes": 91880992,
+      "mtime_ns": 1783681120164716500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/AdramhlihK's nai5 style__v1.0__cv3344212.safetensors",
+      "bytes": 91856280,
+      "mtime_ns": 1790703474913405100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/Anima_AASML3-step00007000.safetensors",
+      "bytes": 138776096,
+      "mtime_ns": 1788481716157989200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/Anima_AASML7-step00004500.safetensors",
+      "bytes": 138758864,
+      "mtime_ns": 1787483989463597200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/Anima_NIJI_SWEET_SPOT_v5.safetensors",
+      "bytes": 183692926,
+      "mtime_ns": 1787681258476798800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/BunnySlop_Ani_v5.56.safetensors",
+      "bytes": 138663759,
+      "mtime_ns": 1786168998270251300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/BunnySlop_Ani_v6.9.safetensors",
+      "bytes": 138663707,
+      "mtime_ns": 1787681456243811600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/Colorful Line Art_Anima.safetensors",
+      "bytes": 22610888,
+      "mtime_ns": 1779603049185831400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/D1shwasher.safetensors",
+      "bytes": 185190496,
+      "mtime_ns": 1782486589972823800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/Dark fantasy style.safetensors",
+      "bytes": 183625616,
+      "mtime_ns": 1787484304618819100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/Dark_Synth_Anime_Anima-step00001050.safetensors",
+      "bytes": 138719248,
+      "mtime_ns": 1780727007124380300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/Flat painting style.safetensors",
+      "bytes": 183629328,
+      "mtime_ns": 1789576093682312300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/Futurabbitstyle_animaV1.5-000016.safetensors",
+      "bytes": 91883920,
+      "mtime_ns": 1783161972695519200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/GothicNeonAnima.safetensors",
+      "bytes": 33232032,
+      "mtime_ns": 1782018111711610400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/HYUK STYLE (ANIMA)__v1.0__cv3360809.safetensors",
+      "bytes": 367131688,
+      "mtime_ns": 1790499273335639700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/Hand-drawnfeel-000018.safetensors",
+      "bytes": 183606224,
+      "mtime_ns": 1787848243161373300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/MoriiMee_AnimaV10_byKonan.safetensors",
+      "bytes": 51727984,
+      "mtime_ns": 1783160891212977000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/NTRanima_basev1.safetensors",
+      "bytes": 138663752,
+      "mtime_ns": 1787681271390883200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/Nero Style Anima&krea 2__v2.0__cv3069333.safetensors",
+      "bytes": 91874920,
+      "mtime_ns": 1790703077578463100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/NikkeB1.safetensors",
+      "bytes": 137731216,
+      "mtime_ns": 1786169035033082800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/Snowy Bitch style__v2.0__cv3368465.safetensors",
+      "bytes": 91851184,
+      "mtime_ns": 1790703299872855200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/WaterColorAnima.safetensors",
+      "bytes": 91888744,
+      "mtime_ns": 1786168852959446200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/Ying Yi Style [Anima Krea2]__Anima v1.0__cv3000376.safetensors",
+      "bytes": 138754040,
+      "mtime_ns": 1790703169768127500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/agm-000027.safetensors",
+      "bytes": 91866464,
+      "mtime_ns": 1782018102233151100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/agm_v1_epoch7.safetensors",
+      "bytes": 91851152,
+      "mtime_ns": 1787363491147806300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/akipekoanima_v1_1-step@akipekostyle.safetensors",
+      "bytes": 132308976,
+      "mtime_ns": 1783161097078489500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/anima-748cmv3-@748cmstyle.safetensors",
+      "bytes": 132313848,
+      "mtime_ns": 1781026046583790500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/anima-@4x0style.safetensors",
+      "bytes": 93375296,
+      "mtime_ns": 1781980467799718600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/anima-@BlueArchStyle.safetensors",
+      "bytes": 137731072,
+      "mtime_ns": 1780231127292154900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/anima-@jimaANIMAstyle.safetensors",
+      "bytes": 91851440,
+      "mtime_ns": 1781025577485264500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/anima-@nj7sweet.safetensors",
+      "bytes": 91857960,
+      "mtime_ns": 1781026003031889900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/anima-@zbjlm.safetensors",
+      "bytes": 183606768,
+      "mtime_ns": 1779603056908659200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/anima-base-1-painterly-v2.safetensors",
+      "bytes": 148902616,
+      "mtime_ns": 1782752123214094300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/anima-rl-v0.1.safetensors",
+      "bytes": 148902616,
+      "mtime_ns": 1786168974236274500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/anima-yeechan-@yeejch2nstyle.safetensors",
+      "bytes": 66248456,
+      "mtime_ns": 1780727397359733400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/anima_@m4me.safetensors",
+      "bytes": 183606528,
+      "mtime_ns": 1782018436115413100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/anima_@meionANIMAstyle.safetensors",
+      "bytes": 251359716,
+      "mtime_ns": 1782018742261253400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/azure mist.safetensors",
+      "bytes": 183606632,
+      "mtime_ns": 1787484456284097900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/cf_style_v4.safetensors",
+      "bytes": 367103160,
+      "mtime_ns": 1789576464617744200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/chen-bin_v4.0.safetensors",
+      "bytes": 91851152,
+      "mtime_ns": 1789576843594354000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/chosen style 3-000040.safetensors",
+      "bytes": 183626992,
+      "mtime_ns": 1787484359772273400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/cogecha_model.safetensors",
+      "bytes": 138662176,
+      "mtime_ns": 1779815023727727100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/cunny_animaV1.0-000009.safetensors",
+      "bytes": 91858632,
+      "mtime_ns": 1786859962745761900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/dksnpromax_v1f10_epoch20.safetensors",
+      "bytes": 183666072,
+      "mtime_ns": 1787363495331548600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/f1f_v1_epoch30.safetensors",
+      "bytes": 91851152,
+      "mtime_ns": 1789577151296766200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/hajistar-000008.safetensors",
+      "bytes": 57475168,
+      "mtime_ns": 1781823084354270900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/kamiya yuu V1.safetensors",
+      "bytes": 264454376,
+      "mtime_ns": 1789576043754769300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/kieed_v1.safetensors",
+      "bytes": 91870048,
+      "mtime_ns": 1783161973706553100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/koujuan-000192.safetensors",
+      "bytes": 91867376,
+      "mtime_ns": 1782742223147823000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/lustrelle-000022.safetensors",
+      "bytes": 91856168,
+      "mtime_ns": 1790925667962760900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/lzusa Flat Style - Anima__V1__cv3362436.safetensors",
+      "bytes": 138663848,
+      "mtime_ns": 1790509656667253300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/miaomiao anima Ink Animation 1.0G.safetensors",
+      "bytes": 138709640,
+      "mtime_ns": 1783613078869202500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/mignonv2lora-000002.safetensors",
+      "bytes": 91898208,
+      "mtime_ns": 1788481566549909500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/miratsu369_v1.safetensors",
+      "bytes": 91864440,
+      "mtime_ns": 1781709459912071500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/nai5 fresh style.safetensors",
+      "bytes": 183606272,
+      "mtime_ns": 1789307793095915000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/pastel anima.safetensors",
+      "bytes": 183648328,
+      "mtime_ns": 1787484392947525900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/rei_Anima1_lora_V52.safetensors",
+      "bytes": 183620904,
+      "mtime_ns": 1787681306050103600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/reina_v1_epoch14.safetensors",
+      "bytes": 91851184,
+      "mtime_ns": 1787681276998786700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/rirua_(kjom802)_style_v1.safetensors",
+      "bytes": 109091504,
+      "mtime_ns": 1787480290072201800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/rucarachiv4-6.safetensors",
+      "bytes": 138662176,
+      "mtime_ns": 1780230189343942400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/shine_colorful__AnimaV0.3.safetensors",
+      "bytes": 277331976,
+      "mtime_ns": 1786168790751047400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/ukaisaki-000011.safetensors",
+      "bytes": 91858728,
+      "mtime_ns": 1782131326700517600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/wanx-000015.safetensors",
+      "bytes": 91869576,
+      "mtime_ns": 1787363346175220000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/wlop-2_v1_epoch15.safetensors",
+      "bytes": 91851152,
+      "mtime_ns": 1787363521585560100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/yoneyamai_Anima1_lora_V52.safetensors",
+      "bytes": 183615784,
+      "mtime_ns": 1787363511280503600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/yzsss_anima1.0_v0.2.safetensors",
+      "bytes": 183605592,
+      "mtime_ns": 1779627242022780200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/二次元cg Style__v1.0__cv3363782.safetensors",
+      "bytes": 138662616,
+      "mtime_ns": 1790702638030241100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/晴年的串 qingnian's style__v1.0__cv3362006.safetensors",
+      "bytes": 91856008,
+      "mtime_ns": 1790702706623890300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/画风与画师/画风 ningen mame style 【anima】__v2.0__cv3097955.safetensors",
+      "bytes": 91856272,
+      "mtime_ns": 1790510605795435100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/细节与修复/Add Micro Details - Concept (Illustrious Pony NoobAI)__v1.0_Anima (New)__cv3287274.safetensors",
+      "bytes": 183623008,
+      "mtime_ns": 1790437495737385100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/细节与修复/AddMicroDetails_Anima_v1.safetensors",
+      "bytes": 138747088,
+      "mtime_ns": 1787847964501515400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/细节与修复/anima-highres-aesthetic-boost.safetensors",
+      "bytes": 138662176,
+      "mtime_ns": 1780850537869192300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/细节与修复/anima-masterpiece-美学品质修正器 - 杰作.safetensors",
+      "bytes": 138662176,
+      "mtime_ns": 1780850535913023200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/细节与修复/anima_footRepair赤足修复.safetensors",
+      "bytes": 277206000,
+      "mtime_ns": 1782540268958712400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/细节与修复/anima_footRepair足袜修复.safetensors",
+      "bytes": 277206000,
+      "mtime_ns": 1782540253370440000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/细节与修复/background_detailer_v1-step00000200.safetensors",
+      "bytes": 91852272,
+      "mtime_ns": 1782752136277685800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/细节与修复/zoda_v3_anima.safetensors",
+      "bytes": 69441344,
+      "mtime_ns": 1786168641555030900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/背景与场景/Anima Real Scene Anime Character__v1.0 - Anima__cv3003119.safetensors",
+      "bytes": 45994168,
+      "mtime_ns": 1782019160073295600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训角色/alicia_bell_morning_star_anima29_r32_v1.safetensors",
+      "bytes": 131241592,
+      "mtime_ns": 1787578787596774600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训角色/alicia_bell_morning_star_anima_r32_v1.safetensors",
+      "bytes": 91897744,
+      "mtime_ns": 1787367646429335600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训角色/alicia_bell_ordinary_anima_r32_v1.safetensors",
+      "bytes": 91895752,
+      "mtime_ns": 1787359546374733300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训角色/rosasha_anima_r32_v1.safetensors",
+      "bytes": 91886168,
+      "mtime_ns": 1785156415901239500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_eval/alicia_bell_r32_step0100.safetensors",
+      "bytes": 91878480,
+      "mtime_ns": 1787354197842737400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_eval/alicia_bell_r32_step0200.safetensors",
+      "bytes": 91878480,
+      "mtime_ns": 1787354318698533400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_eval/alicia_bell_r32_step0300.safetensors",
+      "bytes": 91878480,
+      "mtime_ns": 1787354436220981500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_eval/alicia_bell_r32_step0400.safetensors",
+      "bytes": 91878480,
+      "mtime_ns": 1787354548923189500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0100.safetensors",
+      "bytes": 91897728,
+      "mtime_ns": 1787366672668644100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0125.safetensors",
+      "bytes": 91897744,
+      "mtime_ns": 1787367628916451600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0150.safetensors",
+      "bytes": 91897744,
+      "mtime_ns": 1787367646429335600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0175.safetensors",
+      "bytes": 91897744,
+      "mtime_ns": 1787367665165860900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0200.safetensors",
+      "bytes": 91897728,
+      "mtime_ns": 1787366744093289400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0300.safetensors",
+      "bytes": 91897728,
+      "mtime_ns": 1787366820099554800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0400.safetensors",
+      "bytes": 91897728,
+      "mtime_ns": 1787366895183737900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_ordinary_eval/step0100.safetensors",
+      "bytes": 91895752,
+      "mtime_ns": 1787359393158867600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_ordinary_eval/step0200.safetensors",
+      "bytes": 91895752,
+      "mtime_ns": 1787359471211345400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_ordinary_eval/step0300.safetensors",
+      "bytes": 91895752,
+      "mtime_ns": 1787359546374733300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_ordinary_eval/step0400.safetensors",
+      "bytes": 91895752,
+      "mtime_ns": 1787359619975351000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/Anastasya Feodorovna Snezhnaya.safetensors",
+      "bytes": 183605872,
+      "mtime_ns": 1782494653766936400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/Anima-爱弥斯.safetensors",
+      "bytes": 138662176,
+      "mtime_ns": 1779889384915847700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/Cure_Arcana_v1.5.safetensors",
+      "bytes": 200843480,
+      "mtime_ns": 1788069239982523100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/E5A5A5E58FA4E696AFE789B9E7A4BCE6.yUGx.safetensors",
+      "bytes": 91887784,
+      "mtime_ns": 1779543302323874100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/E99B85E58AAAE696AFE5A49A.Wp5S.safetensors",
+      "bytes": 69452640,
+      "mtime_ns": 1785030653466682500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/Hai Tien (azur lane) V2-000019.safetensors",
+      "bytes": 183612648,
+      "mtime_ns": 1789136221080188300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/Koinoya Mai_v1.0_gekawiakoimai.safetensors",
+      "bytes": 91857112,
+      "mtime_ns": 1785167523150810000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/Marian Andreotti, Marian Andreotti-Aquila.safetensors",
+      "bytes": 138716888,
+      "mtime_ns": 1783100860555706500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/Miyu_Edelfelt-Fate_(Series)-variant-284-anima-v1.safetensors",
+      "bytes": 91905976,
+      "mtime_ns": 1785168067499774200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/Priestess-Goblin-Slayer-AnimaBaseV1-StrangestArt.safetensors",
+      "bytes": 91856544,
+      "mtime_ns": 1785559015281383100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/Sakamata_Chloe-Hololive-variant-325-anima-v1.safetensors",
+      "bytes": 91916448,
+      "mtime_ns": 1785343250455486200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/Shinano 信濃 信浓 [7 outfits] (Azur Lane アズールレーン 碧蓝航线)__v1.0__cv2981688.safetensors",
+      "bytes": 138662176,
+      "mtime_ns": 1780748049424880700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/Specter_(Arknights)-Arknights-variant-282-anima-v1.safetensors",
+      "bytes": 91893448,
+      "mtime_ns": 1785168070809337900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/anima-xinyuehu-心月狐.safetensors",
+      "bytes": 138716408,
+      "mtime_ns": 1781700183897357800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/anima-信浓.safetensors",
+      "bytes": 138662176,
+      "mtime_ns": 1782017605544604900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/anima-圣园未花.safetensors",
+      "bytes": 138663776,
+      "mtime_ns": 1781610693007054600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/anima-昔涟.safetensors",
+      "bytes": 138782240,
+      "mtime_ns": 1779895206231454200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/anima-洛茜-cos或角色.safetensors",
+      "bytes": 138773064,
+      "mtime_ns": 1782017930647520600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/anima-洛茜.safetensors",
+      "bytes": 45993728,
+      "mtime_ns": 1781282156867894900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/anima-海天.safetensors",
+      "bytes": 138662176,
+      "mtime_ns": 1780748056896779500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/anima-能代Noshiro.safetensors",
+      "bytes": 138721496,
+      "mtime_ns": 1779542910699432100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/anima-英仙座.safetensors",
+      "bytes": 138662176,
+      "mtime_ns": 1781328748780210300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/anima-达尼亚-denia (wuthering waves).safetensors",
+      "bytes": 46029840,
+      "mtime_ns": 1782017537995285100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/anima-镇海chenhai.safetensors",
+      "bytes": 91863536,
+      "mtime_ns": 1781527476497641000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/anima_露露卡.safetensors",
+      "bytes": 132297712,
+      "mtime_ns": 1779888777049831200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/firefly 流萤__anima_2_v1__cv3004395.safetensors",
+      "bytes": 138720856,
+      "mtime_ns": 1780586845102331300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/hakuhou.safetensors",
+      "bytes": 91865584,
+      "mtime_ns": 1782627785234807600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/illya 8 outfits.safetensors",
+      "bytes": 69463864,
+      "mtime_ns": 1784132686031263100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/kiki_swimsuit_v2.safetensors",
+      "bytes": 91855056,
+      "mtime_ns": 1787363535089057000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/kisaki_swimsuit_v2.safetensors",
+      "bytes": 45986544,
+      "mtime_ns": 1782530179098837100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/lelia_nm_mixed_v1-000007.safetensors",
+      "bytes": 165404896,
+      "mtime_ns": 1780118817824700800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/remielle-dan-zzz-anima-Tanger.safetensors",
+      "bytes": 137768160,
+      "mtime_ns": 1785559047552701900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/sirius_2skin_anima-000006-1.safetensors",
+      "bytes": 45982776,
+      "mtime_ns": 1783000612035319900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/角色与人物/黑兽2米斯蒂奥拉.safetensors",
+      "bytes": 66227952,
+      "mtime_ns": 1781331131831789200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/姿势与动作/Shoe play__V1__cv3354644.safetensors",
+      "bytes": 228588976,
+      "mtime_ns": 1790513656303796400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/姿势与动作/dangling a shoe_v1.safetensors",
+      "bytes": 228587728,
+      "mtime_ns": 1788797624019338500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/控制与编辑/krea2_identity_edit_v1_2.safetensors",
+      "bytes": 1828256432,
+      "mtime_ns": 1788626021345168800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/服装与配饰/Evening dress.safetensors",
+      "bytes": 228587792,
+      "mtime_ns": 1787681074487506300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/服装与配饰/neo_cheongsam-KreaTurob.safetensors",
+      "bytes": 234680592,
+      "mtime_ns": 1788968194346464800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/服装与配饰/serafuku_Krea2_V1.0.safetensors",
+      "bytes": 234703488,
+      "mtime_ns": 1791046834314354800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/服装与配饰/x-micro-bikini_Krea2_V1.0.safetensors",
+      "bytes": 234703512,
+      "mtime_ns": 1790176651496183500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/服装与配饰/ウェディングドレス wedding dress__v1.0 Krea2__cv3361894.safetensors",
+      "bytes": 234703512,
+      "mtime_ns": 1790494838630096400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/服装与配饰/女児服 girl's clothes(XL,ill,Pony)__v1.0 Krea2__cv3338606.safetensors",
+      "bytes": 234703512,
+      "mtime_ns": 1790514909778512900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/概念与效果/V1PorcelainDoll.safetensors",
+      "bytes": 228588984,
+      "mtime_ns": 1788793617100631300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/概念与效果/better pussy.safetensors",
+      "bytes": 228587720,
+      "mtime_ns": 1788799300945574300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/概念与效果/k_cuminmouth.safetensors",
+      "bytes": 228588920,
+      "mtime_ns": 1786853057119932500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/概念与效果/krea2_better_pussy_poses_v4.2.1.safetensors",
+      "bytes": 228587784,
+      "mtime_ns": 1789046405915777300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/概念与效果/krea2_gotd_cum_on_pussy.safetensors",
+      "bytes": 114329272,
+      "mtime_ns": 1789560013667949200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/概念与效果/nsfwPetite_v1.safetensors",
+      "bytes": 228588968,
+      "mtime_ns": 1790724811749756000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/概念与效果/shrimp_makeup_style_01.safetensors",
+      "bytes": 4061232,
+      "mtime_ns": 1785334914596037400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/748_c1-st2000.safetensors",
+      "bytes": 117374840,
+      "mtime_ns": 1787363822597555600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/ATDAN_c1-st6000.safetensors",
+      "bytes": 234680560,
+      "mtime_ns": 1790180542351613100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/Aleriia_V.safetensors",
+      "bytes": 228588904,
+      "mtime_ns": 1784355109657511600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/BArtstyle-KREA2-V2-1024.safetensors",
+      "bytes": 938539208,
+      "mtime_ns": 1786895527804483200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/BunnySlop AI Style 『Anima Illustrious』__Krea2(test)__cv3354208.safetensors",
+      "bytes": 228588908,
+      "mtime_ns": 1790271818399002200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/ClearAnime_Krea2_cl34ran1m3_st2000.safetensors",
+      "bytes": 410640000,
+      "mtime_ns": 1784629899745616600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/CuteSexyRobutts_NEWEST2.safetensors",
+      "bytes": 228587752,
+      "mtime_ns": 1790177602861064300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/E38090KREA2E6B7B7E59088E9A38EE6A0BCE38091E587.rHNX.safetensors",
+      "bytes": 234674208,
+      "mtime_ns": 1790180417899487300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/E38090KREA2E6B7B7E59088E9A38EE6A0BCE38091E58D.FOza.safetensors",
+      "bytes": 234674208,
+      "mtime_ns": 1790180027148103600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/E38090KREA2E6B7B7E59088E9A38EE6A0BCE38091E69CA6E883.ZDQH.safetensors",
+      "bytes": 234674208,
+      "mtime_ns": 1790180311327024200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/E38090KREA2E6B7B7E59088E9A38EE6A0BCE38091E69F94E585.bT5B-7ee9.safetensors",
+      "bytes": 234674208,
+      "mtime_ns": 1790180398696639800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/E38090KREA2E6B7B7E59088E9A38EE6A0BCE38091E6BE84E698.Aiga.safetensors",
+      "bytes": 234674208,
+      "mtime_ns": 1788366053110808800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/E38090KREA2E6B7B7E59088E9A38EE6A0BCE38091E99490E5.GCbC.safetensors",
+      "bytes": 234674208,
+      "mtime_ns": 1790180179138561400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/E68481E69C9F.dJir.safetensors",
+      "bytes": 456499804,
+      "mtime_ns": 1784645040075719900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/E7AB9CE5B48EE38184E381.dd79.safetensors",
+      "bytes": 234680560,
+      "mtime_ns": 1788365989600758200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/FujiChoko_Krea2.safetensors",
+      "bytes": 114326424,
+      "mtime_ns": 1787363955738825200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/FymriE_krea2_style_V2_0_epoch_7.safetensors",
+      "bytes": 457113168,
+      "mtime_ns": 1790180716840755600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/K2_Anime_Flat_V20_nnegret线条动漫.safetensors",
+      "bytes": 228587832,
+      "mtime_ns": 1784049926764257300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/K2_Semi_Real_Anime_V2_nnegretsemireal.safetensors",
+      "bytes": 228587792,
+      "mtime_ns": 1784050311842563900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/Krea2GalaxyStyle_c1-st8000.safetensors",
+      "bytes": 234680584,
+      "mtime_ns": 1784130344402556300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/Krea2PancelStyle_c1-st6000.safetensors",
+      "bytes": 234680584,
+      "mtime_ns": 1784129950727157500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/Krea2Rella_c1-st8000.safetensors",
+      "bytes": 234680576,
+      "mtime_ns": 1784113191254533600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/Krea2_AASML3_000009000.safetensors",
+      "bytes": 228587728,
+      "mtime_ns": 1784130258519150500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/Krea2_Nikki_Style_Anime_000006000.safetensors",
+      "bytes": 457112000,
+      "mtime_ns": 1784049876059474300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/LoveCacao_Style_Krea2_v1_000001800.safetensors",
+      "bytes": 228587816,
+      "mtime_ns": 1784113240469828300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/MoriiMee_Krea_epoch_10.safetensors",
+      "bytes": 228588904,
+      "mtime_ns": 1784355055323861000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/NeKorY-k2_c1-st6000.safetensors",
+      "bytes": 234680560,
+      "mtime_ns": 1786035566499331800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/Nero Style Anima&krea 2__Krea 2__cv3310163.safetensors",
+      "bytes": 234680560,
+      "mtime_ns": 1790703100495045400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/Niji_Sweet_Spot_Krea2_v2A.safetensors",
+      "bytes": 228588904,
+      "mtime_ns": 1787681263596810000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/Noctilume Style.safetensors",
+      "bytes": 228587752,
+      "mtime_ns": 1784113141956117700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/Ogipote style.safetensors",
+      "bytes": 234704112,
+      "mtime_ns": 1784113173888343200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/Outlined_Krea2.safetensors",
+      "bytes": 228587728,
+      "mtime_ns": 1784113246737940600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/Ying Yi Style [Anima Krea2]__Krea 2 v1.0__cv3286750.safetensors",
+      "bytes": 234702992,
+      "mtime_ns": 1790703190147669300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/[Krea2]ABP_ART style__v1.0__cv3360257.safetensors",
+      "bytes": 234680576,
+      "mtime_ns": 1790437524424720900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/blinklikeer_k2v14x0style.safetensors",
+      "bytes": 234702288,
+      "mtime_ns": 1784453494315945000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/chenbin_style_krea2_v2鬼针草.safetensors",
+      "bytes": 229932352,
+      "mtime_ns": 1784130270108475900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/dk.senie_krea2_style_v5.0_c1-st4000.safetensors",
+      "bytes": 469292928,
+      "mtime_ns": 1784129301348503100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/granblue_1138_detail_l_black_bg_krea2_lora-000008.safetensors",
+      "bytes": 469315488,
+      "mtime_ns": 1784113140463118600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/jmz_c1-st6000.safetensors",
+      "bytes": 234680560,
+      "mtime_ns": 1790180643050130500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/kieed_style_krea2_v2.safetensors",
+      "bytes": 229932352,
+      "mtime_ns": 1788432988243647400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/krea2_syokumura_style_c1-st6000.safetensors",
+      "bytes": 234681112,
+      "mtime_ns": 1786785182960168200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/monmon mon2133 style KREA V1.safetensors",
+      "bytes": 228588976,
+      "mtime_ns": 1790180558182985400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/nai_ba_style_krea2-st6000.safetensors",
+      "bytes": 234680576,
+      "mtime_ns": 1790726436608025100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/ningen_style3_krea2_v1.safetensors",
+      "bytes": 234680576,
+      "mtime_ns": 1788432889766632700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/onineko_k2_v1.safetensors",
+      "bytes": 234702288,
+      "mtime_ns": 1784645074231487300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/shangcang.safetensors",
+      "bytes": 228587728,
+      "mtime_ns": 1790180662487200100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/tokkyu_c1-st4000tokkyu style.safetensors",
+      "bytes": 234680584,
+      "mtime_ns": 1784130438597191800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/umina_krea2_v1.safetensors",
+      "bytes": 229932352,
+      "mtime_ns": 1784130769632308000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/villainchin-v3-1mp-50epochs.safetensors",
+      "bytes": 228591760,
+      "mtime_ns": 1790726401783219500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/watercolor.safetensors",
+      "bytes": 228587776,
+      "mtime_ns": 1785416956196536300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/wlop_c1-st4000.safetensors",
+      "bytes": 234680584,
+      "mtime_ns": 1784473325234435100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/xiaoya_k2_c1-st6000.safetensors",
+      "bytes": 234680560,
+      "mtime_ns": 1785932171328472000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/yoneyamamai_style_krea2_v1.safetensors",
+      "bytes": 229932352,
+      "mtime_ns": 1788433012279137200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/yu-hydra_K2_v1.safetensors",
+      "bytes": 469314152,
+      "mtime_ns": 1789488854274101300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/zhibuji_loom_style_krea2_v1.safetensors",
+      "bytes": 234680576,
+      "mtime_ns": 1788366023362279600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/锋锐魅影·凌冽霓光CG风__v1.0__cv3359974.safetensors",
+      "bytes": 234674208,
+      "mtime_ns": 1790437551939504400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/画风与画师/青桔动漫风.safetensors",
+      "bytes": 228587712,
+      "mtime_ns": 1784113208560855600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/细节与修复/Add Micro Details - Concept (Illustrious Pony NoobAI)__v1.0_Krea2__cv3298811.safetensors",
+      "bytes": 228588904,
+      "mtime_ns": 1790437487126999100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/细节与修复/krea2-masterpieces-v51masterpiece.safetensors",
+      "bytes": 214750256,
+      "mtime_ns": 1784131755759566600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/角色与人物/AerithG_SoloLoRA_Kr2v1.safetensors",
+      "bytes": 57193308,
+      "mtime_ns": 1784221344554418300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/角色与人物/Cantrella鸣潮 坎特蕾拉.safetensors",
+      "bytes": 228587768,
+      "mtime_ns": 1784467821434908600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/角色与人物/Krea2_Castorice_HSR.safetensors",
+      "bytes": 469315656,
+      "mtime_ns": 1789799742007105600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/角色与人物/Platinum2outfits.safetensors",
+      "bytes": 138718976,
+      "mtime_ns": 1789915687378143300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/角色与人物/V1.safetensors",
+      "bytes": 228588904,
+      "mtime_ns": 1785342572508833900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/角色与人物/hsin_krea2_v1.safetensors",
+      "bytes": 228588904,
+      "mtime_ns": 1788480975589557700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/角色与人物/krea2_kgirl_v3.safetensors",
+      "bytes": 114324728,
+      "mtime_ns": 1784221792096921300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/角色与人物/lacrimosa_00.safetensors",
+      "bytes": 228587720,
+      "mtime_ns": 1784220195843044000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/角色与人物/remielle_dan_v2_raw-step00001500.safetensors",
+      "bytes": 469315336,
+      "mtime_ns": 1785251907974654700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/角色与人物/rymier1_c1-st7000.safetensors",
+      "bytes": 234680560,
+      "mtime_ns": 1788480858776602000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/角色与人物/stellar blade Lily Artemis II krea 2 lora attempt 1.safetensors",
+      "bytes": 457112168,
+      "mtime_ns": 1784219796957209100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/角色与人物/xinyuehu_c1-st2000.safetensors",
+      "bytes": 234680592,
+      "mtime_ns": 1788794743196864300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/角色与人物/明日方舟终末地 洛茜娜·狼珀·卢皮诺（ロッシ Rossi) arknights__krea2__cv3351930.safetensors",
+      "bytes": 229932352,
+      "mtime_ns": 1790272330417383700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/loras/krea2/角色与人物/蒂法-L-800_000003200TifaLockhart.safetensors",
+      "bytes": 228587784,
+      "mtime_ns": 1784467995639974900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/sam3dbody/model.ckpt",
+      "bytes": 2109129346,
+      "mtime_ns": 1782562011483180800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/sam3dbody/assets/mhr_model.pt",
+      "bytes": 696110248,
+      "mtime_ns": 1782561305886095900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/sams/sam_vit_b_01ec64.pth",
+      "bytes": 375042383,
+      "mtime_ns": 1791116042412621300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/taggers/pixai-tagger-v1.0/model.safetensors",
+      "bytes": 1945425796,
+      "mtime_ns": 1790951013383867100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors",
+      "bytes": 1192135096,
+      "mtime_ns": 1778892991795930400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/text_encoders/qwen3-vl-4b-heretic.safetensors",
+      "bytes": 8875713408,
+      "mtime_ns": 1787322243608972600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/text_encoders/qwen3vl_8b_bf16.safetensors",
+      "bytes": 17534334616,
+      "mtime_ns": 1791087583285183600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/ultralytics/bbox/Eyeful_v2-Individual.pt",
+      "bytes": 22545748,
+      "mtime_ns": 1718693222000000000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/ultralytics/bbox/adetailerFootYolov8x_v20.pt",
+      "bytes": 136712062,
+      "mtime_ns": 1791109114438283000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/ultralytics/bbox/face_yolov8m.pt",
+      "bytes": 52026019,
+      "mtime_ns": 1777820083260203600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/ultralytics/bbox/face_yolov9c.pt",
+      "bytes": 51648019,
+      "mtime_ns": 1791108096543964200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/ultralytics/bbox/hand_yolov8s.pt",
+      "bytes": 22507643,
+      "mtime_ns": 1786173005749918100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/ultralytics/bbox/hand_yolov9c.pt",
+      "bytes": 51633747,
+      "mtime_ns": 1791108103040580400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/ultralytics/segm/NSFW_01_女性-半写实_v1.pt",
+      "bytes": 55871770,
+      "mtime_ns": 1786177083397071800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/ultralytics/segm/NSFW_02_女性-动漫_v5.pt",
+      "bytes": 20585444,
+      "mtime_ns": 1786181584489451200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/ultralytics/segm/NSFW_03_男性-2D动漫_v2.pt",
+      "bytes": 124756129,
+      "mtime_ns": 1786177116658592000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/ultralytics/segm/NSFW_04_男性-真人写实_v1.pt",
+      "bytes": 143940851,
+      "mtime_ns": 1786181898391473400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/ultralytics/segm/ntd11_anime_nsfw_segm_v5-variant1.pt",
+      "bytes": 20585444,
+      "mtime_ns": 1761402316000000000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/ultralytics/segm/person_yolov8m-seg.pt",
+      "bytes": 54827683,
+      "mtime_ns": 1786173022290513700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/ultralytics/segm/YOLO26/目标检测与分割/Cock and Ball Detection (ADetailer)__v2.0__PT__cv2947933.pt",
+      "bytes": 141703493,
+      "mtime_ns": 1786181737089329700,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/upscale_models/OmniSR_X4_DIV2K.safetensors",
+      "bytes": 1697536,
+      "mtime_ns": 1786178090396867100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/vae/krea2RealVae_v10.safetensors",
+      "bytes": 507591212,
+      "mtime_ns": 1784049176112494200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/vae/qwen_image_2.1_vae_bf16.safetensors",
+      "bytes": 675509688,
+      "mtime_ns": 1791087539247350300,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/models/vae/qwen_image_vae.safetensors",
+      "bytes": 253806246,
+      "mtime_ns": 1778892858881353600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui-kjnodes/intrinsic_loras/intrinsic_lora_sd15_albedo.safetensors",
+      "bytes": 6416109,
+      "mtime_ns": 1778911056925717100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui-kjnodes/intrinsic_loras/intrinsic_lora_sd15_depth.safetensors",
+      "bytes": 6416109,
+      "mtime_ns": 1778911056946580100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui-kjnodes/intrinsic_loras/intrinsic_lora_sd15_normal.safetensors",
+      "bytes": 6416109,
+      "mtime_ns": 1778911056966847500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui-kjnodes/intrinsic_loras/intrinsic_lora_sd15_shading.safetensors",
+      "bytes": 6416109,
+      "mtime_ns": 1778911056987779600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/TheMistoAI/MistoLine/Anyline/MTEED.pth",
+      "bytes": 248298,
+      "mtime_ns": 1782357485876333900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/depth-anything/Depth-Anything-V2-Base/depth_anything_v2_vitb.pth",
+      "bytes": 389961218,
+      "mtime_ns": 1782365032781278900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/depth-anything/Depth-Anything-V2-Large/depth_anything_v2_vitl.pth",
+      "bytes": 1341395338,
+      "mtime_ns": 1782358472489550600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/hr16/DWPose-TorchScript-BatchSize5/dw-ll_ucoco_384_bs5.torchscript.pt",
+      "bytes": 135059124,
+      "mtime_ns": 1778506215216864800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/hr16/DWPose-TorchScript-BatchSize5/rtmpose-m_ap10k_256_bs5.torchscript.pt",
+      "bytes": 55018318,
+      "mtime_ns": 1782358823922861400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/hr16/yolox-onnx/yolox_l.torchscript.pt",
+      "bytes": 217697649,
+      "mtime_ns": 1782358820074255400,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/lllyasviel/Annotators/ControlNetHED.pth",
+      "bytes": 29444406,
+      "mtime_ns": 1782366875763334800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/lllyasviel/Annotators/body_pose_model.pth",
+      "bytes": 209267595,
+      "mtime_ns": 1777725646859678200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/lllyasviel/Annotators/erika.pth",
+      "bytes": 172789563,
+      "mtime_ns": 1782357846703423600,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/lllyasviel/Annotators/facenet.pth",
+      "bytes": 153718792,
+      "mtime_ns": 1777725691198575900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/lllyasviel/Annotators/hand_pose_model.pth",
+      "bytes": 147341049,
+      "mtime_ns": 1777725667598958000,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/lllyasviel/Annotators/netG.pth",
+      "bytes": 217631959,
+      "mtime_ns": 1782360953711442800,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/lllyasviel/Annotators/sk_model.pth",
+      "bytes": 17173511,
+      "mtime_ns": 1782360939329651100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/lllyasviel/Annotators/sk_model2.pth",
+      "bytes": 17173511,
+      "mtime_ns": 1782360941283857500,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/yzd-v/DWPose/yolox_l.onnx",
+      "bytes": 216746733,
+      "mtime_ns": 1778506196605029200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_controlnet_aux/diffusion_edge/taming/modules/autoencoder/lpips/vgg.pth",
+      "bytes": 7289,
+      "mtime_ns": 1768742690250110200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_mesh_graphormer/modeling/data/mano_195_adjmat_indices.pt",
+      "bytes": 21639,
+      "mtime_ns": 1768742690454008900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_mesh_graphormer/modeling/data/mano_195_adjmat_size.pt",
+      "bytes": 173,
+      "mtime_ns": 1768742690454008900,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_mesh_graphormer/modeling/data/mano_195_adjmat_values.pt",
+      "bytes": 5663,
+      "mtime_ns": 1768742690455021200,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_mesh_graphormer/modeling/data/smpl_431_adjmat_indices.pt",
+      "bytes": 48423,
+      "mtime_ns": 1768742690463117100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_mesh_graphormer/modeling/data/smpl_431_adjmat_size.pt",
+      "bytes": 175,
+      "mtime_ns": 1768742690463117100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_mesh_graphormer/modeling/data/smpl_431_adjmat_values.pt",
+      "bytes": 12359,
+      "mtime_ns": 1768742690463117100,
+      "sha256": null,
+      "verification": "path_size_mtime_only"
+    }
+  ],
+  "count": 384,
+  "bytes": 335256620629,
+  "weights_in_git": false,
+  "full_weight_hashes_computed": false
+}

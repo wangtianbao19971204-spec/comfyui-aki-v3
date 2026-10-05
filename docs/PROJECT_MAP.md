@@ -1,0 +1,33 @@
+# 项目地图与归属
+
+本机运行根目录：`G:\ComfyUI-aki-v3`。维护仓：`G:\ComfyUI-aki-v3\maintenance\comfyui`。Windows 路径不区分大小写，不能在同一父目录再建一个与现有 `ComfyUI` 同名的 `comfyui`，所以维护仓单独放在 maintenance 下。
+
+| 范围 | 实际源路径（相对运行根） | 本仓库管理方式 |
+|---|---|---|
+| ComfyUI 本体 | `ComfyUI/` | 源码快照、上游 URL/提交、依赖版本；不复制嵌套 .git |
+| 权威整合插件 | `ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/` | 统一包与 5 个 modules 的当前源码，不仅依赖各自旧 Git 跟踪名单 |
+| 前端 UI | 统一包 `web/` | 主题、图标、工作台、资料检索、目标写入、运行控制 |
+| 常用控制台 | 统一包 `modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/` | 导航、区域定位、控件与子图原参数映射 |
+| 正式 UAP | `ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json` | 完整原文件，包含所有内嵌子图/连线/模式，不另拆一套失联子流程 |
+| 权威 UAP 模板 | `production_tools/templates/UAP统一生产工作台_v2.json` | 与正式文件分别保留、分别核对哈希 |
+| 其他个人流与历史流 | `ComfyUI/user/default/workflows/*.json` | 全部保留；不把历史流默认为当前构建源或已通过验收 |
+| 冻结模板 | `production_tools/templates/` | 原样保存，允许与个人副本不同，不强行同步覆盖 |
+| 启动与白名单 | `production_tools/profiles.json`、`launch.py`、根目录启动 CMD | 配置与脚本版本化；当前 live 服务身份另查，不能从旧文档的插件数量推断 |
+| 权威共享资料 | 统一包 WeiLin 模块 `user_data/prompt_selector/` | 6 个当前主文件分片；data、默认资料、语义投影、关联、同步日志、归属说明 |
+| Tag / 历史数据库 | 同一 WeiLin 模块 `user_data/userdatas_zh_CN_*.db` | backup API → SQL 分片；分组、词条、个人字段、修订、历史均保留 |
+| 预览原图与缩略图 | `prompt_selector/preview`、`preview_thumbnails` | 外部媒体清单，不进 Git；不能视作可随意删除的缓存 |
+| 模型 | `ComfyUI/models` 及生产插件内权重 | 路径/大小/mtime 清单及工作流引用关系；权重本体留在外部 |
+| 网页/法典导入 | `benchmark_reports/source_update_flow` | 当前门禁脚本与说明；其他历史批次数据仍留在原目录 |
+| 验收与已知问题 | 当前 part_refinement_pipeline STATE 指向的收据 | 当前 UI、工作流与推理证据分开保存，不互相替代 |
+
+## 当前流程边界
+
+UAP 保留九个工作分支：Anima 原版、Anima 2.9B、Krea2 生产，Krea2 编辑、裁剪精修、透明抠图、左右扩图、二倍和四倍超分工具。
+
+两套 Anima 的细化次序：手 → 脚 → 原有区域标准/快速互斥支路 → 脸 → 眼 → 可选 1.5× 二放。工作台只显示/编辑原节点和子图，不额外生成一套隐形采样参数。细化与二放默认关闭；头发、四肢、人体、服装、独立皮肤细化不新增。独立 08/09 超分工具不是主流程自动续段。
+
+工作台五模块：WeiLin 共享资料、Anima 选择器、Gallery/UAP、LoRA Manager、custom-scripts 补全。外层旧同名目录是兼容入口或历史副本；实际归属以统一包 `modules.json` 和当前服务注册为准。
+
+## 捕获范围不是全部磁盘镜像
+
+当前 production 配置之外的插件记录在 `inventory/upstreams.json`，但不把所有视频/旧 LLM/已禁用包拷进生产基线。Python 前端分发包、CUDA、下载模型、LoRA Manager 的大型 Civitai 缓存、图库缓存、源网页原件、训练项目和历史 benchmark 媒体仍为外部资源。迁移前根据实际用途补齐，不可声称仅 clone 即可完全复现整台机器。

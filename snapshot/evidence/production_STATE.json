@@ -1,0 +1,279 @@
+{
+  "status": "published_anime_visual_acceptance_pass",
+  "scope": "Anime-inspired UI palette and existing SVG icons only; prior inference findings remain open.",
+  "owner_thread": "01a1061f-c0b3-7f40-8168-1bc0ca82582c",
+  "active_run": null,
+  "current_phase": "anime_visual_polish_complete",
+  "verdict": "UI_ANIME_VISUAL_PASS",
+  "inference_verdict": "EXECUTION_12_OF_12_VISUAL_10_LIMITED_PASS_2_FAIL",
+  "ui_polish_acceptance": {
+    "run": "20261005_workbench_anime_polish",
+    "changed_frontend_files": 17,
+    "unit_checks": 75,
+    "final_browser_checks": 23,
+    "protected_unchanged_files": 65,
+    "served_hashes": 17,
+    "backend_jobs": 0
+  },
+  "deliverables": {
+    "new_workflows": [
+      "ComfyUI\\user\\default\\workflows\\检测模板_05_脸手眼_仅蒙版.json",
+      "ComfyUI\\user\\default\\workflows\\检测模板_06_人体服装皮肤_仅蒙版.json",
+      "ComfyUI\\user\\default\\workflows\\检测模板_07_脚_仅蒙版.json",
+      "ComfyUI\\user\\default\\workflows\\生产扩展_10_部位细化_Anima.json"
+    ],
+    "new_models": [
+      "ComfyUI\\models\\ultralytics\\bbox\\face_yolov9c.pt",
+      "ComfyUI\\models\\ultralytics\\bbox\\hand_yolov9c.pt",
+      "ComfyUI\\models\\ultralytics\\bbox\\Eyeful_v2-Individual.pt",
+      "ComfyUI\\models\\ultralytics\\bbox\\adetailerFootYolov8x_v20.pt",
+      "ComfyUI\\models\\ultralytics\\segm\\ntd11_anime_nsfw_segm_v5-variant1.pt",
+      "ComfyUI\\models\\RMBG\\body_segment\\deeplabv3p-resnet50-human.onnx",
+      "ComfyUI\\models\\RMBG\\segformer_clothes\\model.safetensors",
+      "ComfyUI\\models\\RMBG\\segformer_clothes\\config.json",
+      "ComfyUI\\models\\RMBG\\segformer_clothes\\preprocessor_config.json"
+    ],
+    "preexisting_workflows_unchanged": [
+      "ComfyUI\\user\\default\\workflows\\检测模板_01_SAM31_五部位_仅蒙版.json",
+      "ComfyUI\\user\\default\\workflows\\检测模板_02_YOLO_五部位_仅蒙版.json",
+      "ComfyUI\\user\\default\\workflows\\检测模板_03_YOLO_男性专用_仅蒙版.json",
+      "ComfyUI\\user\\default\\workflows\\实验模板_04_SAM31_提示词候选_仅蒙版.json"
+    ]
+  },
+  "last_published_changes": {
+    "workflow_files_modified": 0,
+    "frontend_files_modified": 17,
+    "builder_files_modified": 0,
+    "core_or_backend_edits": 0,
+    "models_added": 0,
+    "plugins_installed": 0,
+    "service_restarted": false,
+    "queue_cleared": false,
+    "published": true
+  },
+  "production_changes": {
+    "workflow_files_modified": 0,
+    "frontend_files_modified": 17,
+    "builder_files_modified": 0,
+    "core_or_backend_edits": 0,
+    "models_added": 0,
+    "plugins_installed": 0,
+    "service_restarted": false,
+    "queue_cleared": false,
+    "published": true
+  },
+  "acceptance": {
+    "run": "20261005_native_e2e_acceptance",
+    "backend_jobs": 12,
+    "backend_success": 12,
+    "visual_limited_pass": 10,
+    "visual_failed_cases": [
+      "ext05",
+      "ext07"
+    ],
+    "findings": [
+      "E2E-EXT05-001",
+      "E2E-EXT07-001"
+    ],
+    "all_image_quality_passed": false,
+    "nine_branch_selected_paths_executed": true,
+    "all_optional_features_verified": false,
+    "region_detailers_executed": false,
+    "browser_click_lifecycle_rerun": false,
+    "protected_files_unchanged": 69,
+    "served_frontend_hashes_matched": 9,
+    "production_sha256": "c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a",
+    "template_sha256": "c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a",
+    "queue": {
+      "running": 0,
+      "pending": 0
+    },
+    "peak_whole_gpu_mib": 31449,
+    "min_system_available_gib": 0.392
+  },
+  "prior_ui_acceptance": {
+    "run": "20261005_workflow_product_repair",
+    "unit_checks": 83,
+    "structure_checks": 1156,
+    "browser_checks": 32,
+    "backend_jobs": 0,
+    "full_nine_branch_inference": false,
+    "production_sha256": "c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a",
+    "template_sha256": "c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a",
+    "prior_visual_acceptance": "20261004_k2_usdu_repair; unchanged values; not rerun here"
+  },
+  "rollback": {
+    "script": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261005_workbench_anime_polish\\manage.cjs",
+    "runtime": "node",
+    "check_argument": "rollback-check",
+    "apply_argument": "rollback",
+    "scope": "Only this 17-file UI release; prior workflow/interaction release retained",
+    "safety": "Refuses later guarded file drift, busy queue or changed service identity"
+  },
+  "known_limits": [
+    "One neutral sample and one seed per case, not cross-scene reliability or arbitrary LoRA compatibility acceptance.",
+    "Ext05 crop refinement produced rectangular background artifacts; ext07 outpaint retained visible junction lines. Neither passed seamless image-quality acceptance.",
+    "Regional detailer branches were excluded; no adult-region generation was performed.",
+    "Native browser graph export plus API inference is not a new real-click UI lifecycle/cancellation acceptance.",
+    "Only selected optional controls were enabled; ext07 exercised left/right defaults, not all four directions.",
+    "Peak whole-card GPU occupancy was 31449 MiB and minimum available system RAM was 0.392 GiB; no OOM observed, no concurrency or large-batch guarantee.",
+    "Production parameters, default disabled refinements/upscale, user data and formal workflow hashes are unchanged."
+  ],
+  "prior_ui_known_limits": [
+    "No backend inference, paid or online model API calls, uploads, queue clearing, memory release or service restart in this repair.",
+    "Nine branches were switched and serialized; this is not full nine-branch GPU or image-quality acceptance.",
+    "Two native/daily requests and one earlier daily request were intercepted locally at /api/prompt; no prompt was submitted.",
+    "Execution lifecycle checks used synthetic local EventTarget events, not live detection, redraw or cancellation evidence.",
+    "Upstream nodes do not supply hit/redraw counts here; the UI reports observed lifecycle only and does not invent counts.",
+    "Model contracts are a static allowlist from locally inspected model headers, not a per-submission file-content check; new or replaced model files need review. LoRA compatibility and quality are not guaranteed.",
+    "Formal prompts, LoRAs, sampler/detector/upscale values, seeds and default off/mute/bypass modes are unchanged.",
+    "Historical standalone sources remain snapshots; only the canonical UAP v2 template is the default build source.",
+    "Optional low-priority graph cleanup, repeated SAM loader profiling, cross-scene quality regression and physical IME were not performed."
+  ],
+  "updated_at": "2026-10-05T02:06:49.090Z",
+  "runs": [
+    {
+      "run": "20261004_1911_hair_limb_branches",
+      "status": "live_accepted",
+      "receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261004_1911_hair_limb_branches\\FINAL_DELIVERY.json"
+    },
+    {
+      "run": "20261004_1943_revert_to_5stage",
+      "status": "revert_accepted",
+      "receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261004_1943_revert_to_5stage\\FINAL_DELIVERY.json"
+    },
+    {
+      "run": "20261004_2000_usdu_seam_fix",
+      "status": "live_accepted",
+      "receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261004_2000_usdu_seam_fix\\FINAL_DELIVERY.json"
+    },
+    {
+      "run": "20261004_2030_eye_branch_10A",
+      "status": "live_accepted_via_replica",
+      "receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261004_2030_eye_branch_10A\\FINAL_DELIVERY.json"
+    },
+    {
+      "run": "20261004_2110_10A_yolo_sam_align",
+      "status": "live_accepted_via_replica",
+      "receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261004_2110_10A_yolo_sam_align\\FINAL_DELIVERY.json"
+    },
+    {
+      "run": "20261004_2140_10BC_yolo_sam_align",
+      "status": "live_accepted_via_replica",
+      "receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261004_2140_10BC_yolo_sam_align\\FINAL_DELIVERY.json"
+    },
+    {
+      "run": "20261004_2200_nsfw_force_inpaint",
+      "status": "accepted_parameter_change",
+      "receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261004_2200_nsfw_force_inpaint\\FINAL_DELIVERY.json"
+    },
+    {
+      "run": "20261004_2220_naming_align",
+      "status": "accepted_cosmetic",
+      "receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261004_2220_naming_align\\FINAL_DELIVERY.json"
+    },
+    {
+      "run": "20261004_repair_audit",
+      "status": "repaired_verified_with_limits",
+      "receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261004_repair_audit\\FINAL_DELIVERY.json"
+    },
+    {
+      "run": "20261004_live_acceptance",
+      "status": "acceptance_complete_with_findings",
+      "receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261004_live_acceptance\\STATE.json"
+    },
+    {
+      "run": "20261004_k2_usdu_repair",
+      "status": "published_limited_visual_acceptance_pass",
+      "receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261004_k2_usdu_repair\\FINAL_DELIVERY.json"
+    },
+    {
+      "run": "20261005_workflow_product_repair",
+      "status": "published_ui_structural_acceptance_pass",
+      "receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261005_workflow_product_repair\\FINAL_DELIVERY.json"
+    },
+    {
+      "run": "20261005_native_e2e_acceptance",
+      "status": "neutral_native_acceptance_complete_with_findings",
+      "receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261005_native_e2e_acceptance\\FINAL_DELIVERY.json"
+    },
+    {
+      "run": "20261005_workbench_visual_polish",
+      "status": "published_visual_convenience_acceptance_pass",
+      "receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261005_workbench_visual_polish\\FINAL_DELIVERY.json"
+    },
+    {
+      "run": "20261005_workbench_anime_polish",
+      "status": "published_anime_visual_acceptance_pass",
+      "receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261005_workbench_anime_polish\\FINAL_DELIVERY.json"
+    }
+  ],
+  "latest_receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261005_workbench_anime_polish\\FINAL_DELIVERY.json",
+  "latest_release_receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261005_workbench_anime_polish\\FINAL_DELIVERY.json",
+  "latest_workflow_release_receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261005_workflow_product_repair\\FINAL_DELIVERY.json",
+  "latest_inference_receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261005_native_e2e_acceptance\\FINAL_DELIVERY.json",
+  "next_action": "Anime UI polish complete. Save unsaved work before opening a fresh ComfyUI page. Existing ext05/ext07 image-fusion findings remain open; no image-quality repair in this UI release.",
+  "enable_state_decision": {
+    "decision": "All refinements off by default and selectable in the workbench.",
+    "a1": "six instances mode=4 (bypass)",
+    "a29": "inactive branch mode=2 (mute); saved per-part modes=4 (bypass)",
+    "mode_semantics": {
+      "0": "execute",
+      "2": "mute, no execution",
+      "4": "bypass, pass-through"
+    },
+    "controls": "10A hand, 10B foot, 10C face, 10D/10E regional standard/fast (exclusive), 10F eyes"
+  },
+  "historical_acceptance": {
+    "method": "ComfyUI /prompt API on the live 8188 instance, then measured mask coverage",
+    "runs": 10,
+    "all_success": true,
+    "measurements": "artifact_manifest.json#measurements",
+    "health": "health.json"
+  },
+  "historical_production_changes": {
+    "workflows_added": 4,
+    "workflows_modified_in_place": 4,
+    "node_or_core_code_edits": 0,
+    "models_added": 8,
+    "model_aliases_added": 1,
+    "third_party_plugins_installed": 0,
+    "service_restarted": false,
+    "queue_cleared": false,
+    "current_repair": {
+      "workflow_files": 3,
+      "frontend_files": 3,
+      "core_or_third_party_edits": 0,
+      "plugins_installed": 0,
+      "service_restarted": false,
+      "queue_cleared": false,
+      "published": false
+    }
+  },
+  "prior_visual_polish_acceptance": {
+    "run": "20261005_workbench_visual_polish",
+    "changed_frontend_files": 3,
+    "unit_checks": 52,
+    "final_browser_checks": 29,
+    "protected_unchanged_files": 66,
+    "backend_jobs": 0
+  },
+  "prior_workflow_published_changes": {
+    "workflow_files_modified": 2,
+    "frontend_files_modified": 9,
+    "builder_files_modified": 1,
+    "core_or_backend_edits": 0,
+    "models_added": 0,
+    "plugins_installed": 0,
+    "service_restarted": false,
+    "queue_cleared": false,
+    "published": true
+  },
+  "prior_workflow_rollback": {
+    "script": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261005_workflow_product_repair\\release.py",
+    "check_argument": "rollback-check",
+    "apply_argument": "rollback",
+    "scope": "Only this 12-file release; prior Krea2 repair retained",
+    "safety": "Refuses later file drift, a busy queue or changed service identity"
+  }
+}

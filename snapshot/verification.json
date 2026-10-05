@@ -1,0 +1,18 @@
+{
+  "time": "2026-10-05T02:43:16.556977+00:00",
+  "pass": true,
+  "entry_count": 5307,
+  "failures": [],
+  "reviewed_security_fixtures": [
+    {
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/tests/test_v53_legacy_security.py",
+      "sha256": "06d5f2680138c9fa4919fc13afd362fe3c969fe58c1c54d635380fe80181e7a1",
+      "reason": "reviewed_synthetic_security_test"
+    },
+    {
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/tests/test_v53_ssrf.py",
+      "sha256": "32a06d3f7d31f43c8d558f6f6223d9b8accf37c832b20181b2f8c5c1ef00c812",
+      "reason": "reviewed_synthetic_security_test"
+    }
+  ]
+}

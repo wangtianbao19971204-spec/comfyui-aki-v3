@@ -1,0 +1,59 @@
+{
+  "status": "published_anime_visual_acceptance_pass",
+  "time": "2026-10-05T02:06:49.090Z",
+  "scope": "Anime-inspired UI palette and existing SVG icons only; prior inference findings remain open.",
+  "release_files": 17,
+  "unit_checks": 75,
+  "browser_checks": 23,
+  "guarded_files": 82,
+  "protected_unchanged": 65,
+  "served_matching": 17,
+  "workflow_sha256": "c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a",
+  "workflow_changed": false,
+  "parameters_changed": false,
+  "user_data_changed": false,
+  "backend_jobs": 0,
+  "queue": {
+    "running": 0,
+    "pending": 0
+  },
+  "services": {
+    "comfyui_pid": 53232,
+    "qwen_pid": 51312,
+    "restarted": false
+  },
+  "screenshots": [
+    "daily_final_1280.png",
+    "daily_anime_light_1280.png",
+    "daily_anime_dark_1280.png",
+    "workbench_dark_760.png",
+    "icon_size_fixture.png"
+  ],
+  "evidence": [
+    "unit_results.json",
+    "browser_acceptance.json",
+    "final_guard.json",
+    "rollback-check_receipt.json",
+    "browser_cleanup.json"
+  ],
+  "rollback": {
+    "script": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261005_workbench_anime_polish\\manage.cjs",
+    "runtime": "node",
+    "check_argument": "rollback-check",
+    "apply_argument": "rollback",
+    "scope": "Only this 17-file UI release; prior workflow/interaction release retained",
+    "safety": "Refuses later guarded file drift, busy queue or changed service identity"
+  },
+  "cleanup": {
+    "own_lock_archived": true,
+    "test_tabs_closed": 2,
+    "viewport_reset": true,
+    "user_tabs_closed": false
+  },
+  "known_limits": [
+    "UI only; ext05/ext07 image-quality findings remain open",
+    "No inference, physical IME, exhaustive nine-branch or all-optional-feature retest",
+    "Icon contact sheet is a removed test fixture"
+  ],
+  "report": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261005_workbench_anime_polish\\REPORT.txt"
+}

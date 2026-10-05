@@ -1,0 +1,416 @@
+{
+  "core": {
+    "path": "ComfyUI",
+    "own_git": true,
+    "head": "cc0fc21fea7a6a82f568362b15b7fbd713b419c1",
+    "upstream": "https://github.com/Comfy-Org/ComfyUI",
+    "tracked_dirty": false
+  },
+  "plugins": [
+    {
+      "path": "ComfyUI/custom_nodes/civitai-toolkit",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI-Anima-LLLite",
+      "own_git": true,
+      "head": "c8ad372b3adea39bb1aa37db9e278978bef2c222",
+      "upstream": "https://github.com/kohya-ss/ComfyUI-Anima-LLLite",
+      "tracked_dirty": true,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui-anima-tools",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui-custom-scripts",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI-Danbooru-Gallery-V50-GalleryOnly",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI-DazzleSwitch",
+      "own_git": true,
+      "head": "0c11da0fc65abb32b8f7584fd7d6ba449aec8c9a",
+      "upstream": "https://github.com/DazzleNodes/ComfyUI-DazzleSwitch",
+      "tracked_dirty": false,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui-dev-utils",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI-Direct-LLM-Chat",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui-easy-use",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI-GGUF",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI-Impact-Pack",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui-impact-subpack",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui-kjnodes",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui-krea2-controlnet",
+      "own_git": true,
+      "head": "79ebfd3bd80d2180b334dd7ce57f3c9ddaa0848f",
+      "upstream": "https://github.com/facok/comfyui-krea2-controlnet",
+      "tracked_dirty": false,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui-krea2edit",
+      "own_git": true,
+      "head": "86f886dac23013d88996e3a2e99093ba44d322fb",
+      "upstream": "https://github.com/lbouaraba/comfyui-krea2edit.git",
+      "tracked_dirty": false,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui-lora-manager",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI-LTXVideo",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI-Manager",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI-Olm-DragCrop",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI-Olm-JoyCaption",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI-OpenPose-Studio",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI-PixAI-Tagger",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI-RMBG",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui-sortlist",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench",
+      "own_git": true,
+      "head": "cc3bc63d55843f94b79f4e16042e03eccbfcc56e",
+      "upstream": null,
+      "tracked_dirty": true,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI-VideoHelperSuite",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui-wd14-tagger.disabled",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI_Comfyroll_CustomNodes",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_controlnet_aux",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI_Custom_Nodes_AlekPet",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI_IPAdapter_plus",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_llm_party",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/comfyui_memory_cleanup",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI_Mira",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/ComfyUI_UltimateSDUpscale",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/llama-cpp_vllm",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/nsfwprompt",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/prompt-assistant",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/rgthree-comfy",
+      "own_git": true,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": false,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/vnccs",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": false,
+      "source_captured": false
+    },
+    {
+      "path": "ComfyUI/custom_nodes/vnccs-utils",
+      "own_git": true,
+      "head": "1908ddfa8a5084a360783ca596f27678743c5496",
+      "upstream": "https://github.com/AHEKOT/ComfyUI_VNCCS_Utils",
+      "tracked_dirty": false,
+      "production_profile": true,
+      "source_captured": true
+    },
+    {
+      "path": "ComfyUI/custom_nodes/WeiLin-Comfyui-Tools-V52-FullPromptSelector",
+      "own_git": false,
+      "head": null,
+      "upstream": null,
+      "tracked_dirty": null,
+      "production_profile": false,
+      "source_captured": false
+    }
+  ]
+}

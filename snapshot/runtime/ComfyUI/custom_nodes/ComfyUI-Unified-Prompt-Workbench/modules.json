@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "modules": [
+    {"key":"weilin","directory":"WeiLin-Comfyui-Tools-V52-FullPromptSelector","label":"共享资料与提示词"},
+    {"key":"anima","directory":"comfyui-anima-tools","label":"Anima 标签与随机选择"},
+    {"key":"gallery","directory":"ComfyUI-Danbooru-Gallery-V50-GalleryOnly","label":"Gallery 与 UAP"},
+    {"key":"lora_manager","directory":"comfyui-lora-manager","label":"LoRA、模型与 Embedding"},
+    {"key":"completion","directory":"comfyui-custom-scripts","label":"补全与工作流工具"}
+  ]
+}

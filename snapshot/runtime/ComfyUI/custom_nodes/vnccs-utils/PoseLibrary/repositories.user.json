@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "repositories": [
+    {
+      "repo_id": "MIUProject/VNCCS_PoseLibrary_Main",
+      "title": "VNCCS Pose Library",
+      "description": "Default curated VNCCS Pose Studio pose library.",
+      "manifest_path": "pose_library.json",
+      "enabled": true,
+      "status": "error",
+      "pose_count": 16,
+      "last_checked": 1791166083.2879558,
+      "last_error": "(MaxRetryError(\"HTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /api/models/MIUProject/VNCCS_PoseLibrary_Main (Caused by ConnectTimeoutError(<HTTPSConnection(host='huggingface.co', port=443) at 0x1f750ba7ed0>, 'Connection to huggingface.co timed out. (connect timeout=None)'))\"), '(Request ID: 4cb5666d-7355-4f59-b0bc-c91b85b30a10)')",
+      "sha": "baef0455ef9d3cc31ce3e2a407f722069355c617",
+      "downloaded_count": 0,
+      "skipped_count": 16,
+      "removed_count": 0,
+      "updated_at": "2026-05-23T22:32:53.471063+00:00"
+    }
+  ]
+}
