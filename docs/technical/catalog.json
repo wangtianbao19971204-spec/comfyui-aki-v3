@@ -427,7 +427,8 @@
       ],
       "tests": [],
       "evidence": [
-        "docs/receipts/anima29_lorapatch_20261005.json"
+        "docs/receipts/anima29_lorapatch_20261005.json",
+        "docs/receipts/anima29_lorapatch_original_anima_check_20261005.json"
       ],
       "acceptance": "historical",
       "watch": [

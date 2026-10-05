@@ -1,0 +1,54 @@
+{
+  "receipt": "anima29_lorapatch_original_anima_check_20261005",
+  "parent_receipt": "docs/receipts/anima29_lorapatch_20261005.json",
+  "question": "After installing ComfyUI-Anima-2.9B-loraPatch, do original Anima (28 blocks) and Anima 2.9B (40 blocks) both still behave correctly?",
+  "method": "Same prompt, same seed 645613437897959, same sampler (28 steps, cfg 3.5, euler, sgm_uniform, AuraFlow shift 3), 768x1344. The only variable is the ANIMA_LORA_REMAP state, changed by restarting the service. Original Anima used Anima/animayume_v15Base.safetensors (the model the production base workflow loads).",
+  "loras": [
+    "anima/画风与画师/anima-base-1-painterly-v2.safetensors",
+    "anima/角色与人物/remielle-dan-zzz-anima-Tanger.safetensors"
+  ],
+  "results": {
+    "original_anima_patch_on_vs_off_both_lora_1_0": {
+      "max_abs_diff": 0,
+      "mean_abs_diff": 0.0,
+      "pct_pixels_gt8": 0.0,
+      "verdict": "BIT-IDENTICAL. The patch is an exact no-op on 28-block Anima; no pixel changed."
+    },
+    "anima_29b_patch_on_vs_off_both_lora_0_7": {
+      "max_abs_diff": 224,
+      "mean_abs_diff": 35.66,
+      "pct_pixels_gt8": 99.0,
+      "verdict": "Decisively different. The patch is the sole cause of change on the 40-block model."
+    },
+    "original_anima_nolora_vs_lora_1_0_patch_on": {
+      "max_abs_diff": 214,
+      "mean_abs_diff": 51.27,
+      "pct_pixels_gt8": 99.7,
+      "verdict": "Base-trained LoRAs work normally on original Anima, as before."
+    }
+  },
+  "log_evidence": {
+    "patch_on_server": {
+      "remap_lines_for_original_anima_runs": 0,
+      "remap_lines_for_anima_29b_run": 2,
+      "note": "On a 28-block model the patch emits no line at all - the gating branch for len(model_blocks)==28 returns silently."
+    },
+    "patch_off_server": {
+      "remap_lines": 0
+    }
+  },
+  "images": {
+    "ORIG_noLora_00001_.png": "5b226c1860ce651d696598c41e4d0fb620b2c4c87da41539e0a3633c7a159d16",
+    "ORIG_lora10_00001_.png": "b3543317c9db4419e5ba38a2060f4724d9adee488f7db23d43259ce14d44fcd1",
+    "ORIG_lora10_off_00001_.png": "3da593a922126cc5e141ab84749ebef0db7b7775ce04e5fc5dba85bb8527cd19",
+    "A29_lora07_00001_.png": "22c0e69896305130965abf7b106cb1205a8b77f56b698907e08ef0cac06d9f2f",
+    "A29_lora07_off_00001_.png": "c15f75558ca83d0a5ec691577a8e3db7010d54026c154254b5c62f9ad6cddf8a"
+  },
+  "side_finding": "Stacking these two LoRAs at 1.0 washes the image out on original Anima too, so the over-application seen on 2.9B is a strength issue, not a patch artefact.",
+  "service_after_check": {
+    "pid": 44944,
+    "queue": "0/0",
+    "patch_active": true,
+    "log": "production_tools/logs/20261005_141056_production.stderr.log"
+  }
+}
