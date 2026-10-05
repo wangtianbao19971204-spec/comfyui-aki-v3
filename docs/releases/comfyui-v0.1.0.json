@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "package": "comfyui",
+  "version": "0.1.0",
+  "base_commit": "b2d326240a39ebe8699caf4b1aaf45f697ae8094",
+  "snapshot_manifest_sha256": "c52867f73b37bfc288817ce592b7d07db7993ecf699ba9506fef36572f0a310c",
+  "review_sha256": "f1cef2f5beef3b1b994364a2a90745ebdaff9f6b259cc27ddf3769ee431ece92",
+  "reviewed_notes": {
+    "schema": 1,
+    "summary": "首个统一 comfyui 维护版本：技术实现补档、可持续提交门禁与独立版本治理。",
+    "components": [
+      "runtime-and-workflows",
+      "library-import-previews-taxonomy",
+      "training-forges",
+      "maintenance-and-security"
+    ],
+    "changes": [
+      "建立 16 项 L0-L4 功能接手目录，补入 445 份技术原件和 11 份现行 SD-Trainer 外层实现；不执行旧脚本。",
+      "接收独立 Anima 2.9B 补丁部署、原版回归和有限 A/B 证据；用户工作流强度保持不变。",
+      "源码快照 8499 个逻辑项；仓外 353 项配置/资源/运行数据组合保持明确边界，动态数据库不被旧检查点覆盖。",
+      "提交检查对应技术说明和归档哈希；18 项触发词误报仅按精确路径、完整 SHA 与单条规则审核。",
+      "增加显式 SemVer 递增、独立本地标签门禁与回滚摘要；不修改第三方版本，不自动推送或部署。"
+    ],
+    "tests": [
+      "完整维护单测 317/317 PASS，含隔离真实 bundle/clone、版本、归档、凭证及临时 index 回归；不是生产 GPU 或浏览器重验收。",
+      "snapshot seal/verify 为 8499 项通过；数据库结构契约通过。源/运行哈希和 445 份技术原件 SHA 通过。",
+      "353 项外部状态 inventory/verify-dry-run 曾在同一核验窗口通过，335 项为 unresolved references；不是全部资源备份，后续运行态变化需刷新。",
+      "协调任务收据的 7 个新增补丁源码与 profiles 部署匹配；追加原版回归 5 个输出文件 SHA 匹配，结论限于实测样本。",
+      "提交使用本地真实 hooks；发行 tag 还必须独立完成全历史正文/名称安全门禁、快照和 Git strict fsck，不能以旧包扫描替代。"
+    ],
+    "rollback": {
+      "target_commit": "f1e61294f414a90f2c1eeab88c240ca118b38b31",
+      "receipt_id": "technical-maintenance-20261005-recovery",
+      "receipt_sha256": "4946f33f0b6da5770c8b23c28ea1b1371bb1116037859998ea27a4b4c553fad2",
+      "scope": [
+        "维护仓前一检查点的隔离恢复；运行根路由和独立补丁的原件位置另在私密回执。"
+      ],
+      "limitations": [
+        "回滚计划未执行；不授权整树重置、重启或在线数据库替换。",
+        "旧 public-v3 bundle 只覆盖 f1 基线，不包含本次新增内容。",
+        "模型、预览、最新运行资料、环境和私密配置不属于 Git 镜像；普通私密目录不是加密或异地灾备。",
+        "第三方法典资料再分发许可须在真正公开前另核；本版没有 remote、push 或 GitHub 上传。"
+      ]
+    }
+  },
+  "runtime_deployed": false
+}

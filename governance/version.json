@@ -1,8 +1,17 @@
 {
   "schema": 1,
   "package": "comfyui",
-  "version": "0.0.0",
-  "state": "unreleased-baseline",
+  "version": "0.1.0",
+  "state": "prepared",
   "tag_prefix": "comfyui-v",
-  "prepared": null
+  "prepared": {
+    "base_commit": "b2d326240a39ebe8699caf4b1aaf45f697ae8094",
+    "previous_version": "0.0.0",
+    "bump": "minor",
+    "notes_path": "docs/releases/comfyui-v0.1.0.json",
+    "notes_sha256": "c3df3afc92bd0008e19f345232c6b74fdeb205901ba58903c30c50d0eedf3129",
+    "snapshot_manifest_sha256": "c52867f73b37bfc288817ce592b7d07db7993ecf699ba9506fef36572f0a310c",
+    "review_sha256": "f1cef2f5beef3b1b994364a2a90745ebdaff9f6b259cc27ddf3769ee431ece92",
+    "rollback_receipt_sha256": "4946f33f0b6da5770c8b23c28ea1b1371bb1116037859998ea27a4b4c553fad2"
+  }
 }
