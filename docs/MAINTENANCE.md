@@ -10,6 +10,7 @@
 
 ```powershell
 git config --local core.hooksPath .githooks
+git config --local core.longpaths true
 & ..\..\python\python.exe -X utf8 -B scripts\project.py status
 # 在 snapshot/runtime 中完成已授权的代码修改和专项测试，然后：
 & ..\..\python\python.exe -X utf8 -B scripts\project.py seal --note "本次修改说明"
@@ -59,7 +60,7 @@ adopt 只移动维护仓的快照：旧版本保留到 ignored `local/backups/�
 
 bundle 包含已提交的全部 refs/可达历史；不包含 ignored 文件、未提交内容、外部权重和媒体。工具要求干净工作树、快照完整性和完整历史凭证/资源门禁通过，再核验 fsck、bundle、refs 稳定性和 SHA-256，不接触远端。不能用 `--audit-content-only` 代替公开门禁，也不能绕过 hooks 发布。
 
-每次在新目录 clone bundle，再做 snapshot verify、全历史凭证检查与所需离线还原。公开时仅推经过核验的主仓 refs；禁止整目录打包本机 `.git`、local、private-archives、旧克隆/还原目录或首版旧 bundle。GitHub 目的地仍须用户明确指定。
+每次在新目录 clone bundle（Windows 用 `git clone -c core.longpaths=true`），再做 snapshot verify、全历史凭证检查与所需离线还原。公开时仅推经过核验的主仓 refs；禁止整目录打包本机 `.git`、local、private-archives、旧克隆/还原目录或首版旧 bundle。GitHub 目的地仍须用户明确指定。
 
 ## 5. 回退
 

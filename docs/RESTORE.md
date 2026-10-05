@@ -5,7 +5,7 @@
 仅使用新验收回执列出的 `comfyui-public-ready-20261005.bundle`（后续版本用各自回执命名），校验 SHA 后执行。旧 `comfyui.bundle` 含历史凭证，只能私有归档，不能公开复用。
 
 ```powershell
-git clone .\comfyui-public-ready-20261005.bundle .\comfyui
+git clone -c core.longpaths=true .\comfyui-public-ready-20261005.bundle .\comfyui
 git -C .\comfyui fsck --full
 cd .\comfyui
 python -X utf8 -B scripts\snapshot.py verify
@@ -14,6 +14,8 @@ git config --local core.hooksPath .githooks
 ```
 
 克隆产生的 origin 只是本地 bundle 路径，不是在线远端。首次仓库使用专用维护作者标识，不修改用户全局 Git 身份；后续提交可以配置你自己的 repo-local user.name/user.email。
+
+Windows 必须在初次检出前使用上面的 `-c core.longpaths=true`：整合插件目录较深，较长的父目录可能触发 `Filename too long`。该选项只设置新克隆仓库，不修改全局 Git 或系统注册表。已有仓库可用 `git config --local core.longpaths true`；失败的半成品克隆不要当作验收通过，也不要直接向生产恢复缺失文件。
 
 ## 只向全新目录物化
 

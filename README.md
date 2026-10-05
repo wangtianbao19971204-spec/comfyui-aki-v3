@@ -56,6 +56,7 @@ comfyui/
 & ..\..\python\python.exe -X utf8 -B database\tools\contract.py check --against-snapshot
 & ..\..\python\python.exe -X utf8 -B scripts\security_guard.py --all-history
 git config --local core.hooksPath .githooks
+git config --local core.longpaths true
 git status --short
 ```
 

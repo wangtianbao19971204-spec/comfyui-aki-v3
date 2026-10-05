@@ -120,7 +120,7 @@ class RepositoryTests(unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()):
             repository.bundle(output)
         restored = self.root/'cloned'
-        subprocess.run(['git', 'clone', str(output), str(restored)], check=True, capture_output=True)
+        subprocess.run(['git', 'clone', '-c', 'core.longpaths=true', str(output), str(restored)], check=True, capture_output=True)
         self.assertTrue(snapshot.verify(restored/'snapshot')['pass'])
         self.assertEqual((restored/'snapshot/source.txt').read_bytes(), b'original')
         with self.assertRaises(ValueError):
