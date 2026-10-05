@@ -2,10 +2,18 @@
 
 ## Git bundle 恢复
 
-仅使用对应验收回执列出的公开包。工作区整合版命名为 `comfyui-public-v3-20261005.bundle`，后续版本用各自回执命名，先校验 SHA 再执行。旧 `comfyui.bundle` 含历史凭证，只能私有归档，不能公开复用；v2 包也不包含本轮新增源码与插件历史。
+仅使用随包交付回执确认通过的版本；包名、维护版本号、精确提交、manifest SHA、包 SHA 和隔离还原结果必须属于同一轮。当前交付目标为 `comfyui-v0.2.0-20261005.bundle`，对应 `comfyui-v0.2.0-20261005.delivery.json`；以该回执实际存在且 `pass: true` 为最终交付依据，文档中的目标名本身不是验收证明。后续发行沿用这一命名方式，替换为对应版本的实际文件名。
+
+`comfyui-public-v3-20261005.bundle` 只覆盖 `f1e61294` 历史检查点，不包含后续 Anima 补丁、技术补档、维护命令及支持文件补录。它和旧验证目录保持历史身份，不充当最新版；旧 `comfyui.bundle` 含历史凭证，只能私有归档，不能公开复用。
 
 ```powershell
-git clone -c core.longpaths=true .\comfyui-public-v3-20261005.bundle .\comfyui
+$comfyDelivery = Get-Content -LiteralPath .\comfyui-v0.2.0-20261005.delivery.json -Raw | ConvertFrom-Json
+if ($comfyDelivery.pass -ne $true) { throw 'Delivery is not accepted' }
+$comfyBundle = Join-Path (Get-Location) $comfyDelivery.bundle.filename
+if ((Get-FileHash -LiteralPath $comfyBundle -Algorithm SHA256).Hash.ToLowerInvariant() -ne $comfyDelivery.bundle.sha256) { throw 'Bundle SHA256 mismatch' }
+git clone -c core.longpaths=true -- $comfyBundle .\comfyui
+if ($LASTEXITCODE -ne 0) { throw 'Clone failed; retain the partial directory for inspection' }
+if ((git -C .\comfyui rev-parse HEAD).Trim() -ne $comfyDelivery.commit) { throw 'Restored commit differs from delivery receipt' }
 git -C .\comfyui fsck --full
 cd .\comfyui
 python -X utf8 -B scripts\snapshot.py verify
@@ -15,15 +23,19 @@ git config --local core.hooksPath .githooks
 
 克隆产生的 origin 只是本地 bundle 路径，不是在线远端。首次仓库使用专用维护作者标识，不修改用户全局 Git 身份；后续提交可以配置你自己的 repo-local user.name/user.email。
 
+随包回执与包一样保存在仓外，完整详细证据见其 `evidence_id`。回执必须由实际结束的门禁和还原生成；未完成的 `prepared` 元数据、单独的 tag 或旧还原回执都不能替代。文档、版本说明先冻结并提交，最终 SHA/提交/验收结果写在仓外，避免为了把“本包最终 SHA”塞进本包而出现自引用或打包后再次改源码。
+
 Windows 必须在初次检出前使用上面的 `-c core.longpaths=true`：整合插件目录较深，较长的父目录可能触发 `Filename too long`。该选项只设置新克隆仓库，不修改全局 Git 或系统注册表。已有仓库可用 `git config --local core.longpaths true`；失败的半成品克隆不要当作验收通过，也不要直接向生产恢复缺失文件。
 
 ## 只向全新目录物化
 
 ```powershell
-python -X utf8 -B scripts\snapshot.py materialize --dest G:\ComfyUI-local\validation\comfyui-restored-20261005
+python -X utf8 -B scripts\snapshot.py materialize --dest G:\ComfyUI-local\validation\comfyui-restored-v0.2.0-new
 ```
 
 目标目录必须不存在。工具拒绝直接写回 manifest 原运行根、原 ComfyUI 树和 snapshot 内部。它不会启动服务、执行模型或覆盖现有文件。
+
+每轮使用全新目录，不重用上例中已经存在的目标。验收须从本轮 bundle 的新 clone 中执行，并核对还原回执的 manifest SHA 与随包回执一致；主仓本地文件校验通过不等于交付包已经可还原。
 
 - 普通源码/工作流：逐文件 SHA-256 一致。
 - 上游 `.gitattributes` 在 Git 内以 `.gitattributes.upstream` 保存原字节，物化时恢复原名称，避免嵌套换行规则改写快照。原 `.gitignore` 保留。

@@ -1,6 +1,6 @@
 # 本体、插件装配与启动
 
-文档修订：2026-10-05.1。
+文档修订：2026-10-05.2。
 
 ## 职责与实现
 
@@ -16,9 +16,11 @@
 
 [validate_profiles.py](../../../snapshot/runtime/production_tools/validate_profiles.py)、[validate_lean_profile.py](../../../snapshot/runtime/production_tools/validate_lean_profile.py)检查配置；[test_plugin_fusion.cjs](../../../snapshot/runtime/production_tools/test_plugin_fusion.cjs)检查融合。正式启动还应核对真实 PID/启动时间、8188 所有者、队列及 `/unified-workbench/status`；静态代码检查不能替代冷启动。
 
-旧 `.git` 退休后的静态探测回退已审计，但不据此声称所有插件都完成重启验收。正在进行的 Anima Patch 部署可能改变白名单和服务身份，以它的最新回执为准。
+旧 `.git` 退休后的静态探测回退已审计，但不据此声称所有插件都完成重启验收。Anima 2.9B LoRA Patch 已完成独立任务的限定部署与对照交接，见 [兼容层档案](../training/anima-compat.md)；其服务身份与 A/B 结果只代表记录时的现场和样本，后续操作仍须重新核对当前状态。
 
 ## 更新记录
+
+- 2026-10-05：修正 Anima 补丁仍“正在进行”的过时表述；接手指向已归档的限定部署/对照证据，不扩大为全部插件或模型的冷启动验收。
 
 - 2026-10-05：补入 rgthree 默认配置、源码/发布目录的 4 份 Tree-sitter WASM、GGUF 补丁与缺失第三方许可证；包括已收录但未启用的 Wan/Qwen/llama.cpp 配套声明。精确身份见 [补源回执](../../../governance/runtime-support-import.json)。不变更白名单、节点、默认参数或运行字节；许可证被保存不等于取得所有模型/数据的再分发许可。
 

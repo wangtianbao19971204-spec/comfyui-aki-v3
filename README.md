@@ -38,4 +38,6 @@ ComfyUI 相关源码、工作流/子图、提示词资料检查点和维护工�
 
 [旧 Git 迁移](docs/history/README.md)和 [445 份技术原件](docs/technical/archive/README.md)保留追溯，不是另一套开发入口。日常更新对应功能的现行说明及短记录，不为每次小改动复制一套文档；历史脚本不可直接重跑。
 
-[技术覆盖复核](docs/ACCEPTANCE_TECHNICAL.md)是当时的验收，不替代当前状态。旧 bundle 不自动包含后续提交；正式分发必须通过[安全与许可检查](docs/SECURITY.md)，不能公开复制本机 `.git`、运行根或私密档案。本仓尚未配置在线远端或上传 GitHub。
+[技术覆盖复核](docs/ACCEPTANCE_TECHNICAL.md)保留建仓时的历史基线；后续支持文件补齐见[源码覆盖验收](docs/receipts/source_coverage_20261005.json)。当前代码、最后本地版本和未提交改动以 `maintain.py status` 为准。交付包是否覆盖该版本、是否通过隔离还原，须核对[恢复方法](docs/RESTORE.md)说明的随包交付回执，不能由标签或旧包推断。
+
+正式分发必须通过[安全与许可检查](docs/SECURITY.md)，不能公开复制本机 `.git`、运行根或私密档案。本仓尚未配置在线远端或上传 GitHub。
