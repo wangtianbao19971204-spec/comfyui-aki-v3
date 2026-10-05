@@ -2,6 +2,8 @@
 
 本机运行根目录：`G:\ComfyUI-aki-v3`。维护仓：`G:\ComfyUI-aki-v3\maintenance\comfyui`。Windows 路径不区分大小写，不能在同一父目录再建一个与现有 `ComfyUI` 同名的 `comfyui`，所以维护仓单独放在 maintenance 下。
 
+表中“实际源路径”是最初捕获/最终部署的运行位置；今后开发权威位置为主仓 `snapshot/runtime/<相对路径>`，不是继续编辑那两个运行 Git。真实库分片在 `snapshot/library`；数据库结构、索引、触发器与迁移在 `database`。旧 Git 全图在当前仓历史中以归档合并保留，映射见 `docs/history`，不形成另一套活动工作分支。
+
 | 范围 | 实际源路径（相对运行根） | 本仓库管理方式 |
 |---|---|---|
 | ComfyUI 本体 | `ComfyUI/` | 源码快照、上游 URL/提交、依赖版本；不复制嵌套 .git |

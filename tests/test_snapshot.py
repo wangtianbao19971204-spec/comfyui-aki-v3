@@ -3,10 +3,13 @@ import contextlib
 import importlib.util
 import json
 import sqlite3
+import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 SPEC = importlib.util.spec_from_file_location('snapshot', Path(__file__).resolve().parents[1] / 'scripts/snapshot.py')
 snapshot = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(snapshot)
@@ -15,7 +18,8 @@ SPEC.loader.exec_module(snapshot)
 class SnapshotTests(unittest.TestCase):
     def test_path_traversal_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
-            for relative in ['../elsewhere', '/absolute', '.']:
+            for relative in ['../elsewhere', '/absolute', '.', r'ComfyUI\main.py', 'C:/absolute', 'C:relative',
+                             'a/../b', 'a//b', 'a/./b', 'a/', 'a./b', 'a /b', 'NUL.txt', 'a:stream', '']:
                 with self.assertRaises(ValueError):
                     snapshot.safe_path(Path(temp), relative)
 
@@ -106,6 +110,101 @@ class SnapshotTests(unittest.TestCase):
             with self.assertRaises(FileExistsError):snapshot.materialize(payload,destination)
             (payload/'sql'/parts[0]['path']).write_bytes(b'broken')
             self.assertFalse(snapshot.verify(payload)['pass'])
+
+    def test_duplicate_sources_are_rejected_before_restore_directory_creation(self):
+        for duplicate in ['ComfyUI/main.py', 'comfyui/MAIN.PY']:
+            with self.subTest(duplicate=duplicate), tempfile.TemporaryDirectory() as temp:
+                root = Path(temp)
+                payload = root / 'snapshot'
+                payload.mkdir()
+                entries = []
+                for name, source in [('a.txt', 'ComfyUI/main.py'), ('b.txt', duplicate)]:
+                    file = payload / name
+                    file.write_text(name, encoding='utf-8')
+                    entries.append({'source': source, 'path': name, 'kind': 'file', 'sha256': snapshot.digest(file)})
+                snapshot.save(payload / 'manifest.json', {'source_root': str(root / 'live'), 'files': entries})
+                result = snapshot.verify(payload)
+                self.assertFalse(result['pass'])
+                self.assertIn('duplicate_source_path', {item['reason'] for item in result['failures']})
+                with self.assertRaises(RuntimeError):
+                    snapshot.materialize(payload, root / 'restored')
+                self.assertFalse((root / 'restored').exists())
+
+    def test_payload_metadata_and_part_ownership_cannot_be_reused(self):
+        sha = hashlib.sha256(b'fixture').hexdigest()
+        def file(source, path):
+            return {'source': source, 'path': path, 'kind': 'file', 'sha256': sha}
+        chunk = {'source': 'ComfyUI/library.json', 'path': 'library/parts', 'kind': 'chunks', 'sha256': sha,
+                 'parts': [{'path': '00000.part', 'sha256': sha}]}
+        cases = [
+            {'files': [file('ComfyUI/a.py', 'payload.txt'), file('ComfyUI/b.py', 'PAYLOAD.TXT')]},
+            {'files': [file('ComfyUI/a.py', 'payload.txt')], 'metadata_files': [{'path': 'payload.txt', 'sha256': sha}]},
+            {'files': [chunk], 'metadata_files': [{'path': 'library/parts/00000.part', 'sha256': sha}]},
+            {'files': [chunk, {**chunk, 'source': 'ComfyUI/other.json'}]},
+            {'files': [{**chunk, 'parts': chunk['parts'] * 2}]},
+            {'files': [file('ComfyUI/a.py', 'manifest.json')]},
+            {'files': [], 'metadata_files': [{'path': 'verification.json', 'sha256': sha}]},
+        ]
+        for manifest in cases:
+            with self.subTest(manifest=manifest):
+                self.assertIn('duplicate_payload_path', {item['reason'] for item in snapshot.manifest_path_failures(manifest)})
+
+    def test_source_and_payload_file_directory_conflicts_fail(self):
+        sha = hashlib.sha256(b'fixture').hexdigest()
+        for entries, expected in [
+            ([{'source': 'ComfyUI/a', 'path': 'first.txt', 'kind': 'file', 'sha256': sha},
+              {'source': 'ComfyUI/a/b.py', 'path': 'second.txt', 'kind': 'file', 'sha256': sha}], 'source_path_conflict'),
+            ([{'source': 'ComfyUI/a.py', 'path': 'payload', 'kind': 'file', 'sha256': sha},
+              {'source': 'ComfyUI/b.py', 'path': 'payload/child.txt', 'kind': 'file', 'sha256': sha}], 'payload_path_conflict'),
+            ([{'source': 'ComfyUI/a.py', 'path': 'payload/child.txt', 'kind': 'file', 'sha256': sha},
+              {'source': 'ComfyUI/b.py', 'path': 'payload', 'kind': 'file', 'sha256': sha}], 'payload_path_conflict'),
+        ]:
+            with self.subTest(expected=expected):
+                self.assertIn(expected, {item['reason'] for item in snapshot.manifest_path_failures({'files': entries})})
+
+    def test_restore_sql_sidecar_and_receipt_are_reserved_targets(self):
+        sha = hashlib.sha256(b'fixture').hexdigest()
+        sql = {'source': 'ComfyUI/user/test.db', 'path': 'sql', 'kind': 'sqlite_sql', 'sql_sha256': sha,
+               'parts': [{'path': '00000.part', 'sha256': sha}], 'tables': {}}
+        for source in ['ComfyUI/user/test.db.restore.sql', 'restore_receipt.JSON']:
+            entry = {'source': source, 'path': 'other.txt', 'kind': 'file', 'sha256': sha}
+            with self.subTest(source=source):
+                self.assertIn('duplicate_source_path', {item['reason'] for item in snapshot.manifest_path_failures({'files': [sql, entry]})})
+
+    def test_manifest_rejects_unknown_kinds_and_nonportable_paths(self):
+        sha = hashlib.sha256(b'fixture').hexdigest()
+        normal = {'source': 'ComfyUI/a.py', 'path': 'payload.txt', 'kind': 'file', 'sha256': sha}
+        for kind in ['unknown', None, [], {}]:
+            with self.subTest(kind=kind):
+                self.assertIn('invalid_entry_kind', {item['reason'] for item in snapshot.manifest_path_failures({'files': [{**normal, 'kind': kind}]})})
+        for value in [r'ComfyUI\escape', '../escape', 'C:/escape', '/escape', 'a/../b', 'a//b']:
+            for field in ['source', 'path']:
+                with self.subTest(value=value, field=field):
+                    self.assertTrue(snapshot.manifest_path_failures({'files': [{**normal, field: value}]}))
+            chunk = {**normal, 'kind': 'chunks', 'parts': [{'path': value, 'sha256': sha}]}
+            self.assertIn('invalid_part_path', {item['reason'] for item in snapshot.manifest_path_failures({'files': [chunk]})})
+
+    def test_materialize_exclusive_create_does_not_overwrite_newly_appearing_file(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            payload = root / 'snapshot'
+            payload.mkdir()
+            (payload / 'source.txt').write_bytes(b'new content')
+            snapshot.save(payload / 'manifest.json', {'source_root': str(root / 'live'), 'files': [
+                {'source': 'ComfyUI/main.py', 'path': 'source.txt', 'kind': 'file', 'sha256': snapshot.digest(payload / 'source.txt')}
+            ]})
+            destination = root / 'restored'
+            original_safe_path = snapshot.safe_path
+            def competing_file(target_root, relative):
+                target = original_safe_path(target_root, relative)
+                if target_root == destination and relative == 'ComfyUI/main.py':
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_bytes(b'keep competing content')
+                return target
+            with patch.object(snapshot, 'safe_path', side_effect=competing_file), self.assertRaises(FileExistsError):
+                snapshot.materialize(payload, destination)
+            self.assertEqual((destination / 'ComfyUI/main.py').read_bytes(), b'keep competing content')
+            self.assertFalse((destination / 'RESTORE_RECEIPT.json').exists())
 
 
 if __name__ == '__main__':

@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+cd "$(git rev-parse --show-toplevel)"
+if [ -n "${COMFYUI_MAINTENANCE_PYTHON:-}" ]; then
+    interpreter="$COMFYUI_MAINTENANCE_PYTHON"
+elif [ -x ../../python/python.exe ]; then
+    interpreter=../../python/python.exe
+elif command -v python3 >/dev/null 2>&1; then
+    interpreter=python3
+else
+    interpreter=python
+fi
+exec "$interpreter" -X utf8 -B scripts/security_guard.py "$@"

@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "component": "main",
+  "source_original_commit_count": 1,
+  "source_ref_reachable_commits": 1,
+  "source_reflog_only_commits": 0,
+  "source_fully_unreachable_commits": 0,
+  "source_ref_counts": {
+    "heads": 1,
+    "tags": 1
+  },
+  "public_commit_count": 1,
+  "unchanged_commit_ids": 0,
+  "rewritten_commit_ids": 1,
+  "original_commit_ids": [
+    "c1d1d8707a1d334bd6ffa3a991f973032769ecf8"
+  ],
+  "commit_map": {
+    "c1d1d8707a1d334bd6ffa3a991f973032769ecf8": "e724311869c31940ea11b930f4d01f25d16ea6f5"
+  },
+  "refs": [
+    {
+      "ref": "refs/heads/main",
+      "oid": "c1d1d8707a1d334bd6ffa3a991f973032769ecf8",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": null,
+      "public_oid": "e724311869c31940ea11b930f4d01f25d16ea6f5"
+    },
+    {
+      "ref": "refs/tags/maintenance-v1-20261005",
+      "oid": "c1d1d8707a1d334bd6ffa3a991f973032769ecf8",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": null,
+      "public_oid": "e724311869c31940ea11b930f4d01f25d16ea6f5"
+    }
+  ],
+  "recovered_tips": {},
+  "all_graph_tips": {
+    "c1d1d8707a1d334bd6ffa3a991f973032769ecf8": "e724311869c31940ea11b930f4d01f25d16ea6f5"
+  },
+  "redactions": [
+    {
+      "old_blob": "26c0537843ec84dd07c2d2e5d7d80d02ce25b8a5",
+      "new_blob": "4fb563cb290c81b6f03375cf00b9e9460ff1f6a7",
+      "replacement": "",
+      "occurrences": 1
+    },
+    {
+      "old_blob": "681c7328b35b15d8463ab8f4479d1d086632b549",
+      "new_blob": "60672a2a83f912e5fb79fb851c5d436293775f51",
+      "replacement": "",
+      "occurrences": 2
+    }
+  ],
+  "stripped_invalid_signatures": [],
+  "all_commit_metadata_and_messages_preserved": true,
+  "parent_order_preserved_via_commit_map": true,
+  "known_credential_blobs_absent_from_entire_object_database": true,
+  "fsck_strict_passed": true,
+  "limitations": [
+    "Author, committer, timestamps, encoding and message are preserved; signatures of rewritten commits cannot remain valid and are listed if removed.",
+    "All original objects and reflogs remain only in the separate private archive.",
+    "This exact redaction is not a substitute for independent public-history credential scanning."
+  ]
+}

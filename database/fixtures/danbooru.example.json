@@ -1,0 +1,9 @@
+{
+  "fictional": true,
+  "purpose": "Neutral schema fixture; not an exported production record",
+  "tables": {
+    "danbooru_tag": [
+      {"id_index": 1, "tag": "blue_sky", "color_id": 0, "translate": "蓝天示例", "hot": 0, "aliases": 0}
+    ]
+  }
+}

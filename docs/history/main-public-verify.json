@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "commits_verified": 1,
+  "changed_tree_pairs_verified": 12,
+  "refs_verified": 2,
+  "messages_metadata_and_parent_order_preserved": true,
+  "only_known_blob_changes": true,
+  "original_secret_blobs_absent": true,
+  "public_commit_coverage_exact": true
+}

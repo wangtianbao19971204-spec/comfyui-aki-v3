@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-05T02:37:22.845210+00:00",
+  "created_at": "2026-10-05T03:19:42.876985+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -11836,8 +11836,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/app/server/cloud_warehouse/warehouse.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/app/server/cloud_warehouse/warehouse.py",
-      "sha256": "4e19ba5d4699f72978188f634b1075ecb1e7be2b73b91004265a7d163fd7a3db",
-      "bytes": 1072,
+      "sha256": "c71904e209adf017973907e42682eadbe5274167c3cd21c56b5adf17b94a7743",
+      "bytes": 1048,
       "kind": "file"
     },
     {
@@ -11850,8 +11850,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/app/server/dao/dao.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/app/server/dao/dao.py",
-      "sha256": "ecef406b826122215a195547679f475d40db164771ea9d08b08ab5e90d70c438",
-      "bytes": 44447,
+      "sha256": "46bb7f011743f7fcabf812bfc42c3bac9d00dbfda5b900bbb4b96f96ad952775",
+      "bytes": 44399,
       "kind": "file"
     },
     {
@@ -23157,13 +23157,6 @@
       "path": "runtime/ComfyUI/custom_nodes/TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters/__init__.py",
       "sha256": "e30b16f574222d079e5142e0b664778a31fa78e20f5f31d196464bcf8aabcfe3",
       "bytes": 266,
-      "kind": "file"
-    },
-    {
-      "source": "ComfyUI/custom_nodes/TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters/models_cache.json",
-      "path": "runtime/ComfyUI/custom_nodes/TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters/models_cache.json",
-      "sha256": "256920e0f444fce3358401b72bc1529e32d3954690ec2f1cd397aaf9251df3c6",
-      "bytes": 3926,
       "kind": "file"
     },
     {
@@ -37933,93 +37926,28 @@
     "rgthree-comfy",
     "vnccs-utils"
   ],
-  "runtime_before": {
-    "queue": {
-      "running": 0,
-      "pending": 0
+  "runtime_before": null,
+  "runtime_after": null,
+  "scope": "Core + production plugin sources + workflows + full authoritative prompt JSON and three logical SQL databases; external weights/media are inventories, not payloads",
+  "development_revision": {
+    "note": "统一主Git公开准备：清除旧GitCode硬编码token并排除机器模型缓存；未部署生产",
+    "previous_manifest_sha256": "ee4a11bf62f90c4547f0cdd4abedc1a80689def6aeaabd5bd6465b9526139260",
+    "source_changes": {
+      "added": [],
+      "removed": [
+        "ComfyUI/custom_nodes/TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters/models_cache.json"
+      ],
+      "changed": [
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/app/server/cloud_warehouse/warehouse.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/app/server/dao/dao.py"
+      ]
     },
-    "listeners": [
+    "live_deployed": false,
+    "removed_sources": [
       {
-        "pid": 53232,
-        "created": 1791039069.3135595
-      }
-    ],
-    "modules": [
-      {
-        "key": "weilin",
-        "label": "共享资料与提示词",
-        "nodes": 4,
-        "ready": true
-      },
-      {
-        "key": "anima",
-        "label": "Anima 标签与随机选择",
-        "nodes": 16,
-        "ready": true
-      },
-      {
-        "key": "gallery",
-        "label": "Gallery 与 UAP",
-        "nodes": 22,
-        "ready": true
-      },
-      {
-        "key": "lora_manager",
-        "label": "LoRA、模型与 Embedding",
-        "nodes": 21,
-        "ready": true
-      },
-      {
-        "key": "completion",
-        "label": "补全与工作流工具",
-        "nodes": 13,
-        "ready": true
+        "source": "ComfyUI/custom_nodes/TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters/models_cache.json",
+        "previous_sha256": "256920e0f444fce3358401b72bc1529e32d3954690ec2f1cd397aaf9251df3c6"
       }
     ]
-  },
-  "runtime_after": {
-    "queue": {
-      "running": 0,
-      "pending": 0
-    },
-    "listeners": [
-      {
-        "pid": 53232,
-        "created": 1791039069.3135595
-      }
-    ],
-    "modules": [
-      {
-        "key": "weilin",
-        "label": "共享资料与提示词",
-        "nodes": 4,
-        "ready": true
-      },
-      {
-        "key": "anima",
-        "label": "Anima 标签与随机选择",
-        "nodes": 16,
-        "ready": true
-      },
-      {
-        "key": "gallery",
-        "label": "Gallery 与 UAP",
-        "nodes": 22,
-        "ready": true
-      },
-      {
-        "key": "lora_manager",
-        "label": "LoRA、模型与 Embedding",
-        "nodes": 21,
-        "ready": true
-      },
-      {
-        "key": "completion",
-        "label": "补全与工作流工具",
-        "nodes": 13,
-        "ready": true
-      }
-    ]
-  },
-  "scope": "Core + production plugin sources + workflows + full authoritative prompt JSON and three logical SQL databases; external weights/media are inventories, not payloads"
+  }
 }

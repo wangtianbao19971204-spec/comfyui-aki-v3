@@ -1,0 +1,26 @@
+name: Maintenance integrity
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Maintenance unit tests
+        run: python -X utf8 -B -m unittest discover -s tests -v
+      - name: Snapshot integrity
+        run: python -X utf8 -B scripts/snapshot.py verify
+      - name: Database schema contract
+        run: python -X utf8 -B database/tools/contract.py check --against-snapshot
+      - name: All reachable history credential gate
+        run: python -X utf8 -B scripts/security_guard.py --all-history

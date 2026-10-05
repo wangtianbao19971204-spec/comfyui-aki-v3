@@ -2,13 +2,15 @@
 
 ## Git bundle 恢复
 
-将 `comfyui.bundle` 复制到新位置，校验交付 SHA 后执行：
+仅使用新验收回执列出的 `comfyui-public-ready-20261005.bundle`（后续版本用各自回执命名），校验 SHA 后执行。旧 `comfyui.bundle` 含历史凭证，只能私有归档，不能公开复用。
 
 ```powershell
-git clone .\comfyui.bundle .\comfyui
+git clone .\comfyui-public-ready-20261005.bundle .\comfyui
 git -C .\comfyui fsck --full
 cd .\comfyui
 python -X utf8 -B scripts\snapshot.py verify
+python -X utf8 -B scripts\security_guard.py --all-history
+git config --local core.hooksPath .githooks
 ```
 
 克隆产生的 origin 只是本地 bundle 路径，不是在线远端。首次仓库使用专用维护作者标识，不修改用户全局 Git 身份；后续提交可以配置你自己的 repo-local user.name/user.email。

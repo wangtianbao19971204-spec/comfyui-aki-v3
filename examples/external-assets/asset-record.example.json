@@ -1,0 +1,42 @@
+{
+  "format_version": 1,
+  "example_only": true,
+  "root": "runtime-root",
+  "notes": "Fictional records only. No payload or download authorization is supplied. Null hashes are not verification.",
+  "assets": [
+    {
+      "id": "example-diffusion-model",
+      "kind": "model_weight",
+      "relative_path": "ComfyUI/models/diffusion_models/Anima/example-model.safetensors",
+      "format": "safetensors",
+      "model_family": "must-match-the-selected-workflow",
+      "source_page": null,
+      "source_version_id": null,
+      "license": "review-required-before-redistribution",
+      "bytes": null,
+      "sha256": null,
+      "verification": "example_not_present",
+      "companions": "Record the exact matching text encoder, VAE and any loader-specific configuration separately."
+    },
+    {
+      "id": "example-directory-model",
+      "kind": "complete_model_directory",
+      "relative_path": "ComfyUI/models/taggers/pixai-tagger-v1.0/",
+      "required_by_current_loader": ["model.safetensors", "config.json", "preprocessor_config.json", "tagger_pipeline.py"],
+      "also_preserve": "All other files from the same reviewed revision, including tokenizer/processor/vocabulary/label maps when supplied.",
+      "source_page": null,
+      "source_revision": null,
+      "verification": "example_no_files_included"
+    },
+    {
+      "id": "example-library-preview",
+      "kind": "library_preview",
+      "relative_path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/user_data/prompt_selector/preview/example-only.png",
+      "linked_record_id": "fixture-tag-001",
+      "documentation_preview": "examples/external-assets/preview.example.svg",
+      "bytes": null,
+      "sha256": null,
+      "verification": "fictional_mapping_do_not_install"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "component": "workbench",
+  "source_original_commit_count": 2,
+  "source_ref_reachable_commits": 2,
+  "source_reflog_only_commits": 0,
+  "source_fully_unreachable_commits": 0,
+  "source_ref_counts": {
+    "heads": 1
+  },
+  "public_commit_count": 2,
+  "unchanged_commit_ids": 2,
+  "rewritten_commit_ids": 0,
+  "original_commit_ids": [
+    "02428ca15b911e90ef146211e86721dc1d9639c3",
+    "cc3bc63d55843f94b79f4e16042e03eccbfcc56e"
+  ],
+  "commit_map": {
+    "02428ca15b911e90ef146211e86721dc1d9639c3": "02428ca15b911e90ef146211e86721dc1d9639c3",
+    "cc3bc63d55843f94b79f4e16042e03eccbfcc56e": "cc3bc63d55843f94b79f4e16042e03eccbfcc56e"
+  },
+  "refs": [
+    {
+      "ref": "refs/heads/master",
+      "oid": "cc3bc63d55843f94b79f4e16042e03eccbfcc56e",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": null,
+      "public_oid": "cc3bc63d55843f94b79f4e16042e03eccbfcc56e"
+    }
+  ],
+  "recovered_tips": {},
+  "all_graph_tips": {
+    "cc3bc63d55843f94b79f4e16042e03eccbfcc56e": "cc3bc63d55843f94b79f4e16042e03eccbfcc56e"
+  },
+  "redactions": [],
+  "stripped_invalid_signatures": [],
+  "all_commit_metadata_and_messages_preserved": true,
+  "parent_order_preserved_via_commit_map": true,
+  "known_credential_blobs_absent_from_entire_object_database": true,
+  "fsck_strict_passed": true,
+  "limitations": [
+    "Author, committer, timestamps, encoding and message are preserved; signatures of rewritten commits cannot remain valid and are listed if removed.",
+    "All original objects and reflogs remain only in the separate private archive.",
+    "This exact redaction is not a substitute for independent public-history credential scanning."
+  ]
+}

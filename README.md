@@ -2,16 +2,21 @@
 
 本机 ComfyUI 项目的维护仓库。覆盖**本体源码、生产插件与统一工作台、已保存工作流及子图、提示词资料库、模型依赖清单和维护工具**。
 
-这是本地私人维护基线，不是 Comfy-Org 官方仓库，也不是已经安装好模型的整机镜像。没有配置远端、没有上传 GitHub。原运行目录和原有嵌套 Git 历史均未替换。
+这是今后 **ComfyUI 相关修改的唯一主 Git**，不是 Comfy-Org 官方仓库，也不是装好全部模型的整机镜像。日常开发直接改本仓 `snapshot/runtime/` 对应源码；运行目录只作部署目标。数据库结构、迁移、工作流和提示词资料维护也在本仓登记。
+
+按用户最新决定保留真实提示词库、收藏、备注和历史；公开准备的重点是移除密钥、登录配置及插件缓存。旧 Git 全历史以脱敏后的提交图迁入，原始含凭证图另作私有档案。**没有配置在线远端、没有上传 GitHub、没有部署本轮源码改动。**
 
 ## 从这里开始
 
 - [项目地图](docs/PROJECT_MAP.md)：每类文件的归属、作用和实际源路径。
-- [日常维护](docs/MAINTENANCE.md)：检查、捕获、比较、接纳新版本、提交与打包。
+- [日常维护](docs/MAINTENANCE.md)：主仓开发、封装清单、隔离验收、授权部署与打包。
+- [历史迁移](docs/history/README.md)：完整图、reflog 补迁、脱敏映射与私有原件。
+- [数据库契约](docs/DATABASE.md)：三库结构、虚构测试资料、未来有序迁移入口。
+- [外部资源](docs/EXTERNAL_ASSETS.md)：模型/预览放置路径与小型格式样例。
 - [恢复与迁移](docs/RESTORE.md)：Git bundle 克隆、离线还原、外部资源和凭证补齐。
 - [模型管理](docs/MODELS.md)：本体、编码器、VAE、LoRA、检测器与超分依赖。
 - [已知限制](docs/KNOWN_ISSUES.md)：已验收边界和仍未修复的问题。
-- [安全与授权](docs/SECURITY.md)：哪些内容不能进 Git、何时不能公开仓库。
+- [安全与发布](docs/SECURITY.md)：凭证门禁、GitHub 发布前检查与禁止上传项。
 
 ## 内容结构
 
@@ -21,6 +26,12 @@ comfyui/
 ├─ docs/                      维护、恢复、安全与项目地图
 ├─ scripts/snapshot.py        只读采集、哈希校验、离线物化
 ├─ scripts/repository.py      差异审查、接纳快照、Git bundle
+├─ scripts/project.py         主仓源码封装与只读部署计划
+├─ scripts/security_guard.py  index / 全可达历史凭证与资源门禁
+├─ database/                  结构契约、迁移登记与隔离测试资料
+├─ examples/external-assets/  一个中性视觉样例、格式与放置表
+├─ governance/                运行根 AGENTS 路由的版本化原件
+├─ .githooks/ / .github/       本地提交/推送保护与 CI
 ├─ tests/                     快照工具测试
 └─ snapshot/
    ├─ manifest.json          逐文件来源、哈希、分片顺序、服务基线
@@ -42,7 +53,10 @@ comfyui/
 ```powershell
 & ..\..\python\python.exe -X utf8 -B scripts\snapshot.py verify
 & ..\..\python\python.exe -X utf8 -B -m unittest discover -s tests -v
+& ..\..\python\python.exe -X utf8 -B database\tools\contract.py check --against-snapshot
+& ..\..\python\python.exe -X utf8 -B scripts\security_guard.py --all-history
+git config --local core.hooksPath .githooks
 git status --short
 ```
 
-详细交付数量、提交和 bundle 位置见 [首版验收](docs/ACCEPTANCE.md)。后续不要直接执行 snapshot 中写死旧日期、旧 PID 的历史发布/回滚脚本。
+首次 clone 后需自己启用 hooks（Git 不会自动执行仓库脚本）。最新交付见 [统一主仓验收](docs/ACCEPTANCE_V2.md)；[首版验收](docs/ACCEPTANCE.md)仅为历史证据，旧 `comfyui.bundle` 不可公开。不要执行快照中写死旧日期、旧 PID 的历史发布/回滚脚本；也不要整目录上传 `maintenance` 或复制本机 `.git` 公开。

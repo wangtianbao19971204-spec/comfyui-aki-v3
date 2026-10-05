@@ -2,13 +2,25 @@
 
 以下在 `maintenance/comfyui` 中执行；本机 Python 为 `../../python/python.exe`。另一台机器可以使用 Python 3.10+；在线 capture 另需 psutil。verify/materialize 不要求导入 Torch 或启动 ComfyUI。
 
-## 1. 明确改哪里
+## 1. 只在主仓开发
 
 先查 PROJECT_MAP 和最新收据。正式 UI 代码、资料数据、模型配置、工作流和旧历史流是不同维护范围。现有快照是基线，不自动同步实时目录。
 
-改功能可以在维护分支的 `snapshot/runtime/` 对应源码中做，但这会使旧 manifest 校验失败，不能直接打成“已验收快照”bundle。先单独提交开发改动；经隔离测试、授权部署与现场验收后，重新 capture 并 adopt，才产生新的发布基线。发布到运行环境前必须另建候选、基线和回滚，不要把整个 snapshot/runtime 一次性覆盖到生产。修改提示词资料优先走现有工作台或审核过的迁移工具，随后重新 capture；不要直接编辑分片。工作流子图随原完整 JSON 一起维护。
+所有 ComfyUI 相关代码、工作流、提示词库、数据库、加载器和维护工具均以本仓为唯一修改/提交入口。两个运行区旧 Git 不再继续开发提交。功能改动在 `snapshot/runtime/` 对应源码中做，工作流子图随完整 JSON 维护；数据库结构/索引/触发器及迁移记录在 `database/`。不要直接手改资料分片，资料内容通过受审查工具导出后核验 ID、正文、个人字段与来源绑定。
 
-## 2. 捕获已经确认的现场状态
+```powershell
+git config --local core.hooksPath .githooks
+& ..\..\python\python.exe -X utf8 -B scripts\project.py status
+# 在 snapshot/runtime 中完成已授权的代码修改和专项测试，然后：
+& ..\..\python\python.exe -X utf8 -B scripts\project.py seal --note "本次修改说明"
+& ..\..\python\python.exe -X utf8 -B scripts\project.py deploy-plan --runtime G:\ComfyUI-aki-v3
+```
+
+`seal` 只重建普通源码清单，不重新认可被任意改写的 JSON/SQL；它保留旧 manifest 于 ignored local/source-seals，并明确标记 `live_deployed=false`、清空当前现场验收字段。旧 evidence 仍是历史凭据。`deploy-plan` 只读，未 seal 的源码会拒绝出计划，删除条目列为需审核候选，不会删除运行文件。
+
+部署需要另建隔离候选、测试、线上基线和回滚，按明确范围写回后现场验收；不要一次覆盖整个 snapshot/runtime。工作台日常产生的资料记录仍由应用写入运行库，但任何相关代码/迁移脚本只能在主 Git 维护。完成真实部署后才允许第 2–3 步回收现场资料/验收基线。
+
+## 2. 捕获已经确认的现场状态（不是日常反向同步）
 
 关闭其他资料编辑操作，确认无同范围活动锁、队列为空。服务可以继续运行；采集工具不会停止服务，SQLite 通过在线 backup API 读取。
 
@@ -26,7 +38,7 @@
 先提交或单独保存仓库已有改动。检查新增/删除/变化列表、metadata_* 中的模型/依赖/证据变化和凭证扫描，按风险运行源码测试、隔离 UI 与必要的中性样例推理。只读快照检查不能替代功能验收。
 
 ```powershell
-& ..\..\python\python.exe -X utf8 -B scripts\repository.py adopt --candidate ..\comfyui-candidate-20261006
+& ..\..\python\python.exe -X utf8 -B scripts\repository.py adopt --candidate ..\comfyui-candidate-20261006 --purpose accepted-deployment --review-sha256 "compare返回的review_sha256"
 & ..\..\python\python.exe -X utf8 -B scripts\snapshot.py verify
 git diff --stat
 git add -- docs CHANGELOG.md
@@ -35,7 +47,7 @@ git diff --cached --stat
 git commit -m "Update accepted workflow and library snapshot"
 ```
 
-adopt 只移动维护仓的快照：旧版本保留到 ignored `local/backups/时间`，不会写回生产。候选必须是本仓旁的 `comfyui-candidate-*` 普通目录。源码、数据修改范围不符时不要 adopt。更新 CHANGELOG 和对应验收说明，不把旧限制悄悄标为已修复。
+adopt 只移动维护仓的快照：旧版本保留到 ignored `local/backups/时间`，不会写回生产。候选必须是本仓旁的 `comfyui-candidate-*` 普通目录。`review_sha256` 绑定新旧 manifest，变化后须重新 review；`--purpose` 必须为已验收部署 `accepted-deployment`，或明确恢复/迁移 `recovery-migration`。源码、数据范围不符时不要 adopt，更不能把旧运行源码覆盖尚未部署的新主仓修改。更新 CHANGELOG 和验收说明，不把旧限制悄悄标为已修复。
 
 源码内保留了上游 `.gitignore`，所以仅在完整校验/凭证扫描通过之后，对精确的 `snapshot` 路径使用 `git add -f`。不要对运行根或整个维护仓使用强制 add。bundle 工具会检查快照是否全部被 Git 跟踪，防止嵌套忽略规则造成静默遗漏。
 
@@ -45,7 +57,9 @@ adopt 只移动维护仓的快照：旧版本保留到 ignored `local/backups/�
 & ..\..\python\python.exe -X utf8 -B scripts\repository.py bundle --out ..\comfyui-20261006.bundle
 ```
 
-bundle 包含已提交的全部 refs/历史；不包含 ignored 文件、未提交内容、外部权重、媒体或密钥。工具要求干净工作树，核验 fsck、bundle 和 SHA-256，不接触远端。
+bundle 包含已提交的全部 refs/可达历史；不包含 ignored 文件、未提交内容、外部权重和媒体。工具要求干净工作树、快照完整性和完整历史凭证/资源门禁通过，再核验 fsck、bundle、refs 稳定性和 SHA-256，不接触远端。不能用 `--audit-content-only` 代替公开门禁，也不能绕过 hooks 发布。
+
+每次在新目录 clone bundle，再做 snapshot verify、全历史凭证检查与所需离线还原。公开时仅推经过核验的主仓 refs；禁止整目录打包本机 `.git`、local、private-archives、旧克隆/还原目录或首版旧 bundle。GitHub 目的地仍须用户明确指定。
 
 ## 5. 回退
 

@@ -17,16 +17,21 @@ import tempfile
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
+from security_guard import blocked_path
 
 REPO = Path(__file__).resolve().parents[1]
 WB = 'ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench'
 LIBRARY = WB + '/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/user_data'
+LIBRARY_DATABASES = ('userdatas_zh_CN_danbooru.db', 'userdatas_zh_CN_history.db', 'userdatas_zh_CN_tags.db')
 WEIGHTS = {'.safetensors', '.ckpt', '.pt', '.pth', '.onnx', '.gguf', '.bin', '.engine'}
 TEXT = {'.py', '.pyi', '.mako', '.js', '.mjs', '.cjs', '.ts', '.tsx', '.vue', '.svelte', '.css', '.scss', '.sass', '.less', '.html', '.json', '.jsonl', '.yaml', '.yml', '.toml', '.ini', '.cfg', '.md', '.rst', '.txt', '.csv', '.tsv', '.sql', '.xml', '.sh', '.ps1', '.psm1', '.bat', '.cmd', '.example', '.lock', '.map', '.in', '.c', '.cc', '.cpp', '.h', '.hpp', '.cu', '.cuh', '.glsl', '.frag', '.vert'}
 ASSETS = {'.png', '.jpg', '.jpeg', '.webp', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.otf', '.mp3', '.webmanifest', '.gz'}
 SKIP_DIRS = {'.git', '.hg', '.svn', '__pycache__', 'node_modules', '.cache', '.pytest_cache', '.hypothesis', '.agents', '.benchmarks', '.omo', '.specs', '.venv', 'venv', 'logs', 'temp', 'output', 'input', 'preview', 'preview_thumbnails', 'user_data', 'lora_userdatas', 'loras_userdatas', 'translate_userdatas', 'prompt_selector_data_backups', 'random_tag'}
 PRIVATE_NAME = re.compile(r'^(?:\.env(?:\..*)?|(?:.*[_-])?(?:credentials|secrets|cookies|accounts|auth|tokens|providers|settings)(?:\.(?:json|yaml|yml|ini|toml))|config\.(?:json|yaml|yml|ini))$', re.I)
-PRIVATE_PATHS = {WB + '/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/init.json'}
+PRIVATE_PATHS = {
+    WB + '/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/init.json',
+    'ComfyUI/custom_nodes/TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters/models_cache.json',
+}
 PUBLIC_CONFIG_PATHS = {
     'ComfyUI/.github/ISSUE_TEMPLATE/config.yml',
     'ComfyUI/comfy/text_encoders/byt5_tokenizer/added_tokens.json',
@@ -81,13 +86,92 @@ def save(file, data):
 
 
 def safe_path(root, relative):
-    relative = Path(relative)
-    if relative.is_absolute() or '..' in relative.parts:
-        raise ValueError('Unsafe relative path')
-    candidate = (root / relative).resolve()
+    parts = portable_parts(relative)
+    candidate = root.joinpath(*parts).resolve()
     if not candidate.is_relative_to(root.resolve()) or candidate == root.resolve():
         raise ValueError('Path escaped target')
     return candidate
+
+
+def portable_parts(relative):
+    """One spelling on Windows and POSIX; reject drive/ADS and alias tricks."""
+    if not isinstance(relative, str) or not relative or re.search(r'[\\:*?"<>|\x00-\x1f]', relative):
+        raise ValueError('Unsafe portable relative path')
+    parts = relative.split('/')
+    devices = {'con', 'prn', 'aux', 'nul', *(f'com{i}' for i in range(1, 10)), *(f'lpt{i}' for i in range(1, 10))}
+    if any(part in {'', '.', '..'} or part.rstrip(' .') != part or part.split('.')[0].casefold() in devices for part in parts):
+        raise ValueError('Unsafe portable relative path')
+    return parts
+
+
+def manifest_path_failures(manifest):
+    """Validate ownership before hashing/copying so every target is unique."""
+    failures = []
+    sources, payloads = {}, {}
+    source_parents, payload_parents = set(), set()
+
+    def claim(relative, claims, parents, owner, directory=False, scope='payload'):
+        try:
+            parts = portable_parts(relative)
+        except ValueError:
+            failures.append({'path': '<' + owner + '>', 'reason': 'invalid_' + scope + '_path'})
+            return False
+        key = '/'.join(parts).casefold()
+        ancestors = ['/'.join(parts[:index]).casefold() for index in range(1, len(parts))]
+        if key in claims:
+            failures.append({'path': relative, 'reason': 'duplicate_' + scope + '_path'})
+            return False
+        if key in parents or any(parent in claims and (not claims[parent][0] or claims[parent][1] != owner) for parent in ancestors):
+            failures.append({'path': relative, 'reason': scope + '_path_conflict'})
+            return False
+        claims[key] = (directory, owner)
+        parents.update(ancestors)
+        return True
+
+    if not isinstance(manifest, dict) or not isinstance(manifest.get('files'), list) or not isinstance(manifest.get('metadata_files', []), list):
+        return [{'path': 'manifest.json', 'reason': 'invalid_manifest_structure'}]
+    claim('manifest.json', payloads, payload_parents, 'reserved-manifest')
+    claim('verification.json', payloads, payload_parents, 'reserved-verification')
+    claim('RESTORE_RECEIPT.json', sources, source_parents, 'reserved-restore-receipt', scope='source')
+    for index, entry in enumerate(manifest['files']):
+        owner = 'files[' + str(index) + ']'
+        if not isinstance(entry, dict) or not isinstance(entry.get('kind'), str) or entry['kind'] not in {'file', 'chunks', 'sqlite_sql'}:
+            failures.append({'path': '<' + owner + '>', 'reason': 'invalid_entry_kind'})
+            continue
+        kind = entry['kind']
+        hash_field = 'sql_sha256' if kind == 'sqlite_sql' else 'sha256'
+        if not isinstance(entry.get(hash_field), str) or not re.fullmatch('[0-9a-f]{64}', entry[hash_field]):
+            failures.append({'path': '<' + owner + '>', 'reason': 'invalid_entry_hash'})
+        source_ok = claim(entry.get('source'), sources, source_parents, owner, scope='source')
+        path_ok = claim(entry.get('path'), payloads, payload_parents, owner, directory=kind != 'file')
+        if kind == 'sqlite_sql':
+            if source_ok:
+                claim(entry['source'] + '.restore.sql', sources, source_parents, owner + '-sql-sidecar', scope='source')
+            if not isinstance(entry.get('tables'), dict) or any(not isinstance(table, str) or not isinstance(count, int) or count < 0 for table, count in entry.get('tables', {}).items()):
+                failures.append({'path': '<' + owner + '>', 'reason': 'invalid_sql_table_counts'})
+        if kind == 'file':
+            continue
+        if not isinstance(entry.get('parts'), list):
+            failures.append({'path': '<' + owner + '>', 'reason': 'invalid_parts_list'})
+            continue
+        for part_index, part in enumerate(entry['parts']):
+            if not isinstance(part, dict) or not isinstance(part.get('sha256'), str) or not re.fullmatch('[0-9a-f]{64}', part['sha256']):
+                failures.append({'path': '<' + owner + '.parts[' + str(part_index) + ']>', 'reason': 'invalid_part_entry'})
+                continue
+            try:
+                portable_parts(part.get('path'))
+            except ValueError:
+                failures.append({'path': '<' + owner + '.parts[' + str(part_index) + ']>', 'reason': 'invalid_part_path'})
+                continue
+            if path_ok:
+                claim(entry['path'] + '/' + part['path'], payloads, payload_parents, owner)
+    for index, entry in enumerate(manifest.get('metadata_files', [])):
+        owner = 'metadata_files[' + str(index) + ']'
+        if not isinstance(entry, dict) or not isinstance(entry.get('sha256'), str) or not re.fullmatch('[0-9a-f]{64}', entry['sha256']):
+            failures.append({'path': '<' + owner + '>', 'reason': 'invalid_metadata_entry'})
+            continue
+        claim(entry.get('path'), payloads, payload_parents, owner)
+    return failures
 
 
 def walk(root, skip=SKIP_DIRS, skip_top=()):
@@ -250,6 +334,12 @@ def capture(root, out, offline=False):
         entries.append({'source': source.relative_to(root).as_posix(), 'path': destination.relative_to(out).as_posix(), 'kind': 'chunks', 'sha256': before, 'bytes': source.stat().st_size, 'parts': parts})
     print('Online-consistent SQLite backups and SQL exports...', flush=True)
     for source in sorted(library.glob('*.db')):
+        if source.name not in LIBRARY_DATABASES:
+            omitted.append({'path': source.relative_to(root).as_posix(), 'reason': 'database_not_in_reviewed_contract'})
+    for name in LIBRARY_DATABASES:
+        source = library / name
+        if not source.is_file():
+            raise FileNotFoundError(source)
         before = database_state(source)
         with tempfile.TemporaryDirectory(prefix='comfyui-sql-') as temp:
             backup = Path(temp) / source.name
@@ -353,7 +443,9 @@ def capture(root, out, offline=False):
 def verify(snapshot):
     snapshot = snapshot.resolve()
     manifest = json.loads((snapshot / 'manifest.json').read_text(encoding='utf-8'))
-    failures = []
+    failures = manifest_path_failures(manifest)
+    if failures:
+        return {'time':now(),'pass':False,'entry_count':len(manifest.get('files', [])) if isinstance(manifest, dict) and isinstance(manifest.get('files'), list) else 0,'failures':failures,'reviewed_security_fixtures':[]}
     expected_paths = {'manifest.json', 'verification.json'}
     reviewed_fixtures = []
     for entry in manifest.get('metadata_files', []):
@@ -393,6 +485,8 @@ def verify(snapshot):
             failures.append({'path':file.relative_to(snapshot).as_posix(),'reason':'forbidden_payload'})
         if private_config(relative.removeprefix('runtime/')):
             failures.append({'path': relative, 'reason': 'private_config_payload'})
+        for reason in blocked_path('snapshot/' + relative):
+            failures.append({'path': relative, 'reason': reason})
         if relative in REVIEWED_SECURITY_FIXTURES and REVIEWED_SECURITY_FIXTURES[relative] == digest(file):
             reviewed_fixtures.append({'path': relative, 'sha256': digest(file), 'reason': 'reviewed_synthetic_security_test'})
             continue
@@ -419,7 +513,8 @@ def materialize(snapshot, destination):
         target=safe_path(destination,entry['source']);target.parent.mkdir(parents=True,exist_ok=True)
         payload=safe_path(snapshot,entry['path'])
         if entry['kind']=='file':
-            shutil.copyfile(payload,target)
+            with payload.open('rb') as source, target.open('xb') as stream:
+                shutil.copyfileobj(source,stream)
         else:
             joined=target if entry['kind']=='chunks' else target.with_suffix(target.suffix+'.restore.sql')
             with joined.open('xb') as stream:
@@ -427,6 +522,8 @@ def materialize(snapshot, destination):
                     with safe_path(payload,part['path']).open('rb') as source:
                         shutil.copyfileobj(source,stream)
             if entry['kind']=='sqlite_sql':
+                with target.open('xb'):
+                    pass
                 with contextlib.closing(sqlite3.connect(target)) as conn, joined.open(encoding='utf-8', newline='') as sql:
                     statement=''
                     for line in sql:

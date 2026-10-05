@@ -1,0 +1,16 @@
+{
+  "format": 1,
+  "current_version": 1,
+  "purpose": "Schema baseline and future reviewed migration registration; no production migration runner",
+  "migrations": [
+    {
+      "version": 1,
+      "id": "0001_baseline_20261005",
+      "schemas": {
+        "danbooru": "database/schema/v1/userdatas_zh_CN_danbooru.sql",
+        "history": "database/schema/v1/userdatas_zh_CN_history.sql",
+        "tags": "database/schema/v1/userdatas_zh_CN_tags.sql"
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "fictional": true,
+  "purpose": "Neutral schema fixture; not an exported production record",
+  "tables": {
+    "history": [
+      {"id_index": 1, "tag": "blue sky, soft light", "name": "演示历史", "color": "#89b4fa", "create_time": 0, "is_deleted": 0}
+    ],
+    "collect_history": [
+      {"id_index": 1, "tag": "blue sky", "name": "演示收藏", "color": "#cba6f7", "create_time": 0, "is_deleted": 0}
+    ]
+  }
+}

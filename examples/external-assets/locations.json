@@ -1,0 +1,30 @@
+{
+  "format_version": 1,
+  "relative_to": "runtime-root containing ComfyUI and production_tools",
+  "payloads_in_git": false,
+  "directories": [
+    {"path": "ComfyUI/models/diffusion_models/", "role": "Diffusion/UNet weights; retain Anima, Anima-2.9B and krea2 family subdirectories"},
+    {"path": "ComfyUI/models/checkpoints/", "role": "Checkpoint models and loader-specific checkpoint weights"},
+    {"path": "ComfyUI/models/text_encoders/", "role": "Matching text encoder weights"},
+    {"path": "ComfyUI/models/vae/", "role": "Matching VAE weights"},
+    {"path": "ComfyUI/models/clip_vision/", "role": "Image encoders"},
+    {"path": "ComfyUI/models/loras/", "role": "LoRA weights with architecture/family subdirectories"},
+    {"path": "ComfyUI/models/controlnet/", "role": "ControlNet/LLLite weights"},
+    {"path": "ComfyUI/models/ipadapter/", "role": "IP-Adapter weights"},
+    {"path": "ComfyUI/models/ultralytics/bbox/", "role": "Bounding-box detectors"},
+    {"path": "ComfyUI/models/ultralytics/segm/", "role": "Instance-segmentation detectors"},
+    {"path": "ComfyUI/models/sams/", "role": "SAM loader weights; do not assume every SAM generation uses this directory"},
+    {"path": "ComfyUI/models/sam3dbody/", "role": "SAM 3D body checkpoint and assets where that loader is used"},
+    {"path": "ComfyUI/models/RMBG/", "role": "RMBG model folders and their configurations"},
+    {"path": "ComfyUI/models/birefnet/", "role": "Separate BiRefNet loader directory; do not silently merge with RMBG"},
+    {"path": "ComfyUI/models/taggers/pixai-tagger-v1.0/", "role": "Complete PixAI model/config/processor/reviewed custom-code directory"},
+    {"path": "ComfyUI/models/upscale_models/", "role": "Super-resolution model weights"},
+    {"path": "ComfyUI/models/LLM/", "role": "Local GGUF models and matching vision projection weights"},
+    {"path": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/", "role": "Plugin-owned annotator models; preserve nested upstream paths"},
+    {"path": "ComfyUI/custom_nodes/comfyui-kjnodes/intrinsic_loras/", "role": "Plugin-owned intrinsic LoRA weights"},
+    {"path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/user_data/prompt_selector/preview/", "role": "Original prompt-library previews; preserve filenames and record bindings"},
+    {"path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/user_data/prompt_selector/preview_thumbnails/", "role": "Prompt-library thumbnail media; preserve or regenerate through the matching application version"}
+  ],
+  "authoritative_inventory": "snapshot/inventory/models.json",
+  "additional_locations": "Every exact path in the model/media inventories remains authoritative, including plugin source/data weights not generalized here. External extra_model_paths targets need a separate local mapping."
+}

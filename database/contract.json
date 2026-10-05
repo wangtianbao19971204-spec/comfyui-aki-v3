@@ -1,0 +1,79 @@
+{
+  "contract_version": 1,
+  "baseline_version": 1,
+  "source": "accepted SQL snapshot; schema-only contract",
+  "production_rows_in_schema": false,
+  "databases": {
+    "danbooru": {
+      "filename": "userdatas_zh_CN_danbooru.db",
+      "source_path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/user_data/userdatas_zh_CN_danbooru.db",
+      "source_sql_sha256": "15648c5cf984ef29afa338f73d3964b52020c66e6a6eb462cc81748345c45062",
+      "schema": "database/schema/v1/userdatas_zh_CN_danbooru.sql",
+      "schema_sha256": "b5b32533c4750715fc029883ea8971650a49b7b825e6d1dca0031fc7c735d768",
+      "schema_fingerprint": "8bbdcaf68ca1bad67a6067d3005cf4fe81ea9ba6265e70f0e0d7058b73705039",
+      "object_counts": {
+        "table": 3,
+        "index": 0,
+        "trigger": 0,
+        "view": 0
+      },
+      "fixture": "database/fixtures/danbooru.example.json",
+      "fixture_sha256": "db8b4ea3f222a0e44f6481e9b3e8ff45cc50791c85a54e1e6c4001b5ad2409eb",
+      "fixture_expected_rows": {
+        "danbooru_tag": 1,
+        "schema_version": 0,
+        "update_info": 0
+      }
+    },
+    "history": {
+      "filename": "userdatas_zh_CN_history.db",
+      "source_path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/user_data/userdatas_zh_CN_history.db",
+      "source_sql_sha256": "19f9928ff24672294668b66a2efcbc103f42fdb4eb627453fe7a40dd57f81f43",
+      "schema": "database/schema/v1/userdatas_zh_CN_history.sql",
+      "schema_sha256": "824914dedcedbe159076850b6b8547f0c5d95955b788708945e5f14a318c205d",
+      "schema_fingerprint": "b8aff009c2f11b8d706f9e9cd62121f47fc5ed464c81735bf25ef219994afdaf",
+      "object_counts": {
+        "table": 3,
+        "index": 0,
+        "trigger": 0,
+        "view": 0
+      },
+      "fixture": "database/fixtures/history.example.json",
+      "fixture_sha256": "4b88ccd8361b531de3511e3738b880cc2f1695fa4662f184d0c1521bd938d29f",
+      "fixture_expected_rows": {
+        "collect_history": 1,
+        "history": 1,
+        "schema_version": 0
+      }
+    },
+    "tags": {
+      "filename": "userdatas_zh_CN_tags.db",
+      "source_path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/user_data/userdatas_zh_CN_tags.db",
+      "source_sql_sha256": "d9f2167da556e76753f5f2f5b233d13d4fea459f96aba3eb82312b07a83e3f30",
+      "schema": "database/schema/v1/userdatas_zh_CN_tags.sql",
+      "schema_sha256": "e826a7ff35fc2a7947cab9f8216d98f8864d61b2260beaf989f37cfa4312fc62",
+      "schema_fingerprint": "d51f09b7392a1d8aded1fc27002a7e98198248132fba6b6e81a70db0b586b05b",
+      "object_counts": {
+        "table": 11,
+        "index": 11,
+        "trigger": 24,
+        "view": 0
+      },
+      "fixture": "database/fixtures/tags.example.json",
+      "fixture_sha256": "ffc72fed0395d938f524d68c3883b55ac405f5e247d38f04876009c1fd152bfa",
+      "fixture_expected_rows": {
+        "schema_version": 0,
+        "tag_groups": 1,
+        "tag_subgroups": 1,
+        "tag_tags": 1,
+        "update_info": 0,
+        "workbench_tag_flags_meta": 0,
+        "workbench_tag_folder_members": 1,
+        "workbench_tag_meta": 1,
+        "workbench_tag_revision": 1,
+        "workbench_tag_string_flags": 1,
+        "workbench_tag_text_revision": 1
+      }
+    }
+  }
+}

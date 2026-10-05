@@ -33,6 +33,9 @@ class RepositoryTests(unittest.TestCase):
     def commit(self):
         repository.run_git('-c', 'user.name=Maintenance Test', '-c', 'user.email=test@local.invalid', 'commit', '-qm', 'Test baseline')
 
+    def adopt(self, candidate):
+        repository.adopt(candidate, purpose='recovery-migration', reviewed_sha256=repository.changes(candidate)['review_sha256'])
+
     def make_snapshot(self, destination, payload, runtime=None):
         destination.mkdir()
         (destination/'source.txt').write_bytes(payload)
@@ -47,7 +50,7 @@ class RepositoryTests(unittest.TestCase):
         diff = repository.changes(candidate)
         self.assertEqual(diff['changed'], ['ComfyUI/main.py'])
         with contextlib.redirect_stdout(io.StringIO()):
-            repository.adopt(candidate)
+            self.adopt(candidate)
         self.assertFalse(candidate.exists())
         self.assertFalse((self.root/'live').exists())
         self.assertEqual((self.repo/'snapshot/source.txt').read_bytes(), b'new version')
@@ -59,13 +62,33 @@ class RepositoryTests(unittest.TestCase):
         candidate = self.make_snapshot(self.root/'comfyui-candidate-two', b'new')
         (self.repo/'uncommitted.txt').write_text('keep me')
         with self.assertRaises(RuntimeError):
-            repository.adopt(candidate)
+            self.adopt(candidate)
         self.assertTrue(candidate.exists())
         repository.run_git('add', 'uncommitted.txt')
         self.commit()
         foreign = self.make_snapshot(self.root/'comfyui-candidate-foreign', b'new', self.root/'other-runtime')
         with self.assertRaises(ValueError):
-            repository.adopt(foreign)
+            self.adopt(foreign)
+
+    def test_adopt_requires_review_bound_to_both_manifests(self):
+        candidate = self.make_snapshot(self.root/'comfyui-candidate-review', b'new')
+        with self.assertRaises(ValueError):
+            repository.adopt(candidate)
+        with self.assertRaises(ValueError):
+            repository.adopt(candidate, purpose='recovery-migration', reviewed_sha256='stale')
+        self.assertTrue(candidate.exists())
+        self.assertEqual((self.repo/'snapshot/source.txt').read_bytes(), b'original')
+
+    def test_bundle_rejects_deleted_historical_secret(self):
+        secret = self.repo/'leaked.txt'
+        secret.write_text('api_key = "' + 'sk-' + 'A9' * 24 + '"')
+        repository.run_git('add', 'leaked.txt')
+        self.commit()
+        repository.run_git('rm', 'leaked.txt')
+        self.commit()
+        with self.assertRaises(RuntimeError):
+            repository.bundle(self.root/'unsafe.bundle')
+        self.assertFalse((self.root/'unsafe.bundle').exists())
 
     def test_candidate_location_guard(self):
         wrong = self.make_snapshot(self.root/'wrong-name', b'new')
