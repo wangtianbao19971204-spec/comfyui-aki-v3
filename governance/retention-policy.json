@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "mode": "rules-only",
+  "automatic_actions": false,
+  "backup_destination": null,
+  "independent_backup_verified": false,
+  "principle": "一个开发主仓；历史原件只读保存；运行数据另做一致备份。规则不是已执行备份或清理收据。",
+  "categories": {
+    "original_history": {
+      "keep": "永久保留一套完整、验证过的原始历史及映射；不自动去重或删除",
+      "includes": ["退休 Git", "未公开原件", "历史迁移映射", "不可替代的技术原件"],
+      "public": false
+    },
+    "release_bundles": {
+      "minimum_verified_versions": 3,
+      "keep_forever": ["首个可恢复基线", "仍被回滚链引用的版本"],
+      "prune_only_after": "替代包经过 fresh clone、完整性和所需恢复检查；旧包仍被引用时不得清理"
+    },
+    "deployment_backups": {
+      "minimum_verified_releases": 3,
+      "minimum_days": 30,
+      "keep_forever_until_unpinned": ["当前部署的回滚依赖", "尚未验收或存在已知问题的变更原件"],
+      "note": "数量和天数均满足后才可能成为审核候选，不按时间直接删除"
+    },
+    "mutable_databases": {
+      "proposed_frequency": "每天及导入/迁移前；尚未建立定时任务",
+      "method": "SQLite backup API 加完整性检查；多库和 JSON 需要同一安静窗口及对应清单",
+      "retention": {"daily": 7, "weekly": 4, "monthly": 6},
+      "always_keep": ["最新已验证备份", "迁移前且仍被恢复链引用的备份"],
+      "destination_requirement": "受控的另一物理磁盘或独立备份介质；同盘文件夹不能声称异盘灾备"
+    },
+    "private_configuration": {
+      "proposed_frequency": "配置变更后及部署前",
+      "minimum_verified_versions": 3,
+      "requirements": ["仓外保存", "受控访问权限", "离机备份应加密且密钥独立保管", "不输出凭证原值"]
+    },
+    "unique_assets": {
+      "includes": ["自训 LoRA", "训练集与配套 captions", "唯一源图", "不可重建的提示词预览绑定"],
+      "proposed_frequency": "完成一个可接受的数据集或模型版本后",
+      "deletion": "禁止作为可重建缓存自动清理",
+      "downloadable_models": "可记录来源、版本、哈希和放置路径；能否重新下载须核实，不据此自动删本地模型"
+    },
+    "temporary_validation": {
+      "minimum_successful_generations": 2,
+      "minimum_days": 30,
+      "eligibility": "仅已结束、无活动使用者、无恢复引用的隔离验证树/失败候选；必须逐项审核",
+      "never_includes": ["运行目录", "模型或预览原件", "在线数据库", "唯一历史", "仍在执行的任务目录"]
+    }
+  },
+  "cleanup_requires": {
+    "explicit_review": true,
+    "no_active_users": true,
+    "exact_validated_paths": true,
+    "no_unresolved_recovery_references": true,
+    "replacement_verified_where_required": true,
+    "recoverable_move_first": true,
+    "follow_junction_targets": false,
+    "execution_receipt": true
+  }
+}

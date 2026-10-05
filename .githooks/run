@@ -12,6 +12,7 @@ else
 fi
 if [ "${1:-}" = "--staged" ]; then
     "$interpreter" -X utf8 -B scripts/technical_catalog.py check --staged --enforce-changes
+    exec "$interpreter" -X utf8 -B scripts/security_guard.py "$@" --cache-staged
 else
     "$interpreter" -X utf8 -B scripts/technical_catalog.py check --require-tracked
 fi

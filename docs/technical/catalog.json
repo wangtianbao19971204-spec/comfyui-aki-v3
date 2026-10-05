@@ -428,7 +428,8 @@
       "tests": [],
       "evidence": [
         "docs/receipts/anima29_lorapatch_20261005.json",
-        "docs/receipts/anima29_lorapatch_original_anima_check_20261005.json"
+        "docs/receipts/anima29_lorapatch_original_anima_check_20261005.json",
+        "docs/receipts/anima29_lorapatch_production_lora_strength_20261005.json"
       ],
       "acceptance": "historical",
       "watch": [
@@ -439,6 +440,9 @@
       "id": "operations-source-of-truth",
       "document": "docs/technical/operations/source-of-truth.md",
       "implementation": [
+        "scripts/maintain.py",
+        "scripts/staged_scan_cache.py",
+        "governance/retention-policy.json",
         "scripts/snapshot.py",
         "scripts/project.py",
         "scripts/external_state.py",
@@ -453,6 +457,8 @@
         "governance/training-trigger-reviews.json"
       ],
       "tests": [
+        "tests/test_maintain.py",
+        "tests/test_staged_scan_cache.py",
         "tests/test_snapshot.py",
         "tests/test_project.py",
         "tests/test_external_state.py",

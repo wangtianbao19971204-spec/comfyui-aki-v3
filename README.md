@@ -1,71 +1,41 @@
 # comfyui
 
-本机 ComfyUI 项目的维护仓库。覆盖**本体源码、生产插件与统一工作台、已保存工作流及子图、提示词资料库、模型依赖清单和维护工具**。
+ComfyUI 相关源码、工作流/子图、提示词资料检查点和维护工具的**唯一开发主仓**。在本仓修改、验证和提交；运行目录只接收明确范围的部署。仓外资料保管密钥、大资源和最新运行数据。
 
-这是今后 **ComfyUI 相关修改的唯一主 Git**，不是 Comfy-Org 官方仓库，也不是装好全部模型的整机镜像。日常开发直接改本仓 `snapshot/runtime/` 对应源码；运行目录只作部署目标。数据库结构、迁移、工作流和提示词资料维护也在本仓登记。
+## 日常只看四个入口
 
-按用户最新决定保留真实提示词库、收藏、备注和历史；公开准备的重点是移除密钥、登录配置及插件缓存。所有发现的工作 Git 的本地可得提交历史已接入主仓；原始含凭证图另作私有档案。**没有配置在线远端、没有上传 GitHub。** 初次整理仅部署了 9 份凭证外置/安全示例文件及运行根维护路由；后续独立任务另完成了 [Anima 2.9B LoRA 补丁部署与对照验收](docs/technical/training/anima-compat.md)。这些有边界验收不表示完成全部功能或新机器冷启动验收。
+| 要做什么 | 从哪里开始 |
+|---|---|
+| 看当前提交、未提交改动和本地版本标签 | [维护入口](scripts/maintain.py)：运行下面的 `status` |
+| 找一项功能的代码、测试与技术说明 | [功能地图](docs/technical/README.md) |
+| 修改、检查、提交和按范围部署 | [日常维护](docs/MAINTENANCE.md) |
+| 回退、换机器与补齐外部资源 | [恢复方法](docs/RESTORE.md) |
 
-## 从这里开始
-
-- [分层技术接手档案](docs/technical/README.md)：按功能找到真实实现、测试、数据边界和短更新记录；旧技术原件单列历史参考。
-- [最新技术覆盖复核](docs/ACCEPTANCE_TECHNICAL.md)：本轮补源、现场核对、317 项回归与明确保留的限制。
-- [维护包版本与发布](docs/VERSIONING.md)：独立 SemVer、显式自动递增、发布标签与回滚引用；不改本体/插件版本。
-- [项目地图](docs/PROJECT_MAP.md)：每类文件的归属、作用和实际源路径。
-- [工作区与唯一来源](docs/WORKSPACE.md)：主 Git、仓外私密/资源、实际运行目录的关系及清理恢复。
-- [外部状态组合](docs/EXTERNAL_STATE.md)：私密配置、在线库和大资源的显式引用与隔离组合。
-- [日常维护](docs/MAINTENANCE.md)：主仓开发、封装清单、隔离验收、授权部署与打包。
-- [历史迁移](docs/history/README.md)：完整图、reflog 补迁、脱敏映射与私有原件。
-- [数据库契约](docs/DATABASE.md)：三库结构、虚构测试资料、未来有序迁移入口。
-- [外部资源](docs/EXTERNAL_ASSETS.md)：模型/预览放置路径与小型格式样例。
-- [恢复与迁移](docs/RESTORE.md)：Git bundle 克隆、离线还原、外部资源和凭证补齐。
-- [模型管理](docs/MODELS.md)：本体、编码器、VAE、LoRA、检测器与超分依赖。
-- [已知限制](docs/KNOWN_ISSUES.md)：已验收边界和仍未修复的问题。
-- [安全与发布](docs/SECURITY.md)：凭证门禁、GitHub 发布前检查与禁止上传项。
-
-## 内容结构
-
-```text
-comfyui/
-├─ README.md / AGENTS.md / CHANGELOG.md
-├─ docs/                      维护、恢复、安全与项目地图
-├─ scripts/snapshot.py        只读采集、哈希校验、离线物化
-├─ scripts/repository.py      差异审查、接纳快照、Git bundle
-├─ scripts/project.py         主仓源码封装与只读部署计划
-├─ scripts/security_guard.py  index / 全可达历史凭证与资源门禁
-├─ database/                  结构契约、迁移登记与隔离测试资料
-├─ examples/external-assets/  一个中性视觉样例、格式与放置表
-├─ governance/                运行根 AGENTS 路由的版本化原件
-├─ .githooks/ / .github/       本地提交/推送保护与 CI
-├─ tests/                     快照工具测试
-└─ snapshot/
-   ├─ manifest.json          逐文件来源、哈希、分片顺序、服务基线
-   ├─ runtime/               保留原相对目录的源码/工作流/生产工具
-   ├─ library/json/          提示词库 JSON 的逐字节可逆分片
-   ├─ library/sql/           一致 SQLite 备份产生的逻辑 SQL 分片
-   ├─ inventory/             模型、预览、依赖、上游与排除项清单
-   └─ evidence/              当前 UI、工作流发布与真实推理验收记录
-```
-
-模型权重、约 23 GB 的提示词预览媒体、Python/CUDA 二进制、日志、生成图和密钥**不包含在 Git 中**。权重及预览清单不等于文件备份，换机器必须另行保存这些原目录。
-
-提示词正文、分类、ID、收藏、备注、关联与历史数据库是本轮快照的实质内容，不是只列清单。JSON 分片合并后可恢复原始字节；SQLite 从在线备份导出，恢复后校验表行数与完整逻辑 SQL 哈希，不直接拷贝运行中的 WAL 数据库。
-
-## 快速检查
-
-在仓库目录执行（下面的 Python 路径适用于当前安装位置）：
+在本仓目录运行；本机 Python 路径如下，其他机器使用自己的 Python 3.10+：
 
 ```powershell
-& ..\..\python\python.exe -X utf8 -B scripts\snapshot.py verify
-& ..\..\python\python.exe -X utf8 -B -m unittest discover -s tests -v
-& ..\..\python\python.exe -X utf8 -B database\tools\contract.py check --against-snapshot
-& ..\..\python\python.exe -X utf8 -B scripts\technical_catalog.py check
-& ..\..\python\python.exe -X utf8 -B scripts\security_guard.py --all-history
-git config --local core.hooksPath .githooks
-git config --local core.longpaths true
-git status --short
+# 快速看现在；不扫描整库、不访问在线服务
+& ..\..\python\python.exe -X utf8 -B scripts\maintain.py status
+
+# 只看我们自己的主线，不展开旧组件的全部历史
+& ..\..\python\python.exe -X utf8 -B scripts\maintain.py history
+
+# 精确 git add 本次文件后，检查真正暂存的字节
+& ..\..\python\python.exe -X utf8 -B scripts\maintain.py check-staged
 ```
 
-首次 clone 后需自己启用 hooks（Git 不会自动执行仓库脚本）。最新整理见 [工作区整理验收](docs/ACCEPTANCE_WORKSPACE.md)；[统一主仓 v2](docs/ACCEPTANCE_V2.md) 与 [首版验收](docs/ACCEPTANCE.md)保留为历史证据，旧 `comfyui.bundle` 不可公开。不要执行快照中写死旧日期、旧 PID 的历史发布/回滚脚本；也不要整目录上传运行根、仓外根、`maintenance` 或复制本机 `.git` 公开。
+首次 clone 要按维护页启用 hooks。普通开发不会自动加版本、打标签或部署；正式发布按 [版本规则](docs/VERSIONING.md) 执行。状态命令区分“有本地标签”“有未提交修改”和“运行状态未实测”，不把任一项当成全部完成。
 
-后续完整性复核已补迁 445 份网页抓取、图片补全、历史分类、训练参数、UI/工作流实现及证据。精确来源与 SHA 见 [技术归档登记](governance/technical-archive.json)，接手从分层技术档案进入。80 项外部依赖/缺失 fixture 单列在本机审核回执，目录引用不等于备份；旧原文的本机路径保持历史字节，新接手页使用可检查的相对链接。旧验收收据保持原时点，不把补迁或并行新功能倒写成当时已完成。
+## 保持三个边界
+
+- **主仓**：源码在 `snapshot/runtime/`，结构与迁移在 `database/`，受审查资料导出在 `snapshot/library/`。真实提示词、收藏、备注与历史可保留，不手工改资料分片。
+- **运行区**：部署代码、环境、模型及应用最新数据。旧 Git 已退休，不能继续从运行插件目录开发或一键拉取覆盖；旧 SQL 检查点不能覆盖更新的在线库。
+- **仓外资料**：密钥、模型、预览原图、训练集、原始 Git 和回滚材料。路径引用不是备份，同盘归档不是异盘灾备；当前备份保留规则不执行自动清理。
+
+详细归属见 [工作区](docs/WORKSPACE.md) 和 [外部状态](docs/EXTERNAL_STATE.md)。模型与媒体只有清单/格式样例，clone 本仓不等于装好了完整运行环境；现有功能限制见 [已知问题](docs/KNOWN_ISSUES.md)。
+
+## 历史需要时再看
+
+[旧 Git 迁移](docs/history/README.md)和 [445 份技术原件](docs/technical/archive/README.md)保留追溯，不是另一套开发入口。日常更新对应功能的现行说明及短记录，不为每次小改动复制一套文档；历史脚本不可直接重跑。
+
+[技术覆盖复核](docs/ACCEPTANCE_TECHNICAL.md)是当时的验收，不替代当前状态。旧 bundle 不自动包含后续提交；正式分发必须通过[安全与许可检查](docs/SECURITY.md)，不能公开复制本机 `.git`、运行根或私密档案。本仓尚未配置在线远端或上传 GitHub。

@@ -1,0 +1,43 @@
+{
+  "receipt": "anima29_lorapatch_production_lora_strength_20261005",
+  "parent_receipts": [
+    "docs/receipts/anima29_lorapatch_20261005.json",
+    "docs/receipts/anima29_lorapatch_original_anima_check_20261005.json"
+  ],
+  "question": "Do the LoRA strengths baked into the Anima 2.9B recommended workflows need to be lowered now that the patch makes them land on the correct layers?",
+  "method": "Same prompt, same seed 645613437897959, same sampler (28 steps, cfg 3.5, euler, sgm_uniform, AuraFlow shift 3), 768x1344, patch active. Only the shared strength of the four LoRAs of the recommended workflow [02] subgraph varies.",
+  "tested_loras": [
+    "anima/角色与人物/remielle-dan-zzz-anima-Tanger.safetensors",
+    "anima/概念与效果/anima_vagina_detail_v1.safetensors",
+    "anima/姿势与动作/HighHeel_SoundingANIMA.safetensors",
+    "anima/画风与画师/NikkeB1.safetensors"
+  ],
+  "results": [
+    {
+      "strength": 1.0,
+      "image": "R4_100_00001_.png",
+      "sha256": "32ea341fc93a5b557e620f60005b162f0b0da11ec26b6a865a508aa05983a8db",
+      "reading": "Clean, well-exposed, no colour wash. Character identity (pink-haired ZZZ character) most faithful."
+    },
+    {
+      "strength": 0.7,
+      "image": "R4_70_00001_.png",
+      "sha256": "e12591967b45f5d12c8726012e6ae91a1db285854b4b8ea81ea48e232fb45aaf",
+      "reading": "Still clean, but the character LoRA influence weakens: hair colour drifts to silver, identity less faithful."
+    },
+    {
+      "strength": 0.5,
+      "image": "R4_50_00001_.png",
+      "sha256": "101a3e3fa135aa29684818fb772d013c8a863fc7407fcdf3b51ce75e73d24061",
+      "reading": "Clean but character influence further reduced."
+    }
+  ],
+  "conclusion": "No strength change is warranted. The baked 1.0 renders cleanly with the actual production LoRA set and gives the strongest character fidelity; lowering it only weakens the LoRAs.",
+  "retraction": "The earlier recommendation in the parent receipt - lower the four baked 1.0 entries to 0.6 - was based on a different LoRA pair (anima-base-1-painterly-v2 + remielle-dan). The wash-out seen there comes from that specific very strong painterly style LoRA at 1.0, and it reproduces on original Anima as well, so it is a per-LoRA strength property rather than a workflow defect. That recommendation is withdrawn.",
+  "workflow_action": "None. The Anima 2.9B recommended workflows already route their LoRA stack into the 2.9B model chain (UNETLoader -> LoraManager merge -> ModelSamplingAuraFlow -> sampler); they needed no structural repair and their baked strengths are left untouched.",
+  "service": {
+    "pid": 44944,
+    "queue": "0/0",
+    "patch_active": true
+  }
+}

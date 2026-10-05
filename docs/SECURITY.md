@@ -25,6 +25,14 @@ git config --local core.hooksPath .githooks
 
 本地 pre-commit 强制 index 门禁，pre-push 强制全历史门禁；bundle 工具也内置全历史门禁。GitHub CI 对新推送/PR 跑工具测试、快照、数据库契约和全部可达历史扫描。新 clone 不会自动启用 hooks，须执行上面的 repo-local 配置。
 
+### 本地暂存快检缓存
+
+pre-commit 使用 `--staged --cache-staged`；`--staged` 单独运行仍完全不使用缓存。缓存只在该工作树的 Git 管理目录保存 `comfyui-staged-scan-v1.json`，内容只有身份/规则/内容摘要，没有文件正文、分片首尾或凭证值。只在整次检查成功且 refs/index/规则稳定后写入，原子替换；拒绝链接/硬链接，损坏或失效时完整重扫。
+
+命中仍读取 Git 对象全部字节，核对 SHA、大小、所有路径、当前 manifest 顺序及跨片边界。缓存只省略此前干净、未压缩、未使用审核例外对象的重复内容模式匹配；压缩包与所有审核例外每次重扫。实际检测器/缓存代码、Python 版本、规则、例外登记、路径别名或对象变化会失效。合法临时 `GIT_INDEX_FILE` 使用实际选定的 index，不读取编辑器未暂存内容。
+
+摘要用于发现偶然损坏，不是对本机 Git 管理员的防篡改认证；管理员同样可以改 hooks。缓存不能提交、不能从别人的仓库导入为可信证据，不缓存未知来源的 PASS。**全历史、pre-push、release、bundle、CI 都不读该缓存**，也不提供以缓存替代公开门禁的开关。`scanned_bytes` 仍是实际读取字节，报告另外列出复用的内容扫描量，不把复用称为重新执行所有内容规则。
+
 ## 历史凭证处理与后续整理
 
 旧本体实验分支发现 1 处硬编码 API key；维护首版的两份上游插件源码共 3 处旧 GitCode token。公开历史仅精确去除这些确认值，保留提交消息、作者/提交者时间、父链与全部本地 commits，old→new 映射在 `docs/history`。受影响签名不沿用为有效签名；原对象及签名只留在私有备份。
