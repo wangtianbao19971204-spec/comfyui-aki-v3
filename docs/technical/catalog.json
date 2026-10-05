@@ -1,0 +1,556 @@
+{
+  "schema": 1,
+  "indexes": [
+    "docs/technical/README.md",
+    "docs/technical/runtime/README.md",
+    "docs/technical/library/README.md",
+    "docs/technical/training/README.md",
+    "docs/technical/operations/README.md"
+  ],
+  "features": [
+    {
+      "id": "runtime-core",
+      "document": "docs/technical/runtime/core.md",
+      "implementation": [
+        "snapshot/runtime/ComfyUI/main.py",
+        "snapshot/runtime/ComfyUI/nodes.py",
+        "snapshot/runtime/production_tools/launch.py",
+        "snapshot/runtime/production_tools/profiles.json",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/__init__.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules.json"
+      ],
+      "tests": [
+        "snapshot/runtime/production_tools/validate_profiles.py",
+        "snapshot/runtime/production_tools/validate_lean_profile.py",
+        "snapshot/runtime/production_tools/test_plugin_fusion.cjs"
+      ],
+      "evidence": [],
+      "acceptance": "checked-source",
+      "watch": [
+        "snapshot/runtime/",
+        "snapshot/runtime/production_tools/launch.py",
+        "snapshot/runtime/production_tools/profiles.json",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/__init__.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules.json"
+      ]
+    },
+    {
+      "id": "runtime-workbench",
+      "document": "docs/technical/runtime/workbench.md",
+      "implementation": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_theme.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_identity.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime.css",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/modal_focus.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_target.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/pending_prompts.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_optimizer.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/run_controls.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/refinement_controls.js"
+      ],
+      "tests": [
+        "snapshot/runtime/production_tools/test_uap_navigation.cjs",
+        "snapshot/runtime/production_tools/test_uap_daily_controls.cjs",
+        "snapshot/runtime/production_tools/test_uap_compact_widgets.cjs",
+        "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/test_candidate.cjs",
+        "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/browser_measurement.js",
+        "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/lifecycle_collector.js"
+      ],
+      "evidence": [
+        "snapshot/evidence/20261005_workbench_anime_polish/REPORT.txt",
+        "snapshot/evidence/20261005_workflow_product_repair/REPORT.txt",
+        "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/browser_acceptance.json",
+        "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261003_015012_R1_autonomous/UI_FINAL_ACCEPTANCE.json"
+      ],
+      "acceptance": "historical",
+      "watch": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/",
+        "snapshot/runtime/production_tools/layout_uap_workbench.py",
+        "snapshot/runtime/production_tools/tighten_uap_widgets.py",
+        "snapshot/runtime/production_tools/arrange_uap_daily_controls.py",
+        "snapshot/runtime/production_tools/test_uap_navigation.cjs",
+        "snapshot/runtime/production_tools/test_uap_daily_controls.cjs",
+        "snapshot/runtime/production_tools/test_uap_compact_widgets.cjs"
+      ]
+    },
+    {
+      "id": "runtime-workflows",
+      "document": "docs/technical/runtime/workflows.md",
+      "implementation": [
+        "snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+        "snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json",
+        "snapshot/runtime/production_tools/merge_unified_workflow.py",
+        "snapshot/runtime/production_tools/validate_uap_workflow.py",
+        "snapshot/runtime/production_tools/analyze_workflow_dependencies.py",
+        "docs/technical/archive/benchmark_reports/2026-10-04_full_workflow_review/build_component_catalog.py"
+      ],
+      "tests": [
+        "snapshot/runtime/production_tools/validate_uap_workflow.py",
+        "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/test_structure.py",
+        "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/test_candidate.cjs",
+        "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_native_e2e_acceptance/acceptance.py"
+      ],
+      "evidence": [
+        "snapshot/evidence/20261005_workflow_product_repair/FINAL_DELIVERY.json",
+        "snapshot/evidence/20261005_native_e2e_acceptance/REPORT.txt",
+        "docs/technical/archive/civitai_workflow_study/报告-Civitai近三月热门工作流人体部件与NSFW细化分析.md",
+        "docs/technical/archive/civitai_workflow_study/检测器到细化器数据流.json",
+        "docs/technical/archive/civitai_workflow_study/逐工作流明细.json"
+      ],
+      "acceptance": "historical",
+      "watch": [
+        "snapshot/runtime/ComfyUI/user/default/workflows/",
+        "snapshot/runtime/production_tools/templates/",
+        "snapshot/runtime/production_tools/merge_unified_workflow.py",
+        "snapshot/runtime/production_tools/validate_uap_workflow.py",
+        "snapshot/runtime/production_tools/analyze_workflow_dependencies.py"
+      ]
+    },
+    {
+      "id": "runtime-models",
+      "document": "docs/technical/runtime/models.md",
+      "implementation": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/__init__.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/py/lora_manager.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/py/config.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules.json",
+        "snapshot/inventory/models.json",
+        "snapshot/inventory/workflow_models.json",
+        "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/run_benchmark.py"
+      ],
+      "tests": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/test_checkpoint_loaders.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/nodes/test_lora_loader.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/nodes/test_lora_validation.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/utils/test_civitai_utils.py"
+      ],
+      "evidence": [
+        "docs/technical/archive/benchmark_reports/MODEL_COMPARISON_RUNBOOK.md",
+        "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/report/三模型详细对比报告.md"
+      ],
+      "acceptance": "checked-source",
+      "watch": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/"
+      ]
+    },
+    {
+      "id": "runtime-pixai",
+      "document": "docs/technical/runtime/pixai.md",
+      "implementation": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-PixAI-Tagger/__init__.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-PixAI-Tagger/nodes.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-PixAI-Tagger/web/pixai_tagger.js"
+      ],
+      "tests": [],
+      "evidence": [],
+      "acceptance": "checked-source",
+      "watch": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-PixAI-Tagger/"
+      ]
+    },
+    {
+      "id": "library-web-import",
+      "document": "docs/technical/library/web-import.md",
+      "implementation": [
+        "snapshot/runtime/benchmark_reports/source_update_flow/freeze_batch.py",
+        "snapshot/runtime/benchmark_reports/source_update_flow/flow_gate.py",
+        "snapshot/runtime/benchmark_reports/source_update_flow/newer_source_policy.py",
+        "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/acquire_web.py",
+        "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/fetch_catalog.py",
+        "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/extract_documents.py",
+        "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/parse_documents.py",
+        "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/audit_matching.py",
+        "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/update_common.py",
+        "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/prepare_stage.py",
+        "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/finalize_stage.py",
+        "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/fetch_images.py",
+        "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/stage_increment.py",
+        "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/release.py",
+        "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/live_acceptance.py",
+        "docs/technical/archive/benchmark_reports/2026-09-28_web_image_reaudit/audit_web_images.py",
+        "docs/technical/archive/benchmark_reports/2026-09-28_web_image_reaudit/current_gap.py",
+        "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/db_fingerprint.py",
+        "docs/technical/archive/benchmark_reports/2026-09-15_tag_folder_classification/repo_src/NovelAI-Tag-main/tools/convert.py",
+        "docs/technical/archive/benchmark_reports/2026-09-15_tag_folder_classification/repo_src/NovelAI-Tag-main/tools/codex_update_match.py",
+        "docs/technical/archive/benchmark_reports/2026-09-15_tag_folder_classification/repo_src/NovelAI-Tag-main/tools/migrate_suozhang_char_prompts.py"
+      ],
+      "tests": [],
+      "evidence": [
+        "snapshot/runtime/benchmark_reports/source_update_flow/historical_replay_result.json",
+        "snapshot/runtime/benchmark_reports/source_update_flow/current_scope_rejection.json",
+        "docs/technical/archive/benchmark_reports/分类工作入口.md",
+        "docs/technical/archive/benchmark_reports/分类标准.md",
+        "docs/technical/archive/benchmark_reports/分类标准变更记录.md",
+        "docs/technical/archive/benchmark_reports/2026-09-15_tag_folder_classification/repo_src/NovelAI-Tag-main/LICENSE",
+        "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/stage_validation.json",
+        "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/live_acceptance.json",
+        "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/release_receipt.json"
+      ],
+      "acceptance": "historical",
+      "watch": [
+        "snapshot/runtime/benchmark_reports/source_update_flow/"
+      ]
+    },
+    {
+      "id": "library-taxonomy",
+      "document": "docs/technical/library/taxonomy.md",
+      "implementation": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/semantic_taxonomy.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/semantic_projection.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/semantic_refinements.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/semantic_filter_counts.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/selector_library.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/prompt_selector.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_library.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_identity_bridge.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_links.py",
+        "docs/technical/archive/benchmark_reports/2026-09-25_full_coverage/full_coverage_scan.py",
+        "docs/technical/archive/benchmark_reports/2026-09-25_full_coverage/release_gate.py",
+        "docs/technical/archive/benchmark_reports/2026-09-25_full_coverage/strict_replay.py",
+        "docs/technical/archive/benchmark_reports/2026-09-25_full_coverage/g6_current_source_contract.py",
+        "docs/technical/archive/benchmark_reports/2026-09-25_taxonomy_convergence/reviewer_backend_v3/verify_g6.py",
+        "docs/technical/archive/benchmark_reports/2026-09-20_taxonomy_audit/verify_filter_pool.py",
+        "docs/technical/archive/benchmark_reports/2026-09-20_topic_drilldown/verify_backend.py",
+        "docs/technical/archive/benchmark_reports/2026-09-23_consecutive_backlog_wave1/verify_linkage_backend.py",
+        "docs/technical/archive/benchmark_reports/2026-09-23_consecutive_round135_batch2_expression_gaze_pose_release/transaction_common.py",
+        "docs/technical/archive/benchmark_reports/2026-09-23_consecutive_round135_batch1_controlled_radius/historical_replay_amendment.py",
+        "docs/technical/archive/benchmark_reports/2026-09-23_consecutive_round135_batch2_expression_gaze_pose_release/context_parent_rules.py",
+        "docs/technical/archive/benchmark_reports/2026-09-20_consecutive_parent_contexts/context_parent_rules.py",
+        "docs/technical/archive/benchmark_reports/2026-09-23_consecutive_backlog_wave1/review_amendments.py"
+      ],
+      "tests": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_anima_tag_classifier.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_anima_tag_semantic_pass.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_anima_review_refinement.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_anima_second_pass.py",
+        "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/test_strict_replay.py",
+        "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/test_exact_contract.py",
+        "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/boundary_tests.py"
+      ],
+      "evidence": [
+        "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/集中修复与验收报告.md",
+        "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/release_receipt.json",
+        "docs/technical/archive/benchmark_reports/2026-09-27_remaining_classification/EXECUTION_STATE.json"
+      ],
+      "acceptance": "checked-source",
+      "watch": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/tag_manager.js"
+      ]
+    },
+    {
+      "id": "library-selectors",
+      "document": "docs/technical/library/selectors.md",
+      "implementation": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/nodes.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/js/anima_shared_prompt_data.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/js/anima_selector_ui.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/js/anima_character_selector.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/js/anima_clothing_selector.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/js/anima_pose_selector.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/js/anima_background_selector.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/js/anima_artist_selector.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/js/anima_prompt_composer.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/data/weilin_category_taxonomy.json",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/data/weilin_anima_classification_contract.json",
+        "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/snapshot_contract.py",
+        "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/source_snapshot_final/rollback.py"
+      ],
+      "tests": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/tests/anima_shared_prompt_data.test.mjs",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/tests/anima_selector_ui.test.mjs",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/tests/test_style_quality_selector.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/tests/test_weilin_taxonomy_manifest.py",
+        "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/test_canonical_selector_backend.py",
+        "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/test_canonical_selector_frontend.mjs",
+        "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/test_artist_page_contract_adapted.py",
+        "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/test_snapshot_guards.py"
+      ],
+      "evidence": [
+        "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/source_snapshot_final/manifest.json",
+        "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/source_snapshot_final/README.txt",
+        "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/交付说明.txt",
+        "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/browser_acceptance.json",
+        "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/live_api_acceptance.json",
+        "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/final_live_guard.json"
+      ],
+      "acceptance": "checked-source",
+      "watch": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/selector_tools.js"
+      ]
+    },
+    {
+      "id": "library-tag-previews",
+      "document": "docs/technical/library/tag-previews.md",
+      "implementation": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_library.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_api.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/prompt_selector.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/resource_results.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_resource.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/py/shared/db/weilin_tag_bridge.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/danbooru_gallery/danbooru_gallery.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/danbooru_gallery/gallery_dialog.js",
+        "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/fetch_images.py",
+        "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/prepare_images.py",
+        "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/fetch_images.py",
+        "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/validate_increment.py",
+        "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/live_acceptance.py"
+      ],
+      "tests": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/tests/test_weilin_tag_bridge.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/tests/test_tag_translation_runtime.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_tag_identity_bridge.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_tag_api_identity.py",
+        "docs/technical/archive/benchmark_reports/2026-09-13_tag_import/test_tag_http.py",
+        "docs/technical/archive/benchmark_reports/2026-09-13_tag_import/tag_import_ui.test.mjs"
+      ],
+      "evidence": [
+        "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/stage_validation.json",
+        "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/live_acceptance.json",
+        "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/current_site_audit.json",
+        "docs/technical/archive/benchmark_reports/2026-10-01_gallery_card_fix/verification.json"
+      ],
+      "acceptance": "checked-source",
+      "watch": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_library.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_api.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_identity_bridge.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_links.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/autocomplete_api.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_tag_identity_bridge.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_tag_api_identity.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/resource_results.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_resource.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Custom-Scripts/web/js/autocompleter.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Custom-Scripts/web/js/common/autocomplete.js"
+      ]
+    },
+    {
+      "id": "training-data-forge",
+      "document": "docs/technical/training/data-forge.md",
+      "implementation": [
+        "snapshot/runtime/character_lora_forge/forge.py",
+        "snapshot/runtime/character_lora_forge/character_forge/pipeline.py",
+        "snapshot/runtime/character_lora_forge/character_forge/matrix.py",
+        "snapshot/runtime/character_lora_forge/character_forge/workflow.py",
+        "snapshot/runtime/character_lora_forge/character_forge/scoring.py",
+        "snapshot/runtime/character_lora_forge/character_forge/vlm.py",
+        "docs/technical/archive/character_lora_forge/characters/alicia_bell/character.json",
+        "docs/technical/archive/character_lora_forge/characters/alicia_bell/selection_campaign_20x200_plan.json",
+        "docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/visual_spec.json",
+        "docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/dual_form_base_spec.json"
+      ],
+      "tests": [
+        "snapshot/runtime/character_lora_forge/tests/test_core.py",
+        "snapshot/runtime/character_lora_forge/tests/test_recovery_tools.py"
+      ],
+      "evidence": [
+        "docs/technical/archive/character_lora_forge/characters/alicia_bell/gold_package_plan.md",
+        "docs/technical/archive/character_lora_forge/characters/alicia_bell/gold_selection_strategy_review_20260818.md",
+        "docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/form_outfit_separation_matrix_20260818.md",
+        "docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/split_lora_contract_20260822.md",
+        "docs/technical/archive/character_lora_forge/characters/rosasha/README.md"
+      ],
+      "acceptance": "checked-source",
+      "watch": [
+        "snapshot/runtime/character_lora_forge/"
+      ]
+    },
+    {
+      "id": "training-lora-forge",
+      "document": "docs/technical/training/lora-forge.md",
+      "implementation": [
+        "snapshot/runtime/anima_lora_forge/anima_lora.py",
+        "snapshot/runtime/anima_lora_forge/anima_lora_forge/core.py",
+        "snapshot/runtime/anima_lora_forge/templates/new_character.profile.json",
+        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/anima_train_network.py",
+        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/library/anima_models.py",
+        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/library/anima_train_utils.py",
+        "docs/technical/archive/anima_lora_forge/profiles/rosasha_smoke.json",
+        "docs/technical/archive/anima_lora_forge/profiles/rosasha_calibration_400.json",
+        "docs/technical/archive/anima_lora_forge/profiles/rosasha.json",
+        "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_smoke.json",
+        "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_calibration_400.json",
+        "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_ordinary_400.json",
+        "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_400.json",
+        "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_anima29_400.json",
+        "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_v3_bow_bundle_stress_80.json",
+        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/Download-Anima-Model.bat",
+        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/Fix-Portable-Bats.bat",
+        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/install_xformers.bat",
+        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/README.txt",
+        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/run_gui_portable.bat",
+        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/run_gui.bat",
+        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/Update-SD-Trainer-Release.bat",
+        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/Update-SD-Trainer.bat",
+        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/update/update_dependencies.bat",
+        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/update/update_from_release.bat",
+        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/update/update_sd_trainer.bat"
+      ],
+      "tests": [
+        "snapshot/runtime/anima_lora_forge/tests/test_core.py"
+      ],
+      "evidence": [
+        "docs/technical/archive/anima_lora_forge/releases/rosasha_anima_r32_v1/README.md",
+        "docs/technical/archive/anima_lora_forge/releases/rosasha_anima_r32_v1/evaluation_report.md",
+        "docs/technical/archive/anima_lora_forge/releases/rosasha_anima_r32_v1/prompt_pack.txt",
+        "docs/technical/archive/anima_lora_forge/releases/alicia_bell_ordinary_anima_r32_v1/README.md",
+        "docs/technical/archive/anima_lora_forge/releases/alicia_bell_ordinary_anima_r32_v1/evaluation_report.md",
+        "docs/technical/archive/anima_lora_forge/releases/alicia_bell_ordinary_anima_r32_v1/prompt_pack.txt",
+        "docs/technical/archive/anima_lora_forge/releases/alicia_bell_ordinary_anima_r32_v1/weight_audit.json",
+        "docs/technical/archive/anima_lora_forge/releases/alicia_bell_morning_star_anima_r32_v1/README.md",
+        "docs/technical/archive/anima_lora_forge/releases/alicia_bell_morning_star_anima_r32_v1/evaluation_report.md",
+        "docs/technical/archive/anima_lora_forge/releases/alicia_bell_morning_star_anima_r32_v1/prompt_pack.txt",
+        "docs/technical/archive/anima_lora_forge/releases/alicia_bell_morning_star_anima_r32_v1/weight_audit.json",
+        "docs/technical/archive/anima_lora_forge/releases/alicia_bell_morning_star_anima29_r32_v1/README.md",
+        "docs/technical/archive/anima_lora_forge/releases/alicia_bell_morning_star_anima29_r32_v1/evaluation_report.md",
+        "docs/technical/archive/anima_lora_forge/releases/alicia_bell_morning_star_anima29_r32_v1/prompt_pack.txt",
+        "docs/technical/archive/anima_lora_forge/releases/alicia_bell_morning_star_anima29_r32_v1/weight_audit.json"
+      ],
+      "acceptance": "checked-source",
+      "watch": [
+        "snapshot/runtime/anima_lora_forge/"
+      ]
+    },
+    {
+      "id": "training-anima-compat",
+      "document": "docs/technical/training/anima-compat.md",
+      "implementation": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-2.9B-loraPatch/__init__.py",
+        "snapshot/runtime/production_tools/profiles.json"
+      ],
+      "tests": [],
+      "evidence": [
+        "docs/receipts/anima29_lorapatch_20261005.json"
+      ],
+      "acceptance": "historical",
+      "watch": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-2.9B-loraPatch/"
+      ]
+    },
+    {
+      "id": "operations-source-of-truth",
+      "document": "docs/technical/operations/source-of-truth.md",
+      "implementation": [
+        "scripts/snapshot.py",
+        "scripts/project.py",
+        "scripts/external_state.py",
+        "scripts/workspace_guard.py",
+        "scripts/archive_workspace.ps1",
+        "scripts/workspace_history.py",
+        "scripts/history_migration.py",
+        "scripts/import_workspace_sources.py",
+        "scripts/technical_archive.py",
+        "scripts/security_guard.py",
+        "governance/technical-archive.json",
+        "governance/training-trigger-reviews.json"
+      ],
+      "tests": [
+        "tests/test_snapshot.py",
+        "tests/test_project.py",
+        "tests/test_external_state.py",
+        "tests/test_workspace_guard.py",
+        "tests/test_archive_workspace.py",
+        "tests/test_workspace_history.py",
+        "tests/test_history_migration.py",
+        "tests/test_import_workspace_sources.py",
+        "tests/test_technical_archive.py",
+        "tests/test_security_guard.py",
+        "tests/test_security_names.py",
+        "tests/test_training_trigger_reviews.py"
+      ],
+      "evidence": [],
+      "acceptance": "checked-source",
+      "watch": [
+        "scripts/",
+        "tests/",
+        "tests/test_snapshot.py",
+        "tests/test_project.py",
+        "tests/test_external_state.py",
+        "tests/test_workspace_guard.py",
+        "tests/test_archive_workspace.py",
+        "tests/test_workspace_history.py",
+        "tests/test_history_migration.py",
+        "tests/test_import_workspace_sources.py",
+        "tests/test_technical_archive.py",
+        "tests/test_security_guard.py",
+        "tests/test_security_names.py",
+        "tests/test_training_trigger_reviews.py"
+      ]
+    },
+    {
+      "id": "operations-release",
+      "document": "docs/technical/operations/release.md",
+      "implementation": [
+        "scripts/release.py",
+        "scripts/repository.py",
+        "scripts/technical_catalog.py",
+        "governance/version.json",
+        ".githooks/run",
+        ".githooks/pre-commit",
+        ".githooks/pre-push"
+      ],
+      "tests": [
+        "tests/test_release.py",
+        "tests/test_repository.py",
+        "tests/test_technical_catalog.py"
+      ],
+      "evidence": [],
+      "acceptance": "checked-source",
+      "watch": [
+        "scripts/release.py",
+        "scripts/repository.py",
+        "scripts/technical_catalog.py",
+        "governance/version.json",
+        ".githooks/",
+        ".github/",
+        "tests/test_release.py",
+        "tests/test_repository.py",
+        "tests/test_technical_catalog.py"
+      ]
+    },
+    {
+      "id": "operations-database",
+      "document": "docs/technical/operations/database.md",
+      "implementation": [
+        "database/contract.json",
+        "database/tools/contract.py",
+        "database/migrations/index.json"
+      ],
+      "tests": [
+        "tests/test_database_contract.py"
+      ],
+      "evidence": [],
+      "acceptance": "checked-source",
+      "watch": [
+        "database/",
+        "tests/test_database_contract.py"
+      ]
+    },
+    {
+      "id": "operations-remote-llm",
+      "document": "docs/technical/operations/remote-llm.md",
+      "implementation": [
+        "snapshot/runtime/remote_llm_guard/launcher.py",
+        "snapshot/runtime/remote_llm_guard/remote-llm.config.example.json",
+        "scripts/extract_remote_llm.py"
+      ],
+      "tests": [
+        "tests/test_remote_llm_config.py"
+      ],
+      "evidence": [],
+      "acceptance": "checked-source",
+      "watch": [
+        "snapshot/runtime/remote_llm_guard/",
+        "scripts/extract_remote_llm.py",
+        "tests/test_remote_llm_config.py"
+      ]
+    }
+  ]
+}

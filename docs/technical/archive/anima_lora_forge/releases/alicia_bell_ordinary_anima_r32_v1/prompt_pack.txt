@@ -1,0 +1,21 @@
+[IDENTITY]
+alcbo7yo260822, one 23-year-old adult woman, warm approachable soft oval face, fair warm skin, natural honey-hazel amber eyes with normal round pupils, loose light-brown champagne shoulder-length hair with a small side braid and wine ribbon, fully clothed
+
+[CANONICAL]
+opaque ivory blouse, short teal cardigan, wine-red knee-length A-line skirt, bare lower legs, brown low ankle boots, full body, plain warm gray background, clean anime character art
+
+[FORMAL]
+opaque midnight-blue tailored blazer, ivory buttoned blouse, matching ankle-length trousers, black socks and black loafers, poised full-body standing pose
+
+[MODERN CASUAL]
+navy denim jacket, opaque white crew-neck shirt, straight black trousers, gray socks and white sneakers, walking pose, full body
+
+[WATERCOLOR]
+delicate watercolor and ink storybook illustration, pale paper texture, soft contours
+
+[STRENGTH]
+Recommended: 0.8
+Use 0.6 for more base-model freedom. Use 1.0 only when stronger canonical clothing binding is acceptable.
+
+[NEGATIVE]
+nsfw, nude, underwear, child, teen, Morning Star form, peach-pink low twin tails, star hair accessory, idol outfit, sheer ivory pantyhose, multiple people, character sheet, turnaround sheet, front and back views, cropped feet, bad anatomy, text, watermark, signature, worst quality, low quality

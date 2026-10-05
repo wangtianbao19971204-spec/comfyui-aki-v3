@@ -33,6 +33,11 @@ MAX_DB_BYTES = 2 * 1024 * 1024 * 1024
 RECEIPT = 'EXTERNAL_STATE_RECEIPT.json'
 ENTRY_KEYS = {'id', 'root', 'source', 'target', 'category', 'action'}
 IDENTIFIER = re.compile(r'[a-z][a-z0-9_-]{0,63}')
+REFERENCE_ONLY_PRIVATE_CONFIG_PATHS = frozenset({
+    'qwen21_lab/extra_model_paths.yaml',
+    'qwen21_lab/runtime.json',
+    'qwen21_lab/server.json',
+})
 
 
 class ContractError(ValueError):
@@ -186,11 +191,15 @@ def validate_plan(plan, repo=REPO):
                 raise ContractError('database_requires_reference_or_backup_api')
         elif entry['action'] == 'sqlite_backup':
             raise ContractError('backup_action_requires_mutable_db')
+        if entry['target'].casefold() in REFERENCE_ONLY_PRIVATE_CONFIG_PATHS and (
+                entry['target'] not in REFERENCE_ONLY_PRIVATE_CONFIG_PATHS or
+                entry['category'] != 'private_config' or entry['action'] != 'reference'):
+            raise ContractError('private_config_reference_only')
         if entry['category'] == 'private_config':
             if is_dir or not (private_config(entry['target']) or entry['target'] in {
                 'ComfyUI/extra_model_paths.yaml', 'ComfyUI/user/default/comfy.settings.json',
                 'ComfyUI/user/anima_lora_config.json'
-            }):
+            } or entry['target'] in REFERENCE_ONLY_PRIVATE_CONFIG_PATHS):
                 raise ContractError('private_config_target_not_recognized')
         if entry['action'] == 'copy':
             if Path(entry['target']).suffix.lower() not in PRIVATE_EXTENSIONS and Path(entry['target']).name != '.env':

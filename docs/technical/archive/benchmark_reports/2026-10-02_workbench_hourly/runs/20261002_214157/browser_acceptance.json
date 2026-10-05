@@ -1,0 +1,43 @@
+{
+  "run_id": "20261002_214157",
+  "accepted_at": "2026-10-02T22:21:20.352290+08:00",
+  "milestone": "M9c_frequent_flow_validation_complete",
+  "status": "accepted",
+  "overall_plan": "complete",
+  "production_files_changed_this_run": 0,
+  "whole_M9_changed_files": 1,
+  "last_production_change": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_workbench_hourly\\runs\\20261002_205503\\change_manifest.json",
+  "passed": [
+    "M9a common-flow isolated functional baseline and M9b F08 inherited from accepted receipts",
+    "M9b one-line clothing optimization, compatibility and before/after browser measurements inherited",
+    "15/15 fresh-page samples: T01/T03/T02/T04/artist, 3 independent pages each",
+    "20/20 T06 v2 trusted-click samples: 3 fresh and 7 warm exact append/undo pairs",
+    "Returned visible positive baseline and unchanged negative confirmed; test documents discarded",
+    "Supplemental P4 10 clothing query/close cycles and paired 0/5/10 scoped resource samples",
+    "M9b 66.8-second closed idle zero request receipt retained",
+    "27 unchanged sources, 21 unchanged formal files, 6 served and 4 executed SHA matches",
+    "Same PID24420 identity, queue0/0, modules5/5, usage26 unchanged; rollback preflight passed",
+    "Own tabs19-22 and documents3/4 cleaned; user tab18 kept; all collectors/overrides removed"
+  ],
+  "boundaries": [
+    "504-node production topology uses short synthetic prompts; no generation or long-prompt performance benchmark.",
+    "T01 is first explicit reopen after automatic prerender, not cold construction; other fresh pages retain normal HTTP/server caches.",
+    "T06 uses synthetic GET/mark_used responses and measures frontend exact synchronization, not backend persistence latency.",
+    "Two rAF callbacks are paint opportunities, not proof of display pixels; all raw samples and preliminary protocol diagnostics retained.",
+    "P4 scoped DOM/globals/new timers pass. Whole-page heap/listener/node counts contain unrelated and tooling state; no whole-app leak/no-leak conclusion.",
+    "Renderer RSS could not be reliably mapped; service RSS is a separate adjacent sample.",
+    "Physical IME acceptance is inherited from M8; no repeat input requested in M9."
+  ],
+  "remaining": [],
+  "evidence": [
+    "fresh_timings_summary.json",
+    "t06_summary.json",
+    "lifecycle_acceptance.json",
+    "visible_restore_receipt.json",
+    "executed_sources.json",
+    "browser_cleanup.json",
+    "final_live_guard.json",
+    "rollback_preflight.json",
+    "source_snapshot_final/manifest.json"
+  ]
+}

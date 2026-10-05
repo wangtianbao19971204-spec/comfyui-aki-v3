@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "created_at": "2026-09-28T08:51:39.349383+08:00",
+  "release": "r-9a4bf4049f141be7d4d9",
+  "site_rows": 41202,
+  "image_rows": 39224,
+  "included_image_rows": 36885,
+  "extra_image_refs": 4186,
+  "held_or_empty_image_rows": 2339,
+  "increment_rows": 816,
+  "missing_source_rows": 0,
+  "missing_targets": 0,
+  "missing_primary_preview_files": 0,
+  "new_source_images_missing_or_changed": 0,
+  "new_source_images_not_primary_preview": 5,
+  "old_installed_image_failures": 0,
+  "data_sha256": "40490c2c8fded8efb85572292970016ea34462b64a216e454190cb73d9386af6",
+  "db_sha256": "eb907aa72f384fb41ba8d7df776ca11175a904d2401b03723a37f6930f067950",
+  "exceptions": {
+    "missing_sources": [],
+    "missing_targets": [],
+    "missing_primary_previews": [],
+    "new_source_images_not_primary": [
+      "raven_composition:raven_composition-3334",
+      "raven_composition:raven_composition-3410",
+      "raven_composition:raven_composition-3447",
+      "raven_composition:raven_composition-3448",
+      "raven_composition:raven_composition-3901"
+    ],
+    "old_installed_image_failures": []
+  }
+}

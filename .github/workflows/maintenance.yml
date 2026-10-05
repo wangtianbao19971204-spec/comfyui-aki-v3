@@ -22,5 +22,7 @@ jobs:
         run: python -X utf8 -B scripts/snapshot.py verify
       - name: Database schema contract
         run: python -X utf8 -B database/tools/contract.py check --against-snapshot
+      - name: Portable feature handoff catalogue
+        run: python -X utf8 -B scripts/technical_catalog.py check --require-tracked
       - name: All reachable history credential gate
         run: python -X utf8 -B scripts/security_guard.py --all-history

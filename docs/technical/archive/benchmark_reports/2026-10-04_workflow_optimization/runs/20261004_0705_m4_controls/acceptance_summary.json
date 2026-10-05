@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "numeric_checks": 288,
+  "checkbox_checks": 169,
+  "retention_checks": 44,
+  "reload_checks": 27,
+  "precision_proof": true,
+  "typed_invalid_feedback": true,
+  "original_user_content_preserved": true,
+  "original_graph_exact_equal": false,
+  "browser_storage_restored": true,
+  "browser_cleanup": true,
+  "limits": [
+    "Neutral unsaved fixtures; runtime handlers and API/JSON serialization, not new image-quality or GPU execution tests.",
+    "JSON load round trip, not a formal disk save.",
+    "Unchanged standalone 01-03 API path evidence reused from M2; current controls matrix covers all nine UAP branches.",
+    "Agent-tab before/after graphs have crop timestamps and three caption-node display-height deltas; all other fields compare equal. Original storage restored and all agent tabs closed."
+  ]
+}

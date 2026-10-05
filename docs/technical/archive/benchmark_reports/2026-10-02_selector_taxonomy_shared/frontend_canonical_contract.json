@@ -1,0 +1,40 @@
+{
+  "verified_at": "2026-10-01T17:06:09.754Z",
+  "passed": true,
+  "source_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_shared_prompt_data.js",
+  "source_sha256": "0cd7c7d0a5416868d267dcd0ab76b3d9c5f3498837f9ddedc51f6a170f38e14c",
+  "source_unchanged_during_test": true,
+  "backend_sha256": "8aba2247fb7046029431571210672048868877b80d28620d269d6f33756741ec",
+  "index_response_sha256": "a2d5daff61f1036f0be2814bf2874fe29628341069d017f5200755dcc2a11ccd",
+  "checks": [
+    "taxonomy finite-field cache, force after completion, revision and event invalidation",
+    "taxonomy same-revision in-flight reads deduplicate",
+    "taxonomy force reads new bytes after an older in-flight request settles",
+    "taxonomy revision reads new bytes after an older in-flight request settles",
+    "event-invalidated taxonomy success cannot overwrite a newer index",
+    "taxonomy missing contract and HTTP errors reject without local fallback",
+    "actual shared loader rechecks payload, caches finite taxonomy by source and schema",
+    "payload projection revision invalidates taxonomy with unchanged source bytes",
+    "shared loader safely rejects disabled data and filters revoked eligibility",
+    "late shared success after an event and replacement cannot update stats",
+    "shared invalidation while awaiting taxonomy rejects its late classification",
+    "canonical paths preserve labels, nested aliases and standard owner boundaries",
+    "frontend and actual backend agree on grouped semantic filters and exact sources",
+    "same-name sources stay independent and navigation retains source selection",
+    "renderer disclosure, Enter/Space navigation, source clearing and persistence",
+    "renderer prunes conflicting dynamic keys and wrong-owner inventory from supplied artist tree"
+  ],
+  "check_count": 16,
+  "failures": [],
+  "expected_failure_warnings": [
+    "[Anima Tools] WeiLin shared clothing prompts unavailable Error: WeiLin 共享资料库不可用，请检查服务后重试。"
+  ],
+  "method": "Actual unmodified shared JS loaded as a VM ESM with only its selector UI import and local fetch mocked; real jsdom DOM; canonical vocabulary from captured live index; actual backend predicates isolated through AST.",
+  "production_writes": 0,
+  "live_http_requests": 0,
+  "browser_actions": 0,
+  "service_restarts": 0,
+  "limits": [
+    "Synthetic shared records and jsdom acceptance only; no full-library scan or visual GUI certification."
+  ]
+}

@@ -1,0 +1,4892 @@
+{
+ "flows": [
+  {
+   "modelId": 1386234,
+   "name": "ComfyUI Image Workflows",
+   "downloads": 95376,
+   "file": "comfyuiImage_v39.zip",
+   "detailer": "FaceDetailerPipe",
+   "detailerId": "27",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DifferentialDiffusion",
+    "EditDetailerPipe",
+    "FaceDetailerPipe",
+    "ImpactSwitch",
+    "ImpactWildcardProcessor",
+    "Input Parameters (Image Saver)",
+    "Lora Loader (LoraManager)",
+    "PrimitiveBoolean",
+    "PrimitiveFloat",
+    "RegexReplace",
+    "SAMLoader",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UltralyticsDetectorProvider",
+    "easy showAnything"
+   ]
+  },
+  {
+   "modelId": 1386234,
+   "name": "ComfyUI Image Workflows",
+   "downloads": 95376,
+   "file": "comfyuiImage_v39.zip",
+   "detailer": "EditDetailerPipe",
+   "detailerId": "15",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DifferentialDiffusion",
+    "EditDetailerPipe",
+    "ImpactSwitch",
+    "ImpactWildcardProcessor",
+    "Input Parameters (Image Saver)",
+    "Lora Loader (LoraManager)",
+    "RegexReplace",
+    "SAMLoader",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 1386234,
+   "name": "ComfyUI Image Workflows",
+   "downloads": 95376,
+   "file": "comfyuiImage_v39.zip",
+   "detailer": "ToDetailerPipe",
+   "detailerId": "6",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DifferentialDiffusion",
+    "ImpactSwitch",
+    "ImpactWildcardProcessor",
+    "Input Parameters (Image Saver)",
+    "Lora Loader (LoraManager)",
+    "RegexReplace",
+    "SAMLoader",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 1386234,
+   "name": "ComfyUI Image Workflows",
+   "downloads": 95376,
+   "file": "comfyuiImage_v39.zip",
+   "detailer": "FaceDetailerPipe",
+   "detailerId": "35",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPNegPip",
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DifferentialDiffusion",
+    "EditDetailerPipe",
+    "FaceDetailerPipe",
+    "ImpactSwitch",
+    "ImpactWildcardProcessor",
+    "Input Parameters (Image Saver)",
+    "Lora Loader (LoraManager)",
+    "PrimitiveBoolean",
+    "PrimitiveFloat",
+    "RegexReplace",
+    "Reroute (rgthree)",
+    "SAMLoader",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UltralyticsDetectorProvider",
+    "easy showAnything"
+   ]
+  },
+  {
+   "modelId": 1386234,
+   "name": "ComfyUI Image Workflows",
+   "downloads": 95376,
+   "file": "comfyuiImage_v39.zip",
+   "detailer": "ToDetailerPipe",
+   "detailerId": "31",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPNegPip",
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DifferentialDiffusion",
+    "ImpactSwitch",
+    "ImpactWildcardProcessor",
+    "Input Parameters (Image Saver)",
+    "Lora Loader (LoraManager)",
+    "RegexReplace",
+    "Reroute (rgthree)",
+    "SAMLoader",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 1386234,
+   "name": "ComfyUI Image Workflows",
+   "downloads": 95376,
+   "file": "comfyuiImage_v39.zip",
+   "detailer": "EditDetailerPipe",
+   "detailerId": "21",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPNegPip",
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DifferentialDiffusion",
+    "EditDetailerPipe",
+    "ImpactSwitch",
+    "ImpactWildcardProcessor",
+    "Input Parameters (Image Saver)",
+    "Lora Loader (LoraManager)",
+    "RegexReplace",
+    "Reroute (rgthree)",
+    "SAMLoader",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 1386234,
+   "name": "ComfyUI Image Workflows",
+   "downloads": 95376,
+   "file": "comfyuiImage_v39.zip",
+   "detailer": "FaceDetailerPipe",
+   "detailerId": "31",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DifferentialDiffusion",
+    "EditDetailerPipe",
+    "FaceDetailerPipe",
+    "ImpactSwitch",
+    "ImpactWildcardProcessor",
+    "Power Lora Loader (rgthree)",
+    "PrimitiveBoolean",
+    "PrimitiveFloat",
+    "RegexReplace",
+    "SAMLoader",
+    "SeedNode",
+    "ToDetailerPipe",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 1386234,
+   "name": "ComfyUI Image Workflows",
+   "downloads": 95376,
+   "file": "comfyuiImage_v39.zip",
+   "detailer": "EditDetailerPipe",
+   "detailerId": "14",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DifferentialDiffusion",
+    "EditDetailerPipe",
+    "ImpactSwitch",
+    "ImpactWildcardProcessor",
+    "Power Lora Loader (rgthree)",
+    "RegexReplace",
+    "SAMLoader",
+    "SeedNode",
+    "ToDetailerPipe",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 1386234,
+   "name": "ComfyUI Image Workflows",
+   "downloads": 95376,
+   "file": "comfyuiImage_v39.zip",
+   "detailer": "ToDetailerPipe",
+   "detailerId": "5",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DifferentialDiffusion",
+    "ImpactSwitch",
+    "ImpactWildcardProcessor",
+    "Power Lora Loader (rgthree)",
+    "RegexReplace",
+    "SAMLoader",
+    "SeedNode",
+    "ToDetailerPipe",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 1386234,
+   "name": "ComfyUI Image Workflows",
+   "downloads": 95376,
+   "file": "comfyuiImage_v39.zip",
+   "detailer": "ToDetailerPipe",
+   "detailerId": "118",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DifferentialDiffusion",
+    "ImpactSwitch",
+    "ImpactWildcardProcessor",
+    "Lora Loader (LoraManager)",
+    "RegexReplace",
+    "SAMLoader",
+    "SeedNode",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 1386234,
+   "name": "ComfyUI Image Workflows",
+   "downloads": 95376,
+   "file": "comfyuiImage_v39.zip",
+   "detailer": "FaceDetailerPipe",
+   "detailerId": "58",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DifferentialDiffusion",
+    "EditDetailerPipe",
+    "FaceDetailerPipe",
+    "ImpactSwitch",
+    "ImpactWildcardProcessor",
+    "Lora Loader (LoraManager)",
+    "PrimitiveBoolean",
+    "PrimitiveFloat",
+    "RegexReplace",
+    "Reroute",
+    "SAMLoader",
+    "SeedNode",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 1386234,
+   "name": "ComfyUI Image Workflows",
+   "downloads": 95376,
+   "file": "comfyuiImage_v39.zip",
+   "detailer": "MaskDetailerPipe",
+   "detailerId": "38",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DifferentialDiffusion",
+    "ImpactSwitch",
+    "ImpactWildcardProcessor",
+    "LoadImage",
+    "Lora Loader (LoraManager)",
+    "MaskDetailerPipe",
+    "PrimitiveFloat",
+    "RegexReplace",
+    "Reroute",
+    "SeedNode",
+    "StringConcatenate",
+    "ToBasicPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "easy float",
+    "easy int"
+   ]
+  },
+  {
+   "modelId": 1386234,
+   "name": "ComfyUI Image Workflows",
+   "downloads": 95376,
+   "file": "comfyuiImage_v39.zip",
+   "detailer": "EditDetailerPipe",
+   "detailerId": "30",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DifferentialDiffusion",
+    "EditDetailerPipe",
+    "ImpactSwitch",
+    "ImpactWildcardProcessor",
+    "Lora Loader (LoraManager)",
+    "RegexReplace",
+    "SAMLoader",
+    "SeedNode",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 1386234,
+   "name": "ComfyUI Image Workflows",
+   "downloads": 95376,
+   "file": "comfyuiImage_v39.zip",
+   "detailer": "FaceDetailerPipe",
+   "detailerId": "36",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPNegPip",
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DifferentialDiffusion",
+    "EditDetailerPipe",
+    "FaceDetailerPipe",
+    "ImpactSwitch",
+    "ImpactWildcardProcessor",
+    "Input Parameters (Image Saver)",
+    "Lora Loader (LoraManager)",
+    "PrimitiveBoolean",
+    "PrimitiveFloat",
+    "RegexReplace",
+    "Reroute (rgthree)",
+    "SAMLoader",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UltralyticsDetectorProvider",
+    "easy showAnything"
+   ]
+  },
+  {
+   "modelId": 1386234,
+   "name": "ComfyUI Image Workflows",
+   "downloads": 95376,
+   "file": "comfyuiImage_v39.zip",
+   "detailer": "ToDetailerPipe",
+   "detailerId": "31",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPNegPip",
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DifferentialDiffusion",
+    "ImpactSwitch",
+    "ImpactWildcardProcessor",
+    "Input Parameters (Image Saver)",
+    "Lora Loader (LoraManager)",
+    "RegexReplace",
+    "Reroute (rgthree)",
+    "SAMLoader",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 1386234,
+   "name": "ComfyUI Image Workflows",
+   "downloads": 95376,
+   "file": "comfyuiImage_v39.zip",
+   "detailer": "EditDetailerPipe",
+   "detailerId": "21",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPNegPip",
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DifferentialDiffusion",
+    "EditDetailerPipe",
+    "ImpactSwitch",
+    "ImpactWildcardProcessor",
+    "Input Parameters (Image Saver)",
+    "Lora Loader (LoraManager)",
+    "RegexReplace",
+    "Reroute (rgthree)",
+    "SAMLoader",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 1768409,
+   "name": "简单易懂的Illustrious工作流/text2img：Simple Workflow for Illustrious(lora、fix、FaceDetailer)",
+   "downloads": 5050,
+   "file": "IllustriousText2imgSimple_v60.zip",
+   "detailer": "FaceDetailer",
+   "detailerId": "834",
+   "detectors": [
+    {
+     "model": "anzhc face seg 640 v4 y11n",
+     "raw": "segm/Anzhc Face seg 640 v4 y11n.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_l_0b3195"
+   ],
+   "upstreamTypes": [
+    "FaceDetailer",
+    "GetNode",
+    "HighRes-Fix Script",
+    "KSampler Adv. (Efficient)",
+    "SAMLoader",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 1768409,
+   "name": "简单易懂的Illustrious工作流/text2img：Simple Workflow for Illustrious(lora、fix、FaceDetailer)",
+   "downloads": 5050,
+   "file": "IllustriousText2imgSimple_v60.zip",
+   "detailer": "FromDetailerPipe",
+   "detailerId": "836",
+   "detectors": [
+    {
+     "model": "anzhc face seg 640 v4 y11n",
+     "raw": "segm/Anzhc Face seg 640 v4 y11n.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_l_0b3195"
+   ],
+   "upstreamTypes": [
+    "FaceDetailer",
+    "FromDetailerPipe",
+    "GetNode",
+    "HighRes-Fix Script",
+    "KSampler Adv. (Efficient)",
+    "SAMLoader",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 1768409,
+   "name": "简单易懂的Illustrious工作流/text2img：Simple Workflow for Illustrious(lora、fix、FaceDetailer)",
+   "downloads": 5050,
+   "file": "IllustriousText2imgSimple_v60.zip",
+   "detailer": "FaceDetailer",
+   "detailerId": "837",
+   "detectors": [
+    {
+     "model": "anzhc eyes -seg-hd",
+     "raw": "segm/Anzhc Eyes -seg-hd.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "anzhc face seg 640 v4 y11n",
+     "raw": "segm/Anzhc Face seg 640 v4 y11n.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_l_0b3195"
+   ],
+   "upstreamTypes": [
+    "FaceDetailer",
+    "FromDetailerPipe",
+    "GetNode",
+    "HighRes-Fix Script",
+    "KSampler Adv. (Efficient)",
+    "SAMLoader",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 1768409,
+   "name": "简单易懂的Illustrious工作流/text2img：Simple Workflow for Illustrious(lora、fix、FaceDetailer)",
+   "downloads": 5050,
+   "file": "IllustriousText2imgSimple_v60.zip",
+   "detailer": "FaceDetailer",
+   "detailerId": "834",
+   "detectors": [
+    {
+     "model": "anzhc face seg 640 v4 y11n",
+     "raw": "segm/Anzhc Face seg 640 v4 y11n.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_l_0b3195"
+   ],
+   "upstreamTypes": [
+    "FaceDetailer",
+    "GetNode",
+    "HighRes-Fix Script",
+    "KSampler Adv. (Efficient)",
+    "SAMLoader",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 1768409,
+   "name": "简单易懂的Illustrious工作流/text2img：Simple Workflow for Illustrious(lora、fix、FaceDetailer)",
+   "downloads": 5050,
+   "file": "IllustriousText2imgSimple_v60.zip",
+   "detailer": "FromDetailerPipe",
+   "detailerId": "836",
+   "detectors": [
+    {
+     "model": "anzhc face seg 640 v4 y11n",
+     "raw": "segm/Anzhc Face seg 640 v4 y11n.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_l_0b3195"
+   ],
+   "upstreamTypes": [
+    "FaceDetailer",
+    "FromDetailerPipe",
+    "GetNode",
+    "HighRes-Fix Script",
+    "KSampler Adv. (Efficient)",
+    "SAMLoader",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 1768409,
+   "name": "简单易懂的Illustrious工作流/text2img：Simple Workflow for Illustrious(lora、fix、FaceDetailer)",
+   "downloads": 5050,
+   "file": "IllustriousText2imgSimple_v60.zip",
+   "detailer": "FaceDetailer",
+   "detailerId": "837",
+   "detectors": [
+    {
+     "model": "anzhc eyes -seg-hd",
+     "raw": "segm/Anzhc Eyes -seg-hd.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "anzhc face seg 640 v4 y11n",
+     "raw": "segm/Anzhc Face seg 640 v4 y11n.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_l_0b3195"
+   ],
+   "upstreamTypes": [
+    "FaceDetailer",
+    "FromDetailerPipe",
+    "GetNode",
+    "HighRes-Fix Script",
+    "KSampler Adv. (Efficient)",
+    "SAMLoader",
+    "UltralyticsDetectorProvider"
+   ]
+  },
+  {
+   "modelId": 2184844,
+   "name": "Z-Image Base & Turbo Pro Grade Workflow I2I/T2I (Low or High VRAM)",
+   "downloads": 34475,
+   "file": "zImageBaseTurboProGrade_v29DeathstarVersion.json",
+   "detailer": "LCDetailPipeOut",
+   "detailerId": "3476",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCDetailPipeOut"
+   ]
+  },
+  {
+   "modelId": 2184844,
+   "name": "Z-Image Base & Turbo Pro Grade Workflow I2I/T2I (Low or High VRAM)",
+   "downloads": 34475,
+   "file": "zImageBaseTurboProGrade_v29DeathstarVersion.json",
+   "detailer": "LCDetailPipeOut",
+   "detailerId": "4665",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCDetailPipeOut"
+   ]
+  },
+  {
+   "modelId": 2184844,
+   "name": "Z-Image Base & Turbo Pro Grade Workflow I2I/T2I (Low or High VRAM)",
+   "downloads": 34475,
+   "file": "zImageBaseTurboProGrade_v29DeathstarVersion.json",
+   "detailer": "LCSkinBeauty",
+   "detailerId": "4678",
+   "detectors": [
+    {
+     "model": "",
+     "raw": "",
+     "type": "LCPersonMask"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCImageDenoise",
+    "LCPersonMask",
+    "LCPreviewMask",
+    "LCSkinBeauty"
+   ]
+  },
+  {
+   "modelId": 2184844,
+   "name": "Z-Image Base & Turbo Pro Grade Workflow I2I/T2I (Low or High VRAM)",
+   "downloads": 34475,
+   "file": "zImageBaseTurboProGrade_v29DeathstarVersion.json",
+   "detailer": "LCDetailDaemon",
+   "detailerId": "4797",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCAnySwitch",
+    "LCDetailDaemon",
+    "LCPipeOut",
+    "LCSigmas"
+   ]
+  },
+  {
+   "modelId": 2189190,
+   "name": "Illustrious/ Pony/ SDXL Pro Grade Workflow (Low or High VRAM)",
+   "downloads": 10678,
+   "file": "illustriousPonySDXLProGrade_v2201KitchenSinkVer.json",
+   "detailer": "DetailDaemonSamplerNode",
+   "detailerId": "3283",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "Any Switch (rgthree)",
+    "DetailDaemonSamplerNode",
+    "GetNode",
+    "KSamplerSelect",
+    "LCPipeOut"
+   ]
+  },
+  {
+   "modelId": 2213699,
+   "name": "FLUX2 Klein_9b Pro Grade Workflow (High & Low VRAM), w/ Controlnet, GGUF capable",
+   "downloads": 9410,
+   "file": "flux2Klein9bProGradeWorkflowHigh_v1001Updates.json",
+   "detailer": "LCDetailPipeOut",
+   "detailerId": "1255",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCDetailPipeOut"
+   ]
+  },
+  {
+   "modelId": 2213699,
+   "name": "FLUX2 Klein_9b Pro Grade Workflow (High & Low VRAM), w/ Controlnet, GGUF capable",
+   "downloads": 9410,
+   "file": "flux2Klein9bProGradeWorkflowHigh_v1001Updates.json",
+   "detailer": "DetailDaemonSamplerNode",
+   "detailerId": "1342",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "Any Switch (rgthree)",
+    "DetailDaemonSamplerNode",
+    "GetNode",
+    "KSamplerSelect",
+    "LCPipeOut"
+   ]
+  },
+  {
+   "modelId": 2213699,
+   "name": "FLUX2 Klein_9b Pro Grade Workflow (High & Low VRAM), w/ Controlnet, GGUF capable",
+   "downloads": 9410,
+   "file": "flux2Klein9bProGradeWorkflowHigh_v1001Updates.json",
+   "detailer": "LCSkinBeauty",
+   "detailerId": "1560",
+   "detectors": [
+    {
+     "model": "",
+     "raw": "",
+     "type": "LayerMask: PersonMaskUltra V2"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCImageDenoise",
+    "LCSkinBeauty",
+    "LayerMask: PersonMaskUltra V2",
+    "MaskPreview"
+   ]
+  },
+  {
+   "modelId": 2282970,
+   "name": "Illustrious/ Pony/ SDXL SFW & NSFW Pro Grade Workflow (Low and high VRAM)",
+   "downloads": 15453,
+   "file": "illustriousPonySDXLSFWNSFW_v14LC123Sigmas.json",
+   "detailer": "DetailDaemonSamplerNode",
+   "detailerId": "3283",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "Any Switch (rgthree)",
+    "DetailDaemonSamplerNode",
+    "GetNode",
+    "KSamplerSelect",
+    "LCPipeOut"
+   ]
+  },
+  {
+   "modelId": 2282970,
+   "name": "Illustrious/ Pony/ SDXL SFW & NSFW Pro Grade Workflow (Low and high VRAM)",
+   "downloads": 15453,
+   "file": "illustriousPonySDXLSFWNSFW_v14LC123Sigmas.json",
+   "detailer": "LCSkinBeauty",
+   "detailerId": "3470",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "LCClarity",
+    "LCSkinBeauty"
+   ]
+  },
+  {
+   "modelId": 2282970,
+   "name": "Illustrious/ Pony/ SDXL SFW & NSFW Pro Grade Workflow (Low and high VRAM)",
+   "downloads": 15453,
+   "file": "illustriousPonySDXLSFWNSFW_v14LC123Sigmas.json",
+   "detailer": "LCDetailPipeOut",
+   "detailerId": "3561",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCDetailPipeOut"
+   ]
+  },
+  {
+   "modelId": 2382239,
+   "name": "ANIMA Pro Grade SFW/NSFW W/ Controlnet, Regional Prompt, & Realism enhancer",
+   "downloads": 11022,
+   "file": "animaProGradeSFWNSFWW_v23ButWaitTheresMore.json",
+   "detailer": "LCDetailPipeOut",
+   "detailerId": "86",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCDetailPipeOut"
+   ]
+  },
+  {
+   "modelId": 2382239,
+   "name": "ANIMA Pro Grade SFW/NSFW W/ Controlnet, Regional Prompt, & Realism enhancer",
+   "downloads": 11022,
+   "file": "animaProGradeSFWNSFWW_v23ButWaitTheresMore.json",
+   "detailer": "LCDetailPipeOut",
+   "detailerId": "149",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCDetailPipeOut"
+   ]
+  },
+  {
+   "modelId": 2382239,
+   "name": "ANIMA Pro Grade SFW/NSFW W/ Controlnet, Regional Prompt, & Realism enhancer",
+   "downloads": 11022,
+   "file": "animaProGradeSFWNSFWW_v23ButWaitTheresMore.json",
+   "detailer": "DetailDaemonSamplerNode",
+   "detailerId": "193",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "Any Switch (rgthree)",
+    "DetailDaemonSamplerNode",
+    "GetNode",
+    "KSamplerSelect",
+    "LCPipeOut"
+   ]
+  },
+  {
+   "modelId": 2382239,
+   "name": "ANIMA Pro Grade SFW/NSFW W/ Controlnet, Regional Prompt, & Realism enhancer",
+   "downloads": 11022,
+   "file": "animaProGradeSFWNSFWW_v23ButWaitTheresMore.json",
+   "detailer": "LCDetailPipeOut",
+   "detailerId": "340",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCDetailPipeOut"
+   ]
+  },
+  {
+   "modelId": 2426853,
+   "name": "Anima Workflows",
+   "downloads": 33811,
+   "file": "animaWorkflows_v90_3212228.zip",
+   "detailer": "ToDetailerPipe",
+   "detailerId": "19",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "DifferentialDiffusion",
+    "ImpactWildcardProcessor",
+    "Input Parameters (Image Saver)",
+    "Lora Loader (LoraManager)",
+    "RegexReplace",
+    "SAMLoader",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2426853,
+   "name": "Anima Workflows",
+   "downloads": 33811,
+   "file": "animaWorkflows_v90_3212228.zip",
+   "detailer": "ToDetailerPipe",
+   "detailerId": "18",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "DifferentialDiffusion",
+    "ImpactWildcardProcessor",
+    "Power Lora Loader (rgthree)",
+    "SAMLoader",
+    "SeedNode",
+    "ToDetailerPipe",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2426853,
+   "name": "Anima Workflows",
+   "downloads": 33811,
+   "file": "animaWorkflows_v90_3212228.zip",
+   "detailer": "ToDetailerPipe",
+   "detailerId": "41",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPNegPip",
+    "CLIPTextEncode",
+    "DifferentialDiffusion",
+    "ImpactWildcardProcessor",
+    "Input Parameters (Image Saver)",
+    "Lora Loader (LoraManager)",
+    "RegexReplace",
+    "SAMLoader",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2426853,
+   "name": "Anima Workflows",
+   "downloads": 33811,
+   "file": "animaWorkflows_v90_3212228.zip",
+   "detailer": "ToDetailerPipe",
+   "detailerId": "43",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPNegPip",
+    "CLIPTextEncode",
+    "DifferentialDiffusion",
+    "ImpactWildcardProcessor",
+    "Input Parameters (Image Saver)",
+    "Lora Loader (LoraManager)",
+    "RegexReplace",
+    "SAMLoader",
+    "ShowText|pysssss",
+    "StringConcatenate",
+    "TIPO",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAELoader",
+    "easy int"
+   ]
+  },
+  {
+   "modelId": 2426853,
+   "name": "Anima Workflows",
+   "downloads": 33811,
+   "file": "animaWorkflows_v90_3212228.zip",
+   "detailer": "ToDetailerPipe",
+   "detailerId": "25",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "DifferentialDiffusion",
+    "ImpactWildcardProcessor",
+    "Input Parameters (Image Saver)",
+    "Lora Loader (LoraManager)",
+    "RegexReplace",
+    "SAMLoader",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2426853,
+   "name": "Anima Workflows",
+   "downloads": 33811,
+   "file": "animaWorkflows_v90_3212234.zip",
+   "detailer": "ToDetailerPipe",
+   "detailerId": "19",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "DifferentialDiffusion",
+    "ImpactWildcardProcessor",
+    "Input Parameters (Image Saver)",
+    "Lora Loader (LoraManager)",
+    "RegexReplace",
+    "SAMLoader",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2426853,
+   "name": "Anima Workflows",
+   "downloads": 33811,
+   "file": "animaWorkflows_v90_3212234.zip",
+   "detailer": "ToDetailerPipe",
+   "detailerId": "18",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "DifferentialDiffusion",
+    "ImpactWildcardProcessor",
+    "Power Lora Loader (rgthree)",
+    "SAMLoader",
+    "SeedNode",
+    "ToDetailerPipe",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2426853,
+   "name": "Anima Workflows",
+   "downloads": 33811,
+   "file": "animaWorkflows_v90_3212234.zip",
+   "detailer": "ToDetailerPipe",
+   "detailerId": "41",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPNegPip",
+    "CLIPTextEncode",
+    "DifferentialDiffusion",
+    "ImpactWildcardProcessor",
+    "Input Parameters (Image Saver)",
+    "Lora Loader (LoraManager)",
+    "RegexReplace",
+    "SAMLoader",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2426853,
+   "name": "Anima Workflows",
+   "downloads": 33811,
+   "file": "animaWorkflows_v90_3212234.zip",
+   "detailer": "ToDetailerPipe",
+   "detailerId": "43",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPNegPip",
+    "CLIPTextEncode",
+    "DifferentialDiffusion",
+    "ImpactWildcardProcessor",
+    "Input Parameters (Image Saver)",
+    "Lora Loader (LoraManager)",
+    "RegexReplace",
+    "SAMLoader",
+    "ShowText|pysssss",
+    "StringConcatenate",
+    "TIPO",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAELoader",
+    "easy int"
+   ]
+  },
+  {
+   "modelId": 2426853,
+   "name": "Anima Workflows",
+   "downloads": 33811,
+   "file": "animaWorkflows_v90_3212234.zip",
+   "detailer": "ToDetailerPipe",
+   "detailerId": "25",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "DifferentialDiffusion",
+    "ImpactWildcardProcessor",
+    "Input Parameters (Image Saver)",
+    "Lora Loader (LoraManager)",
+    "RegexReplace",
+    "SAMLoader",
+    "StringConcatenate",
+    "ToDetailerPipe",
+    "TriggerWord Toggle (LoraManager)",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2623066,
+   "name": "ANIMA Dual Sampling + Upscale + Lora +Face-Detailer",
+   "downloads": 760,
+   "file": "animaDualSamplingUpscale_v20.json",
+   "detailer": "DetailerForEach",
+   "detailerId": "86",
+   "detectors": [
+    {
+     "model": "",
+     "raw": "",
+     "type": "ImpactSimpleDetectorSEGS"
+    },
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "DetailerForEach",
+    "EmptyLatentImage",
+    "ImageScale",
+    "ImageUpscaleWithModel",
+    "ImpactSimpleDetectorSEGS",
+    "KSamplerAdvanced",
+    "Power Lora Loader (rgthree)",
+    "PreviewImage",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2636116,
+   "name": "diffusion_models+Upskale+facedetailer",
+   "downloads": 449,
+   "file": "diffusionModels_krea2.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "36",
+   "detectors": [
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "EmptySD3LatentImage",
+    "FaceDetailer",
+    "KSampler",
+    "Power Lora Loader (rgthree)",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAELoader",
+    "b28567c8-e2bd-4528-a4d2-38523f9bd5c1"
+   ]
+  },
+  {
+   "modelId": 2636116,
+   "name": "diffusion_models+Upskale+facedetailer",
+   "downloads": 449,
+   "file": "diffusionModels_krea2.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "38",
+   "detectors": [
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "EmptySD3LatentImage",
+    "FaceDetailer",
+    "FloatConstant",
+    "GetImageSize",
+    "KSampler",
+    "Power Lora Loader (rgthree)",
+    "SimpleMath+",
+    "UNETLoader",
+    "UltimateSDUpscale",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAELoader",
+    "b28567c8-e2bd-4528-a4d2-38523f9bd5c1"
+   ]
+  },
+  {
+   "modelId": 2711659,
+   "name": "comfyui 单人自动化工作流",
+   "downloads": 533,
+   "file": "comfyui_v20.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "1506",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "135a2684-eb6a-4457-9b3e-4fe9cd1bdc06",
+    "1e258253-a7d5-45db-90c5-51960ff82bd7",
+    "26e8a229-9be7-4893-b749-57de35325a3d",
+    "598f6315-6e1b-40ea-b794-ee0c99e2b84e",
+    "5c3bcd65-d18e-49c8-bd43-21f70ec8a50a",
+    "624db24f-cd1c-4d76-a366-de832f9c62ff",
+    "65675df5-0666-4d66-b374-8bc1abfd303e",
+    "66ab4f52-e72b-4eab-a095-06996057aac2",
+    "7613a58c-7e96-49fa-b7f9-84275ce6d949",
+    "CLIPTextEncode",
+    "DanbooruGalleryNode",
+    "FaceDetailer",
+    "ImageScaleBy",
+    "JoinStrings",
+    "KSampler",
+    "LoadImage",
+    "ParameterBreak",
+    "ParameterControlPanel",
+    "Reroute",
+    "SafeTagDedup",
+    "ShowText|pysssss",
+    "Text Multiline",
+    "UltimateSDUpscaleFLSLLLite",
+    "UpscaleModelLoader",
+    "VAEDecode",
+    "VAEEncode",
+    "WD14Tagger|pysssss",
+    "ZML_PresetResolutionV2",
+    "ZmlPowerLoraLoader",
+    "a9627f28-4bca-4d29-a026-3697e33c11b7",
+    "ad49d25d-a406-44fc-a9af-f750b837101f",
+    "b2d78d1a-3a5e-4b88-80d5-8f83bb64e4a9",
+    "b4b9cb6a-8448-4216-aa51-8077e0d432c3",
+    "caf53734-9023-40ac-89de-eda989b06629",
+    "e524dc5c-3b07-4996-b201-4de80b88fff8",
+    "e58a4b22-0e1c-4cea-b7f3-ada0af4d6dd0",
+    "efe651f9-fe65-4c89-af0a-61d980c17577",
+    "f85e4c42-9332-4a51-9695-4914bebaf8d3",
+    "faae64c2-bbb2-4f5f-9282-53392f8bbbf7"
+   ]
+  },
+  {
+   "modelId": 2711659,
+   "name": "comfyui 单人自动化工作流",
+   "downloads": 533,
+   "file": "comfyui_v20.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "1508",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "135a2684-eb6a-4457-9b3e-4fe9cd1bdc06",
+    "1e258253-a7d5-45db-90c5-51960ff82bd7",
+    "26e8a229-9be7-4893-b749-57de35325a3d",
+    "598f6315-6e1b-40ea-b794-ee0c99e2b84e",
+    "5c3bcd65-d18e-49c8-bd43-21f70ec8a50a",
+    "624db24f-cd1c-4d76-a366-de832f9c62ff",
+    "65675df5-0666-4d66-b374-8bc1abfd303e",
+    "66ab4f52-e72b-4eab-a095-06996057aac2",
+    "7613a58c-7e96-49fa-b7f9-84275ce6d949",
+    "CLIPTextEncode",
+    "DanbooruGalleryNode",
+    "FaceDetailer",
+    "ImageScaleBy",
+    "JoinStrings",
+    "KSampler",
+    "LoadImage",
+    "ParameterBreak",
+    "ParameterControlPanel",
+    "Reroute",
+    "SafeTagDedup",
+    "ShowText|pysssss",
+    "Text Multiline",
+    "UltimateSDUpscaleFLSLLLite",
+    "UpscaleModelLoader",
+    "VAEDecode",
+    "VAEEncode",
+    "WD14Tagger|pysssss",
+    "ZML_PresetResolutionV2",
+    "ZmlPowerLoraLoader",
+    "a9627f28-4bca-4d29-a026-3697e33c11b7",
+    "ad49d25d-a406-44fc-a9af-f750b837101f",
+    "b2d78d1a-3a5e-4b88-80d5-8f83bb64e4a9",
+    "b4b9cb6a-8448-4216-aa51-8077e0d432c3",
+    "caf53734-9023-40ac-89de-eda989b06629",
+    "e524dc5c-3b07-4996-b201-4de80b88fff8",
+    "e58a4b22-0e1c-4cea-b7f3-ada0af4d6dd0",
+    "efe651f9-fe65-4c89-af0a-61d980c17577",
+    "f85e4c42-9332-4a51-9695-4914bebaf8d3",
+    "faae64c2-bbb2-4f5f-9282-53392f8bbbf7"
+   ]
+  },
+  {
+   "modelId": 2715571,
+   "name": "iGEN One",
+   "downloads": 663,
+   "file": "igenOne_rb106M.json",
+   "detailer": "DetailDaemonSamplerNode",
+   "detailerId": "216",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "DetailDaemonSamplerNode",
+    "IO Checkpoint Loader [Eclipse]",
+    "KSamplerSelect",
+    "Smart Model Loader [Eclipse]"
+   ]
+  },
+  {
+   "modelId": 2715571,
+   "name": "iGEN One",
+   "downloads": 663,
+   "file": "igenOne_rb106M.json",
+   "detailer": "Detailer (SEGS/pipe) [Eclipse]",
+   "detailerId": "249",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "1c185246-daf0-4ab6-8ce6-d2ad9f6ba31a",
+    "Any Multi-Switch [Eclipse]",
+    "Detailer (SEGS/pipe) [Eclipse]",
+    "GetAllActiveNode",
+    "Smart Model Loader [Eclipse]"
+   ]
+  },
+  {
+   "modelId": 2715571,
+   "name": "iGEN One",
+   "downloads": 663,
+   "file": "igenOne_rb106M.json",
+   "detailer": "Detailer (SEGS/pipe) [Eclipse]",
+   "detailerId": "387",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "4dc470f3-eb96-4525-b04c-88f33e5eb446",
+    "Any Multi-Switch [Eclipse]",
+    "Detailer (SEGS/pipe) [Eclipse]",
+    "GetAllActiveNode",
+    "Smart Model Loader [Eclipse]"
+   ]
+  },
+  {
+   "modelId": 2726952,
+   "name": "Krea 2 Pro Grade w/ Image Edit, Style Transfer, Moodboard, Controlnet, Multi-reference, Smart Detailers, In & Outpaint, & Low VRAM options",
+   "downloads": 19589,
+   "file": "krea2ProGradeWImageEditStyleTransfer_v241DeathstarVersion.json",
+   "detailer": "LCDetailPipeOut",
+   "detailerId": "3088",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCDetailPipeOut"
+   ]
+  },
+  {
+   "modelId": 2726952,
+   "name": "Krea 2 Pro Grade w/ Image Edit, Style Transfer, Moodboard, Controlnet, Multi-reference, Smart Detailers, In & Outpaint, & Low VRAM options",
+   "downloads": 19589,
+   "file": "krea2ProGradeWImageEditStyleTransfer_v241DeathstarVersion.json",
+   "detailer": "LCDetailPipeOut",
+   "detailerId": "3090",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCDetailPipeOut"
+   ]
+  },
+  {
+   "modelId": 2726952,
+   "name": "Krea 2 Pro Grade w/ Image Edit, Style Transfer, Moodboard, Controlnet, Multi-reference, Smart Detailers, In & Outpaint, & Low VRAM options",
+   "downloads": 19589,
+   "file": "krea2ProGradeWImageEditStyleTransfer_v241DeathstarVersion.json",
+   "detailer": "LCSkinBeauty",
+   "detailerId": "3658",
+   "detectors": [
+    {
+     "model": "",
+     "raw": "",
+     "type": "LCPersonMask"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCImageDenoise",
+    "LCPersonMask",
+    "LCPreviewMask",
+    "LCSkinBeauty"
+   ]
+  },
+  {
+   "modelId": 2726952,
+   "name": "Krea 2 Pro Grade w/ Image Edit, Style Transfer, Moodboard, Controlnet, Multi-reference, Smart Detailers, In & Outpaint, & Low VRAM options",
+   "downloads": 19589,
+   "file": "krea2ProGradeWImageEditStyleTransfer_v241DeathstarVersion.json",
+   "detailer": "LCDetailDaemon",
+   "detailerId": "3907",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCAnySwitch",
+    "LCDetailDaemon",
+    "LCPipeOut",
+    "LCSigmas"
+   ]
+  },
+  {
+   "modelId": 2730327,
+   "name": "Workflow for your \"ART\"",
+   "downloads": 5865,
+   "file": "workflowForYourART_qwen21V27.json",
+   "detailer": "DetailDaemonSamplerNode",
+   "detailerId": "2609",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "ClownSampler_Beta",
+    "DetailDaemonSamplerNode",
+    "GetNode"
+   ]
+  },
+  {
+   "modelId": 2730327,
+   "name": "Workflow for your \"ART\"",
+   "downloads": 5865,
+   "file": "workflowForYourART_qwen21V27.json",
+   "detailer": "DetailDaemonSamplerNode",
+   "detailerId": "2689",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "ClownSampler_Beta",
+    "DetailDaemonSamplerNode",
+    "GetNode"
+   ]
+  },
+  {
+   "modelId": 2735655,
+   "name": "Anima Compact Controlnet + Facedetailer Workflow",
+   "downloads": 949,
+   "file": "animaCompactControlnet_v40.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "102",
+   "detectors": [
+    {
+     "model": "person_yolov8m-seg",
+     "raw": "segm/person_yolov8m-seg.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "D2 Size Selector",
+    "EmptyLatentImage",
+    "FaceDetailer",
+    "Fast Groups Bypasser (rgthree)",
+    "KSampler",
+    "LoraLoaderModelOnly",
+    "Power Lora Loader (rgthree)",
+    "SAMLoader",
+    "Seed (rgthree)",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2737301,
+   "name": "【Anima】いつも使っているワークフローAnima / MyDailyDriverWorkflowAnima",
+   "downloads": 987,
+   "file": "AnimaAnima_v12.zip",
+   "detailer": "FaceDetailer",
+   "detailerId": "794",
+   "detectors": [
+    {
+     "model": "hand_yolov8s",
+     "raw": "bbox/hand_yolov8s.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "Context (rgthree)",
+    "EmptyLatentImage",
+    "FaceDetailer",
+    "Float Literal (Image Saver)",
+    "Int Literal (Image Saver)",
+    "KSampler (Efficient)",
+    "OlmResolutionPicker",
+    "Pipe from any [Crystools]",
+    "Pipe to/edit any [Crystools]",
+    "Power Prompt (rgthree)",
+    "Sampler Selector (Image Saver)",
+    "Scheduler Selector (Image Saver)",
+    "Seed (rgthree)",
+    "UNet loader with Name (Image Saver)",
+    "UltralyticsDetectorProvider",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2753759,
+   "name": "Krea2 Anime to Realism w/ skin enhancers, upscalers, & detailers",
+   "downloads": 1408,
+   "file": "krea2AnimeToRealismWSkin_v40ComfyFix.json",
+   "detailer": "LCSkinBeauty",
+   "detailerId": "1068",
+   "detectors": [
+    {
+     "model": "",
+     "raw": "",
+     "type": "LayerMask: PersonMaskUltra V2"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCImageDenoise",
+    "LCSkinBeauty",
+    "LayerMask: PersonMaskUltra V2",
+    "MaskPreview"
+   ]
+  },
+  {
+   "modelId": 2763583,
+   "name": "Simple Workflow for anima(lora、fix、FaceDetailer)/简单易懂的anima工作流",
+   "downloads": 631,
+   "file": "simpleWorkflowForAnimaLoraFix_v04.zip",
+   "detailer": "FaceDetailer",
+   "detailerId": "30",
+   "detectors": [
+    {
+     "model": "anzhc face seg 640 v4 y11n",
+     "raw": "segm/Anzhc Face seg 640 v4 y11n.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_l_0b3195"
+   ],
+   "upstreamTypes": [
+    "AnimaLLLiteApplyBlockMap",
+    "AnyLineArtPreprocessor_aux",
+    "DetailerForEach",
+    "FaceDetailer",
+    "GetImageSize",
+    "GetNode",
+    "KSampler",
+    "MaskToSEGS",
+    "ModelPatchLoader",
+    "PreviewImage",
+    "SAMLoader",
+    "SolidMask",
+    "UltimateSDUpscale",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAEDecode"
+   ]
+  },
+  {
+   "modelId": 2763583,
+   "name": "Simple Workflow for anima(lora、fix、FaceDetailer)/简单易懂的anima工作流",
+   "downloads": 631,
+   "file": "simpleWorkflowForAnimaLoraFix_v04.zip",
+   "detailer": "FaceDetailer",
+   "detailerId": "146",
+   "detectors": [
+    {
+     "model": "anzhc eyes -seg-hd",
+     "raw": "segm/Anzhc Eyes -seg-hd.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "anzhc face seg 640 v4 y11n",
+     "raw": "segm/Anzhc Face seg 640 v4 y11n.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_l_0b3195"
+   ],
+   "upstreamTypes": [
+    "AnimaLLLiteApplyBlockMap",
+    "AnyLineArtPreprocessor_aux",
+    "DetailerForEach",
+    "FaceDetailer",
+    "GetImageSize",
+    "GetNode",
+    "KSampler",
+    "MaskToSEGS",
+    "ModelPatchLoader",
+    "PreviewImage",
+    "SAMLoader",
+    "SolidMask",
+    "UltimateSDUpscale",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAEDecode"
+   ]
+  },
+  {
+   "modelId": 2763583,
+   "name": "Simple Workflow for anima(lora、fix、FaceDetailer)/简单易懂的anima工作流",
+   "downloads": 631,
+   "file": "simpleWorkflowForAnimaLoraFix_v04.zip",
+   "detailer": "DetailerForEach",
+   "detailerId": "180",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "AnimaLLLiteApplyBlockMap",
+    "AnyLineArtPreprocessor_aux",
+    "DetailerForEach",
+    "GetImageSize",
+    "GetNode",
+    "KSampler",
+    "MaskToSEGS",
+    "ModelPatchLoader",
+    "PreviewImage",
+    "SolidMask",
+    "UltimateSDUpscale",
+    "UpscaleModelLoader",
+    "VAEDecode"
+   ]
+  },
+  {
+   "modelId": 2763583,
+   "name": "Simple Workflow for anima(lora、fix、FaceDetailer)/简单易懂的anima工作流",
+   "downloads": 631,
+   "file": "simpleWorkflowForAnimaLoraFix_v04.zip",
+   "detailer": "FaceDetailer",
+   "detailerId": "407",
+   "detectors": [
+    {
+     "model": "ntd11_anime_nsfw_segm_v3_all",
+     "raw": "segm/animeNSFWDetection_v10\\ntd11_anime_nsfw_segm_v3_all.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "anzhc eyes -seg-hd",
+     "raw": "segm/Anzhc Eyes -seg-hd.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "anzhc face seg 640 v4 y11n",
+     "raw": "segm/Anzhc Face seg 640 v4 y11n.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_l_0b3195",
+    "sam_vit_l_0b3195"
+   ],
+   "upstreamTypes": [
+    "AnimaLLLiteApplyBlockMap",
+    "AnyLineArtPreprocessor_aux",
+    "DetailerForEach",
+    "FaceDetailer",
+    "GetImageSize",
+    "GetNode",
+    "KSampler",
+    "MaskToSEGS",
+    "ModelPatchLoader",
+    "PreviewImage",
+    "SAMLoader",
+    "SolidMask",
+    "UltimateSDUpscale",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAEDecode"
+   ]
+  },
+  {
+   "modelId": 2763583,
+   "name": "Simple Workflow for anima(lora、fix、FaceDetailer)/简单易懂的anima工作流",
+   "downloads": 631,
+   "file": "simpleWorkflowForAnimaLoraFix_v04.zip",
+   "detailer": "FaceDetailer",
+   "detailerId": "30",
+   "detectors": [
+    {
+     "model": "anzhc face seg 640 v4 y11n",
+     "raw": "segm/Anzhc Face seg 640 v4 y11n.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_l_0b3195"
+   ],
+   "upstreamTypes": [
+    "AnimaLLLiteApplyBlockMap",
+    "AnyLineArtPreprocessor_aux",
+    "DetailerForEach",
+    "FaceDetailer",
+    "GetImageSize",
+    "GetNode",
+    "KSampler",
+    "MaskToSEGS",
+    "ModelPatchLoader",
+    "PreviewImage",
+    "SAMLoader",
+    "SolidMask",
+    "UltimateSDUpscale",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAEDecode"
+   ]
+  },
+  {
+   "modelId": 2763583,
+   "name": "Simple Workflow for anima(lora、fix、FaceDetailer)/简单易懂的anima工作流",
+   "downloads": 631,
+   "file": "simpleWorkflowForAnimaLoraFix_v04.zip",
+   "detailer": "FaceDetailer",
+   "detailerId": "146",
+   "detectors": [
+    {
+     "model": "anzhc eyes -seg-hd",
+     "raw": "segm/Anzhc Eyes -seg-hd.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "anzhc face seg 640 v4 y11n",
+     "raw": "segm/Anzhc Face seg 640 v4 y11n.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_l_0b3195"
+   ],
+   "upstreamTypes": [
+    "AnimaLLLiteApplyBlockMap",
+    "AnyLineArtPreprocessor_aux",
+    "DetailerForEach",
+    "FaceDetailer",
+    "GetImageSize",
+    "GetNode",
+    "KSampler",
+    "MaskToSEGS",
+    "ModelPatchLoader",
+    "PreviewImage",
+    "SAMLoader",
+    "SolidMask",
+    "UltimateSDUpscale",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAEDecode"
+   ]
+  },
+  {
+   "modelId": 2763583,
+   "name": "Simple Workflow for anima(lora、fix、FaceDetailer)/简单易懂的anima工作流",
+   "downloads": 631,
+   "file": "simpleWorkflowForAnimaLoraFix_v04.zip",
+   "detailer": "DetailerForEach",
+   "detailerId": "180",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "AnimaLLLiteApplyBlockMap",
+    "AnyLineArtPreprocessor_aux",
+    "DetailerForEach",
+    "GetImageSize",
+    "GetNode",
+    "KSampler",
+    "MaskToSEGS",
+    "ModelPatchLoader",
+    "PreviewImage",
+    "SolidMask",
+    "UltimateSDUpscale",
+    "UpscaleModelLoader",
+    "VAEDecode"
+   ]
+  },
+  {
+   "modelId": 2763583,
+   "name": "Simple Workflow for anima(lora、fix、FaceDetailer)/简单易懂的anima工作流",
+   "downloads": 631,
+   "file": "simpleWorkflowForAnimaLoraFix_v04.zip",
+   "detailer": "FaceDetailer",
+   "detailerId": "407",
+   "detectors": [
+    {
+     "model": "ntd11_anime_nsfw_segm_v3_all",
+     "raw": "segm/animeNSFWDetection_v10\\ntd11_anime_nsfw_segm_v3_all.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "anzhc eyes -seg-hd",
+     "raw": "segm/Anzhc Eyes -seg-hd.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "anzhc face seg 640 v4 y11n",
+     "raw": "segm/Anzhc Face seg 640 v4 y11n.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_l_0b3195",
+    "sam_vit_l_0b3195"
+   ],
+   "upstreamTypes": [
+    "AnimaLLLiteApplyBlockMap",
+    "AnyLineArtPreprocessor_aux",
+    "DetailerForEach",
+    "FaceDetailer",
+    "GetImageSize",
+    "GetNode",
+    "KSampler",
+    "MaskToSEGS",
+    "ModelPatchLoader",
+    "PreviewImage",
+    "SAMLoader",
+    "SolidMask",
+    "UltimateSDUpscale",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAEDecode"
+   ]
+  },
+  {
+   "modelId": 2781647,
+   "name": "Illustrious - T2I + Detailer + HiRes Fix",
+   "downloads": 199,
+   "file": "illustriousT2IDetailer_v10.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "42",
+   "detectors": [
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "EmptyLatentImage",
+    "FaceDetailer",
+    "ImageScaleBy",
+    "ImageUpscaleWithModel",
+    "KSampler",
+    "Lora Loader Stack (rgthree)",
+    "PrimitiveNode",
+    "SAMLoader",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAEDecode",
+    "VAEEncode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2781647,
+   "name": "Illustrious - T2I + Detailer + HiRes Fix",
+   "downloads": 199,
+   "file": "illustriousT2IDetailer_v10.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "74",
+   "detectors": [
+    {
+     "model": "hand_yolov8s",
+     "raw": "bbox/hand_yolov8s.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64",
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "EmptyLatentImage",
+    "FaceDetailer",
+    "ImageScaleBy",
+    "ImageUpscaleWithModel",
+    "KSampler",
+    "Lora Loader Stack (rgthree)",
+    "PrimitiveNode",
+    "SAMLoader",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAEDecode",
+    "VAEEncode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2783372,
+   "name": "Krea2千问完美洗图流+SD高清工作流合集（Krea2 + QWEN Comprehensive Perfect Image Refining Workflow + SD High-Definition Workflow Compilation）",
+   "downloads": 1722,
+   "file": "krea2SDKrea2QWENComprehensive_v20.json",
+   "detailer": "DetailerForEach",
+   "detailerId": "544",
+   "detectors": [
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    },
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BboxDetectorSEGS",
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "ColorMatchV2",
+    "ConditioningZeroOut",
+    "DetailerForEach",
+    "EmptyLatentImage",
+    "GetImageSize+",
+    "ImpactSEGSOrderedFilter",
+    "KSamplerAdvanced",
+    "LatentUpscaleBy",
+    "LayerUtility: ImageScaleByAspectRatio V2",
+    "LoadImage",
+    "LoraLoaderModelOnly",
+    "PrimitiveFloat",
+    "Reroute",
+    "Seed (rgthree)",
+    "SimpleMathDual+",
+    "TextEncodeQwenImageEditPlus",
+    "UNETLoader",
+    "UltimateSDUpscale",
+    "UltralyticsDetectorProvider",
+    "UnetLoaderGGUF",
+    "UpscaleModelLoader",
+    "VAEDecode",
+    "VAELoader",
+    "easy int"
+   ]
+  },
+  {
+   "modelId": 2791097,
+   "name": "Lonecat's 🎨Post Production Module",
+   "downloads": 1090,
+   "file": "lonecatsPost_v70KitchenSinkUpdate.json",
+   "detailer": "LCSkinBeauty",
+   "detailerId": "148",
+   "detectors": [
+    {
+     "model": "",
+     "raw": "",
+     "type": "LCPersonMask"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCImageDenoise",
+    "LCPersonMask",
+    "LCPreviewMask",
+    "LCSkinBeauty"
+   ]
+  },
+  {
+   "modelId": 2803688,
+   "name": "Lonecat's Krea2 Identity Edit & Head Swap",
+   "downloads": 5168,
+   "file": "lonecatsKrea2Identity_v602HeadSwapRMBG.json",
+   "detailer": "LCSkinBeauty",
+   "detailerId": "229",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "LCClarity",
+    "LCSkinBeauty"
+   ]
+  },
+  {
+   "modelId": 2818074,
+   "name": "Anima simple workflow",
+   "downloads": 730,
+   "file": "animaSimpleWorkflow_v15.json",
+   "detailer": "FaceDetailerPipe",
+   "detailerId": "28",
+   "detectors": [
+    {
+     "model": "face_yolov8n_v2",
+     "raw": "bbox/face_yolov8n_v2.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov8n_v2",
+     "raw": "bbox/face_yolov8n_v2.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "DifferentialDiffusion",
+    "EditDetailerPipe",
+    "EmptyLatentImage",
+    "FaceDetailerPipe",
+    "FreeU_V2",
+    "KSampler",
+    "LoraLoader",
+    "PreviewImage",
+    "ToDetailerPipe",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAEDecodeTiled",
+    "VAELoader",
+    "easy hiresFix"
+   ]
+  },
+  {
+   "modelId": 2818074,
+   "name": "Anima simple workflow",
+   "downloads": 730,
+   "file": "animaSimpleWorkflow_v15.json",
+   "detailer": "ToDetailerPipe",
+   "detailerId": "22",
+   "detectors": [
+    {
+     "model": "face_yolov8n_v2",
+     "raw": "bbox/face_yolov8n_v2.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "DifferentialDiffusion",
+    "FreeU_V2",
+    "LoraLoader",
+    "ToDetailerPipe",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2818074,
+   "name": "Anima simple workflow",
+   "downloads": 730,
+   "file": "animaSimpleWorkflow_v15.json",
+   "detailer": "EditDetailerPipe",
+   "detailerId": "29",
+   "detectors": [
+    {
+     "model": "face_yolov8n_v2",
+     "raw": "bbox/face_yolov8n_v2.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov8n_v2",
+     "raw": "bbox/face_yolov8n_v2.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "DifferentialDiffusion",
+    "EditDetailerPipe",
+    "FreeU_V2",
+    "LoraLoader",
+    "ToDetailerPipe",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2823539,
+   "name": "Ultra Realistic Image Workflow ( Krea 2\t+ Klein)",
+   "downloads": 680,
+   "file": "ultraRealisticImageWorkflow_v10.json",
+   "detailer": "DetailDaemonSamplerNode",
+   "detailerId": "136",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "DetailDaemonSamplerNode",
+    "KSamplerSelect"
+   ]
+  },
+  {
+   "modelId": 2828862,
+   "name": "Anima All in one adetailer with mask editing",
+   "downloads": 104,
+   "file": "animaAllInOneAdetailer_v10.zip",
+   "detailer": "IkkiDetailerProcessor",
+   "detailerId": "53",
+   "detectors": [
+    {
+     "model": "pithanddetailer-v1b-seg",
+     "raw": "segm/handDetailer_v1b/PitHandDetailer-v1b-seg.pt",
+     "type": "IkkiUltralyticsDetector"
+    },
+    {
+     "model": "eyeful_v2-paired",
+     "raw": "bbox/Eyeful_v2-Paired.pt",
+     "type": "IkkiUltralyticsDetector"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "EmptyLatentImage",
+    "IkkiCompositeBack",
+    "IkkiDetailerKSampler",
+    "IkkiDetailerProcessor",
+    "IkkiLoraStackLoader",
+    "IkkiUltralyticsDetector",
+    "KSampler",
+    "LoraLoaderModelOnly",
+    "SaveImage",
+    "UNETLoader",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2828862,
+   "name": "Anima All in one adetailer with mask editing",
+   "downloads": 104,
+   "file": "animaAllInOneAdetailer_v10.zip",
+   "detailer": "IkkiDetailerProcessor",
+   "detailerId": "14",
+   "detectors": [
+    {
+     "model": "eyeful_v2-paired",
+     "raw": "bbox/Eyeful_v2-Paired.pt",
+     "type": "IkkiUltralyticsDetector"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "EmptyLatentImage",
+    "IkkiDetailerProcessor",
+    "IkkiLoraStackLoader",
+    "IkkiUltralyticsDetector",
+    "KSampler",
+    "LoraLoaderModelOnly",
+    "SaveImage",
+    "UNETLoader",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2828862,
+   "name": "Anima All in one adetailer with mask editing",
+   "downloads": 104,
+   "file": "animaAllInOneAdetailer_v10.zip",
+   "detailer": "IkkiDetailerProcessor",
+   "detailerId": "69",
+   "detectors": [
+    {
+     "model": "pithanddetailer-v1b-seg",
+     "raw": "segm/handDetailer_v1b/PitHandDetailer-v1b-seg.pt",
+     "type": "IkkiUltralyticsDetector"
+    },
+    {
+     "model": "hair_seg_bigmodel_afterdetailer_v10",
+     "raw": "segm/Hair_seg_bigmodel_AfterDetailer_v10.pt",
+     "type": "IkkiUltralyticsDetector"
+    },
+    {
+     "model": "eyeful_v2-paired",
+     "raw": "bbox/Eyeful_v2-Paired.pt",
+     "type": "IkkiUltralyticsDetector"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "EmptyLatentImage",
+    "IkkiCompositeBack",
+    "IkkiDetailerKSampler",
+    "IkkiDetailerProcessor",
+    "IkkiLoraStackLoader",
+    "IkkiUltralyticsDetector",
+    "KSampler",
+    "LoraLoaderModelOnly",
+    "SaveImage",
+    "UNETLoader",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2828862,
+   "name": "Anima All in one adetailer with mask editing",
+   "downloads": 104,
+   "file": "animaAllInOneAdetailer_v10.zip",
+   "detailer": "IkkiDetailerKSampler",
+   "detailerId": "72",
+   "detectors": [
+    {
+     "model": "pithanddetailer-v1b-seg",
+     "raw": "segm/handDetailer_v1b/PitHandDetailer-v1b-seg.pt",
+     "type": "IkkiUltralyticsDetector"
+    },
+    {
+     "model": "hair_seg_bigmodel_afterdetailer_v10",
+     "raw": "segm/Hair_seg_bigmodel_AfterDetailer_v10.pt",
+     "type": "IkkiUltralyticsDetector"
+    },
+    {
+     "model": "eyeful_v2-paired",
+     "raw": "bbox/Eyeful_v2-Paired.pt",
+     "type": "IkkiUltralyticsDetector"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "EmptyLatentImage",
+    "IkkiCompositeBack",
+    "IkkiDetailerKSampler",
+    "IkkiDetailerProcessor",
+    "IkkiLoraStackLoader",
+    "IkkiUltralyticsDetector",
+    "KSampler",
+    "LoraLoaderModelOnly",
+    "SaveImage",
+    "UNETLoader",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2828862,
+   "name": "Anima All in one adetailer with mask editing",
+   "downloads": 104,
+   "file": "animaAllInOneAdetailer_v10.zip",
+   "detailer": "IkkiDetailerKSampler",
+   "detailerId": "21",
+   "detectors": [
+    {
+     "model": "eyeful_v2-paired",
+     "raw": "bbox/Eyeful_v2-Paired.pt",
+     "type": "IkkiUltralyticsDetector"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "EmptyLatentImage",
+    "IkkiDetailerKSampler",
+    "IkkiDetailerProcessor",
+    "IkkiLoraStackLoader",
+    "IkkiUltralyticsDetector",
+    "KSampler",
+    "LoraLoaderModelOnly",
+    "SaveImage",
+    "UNETLoader",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2828862,
+   "name": "Anima All in one adetailer with mask editing",
+   "downloads": 104,
+   "file": "animaAllInOneAdetailer_v10.zip",
+   "detailer": "IkkiDetailerKSampler",
+   "detailerId": "51",
+   "detectors": [
+    {
+     "model": "pithanddetailer-v1b-seg",
+     "raw": "segm/handDetailer_v1b/PitHandDetailer-v1b-seg.pt",
+     "type": "IkkiUltralyticsDetector"
+    },
+    {
+     "model": "eyeful_v2-paired",
+     "raw": "bbox/Eyeful_v2-Paired.pt",
+     "type": "IkkiUltralyticsDetector"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "EmptyLatentImage",
+    "IkkiCompositeBack",
+    "IkkiDetailerKSampler",
+    "IkkiDetailerProcessor",
+    "IkkiLoraStackLoader",
+    "IkkiUltralyticsDetector",
+    "KSampler",
+    "LoraLoaderModelOnly",
+    "SaveImage",
+    "UNETLoader",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2828862,
+   "name": "Anima All in one adetailer with mask editing",
+   "downloads": 104,
+   "file": "animaAllInOneAdetailer_v10.zip",
+   "detailer": "IkkiDetailerProcessor",
+   "detailerId": "23",
+   "detectors": [
+    {
+     "model": "pithanddetailer-v1b-seg",
+     "raw": "segm/handDetailer_v1b/PitHandDetailer-v1b-seg.pt",
+     "type": "IkkiUltralyticsDetector"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "EmptyLatentImage",
+    "IkkiDetailerProcessor",
+    "IkkiLoraStackLoader",
+    "IkkiUltralyticsDetector",
+    "KSampler",
+    "LoraLoaderModelOnly",
+    "SaveImage",
+    "UNETLoader",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2828862,
+   "name": "Anima All in one adetailer with mask editing",
+   "downloads": 104,
+   "file": "animaAllInOneAdetailer_v10.zip",
+   "detailer": "IkkiDetailerKSampler",
+   "detailerId": "31",
+   "detectors": [
+    {
+     "model": "pithanddetailer-v1b-seg",
+     "raw": "segm/handDetailer_v1b/PitHandDetailer-v1b-seg.pt",
+     "type": "IkkiUltralyticsDetector"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "EmptyLatentImage",
+    "IkkiDetailerKSampler",
+    "IkkiDetailerProcessor",
+    "IkkiLoraStackLoader",
+    "IkkiMaskEditor",
+    "IkkiUltralyticsDetector",
+    "KSampler",
+    "LoraLoaderModelOnly",
+    "SaveImage",
+    "UNETLoader",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2834962,
+   "name": "🔱 Trinity SDXL Workflow (Illustrious / Pony / NoobAi / Img2Img / inpainting)",
+   "downloads": 167,
+   "file": "TrinitySDXLWorkflowIllustrious_v10.json",
+   "detailer": "DetailerForEach",
+   "detailerId": "152",
+   "detectors": [
+    {
+     "model": "person_yolov8m-seg",
+     "raw": "segm/person_yolov8m-seg.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "hand_yolov8s",
+     "raw": "bbox/hand_yolov8s.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "ImpactSimpleDetectorSEGS"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64",
+    "sam_vit_b_01ec64",
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPTextEncode",
+    "CR Conditioning Input Switch",
+    "CR Image Input Switch",
+    "CR Latent Input Switch",
+    "CR Model Input Switch",
+    "CR Upscale Image",
+    "CR VAE Input Switch",
+    "CheckpointLoaderSimple",
+    "ControlNetApplyAdvanced",
+    "DWPreprocessor",
+    "DetailerForEach",
+    "DiffControlNetLoader",
+    "EmptyLatentImage",
+    "FaceDetailer",
+    "FreeU_V2",
+    "GrowMask",
+    "ImpactSimpleDetectorSEGS",
+    "KSampler",
+    "LoadImage",
+    "MaskBlur+",
+    "PerturbedAttentionGuidance",
+    "Power Lora Loader (rgthree)",
+    "Primitive float [Crystools]",
+    "Primitive integer [Crystools]",
+    "SAMLoader",
+    "Sampler Selector (Image Saver)",
+    "Scheduler Selector (Image Saver)",
+    "Seed (rgthree)",
+    "UltralyticsDetectorProvider",
+    "VAEDecode",
+    "VAEEncode",
+    "VAEEncodeForInpaint",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2834962,
+   "name": "🔱 Trinity SDXL Workflow (Illustrious / Pony / NoobAi / Img2Img / inpainting)",
+   "downloads": 167,
+   "file": "TrinitySDXLWorkflowIllustrious_v10.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "176",
+   "detectors": [
+    {
+     "model": "person_yolov8m-seg",
+     "raw": "segm/person_yolov8m-seg.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPTextEncode",
+    "CR Conditioning Input Switch",
+    "CR Image Input Switch",
+    "CR Latent Input Switch",
+    "CR Model Input Switch",
+    "CR Upscale Image",
+    "CR VAE Input Switch",
+    "CheckpointLoaderSimple",
+    "ControlNetApplyAdvanced",
+    "DWPreprocessor",
+    "DiffControlNetLoader",
+    "EmptyLatentImage",
+    "FaceDetailer",
+    "FreeU_V2",
+    "GrowMask",
+    "KSampler",
+    "LoadImage",
+    "MaskBlur+",
+    "PerturbedAttentionGuidance",
+    "Power Lora Loader (rgthree)",
+    "Primitive float [Crystools]",
+    "Primitive integer [Crystools]",
+    "SAMLoader",
+    "Sampler Selector (Image Saver)",
+    "Scheduler Selector (Image Saver)",
+    "Seed (rgthree)",
+    "UltralyticsDetectorProvider",
+    "VAEDecode",
+    "VAEEncode",
+    "VAEEncodeForInpaint",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2834962,
+   "name": "🔱 Trinity SDXL Workflow (Illustrious / Pony / NoobAi / Img2Img / inpainting)",
+   "downloads": 167,
+   "file": "TrinitySDXLWorkflowIllustrious_v10.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "85",
+   "detectors": [
+    {
+     "model": "person_yolov8m-seg",
+     "raw": "segm/person_yolov8m-seg.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64",
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPTextEncode",
+    "CR Conditioning Input Switch",
+    "CR Image Input Switch",
+    "CR Latent Input Switch",
+    "CR Model Input Switch",
+    "CR Upscale Image",
+    "CR VAE Input Switch",
+    "CheckpointLoaderSimple",
+    "ControlNetApplyAdvanced",
+    "DWPreprocessor",
+    "DiffControlNetLoader",
+    "EmptyLatentImage",
+    "FaceDetailer",
+    "FreeU_V2",
+    "GrowMask",
+    "KSampler",
+    "LoadImage",
+    "MaskBlur+",
+    "PerturbedAttentionGuidance",
+    "Power Lora Loader (rgthree)",
+    "Primitive float [Crystools]",
+    "Primitive integer [Crystools]",
+    "SAMLoader",
+    "Sampler Selector (Image Saver)",
+    "Scheduler Selector (Image Saver)",
+    "Seed (rgthree)",
+    "UltralyticsDetectorProvider",
+    "VAEDecode",
+    "VAEEncode",
+    "VAEEncodeForInpaint",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2835514,
+   "name": "[Krea2 Edit] Anime2Real Workflow (Anime to Realistic)",
+   "downloads": 4038,
+   "file": "Krea2EditAnime2real_v30DpNonAsian.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "1120",
+   "detectors": [
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPTextEncode",
+    "ConditioningZeroOut",
+    "FaceDetailer",
+    "GetNode",
+    "KSamplerAdvanced",
+    "Power Lora Loader (rgthree)",
+    "SAMLoader",
+    "UltralyticsDetectorProvider",
+    "UpscaleImageByModelThenResize",
+    "UpscaleModelLoader",
+    "VAEDecode"
+   ]
+  },
+  {
+   "modelId": 2856577,
+   "name": "Krea 2 Regional Prompting + JSON Layout Import",
+   "downloads": 290,
+   "file": "krea2RegionalPrompting_v20.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "15",
+   "detectors": [
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BasicScheduler",
+    "CFGGuider",
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DetailDaemonSamplerNode",
+    "EmptyLatentImage",
+    "FaceDetailer",
+    "KSamplerSelect",
+    "Krea2ApplyRegional",
+    "Krea2RegionalBuilder",
+    "LoraLoader",
+    "PrimitiveStringMultiline",
+    "RandomNoise",
+    "SamplerCustomAdvanced",
+    "UltralyticsDetectorProvider",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2856577,
+   "name": "Krea 2 Regional Prompting + JSON Layout Import",
+   "downloads": 290,
+   "file": "krea2RegionalPrompting_v20.json",
+   "detailer": "DetailDaemonSamplerNode",
+   "detailerId": "27",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "DetailDaemonSamplerNode",
+    "KSamplerSelect"
+   ]
+  },
+  {
+   "modelId": 2856577,
+   "name": "Krea 2 Regional Prompting + JSON Layout Import",
+   "downloads": 290,
+   "file": "krea2RegionalPrompting_v20.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "17",
+   "detectors": [
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "eyeful_v2-individual",
+     "raw": "bbox/Eyeful_v2-Individual.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BasicScheduler",
+    "CFGGuider",
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DetailDaemonSamplerNode",
+    "EmptyLatentImage",
+    "FaceDetailer",
+    "KSamplerSelect",
+    "Krea2ApplyRegional",
+    "Krea2RegionalBuilder",
+    "LoraLoader",
+    "PrimitiveStringMultiline",
+    "RandomNoise",
+    "SamplerCustomAdvanced",
+    "UltralyticsDetectorProvider",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2858876,
+   "name": "New Multi Positive Input and mathematical representation WF",
+   "downloads": 157,
+   "file": "newMultiPositiveInput_v400FastFixed.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "581",
+   "detectors": [
+    {
+     "model": "hair_yolov8n-seg_60",
+     "raw": "segm/hair_yolov8n-seg_60.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "hand_yolov8s",
+     "raw": "bbox/hand_yolov8s.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CR Switch Model and CLIP",
+    "CR VAE Input Switch",
+    "CheckpointLoaderSimple",
+    "ConditioningConcat",
+    "EmptyLatentImage",
+    "FaceDetailer",
+    "IPT-CombinePrompts",
+    "IPT-LoraStackLorader",
+    "IPT-PowerLoraSelector",
+    "ImageScaleToTotalPixels",
+    "KSampler",
+    "PreviewImage",
+    "PrimitiveStringMultiline",
+    "Reroute (rgthree)",
+    "SoftFullCleanRAMAndVRAM|LP",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAEDecode",
+    "VAEDecodeTiled",
+    "VAEEncodeTiled",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2858876,
+   "name": "New Multi Positive Input and mathematical representation WF",
+   "downloads": 157,
+   "file": "newMultiPositiveInput_v400FastFixed.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "595",
+   "detectors": [
+    {
+     "model": "eyeful_v2-paired",
+     "raw": "bbox/Eyeful_v2-Paired.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "hair_yolov8n-seg_60",
+     "raw": "segm/hair_yolov8n-seg_60.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "hand_yolov8s",
+     "raw": "bbox/hand_yolov8s.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CR Switch Model and CLIP",
+    "CR VAE Input Switch",
+    "CheckpointLoaderSimple",
+    "ConditioningConcat",
+    "EmptyLatentImage",
+    "FaceDetailer",
+    "IPT-CombinePrompts",
+    "IPT-LoraStackLorader",
+    "IPT-PowerLoraSelector",
+    "ImageScaleToTotalPixels",
+    "KSampler",
+    "PreviewImage",
+    "PrimitiveStringMultiline",
+    "Reroute (rgthree)",
+    "SoftFullCleanRAMAndVRAM|LP",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAEDecode",
+    "VAEDecodeTiled",
+    "VAEEncodeTiled",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2858876,
+   "name": "New Multi Positive Input and mathematical representation WF",
+   "downloads": 157,
+   "file": "newMultiPositiveInput_v400FastFixed.json",
+   "detailer": "DetailerForEach",
+   "detailerId": "634",
+   "detectors": [
+    {
+     "model": "person_yolov8m-seg",
+     "raw": "segm/person_yolov8m-seg.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "eyeful_v2-paired",
+     "raw": "bbox/Eyeful_v2-Paired.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "hair_yolov8n-seg_60",
+     "raw": "segm/hair_yolov8n-seg_60.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "hand_yolov8s",
+     "raw": "bbox/hand_yolov8s.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "ImpactSimpleDetectorSEGS"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CR Switch Model and CLIP",
+    "CR VAE Input Switch",
+    "CheckpointLoaderSimple",
+    "ConditioningConcat",
+    "DetailerForEach",
+    "EmptyLatentImage",
+    "FaceDetailer",
+    "IPT-CombinePrompts",
+    "IPT-LoraStackLorader",
+    "IPT-PowerLoraSelector",
+    "Image Switch (JPS)",
+    "ImageScaleToTotalPixels",
+    "ImpactSimpleDetectorSEGS",
+    "KSampler",
+    "PreviewImage",
+    "PrimitiveStringMultiline",
+    "Reroute (rgthree)",
+    "SoftFullCleanRAMAndVRAM|LP",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAEDecode",
+    "VAEDecodeTiled",
+    "VAEEncodeTiled",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2858876,
+   "name": "New Multi Positive Input and mathematical representation WF",
+   "downloads": 157,
+   "file": "newMultiPositiveInput_v400FastFixed.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "553",
+   "detectors": [
+    {
+     "model": "hair_yolov8n-seg_60",
+     "raw": "segm/hair_yolov8n-seg_60.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPSetLastLayer",
+    "CLIPTextEncode",
+    "CR Switch Model and CLIP",
+    "CR VAE Input Switch",
+    "CheckpointLoaderSimple",
+    "ConditioningConcat",
+    "EmptyLatentImage",
+    "FaceDetailer",
+    "IPT-CombinePrompts",
+    "IPT-LoraStackLorader",
+    "IPT-PowerLoraSelector",
+    "ImageScaleToTotalPixels",
+    "KSampler",
+    "PreviewImage",
+    "PrimitiveStringMultiline",
+    "Reroute (rgthree)",
+    "SoftFullCleanRAMAndVRAM|LP",
+    "UNETLoader",
+    "UltralyticsDetectorProvider",
+    "VAEDecode",
+    "VAEDecodeTiled",
+    "VAEEncodeTiled",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2863370,
+   "name": "Illustrious [Unblended Character] workflow by ComfyUI",
+   "downloads": 126,
+   "file": "illustriousUnblended_unblend.zip",
+   "detailer": "FaceDetailer",
+   "detailerId": "679",
+   "detectors": [
+    {
+     "model": "eyes",
+     "raw": "bbox/Eyes.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPSetLastLayer",
+    "CheckpointLoaderKJ",
+    "EmptyLatentImage",
+    "FaceDetailer",
+    "IllustriousCLIPTextEncoder",
+    "Input Parameters (Image Saver)",
+    "KSampler",
+    "Lora Loader (LoraManager)",
+    "Reroute",
+    "SAMLoader",
+    "SwitchAnyBool",
+    "Text (LoraManager)",
+    "Text List",
+    "Text List to Text",
+    "Text Multiline",
+    "UltralyticsDetectorProvider",
+    "UnblendDynamicSampler",
+    "VAEDecode",
+    "easy loraPromptApply",
+    "ff452577-bfd3-448d-9788-27a6f101a370"
+   ]
+  },
+  {
+   "modelId": 2863719,
+   "name": "Lonecats Skin Beauty ✨ Node",
+   "downloads": 191,
+   "file": "lonecatsSkinBeauty_lc123PackLaunch.zip",
+   "detailer": "LCSkinBeauty",
+   "detailerId": "92",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "LCSkinBeauty",
+    "LoadImage"
+   ]
+  },
+  {
+   "modelId": 2863719,
+   "name": "Lonecats Skin Beauty ✨ Node",
+   "downloads": 191,
+   "file": "lonecatsSkinBeauty_lc123PackLaunch.zip",
+   "detailer": "LCSkinBeauty",
+   "detailerId": "85",
+   "detectors": [],
+   "sam": [
+    ""
+   ],
+   "upstreamTypes": [
+    "LCSkinBeauty",
+    "LayerMask: SegmentAnythingUltra V2",
+    "LoadImage"
+   ]
+  },
+  {
+   "modelId": 2863719,
+   "name": "Lonecats Skin Beauty ✨ Node",
+   "downloads": 191,
+   "file": "lonecatsSkinBeauty_lc123PackLaunch.zip",
+   "detailer": "LCSkinBeauty",
+   "detailerId": "92",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "LCSkinBeauty",
+    "LoadImage"
+   ]
+  },
+  {
+   "modelId": 2874142,
+   "name": "Moody Krea2 Image to Image 4KHD Workflow V1  (洗图流)",
+   "downloads": 3044,
+   "file": "moodyKrea2ImageToImage4KHD_v10.json",
+   "detailer": "DetailerForEach",
+   "detailerId": "734",
+   "detectors": [
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    },
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BboxDetectorSEGS",
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "ColorMatch",
+    "ComfyMathExpression",
+    "ConditioningZeroOut",
+    "DetailerForEach",
+    "DownloadAndLoadFlorence2Model",
+    "FloatConstant",
+    "Florence2Run",
+    "GetImageSize",
+    "GetNode",
+    "ImpactDilateMask",
+    "ImpactSEGSOrderedFilter",
+    "KSampler",
+    "MaskToSEGS",
+    "Power Lora Loader (rgthree)",
+    "PreviewAny",
+    "PreviewBridge",
+    "PreviewImage",
+    "PrimitiveInt",
+    "Reroute",
+    "Seed (rgthree)",
+    "StringConcatenate",
+    "StringReplace",
+    "UNETLoader",
+    "UltimateSDUpscale",
+    "UltralyticsDetectorProvider",
+    "VAEDecode",
+    "VAEEncode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2874142,
+   "name": "Moody Krea2 Image to Image 4KHD Workflow V1  (洗图流)",
+   "downloads": 3044,
+   "file": "moodyKrea2ImageToImage4KHD_v10.json",
+   "detailer": "DetailerForEach",
+   "detailerId": "789",
+   "detectors": [
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    },
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BboxDetectorSEGS",
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "ColorMatch",
+    "ComfyMathExpression",
+    "ConditioningZeroOut",
+    "DetailerForEach",
+    "DownloadAndLoadFlorence2Model",
+    "FloatConstant",
+    "Florence2Run",
+    "GetImageSize",
+    "GetNode",
+    "ImpactSEGSOrderedFilter",
+    "KSampler",
+    "Power Lora Loader (rgthree)",
+    "PreviewAny",
+    "PreviewImage",
+    "PrimitiveInt",
+    "Reroute",
+    "Seed (rgthree)",
+    "StringConcatenate",
+    "StringReplace",
+    "UNETLoader",
+    "UltimateSDUpscale",
+    "UltralyticsDetectorProvider",
+    "VAEDecode",
+    "VAEEncode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2882173,
+   "name": "iGEN - Simple (Save with Generation Data)",
+   "downloads": 295,
+   "file": "igenSimpleSaveWith_v15.json",
+   "detailer": "DetailDaemonSamplerNode",
+   "detailerId": "65",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "DetailDaemonSamplerNode",
+    "GetAllActiveNode",
+    "KSamplerSelect"
+   ]
+  },
+  {
+   "modelId": 2885536,
+   "name": "5-in-1 Multi-Model Realism Workflow",
+   "downloads": 58,
+   "file": "5In1MultiModelRealism_v10.json",
+   "detailer": "DetailerForEachPipe",
+   "detailerId": "141",
+   "detectors": [
+    {
+     "model": "hand_yolov9c",
+     "raw": "bbox/hand_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BasicGuider",
+    "BasicScheduler",
+    "BboxDetectorSEGS",
+    "CLIPTextEncode",
+    "CLIPTextEncodeFlux",
+    "DetailerForEachPipe",
+    "DualCLIPLoader",
+    "DyPE_FLUX",
+    "FluxGuidance",
+    "GetNode",
+    "ImageUpscaleWithModel",
+    "KSamplerSelect",
+    "ModelSamplingFlux",
+    "Power Lora Loader (rgthree)",
+    "PreviewImage",
+    "SamplerCustomAdvanced",
+    "SaveLatent",
+    "ToBasicPipe",
+    "UNETLoader",
+    "UltimateSDUpscaleNoUpscale",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAEDecode"
+   ]
+  },
+  {
+   "modelId": 2885536,
+   "name": "5-in-1 Multi-Model Realism Workflow",
+   "downloads": 58,
+   "file": "5In1MultiModelRealism_v10.json",
+   "detailer": "DetailerForEachPipe",
+   "detailerId": "181",
+   "detectors": [
+    {
+     "model": "hand_yolov9c",
+     "raw": "bbox/hand_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BboxDetectorSEGS",
+    "CLIPTextEncode",
+    "Checkpoint Loader (Simple)",
+    "DetailerForEachPipe",
+    "FreeU_V2",
+    "GetNode",
+    "ImageUpscaleWithModel",
+    "KSampler",
+    "Power Lora Loader (rgthree)",
+    "ToBasicPipe",
+    "UltimateSDUpscaleNoUpscale",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAEDecode"
+   ]
+  },
+  {
+   "modelId": 2885536,
+   "name": "5-in-1 Multi-Model Realism Workflow",
+   "downloads": 58,
+   "file": "5In1MultiModelRealism_v10.json",
+   "detailer": "DetailerForEachPipe",
+   "detailerId": "320",
+   "detectors": [
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    },
+    {
+     "model": "hand_yolov9c",
+     "raw": "bbox/hand_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BasicGuider",
+    "BasicScheduler",
+    "BboxDetectorSEGS",
+    "CLIPTextEncode",
+    "CLIPTextEncodeFlux",
+    "DetailerForEachPipe",
+    "DualCLIPLoader",
+    "DyPE_FLUX",
+    "FluxGuidance",
+    "GetNode",
+    "ImageUpscaleWithModel",
+    "KSamplerSelect",
+    "ModelSamplingFlux",
+    "Power Lora Loader (rgthree)",
+    "PreviewImage",
+    "SamplerCustomAdvanced",
+    "SaveLatent",
+    "ToBasicPipe",
+    "UltimateSDUpscaleNoUpscale",
+    "UltralyticsDetectorProvider",
+    "UnetLoaderGGUF",
+    "UpscaleModelLoader",
+    "VAEDecode"
+   ]
+  },
+  {
+   "modelId": 2885536,
+   "name": "5-in-1 Multi-Model Realism Workflow",
+   "downloads": 58,
+   "file": "5In1MultiModelRealism_v10.json",
+   "detailer": "DetailerForEachPipe",
+   "detailerId": "455",
+   "detectors": [
+    {
+     "model": "hand_yolov9c",
+     "raw": "bbox/hand_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BasicScheduler",
+    "BboxDetectorSEGS",
+    "CFGGuider",
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DetailerForEachPipe",
+    "EmptySD3LatentImage",
+    "GetNode",
+    "ImageUpscaleWithModel",
+    "KSamplerSelect",
+    "LoraLoaderModelOnly",
+    "ModelSamplingAuraFlow",
+    "PonyNoise",
+    "PreviewImage",
+    "SamplerCustomAdvanced",
+    "T5TokenizerOptions",
+    "ToBasicPipe",
+    "UltimateSDUpscaleNoUpscale",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2885536,
+   "name": "5-in-1 Multi-Model Realism Workflow",
+   "downloads": 58,
+   "file": "5In1MultiModelRealism_v10.json",
+   "detailer": "DetailerForEachPipe",
+   "detailerId": "385",
+   "detectors": [
+    {
+     "model": "hand_yolov9c",
+     "raw": "bbox/hand_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BboxDetectorSEGS",
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "ConditioningZeroOut",
+    "DetailerForEachPipe",
+    "GetNode",
+    "ImageUpscaleWithModel",
+    "KSampler",
+    "ModelSamplingAuraFlow",
+    "Power Lora Loader (rgthree)",
+    "PreviewImage",
+    "ToBasicPipe",
+    "UNETLoader",
+    "UltimateSDUpscaleNoUpscale",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2885536,
+   "name": "5-in-1 Multi-Model Realism Workflow",
+   "downloads": 58,
+   "file": "5In1MultiModelRealism_v10.json",
+   "detailer": "DetailerForEachDebug",
+   "detailerId": "144",
+   "detectors": [
+    {
+     "model": "hand_yolov9c",
+     "raw": "bbox/hand_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "eyeful_v2-paired",
+     "raw": "bbox/Eyeful_v2-Paired.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BasicGuider",
+    "BasicScheduler",
+    "BboxDetectorSEGS",
+    "CLIPTextEncode",
+    "CLIPTextEncodeFlux",
+    "DetailerForEachDebug",
+    "DetailerForEachPipe",
+    "DualCLIPLoader",
+    "DyPE_FLUX",
+    "FluxGuidance",
+    "GetNode",
+    "ImageUpscaleWithModel",
+    "KSamplerSelect",
+    "ModelSamplingFlux",
+    "Power Lora Loader (rgthree)",
+    "PreviewImage",
+    "SamplerCustomAdvanced",
+    "SaveLatent",
+    "ToBasicPipe",
+    "UNETLoader",
+    "UltimateSDUpscaleNoUpscale",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAEDecode"
+   ]
+  },
+  {
+   "modelId": 2885536,
+   "name": "5-in-1 Multi-Model Realism Workflow",
+   "downloads": 58,
+   "file": "5In1MultiModelRealism_v10.json",
+   "detailer": "DetailerForEachDebug",
+   "detailerId": "191",
+   "detectors": [
+    {
+     "model": "hand_yolov9c",
+     "raw": "bbox/hand_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    },
+    {
+     "model": "eyeful_v2-paired",
+     "raw": "bbox/Eyeful_v2-Paired.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BboxDetectorSEGS",
+    "CLIPTextEncode",
+    "Checkpoint Loader (Simple)",
+    "DetailerForEachDebug",
+    "DetailerForEachPipe",
+    "FreeU_V2",
+    "GetNode",
+    "ImageUpscaleWithModel",
+    "KSampler",
+    "Power Lora Loader (rgthree)",
+    "PreviewImage",
+    "ToBasicPipe",
+    "UltimateSDUpscaleNoUpscale",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAEDecode"
+   ]
+  },
+  {
+   "modelId": 2885536,
+   "name": "5-in-1 Multi-Model Realism Workflow",
+   "downloads": 58,
+   "file": "5In1MultiModelRealism_v10.json",
+   "detailer": "DetailerForEachDebug",
+   "detailerId": "332",
+   "detectors": [
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    },
+    {
+     "model": "eyeful_v2-paired",
+     "raw": "bbox/Eyeful_v2-Paired.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "hand_yolov9c",
+     "raw": "bbox/hand_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BasicGuider",
+    "BasicScheduler",
+    "BboxDetectorSEGS",
+    "CLIPTextEncode",
+    "CLIPTextEncodeFlux",
+    "DetailerForEachDebug",
+    "DetailerForEachPipe",
+    "DualCLIPLoader",
+    "DyPE_FLUX",
+    "FluxGuidance",
+    "GetNode",
+    "ImageUpscaleWithModel",
+    "KSamplerSelect",
+    "ModelSamplingFlux",
+    "Power Lora Loader (rgthree)",
+    "PreviewImage",
+    "SamplerCustomAdvanced",
+    "SaveLatent",
+    "ToBasicPipe",
+    "UltimateSDUpscaleNoUpscale",
+    "UltralyticsDetectorProvider",
+    "UnetLoaderGGUF",
+    "UpscaleModelLoader",
+    "VAEDecode"
+   ]
+  },
+  {
+   "modelId": 2885536,
+   "name": "5-in-1 Multi-Model Realism Workflow",
+   "downloads": 58,
+   "file": "5In1MultiModelRealism_v10.json",
+   "detailer": "DetailerForEachDebug",
+   "detailerId": "465",
+   "detectors": [
+    {
+     "model": "hand_yolov9c",
+     "raw": "bbox/hand_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "eyeful_v2-paired",
+     "raw": "bbox/Eyeful_v2-Paired.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BasicScheduler",
+    "BboxDetectorSEGS",
+    "CFGGuider",
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "CheckpointLoaderSimple",
+    "DetailerForEachDebug",
+    "DetailerForEachPipe",
+    "EmptySD3LatentImage",
+    "GetNode",
+    "ImageUpscaleWithModel",
+    "KSamplerSelect",
+    "LoraLoaderModelOnly",
+    "ModelSamplingAuraFlow",
+    "PonyNoise",
+    "PreviewImage",
+    "SamplerCustomAdvanced",
+    "T5TokenizerOptions",
+    "ToBasicPipe",
+    "UltimateSDUpscaleNoUpscale",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2885536,
+   "name": "5-in-1 Multi-Model Realism Workflow",
+   "downloads": 58,
+   "file": "5In1MultiModelRealism_v10.json",
+   "detailer": "DetailerForEachDebug",
+   "detailerId": "395",
+   "detectors": [
+    {
+     "model": "hand_yolov9c",
+     "raw": "bbox/hand_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "eyeful_v2-paired",
+     "raw": "bbox/Eyeful_v2-Paired.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BboxDetectorSEGS",
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "ConditioningZeroOut",
+    "DetailerForEachDebug",
+    "DetailerForEachPipe",
+    "GetNode",
+    "ImageUpscaleWithModel",
+    "KSampler",
+    "ModelSamplingAuraFlow",
+    "Power Lora Loader (rgthree)",
+    "PreviewImage",
+    "ToBasicPipe",
+    "UNETLoader",
+    "UltimateSDUpscaleNoUpscale",
+    "UltralyticsDetectorProvider",
+    "UpscaleModelLoader",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2894254,
+   "name": "SDXL_Niakr1s",
+   "downloads": 43,
+   "file": "sdxlNiakr1s_v10.json",
+   "detailer": "BasicPipeToDetailerPipe",
+   "detailerId": "477",
+   "detectors": [
+    {
+     "model": "eyeful_v2-paired",
+     "raw": "bbox/Eyeful_v2-Paired.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "Any Switch (rgthree)",
+    "BasicPipeToDetailerPipe",
+    "DetailerPipeToBasicPipe",
+    "EA_LMStudio",
+    "FaceDetailerPipe",
+    "ImpactWildcardProcessor",
+    "OneButtonSuperPrompt",
+    "PreviewAny",
+    "PrimitiveStringMultiline",
+    "Reroute",
+    "SAMLoader",
+    "StringFunction|pysssss",
+    "ToBasicPipe",
+    "UltralyticsDetectorProvider",
+    "easy comfyLoader",
+    "easy fullkSampler",
+    "easy int",
+    "easy loraStack",
+    "easy pipeOut"
+   ]
+  },
+  {
+   "modelId": 2894254,
+   "name": "SDXL_Niakr1s",
+   "downloads": 43,
+   "file": "sdxlNiakr1s_v10.json",
+   "detailer": "DetailerPipeToBasicPipe",
+   "detailerId": "480",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "Any Switch (rgthree)",
+    "BasicPipeToDetailerPipe",
+    "DetailerPipeToBasicPipe",
+    "EA_LMStudio",
+    "FaceDetailerPipe",
+    "ImpactWildcardProcessor",
+    "OneButtonSuperPrompt",
+    "PreviewAny",
+    "PrimitiveStringMultiline",
+    "Reroute",
+    "SAMLoader",
+    "StringFunction|pysssss",
+    "ToBasicPipe",
+    "UltralyticsDetectorProvider",
+    "easy comfyLoader",
+    "easy fullkSampler",
+    "easy int",
+    "easy loraStack",
+    "easy pipeOut"
+   ]
+  },
+  {
+   "modelId": 2894254,
+   "name": "SDXL_Niakr1s",
+   "downloads": 43,
+   "file": "sdxlNiakr1s_v10.json",
+   "detailer": "BasicPipeToDetailerPipe",
+   "detailerId": "464",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "Any Switch (rgthree)",
+    "BasicPipeToDetailerPipe",
+    "EA_LMStudio",
+    "ImpactWildcardProcessor",
+    "OneButtonSuperPrompt",
+    "PreviewAny",
+    "PrimitiveStringMultiline",
+    "Reroute",
+    "SAMLoader",
+    "StringFunction|pysssss",
+    "ToBasicPipe",
+    "UltralyticsDetectorProvider",
+    "easy comfyLoader",
+    "easy fullkSampler",
+    "easy int",
+    "easy loraStack",
+    "easy pipeOut"
+   ]
+  },
+  {
+   "modelId": 2894254,
+   "name": "SDXL_Niakr1s",
+   "downloads": 43,
+   "file": "sdxlNiakr1s_v10.json",
+   "detailer": "FaceDetailerPipe",
+   "detailerId": "476",
+   "detectors": [
+    {
+     "model": "eyeful_v2-paired",
+     "raw": "bbox/Eyeful_v2-Paired.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "Any Switch (rgthree)",
+    "BasicPipeToDetailerPipe",
+    "DetailerPipeToBasicPipe",
+    "EA_LMStudio",
+    "FaceDetailerPipe",
+    "ImpactWildcardProcessor",
+    "OneButtonSuperPrompt",
+    "PreviewAny",
+    "PrimitiveStringMultiline",
+    "Reroute",
+    "SAMLoader",
+    "StringFunction|pysssss",
+    "ToBasicPipe",
+    "UltralyticsDetectorProvider",
+    "easy comfyLoader",
+    "easy fullkSampler",
+    "easy int",
+    "easy loraStack",
+    "easy pipeOut"
+   ]
+  },
+  {
+   "modelId": 2894254,
+   "name": "SDXL_Niakr1s",
+   "downloads": 43,
+   "file": "sdxlNiakr1s_v10.json",
+   "detailer": "FaceDetailerPipe",
+   "detailerId": "459",
+   "detectors": [
+    {
+     "model": "face_yolov9c",
+     "raw": "bbox/face_yolov9c.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "Any Switch (rgthree)",
+    "BasicPipeToDetailerPipe",
+    "EA_LMStudio",
+    "FaceDetailerPipe",
+    "ImpactWildcardProcessor",
+    "OneButtonSuperPrompt",
+    "PreviewAny",
+    "PrimitiveStringMultiline",
+    "Reroute",
+    "SAMLoader",
+    "StringFunction|pysssss",
+    "ToBasicPipe",
+    "UltralyticsDetectorProvider",
+    "easy comfyLoader",
+    "easy fullkSampler",
+    "easy int",
+    "easy loraStack",
+    "easy pipeOut"
+   ]
+  },
+  {
+   "modelId": 2903736,
+   "name": "Krea2 Pro Realism w/ ID edit, skin beauty ✨, lighting control 🔦, and Klein_9b pass",
+   "downloads": 1136,
+   "file": "krea2ProRealismWIDEditSkinBeauty_v501Overhaul.json",
+   "detailer": "LCDetailPipeOut",
+   "detailerId": "3088",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCDetailPipeOut"
+   ]
+  },
+  {
+   "modelId": 2903736,
+   "name": "Krea2 Pro Realism w/ ID edit, skin beauty ✨, lighting control 🔦, and Klein_9b pass",
+   "downloads": 1136,
+   "file": "krea2ProRealismWIDEditSkinBeauty_v501Overhaul.json",
+   "detailer": "DetailDaemonSamplerNode",
+   "detailerId": "2323",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "Any Switch (rgthree)",
+    "DetailDaemonSamplerNode",
+    "GetNode",
+    "KSamplerSelect",
+    "LCPipeOut"
+   ]
+  },
+  {
+   "modelId": 2903736,
+   "name": "Krea2 Pro Realism w/ ID edit, skin beauty ✨, lighting control 🔦, and Klein_9b pass",
+   "downloads": 1136,
+   "file": "krea2ProRealismWIDEditSkinBeauty_v501Overhaul.json",
+   "detailer": "LCDetailPipeOut",
+   "detailerId": "3450",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCDetailPipeOut"
+   ]
+  },
+  {
+   "modelId": 2903736,
+   "name": "Krea2 Pro Realism w/ ID edit, skin beauty ✨, lighting control 🔦, and Klein_9b pass",
+   "downloads": 1136,
+   "file": "krea2ProRealismWIDEditSkinBeauty_v501Overhaul.json",
+   "detailer": "LCSkinBeauty",
+   "detailerId": "3541",
+   "detectors": [
+    {
+     "model": "",
+     "raw": "",
+     "type": "LayerMask: PersonMaskUltra V2"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "GetNode",
+    "LCImageDenoise",
+    "LCSkinBeauty",
+    "LayerMask: PersonMaskUltra V2",
+    "MaskPreview"
+   ]
+  },
+  {
+   "modelId": 2910096,
+   "name": "Compact Illustrious / SDXL / Pony Utility Workflow",
+   "downloads": 93,
+   "file": "compactIllustriousSDXL_v10.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "22",
+   "detectors": [
+    {
+     "model": "person_yolov8m-seg",
+     "raw": "segm/person_yolov8m-seg.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "ApplyFBCacheOnModel",
+    "CheckpointLoaderSimple",
+    "D2 Size Selector",
+    "EmptyLatentImage",
+    "FaceDetailer",
+    "KSampler",
+    "LoraLoader",
+    "Power Lora Loader (rgthree)",
+    "SAMLoader",
+    "Seed (rgthree)",
+    "UltralyticsDetectorProvider",
+    "VAEDecode"
+   ]
+  },
+  {
+   "modelId": 2912572,
+   "name": "Krea 2 Detailer Workflow",
+   "downloads": 306,
+   "file": "krea2Detailer_krea2DetailerV2GGUF.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "30",
+   "detectors": [
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "CLIPLoaderGGUF",
+    "CLIPTextEncode",
+    "CoreMLDetailerHookProvider",
+    "FaceDetailer",
+    "GGUFLoaderKJ",
+    "GITSSchedulerFuncProvider",
+    "LoadImage",
+    "SAMLoader",
+    "UltralyticsDetectorProvider",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2912572,
+   "name": "Krea 2 Detailer Workflow",
+   "downloads": 306,
+   "file": "krea2Detailer_krea2DetailerV2GGUF.json",
+   "detailer": "CoreMLDetailerHookProvider",
+   "detailerId": "49",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "CoreMLDetailerHookProvider"
+   ]
+  },
+  {
+   "modelId": 2941760,
+   "name": "Moody Krea2 Advanced Workflow (SDA Variety Fix)",
+   "downloads": 1180,
+   "file": "moodyKrea2Advanced_v10.json",
+   "detailer": "DetailerForEach",
+   "detailerId": "734",
+   "detectors": [
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    },
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    },
+    {
+     "model": "pussyv2",
+     "raw": "bbox/pussyV2.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BboxDetectorSEGS",
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "ColorMatch",
+    "ConditioningZeroOut",
+    "DetailerForEach",
+    "EmptyLatentImage",
+    "FloatConstant",
+    "GetImageSize",
+    "GetNode",
+    "ImpactDilateMask",
+    "ImpactSEGSOrderedFilter",
+    "KSampler",
+    "KSamplerAdvanced",
+    "LatentUpscaleBy",
+    "LoraLoaderModelOnly",
+    "MaskToSEGS",
+    "Power Lora Loader (rgthree)",
+    "PreviewBridge",
+    "PrimitiveInt",
+    "ResolutionSelector",
+    "Seed (rgthree)",
+    "SimpleMath+",
+    "UNETLoader",
+    "UltimateSDUpscale",
+    "UltralyticsDetectorProvider",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2941760,
+   "name": "Moody Krea2 Advanced Workflow (SDA Variety Fix)",
+   "downloads": 1180,
+   "file": "moodyKrea2Advanced_v10.json",
+   "detailer": "DetailerForEach",
+   "detailerId": "789",
+   "detectors": [
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    },
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    },
+    {
+     "model": "pussyv2",
+     "raw": "bbox/pussyV2.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BboxDetectorSEGS",
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "ColorMatch",
+    "ConditioningZeroOut",
+    "DetailerForEach",
+    "EmptyLatentImage",
+    "FloatConstant",
+    "GetImageSize",
+    "GetNode",
+    "ImpactSEGSOrderedFilter",
+    "KSampler",
+    "KSamplerAdvanced",
+    "LatentUpscaleBy",
+    "LoraLoaderModelOnly",
+    "Power Lora Loader (rgthree)",
+    "PrimitiveInt",
+    "ResolutionSelector",
+    "Seed (rgthree)",
+    "SimpleMath+",
+    "UNETLoader",
+    "UltimateSDUpscale",
+    "UltralyticsDetectorProvider",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2941760,
+   "name": "Moody Krea2 Advanced Workflow (SDA Variety Fix)",
+   "downloads": 1180,
+   "file": "moodyKrea2Advanced_v10.json",
+   "detailer": "DetailerForEach",
+   "detailerId": "877",
+   "detectors": [
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "BboxDetectorSEGS"
+    }
+   ],
+   "sam": [],
+   "upstreamTypes": [
+    "BboxDetectorSEGS",
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "ColorMatch",
+    "ConditioningZeroOut",
+    "DetailerForEach",
+    "EmptyLatentImage",
+    "FloatConstant",
+    "GetImageSize",
+    "GetNode",
+    "ImpactSEGSOrderedFilter",
+    "KSampler",
+    "KSamplerAdvanced",
+    "LatentUpscaleBy",
+    "LoraLoaderModelOnly",
+    "Power Lora Loader (rgthree)",
+    "PrimitiveInt",
+    "ResolutionSelector",
+    "Seed (rgthree)",
+    "SimpleMath+",
+    "UNETLoader",
+    "UltimateSDUpscale",
+    "UltralyticsDetectorProvider",
+    "VAEDecode",
+    "VAELoader"
+   ]
+  },
+  {
+   "modelId": 2948408,
+   "name": "SDXL_controlnet_hires_face-detailer",
+   "downloads": 64,
+   "file": "sdxlControlnetHires_v10.json",
+   "detailer": "FaceDetailer",
+   "detailerId": "111",
+   "detectors": [
+    {
+     "model": "face_yolov8m",
+     "raw": "bbox/face_yolov8m.pt",
+     "type": "UltralyticsDetectorProvider"
+    }
+   ],
+   "sam": [
+    "sam_vit_b_01ec64"
+   ],
+   "upstreamTypes": [
+    "EmptyLatentImage",
+    "FaceDetailer",
+    "GetNode",
+    "KSampler",
+    "LatentUpscaleBy",
+    "SAMLoader",
+    "UltralyticsDetectorProvider",
+    "VAEDecode"
+   ]
+  },
+  {
+   "modelId": 2950713,
+   "name": "Krea 2 Ultimate Face & Background Detailer + SeedVR2 4K Upscale",
+   "downloads": 397,
+   "file": "krea2UltimateFace_v10.json",
+   "detailer": "DetailerForEachDebug",
+   "detailerId": "241",
+   "detectors": [
+    {
+     "model": "",
+     "raw": "",
+     "type": "easy sam3ImageSegmentation"
+    }
+   ],
+   "sam": [
+    "sam3"
+   ],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "DetailerForEachDebug",
+    "EmptySD3LatentImage",
+    "GetNode",
+    "ImageResize+",
+    "ImageScaleToTotalPixels",
+    "KSampler",
+    "MaskToSEGS",
+    "Masks Combine Batch",
+    "ModelSamplingAuraFlow",
+    "ResolutionSelector",
+    "SeedVR2LoadDiTModel",
+    "SeedVR2LoadVAEModel",
+    "SeedVR2VideoUpscaler",
+    "UNETLoader",
+    "VAEDecode",
+    "VAELoader",
+    "easy sam3ImageSegmentation",
+    "easy sam3ModelLoader"
+   ]
+  },
+  {
+   "modelId": 2950713,
+   "name": "Krea 2 Ultimate Face & Background Detailer + SeedVR2 4K Upscale",
+   "downloads": 397,
+   "file": "krea2UltimateFace_v10.json",
+   "detailer": "DetailerForEachDebug",
+   "detailerId": "236",
+   "detectors": [
+    {
+     "model": "",
+     "raw": "",
+     "type": "easy sam3ImageSegmentation"
+    },
+    {
+     "model": "",
+     "raw": "",
+     "type": "easy sam3ImageSegmentation"
+    }
+   ],
+   "sam": [
+    "sam3",
+    "sam3"
+   ],
+   "upstreamTypes": [
+    "CLIPLoader",
+    "CLIPTextEncode",
+    "DetailerForEachDebug",
+    "EmptySD3LatentImage",
+    "GetNode",
+    "ImageResize+",
+    "ImageScaleToTotalPixels",
+    "InvertMask",
+    "KSampler",
+    "MaskToSEGS",
+    "Masks Combine Batch",
+    "ModelSamplingAuraFlow",
+    "ResolutionSelector",
+    "SeedVR2LoadDiTModel",
+    "SeedVR2LoadVAEModel",
+    "SeedVR2VideoUpscaler",
+    "UNETLoader",
+    "VAEDecode",
+    "VAELoader",
+    "easy sam3ImageSegmentation",
+    "easy sam3ModelLoader"
+   ]
+  },
+  {
+   "modelId": 2960068,
+   "name": "Lonecats Qwen 2.1 Fast Workflow w/ upscalers and post processing",
+   "downloads": 1029,
+   "file": "lonecatsQwen21FastWorkflow_v20Optimizers.json",
+   "detailer": "DetailDaemonSamplerNode",
+   "detailerId": "70",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "Any Switch (rgthree)",
+    "DetailDaemonSamplerNode",
+    "GetNode",
+    "KSamplerSelect",
+    "LCPipeOut"
+   ]
+  },
+  {
+   "modelId": 2982229,
+   "name": "Qwen Image 2.1 Realistic & detailed Image ( FLUX Klein Upscaler)",
+   "downloads": 149,
+   "file": "qwenImage21Realistic_v10.json",
+   "detailer": "DetailDaemonSamplerNode",
+   "detailerId": "136",
+   "detectors": [],
+   "sam": [],
+   "upstreamTypes": [
+    "DetailDaemonSamplerNode",
+    "KSamplerSelect"
+   ]
+  }
+ ],
+ "detToDetailer": [
+  [
+   "face_yolov9c -> ToDetailerPipe",
+   15
+  ],
+  [
+   "face_yolov9c -> FaceDetailerPipe",
+   12
+  ],
+  [
+   "face_yolov8m -> FaceDetailer",
+   12
+  ],
+  [
+   "face_yolov9c -> EditDetailerPipe",
+   10
+  ],
+  [
+   "anzhc face seg 640 v4 y11n -> FaceDetailer",
+   10
+  ],
+  [
+   "face_yolov8m -> DetailerForEach",
+   7
+  ],
+  [
+   "anzhc eyes -seg-hd -> FaceDetailer",
+   6
+  ],
+  [
+   "hand_yolov9c -> DetailerForEachPipe",
+   5
+  ],
+  [
+   "hand_yolov9c -> DetailerForEachDebug",
+   5
+  ],
+  [
+   "eyeful_v2-paired -> DetailerForEachDebug",
+   5
+  ],
+  [
+   "person_yolov8m-seg -> FaceDetailer",
+   4
+  ],
+  [
+   "hand_yolov8s -> FaceDetailer",
+   4
+  ],
+  [
+   "pithanddetailer-v1b-seg -> IkkiDetailerProcessor",
+   3
+  ],
+  [
+   "eyeful_v2-paired -> IkkiDetailerProcessor",
+   3
+  ],
+  [
+   "pithanddetailer-v1b-seg -> IkkiDetailerKSampler",
+   3
+  ],
+  [
+   "eyeful_v2-paired -> IkkiDetailerKSampler",
+   3
+  ],
+  [
+   "hair_yolov8n-seg_60 -> FaceDetailer",
+   3
+  ],
+  [
+   "anzhc face seg 640 v4 y11n -> FromDetailerPipe",
+   2
+  ],
+  [
+   "ntd11_anime_nsfw_segm_v3_all -> FaceDetailer",
+   2
+  ],
+  [
+   "face_yolov8n_v2 -> FaceDetailerPipe",
+   2
+  ],
+  [
+   "face_yolov8n_v2 -> EditDetailerPipe",
+   2
+  ],
+  [
+   "person_yolov8m-seg -> DetailerForEach",
+   2
+  ],
+  [
+   "hand_yolov8s -> DetailerForEach",
+   2
+  ],
+  [
+   "face_yolov9c -> BasicPipeToDetailerPipe",
+   2
+  ],
+  [
+   "pussyv2 -> DetailerForEach",
+   2
+  ],
+  [
+   "face_yolov9c -> DetailerForEach",
+   1
+  ],
+  [
+   "face_yolov8n_v2 -> ToDetailerPipe",
+   1
+  ],
+  [
+   "hair_seg_bigmodel_afterdetailer_v10 -> IkkiDetailerProcessor",
+   1
+  ],
+  [
+   "hair_seg_bigmodel_afterdetailer_v10 -> IkkiDetailerKSampler",
+   1
+  ],
+  [
+   "eyeful_v2-individual -> FaceDetailer",
+   1
+  ],
+  [
+   "eyeful_v2-paired -> FaceDetailer",
+   1
+  ],
+  [
+   "eyeful_v2-paired -> DetailerForEach",
+   1
+  ],
+  [
+   "hair_yolov8n-seg_60 -> DetailerForEach",
+   1
+  ],
+  [
+   "eyes -> FaceDetailer",
+   1
+  ],
+  [
+   "eyeful_v2-paired -> BasicPipeToDetailerPipe",
+   1
+  ],
+  [
+   "face_yolov9c -> DetailerPipeToBasicPipe",
+   1
+  ],
+  [
+   "eyeful_v2-paired -> FaceDetailerPipe",
+   1
+  ]
+ ],
+ "detUsedBy": {
+  "face_yolov9c": [
+   [
+    "ToDetailerPipe",
+    15
+   ],
+   [
+    "FaceDetailerPipe",
+    12
+   ],
+   [
+    "EditDetailerPipe",
+    10
+   ],
+   [
+    "BasicPipeToDetailerPipe",
+    2
+   ],
+   [
+    "DetailerForEach",
+    1
+   ],
+   [
+    "DetailerPipeToBasicPipe",
+    1
+   ]
+  ],
+  "face_yolov8m": [
+   [
+    "FaceDetailer",
+    12
+   ],
+   [
+    "DetailerForEach",
+    7
+   ]
+  ],
+  "eyeful_v2-paired": [
+   [
+    "DetailerForEachDebug",
+    5
+   ],
+   [
+    "IkkiDetailerProcessor",
+    3
+   ],
+   [
+    "IkkiDetailerKSampler",
+    3
+   ],
+   [
+    "FaceDetailer",
+    1
+   ],
+   [
+    "DetailerForEach",
+    1
+   ],
+   [
+    "BasicPipeToDetailerPipe",
+    1
+   ],
+   [
+    "FaceDetailerPipe",
+    1
+   ]
+  ],
+  "anzhc face seg 640 v4 y11n": [
+   [
+    "FaceDetailer",
+    10
+   ],
+   [
+    "FromDetailerPipe",
+    2
+   ]
+  ],
+  "hand_yolov9c": [
+   [
+    "DetailerForEachPipe",
+    5
+   ],
+   [
+    "DetailerForEachDebug",
+    5
+   ]
+  ],
+  "anzhc eyes -seg-hd": [
+   [
+    "FaceDetailer",
+    6
+   ]
+  ],
+  "person_yolov8m-seg": [
+   [
+    "FaceDetailer",
+    4
+   ],
+   [
+    "DetailerForEach",
+    2
+   ]
+  ],
+  "hand_yolov8s": [
+   [
+    "FaceDetailer",
+    4
+   ],
+   [
+    "DetailerForEach",
+    2
+   ]
+  ],
+  "pithanddetailer-v1b-seg": [
+   [
+    "IkkiDetailerProcessor",
+    3
+   ],
+   [
+    "IkkiDetailerKSampler",
+    3
+   ]
+  ],
+  "face_yolov8n_v2": [
+   [
+    "FaceDetailerPipe",
+    2
+   ],
+   [
+    "EditDetailerPipe",
+    2
+   ],
+   [
+    "ToDetailerPipe",
+    1
+   ]
+  ],
+  "hair_yolov8n-seg_60": [
+   [
+    "FaceDetailer",
+    3
+   ],
+   [
+    "DetailerForEach",
+    1
+   ]
+  ],
+  "ntd11_anime_nsfw_segm_v3_all": [
+   [
+    "FaceDetailer",
+    2
+   ]
+  ],
+  "hair_seg_bigmodel_afterdetailer_v10": [
+   [
+    "IkkiDetailerProcessor",
+    1
+   ],
+   [
+    "IkkiDetailerKSampler",
+    1
+   ]
+  ],
+  "pussyv2": [
+   [
+    "DetailerForEach",
+    2
+   ]
+  ],
+  "eyeful_v2-individual": [
+   [
+    "FaceDetailer",
+    1
+   ]
+  ],
+  "eyes": [
+   [
+    "FaceDetailer",
+    1
+   ]
+  ]
+ },
+ "detIsolated": [
+  [
+   "face_yolov8n_v2",
+   1
+  ]
+ ],
+ "graphsWithDetailer": 44
+}

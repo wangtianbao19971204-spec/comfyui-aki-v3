@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-27T19:16:28.049616+08:00",
+  "source_counts": {
+    "remaining_sources": 2395,
+    "retain_context_hold_pending_evidence": 1975,
+    "direct_review_candidate": 234,
+    "prior_direct_hold": 68,
+    "no_local_resource": 112,
+    "manual_confirmation_preserved": 4,
+    "eligibility_preserved": 2
+  },
+  "candidate_unique_resources": 234,
+  "prior_reason_counts": {
+    "existing_source_exclusion_retained": 2203,
+    "age_context_requires_retaining_exclusion": 116,
+    "no_existing_resource_target": 11,
+    "local_context_requires_retaining_exclusion": 1,
+    "independent_review_hold": 64
+  },
+  "candidate_characters": 107183,
+  "local_model_used": false,
+  "production_mutated": false
+}

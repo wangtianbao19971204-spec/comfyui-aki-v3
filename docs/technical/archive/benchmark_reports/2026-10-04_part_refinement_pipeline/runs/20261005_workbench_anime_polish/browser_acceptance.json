@@ -1,0 +1,592 @@
+{
+  "time": "2026-10-05T02:05:32.021Z",
+  "pass": true,
+  "checks": 23,
+  "cases": [
+    {
+      "name": "daily_dark_1280",
+      "pass": true,
+      "details": {
+        "actionsOverlap": false,
+        "deskOverflow": 0,
+        "headOverflow": 0,
+        "iconsLoaded": true,
+        "rootClass": "dark-theme",
+        "theme": "dark",
+        "titlesLeft": true,
+        "viewport": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "name": "daily_light_1280",
+      "pass": true,
+      "details": {
+        "actionsOverlap": false,
+        "deskOverflow": 0,
+        "headOverflow": 0,
+        "iconsLoaded": true,
+        "rootClass": "",
+        "theme": "light",
+        "titlesLeft": true,
+        "viewport": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "name": "daily_anime_light_1280",
+      "pass": true,
+      "details": {
+        "actionsOverlap": false,
+        "deskOverflow": 0,
+        "headOverflow": 0,
+        "iconsLoaded": true,
+        "rootClass": "",
+        "theme": "anime",
+        "titlesLeft": true,
+        "viewport": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "name": "daily_dark_return",
+      "pass": true,
+      "details": {
+        "actionsOverlap": false,
+        "deskOverflow": 0,
+        "headOverflow": 0,
+        "iconsLoaded": true,
+        "rootClass": "dark-theme",
+        "theme": "dark",
+        "titlesLeft": true,
+        "viewport": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "name": "daily_anime_dark_1280",
+      "pass": true,
+      "details": {
+        "actionsOverlap": false,
+        "deskOverflow": 0,
+        "headOverflow": 0,
+        "iconsLoaded": true,
+        "rootClass": "dark-theme",
+        "theme": "anime",
+        "titlesLeft": true,
+        "viewport": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "name": "daily_dark_1024",
+      "pass": true,
+      "details": {
+        "actionsOverlap": false,
+        "deskOverflow": 0,
+        "headOverflow": 0,
+        "iconsLoaded": true,
+        "rootClass": "dark-theme",
+        "theme": "dark",
+        "titlesLeft": true,
+        "viewport": [
+          1024,
+          640
+        ]
+      }
+    },
+    {
+      "name": "daily_dark_760",
+      "pass": true,
+      "details": {
+        "actionsOverlap": false,
+        "deskOverflow": 0,
+        "headOverflow": 0,
+        "iconsLoaded": true,
+        "rootClass": "dark-theme",
+        "theme": "dark",
+        "titlesLeft": true,
+        "viewport": [
+          760,
+          900
+        ]
+      }
+    },
+    {
+      "name": "narrow_refinement_shortcut",
+      "pass": true,
+      "details": {
+        "bottom": 622.7604370117188,
+        "current": true,
+        "focused": true,
+        "icon": "url(\"http://127.0.0.1:8188/extensions/ComfyUI-Unified-Prompt-Workbench/assets/functions/style_quality.svg?v=20261005-stickers\")",
+        "top": 459.7604370117187
+      }
+    },
+    {
+      "name": "ctrl_k_focus",
+      "pass": true,
+      "details": "查找常用控制项"
+    },
+    {
+      "name": "search_escape_restore",
+      "pass": true,
+      "details": {
+        "shown": 12,
+        "value": ""
+      }
+    },
+    {
+      "name": "workbench_dark_760",
+      "pass": true,
+      "details": {
+        "activeBackground": "color(srgb 0.264784 0.243294 0.311059)",
+        "activeColor": "rgb(255, 179, 155)",
+        "cardIcon": [
+          76,
+          76
+        ],
+        "iconsLoaded": true,
+        "navOverflow": 0,
+        "panelOverflow": 0,
+        "viewport": [
+          760,
+          900
+        ]
+      }
+    },
+    {
+      "name": "workbench_dark_1024",
+      "pass": true,
+      "details": {
+        "activeBackground": "color(srgb 0.264784 0.243294 0.311059)",
+        "activeColor": "rgb(255, 179, 155)",
+        "cardIcon": [
+          54,
+          54
+        ],
+        "iconsLoaded": true,
+        "navOverflow": 0,
+        "panelOverflow": 0,
+        "viewport": [
+          1024,
+          640
+        ]
+      }
+    },
+    {
+      "name": "workbench_dark_1280",
+      "pass": true,
+      "details": {
+        "activeBackground": "color(srgb 0.264784 0.243294 0.311059)",
+        "activeColor": "rgb(255, 179, 155)",
+        "cardIcon": [
+          54,
+          54
+        ],
+        "iconsLoaded": true,
+        "navOverflow": 0,
+        "panelOverflow": 0,
+        "viewport": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "name": "character_selector_visual",
+      "pass": true,
+      "details": {
+        "exists": true,
+        "icon": {
+          "height": 54,
+          "loaded": true,
+          "src": "/extensions/ComfyUI-Unified-Prompt-Workbench/assets/functions/character.svg?v=20261005-stickers",
+          "width": 54
+        },
+        "inputs": [
+          {
+            "aria": "搜索角色名称...",
+            "placeholder": "搜索角色名称...",
+            "type": "text"
+          },
+          {
+            "aria": "页码",
+            "placeholder": "",
+            "type": "text"
+          }
+        ],
+        "overflow": 0,
+        "searchFocused": true
+      }
+    },
+    {
+      "name": "selector_escape_close",
+      "pass": true,
+      "details": {
+        "activeTag": "BUTTON",
+        "focusLabel": null,
+        "focusText": "资料库",
+        "page": "library",
+        "returnButton": false,
+        "selectorClosed": true
+      }
+    },
+    {
+      "name": "browser_parameter_storage_guards",
+      "pass": true,
+      "details": {
+        "blocked": [
+          {
+            "method": "POST",
+            "path": "/api/settings/Comfy.CustomColorPalettes"
+          },
+          {
+            "method": "POST",
+            "path": "/danbooru/logs/batch"
+          },
+          {
+            "method": "POST",
+            "path": "/danbooru/logs/batch"
+          },
+          {
+            "method": "POST",
+            "path": "/prompt-assistant/api/settings/streaming_progress"
+          },
+          {
+            "method": "POST",
+            "path": "/api/lm/loras/cycler-list"
+          },
+          {
+            "method": "POST",
+            "path": "/api/lm/register-nodes"
+          },
+          {
+            "method": "POST",
+            "path": "/danbooru/logs/batch"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/vnccs/pose_library/repositories/auto_refresh"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/vnccs/pose_library/repositories/auto_refresh"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/vnccs/pose_library/repositories/auto_refresh"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/danbooru/logs/batch"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/api/settings/Comfy.ColorPalette"
+          },
+          {
+            "method": "POST",
+            "path": "/api/settings/Comfy.ColorPalette"
+          },
+          {
+            "method": "POST",
+            "path": "/api/settings/Comfy.ColorPalette"
+          },
+          {
+            "method": "POST",
+            "path": "/api/settings/Comfy.ColorPalette"
+          },
+          {
+            "method": "POST",
+            "path": "/api/settings/Comfy.ColorPalette"
+          }
+        ],
+        "forbiddenAttempts": [],
+        "parametersUnchanged": true,
+        "storageUnchanged": true
+      }
+    },
+    {
+      "name": "clothing_selector_visual",
+      "pass": true,
+      "details": {
+        "exists": true,
+        "focus": "搜索服装名称或 Tags...",
+        "icon": "/extensions/ComfyUI-Unified-Prompt-Workbench/assets/functions/clothing.svg?v=20261005-stickers",
+        "loaded": true,
+        "overflow": 0
+      }
+    },
+    {
+      "name": "13_icons_two_sizes_fixture",
+      "pass": true,
+      "details": {
+        "icons": 13,
+        "sizes": [
+          28,
+          56
+        ],
+        "loaded": true,
+        "visuallyInspected": true,
+        "fixtureRemoved": true
+      }
+    },
+    {
+      "name": "clothing_close_focus",
+      "pass": true,
+      "details": {
+        "returnedTo": "daily",
+        "focus": "服装选择器"
+      }
+    },
+    {
+      "name": "anima_original_palette",
+      "pass": true,
+      "details": {
+        "actionsOverlap": false,
+        "deskOverflow": 0,
+        "headOverflow": 0,
+        "iconsLoaded": true,
+        "rootClass": "dark-theme",
+        "theme": "dark",
+        "titlesLeft": true,
+        "viewport": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "name": "anima_29_palette",
+      "pass": true,
+      "details": {
+        "actionsOverlap": false,
+        "deskOverflow": 0,
+        "headOverflow": 0,
+        "iconsLoaded": true,
+        "rootClass": "dark-theme",
+        "theme": "dark",
+        "titlesLeft": true,
+        "viewport": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "name": "krea2_return",
+      "pass": true,
+      "details": {
+        "actionsOverlap": false,
+        "deskOverflow": 0,
+        "headOverflow": 0,
+        "iconsLoaded": true,
+        "rootClass": "dark-theme",
+        "theme": "dark",
+        "titlesLeft": true,
+        "viewport": [
+          1280,
+          720
+        ]
+      }
+    },
+    {
+      "name": "final_browser_guards",
+      "pass": true,
+      "details": {
+        "blocked": [
+          {
+            "method": "POST",
+            "path": "/api/settings/Comfy.CustomColorPalettes"
+          },
+          {
+            "method": "POST",
+            "path": "/danbooru/logs/batch"
+          },
+          {
+            "method": "POST",
+            "path": "/danbooru/logs/batch"
+          },
+          {
+            "method": "POST",
+            "path": "/prompt-assistant/api/settings/streaming_progress"
+          },
+          {
+            "method": "POST",
+            "path": "/api/lm/loras/cycler-list"
+          },
+          {
+            "method": "POST",
+            "path": "/api/lm/register-nodes"
+          },
+          {
+            "method": "POST",
+            "path": "/danbooru/logs/batch"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/vnccs/pose_library/repositories/auto_refresh"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/vnccs/pose_library/repositories/auto_refresh"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/vnccs/pose_library/repositories/auto_refresh"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/danbooru/logs/batch"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/api/vnccs/character_studio/update_preview"
+          },
+          {
+            "method": "POST",
+            "path": "/api/settings/Comfy.ColorPalette"
+          },
+          {
+            "method": "POST",
+            "path": "/api/settings/Comfy.ColorPalette"
+          },
+          {
+            "method": "POST",
+            "path": "/api/settings/Comfy.ColorPalette"
+          },
+          {
+            "method": "POST",
+            "path": "/api/settings/Comfy.ColorPalette"
+          },
+          {
+            "method": "POST",
+            "path": "/api/settings/Comfy.ColorPalette"
+          }
+        ],
+        "fixtureRemoved": true,
+        "forbiddenAttempts": [],
+        "parametersUnchanged": true,
+        "storageUnchanged": true,
+        "theme": "dark"
+      }
+    }
+  ],
+  "coverage": [
+    "three themes plus both anime light/dark variants",
+    "1280x720,1024x640,760x900",
+    "daily and full workbench",
+    "Krea2,Anima original,Anima 2.9B read-only branch views",
+    "character and clothing selector entry/close",
+    "13 actual served SVGs in temporary two-size fixture"
+  ],
+  "limits": [
+    "No inference or image quality acceptance",
+    "No physical IME acceptance",
+    "Initial snapshot attempted before app readiness and was discarded; page reloaded before all final acceptance",
+    "Selector return route differs by entry: character embedded returns library, clothing direct returns daily; both observed"
+  ]
+}

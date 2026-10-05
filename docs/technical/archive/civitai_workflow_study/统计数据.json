@@ -1,0 +1,2625 @@
+{
+ "counts": {
+  "models": 723,
+  "models_with_workflow": 723,
+  "graph_files": 937,
+  "graphs": 937,
+  "models_with_detector": 38,
+  "models_with_detailer": 43,
+  "models_with_sam": 27,
+  "models_with_nsfw_detector": 2
+ },
+ "detectors": [
+  [
+   "face_yolov9c",
+   22
+  ],
+  [
+   "face_yolov8m",
+   13
+  ],
+  [
+   "rmbg-2.0",
+   10
+  ],
+  [
+   "eyeful_v2-paired",
+   9
+  ],
+  [
+   "hand_yolov9c",
+   5
+  ],
+  [
+   "anzhc face seg 640 v4 y11n",
+   4
+  ],
+  [
+   "anzhc eyes -seg-hd",
+   4
+  ],
+  [
+   "person_yolov8m-seg",
+   4
+  ],
+  [
+   "hand_yolov8s",
+   4
+  ],
+  [
+   "face_yolov8n_v2",
+   3
+  ],
+  [
+   "ben2",
+   3
+  ],
+  [
+   "ntd11_anime_nsfw_segm_v3_all",
+   2
+  ],
+  [
+   "pithanddetailer-v1b-seg",
+   2
+  ],
+  [
+   "birefnet-portrait",
+   2
+  ],
+  [
+   "birefnet-general",
+   2
+  ],
+  [
+   "heelsdetect y8m",
+   2
+  ],
+  [
+   "hair_seg_bigmodel_afterdetailer_v10",
+   1
+  ],
+  [
+   "eyeful_v2-individual",
+   1
+  ],
+  [
+   "hair_yolov8n-seg_60",
+   1
+  ],
+  [
+   "birefnet_toonout",
+   1
+  ],
+  [
+   "eyes",
+   1
+  ],
+  [
+   "pussyv2",
+   1
+  ]
+ ],
+ "detectorKind": [
+  [
+   "bbox",
+   61
+  ],
+  [
+   "segm",
+   18
+  ],
+  [
+   "other",
+   18
+  ]
+ ],
+ "detectorPart": [
+  [
+   "face",
+   42
+  ],
+  [
+   "eyes",
+   15
+  ],
+  [
+   "matting",
+   15
+  ],
+  [
+   "hand",
+   11
+  ],
+  [
+   "person",
+   4
+  ],
+  [
+   "nsfw_parts",
+   3
+  ],
+  [
+   "other",
+   3
+  ],
+  [
+   "hair",
+   2
+  ],
+  [
+   "foot_leg",
+   2
+  ]
+ ],
+ "detectorNodeTypes": [
+  [
+   "UltralyticsDetectorProvider",
+   75
+  ],
+  [
+   "BboxDetectorSEGS",
+   16
+  ],
+  [
+   "RMBG",
+   14
+  ],
+  [
+   "easy sam3ImageSegmentation",
+   13
+  ],
+  [
+   "LayerMask: PersonMaskUltra V2",
+   6
+  ],
+  [
+   "ImpactSimpleDetectorSEGS",
+   6
+  ],
+  [
+   "ApplyPuLIDFlux2",
+   6
+  ],
+  [
+   "SAM3_Detect",
+   6
+  ],
+  [
+   "BiRefNetRMBG",
+   5
+  ],
+  [
+   "LCPersonMask",
+   4
+  ],
+  [
+   "IkkiUltralyticsDetector",
+   4
+  ],
+  [
+   "LCRemBG",
+   3
+  ],
+  [
+   "PuLIDModelLoader",
+   2
+  ],
+  [
+   "PuLIDEVACLIPLoader",
+   2
+  ],
+  [
+   "PuLIDInsightFaceLoader",
+   2
+  ],
+  [
+   "GroundingDinoSAMSegment (segment anything)",
+   1
+  ],
+  [
+   "GroundingDinoModelLoader (segment anything)",
+   1
+  ],
+  [
+   "RembgByBiRefNet_SET",
+   1
+  ],
+  [
+   "LTXFaceIdentityReinforcer",
+   1
+  ],
+  [
+   "RemBGSession+",
+   1
+  ],
+  [
+   "PulidFluxEvaClipLoader",
+   1
+  ],
+  [
+   "PulidFluxModelLoader",
+   1
+  ],
+  [
+   "PulidFluxInsightFaceLoader",
+   1
+  ],
+  [
+   "CLIPSeg",
+   1
+  ],
+  [
+   "ApplyPulidFlux",
+   1
+  ]
+ ],
+ "samModels": [
+  [
+   "sam_vit_b_01ec64",
+   33
+  ],
+  [
+   "sam3",
+   10
+  ],
+  [
+   "sam_vit_l_0b3195",
+   6
+  ],
+  [
+   "sam_vit_h (2.56gb)",
+   2
+  ],
+  [
+   "sam_vit_h_4b8939",
+   1
+  ],
+  [
+   "sam_hq_vit_h (2.57gb)",
+   1
+  ]
+ ],
+ "samNodeTypes": [
+  [
+   "SAMLoader",
+   40
+  ],
+  [
+   "SAM_SmartInpainter",
+   7
+  ],
+  [
+   "easy sam3ModelLoader",
+   4
+  ],
+  [
+   "SAM3Segment",
+   3
+  ],
+  [
+   "LayerMask: SegmentAnythingUltra V2",
+   2
+  ],
+  [
+   "SAMModelLoader (segment anything)",
+   1
+  ]
+ ],
+ "detailerNodes": [
+  [
+   "FaceDetailer",
+   30
+  ],
+  [
+   "ToDetailerPipe",
+   16
+  ],
+  [
+   "DetailDaemonSamplerNode",
+   13
+  ],
+  [
+   "LCDetailPipeOut",
+   11
+  ],
+  [
+   "LCSkinBeauty",
+   11
+  ],
+  [
+   "DetailerForEach",
+   11
+  ],
+  [
+   "FaceDetailerPipe",
+   8
+  ],
+  [
+   "DetailerForEachDebug",
+   7
+  ],
+  [
+   "EditDetailerPipe",
+   6
+  ],
+  [
+   "DetailerForEachPipe",
+   5
+  ],
+  [
+   "IkkiDetailerProcessor",
+   4
+  ],
+  [
+   "IkkiDetailerKSampler",
+   4
+  ],
+  [
+   "FromDetailerPipe",
+   2
+  ],
+  [
+   "LCDetailDaemon",
+   2
+  ],
+  [
+   "Detailer (SEGS/pipe) [Eclipse]",
+   2
+  ],
+  [
+   "BasicPipeToDetailerPipe",
+   2
+  ],
+  [
+   "MaskDetailerPipe",
+   1
+  ],
+  [
+   "DetailerPipeToBasicPipe",
+   1
+  ],
+  [
+   "CoreMLDetailerHookProvider",
+   1
+  ]
+ ],
+ "maskOps": [
+  [
+   "MaskPreview",
+   69
+  ],
+  [
+   "MaskPreview+",
+   56
+  ],
+  [
+   "MaskToImage",
+   37
+  ],
+  [
+   "ImageAndMaskPreview",
+   34
+  ],
+  [
+   "SolidMask",
+   17
+  ],
+  [
+   "ImageToMask",
+   16
+  ],
+  [
+   "GrowMaskWithBlur",
+   16
+  ],
+  [
+   "InvertMask",
+   16
+  ],
+  [
+   "ImageBlur",
+   15
+  ],
+  [
+   "SegsToCombinedMask",
+   12
+  ],
+  [
+   "LCPreviewMask",
+   11
+  ],
+  [
+   "LCApplyLUT",
+   11
+  ],
+  [
+   "MaskToSEGS",
+   11
+  ],
+  [
+   "GrowMask",
+   10
+  ],
+  [
+   "MaskComposite",
+   5
+  ],
+  [
+   "LCImageMaskResize",
+   4
+  ],
+  [
+   "MaskBlur+",
+   2
+  ],
+  [
+   "LayerMask: MaskPreview",
+   2
+  ],
+  [
+   "LayerMask: MaskEdgeUltraDetail V3",
+   1
+  ],
+  [
+   "ImageColorToMask",
+   1
+  ],
+  [
+   "Mask_Blur_Plus",
+   1
+  ],
+  [
+   "LayerMask: MaskGrow",
+   1
+  ]
+ ],
+ "topNodes": [
+  [
+   "GetNode",
+   4191
+  ],
+  [
+   "SetNode",
+   3173
+  ],
+  [
+   "MarkdownNote",
+   2296
+  ],
+  [
+   "Note",
+   923
+  ],
+  [
+   "LoadImage",
+   822
+  ],
+  [
+   "VAELoader",
+   815
+  ],
+  [
+   "CLIPTextEncode",
+   809
+  ],
+  [
+   "VAEDecode",
+   692
+  ],
+  [
+   "PreviewImage",
+   690
+  ],
+  [
+   "CLIPLoader",
+   590
+  ],
+  [
+   "Label (rgthree)",
+   569
+  ],
+  [
+   "UNETLoader",
+   540
+  ],
+  [
+   "Fast Groups Bypasser (rgthree)",
+   473
+  ],
+  [
+   "SaveImage",
+   446
+  ],
+  [
+   "easy getNode",
+   432
+  ],
+  [
+   "Any Switch (rgthree)",
+   418
+  ],
+  [
+   "LoraLoaderModelOnly",
+   386
+  ],
+  [
+   "Reroute",
+   377
+  ],
+  [
+   "SamplerCustomAdvanced",
+   361
+  ],
+  [
+   "PrimitiveStringMultiline",
+   360
+  ],
+  [
+   "KSampler",
+   342
+  ],
+  [
+   "KSamplerSelect",
+   270
+  ],
+  [
+   "RandomNoise",
+   270
+  ],
+  [
+   "SaveVideo",
+   256
+  ],
+  [
+   "SetNode [Eclipse]",
+   255
+  ],
+  [
+   "ComfyMathExpression",
+   243
+  ],
+  [
+   "Image Comparer (rgthree)",
+   234
+  ],
+  [
+   "PrimitiveFloat",
+   230
+  ],
+  [
+   "BasicScheduler",
+   229
+  ],
+  [
+   "Power Lora Loader (rgthree)",
+   225
+  ],
+  [
+   "ResolutionSelector",
+   225
+  ],
+  [
+   "CreateVideo",
+   212
+  ],
+  [
+   "PrimitiveInt",
+   211
+  ],
+  [
+   "EmptyLatentImage",
+   210
+  ],
+  [
+   "BasicGuider",
+   183
+  ],
+  [
+   "mxSlider",
+   180
+  ],
+  [
+   "PreviewAny",
+   174
+  ],
+  [
+   "ConditioningZeroOut",
+   172
+  ],
+  [
+   "VAEDecodeAudio",
+   165
+  ],
+  [
+   "VAEEncode",
+   162
+  ],
+  [
+   "GetNode [Eclipse]",
+   154
+  ],
+  [
+   "VHS_VideoCombine",
+   150
+  ],
+  [
+   "ShowText|pysssss",
+   150
+  ],
+  [
+   "PrimitiveBoolean",
+   148
+  ],
+  [
+   "easy setNode",
+   143
+  ],
+  [
+   "Seed (rgthree)",
+   138
+  ],
+  [
+   "Fast Groups Muter (rgthree)",
+   133
+  ],
+  [
+   "StringConcatenate",
+   129
+  ],
+  [
+   "PixaromaLabel",
+   129
+  ],
+  [
+   "KSamplerAdvanced",
+   120
+  ]
+ ],
+ "detectorByPart": {
+  "face": [
+   [
+    "face_yolov9c",
+    22
+   ],
+   [
+    "face_yolov8m",
+    13
+   ],
+   [
+    "anzhc face seg 640 v4 y11n",
+    4
+   ],
+   [
+    "face_yolov8n_v2",
+    3
+   ]
+  ],
+  "eyes": [
+   [
+    "eyeful_v2-paired",
+    9
+   ],
+   [
+    "anzhc eyes -seg-hd",
+    4
+   ],
+   [
+    "eyeful_v2-individual",
+    1
+   ],
+   [
+    "eyes",
+    1
+   ]
+  ],
+  "matting": [
+   [
+    "rmbg-2.0",
+    10
+   ],
+   [
+    "birefnet-portrait",
+    2
+   ],
+   [
+    "birefnet-general",
+    2
+   ],
+   [
+    "birefnet_toonout",
+    1
+   ]
+  ],
+  "person": [
+   [
+    "person_yolov8m-seg",
+    4
+   ]
+  ],
+  "hand": [
+   [
+    "hand_yolov9c",
+    5
+   ],
+   [
+    "hand_yolov8s",
+    4
+   ],
+   [
+    "pithanddetailer-v1b-seg",
+    2
+   ]
+  ],
+  "nsfw_parts": [
+   [
+    "ntd11_anime_nsfw_segm_v3_all",
+    2
+   ],
+   [
+    "pussyv2",
+    1
+   ]
+  ],
+  "hair": [
+   [
+    "hair_seg_bigmodel_afterdetailer_v10",
+    1
+   ],
+   [
+    "hair_yolov8n-seg_60",
+    1
+   ]
+  ],
+  "other": [
+   [
+    "ben2",
+    3
+   ]
+  ],
+  "foot_leg": [
+   [
+    "heelsdetect y8m",
+    2
+   ]
+  ]
+ },
+ "detectorVariants": {
+  "face": [
+   [
+    "bbox/face_yolov9c.pt",
+    22
+   ],
+   [
+    "bbox/face_yolov8m.pt",
+    13
+   ],
+   [
+    "segm/Anzhc Face seg 640 v4 y11n.pt",
+    4
+   ],
+   [
+    "bbox/face_yolov8n_v2.pt",
+    3
+   ]
+  ],
+  "eyes": [
+   [
+    "bbox/Eyeful_v2-Paired.pt",
+    9
+   ],
+   [
+    "segm/Anzhc Eyes -seg-hd.pt",
+    4
+   ],
+   [
+    "bbox/Eyeful_v2-Individual.pt",
+    1
+   ],
+   [
+    "bbox/Eyes.pt",
+    1
+   ]
+  ],
+  "unknown": [
+   [
+    "",
+    77
+   ]
+  ],
+  "matting": [
+   [
+    "RMBG-2.0",
+    10
+   ],
+   [
+    "BiRefNet-portrait",
+    2
+   ],
+   [
+    "BiRefNet-general",
+    2
+   ],
+   [
+    "BiRefNet_toonout",
+    1
+   ]
+  ],
+  "person": [
+   [
+    "segm/person_yolov8m-seg.pt",
+    4
+   ]
+  ],
+  "hand": [
+   [
+    "bbox/hand_yolov9c.pt",
+    5
+   ],
+   [
+    "bbox/hand_yolov8s.pt",
+    4
+   ],
+   [
+    "segm/handDetailer_v1b/PitHandDetailer-v1b-seg.pt",
+    2
+   ]
+  ],
+  "nsfw_parts": [
+   [
+    "segm/animeNSFWDetection_v10\\ntd11_anime_nsfw_segm_v3_all.pt",
+    2
+   ],
+   [
+    "bbox/pussyV2.pt",
+    1
+   ]
+  ],
+  "hair": [
+   [
+    "segm/Hair_seg_bigmodel_AfterDetailer_v10.pt",
+    1
+   ],
+   [
+    "segm/hair_yolov8n-seg_60.pt",
+    1
+   ]
+  ],
+  "other": [
+   [
+    "BEN2",
+    3
+   ]
+  ],
+  "foot_leg": [
+   [
+    "bbox/HeelsDetect Y8m.pt",
+    2
+   ]
+  ]
+ },
+ "refineParams": {
+  "guide_size": {
+   "n": 55,
+   "min": 160.0,
+   "p25": 512.0,
+   "median": 512.0,
+   "p75": 768.0,
+   "max": 1440.0,
+   "mean": 667.636,
+   "common": [
+    [
+     512.0,
+     35
+    ],
+    [
+     1440.0,
+     5
+    ],
+    [
+     768.0,
+     4
+    ],
+    [
+     1024.0,
+     4
+    ],
+    [
+     728.0,
+     2
+    ],
+    [
+     160.0,
+     1
+    ],
+    [
+     256.0,
+     1
+    ],
+    [
+     384.0,
+     1
+    ],
+    [
+     896.0,
+     1
+    ],
+    [
+     1280.0,
+     1
+    ]
+   ]
+  },
+  "max_size": {
+   "n": 55,
+   "min": 512.0,
+   "p25": 1024.0,
+   "median": 1024.0,
+   "p75": 1440.0,
+   "max": 4096.0,
+   "mean": 1495.273,
+   "common": [
+    [
+     1024.0,
+     31
+    ],
+    [
+     4096.0,
+     7
+    ],
+    [
+     1440.0,
+     6
+    ],
+    [
+     1280.0,
+     4
+    ],
+    [
+     1536.0,
+     4
+    ],
+    [
+     512.0,
+     1
+    ],
+    [
+     640.0,
+     1
+    ],
+    [
+     768.0,
+     1
+    ]
+   ]
+  },
+  "steps": {
+   "n": 55,
+   "min": 3.0,
+   "p25": 9.0,
+   "median": 20.0,
+   "p75": 20.0,
+   "max": 40.0,
+   "mean": 17.836,
+   "common": [
+    [
+     20.0,
+     18
+    ],
+    [
+     14.0,
+     8
+    ],
+    [
+     8.0,
+     4
+    ],
+    [
+     30.0,
+     4
+    ],
+    [
+     40.0,
+     4
+    ],
+    [
+     4.0,
+     3
+    ],
+    [
+     9.0,
+     3
+    ],
+    [
+     16.0,
+     3
+    ],
+    [
+     6.0,
+     2
+    ],
+    [
+     22.0,
+     2
+    ],
+    [
+     3.0,
+     1
+    ],
+    [
+     5.0,
+     1
+    ]
+   ]
+  },
+  "cfg": {
+   "n": 55,
+   "min": 1.0,
+   "p25": 3.0,
+   "median": 3.5,
+   "p75": 6.0,
+   "max": 8.0,
+   "mean": 4.004,
+   "common": [
+    [
+     1.0,
+     11
+    ],
+    [
+     3.5,
+     8
+    ],
+    [
+     3.0,
+     7
+    ],
+    [
+     6.0,
+     7
+    ],
+    [
+     5.0,
+     5
+    ],
+    [
+     4.5,
+     4
+    ],
+    [
+     8.0,
+     3
+    ],
+    [
+     2.7,
+     2
+    ],
+    [
+     4.0,
+     2
+    ],
+    [
+     7.0,
+     2
+    ],
+    [
+     4.3,
+     1
+    ],
+    [
+     5.5,
+     1
+    ]
+   ]
+  },
+  "denoise": {
+   "n": 55,
+   "min": 0.12,
+   "p25": 0.25,
+   "median": 0.3,
+   "p75": 0.45,
+   "max": 0.6,
+   "mean": 0.338,
+   "common": [
+    [
+     0.5,
+     11
+    ],
+    [
+     0.25,
+     6
+    ],
+    [
+     0.26,
+     6
+    ],
+    [
+     0.3,
+     6
+    ],
+    [
+     0.35,
+     5
+    ],
+    [
+     0.4,
+     5
+    ],
+    [
+     0.2,
+     4
+    ],
+    [
+     0.12,
+     3
+    ],
+    [
+     0.45,
+     3
+    ],
+    [
+     0.15,
+     2
+    ],
+    [
+     0.6,
+     2
+    ],
+    [
+     0.14,
+     1
+    ]
+   ]
+  },
+  "feather": {
+   "n": 55,
+   "min": 5.0,
+   "p25": 5.0,
+   "median": 16.0,
+   "p75": 16.0,
+   "max": 100.0,
+   "mean": 22.6,
+   "common": [
+    [
+     5.0,
+     20
+    ],
+    [
+     16.0,
+     16
+    ],
+    [
+     100.0,
+     6
+    ],
+    [
+     8.0,
+     5
+    ],
+    [
+     20.0,
+     2
+    ],
+    [
+     30.0,
+     2
+    ],
+    [
+     60.0,
+     2
+    ],
+    [
+     12.0,
+     1
+    ],
+    [
+     15.0,
+     1
+    ]
+   ]
+  },
+  "bbox_threshold": {
+   "n": 38,
+   "min": 0.25,
+   "p25": 0.4,
+   "median": 0.5,
+   "p75": 0.5,
+   "max": 0.8,
+   "mean": 0.475,
+   "common": [
+    [
+     0.5,
+     26
+    ],
+    [
+     0.4,
+     7
+    ],
+    [
+     0.3,
+     2
+    ],
+    [
+     0.25,
+     1
+    ],
+    [
+     0.6,
+     1
+    ],
+    [
+     0.8,
+     1
+    ]
+   ]
+  },
+  "bbox_dilation": {
+   "n": 38,
+   "min": 0.0,
+   "p25": 8.0,
+   "median": 10.0,
+   "p75": 10.0,
+   "max": 16.0,
+   "mean": 8.421,
+   "common": [
+    [
+     10.0,
+     19
+    ],
+    [
+     8.0,
+     12
+    ],
+    [
+     0.0,
+     4
+    ],
+    [
+     6.0,
+     1
+    ],
+    [
+     12.0,
+     1
+    ],
+    [
+     16.0,
+     1
+    ]
+   ]
+  },
+  "bbox_crop_factor": {
+   "n": 38,
+   "min": 1.1,
+   "p25": 3.0,
+   "median": 3.0,
+   "p75": 3.0,
+   "max": 4.0,
+   "mean": 2.803,
+   "common": [
+    [
+     3.0,
+     29
+    ],
+    [
+     2.5,
+     3
+    ],
+    [
+     1.1,
+     1
+    ],
+    [
+     1.2,
+     1
+    ],
+    [
+     1.5,
+     1
+    ],
+    [
+     2.0,
+     1
+    ],
+    [
+     2.2,
+     1
+    ],
+    [
+     4.0,
+     1
+    ]
+   ]
+  },
+  "sam_dilation": {
+   "n": 38,
+   "min": 0.0,
+   "p25": 0.0,
+   "median": 0.0,
+   "p75": 4.0,
+   "max": 90.0,
+   "mean": 4.026,
+   "common": [
+    [
+     0.0,
+     24
+    ],
+    [
+     4.0,
+     12
+    ],
+    [
+     15.0,
+     1
+    ],
+    [
+     90.0,
+     1
+    ]
+   ]
+  },
+  "sam_threshold": {
+   "n": 38,
+   "min": 0.5,
+   "p25": 0.9,
+   "median": 0.93,
+   "p75": 0.93,
+   "max": 0.98,
+   "mean": 0.888,
+   "common": [
+    [
+     0.93,
+     22
+    ],
+    [
+     0.9,
+     12
+    ],
+    [
+     0.5,
+     3
+    ],
+    [
+     0.98,
+     1
+    ]
+   ]
+  },
+  "sam_mask_hint_threshold": {
+   "n": 38,
+   "min": 0.5000000000000001,
+   "p25": 0.7,
+   "median": 0.7,
+   "p75": 0.7,
+   "max": 0.73,
+   "mean": 0.691,
+   "common": [
+    [
+     0.7,
+     34
+    ],
+    [
+     0.5,
+     2
+    ],
+    [
+     0.73,
+     2
+    ]
+   ]
+  },
+  "drop_size": {
+   "n": 39,
+   "min": 4.0,
+   "p25": 10.0,
+   "median": 10.0,
+   "p75": 16.0,
+   "max": 32.0,
+   "mean": 12.256,
+   "common": [
+    [
+     10.0,
+     22
+    ],
+    [
+     16.0,
+     12
+    ],
+    [
+     9.0,
+     2
+    ],
+    [
+     4.0,
+     1
+    ],
+    [
+     12.0,
+     1
+    ],
+    [
+     32.0,
+     1
+    ]
+   ]
+  },
+  "cycle": {
+   "n": 55,
+   "min": 1.0,
+   "p25": 1.0,
+   "median": 1.0,
+   "p75": 1.0,
+   "max": 10.0,
+   "mean": 1.164,
+   "common": [
+    [
+     1.0,
+     54
+    ],
+    [
+     10.0,
+     1
+    ]
+   ]
+  },
+  "noise_mask_feather": {
+   "n": 55,
+   "min": 0.0,
+   "p25": 20.0,
+   "median": 20.0,
+   "p75": 64.0,
+   "max": 100.0,
+   "mean": 31.509,
+   "common": [
+    [
+     20.0,
+     32
+    ],
+    [
+     64.0,
+     13
+    ],
+    [
+     0.0,
+     2
+    ],
+    [
+     12.0,
+     2
+    ],
+    [
+     32.0,
+     2
+    ],
+    [
+     19.0,
+     1
+    ],
+    [
+     24.0,
+     1
+    ],
+    [
+     30.0,
+     1
+    ],
+    [
+     100.0,
+     1
+    ]
+   ]
+  },
+  "crop_factor": {
+   "n": 1,
+   "min": 4.0,
+   "p25": 4.0,
+   "median": 4.0,
+   "p75": 4.0,
+   "max": 4.0,
+   "mean": 4.0,
+   "common": [
+    [
+     4.0,
+     1
+    ]
+   ]
+  }
+ },
+ "paramAlign": {
+  "good": 55,
+  "rejected": 82
+ },
+ "samplers": [
+  [
+   "euler_ancestral",
+   20
+  ],
+  [
+   "euler",
+   19
+  ],
+  [
+   "er_sde",
+   4
+  ],
+  [
+   "dpmpp_3m_sde_gpu",
+   4
+  ],
+  [
+   "res_multistep",
+   2
+  ],
+  [
+   "dpmpp_2m_sde",
+   2
+  ],
+  [
+   "dpmpp_3m_sde",
+   2
+  ],
+  [
+   "dpmpp_2m",
+   2
+  ]
+ ],
+ "schedulers": [
+  [
+   "simple",
+   20
+  ],
+  [
+   "normal",
+   11
+  ],
+  [
+   "sgm_uniform",
+   10
+  ],
+  [
+   "beta",
+   6
+  ],
+  [
+   "karras",
+   6
+  ],
+  [
+   "linear_quadratic",
+   2
+  ]
+ ],
+ "detailerPrompts": [
+  [
+   "512 | True | 4096 | 0 | randomize | 14 | 6 | euler_ancestral | normal | 0.26 | 16 | True | True | 0.4 | 8 | 3 | none | 4 | 0.9 | 0 | 0.7 | False | 16 | 0.2 | 1 | False | 64 | False | False",
+   5
+  ],
+  [
+   "512 | True | 1024 | 481937092674701 | fixed | 20 | 3.5 | euler | sgm_uniform | 0.5 | 16 | True | True | 0.5 | 8 | 3 | center-1 | 4 | 0.9 | 0 | 0.7 | False | 16 |  | 1 | False | 64 | False | False",
+   4
+  ],
+  [
+   "512 | False | 1024 | 879851501711326 | fixed | 9 | 3 | euler | simple | 0.12 | 5 | True | False |  | 0.3 | 1 | False | 20 | False | False",
+   3
+  ],
+  [
+   "512 | True | 1024 | 481937092674701 | fixed | 20 | 3.5 | euler | sgm_uniform | 0.5 | 16 | True | True | 0.5 | 8 | 3 | center-1 | 4 | 0.9 | 0 | 0.7 | False | 16 | eyes,detailed eyes | 1 | False | 64 | False | False",
+   2
+  ],
+  [
+   "512 | True | 1024 | 481937092674701 | fixed | 30 | 3.5 | res_multistep | linear_quadratic | 0.15 | 16 | True | True |  | 1 | False | 32 | False | False",
+   2
+  ],
+  [
+   "512 | False | 1024 | 879851501711326 | fixed | 14 | 2.7 | euler | simple | 0.25 | 5 | True | False |  | 0.2 | 1 | False | 20 | False | False",
+   2
+  ],
+  [
+   "512 | True | 4096 | True | 0 | randomize | 20 | 8 | euler_ancestral | normal | 0.5 | 16 | 4 | 12 | 0.2 | 1 | 1 | False | 64 | False | True",
+   1
+  ],
+  [
+   "512 | True | 1024 | 188001448409988 | fixed | 40 | 5 | euler_ancestral | simple | 0.4 | 60 | True | True | 0.5000000000000001 | 10 | 3 | center-1 | 0 | 0.93 | 0 | 0.5000000000000001 | False | 10 |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "512 | True | 1024 | 188001448409988 | fixed | 40 | 5 | euler_ancestral | simple | 0.6 | 30 | True | True | 0.5000000000000001 | 10 | 3 | center-1 | 0 | 0.93 | 0 | 0.7000000000000002 | False | 10 | eye focus | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "512 | True | 1024 | 388588442666511 | fixed | 40 | 5 | euler_ancestral | simple | 0.4 | 60 | True | True | 0.5000000000000001 | 10 | 3 | center-1 | 0 | 0.93 | 0 | 0.5000000000000001 | False | 10 |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "512 | True | 1024 | 388588442666511 | fixed | 40 | 5 | euler_ancestral | simple | 0.6 | 30 | True | True | 0.5000000000000001 | 10 | 3 | center-1 | 0 | 0.93 | 0 | 0.7000000000000002 | False | 10 | eye focus | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "512 | True | 1024 | 513795447416006 | randomize | 30 | 5 | euler_ancestral | simple | 0.4 | 5 | True | True |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "728 | True | 1024 | 282370891703335 | fixed | 4 | 1 | euler | simple | 0.4 | 5 | True | True | 0.5 | 10 | 3 | center-1 | 0 | 0.93 | 0 | 0.7 | False | 9 |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "728 | True | 1024 | 282370891703335 | fixed | 4 | 1 | euler | simple | 0.3 | 5 | True | True | 0.5 | 10 | 3 | center-1 | 0 | 0.93 | 0 | 0.7 | False | 9 |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "1024 | True | 1536 | 1094088136850947 | randomize | 20 | 3 | euler_ancestral | normal | 0.35 | 12 | True | True | 0.3 | 0 | 1.2 | rect-4 | 90 | 0.93 | 0 | 0.73 | False | 10 |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "768 | True | 1024 | 1094088136850947 | randomize | 14 | 3 | euler_ancestral | normal | 0.25 | 20 | True | True | 0.3 | 0 | 1.5 | rect-4 | 15 | 0.93 | 0 | 0.73 | False | 10 | hand focus, | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "512 | True | 1024 | 643195177391019 | randomize | 16 | 8 | er_sde | simple | 0.35 | 5 | True | True | 0.6 | 10 | 2.5 | center-1 | 0 | 0.93 | 0 | 0.7 | False | 10 |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "1280 | True | 1536 | 598670726561934 | randomize | 30 | 4.5 | er_sde | beta | 0.35 | 15 | True | True | 0.5 | 10 | 4 | center-1 | 0 | 0.93 | 0 | 0.7 | False | 10 |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "512 | True | 1024 | 438018737464274 | randomize | 20 | 3 | euler | normal | 0.5 | 5 | True | True | 0.5 | 10 | 3 | center-1 | 0 | 0.93 | 0 | 0.7 | False | 10 |  | 1 | False | 19 | False | False",
+   1
+  ],
+  [
+   "512 | True | 1024 | 748458286274640 | randomize | 20 | 3 | euler | normal | 0.5 | 5 | True | True | 0.5 | 10 | 3 | center-1 | 0 | 0.93 | 0 | 0.7 | False | 10 |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "512 | True | 1440 | 674870319687314 | increment | 8 | 1 | euler | simple | 0.5 | 100 | True | True |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "512 | True | 4096 | 759409859388382 | randomize | 16 | 6 | er_sde | simple | 0.26 | 16 | True | True | 0.4 | 8 | 3 | none | 4 | 0.9000000000000001 | 0 | 0.7 | False | 16 | 0.2 | 1 | False | 64 | False | False",
+   1
+  ],
+  [
+   "512 | True | 1024 | 0 | fixed | 16 | 5.5 | euler | simple | 0.3 | 5 | True | True |  | 1 | False | 12 | False | False",
+   1
+  ],
+  [
+   "768 | True | 1024 | 708492396029774 | fixed | 20 | 4 | dpmpp_2m_sde | karras | 0.3 | 5 | True | True | 0.5 | 0 | 1.1 | center-1 | 0 | 0.93 | 0 | 0.7 | False | 10 |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "512 | True | 1024 | 708492396029774 | fixed | 20 | 4 | dpmpp_2m_sde | karras | 0.3 | 5 | True | True | 0.5 | 10 | 2.5 | center-1 | 0 | 0.93 | 0 | 0.7 | False | 10 |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "1024 | True | 1024 | 42 | fixed | 4 | 1 | er_sde | simple | 0.2 | 5 | True | True | 0.8 | 10 | 3 | center-1 | 0 | 0.93 | 0 | 0.7 | False | 10 |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "768 | True | 1280 | 80088176054206 | randomize | 8 | 1 | euler | simple | 0.2 | 16 | True | False | 0.5 | 16 | 2 | center-1 | 0 | 0.93 | 0 | 0.7 | False | 32 |  | 1 | False | 24 | False | False",
+   1
+  ],
+  [
+   "512 | True | 1280 | 19634121882446 | randomize | 8 | 1 | euler | simple | 0.25 | 8 | True | True | 0.25 | 6 | 3 | center-1 | 0 | 0.93 | 0 | 0.7 | False | 4 |  | 1 | False | 12 | False | False",
+   1
+  ],
+  [
+   "768 | True | 1280 | 107430621971184 | fixed | 22 | 4.5 | dpmpp_3m_sde_gpu | sgm_uniform | 0.2 | 8 | True | True | 0.4 | 12 | 2.2 | center-1 | 0 | 0.5 | 0 | 0.7 | False | 10 |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "896 | True | 1280 | 107430621971184 | fixed | 20 | 4.5 | dpmpp_3m_sde_gpu | sgm_uniform | 0.2 | 8 | True | True | 0.5 | 10 | 2.5 | center-1 | 0 | 0.5 | 0 | 0.7 | False | 10 |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "1024 | True | 1536 | 513293818570250 | fixed | 22 | 4.5 | dpmpp_3m_sde_gpu | sgm_uniform | 0.25 | 8 | True | True |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "1024 | True | 1536 | 107430621971184 | fixed | 18 | 4.3 | dpmpp_3m_sde_gpu | sgm_uniform | 0.14 | 8 | True | True | 0.5 | 10 | 3 | center-1 | 0 | 0.5 | 0 | 0.7 | False | 10 |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "160 | True | 640 | 0 | fixed | 20 | 6.5 | euler_ancestral | normal | 0.3 | 20 | True | False | 0.5 | 0 | 3 | center-1 | 0 | 0.98 | 0 | 0.7 | False | 10 |  | 1 | False | 30 | False | False",
+   1
+  ],
+  [
+   "1440 | True | 1440 | 955333 | fixed | 3 | 1 | euler_ancestral | beta | 0.35 | 100 | True | True |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "1440 | True | 1440 | 674870319686628 | increment | 6 | 1 | euler_ancestral | beta | 0.25 | 100 | True | True |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "256 | True | 512 | 116786264138749 | fixed | 28 | 7 | dpmpp_3m_sde | karras | 0.3 | 5 | True | False | 0.5 | 10 | 3 | center-1 | 0 | 0.93 | 0 | 0.7 | False | 10 | 0.2 | 1 | False | 0 | False | False",
+   1
+  ],
+  [
+   "512 | True | 768 | 90926305222740 | fixed | 20 | 7 | dpmpp_3m_sde | karras | 0.4 | 5 | True | False | 0.5 | 10 | 3 | center-1 | 0 | 0.93 | 0 | 0.7 | False | 10 | 0.2 | 1 | False | 0 | False | False",
+   1
+  ],
+  [
+   "512 | True | 1024 | 224581597588174 | randomize | 20 | 7.5 | dpmpp_2m | karras | 0.45 | 5 | True | True | 0.5 | 10 | 3 | center-1 | 0 | 0.93 | 0 | 0.7 | False | 10 |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "384 | True | 1024 | 49071118187329 | randomize | 20 | 6 | dpmpp_2m | karras | 0.45 | 5 | True | False | 0.5 | 10 | 3 | center-1 | 0 | 0.93 | 0.7 | 0.7 | False | 10 | False | 10 | False | 20 | False | False",
+   1
+  ],
+  [
+   "1440 | True | 1440 | 955333 | fixed | 8 | 1 | euler_ancestral | beta | 0.45 | 100 | True | True |  | 1 | False | 100 | False | False",
+   1
+  ],
+  [
+   "1440 | True | 1440 | 674870319686632 | increment | 6 | 1 | euler_ancestral | beta | 0.35 | 100 | True | True |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "1440 | True | 1440 | 674870319686632 | increment | 5 | 1 | euler_ancestral | beta | 0.34 | 100 | True | True |  | 1 | False | 20 | False | False",
+   1
+  ],
+  [
+   "512 | True | 1024 | 101010 | fixed | 20 | 8 | euler_ancestral | simple | 0.5 | 5 | True | True | 0.5 | 10 | 3 | center-1 | 0 | 0.93 | 0 | 0.7 | False | 10 |  | 1 | False | 20 | False | False",
+   1
+  ]
+ ],
+ "nsfwPrompts": [
+  [
+   "色调艳丽，过曝，静态，细节模糊不清，字幕，风格，作品，画作，画面，静止，整体发灰，最差质量，低质量，JPEG压缩残留，丑陋的，残缺的，多余的手指，画得不好的手部，画得不好的脸部，畸形的，毁容的，形态畸形的肢体，手指融合，静止不动的画面，马赛克，卡通崩坏，绘制错误，\nbad anatomy, bad proportions, malformed limbs, ugly, mutilated, \nsignature, watermark, username, overlay, stamp, \nNo nipples, bad nipples, pubic hair,\ndeformed reproductive organs, \nmutated reproductive organs,",
+   3
+  ],
+  [
+   "Nipples, breasts, 乳头，乳晕，胸部，乳房\n\nPussy, Vagina, 阴道，阴蒂，阴唇,\n\n手部，手指，美甲",
+   3
+  ],
+  [
+   "pt poze : RAW photo, detailed, natural light, looking straight at the camera, skin blemishes, 8k, HD, UHD, imperfect skin, skin pores, solo, centered, clear features, sharp focus, film grain, uhd, candid portrait, high quality image, Sharp Focus, In Frame, puckered anus",
+   2
+  ],
+  [
+   "{\"diffusion_models:krea2GPTGrandPUSSYTruth.safetensors\":{\"air\":\"urn:air:krea2:diffusionmodel:civitai:452459@3123514\",\"reference_type\":\"civitai\",\"folder_role\":\"diffusion_models\",\"relative_path\":\"krea2GPTGrandPUSSYTruth.safetensors\"}}",
+   2
+  ],
+  [
+   "worst quality, low quality, lowres, score_1, score_2, score_3, blurry, jpeg artifacts, sepia, bad anatomy, watermark, artist name, signature, early, old, realistic, nsfw,",
+   2
+  ],
+  [
+   "🔞Select the nsfw add to the text",
+   2
+  ],
+  [
+   "Include whether the image is sfw, suggestive, or nsfw.",
+   1
+  ],
+  [
+   "ugly, bad, wrong, low quality, monochrome,  simple background, nsfw, worst quality, lowres, score_1, score_2, score_3, blurry, jpeg artifacts, sepia, bad anatomy, watermark, artist name, white background,",
+   1
+  ],
+  [
+   "masterpiece, best quality, highres, sensitive, explicit",
+   1
+  ],
+  [
+   "{\"kleinovaNSFWGeneration_30bf16.safetensors\":{\"air\":\"urn:air:flux2:checkpoint:civitai:2547526@2999852\",\"sha256\":\"2d5b548efd8b8e26abfe52f9cf7774d10e63084a7bfba9d2e0e66c3131fb10f8\"},\"diffusion_models:kleinovaNSFWGeneration_30bf16.safetensors\":{\"air\":\"urn:air:flux2:checkpoint:civitai:2547526@2999852\"}}",
+   1
+  ],
+  [
+   "keeping everything exactly the same, Remove the Person's Clothing and Accessoires, increase her breast size to large. Make the Person complete naked and nude, restore the image quality to 4k HDR",
+   1
+  ],
+  [
+   "images/2026-09-16/krea2GPTGrandPUSSYTruth, seed, euler, simple, 10_steps_0002.png",
+   1
+  ],
+  [
+   "Qwen 2.1\\qwen21_v2_Pussy.safetensors",
+   1
+  ],
+  [
+   "Qwen 2.1\\NSFW Qwen Lora.safetensors",
+   1
+  ],
+  [
+   "the task prompt variations will create 5 variation of the prompt you enter in the user_prompt.\n\nfor nsfw fewshot training -> setup the nsfw version in the eclipse config -> repo root folder config.json\n\n\"few_shot_training_file\": \"llm_few_shot_training_nsfw.json\",",
+   1
+  ],
+  [
+   "✍️  MODE A  —  SUBJECT KEYWORD  →  AI PROMPT  (active by default, index=0)\n\nType any subject keyword or phrase in  [prompt_text]  below.\nQwen3-VL-2B (local, ~3 GB, auto-downloads on first run) expands it into\na rich, photorealistic prompt for Krea-2 Turbo.\n\nEverything else below (Mode / Latent / Rebalance / NSFW / VRAM) already has a working default — just type here + Queue Prompt to start.",
+   1
+  ],
+  [
+   "🔞  NSFW TOGGLE  (0 = Off/safe, default | 1 = On/mature)\n\nOne [easy int] control fans into two instruction switches — one feeds Mode A (PromptEnhancer), one feeds Mode B (QwenVL image-describe). Only the switch for whichever Mode is currently active actually executes (lazy-eval), so setting this one widget covers both modes consistently.",
+   1
+  ],
+  [
+   "nsfw, lowres, bad quality, worst quality, score_1, score_2, score_3, poorly drawn, flat color, sketch, jpeg artifacts,\nmutated, ugly, disfigured, long body, bad anatomy, bad hands, missing fingers, extra fingers, extra digits, fewer digits, \nsimple background, transparent background, blurry, furry",
+   1
+  ],
+  [
+   "masterpiece, ultra high quality, ultra-realistic photography, high detail, detailed skin, skin textures, \nslim girl, perfect body, tall, skinny, slender body, small waist, \ncompletely nude, collarbone, navel, \nbeautiful breasts, huge breasts, big round tits, soft pink nipples, puffy areoles, perky round tits,\nperfect pussy, spread pussy, exposed vagina,",
+   1
+  ],
+  [
+   "keqing (genshin impact)​,upper_body​,cloth,covered_nipples",
+   1
+  ],
+  [
+   "HMNSFW, f4nt4sy,Topless, 二次元风格，一位蓝发少女，手持一把蓝色武器\nmasterpiece, very aesthetic",
+   1
+  ],
+  [
+   "plastic skin, waxy skin, doll face, artificial face, CGI face, cartoon, anime, illustration, 3d render, blurry subject, blurry face, blurry hands, blurry feet, one person out of focus, low detail, low quality, extra Penis, fruit, third person, extra person, additional person, background person, crowd, group of people, stranger, clutter,",
+   1
+  ],
+  [
+   "* Model: Stable Yogi\n\nhttps://civitai.red/models/2741166/muse-by-stable-yogi-krea2?modelVersionId=3147272\n\n* Clip for Nsfw\n\nhttps://huggingface.co/DreamFast/Qwen3-VL-4b-Heretic-ComfyUI/blob/main/qwen3-vl-4b-heretic_fp8_e4m3fn.safetensors",
+   1
+  ],
+  [
+   "Hand-drawn dark fantasy field journal illustration, fine-nib dip pen crosshatching, colored ink washes, handwritten calligraphy, weathered antique manuscript texture.",
+   1
+  ],
+  [
+   "A raw, atmospheric in-universe field-notes manuscript featuring fine-nib ink line art, heavy crosshatching, variable ink bleed, coffee ring stains, and worn parchment creases. Blends precise relic schematic drawings with expressive explorer journal notes.",
+   1
+  ],
+  [
+   "1girl, solo, long hair, breasts, looking at viewer, hair ornament, animal ears, closed mouth, very long hair, medium breasts, standing, white hair, indoors, rabbit ears, blurry, animal ear fluff, covered nipples, grey eyes, see-through, thigh strap, blurry background, sideboob, chain, piercing, bandages, bound, revealing clothes, restrained, cuffs, bandaged leg, shackles, chained wrists",
+   1
+  ],
+  [
+   "⚖️  LICENSE\n\nMiniMax H3 model: Community License\n  ✓  Commercial use + NSFW generation allowed\n\nTurbo LoRA (drbaph/MiniMax-H3-Turbo-Lora-ComfyUI): Apache-2.0\n  see the drbaph HuggingFace repo for full terms\n\nQwen3-VL (QwenVL nodes, 1038lab/ComfyUI-QwenVL): Apache-2.0\n\nWorkflow: CC0 — free to use, share, modify",
+   1
+  ],
+  [
+   "breasts, 1girl, blush, blonde hair, penis, hetero, blue eyes, fellatio, 1boy, pubic hair, blue shirt, male pubic hair, oral, shirt, long hair, indoors, under covers, uncensored, cleavage, erection, collarbone, lying, nose blush, open door, door, pink nails, blanket, on bed, veins, bed sheet",
+   1
+  ],
+  [
+   "[CHAR2] 1boy, muscular_male, huge_penis, girthy_penis, black_skin,",
+   1
+  ],
+  [
+   "embedding:lazyneg, embedding:lazynsfw, embedding:lazyhand, worst quality, low quality, lowres, blurry, jpeg artifacts, bad anatomy, bad proportions, extra_limbs, bad hands, extra fingers, missing fingers, fused fingers, mutated hands, bad face, ugly, artist name, watermark, logo, signature, caption, text, censored, cropped, split screen, loli, chibi, futanari, 3d, cg, photorealistic",
+   1
+  ],
+  [
+   "2D anime style，Cel-shaded Style，nsfw，ray tracing（RTX），HDR。",
+   1
+  ],
+  [
+   "Pussy, Vagina, 阴道，阴蒂，阴唇,",
+   1
+  ],
+  [
+   "krea2\\Krea2 spread pussy.safetensors",
+   1
+  ],
+  [
+   "当提示词有遗漏或者需要强调的时候，可以手动加入。 特别是NSFW内容。\nIn case of key prompts missing from auto-detection or want to enhance the prompt, add them manually, especially 4 NSFW content",
+   1
+  ],
+  [
+   "score_9, score_8_up, score_7_up, source_anime, source_real, rating_explicit, uncensored, real skin, best quality, masterpiece, uncensored, (ultra realistic, photorealistic, raw photo, absurdly high resolution, unity 8k wallpaper, official art, official style), highly detailed, ExpressiveH, \nembedding:lazyup,\nembedding:lazypos, \n1 girl, solo,",
+   1
+  ],
+  [
+   "score_9, score_8, uncensored, masterpiece, best quality, official art, explicit, newest, highres, absurdres, semi-photorealistic, anime screenshot,\n\n# World\n\n# Stage\n\n# Situation\n\n# Character\n\n# Clothing\n\n# Posing\n\n# Expression\n\n# Modification",
+   1
+  ],
+  [
+   "<PREFIX> NSFW:5/10",
+   1
+  ],
+  [
+   "<PREFIX> NSFW:5/10 <MAIN> 1girl, young beautiful girl, short straight brown hair,",
+   1
+  ],
+  [
+   "{\"wan/wan22EnhancedNSFWSVICamera_nolightningSVICfFp8H.safetensors\":{\"air\":\"urn:air:wanvideo-22-i2v-a14b:checkpoint:civitai:2053259@2609141\"},\"wan22EnhancedNSFWSVICamera_nolightningSVICfFp8H.safetensors\":{\"air\":\"urn:air:wanvideo-22-i2v-a14b:checkpoint:civitai:2053259@2609141\",\"sha256\":\"d0ffd18a8836dd377cc73e73214647e757400cf329aa1cb337b75b215908b350\"}}",
+   1
+  ],
+  [
+   "{\"wan/wan22EnhancedNSFWSVICamera_nolightningSVICfFp8L.safetensors\":{\"air\":\"urn:air:wanvideo-22-i2v-a14b:checkpoint:civitai:2053259@2609148\"},\"wan22EnhancedNSFWSVICamera_nolightningSVICfFp8L.safetensors\":{\"air\":\"urn:air:wanvideo-22-i2v-a14b:checkpoint:civitai:2053259@2609148\",\"sha256\":\"2db17ce565a4a5fe42daf2b5cb0a97081e35e9495a5a886c9580704f5d61a969\"}}",
+   1
+  ],
+  [
+   "images/2026-09-08/krea2GPTGrandPUSSYTruth, seed, euler, simple, 10_steps_0005.png",
+   1
+  ],
+  [
+   "images/2026-09-05/krea2GPTGrandPUSSYTruth, seed, euler, simple, 10_steps_0018.png",
+   1
+  ],
+  [
+   "minimax_h3_Astro nsfw.safetensors",
+   1
+  ],
+  [
+   "Remove the Person's Clothing and Accessoires. Make the Person complete naked and nude. Replace the Background with a uninterrupted featureless white color that fills the entire background",
+   1
+  ],
+  [
+   "krea2\\saltaro krea2_pussy_inpainting_lora_v1.0.safetensors",
+   1
+  ],
+  [
+   "[{\"on\":true,\"lora\":\"Qwen\\\\V2.1\\\\NSFW Qwen by TheseAlpacas V2.safetensors\",\"strength\":0.8}]",
+   1
+  ],
+  [
+   "For better NSFW anatomy understanding you can mix in certain realism LoRAs, but I find it's usually not necessary.",
+   1
+  ],
+  [
+   "<lora:samsung_qwen21:1.00> <lora:NSFW Qwen Lora:1.00> <lora:Qwen-Image-2.1-viggle-turbo-4step-lora-r64:1.00>",
+   1
+  ],
+  [
+   "NSFW Qwen Lora",
+   1
+  ],
+  [
+   "bad quality, noise, blurry, worst quality, low resolution, blur, distortion, unnatural blending, cartoon, illustration, painting,nude,pussy",
+   1
+  ]
+ ],
+ "chainSignatures": [
+  [
+   [
+    [],
+    [],
+    []
+   ],
+   862
+  ],
+  [
+   [
+    [
+     "face"
+    ],
+    [
+     "ToDetailerPipe"
+    ],
+    [
+     "sam_vit_b_01ec64"
+    ]
+   ],
+   10
+  ],
+  [
+   [
+    [
+     "matting"
+    ],
+    [],
+    []
+   ],
+   7
+  ],
+  [
+   [
+    [],
+    [
+     "DetailDaemonSamplerNode"
+    ],
+    []
+   ],
+   5
+  ],
+  [
+   [
+    [
+     "face"
+    ],
+    [
+     "EditDetailerPipe",
+     "FaceDetailerPipe",
+     "ToDetailerPipe"
+    ],
+    [
+     "sam_vit_b_01ec64"
+    ]
+   ],
+   4
+  ],
+  [
+   [
+    [
+     "face"
+    ],
+    [
+     "DetailerForEach"
+    ],
+    []
+   ],
+   3
+  ],
+  [
+   [
+    [
+     "eyes",
+     "face"
+    ],
+    [
+     "FaceDetailer",
+     "FromDetailerPipe"
+    ],
+    [
+     "sam_vit_l_0b3195"
+    ]
+   ],
+   2
+  ],
+  [
+   [
+    [],
+    [
+     "LCDetailDaemon",
+     "LCDetailPipeOut",
+     "LCSkinBeauty"
+    ],
+    []
+   ],
+   2
+  ],
+  [
+   [
+    [],
+    [
+     "DetailDaemonSamplerNode",
+     "LCDetailPipeOut",
+     "LCSkinBeauty"
+    ],
+    [
+     "sam3",
+     "sam_vit_b_01ec64"
+    ]
+   ],
+   2
+  ],
+  [
+   [
+    [
+     "face",
+     "person"
+    ],
+    [
+     "FaceDetailer"
+    ],
+    [
+     "sam_vit_b_01ec64"
+    ]
+   ],
+   2
+  ],
+  [
+   [
+    [
+     "eyes",
+     "face",
+     "nsfw_parts"
+    ],
+    [
+     "DetailerForEach",
+     "FaceDetailer"
+    ],
+    [
+     "sam_vit_l_0b3195"
+    ]
+   ],
+   2
+  ],
+  [
+   [
+    [],
+    [
+     "LCSkinBeauty"
+    ],
+    []
+   ],
+   2
+  ],
+  [
+   [
+    [
+     "face"
+    ],
+    [
+     "FaceDetailer"
+    ],
+    [
+     "sam_vit_b_01ec64"
+    ]
+   ],
+   2
+  ],
+  [
+   [
+    [
+     "face"
+    ],
+    [
+     "EditDetailerPipe",
+     "FaceDetailerPipe",
+     "MaskDetailerPipe",
+     "ToDetailerPipe"
+    ],
+    [
+     "sam_vit_b_01ec64"
+    ]
+   ],
+   1
+  ],
+  [
+   [
+    [
+     "face"
+    ],
+    [
+     "DetailDaemonSamplerNode"
+    ],
+    [
+     "sam3"
+    ]
+   ],
+   1
+  ],
+  [
+   [
+    [
+     "matting"
+    ],
+    [],
+    [
+     "sam_vit_b_01ec64"
+    ]
+   ],
+   1
+  ],
+  [
+   [
+    [],
+    [
+     "DetailDaemonSamplerNode",
+     "LCDetailPipeOut"
+    ],
+    [
+     "sam_vit_b_01ec64"
+    ]
+   ],
+   1
+  ],
+  [
+   [
+    [
+     "face"
+    ],
+    [
+     "FaceDetailer"
+    ],
+    []
+   ],
+   1
+  ],
+  [
+   [
+    [],
+    [
+     "FaceDetailer"
+    ],
+    []
+   ],
+   1
+  ],
+  [
+   [
+    [],
+    [
+     "DetailDaemonSamplerNode",
+     "Detailer (SEGS/pipe) [Eclipse]"
+    ],
+    []
+   ],
+   1
+  ],
+  [
+   [
+    [
+     "hand"
+    ],
+    [
+     "FaceDetailer"
+    ],
+    []
+   ],
+   1
+  ],
+  [
+   [
+    [
+     "face"
+    ],
+    [],
+    []
+   ],
+   1
+  ],
+  [
+   [
+    [],
+    [
+     "LCSkinBeauty"
+    ],
+    [
+     "sam_vit_b_01ec64"
+    ]
+   ],
+   1
+  ],
+  [
+   [
+    [
+     "face",
+     "hand"
+    ],
+    [
+     "FaceDetailer"
+    ],
+    [
+     "sam_vit_b_01ec64"
+    ]
+   ],
+   1
+  ],
+  [
+   [
+    [],
+    [],
+    [
+     "sam_vit_h (2.56gb)"
+    ]
+   ],
+   1
+  ]
+ ],
+ "comboParts": [
+  [
+   "face",
+   12
+  ],
+  [
+   "matting",
+   9
+  ],
+  [
+   "eyes+face",
+   3
+  ],
+  [
+   "hand",
+   2
+  ],
+  [
+   "face+person",
+   2
+  ],
+  [
+   "eyes",
+   2
+  ],
+  [
+   "clothing+eyes+face+nsfw_parts",
+   1
+  ],
+  [
+   "face+hand",
+   1
+  ],
+  [
+   "eyes+hair+hand",
+   1
+  ],
+  [
+   "face+hand+person",
+   1
+  ],
+  [
+   "clothing+eyes+hair+hand+person",
+   1
+  ],
+  [
+   "eyes+hand",
+   1
+  ],
+  [
+   "face+nsfw_parts",
+   1
+  ],
+  [
+   "foot_leg+matting",
+   1
+  ]
+ ],
+ "comboDetectors": [
+  [
+   "rmbg-2.0",
+   7
+  ],
+  [
+   "face_yolov8m",
+   7
+  ],
+  [
+   "face_yolov9c",
+   3
+  ],
+  [
+   "face_yolov8n_v2",
+   2
+  ],
+  [
+   "face_yolov8m+person_yolov8m-seg",
+   2
+  ],
+  [
+   "anzhc eyes -seg-hd+anzhc face seg 640 v4 y11n",
+   1
+  ],
+  [
+   "hand_yolov8s",
+   1
+  ],
+  [
+   "anzhc eyes -seg-hd+anzhc face seg 640 v4 y11n+ntd11_anime_nsfw_segm_v3_all",
+   1
+  ],
+  [
+   "face_yolov8m+hand_yolov8s",
+   1
+  ],
+  [
+   "eyeful_v2-paired+hair_seg_bigmodel_afterdetailer_v10+pithanddetailer-v1b-seg",
+   1
+  ],
+  [
+   "eyeful_v2-paired",
+   1
+  ],
+  [
+   "face_yolov8m+hand_yolov8s+person_yolov8m-seg",
+   1
+  ],
+  [
+   "eyeful_v2-individual+face_yolov8m",
+   1
+  ],
+  [
+   "eyeful_v2-paired+hair_yolov8n-seg_60+hand_yolov8s+person_yolov8m-seg",
+   1
+  ],
+  [
+   "birefnet_toonout",
+   1
+  ],
+  [
+   "eyes",
+   1
+  ],
+  [
+   "eyeful_v2-paired+hand_yolov9c",
+   1
+  ],
+  [
+   "eyeful_v2-paired+face_yolov9c",
+   1
+  ],
+  [
+   "birefnet-portrait",
+   1
+  ],
+  [
+   "face_yolov8m+pussyv2",
+   1
+  ],
+  [
+   "ben2",
+   1
+  ],
+  [
+   "birefnet-general+heelsdetect y8m",
+   1
+  ]
+ ],
+ "comboDetailers": [
+  [
+   "FaceDetailer",
+   9
+  ],
+  [
+   "DetailDaemonSamplerNode",
+   6
+  ],
+  [
+   "DetailerForEach",
+   4
+  ],
+  [
+   "LCSkinBeauty",
+   4
+  ],
+  [
+   "DetailDaemonSamplerNode+LCDetailPipeOut+LCSkinBeauty",
+   3
+  ],
+  [
+   "DetailerForEach+FaceDetailer",
+   3
+  ],
+  [
+   "LCDetailDaemon+LCDetailPipeOut+LCSkinBeauty",
+   2
+  ],
+  [
+   "EditDetailerPipe+FaceDetailerPipe+MaskDetailerPipe+ToDetailerPipe",
+   1
+  ],
+  [
+   "FaceDetailer+FromDetailerPipe",
+   1
+  ],
+  [
+   "DetailDaemonSamplerNode+LCDetailPipeOut",
+   1
+  ],
+  [
+   "ToDetailerPipe",
+   1
+  ],
+  [
+   "DetailDaemonSamplerNode+Detailer (SEGS/pipe) [Eclipse]",
+   1
+  ],
+  [
+   "EditDetailerPipe+FaceDetailerPipe+ToDetailerPipe",
+   1
+  ],
+  [
+   "IkkiDetailerKSampler+IkkiDetailerProcessor",
+   1
+  ],
+  [
+   "DetailDaemonSamplerNode+FaceDetailer",
+   1
+  ],
+  [
+   "DetailerForEachDebug+DetailerForEachPipe",
+   1
+  ],
+  [
+   "BasicPipeToDetailerPipe+DetailerPipeToBasicPipe+FaceDetailerPipe",
+   1
+  ],
+  [
+   "CoreMLDetailerHookProvider+FaceDetailer",
+   1
+  ],
+  [
+   "DetailerForEachDebug",
+   1
+  ]
+ ],
+ "nDetectorsPerModel": [
+  [
+   0,
+   685
+  ],
+  [
+   1,
+   25
+  ],
+  [
+   2,
+   9
+  ],
+  [
+   3,
+   3
+  ],
+  [
+   4,
+   1
+  ]
+ ],
+ "nRefinersPerModel": [
+  [
+   0,
+   680
+  ],
+  [
+   1,
+   16
+  ],
+  [
+   2,
+   7
+  ],
+  [
+   3,
+   8
+  ],
+  [
+   4,
+   5
+  ],
+  [
+   5,
+   1
+  ],
+  [
+   6,
+   1
+  ],
+  [
+   8,
+   2
+  ],
+  [
+   10,
+   2
+  ],
+  [
+   12,
+   1
+  ]
+ ],
+ "roles": {
+  "partDetection": 29,
+  "mattingOnly": 9,
+  "neither": 685
+ },
+ "influence": {
+  "detailer": {
+   "models": 43,
+   "pctModels": 5.9,
+   "downloads": 269565,
+   "pctDownloads": 25.9
+  },
+  "ultralytics": {
+   "models": 28,
+   "pctModels": 3.9,
+   "downloads": 179825,
+   "pctDownloads": 17.3
+  },
+  "sam": {
+   "models": 30,
+   "pctModels": 4.1,
+   "downloads": 188409,
+   "pctDownloads": 18.1
+  },
+  "matting": {
+   "models": 24,
+   "pctModels": 3.3,
+   "downloads": 105946,
+   "pctDownloads": 10.2
+  },
+  "any": {
+   "models": 70,
+   "pctModels": 9.7,
+   "downloads": 314027,
+   "pctDownloads": 30.2
+  },
+  "partDetection": {
+   "models": 29,
+   "pctModels": 4.0,
+   "downloads": 180358,
+   "pctDownloads": 17.4
+  }
+ },
+ "coverage": {
+  "models_in_window": 789,
+  "models_parsed": 723,
+  "total_downloads": 1098977,
+  "got_downloads": 1039090,
+  "download_coverage": 94.6
+ }
+}

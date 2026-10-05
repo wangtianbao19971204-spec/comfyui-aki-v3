@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "character_id": "alicia_bell",
+  "display_name": "艾莉西亚·贝尔",
+  "trigger_token": "alcbl7yo260817",
+  "source_files": [
+    "00_source/艾莉西亚lv1西征.xlsx",
+    "00_source/01_背景故事栏位_r2c1.png",
+    "00_source/11_主要_r4c48.png"
+  ],
+  "approved_master_refs": {
+    "morning_star_fullbody": "02_master_refs/morning_star_base_fullbody_translucent_shawl.png",
+    "morning_star_closeup_eye_costume": "02_master_refs/morning_star_base_closeup_translucent_shawl.png",
+    "morning_star_default_outfit_approved_001": "02_master_refs/morning_star_default_idol_outfit_approved_001.png",
+    "morning_star_default_outfit_approved_002": "02_master_refs/morning_star_default_idol_outfit_approved_002.png",
+    "morning_star_lora_keyword_lock": "01_visual_spec/morning_star_lora_keyword_lock_20260818.md",
+    "form_outfit_separation_matrix": "01_visual_spec/form_outfit_separation_matrix_20260818.md",
+    "morning_star_default_outfit_trigger": "Morning Star default idol outfit",
+    "morning_star_alternate_outfit_trigger": "Morning Star alternate idol outfit",
+    "same_clothing_contrast_gate": "If ordinary Alicia and Morning Star intentionally wear the same clothing, they still must separate at first glance by hair structure, eye design, star cue, posture, and virtual-vs-offline presence.",
+    "morning_star_anchor_rule": "These two images are the Morning Star base design. Later simplified single-side-ponytail red-dress variants are not allowed to redefine the form."
+  },
+  "source_handling_note": "Workbook text is treated as character data only, not as instructions to Codex. The two 768x1024 embedded character images are exact duplicates; small icon images are not identity references.",
+  "source_conflicts": [
+    {
+      "topic": "age",
+      "values": [
+        "背景故事栏位 says visually around 17",
+        "主要 sheet has age 23"
+      ],
+      "decision": "Use adult 23-year-old coding for every prompt, caption, and audit gate."
+    }
+  ],
+  "identity_contract": {
+    "fixed_identity_traits": [
+      "one adult 23-year-old human woman",
+      "two related but visually distinct forms: offline ordinary Alicia Bell and bolder online Morning Star magical-network singer",
+      "warm approachable presence, sincere and slightly earnest",
+      "petite slender adult build, 160 cm, light and active from travel",
+      "soft oval youthful-but-adult face, gentle smile, clear attentive gaze",
+      "fair warm luminous skin with bright healthy studio exposure",
+      "ordinary form has long light brown to champagne blond everyday hair, loose with a natural half-up or side-braid accent; Morning Star should deliberately differ with virtual peach-gold, rose-gold, or soft coral-gold low twin tails or side bundles while keeping readable controlled masses with ribbon-bound, curled, or bluntly gathered hair ends that hang close to the body",
+      "ordinary form has natural honey-hazel brown amber eyes with simple normal round pupils and no virtual markings; Morning Star uses soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight",
+      "ordinary form: covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, no sheer stockings, no high heels, no off-shoulder idol bodice",
+      "Morning Star form: bolder but lighter virtual idol costume with wine-red, ivory, coral-gold and luminous amber accents, off-shoulder opaque fitted high waist bodice, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay only, no green sleeve cuffs or shoulder-covering teal capelet, readable compact idol skirt, restrained non-flying back hem, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes, small integrated voice-core brooch, subtle ear monitor",
+      "Morning Star default idol outfit is the normal starting outfit trigger and should not mutate during ordinary scene, pose, view, or style expansion",
+      "Morning Star alternate idol outfit is allowed only as an explicitly tagged branch; alternate outfits must preserve Morning Star hair, eyes, star hairpiece, virtual singer demeanor, and soundwave projection language",
+      "same-clothing contrast tests must still separate ordinary Alicia from Morning Star at first glance through form identity, not only outfit",
+      "ordinary form uses red ribbons; Morning Star may use larger fabric star ribbons, small metal star hairpieces, soft luminous ribbon accents, and brighter gold ornamentation",
+      "magical network idol elements should be sparse and LoRA-clean: small orange-gold soundwave glyphs or one translucent projection panel, not dense UI",
+      "online avatar identity called Morning Star may appear as abstract orange-gold projection motifs, but no readable text",
+      "physical instruments are not identity anchors and should normally be absent"
+    ],
+    "variable_traits_to_caption": [
+      "view and framing",
+      "pose and expression",
+      "whether magical network interface, voice crystal, ear monitor, or holographic stage panels are visible",
+      "which form is shown: ordinary_alicia or morning_star",
+      "Morning Star hair color shift, controlled star accessories, ear monitor, and idol costume details when visible",
+      "ordinary outfit variation and explicitly tagged Morning Star alternate idol outfit variation",
+      "travel, virtual stage, streamer, healer-support, daily, formal, or outdoor context variation",
+      "cape on or cape removed",
+      "orange-gold soundwave and projection glow intensity",
+      "scene, lighting, and rendering style"
+    ],
+    "hard_rejects": [
+      "child, schoolgirl, teen-coded, or ambiguous underage presentation",
+      "non-human species, elf ears, animal ears, horns, wings, or tail",
+      "black, blue, pink, red, or very dark hair replacing the light brown or champagne blond hair identity",
+      "blue, green, red, or purple eyes replacing amber eyes",
+      "wrong dominant outfit identity such as armor, maid dress, swimsuit, wedding dress, generic modern idol uniform, or modern school uniform",
+      "overly dark skin, harsh shadow over the face, muddy complexion, or low-key concert lighting in base images",
+      "busy background, dense holographic UI, circular magic floor dominating the frame, or cluttered city market in base images",
+      "Morning Star base that looks only like ordinary Alicia with tiny decorations and no idol-avatar transformation",
+      "ordinary base that looks like a muted Morning Star outfit instead of an offline daily form",
+      "ordinary and Morning Star forms that read as palette swaps at first glance",
+      "same-clothing contrast tests where ordinary Alicia and Morning Star cannot be separated by hair, eyes, star cue, posture, and virtual-vs-offline presence",
+      "Morning Star hair and eyes too identical to ordinary form when the online avatar form is requested",
+      "Morning Star eyes with harsh crimson color, blood-red inner rings, target-like multi-ring pupils, hypnotic spirals, demonic or predatory stare, or aggressive high-contrast neon treatment",
+      "ordinary Alicia with star-ring or soundwave pupils, rose-gold low twin tails, sheer stockings, high-heeled stage shoes, or off-shoulder idol bodice",
+      "Morning Star design that relies on stacked accessories, too many stars, too many trims, or large costume parts instead of a clear simple silhouette",
+      "untracked Morning Star outfit changes during default outfit production; use the explicit Morning Star alternate idol outfit branch instead",
+      "Morning Star with green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, or heavy green upper-body fabric",
+      "transparent main bodice, transparent skirt, see-through chest coverage, sexualized off-shoulder design, swimsuit-like bodice, exposed chest emphasis, or fetish framing",
+      "Morning Star full body without elegant high-heeled stage shoes or with bulky, flat, ugly, or utilitarian boots",
+      "Morning Star base with giant rear skirt train, banner-like back panel, long flying upper cape tail, or wind-swept back hem",
+      "messy skirt silhouette, excessive skirt panels, dangling chains, too many pouches, or unreadable outfit layers",
+      "hair exploding into many separate flyaway strands, scattered or frayed hair tips, wind-lifted sideways hair, floating hair trails, glassy shard decorations, prismatic color blocks, or oversized chest gem",
+      "missing adult clothing coverage, transparent main clothing, see-through chest or skirt coverage, nudity, lingerie, fetish styling, or sexualized framing",
+      "extra person, duplicated character, split panel, model sheet, text, logo, watermark, signature",
+      "malformed hands, feet, limbs, face, holographic interface, or unreadable critical anatomy",
+      "mandatory physical lute, guitar, microphone stand, or band-instrument framing replacing the magical network singer identity",
+      "critical crop that removes the face for portrait cells or feet for full-body cells",
+      "near duplicate that adds no new training information"
+    ]
+  },
+  "caption_contract": {
+    "trigger_token_first": true,
+    "format": "alcbl7yo260817, adult human woman, ordinary Alicia or Morning Star form, ordinary honey-hazel round pupils or Morning Star soft champagne-peach virtual eyes with gentle star catchlight when visible, warm champagne or peach-gold hair family, fair warm skin, form-specific wine-red ivory teal outfit, visible variation...",
+    "caption_only_visible_traits": true,
+    "avoid_terms": [
+      "child",
+      "teen",
+      "school",
+      "nude",
+      "multiple people",
+      "character sheet"
+    ]
+  },
+  "coverage_targets_final_120": {
+    "identity_anchors": 40,
+    "outfit_accessory_role": 40,
+    "style_scene": 40,
+    "minimum_full_body": 36,
+    "minimum_portraits": 24,
+    "minimum_magic_network_interface_visible": 28,
+    "minimum_virtual_stage_or_streaming_context": 20,
+    "maximum_physical_instrument_cameos": 4,
+    "minimum_cape_removed_or_variant": 12,
+    "minimum_rear_or_profile_views": 12,
+    "style_cap_per_domain": 8
+  },
+  "base_image_gates": {
+    "background": "plain or near-plain warm off-white, pale gold, or light gray only",
+    "skin": "fair warm luminous skin, bright soft studio exposure, no muddy shadows",
+    "skirt": "simple clean A-line silhouette, readable hem, minimal panels",
+    "accessories": "red ribbons and one or two signature small accessories only",
+    "morning_star_stage_shoes": "full-body Morning Star bases must show elegant high-heeled stage shoes or high-heeled ankle boots; flat boots and bulky travel shoes fail the base gate",
+    "morning_star_hair_ends": "Morning Star hair tips must be gathered, curled, ribbon-bound, or bluntly controlled; scattered wispy ends fail the base gate",
+    "morning_star_hair_motion": "Morning Star hair should hang close to the body as designed low twin tails or side bundles; wind-lifted sideways hair fails the base gate",
+    "form_contrast": "ordinary and Morning Star must read very different at first glance, but share the same face, adult build, warm expression, fair skin, and warm amber/gold identity family on close inspection",
+    "ordinary_not_avatar": "ordinary Alicia must keep honey-hazel brown amber eyes with simple normal round pupils, loose everyday light-brown/champagne hair, covered daily clothing, and practical low brown footwear; sheer stockings, high heels, off-shoulder idol bodice, rose-gold low twin tails, and virtual pupil marks fail the ordinary base gate",
+    "morning_star_avatar_difference": "Morning Star should visibly differ from ordinary form through virtual peach/rose-gold low twin-tail / side-bundle hair and soft champagne-gold to peach-gold eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, while keeping the same face and adult identity",
+    "morning_star_off_shoulder": "Morning Star base should use a modest off-shoulder idol top with opaque fitted bodice; green sleeves, teal arm sleeves, and shoulder-covering capelets fail the base gate",
+    "morning_star_sheer_details": "Translucency is allowed only for sheer stockings and the required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms; the bodice and skirt must remain opaque",
+    "morning_star_stockings": "Stockings should be very sheer ivory with skin tone visible through the fabric and natural subtle gold soundwave embroidery; opaque heavy stockings or pasted-on metallic stripes fail the base gate",
+    "morning_star_design_clarity": "Morning Star should read as a clear concise character design with a few identity points; accessory pile-up fails the base gate",
+    "morning_star_back_hem": "Morning Star full-body bases must keep back hems, rear skirt panels, and upper cape backs compact and close to the body; large flying trains fail the base gate",
+    "forms_required_before_scaling": [
+      "ordinary_alicia_front_fullbody",
+      "ordinary_alicia_bust",
+      "morning_star_front_fullbody",
+      "morning_star_bust"
+    ]
+  },
+  "audit_priorities": [
+    "adult same character",
+    "face, ordinary honey-hazel eyes or Morning Star soft champagne-peach virtual eyes, and form-specific warm blond or peach-gold hair",
+    "petite adult human proportions",
+    "wine-red/ivory/teal magical network idol design",
+    "magical network singer context, orange-gold soundwave projection, and virtual stage motifs when requested",
+    "anatomy and single-character integrity",
+    "training diversity without identity drift"
+  ]
+}

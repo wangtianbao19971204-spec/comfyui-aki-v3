@@ -1,0 +1,81 @@
+{
+  "run": "20261004_2140_10BC_yolo_sam_align",
+  "scope": "2026-10-04_part_refinement_pipeline",
+  "owner_thread": "01a1061f-c0b3-7f40-8168-1bc0ca82582c",
+  "completed_at": "2026-10-04T20:23:13.678028+08:00",
+  "change": "Applied the same YOLO-bbox + SAM-refiner conversion to the remaining refine subgraphs: 10B '[10B] SAM3 手脸细化' x2 and 10C '[10C] Turbo 快速细化' x2. 10A was already converted and was skipped.",
+  "converted_subgraphs": [
+    {
+      "kit": "Anima 原版",
+      "10B": "30e4a5f9",
+      "10C": "9f1725e7"
+    },
+    {
+      "kit": "Anima 2.9B",
+      "10B": "09b87285",
+      "10C": "6e22e72b"
+    }
+  ],
+  "branches": {
+    "10C": {
+      "人体": "segm/person_yolov8m-seg.pt thr 0.50 crop 2.0 drop 50 post_dilation 10",
+      "手部": "bbox/hand_yolov9c.pt thr 0.50 crop 2.8 drop 20 post_dilation 8",
+      "人脸": "bbox/face_yolov9c.pt thr 0.40 crop 3.0 drop 20 post_dilation 10"
+    },
+    "10B": {
+      "手部": "bbox/hand_yolov9c.pt thr 0.50 crop 2.8 drop 20 post_dilation 8",
+      "人脸": "bbox/face_yolov9c.pt thr 0.40 crop 3.0 drop 20 post_dilation 10"
+    }
+  },
+  "structural_note": "10C had the same shape as 10A (SAM3_Detect -> MaskToSEGS -> ImpactDilateMaskInSEGS -> DetailerForEach), so the post_dilation carried over the old dilate value. 10B had no dilate stage and feeds DetailerForEachPipe directly, so its post_dilation came from the standard table instead.",
+  "removed": "4 more orphaned SAM3.1 CheckpointLoaderSimple nodes (10B x2, 10C x2). No subgraph still references the 1.66 GB SAM3 checkpoint.",
+  "kept": "all DetailerForEach / DetailerForEachPipe nodes and their tuned params (10B hand 0.30 / face 0.24; 10C 0.15 / 0.25 / 0.22; Turbo steps 12)",
+  "file": {
+    "path": "ComfyUI\\user\\default\\workflows\\UAP统一生产工作台_v2.json",
+    "bytes": 1303838,
+    "sha256_after": "bea7cef98eab5e77db1ae5983925d2bfcdcec5e9dcf5299bd7f4ebc598a15a30"
+  },
+  "backup": {
+    "path": "ComfyUI\\user\\default\\codex_backups\\2026-10-04_before_10BC_align.json",
+    "bytes": 1316390,
+    "sha256": "1bfb5dde8c830189d8fe0fb4a05c6698b9090497ee0612ffa467424dfa2a41e3"
+  },
+  "sha256_before": "1bfb5dde8c830189d8fe0fb4a05c6698b9090497ee0612ffa467424dfa2a41e3",
+  "validation": {
+    "static": "0 duplicate node ids across top level and all 20 subgraphs; every link in every subgraph resolves in both directions",
+    "live_10A_face": {
+      "prompt_id": "33cb3b5c-c88c-484c-9d68-90beb84c5aad",
+      "result": "success"
+    },
+    "live_10B_hand": {
+      "prompt_id": "7b874888-68b7-45d3-8c62-990fbafb3c8d",
+      "result": "success",
+      "output": "ComfyUI\\output\\_codex_qa\\10B_align\\hand_pipe_00001_.png",
+      "note": "exercises the DetailerForEachPipe variant (different detailer type from 10A), with tiled_encode/decode True"
+    },
+    "coverage": "the ImpactSimpleDetectorSEGS + SAM path is now live-proven for both DetailerForEach (10A/10C shape) and DetailerForEachPipe (10B shape)"
+  },
+  "refinement_layer_now": {
+    "10A 常规细化": "YOLO bbox + SAM (人体/手/脸/眼) - 4 branches",
+    "10B SAM3 手脸细化": "YOLO bbox + SAM (手/脸) - 2 branches",
+    "10C Turbo 快速细化": "YOLO bbox + SAM (人体/手/脸) - 3 branches",
+    "10D NSFW 标准细化": "unchanged - already segm YOLO (matches Legendaer), but noise_mask_feather is still 0/False",
+    "10E NSFW 快速细化": "unchanged - same as 10D"
+  },
+  "still_divergent": [
+    "10D/10E noise_mask_feather=0 (hard mask edge) where the consensus uses 20-64",
+    "the 10A-10E enable states are untouched (kit1 disabled, kit2 bypassed)",
+    "10D/10E title still says the old names; no eye branch was added to 10B/10C"
+  ],
+  "production_changes": {
+    "workflows_modified_in_place": 1,
+    "files_modified": [
+      "ComfyUI\\user\\default\\workflows\\UAP统一生产工作台_v2.json"
+    ],
+    "models_added": 0,
+    "service_restarted": false,
+    "queue_cleared": false,
+    "free_called": false
+  },
+  "rollback": "copy ComfyUI\\user\\default\\codex_backups\\2026-10-04_before_10BC_align.json over ComfyUI\\user\\default\\workflows\\UAP统一生产工作台_v2.json; pre-change sha256 1bfb5dde8c830189d8fe0fb4a05c6698b9090497ee0612ffa467424dfa2a41e3"
+}

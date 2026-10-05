@@ -1,0 +1,56 @@
+UAP 工作流审计问题修复
+
+1. 当前结果
+正式 UAP、发布模板和独立扩展已同步修复。保留九个工作流分支，默认全部关闭细化，由工作台按需选择。未增加人体、头发、四肢、服装和独立皮肤处理。
+本次修改 3 个工作流 JSON、3 个工作台前端文件，并纠正 scope 文档；不改 ComfyUI 核心或第三方插件，不安装依赖、不下载模型、不重启服务、不清队列。
+
+2. F01–F09 对照
+F01：组名、导航 stages.groups、节点 uap_layout_group、控制器 customSortAlphabet 一起更新。新静态审计所有名称引用均能解析。
+F02：正式 UAP 与 production_tools/templates 的 UAP 字节一致，包含当前检测链和三个 USDU 缝补配置。
+F03：拆除人体处理和重复手脸组合；新增独立脚与眼入口。10A=手，10B=脚，10C=脸，10D=原区域标准档，10E=原区域快速档，10F=眼。
+     工作台选择 D/E 时自动关闭另一档；直接在画布同时打开会在提交前阻止，防止重复重绘。其他部位可自由组合。
+F04：独立扩展复用 UAP 2.9B 的六个子图定义，不再另有一套 FaceDetailer 参数。默认旁路，有独立开关；输入改为现有中性示例 optimization_reference.png，运行前应选自己的待修图片；原有各部位文本保留。此扩展本身没有 USDU。
+F05：细化开启时检查固定 batch_size，阻止大于 1 或由连线提供而无法核实的批量；已有开启的开关仍可关闭。多张应排队多个单张任务。
+     这是工作台前端保护，不是 Impact 底层多图支持；直接调用外部 API、动画多帧或自行改线须满足上游单图限制。
+F06：当前 2.9B + 原版 28 层 LLLite 的线稿/姿态和 VNCCS 开关禁用；画布误开启也在提交前拦截。原版基模仍可选择原控制。未伪造兼容权重或修改模型。
+F07：内部编号、检测器职责、外层名称统一；补回两张只剩“#”的说明；候选复制目标改为 00W-1；说明主采样/子图/二放参数和种子彼此独立。scope REPORT/CONTINUATION/STATE 不再冒称纯新增或全链完成。
+F08：移除空 LoRA 残留节点 1230 和 PixAI 中两个无消费的编码节点 104002/114002，同时清理连线和保存的节点引用。原文件在 before/ 可恢复。
+F09：Krea2 1233 的不安全正向样例替换为中性成年旅行者描述；不复述、不运行原内容。正式 Anima 提示词、LoRA 选择和主采样参数保留。
+
+3. 实际链路
+Anima 两个主分支：基础采样/解码 → 手 → 脚 → 区域标准或快速 → 脸 → 眼 → 二放条件选择 → 显存清理 → 预览/保存。
+关闭的部位用 mode=4 旁路传图；未激活的整个分支为 mode=2，切换恢复时各部位依然为 4。mode=0 才执行。
+手/脚/脸/眼每个子图：YOLO bbox → ImpactSimpleDetectorSEGS（SAM 蒙版求交）→ DetailerForEach 重绘/回贴。每单元有一个 SAMLoader，使用 sam_vit_b_01ec64.pth，不是 SAM3 文本识别。
+原有区域细化内部检测权重/过滤范围/采样参数未在本轮调整；只修与主图的整合及档位选择。
+顺序按已有参考的“细化后再 USDU”保留；没有依据不足地把 USDU 改到脸眼之前。Krea2 不新增这些 Anima 子图。
+
+4. 参数基线与作用
+手：hand_yolov9c；阈值 .50，crop 2.8，drop 20，post dilation 8，denoise .30。
+脚：adetailerFootYolov8x_v20；阈值 .35，crop 3.0，drop 16，post dilation 8，denoise .30。新接入采用较保守的现有手部重绘参数；不是声称热门参考都有脚细化。
+脸：face_yolov9c；阈值 .40，crop 3.0，drop 20，post dilation 10，denoise .24。
+眼：Eyeful_v2-Individual；阈值 .38，crop 4.0，drop 10，post dilation 4，denoise .24。
+四者均 16 steps、guide_size=768、force_inpaint=true、noise_mask_feather=20。SAM threshold=.93，hint=.7。
+原版保留 CFG7/res_multistep/beta；2.9B 保留 CFG3.5/euler/sgm_uniform。局部 guide/crop 不是整图放大倍率。
+三个 USDU 保留 1.5×、denoise .12、tile 1024、Half Tile + Intersections、缝补 denoise .42/blur16/padding32。原版/2.9B/Krea2 各 12/12/4 步。
+主面板只改主采样；局部参数进入对应子图修改，USDU 单独修改。固定主种子不等于固定所有细化/二放种子。
+
+5. 验收证据
+正式图：293 顶层节点、387 顶层链接、22 子图；展开 471 节点/685 链接。
+无重复节点 ID、悬空/非双向链接、子图接口差异、缺失后端节点、固定模型选项缺失、widget 映射错位、参数越界、导航/布局/排序引用失配；全部图无环。详见 audit_snapshot.json。
+单元测试：test_runtime.mjs 的 14 项检查通过，包括多图/连线批量、2.9B 控制、区域档位冲突、子图内提交时的根图保护、非 UAP 不干预、重复安装不重包。
+真实浏览器：隔离中性主图副本，九分支可浏览；独立手/脚/眼开关，默认关闭、D/E 自动互斥、batch 错误提示、2.9B 禁用开关已检查。两种错误提交均在前端结束，未到达被隔离的提交端点。
+真实推理：prompt_id=e3edf6f8-53d6-4078-94d0-e93bca3d835c，success/completed，后端约 103 秒。使用浏览器真正展开的四个 2.9B 子图 + 当前 USDU；成人穿雨衣示例、无 LoRA、中性提示词，区域档位旁路。
+输入 768×1024，最终 1152×1536。手/脸/眼蒙版非零像素为 6558/6155/745；脚蒙版为 0（靴子覆盖），因此脚只能记为无检出透传成功。输出已视觉检查，无明显分块断带；不能由一张图保证所有题材的质量。
+输出：ComfyUI/output/_codex_qa/repair_audit/a29_parts_usdu_00001_.png。receipt 为 neutral_history.json，API 输入为 neutral_api_prompt.json。
+
+6. 未声称的覆盖
+没有将本轮测试称为九分支完整生产链实跑；未覆盖原版/Krea2 全链、人工拖拽/遮罩编辑、物理 IME、裸露脚命中后的重绘、成人区域命中效果或长时间连续批量。
+本轮未重新查询 Civitai 实时热度，不把本地参考样本的历史排名当作实时排名。检测选型/职责参考已有样本，未声称逐节点、逐参数完全复制它们。
+
+7. 文件与回滚
+正式文件：ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json
+同步模板：production_tools/templates/UAP统一生产工作台_v2.json
+独立扩展：ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json
+主图/模板 SHA256：fdbff196324e01296a4bb1ffed6e1a6d38e49cacc7bf0aa59ddeb9983b6e8a1e
+备份：本目录 before/；源文件哈希见 release_manifest.json。rollback.py 默认 dry run，--apply 才恢复；若之后改过文件则拒绝覆盖。回滚保留中性安全替换，不恢复不安全样例。
+打开旧浏览器缓存不会自动替换旧画布；刷新页面并从磁盘重新打开正式 UAP 后使用本次版本。若旧画布有自己的未保存改动，先另存，勿用旧画布覆盖新版。

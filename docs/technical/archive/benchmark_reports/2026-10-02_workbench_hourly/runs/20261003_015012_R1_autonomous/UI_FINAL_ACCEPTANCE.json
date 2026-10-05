@@ -1,0 +1,79 @@
+{
+  "status": "accepted",
+  "at": "2026-10-03T03:24:57.433800+08:00",
+  "milestone": "R1_C1_R2_C2_common_workflow_iteration_accepted",
+  "production_files_changed": 8,
+  "generation_submitted": 7,
+  "service_restarts": 0,
+  "formal_files_unchanged": 21,
+  "browser_cleanup": "Own test tabs34-37 closed; docs3-6 removed; original UAP/Unsaved/Unsaved2 retained; fixtures removed; viewport reset.",
+  "evidence": [
+    {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_workbench_hourly\\runs\\20261003_015012_R1_autonomous\\R1_acceptance.json",
+      "sha256": "d209d5a2a555e1d1b94b00e772a03f81f7e47933df4899473d09b86bccfe16d2"
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_workbench_hourly\\runs\\20261003_015012_R1_autonomous\\c1_execution\\C1_03_review.json",
+      "sha256": "fd5b7ad2b8a0a958b154cef318736f550bdc96d68d9f89e797ef56a8b9989186"
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_workbench_hourly\\runs\\20261003_015012_R1_autonomous\\c1_execution\\runtime_review\\C1_runtime_seven_branch_candidate.json",
+      "sha256": "d363e517a0bdefbace2a35b9f6da30a41c7b5fbfcff8e961714752cf7d9a3813"
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_workbench_hourly\\runs\\20261003_015012_R1_autonomous\\c1_execution\\runtime\\ext06\\rgba_browser_composite.png",
+      "sha256": "b2d10f728a9e4078fa5e5a03a1214b29da1a8e85d96c9f256a38f015e826a385"
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_workbench_hourly\\runs\\20261003_015012_R1_autonomous\\c1_submit_candidate\\retry_feedback_candidate\\final_browser.json",
+      "sha256": "32c9f0d9bfd59090a3bf0bc57336cccc5f025df6beb87551b4a72b21390fae2b"
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_workbench_hourly\\runs\\20261003_015012_R1_autonomous\\r2_inline_candidate\\final_browser.json",
+      "sha256": "194ca0c601641beb067ab198048c774d8cf5a7495780d10facb7e29ada04606d"
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_workbench_hourly\\runs\\20261003_015012_R1_autonomous\\r2_inline_candidate\\executed_source.json",
+      "sha256": "9bc05119282cd4cc5cd043e3c62a9bf8d99d4eace824b75725a2391aa61f50ef"
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_workbench_hourly\\runs\\20261003_015012_R1_autonomous\\layout_review\\R2_INLINE_REVIEW.md",
+      "sha256": "608a6876706a4d43ea0f0d062b9f046b533027efa5258a563df471022867820b"
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_workbench_hourly\\runs\\20261003_015012_R1_autonomous\\UI_final_live_guard.json",
+      "sha256": "143afbc753cbef843ee0f9f12dc87066ce8d6a28a0540274fd9cdd0bae295a0c"
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_workbench_hourly\\runs\\20261003_015012_R1_autonomous\\tab36_final_executed_sources.json",
+      "sha256": "2ad547c0d95384ffa7a2118cafcdc41643b6606f7c8de1ae316aff9a32e18343"
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_workbench_hourly\\runs\\20261003_015012_R1_autonomous\\C2_browser_cleanup.json",
+      "sha256": "b7f10b1080319a085a06475c05fb2f6b81a8fe435af58b6c0f38477472e5b10b"
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_workbench_hourly\\runs\\20261003_015012_R1_autonomous\\change_manifest.json",
+      "sha256": "803099117761e6f8a34ebb481cab1849e547428a0c683a275352af80041b9834"
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_workbench_hourly\\runs\\20261003_015012_R1_autonomous\\changes_final.diff",
+      "sha256": "d8f2adf52bb45ec8b816fbf17062546d212d7ddae426680207fbc6068b9a9594"
+    }
+  ],
+  "accepted": [
+    "R1 layout visible write/undo and footer exact synchronization",
+    "C1 nine native serializations and seven actual local functional runs",
+    "C1 queue rejection no longer reports success; accepted native request required",
+    "C1 success clears only run-owned stale footer error; final native UI with synthetic API response acceptance",
+    "R2 inline unsaved-change protection, keep/discard, focus, saving guard,503 retention and synthetic200 readback",
+    "C2 served8/executed7/formal21/queue/listener/rollback checks"
+  ],
+  "limits": [
+    "ext04 lightblue editing changed background but kept architecture; no pixel-perfect pure-background or model quality claim",
+    "ext06 browser actual PNG shows background removed and person/bicycle retained; edge-quality not exhaustive",
+    "ext07/ext09 serialized only per common-workflow scope",
+    "Save503/200 tests page-memory synthetic records; formal data never test-written",
+    "Website live update/import and taxonomy/formatting not started"
+  ]
+}

@@ -1,0 +1,204 @@
+{
+  "missing_loader_models": [
+    {
+      "workflow": "Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+      "graph": "11af4fd5-3886-4747-97f9-81b165e949a6",
+      "id": 615,
+      "mode": 0,
+      "type": "UnetLoaderGGUF",
+      "model": "krea2\\krea2MuseByStable_v15TurboFp8.gguf"
+    },
+    {
+      "workflow": "Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+      "graph": "11af4fd5-3886-4747-97f9-81b165e949a6",
+      "id": 616,
+      "mode": 0,
+      "type": "CLIPLoader",
+      "model": "qwen3vl_4b_heretic_fp8.safetensors"
+    },
+    {
+      "workflow": "Anima_推荐版_细化可选_手动候选.json",
+      "graph": "173da526-e230-4aaa-b442-2b3f561be267",
+      "id": 580,
+      "mode": 0,
+      "type": "UNETLoader",
+      "model": "Anima\\animayume_v10.safetensors"
+    },
+    {
+      "workflow": "Anima_推荐版_细化可选_手动候选.json",
+      "graph": "11af4fd5-3886-4747-97f9-81b165e949a6",
+      "id": 615,
+      "mode": 0,
+      "type": "UnetLoaderGGUF",
+      "model": "krea2\\krea2MuseByStable_v15TurboFp8.gguf"
+    },
+    {
+      "workflow": "Anima_推荐版_细化可选_手动候选.json",
+      "graph": "11af4fd5-3886-4747-97f9-81b165e949a6",
+      "id": 616,
+      "mode": 0,
+      "type": "CLIPLoader",
+      "model": "qwen3vl_4b_heretic_fp8.safetensors"
+    },
+    {
+      "workflow": "Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+      "graph": "173da526-e230-4aaa-b442-2b3f561be267",
+      "id": 580,
+      "mode": 0,
+      "type": "UNETLoader",
+      "model": "Anima\\animayume_v10.safetensors"
+    },
+    {
+      "workflow": "Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+      "graph": "11af4fd5-3886-4747-97f9-81b165e949a6",
+      "id": 615,
+      "mode": 0,
+      "type": "UnetLoaderGGUF",
+      "model": "krea2\\krea2MuseByStable_v15TurboFp8.gguf"
+    },
+    {
+      "workflow": "Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+      "graph": "11af4fd5-3886-4747-97f9-81b165e949a6",
+      "id": 616,
+      "mode": 0,
+      "type": "CLIPLoader",
+      "model": "qwen3vl_4b_heretic_fp8.safetensors"
+    },
+    {
+      "workflow": "Krea2_图生图_改图_v1.json",
+      "graph": "root",
+      "id": 165,
+      "mode": 0,
+      "type": "CLIPLoader",
+      "model": "qwen3vl_4b_heretic_fp8.safetensors"
+    },
+    {
+      "workflow": "Krea2_工作流.json",
+      "graph": "root",
+      "id": 165,
+      "mode": 0,
+      "type": "CLIPLoader",
+      "model": "qwen3vl_4b_heretic_fp8.safetensors"
+    },
+    {
+      "workflow": "UAP统一生产工作台_v1.json",
+      "graph": "root",
+      "id": 1041,
+      "mode": 0,
+      "type": "UNETLoader",
+      "model": "Anima\\anima_baseV10.safetensors"
+    },
+    {
+      "workflow": "UAP统一生产工作台_v1.json",
+      "graph": "root",
+      "id": 1275,
+      "mode": 2,
+      "type": "UNETLoader",
+      "model": "Anima\\anima_baseV10.safetensors"
+    },
+    {
+      "workflow": "▶▷Krea2-高清生图优化流(整合).json",
+      "graph": "root",
+      "id": 258,
+      "mode": 4,
+      "type": "CLIPLoader",
+      "model": "qwen3vl_4b_fp8_scaled.safetensors"
+    },
+    {
+      "workflow": "▶▷Krea2-高清生图优化流(整合).json",
+      "graph": "root",
+      "id": 262,
+      "mode": 4,
+      "type": "UNETLoader",
+      "model": "Krea2\\Krea2-MuseByStable_v15Turbo_fp8.safetensors"
+    },
+    {
+      "workflow": "▶▷Krea2-高清生图优化流(整合).json",
+      "graph": "root",
+      "id": 298,
+      "mode": 4,
+      "type": "CheckpointLoaderSimple",
+      "model": "Krea2\\Krea2-TurboNSWAIO_v10_fp8.safetensors"
+    },
+    {
+      "workflow": "▶▷Krea2-高清生图优化流(整合).json",
+      "graph": "root",
+      "id": 352,
+      "mode": 4,
+      "type": "UNETLoader",
+      "model": "krea2\\DasiwaKrea2_mirroredskiesV1Turbo.safetensors"
+    },
+    {
+      "workflow": "▶▷Krea2-高清生图优化流(整合).json",
+      "graph": "root",
+      "id": 166,
+      "mode": 0,
+      "type": "CLIPLoader",
+      "model": "qwen3vl_4b_heretic_fp8.safetensors"
+    },
+    {
+      "workflow": "▶▷Krea2-高清生图优化流(整合).json",
+      "graph": "root",
+      "id": 350,
+      "mode": 0,
+      "type": "UnetLoaderGGUF",
+      "model": "krea2\\krea2MuseByStable_v15TurboFp8.gguf"
+    }
+  ],
+  "referenced_modules": {
+    "ComfyUI-Unified-Prompt-Workbench": 418,
+    "ComfyUI_Comfyroll_CustomNodes": 33,
+    "ComfyUI-Impact-Pack": 312,
+    "ComfyUI-DazzleSwitch": 42,
+    "comfyui-easy-use": 14,
+    "rgthree-comfy": 48,
+    "comfyui_controlnet_aux": 56,
+    "ComfyUI-Anima-LLLite": 21,
+    "vnccs-utils": 14,
+    "ComfyUI-GGUF": 3,
+    "ComfyUI_UltimateSDUpscale": 14,
+    "comfyui-kjnodes": 5,
+    "TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters": 28,
+    "ComfyUI-Olm-JoyCaption": 42,
+    "ComfyUI-Danbooru-Browser-Import": 14,
+    "ComfyUI-PixAI-Tagger": 14,
+    "comfyui-impact-subpack": 126,
+    "comfyui-krea2-controlnet": 15,
+    "comfyui_memory_cleanup": 28,
+    "comfyui-krea2edit": 9,
+    "ComfyUI-Olm-DragCrop": 6,
+    "ComfyUI-RMBG": 3
+  },
+  "extra_active_vs_production_profile": [
+    "ComfyUI-Direct-LLM-Chat",
+    "ComfyUI-VideoHelperSuite",
+    "ComfyUI-WanVideoWrapper",
+    "ComfyUI_Custom_Nodes_AlekPet",
+    "ComfyUI_IPAdapter_plus",
+    "ComfyUI_Mira",
+    "civitai-toolkit",
+    "comfyui-dev-utils",
+    "comfyui-sortlist",
+    "comfyui_llm_party",
+    "nsfwprompt",
+    "vnccs",
+    "websocket_image_save"
+  ],
+  "active_without_saved_workflow_nodes": [
+    "ComfyUI-Direct-LLM-Chat",
+    "ComfyUI-OpenPose-Studio",
+    "ComfyUI-VideoHelperSuite",
+    "ComfyUI-WanVideoWrapper",
+    "ComfyUI_Custom_Nodes_AlekPet",
+    "ComfyUI_IPAdapter_plus",
+    "ComfyUI_Mira",
+    "civitai-toolkit",
+    "comfyui-dev-utils",
+    "comfyui-sortlist",
+    "comfyui_llm_party",
+    "nsfwprompt",
+    "prompt-assistant",
+    "vnccs",
+    "websocket_image_save"
+  ]
+}

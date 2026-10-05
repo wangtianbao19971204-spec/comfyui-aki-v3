@@ -1,0 +1,25 @@
+{
+  "status": "review_complete_with_retained_holds",
+  "completed_at": "2026-09-27T19:20:13.971303+08:00",
+  "production_mutated": false,
+  "new_classification_writes": 0,
+  "remaining_sources_reconciled": 2395,
+  "direct_source_reviews": 35,
+  "artist_name_age_false_hits": 14,
+  "direct_image_reviews": 2,
+  "direct_review_unresolved": 1,
+  "other_prior_holds_preserved": 2360,
+  "local_model_used": false,
+  "live_index_unchanged": true,
+  "live_pid": 40896,
+  "data_sha256": "f7c039c4f2a6e7e653758d131d8f80837c6194d4995985f110fda9070e099a54",
+  "projection_sha256": "d0b77d51a0924f011ee62fbada53719438f709ba3d5d9b58cf4122f3e3776f26",
+  "engine_sha256": "07103aa7656ed75326aadcf6ae8199177bc01f6682b8ce38d868fe0ec9e2d394",
+  "queue": {
+    "queue_running": [],
+    "queue_pending": []
+  },
+  "workbench_nodes": 71,
+  "previous_applied_classifications": 45,
+  "semantic_accuracy_scope": "35 full-source context decisions; other rows received mapping/hash/context rechecks and retain previous dispositions. No claim of semantic correctness for all remaining model proposals."
+}

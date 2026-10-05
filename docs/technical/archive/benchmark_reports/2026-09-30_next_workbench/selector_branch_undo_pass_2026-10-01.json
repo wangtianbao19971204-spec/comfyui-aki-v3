@@ -1,0 +1,217 @@
+{
+  "passed": true,
+  "reproducedUnsafeUndo": false,
+  "scenario": "one physical node belongs to both branches; switch active branch after applying through its original selector",
+  "expected": {
+    "captureBlocked": true,
+    "oldApplyWrites": 0,
+    "oldUndoWrites": 0,
+    "targetAfterUndo": "forest, sunlight, standing",
+    "undoDisabled": true
+  },
+  "actual": {
+    "captureBlocked": true,
+    "oldApplyWrites": 0,
+    "oldUndoWrites": 0,
+    "targetAfterUndo": "forest, sunlight, standing",
+    "undoDisabled": true,
+    "applyStatus": "目标工作流、分支或编辑窗口已变化，请从当前目标重新打开。",
+    "undoStatus": "目标已变化，无法撤销旧操作。"
+  },
+  "cases": [
+    {
+      "name": "character_shared_node_other_branch",
+      "kind": "character",
+      "rejected": true,
+      "undoWrites": 0,
+      "passed": true,
+      "message": "目标已变化，无法撤销旧操作。"
+    },
+    {
+      "name": "character_normal_same_branch",
+      "kind": "character",
+      "rejected": false,
+      "undoWrites": 1,
+      "passed": true,
+      "message": "已撤销本次写入。"
+    },
+    {
+      "name": "clothing_shared_node_other_branch",
+      "kind": "clothing",
+      "rejected": true,
+      "undoWrites": 0,
+      "passed": true,
+      "message": "目标已变化，无法撤销旧操作。"
+    },
+    {
+      "name": "clothing_normal_same_branch",
+      "kind": "clothing",
+      "rejected": false,
+      "undoWrites": 1,
+      "passed": true,
+      "message": "已撤销本次写入。"
+    },
+    {
+      "name": "pose_shared_node_other_branch",
+      "kind": "pose",
+      "rejected": true,
+      "undoWrites": 0,
+      "passed": true,
+      "message": "目标已变化，无法撤销旧操作。"
+    },
+    {
+      "name": "pose_normal_same_branch",
+      "kind": "pose",
+      "rejected": false,
+      "undoWrites": 1,
+      "passed": true,
+      "message": "已撤销本次写入。"
+    },
+    {
+      "name": "background_shared_node_other_branch",
+      "kind": "background",
+      "rejected": true,
+      "undoWrites": 0,
+      "passed": true,
+      "message": "目标已变化，无法撤销旧操作。"
+    },
+    {
+      "name": "background_normal_same_branch",
+      "kind": "background",
+      "rejected": false,
+      "undoWrites": 1,
+      "passed": true,
+      "message": "已撤销本次写入。"
+    },
+    {
+      "name": "artist_shared_node_other_branch",
+      "kind": "artist",
+      "rejected": true,
+      "undoWrites": 0,
+      "passed": true,
+      "message": "目标已变化，无法撤销旧操作。"
+    },
+    {
+      "name": "artist_normal_same_branch",
+      "kind": "artist",
+      "rejected": false,
+      "undoWrites": 1,
+      "passed": true,
+      "message": "已撤销本次写入。"
+    },
+    {
+      "name": "style_quality_shared_node_other_branch",
+      "kind": "style_quality",
+      "rejected": true,
+      "undoWrites": 0,
+      "passed": true,
+      "message": "目标已变化，无法撤销旧操作。"
+    },
+    {
+      "name": "style_quality_normal_same_branch",
+      "kind": "style_quality",
+      "rejected": false,
+      "undoWrites": 1,
+      "passed": true,
+      "message": "已撤销本次写入。"
+    },
+    {
+      "name": "other_branch_excludes_node",
+      "kind": "pose",
+      "rejected": true,
+      "undoWrites": 0,
+      "passed": true,
+      "message": "目标已变化，无法撤销旧操作。"
+    },
+    {
+      "name": "workbench_removed_after_apply",
+      "kind": "pose",
+      "rejected": true,
+      "undoWrites": 0,
+      "passed": true,
+      "message": "目标已变化，无法撤销旧操作。"
+    },
+    {
+      "name": "workbench_added_after_apply",
+      "kind": "pose",
+      "rejected": true,
+      "undoWrites": 0,
+      "passed": true,
+      "message": "目标已变化，无法撤销旧操作。"
+    },
+    {
+      "name": "normal_without_workbench",
+      "kind": "pose",
+      "rejected": false,
+      "undoWrites": 1,
+      "passed": true,
+      "message": "已撤销本次写入。"
+    },
+    {
+      "name": "workflow_replaced",
+      "kind": "pose",
+      "rejected": true,
+      "undoWrites": 0,
+      "passed": true,
+      "message": "目标已变化，无法撤销旧操作。"
+    },
+    {
+      "name": "graph_id_changed",
+      "kind": "pose",
+      "rejected": true,
+      "undoWrites": 0,
+      "passed": true,
+      "message": "目标已变化，无法撤销旧操作。"
+    },
+    {
+      "name": "node_deleted",
+      "kind": "pose",
+      "rejected": true,
+      "undoWrites": 0,
+      "passed": true,
+      "message": "目标已变化，无法撤销旧操作。"
+    },
+    {
+      "name": "widget_replaced",
+      "kind": "pose",
+      "rejected": true,
+      "undoWrites": 0,
+      "passed": true,
+      "message": "目标已变化，无法撤销旧操作。"
+    },
+    {
+      "name": "widget_connected",
+      "kind": "pose",
+      "rejected": true,
+      "undoWrites": 0,
+      "passed": true,
+      "message": "目标已变化，无法撤销旧操作。"
+    },
+    {
+      "name": "node_muted",
+      "kind": "pose",
+      "rejected": true,
+      "undoWrites": 0,
+      "passed": true,
+      "message": "目标已变化，无法撤销旧操作。"
+    }
+  ],
+  "hashes": {
+    "modal": {
+      "path": "ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\modal_focus.js",
+      "sha256": "3df030ab0b832993673d8ed821f174861ce492a4cd99e4319cc4d637bf712b2b"
+    },
+    "target": {
+      "path": "ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\prompt_target.js",
+      "sha256": "72d4a6d0382ab496cd5d8ba5d5914ebc03f897b1560bbf509dbfb367fe9a040f"
+    },
+    "identity": {
+      "path": "ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_prompt_identity.js",
+      "sha256": "558029a353fc598800d683a5bc5ce74d20f1a3b2a7061b63d7b9b6588bd019ed"
+    },
+    "selectors": {
+      "path": "ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_selector_ui.js",
+      "sha256": "80503349e7aca84f25e8a620bcfdb83ef564dfeca869e973a4a03ae88aa80926"
+    }
+  }
+}

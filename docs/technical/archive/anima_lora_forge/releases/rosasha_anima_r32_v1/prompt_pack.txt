@@ -1,0 +1,27 @@
+[IDENTITY]
+rsrs_anima, one 23-year-old adult Lalafell woman, mature adult facial features, very short compact four-head-tall fantasy proportions, oversized head-to-body ratio, short sturdy legs, emerald green eyes, honey-gold fluffy curls, one high side ponytail with one large black ribbon, fully clothed, full body
+
+[CANONICAL OUTFIT]
+opaque crimson travel dress, ivory lace trim, high collar, long sleeves, brown leather belt with one pouch, dark tights, brown ankle boots
+
+[ADVENTURER OUTFIT]
+opaque moss-green adventurer jacket, ivory high-neck blouse, fitted brown shorts over dark leggings, leather gloves, utility belt with one pouch, rugged brown boots
+
+[FORMAL OUTFIT]
+opaque midnight-blue velvet Victorian evening dress, white lace jabot, high collar, long fitted sleeves, layered calf-length skirt, white gloves, dark tights, polished black shoes
+
+[MODERN OUTFIT]
+opaque cream knit cardigan, teal high-neck blouse, dark pleated knee-length skirt, opaque charcoal tights, clean white sneakers, small brown crossbody satchel
+
+[MAGE OUTFIT]
+opaque deep-violet mage robe with gold embroidery, high collar, long wide sleeves, layered ankle-length skirt, leather waist belt with one spellbook pouch, dark stockings, sturdy black boots
+
+[STYLE OPTIONS]
+polished high-detail anime character key visual, clean linework, refined cel shading
+delicate watercolor storybook illustration, textured paper, translucent washes, soft ink contours
+premium stylized 3D fantasy game character render, detailed fabric materials, cinematic softbox lighting
+bold flat cel-shaded fantasy graphic novel illustration, crisp black contour lines, limited color palette
+
+[NEGATIVE]
+nsfw, explicit, sexual content, nude, naked, topless, bottomless, nipples, areola, genitals, cleavage, exposed breasts, underwear, lingerie, bikini, swimsuit, transparent clothes, erotic, suggestive, lewd, child, baby, ordinary human proportions, tall, long legs, thin legs, twin ponytails, extra bow, multiple people, cropped feet, bad anatomy, text, watermark, signature, artist name, worst quality, low quality
+

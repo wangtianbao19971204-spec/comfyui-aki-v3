@@ -1,0 +1,1123 @@
+{
+  "schema_version": 1,
+  "character_id": "alicia_bell",
+  "display_name": "艾莉西亚·贝尔",
+  "trigger_token": "alcbl7yo260817",
+  "visual_spec": "01_visual_spec/visual_spec.json",
+  "active_generation_backend": "gpt_image_builtin_reference_generation",
+  "gpt_image": {
+    "enabled_for_gold_dataset": true,
+    "primary_anchor": "02_master_refs/ordinary_alicia_approved_fullbody_001.png",
+    "source_identity_reference": "02_master_refs/alicia_bell_primary_market_fullbody.png",
+    "form_anchors": {
+      "ordinary": "02_master_refs/ordinary_alicia_approved_fullbody_001.png",
+      "ordinary_fullbody": "02_master_refs/ordinary_alicia_approved_fullbody_001.png",
+      "ordinary_closeup": "runs/20260818_eye_color_pupil_contrast_base/candidates/ordinary_eye_contrast_001_bust.png",
+      "morning_star_fullbody": "02_master_refs/morning_star_base_fullbody_translucent_shawl.png",
+      "morning_star_closeup": "02_master_refs/morning_star_base_closeup_translucent_shawl.png",
+      "morning_star_default_outfit_approved_001": "02_master_refs/morning_star_default_idol_outfit_approved_001.png",
+      "morning_star_default_outfit_approved_002": "02_master_refs/morning_star_default_idol_outfit_approved_002.png"
+    },
+    "batch_root": "gpt_image_batches",
+    "planned_rounds": 20,
+    "planned_candidates": 4000,
+    "target_gold": 200,
+    "require_codex_visual_review": true,
+    "dataset_status": "context_v2_reaudit_R13_R15_before_generation"
+  },
+  "comfyui": {
+    "enabled_for_gold_dataset": false,
+    "status_note": "Use only for local pilot or comparison unless the user explicitly switches from GPT Image to ComfyUI production.",
+    "base_url": "http://127.0.0.1:8188",
+    "root": "../../../ComfyUI",
+    "workflow_template": "../../templates/anima_current_api.json",
+    "http_timeout": 30,
+    "generation_timeout": 1800,
+    "bindings": {
+      "positive": {
+        "node": "107",
+        "input": "positive"
+      },
+      "negative": {
+        "node": "6",
+        "input": "text"
+      },
+      "seed": {
+        "node": "542",
+        "input": "seed"
+      },
+      "width": {
+        "node": "519",
+        "input": "width"
+      },
+      "height": {
+        "node": "519",
+        "input": "height"
+      },
+      "model": {
+        "node": "2",
+        "input": "unet_name"
+      },
+      "lora_anchor": {
+        "node": "384",
+        "input": "text"
+      },
+      "lora_style": {
+        "node": "385",
+        "input": "text"
+      },
+      "lora_character": {
+        "node": "390",
+        "input": "text"
+      },
+      "output": {
+        "node": "13"
+      }
+    },
+    "reference_control": {
+      "model_source_node": "167",
+      "model_output_slot": 0,
+      "switch_node": "510",
+      "lllite_name": "anima-lllite-any-test-like-v2.safetensors",
+      "max_dimension": 1024
+    }
+  },
+  "references": [
+    {
+      "id": "primary_market_fullbody",
+      "path": "02_master_refs/alicia_bell_primary_market_fullbody.png",
+      "role": "主身份参考：脸、发色、红丝带、酒红/象牙/青蓝配色和暖橘金气质；背景与复杂裙摆不作为训练锚点",
+      "use_for_scoring": true
+    },
+    {
+      "id": "morning_star_base_fullbody_translucent_shawl",
+      "path": "02_master_refs/morning_star_base_fullbody_translucent_shawl.png",
+      "role": "晨星主全身底图：低双马尾/侧束、星形发饰、透明前胸到上臂轻纱、红白高腰偶像服、薄透丝袜和红高跟为固定触发设计",
+      "use_for_scoring": true
+    },
+    {
+      "id": "morning_star_base_closeup_translucent_shawl",
+      "path": "02_master_refs/morning_star_base_closeup_translucent_shawl.png",
+      "role": "晨星近景底图：锁定柔和香槟桃色虚拟瞳、星形高光、透明披肩路径、小而平的星形 voice-core 夹点和上身服装语言",
+      "use_for_scoring": true
+    },
+    {
+      "id": "morning_star_default_idol_outfit_approved_001",
+      "path": "02_master_refs/morning_star_default_idol_outfit_approved_001.png",
+      "role": "晨星默认偶像服正向样例：作为 Morning Star default idol outfit 的出发图，固定透明披肩、红白高腰偶像服、薄透丝袜和红高跟",
+      "use_for_scoring": true
+    },
+    {
+      "id": "morning_star_default_idol_outfit_approved_002",
+      "path": "02_master_refs/morning_star_default_idol_outfit_approved_002.png",
+      "role": "晨星默认偶像服正向样例：作为换装前的默认参照，保持核心服装触发词稳定",
+      "use_for_scoring": true
+    }
+  ],
+  "lora_keyword_locks": {
+    "morning_star": "01_visual_spec/morning_star_lora_keyword_lock_20260818.md",
+    "form_outfit_separation_matrix": "01_visual_spec/form_outfit_separation_matrix_20260818.md",
+    "rule": "Morning Star default idol outfit elements are caption/trigger cues and must not vary during scene, pose, style, or view expansion.",
+    "default_outfit_trigger": "Morning Star default idol outfit",
+    "alternate_outfit_trigger": "Morning Star alternate idol outfit",
+    "alternate_outfit_policy": "Alternate Morning Star idol outfits are allowed only in explicitly tagged outfit-variant rounds or prompts. Morning Star hair, eyes, star hairpiece, virtual singer demeanor, and soundwave projection language must remain distinct from ordinary Alicia.",
+    "same_clothing_contrast_gate": "If ordinary Alicia and Morning Star intentionally wear the same clothing, the forms must still separate at first glance by hair structure, eye design, star cue, posture, and virtual-vs-offline presence."
+  },
+  "identity": {
+    "positive_prompt": "alcbl7yo260817, one adult 23-year-old human woman, two related forms with strong first-glance difference and deep same-person identity: offline ordinary Alicia Bell and bolder online Morning Star virtual singer avatar, petite slender adult body, 160 cm, warm approachable sincere expression, soft oval youthful-but-adult face, fair warm luminous skin, bright healthy complexion, ordinary form has natural honey-hazel brown amber eyes with simple normal round pupils, no virtual markings, no glowing pupil pattern, and loose light-brown/champagne everyday hair, Morning Star has soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, clearly different from ordinary eyes but warm and kind rather than aggressive, and distinct peach-gold or rose-gold low twin-tail / side-bundle hair, red coral or gold fabric ribbon-star accessory memory point, ordinary form uses a covered daily blouse/cardigan silhouette while Morning Star uses a light off-shoulder idol-stage silhouette, form-specific wine-red ivory outfit language with only tiny teal accents if needed, clean readable compact A-line or bell skirt silhouette, refined corset-like opaque high waist and intentional pleated skirt for Morning Star, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay, very sheer ivory stockings for Morning Star with leg skin tone visible through the fabric and natural subtle gold soundwave embroidery, restrained non-flying back hem for Morning Star, elegant high-heeled stage shoes for Morning Star, small flat integrated voice-core brooch, concise character design with few strong identity points, polished line rhythm, adult online performer and high-magic city girl demeanor, fully clothed with opaque bodice and opaque skirt",
+    "negative_prompt": "child, teen, schoolgirl, underage, little girl, baby face, school uniform, non-human, elf ears, animal ears, horns, wings, tail, black hair, blue hair, pink hair, red hair, dark hair, blue eyes, green eyes, red eyes, purple eyes, overly dark skin, muddy skin, harsh shadow over face, low-key concert lighting, busy background, dense holographic UI, circular magic floor dominating frame, cluttered market background, complex skirt panels, messy dangling chains, too many pouches, unreadable outfit layers, accessory pile-up, too many stars, too many trims, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, heavy green upper-body fabric, swimsuit-like off-shoulder, sexualized bodice, exposed chest emphasis, transparent main bodice, see-through chest coverage, transparent skirt, opaque heavy stockings, pasted-on metallic stocking stripes, ordinary Alicia wearing sheer stockings, ordinary Alicia wearing Morning Star off-shoulder idol bodice, ordinary Alicia in high-heeled stage shoes, ordinary Alicia with star-ring pupils, harsh crimson Morning Star eyes, blood-red inner iris, target-like eye rings, stacked concentric pupil rings, hypnotic spiral eyes, demonic or predatory stare, ordinary hair identical to Morning Star low twin tails, Morning Star hair identical to ordinary loose daily hair, ordinary and Morning Star eyes identical when virtual avatar variation is requested, two forms looking like palette swaps, exploded hair, wind-lifted sideways hair, floating hair trails, too many flyaway strands, scattered hair tips, frayed hair ends, hair covering the whole canvas, giant rear train, banner-like back panel, long flying cape tail, wind-swept back hem, flat boots on Morning Star, bulky boots, ugly shoes, utilitarian travel shoes, glass shard decorations, prismatic crystal chunks, stained-glass color blocks, oversized chest gem, giant jewel pendant, heavy armor, maid dress, swimsuit, wedding dress, generic modern idol uniform, modern school uniform, nude, lingerie, fetish, exposed chest, physical lute, guitar, violin, band instrument, handheld microphone, microphone stand, extra person, multiple people, duplicated character, character sheet, split panel, readable text, watermark, logo, signature"
+  },
+  "forms": {
+    "ordinary_alicia": {
+      "display_name": "艾莉西亚·贝尔",
+      "role": "线下普通形象，高魔城市里的普通少女、旅行者和魔网用户",
+      "prompt": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument",
+      "base_background": "plain warm off-white or very light gray studio background",
+      "base_lighting": "bright soft studio lighting, fair warm luminous skin"
+    },
+    "morning_star": {
+      "display_name": "晨星",
+      "role": "线上魔网投影歌姬形象，电子 VTB 式虚拟艺人",
+      "default_outfit_trigger": "Morning Star default idol outfit",
+      "alternate_outfit_trigger": "Morning Star alternate idol outfit",
+      "same_clothing_contrast_rule": "Even in a shared-clothing test, Morning Star must keep peach-gold low twin tails, wine-red ribbons, small gold star hairpiece, soft champagne-peach virtual idol eyes with tiny star catchlight, and brighter online singer presence; ordinary Alicia keeps loose everyday hair and natural round pupils.",
+      "prompt": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards",
+      "base_background": "plain pale gold or warm off-white studio background with minimal projection accents",
+      "base_lighting": "bright warm key light, fair warm luminous skin, soft orange-gold rim light"
+    }
+  },
+  "generation": {
+    "unet_name": "Anima\\animayume_v10.safetensors",
+    "base_seed": 260817,
+    "width": 832,
+    "height": 1216,
+    "default_style": "clean_anime_reference",
+    "default_reference_id": "primary_market_fullbody",
+    "reference_strength": 0.55,
+    "quality_prompt": "masterpiece, best quality, high resolution, clean anatomy, consistent character design, clear single character, readable hands, readable outfit construction",
+    "negative_prompt": "worst quality, low quality, blurry, jpeg artifacts, bad anatomy, bad hands, extra fingers, missing fingers, extra arms, extra legs, fused limbs, cropped head, cropped feet, overly dark skin, muddy skin, harsh shadow, dim concert lighting, busy background, dense holographic interface, broken projection panels, readable UI text, circular magic floor dominating frame, cluttered market, complex messy skirt panels, dangling chains, too many pouches, accessory pile-up, too many stars, too many trims, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, heavy green upper-body fabric, swimsuit-like off-shoulder, sexualized bodice, exposed chest emphasis, transparent main bodice, see-through chest coverage, transparent skirt, opaque heavy stockings, pasted-on metallic stocking stripes, ordinary Alicia wearing sheer stockings, ordinary Alicia wearing Morning Star off-shoulder idol bodice, ordinary Alicia in high-heeled stage shoes, ordinary Alicia with star-ring pupils, harsh crimson Morning Star eyes, blood-red inner iris, target-like eye rings, stacked concentric pupil rings, hypnotic spiral eyes, demonic or predatory stare, ordinary hair identical to Morning Star low twin tails, Morning Star hair identical to ordinary loose daily hair, ordinary and Morning Star eyes identical when virtual avatar variation is requested, two forms looking like palette swaps, exploded hair, wind-lifted sideways hair, floating hair trails, too many flyaway strands, scattered hair tips, frayed hair ends, hair covering the whole canvas, flat boots on Morning Star, bulky boots, ugly shoes, utilitarian travel shoes, glass shard decorations, prismatic crystal chunks, stained-glass color blocks, oversized chest gem, giant jewel pendant, excessive glow hiding clothes, nsfw, nudity",
+    "anchor_loras": "<lora:anima-灯光概念:1.00><lora:anima-masterpiece-美学品质修正器 - 杰作:1.00><lora:anima_footRepair足袜修复:1.00>",
+    "character_loras": "",
+    "styles": {
+      "clean_anime_reference": {
+        "tier": "anchor",
+        "prompt": "clean polished anime character reference illustration, neutral rendering, accurate construction, identity-preserving",
+        "loras": "",
+        "reference_strength": 0.58,
+        "width": 832,
+        "height": 1216
+      },
+      "cinematic_anime": {
+        "tier": "style_stress",
+        "prompt": "cinematic anime illustration, crisp linework, luminous warm orange-gold light, identity-preserving",
+        "negative_prompt": "photorealistic live action, different face, different hair",
+        "loras": "<lora:anima\\style\\anima-@BlueArchStyle.safetensors:0.45>",
+        "reference_strength": 0.42,
+        "width": 896,
+        "height": 1344
+      },
+      "storybook_gouache": {
+        "tier": "style_stress",
+        "prompt": "soft gouache fantasy storybook illustration, visible brush texture, warm village palette, identity-preserving",
+        "negative_prompt": "abstract face, muddy eyes, overpainted hair structure",
+        "loras": "<lora:anima\\style\\anima-base-1-painterly-v2.safetensors:0.45>",
+        "reference_strength": 0.4,
+        "width": 896,
+        "height": 1344
+      },
+      "watercolor_ink": {
+        "tier": "style_stress",
+        "prompt": "delicate watercolor and ink fantasy illustration, pale paper texture, clear readable eyes, identity-preserving",
+        "negative_prompt": "featureless face, monochrome eyes, washed-out hair identity",
+        "loras": "",
+        "reference_strength": 0.38,
+        "width": 896,
+        "height": 1344
+      },
+      "rpg_concept": {
+        "tier": "style_stress",
+        "prompt": "fantasy RPG character concept art, readable costume layers and equipment, identity-preserving",
+        "negative_prompt": "character sheet, multiple poses, labels, text",
+        "loras": "",
+        "reference_strength": 0.42,
+        "width": 896,
+        "height": 1344
+      },
+      "graphic_novel_ink": {
+        "tier": "style_stress",
+        "prompt": "clean graphic novel anime key art, crisp ink lines, controlled flat color accents, readable eyes and outfit, identity-preserving",
+        "negative_prompt": "noir realism, gritty western comic face, harsh black eye sockets, lost hair color, unreadable costume",
+        "loras": "",
+        "reference_strength": 0.4,
+        "width": 896,
+        "height": 1344
+      },
+      "stylized_3d_anime": {
+        "tier": "style_stress",
+        "prompt": "polished stylized 3D anime render, soft cel-shaded materials, clean silhouette, readable eyes and costume, identity-preserving",
+        "negative_prompt": "photorealistic skin pores, doll face, plastic hair clumps, different face, heavy bloom hiding costume",
+        "loras": "",
+        "reference_strength": 0.4,
+        "width": 896,
+        "height": 1344
+      },
+      "pastel_vintage_print": {
+        "tier": "style_stress",
+        "prompt": "pastel vintage anime print illustration, soft paper grain, clean edges, readable eyes and outfit, identity-preserving",
+        "negative_prompt": "washed-out face, sepia-only palette, faded eye color, muddy hair, lost costume structure",
+        "loras": "",
+        "reference_strength": 0.38,
+        "width": 896,
+        "height": 1344
+      }
+    },
+    "batches": [
+      {
+        "id": "R01_ordinary_core_identity",
+        "round_id": "R01",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single centered full body and half-body identity reference, head and both feet visible when full body",
+        "view": "front view and gentle front three-quarter view, eye level",
+        "pose": "simple relaxed standing pose, hands visible and not covering face or torso",
+        "expression": "warm sincere base expression with small variations",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, locked ordinary base design, natural offline daily impression, clean blouse-cardigan and skirt silhouette",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "plain warm off-white or pale gold studio background",
+        "lighting": "bright soft studio lighting, fair warm luminous skin, no dramatic shadows",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R01_morning_star_core_identity",
+        "round_id": "R01",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single centered full body and half-body identity reference, head and both feet visible when full body",
+        "view": "front view and gentle front three-quarter view, eye level",
+        "pose": "simple relaxed standing pose, hands visible and not covering face or torso",
+        "expression": "warm sincere base expression with small variations",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, locked Morning Star base design, first-glance idol avatar transformation, compact stage silhouette",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "plain warm off-white or pale gold studio background",
+        "lighting": "bright soft studio lighting, fair warm luminous skin, no dramatic shadows",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R02_ordinary_view_coverage",
+        "round_id": "R02",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single full body reference, complete silhouette and back hem visible",
+        "view": "balanced front three-quarter, side profile, rear three-quarter, and clean rear views",
+        "pose": "quiet standing turntable poses, arms relaxed, hands readable",
+        "expression": "neutral warm expression when face is visible",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary hair half-up or side-braid structure and low boots readable from side and back",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "plain neutral studio background",
+        "lighting": "even reference lighting with soft edge light",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R02_morning_star_view_coverage",
+        "round_id": "R02",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single full body reference, complete silhouette and back hem visible",
+        "view": "balanced front three-quarter, side profile, rear three-quarter, and clean rear views",
+        "pose": "quiet standing turntable poses, arms relaxed, hands readable",
+        "expression": "neutral warm expression when face is visible",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star low twin-tail / side-bundle hair ends, compact rear hem, high heels, and stocking transparency readable from side and back",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "plain neutral studio background",
+        "lighting": "even reference lighting with soft edge light",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R03_ordinary_expression_face",
+        "round_id": "R03",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single bust portrait and waist-up portrait, face unobstructed",
+        "view": "front and gentle three-quarter face views",
+        "pose": "upright portrait posture, shoulders relaxed",
+        "expression": "caring smile, mild surprise, focused listening, shy joy, relieved confidence",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary honey-hazel brown amber eyes with simple round pupils stay clear in every expression",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "plain light portrait background with minimal warm accent",
+        "lighting": "bright soft portrait lighting, clean catchlights, no eye shadow obscuring iris",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R03_morning_star_expression_face",
+        "round_id": "R03",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single bust portrait and waist-up portrait, face unobstructed",
+        "view": "front and gentle three-quarter face views",
+        "pose": "upright portrait posture, shoulders relaxed",
+        "expression": "caring smile, mild surprise, focused listening, shy joy, relieved confidence",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star peach-gold virtual idol eyes stay soft, kind, and clearly different from ordinary eyes",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "plain light portrait background with minimal warm accent",
+        "lighting": "bright soft portrait lighting, clean catchlights, no eye shadow obscuring iris",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R04_ordinary_detail_parts",
+        "round_id": "R04",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single three-quarter body or full body detail reference, hands, shoes, and hem visible",
+        "view": "front three-quarter and low three-quarter views without distortion",
+        "pose": "small hand gesture, step pose, or skirt edge gesture with readable fingers",
+        "expression": "calm attentive expression",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary low ankle boots, natural hair tips, simple ribbon and satchel details, no sheer legwear",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "plain studio background with floor contact shadow",
+        "lighting": "clear product-reference lighting on shoes, stockings, hands, hair, and ribbons",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R04_morning_star_detail_parts",
+        "round_id": "R04",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single three-quarter body or full body detail reference, hands, shoes, and hem visible",
+        "view": "front three-quarter and low three-quarter views without distortion",
+        "pose": "small hand gesture, step pose, or skirt edge gesture with readable fingers",
+        "expression": "calm attentive expression",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star elegant high heels, very sheer ivory stockings with natural gold soundwave embroidery, smooth close-to-body hair ends",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "plain studio background with floor contact shadow",
+        "lighting": "clear product-reference lighting on shoes, stockings, hands, hair, and ribbons",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R05_ordinary_outfit_variants",
+        "round_id": "R05",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single full body outfit reference, clothing construction readable",
+        "view": "front and front three-quarter view",
+        "pose": "relaxed standing, gentle walking, or hand-over-heart pose",
+        "expression": "friendly confident expression",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary daily variants: blouse, light cardigan, simple skirt, small shawl, small satchel, restrained trim",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "plain studio or simple dressing-room backdrop",
+        "lighting": "bright fashion-reference lighting with visible fabric texture",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R05_morning_star_canonical_costume_coverage",
+        "round_id": "R05",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single full body outfit reference, clothing construction readable",
+        "view": "front and front three-quarter view",
+        "pose": "relaxed standing, gentle walking, or hand-over-heart pose",
+        "expression": "friendly confident expression",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star canonical costume coverage: off-shoulder opaque bodice, compact pleated bell skirt, transparent chiffon accent only over opaque clothing",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "plain studio or simple dressing-room backdrop",
+        "lighting": "bright fashion-reference lighting with visible fabric texture",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R06_ordinary_accessory_ablation",
+        "round_id": "R06",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single full body or waist-up simplified character reference",
+        "view": "front or three-quarter view",
+        "pose": "quiet natural pose with readable silhouette",
+        "expression": "ordinary calm warmth or Morning Star gentle idol smile",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary simplified version with cape removed or satchel removed, identity preserved by face, hair, eyes, palette",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "plain neutral studio background",
+        "lighting": "flat clean reference lighting",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R06_morning_star_accessory_ablation",
+        "round_id": "R06",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single full body or waist-up simplified character reference",
+        "view": "front or three-quarter view",
+        "pose": "quiet natural pose with readable silhouette",
+        "expression": "ordinary calm warmth or Morning Star gentle idol smile",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star core-cue stability check with fewer non-core background effects, identity preserved by hair, eyes, high heels, sheer stockings",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "plain neutral studio background",
+        "lighting": "flat clean reference lighting",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R07_ordinary_magic_city_broadcast",
+        "round_id": "R07",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single full body or thigh-up environment portrait, character remains dominant",
+        "view": "front three-quarter view",
+        "pose": "walking through high-magic city or greeting a virtual audience with one hand",
+        "expression": "alert hopeful expression or bright performer smile",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary high-magic city user, no stage costume, no virtual pupils, small projection device only",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "low-clutter high-magic city street or abstract virtual broadcast stage, no readable text",
+        "lighting": "clear daylight or warm projection light that keeps skin and outfit bright",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R07_morning_star_magic_city_broadcast",
+        "round_id": "R07",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single full body or thigh-up environment portrait, character remains dominant",
+        "view": "front three-quarter view",
+        "pose": "walking through high-magic city or greeting a virtual audience with one hand",
+        "expression": "alert hopeful expression or bright performer smile",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star virtual broadcast performer with sparse orange-gold soundwave glyphs, no physical instrument",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "low-clutter high-magic city street or abstract virtual broadcast stage, no readable text",
+        "lighting": "clear daylight or warm projection light that keeps skin and outfit bright",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R08_ordinary_travel_relaxed",
+        "round_id": "R08",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single full body or three-quarter body pose reference, limbs visible",
+        "view": "front three-quarter and side three-quarter views",
+        "pose": "walking, sitting on a low bench, adjusting satchel, turning gently, relaxed hand pose",
+        "expression": "soft casual smile or thoughtful listening",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary travel-life posing with low boots and covered daily outfit",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "simple road, room, bench, or projection lounge with low detail",
+        "lighting": "clear natural light with warm highlights",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R08_morning_star_travel_relaxed",
+        "round_id": "R08",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single full body or three-quarter body pose reference, limbs visible",
+        "view": "front three-quarter and side three-quarter views",
+        "pose": "walking, sitting on a low bench, adjusting satchel, turning gently, relaxed hand pose",
+        "expression": "soft casual smile or thoughtful listening",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star relaxed off-stage avatar posing with high heels and stockings still readable",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "simple road, room, bench, or projection lounge with low detail",
+        "lighting": "clear natural light with warm highlights",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R09_ordinary_formal_seasonal",
+        "round_id": "R09",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single full body seasonal outfit reference, silhouette readable",
+        "view": "front and three-quarter view",
+        "pose": "standing, small bow, or holding coat edge, hands visible",
+        "expression": "gentle polished expression",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary modest seasonal layers: light coat, scarf, shawl, rain cape, or formal blouse while keeping daily identity",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "simple seasonal studio backdrop, rain-lit window, or lantern hall with low clutter",
+        "lighting": "soft seasonal light, skin remains fair and luminous",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R09_morning_star_formal_seasonal",
+        "round_id": "R09",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single full body seasonal outfit reference, silhouette readable",
+        "view": "front and three-quarter view",
+        "pose": "standing, small bow, or holding coat edge, hands visible",
+        "expression": "gentle polished expression",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star formal stage-weather variants: short bolero or translucent chiffon accent without hiding off-shoulder idol identity",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "simple seasonal studio backdrop, rain-lit window, or lantern hall with low clutter",
+        "lighting": "soft seasonal light, skin remains fair and luminous",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R10_ordinary_support_streamer",
+        "round_id": "R10",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single waist-up or full body action reference, hands visible",
+        "view": "front three-quarter view",
+        "pose": "support-casting through small network glyphs, checking chat crystal, or guiding soft soundwave light",
+        "expression": "caring focused expression",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary network user and support caster, no idol costume, small crystal terminal only",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "simple support room, relay kiosk, or abstract stream space, no readable UI",
+        "lighting": "warm orange-gold support glow, face and clothing remain bright",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R10_morning_star_support_streamer",
+        "round_id": "R10",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single waist-up or full body action reference, hands visible",
+        "view": "front three-quarter view",
+        "pose": "support-casting through small network glyphs, checking chat crystal, or guiding soft soundwave light",
+        "expression": "caring focused expression",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star virtual singer support stream, gentle performance aura, sparse panels, no microphone",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "simple support room, relay kiosk, or abstract stream space, no readable UI",
+        "lighting": "warm orange-gold support glow, face and clothing remain bright",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R11_ordinary_clean_style_stress",
+        "round_id": "R11",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single character reference, alternating bust, waist-up, and full body",
+        "view": "front, three-quarter, profile, and rear-three-quarter views",
+        "pose": "simple clean readable reference poses",
+        "expression": "controlled warm expressions",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary identity stress in clean anime reference rendering",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "plain studio background",
+        "lighting": "neutral clean reference light",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R11_morning_star_clean_style_stress",
+        "round_id": "R11",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single character reference, alternating bust, waist-up, and full body",
+        "view": "front, three-quarter, profile, and rear-three-quarter views",
+        "pose": "simple clean readable reference poses",
+        "expression": "controlled warm expressions",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star identity stress in clean anime reference rendering",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "plain studio background",
+        "lighting": "neutral clean reference light",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R12_ordinary_cinematic_stress",
+        "round_id": "R12",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "cinematic_anime"
+        ],
+        "framing": "single character cinematic portrait, full body or thigh-up, character dominant",
+        "view": "front three-quarter view",
+        "pose": "subtle movement pose with readable silhouette",
+        "expression": "emotionally warm but controlled expression",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary cinematic high-magic city moment, daily identity remains obvious",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "low-clutter city light or virtual stage glow, no readable UI",
+        "lighting": "cinematic warm orange-gold light, no low-key darkness over face",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R12_morning_star_cinematic_stress",
+        "round_id": "R12",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "cinematic_anime"
+        ],
+        "framing": "single character cinematic portrait, full body or thigh-up, character dominant",
+        "view": "front three-quarter view",
+        "pose": "subtle movement pose with readable silhouette",
+        "expression": "emotionally warm but controlled expression",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star cinematic virtual stage moment, idol identity and soft virtual eyes remain obvious",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "low-clutter city light or virtual stage glow, no readable UI",
+        "lighting": "cinematic warm orange-gold light, no low-key darkness over face",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R13_ordinary_gouache_stress",
+        "round_id": "R13",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "storybook_gouache"
+        ],
+        "framing": "single character storybook portrait, full body or bust",
+        "view": "front and gentle three-quarter view",
+        "pose": "quiet storybook pose with readable hands",
+        "expression": "soft sincere expression",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary fantasy daily-life storybook rendering, honey-hazel eyes and ordinary hair preserved",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "simple warm village, room, or abstract pale gold backdrop",
+        "lighting": "soft painted warm light, face stays readable",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R13_morning_star_gouache_stress",
+        "round_id": "R13",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "storybook_gouache"
+        ],
+        "framing": "single character storybook portrait, full body or bust",
+        "view": "front and gentle three-quarter view",
+        "pose": "quiet storybook pose with readable hands",
+        "expression": "soft sincere expression",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star storybook virtual singer rendering, peach-gold eyes, low twin-tail / side-bundle hair, high heels, sheer stockings preserved",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "simple warm village, room, or abstract pale gold backdrop",
+        "lighting": "soft painted warm light, face stays readable",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R14_ordinary_watercolor_stress",
+        "round_id": "R14",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "watercolor_ink"
+        ],
+        "framing": "single character watercolor portrait, full body or waist-up",
+        "view": "front and three-quarter view",
+        "pose": "delicate calm pose, hands visible",
+        "expression": "gentle clear-eyed expression",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary watercolor identity stress, natural hair and amber ordinary eyes preserved",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "pale paper texture with minimal background marks",
+        "lighting": "light transparent watercolor wash, no muddy shadows",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R14_morning_star_watercolor_stress",
+        "round_id": "R14",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "watercolor_ink"
+        ],
+        "framing": "single character watercolor portrait, full body or waist-up",
+        "view": "front and three-quarter view",
+        "pose": "delicate calm pose, hands visible",
+        "expression": "gentle clear-eyed expression",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star watercolor identity stress, soft virtual peach-gold eyes and idol form preserved",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "pale paper texture with minimal background marks",
+        "lighting": "light transparent watercolor wash, no muddy shadows",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R15_ordinary_rpg_concept_stress",
+        "round_id": "R15",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "rpg_concept"
+        ],
+        "framing": "single full body RPG concept portrait, no sheet labels, no multiple poses",
+        "view": "front and three-quarter view",
+        "pose": "standing concept-art pose, hands and footwear readable",
+        "expression": "confident warm expression",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary RPG city-traveler concept, practical daily outfit but no armor",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "simple fantasy concept backdrop with low detail",
+        "lighting": "clear concept-art light, costume construction readable",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R15_morning_star_rpg_concept_stress",
+        "round_id": "R15",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "rpg_concept"
+        ],
+        "framing": "single full body RPG concept portrait, no sheet labels, no multiple poses",
+        "view": "front and three-quarter view",
+        "pose": "standing concept-art pose, hands and footwear readable",
+        "expression": "confident warm expression",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star RPG virtual idol concept, stage costume remains concise, no armor or weapon",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "simple fantasy concept backdrop with low detail",
+        "lighting": "clear concept-art light, costume construction readable",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R16_ordinary_graphic_novel_stress",
+        "round_id": "R16",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "graphic_novel_ink"
+        ],
+        "framing": "single character graphic novel portrait, full body or bust",
+        "view": "front, three-quarter, and profile views",
+        "pose": "clean bold pose with readable silhouette",
+        "expression": "warm determined expression, not aggressive",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary identity stress with flat color accents and clear honey-hazel eyes",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "simple flat-color stage or city shape, no text",
+        "lighting": "controlled inked light, eyes not blacked out",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R16_morning_star_graphic_novel_stress",
+        "round_id": "R16",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "graphic_novel_ink"
+        ],
+        "framing": "single character graphic novel portrait, full body or bust",
+        "view": "front, three-quarter, and profile views",
+        "pose": "clean bold pose with readable silhouette",
+        "expression": "warm determined expression, not aggressive",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star identity stress with peach-gold virtual eyes, idol costume, high heels, and sheer stockings readable",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "simple flat-color stage or city shape, no text",
+        "lighting": "controlled inked light, eyes not blacked out",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R17_ordinary_stylized_3d_stress",
+        "round_id": "R17",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "stylized_3d_anime"
+        ],
+        "framing": "single stylized 3D anime character render, full body and bust mix",
+        "view": "front and three-quarter view",
+        "pose": "subtle idol or daily pose, hands readable, feet planted",
+        "expression": "friendly clear-eyed expression",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary stylized 3D stress, daily outfit and natural hair remain soft and non-plastic",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "simple studio render background",
+        "lighting": "soft cel-shaded studio light, no excessive bloom",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R17_morning_star_stylized_3d_stress",
+        "round_id": "R17",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "stylized_3d_anime"
+        ],
+        "framing": "single stylized 3D anime character render, full body and bust mix",
+        "view": "front and three-quarter view",
+        "pose": "subtle idol or daily pose, hands readable, feet planted",
+        "expression": "friendly clear-eyed expression",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star stylized 3D stress, compact idol silhouette, high heels, sheer stockings, soft virtual eyes preserved",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "simple studio render background",
+        "lighting": "soft cel-shaded studio light, no excessive bloom",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R18_ordinary_pastel_print_stress",
+        "round_id": "R18",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "pastel_vintage_print"
+        ],
+        "framing": "single pastel print character portrait, full body or bust",
+        "view": "front and gentle three-quarter view",
+        "pose": "soft poster-like pose, hands visible",
+        "expression": "gentle nostalgic smile",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary pastel print stress, honey-hazel eyes and daily hair remain clear",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "soft pale print backdrop with minimal motifs",
+        "lighting": "bright pastel light, no sepia wash over identity colors",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R18_morning_star_pastel_print_stress",
+        "round_id": "R18",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "pastel_vintage_print"
+        ],
+        "framing": "single pastel print character portrait, full body or bust",
+        "view": "front and gentle three-quarter view",
+        "pose": "soft poster-like pose, hands visible",
+        "expression": "gentle nostalgic smile",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star pastel print stress, peach-gold virtual eyes and idol costume remain clearly different",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "soft pale print backdrop with minimal motifs",
+        "lighting": "bright pastel light, no sepia wash over identity colors",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R19_ordinary_repair_weak_coverage",
+        "round_id": "R19",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single corrected character reference, full body, bust, and detail mix",
+        "view": "views that repair weak coverage: rear-three-quarter, side, low shoe detail, clear bust",
+        "pose": "simple correction poses, hands and feet visible, no extreme motion",
+        "expression": "warm non-aggressive expression",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, repair ordinary failures: no idol clothing, no sheer stockings, normal amber eyes, low boots, tidy hair ends",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "plain studio background, no clutter",
+        "lighting": "bright corrective lighting, face and outfit fully readable",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R19_morning_star_repair_weak_coverage",
+        "round_id": "R19",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single corrected character reference, full body, bust, and detail mix",
+        "view": "views that repair weak coverage: rear-three-quarter, side, low shoe detail, clear bust",
+        "pose": "simple correction poses, hands and feet visible, no extreme motion",
+        "expression": "warm non-aggressive expression",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, repair Morning Star failures: no harsh red eyes, no glass shards, no chest gem emphasis, high heels, very sheer natural stockings",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "plain studio background, no clutter",
+        "lighting": "bright corrective lighting, face and outfit fully readable",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      },
+      {
+        "id": "R20_ordinary_final_challenge",
+        "round_id": "R20",
+        "form": "ordinary_alicia",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single character mixed challenge portrait, full body, waist-up, bust, and rare views",
+        "view": "front, three-quarter, profile, rear-three-quarter, seated side view",
+        "pose": "mixed safe poses: walking, sitting, turning, small performance gesture, hands readable",
+        "expression": "wide but controlled expression range, warm identity preserved",
+        "outfit": "ordinary Alicia Bell form, clearly offline and first-glance different from Morning Star, natural honey-hazel brown amber eyes with simple normal round pupils, no star pupils, no soundwave pupil marks, no glowing virtual eye pattern, loose light-brown/champagne everyday hair in a natural half-up or side-braid accent, covered ivory blouse or light cardigan, simple wine-red A-line skirt, teal short shawl or small collar cape, brown low ankle boots, one small belt pouch or satchel, minimal gold trim, no stage effects, no sheer stockings, no high heels, no off-shoulder idol bodice, no physical instrument, ordinary final challenge across scenes and poses while staying first-glance daily Alicia",
+        "equipment": "no physical instrument, at most a small crystal terminal or subtle high-magic interface",
+        "background": "controlled low-clutter studio, city, road, support room, or virtual stage",
+        "lighting": "clear bright light appropriate to scene, no identity-obscuring shadows",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "Morning Star form, stage idol costume, off-shoulder bodice, high heels, sheer stockings, peach-gold virtual eyes, star pupils, soundwave pupils, rose-gold low twin tails, dense stage effects, physical instrument"
+      },
+      {
+        "id": "R20_morning_star_final_challenge",
+        "round_id": "R20",
+        "form": "morning_star",
+        "campaign_run_id": "20260818_20x200_campaign",
+        "count": 100,
+        "styles": [
+          "clean_anime_reference"
+        ],
+        "framing": "single character mixed challenge portrait, full body, waist-up, bust, and rare views",
+        "view": "front, three-quarter, profile, rear-three-quarter, seated side view",
+        "pose": "mixed safe poses: walking, sitting, turning, small performance gesture, hands readable",
+        "expression": "wide but controlled expression range, warm identity preserved",
+        "outfit": "Morning Star form, dramatically transformed but concise virtual singer avatar, distinct from ordinary Alicia: peach-gold or soft rose-gold hair gathered into low ribbon-bound side locks or low twin tails with smooth curled or blunt ends hanging close to the body, soft champagne-gold to peach-gold virtual idol eyes with a gentle small star catchlight or subtle tiny star aperture and at most one faint soundwave crescent highlight, warm and kind rather than aggressive, larger fabric star ribbon and small metal star hairpiece, bold wine-red ivory off-shoulder virtual idol dress with coral-gold and amber light accents, refined corset-like opaque high waist bodice, clean compact intentional pleated bell idol skirt with wine-red underskirt, required short translucent ivory gauze shoulder shawl crossing the front chest and upper arms as decorative overlay over opaque clothing, no green sleeve cuffs, no teal arm sleeves, no shoulder-covering green capelet, tiny teal trim optional only, restrained non-flying back hem, small wrist cuffs or bracelets only, very sheer ivory stockings with skin tone visible through the fabric and natural subtle gold soundwave embroidery, elegant high-heeled stage shoes or high-heeled ankle boots, small flat integrated voice-core brooch at collar, subtle ear monitor, one or two sparse orange-gold soundwave glyphs, polished line rhythm, no physical instrument, no glass shards, Morning Star final challenge across scenes and poses while staying first-glance virtual idol avatar",
+        "equipment": "no physical instrument, one or two sparse orange-gold soundwave glyphs or a small translucent projection panel",
+        "background": "controlled low-clutter studio, city, road, support room, or virtual stage",
+        "lighting": "clear bright light appropriate to scene, no identity-obscuring shadows",
+        "extra_prompt": "campaign rule: first-glance contrast between ordinary Alicia and Morning Star must be strong, but deep face identity remains the same",
+        "negative_prompt": "ordinary daily blouse-cardigan outfit, ordinary low boots, ordinary amber round pupils, identical ordinary loose daily hair, green sleeve cuffs, teal arm sleeves, shoulder-covering green capelet, harsh red eyes, aggressive multi-ring eyes, glass shards, oversized chest gem, flying rear train"
+      }
+    ]
+  },
+  "selection": {
+    "target_gold": 200,
+    "gold_threshold": 82,
+    "duplicate_hash_distance": 6,
+    "promotion_dir": "final_training_200",
+    "require_manual_audit": true,
+    "max_per_style": {
+      "clean_anime_reference": 130,
+      "cinematic_anime": 10,
+      "storybook_gouache": 10,
+      "watercolor_ink": 10,
+      "rpg_concept": 10,
+      "graphic_novel_ink": 10,
+      "stylized_3d_anime": 10,
+      "pastel_vintage_print": 10
+    },
+    "min_per_batch": {
+      "R01_ordinary_core_identity": 5,
+      "R01_morning_star_core_identity": 5,
+      "R02_ordinary_view_coverage": 5,
+      "R02_morning_star_view_coverage": 5,
+      "R03_ordinary_expression_face": 5,
+      "R03_morning_star_expression_face": 5,
+      "R04_ordinary_detail_parts": 5,
+      "R04_morning_star_detail_parts": 5,
+      "R05_ordinary_outfit_variants": 5,
+      "R05_morning_star_canonical_costume_coverage": 5,
+      "R06_ordinary_accessory_ablation": 5,
+      "R06_morning_star_accessory_ablation": 5,
+      "R07_ordinary_magic_city_broadcast": 5,
+      "R07_morning_star_magic_city_broadcast": 5,
+      "R08_ordinary_travel_relaxed": 5,
+      "R08_morning_star_travel_relaxed": 5,
+      "R09_ordinary_formal_seasonal": 5,
+      "R09_morning_star_formal_seasonal": 5,
+      "R10_ordinary_support_streamer": 5,
+      "R10_morning_star_support_streamer": 5,
+      "R11_ordinary_clean_style_stress": 5,
+      "R11_morning_star_clean_style_stress": 5,
+      "R12_ordinary_cinematic_stress": 5,
+      "R12_morning_star_cinematic_stress": 5,
+      "R13_ordinary_gouache_stress": 5,
+      "R13_morning_star_gouache_stress": 5,
+      "R14_ordinary_watercolor_stress": 5,
+      "R14_morning_star_watercolor_stress": 5,
+      "R15_ordinary_rpg_concept_stress": 5,
+      "R15_morning_star_rpg_concept_stress": 5,
+      "R16_ordinary_graphic_novel_stress": 5,
+      "R16_morning_star_graphic_novel_stress": 5,
+      "R17_ordinary_stylized_3d_stress": 5,
+      "R17_morning_star_stylized_3d_stress": 5,
+      "R18_ordinary_pastel_print_stress": 5,
+      "R18_morning_star_pastel_print_stress": 5,
+      "R19_ordinary_repair_weak_coverage": 5,
+      "R19_morning_star_repair_weak_coverage": 5,
+      "R20_ordinary_final_challenge": 5,
+      "R20_morning_star_final_challenge": 5
+    },
+    "llm": {
+      "enabled": true,
+      "provider_config": "../../../ComfyUI/custom_nodes/TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters/providers.json",
+      "provider": "qiny",
+      "model": "gemini-3.5-flash-low",
+      "temperature": 0.1,
+      "max_tokens": 1800,
+      "timeout_seconds": 180,
+      "max_workers": 3,
+      "retry_attempts": 3,
+      "max_image_dimension": 1400,
+      "image_detail": "high"
+    },
+    "campaign_constraints": {
+      "run_id": "20260818_20x200_campaign",
+      "production_rounds": 20,
+      "candidates_per_round": 200,
+      "ordinary_candidates_per_round": 100,
+      "morning_star_candidates_per_round": 100,
+      "provisional_selected_per_round": 50,
+      "ordinary_provisional_selected_per_round": 25,
+      "morning_star_provisional_selected_per_round": 25,
+      "final_gold_target": 200,
+      "final_ordinary_target": 100,
+      "final_morning_star_target": 100,
+      "final_selected_per_batch_floor": 5
+    }
+  }
+}

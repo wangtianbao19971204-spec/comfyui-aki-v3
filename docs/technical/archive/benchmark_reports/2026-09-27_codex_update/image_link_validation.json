@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "data_sha256": "68eaa214ec65ba477ffa38d0558de39ec43139bae5a2a65fcb35131d93074fe6",
+  "db_sha256": "341d88e9538ee432750a4617ebccb0aebf4ff671c933104c5fbb114a0dc627c9",
+  "source_rows_with_verified_preview": 36069,
+  "unique_bound_previews": 33747,
+  "downloaded_preview_files": 8562,
+  "failures": 0
+}

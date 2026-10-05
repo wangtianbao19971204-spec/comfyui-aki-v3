@@ -1,0 +1,33 @@
+[TRIGGER]
+alcbm7yo260822
+
+[QUICK START]
+alcbm7yo260822, adult Alicia Bell, Morning Star, full body, light peach-blonde low twin tails with a soft rose-gold tint, wine-red twin ribbons, one small metallic gold five-point hair star, champagne-gold eyes, opaque ivory high-neck idol top, (small wine-red bow tie at throat:1.2), short translucent ivory shoulder shawl, wine-red high-waist corset, compact ivory bell skirt with a narrow wine-red hem, (transparent nude pantyhose:1.2), subtle nylon sheen, wine-red heels
+
+[STRICT REFERENCE]
+alcbm7yo260822, adult Alicia Bell, Morning Star, full body, neutral standing pose, light peach-blonde low twin tails with a soft rose-gold tint, wine-red twin ribbons, one small metallic gold five-point hair star, champagne-gold eyes, opaque ivory high-neck idol top, covered chest, modest neckline, (small wine-red bow tie at throat:1.2), short translucent ivory shoulder shawl, plain wine-red high-waist corset, compact ivory bell skirt, narrow wine-red hem, (transparent nude pantyhose:1.2), subtle nylon sheen, warm skin visible through fabric, wine-red heels, dark studio background
+
+[COMPACT STABLE EXAMPLE]
+alcbm7yo260822, safe, solo, adult woman, fully clothed, Alicia Bell, Morning Star, full body, neutral standing pose, light peach-blonde low twin tails, wine-red twin ribbons, (one small metallic gold five-point hair star:1.25), champagne-gold eyes, (small wine-red bow tie at throat:1.2), opaque ivory high-neck idol top, short translucent ivory shoulder shawl, plain wine-red high-waist corset, compact ivory bell skirt with a narrow wine-red hem, (transparent nude pantyhose:1.2), subtle nylon sheen, wine-red heels, dark studio background
+
+[SCENE FORMULA]
+Start with the trigger and identity block, including `small wine-red bow tie at throat`, then add one framing tag and one scene tag. Keep the prompt concise for Anima's 0.6B text encoder. Put pose and background last.
+
+[NO HOSIERY]
+bare natural legs and bare feet, no stockings, no pantyhose
+
+[REPLACED HOSIERY]
+opaque plain charcoal tights covering both legs and feet
+
+[NO HAIR STAR]
+no star hair accessory, no hair clip
+
+[REPLACED HAIR ACCESSORY]
+one plain oval pearl hair clip instead of a star
+
+[STRENGTH]
+Recommended: 0.8
+Use 0.6-0.7 for more base-model freedom. Avoid 1.0 when clean ankle continuity is important.
+
+[NEGATIVE]
+nsfw, nude, underwear, child, teen, ordinary Alicia form, bright red hair, saturated pink hair, golden corset, black corset, wine glass, cleavage, exposed chest, strapless top, off-shoulder neckline, bare legs, opaque legwear, black tights, white leggings, thighhighs, stocking bands, garter, uneven leg colors, red outer skirt, red overskirt, ivory center panel, four-point sparkle, chest star, multiple stars, cropped feet, bad anatomy, text, watermark, signature, worst quality, low quality

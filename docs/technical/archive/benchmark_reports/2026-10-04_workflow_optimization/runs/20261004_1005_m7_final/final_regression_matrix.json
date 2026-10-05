@@ -1,0 +1,89 @@
+{
+  "at": "2026-10-04T10:22:01.047573+08:00",
+  "applicable_phases_complete": true,
+  "high_priority_open": [],
+  "rows": [
+    {
+      "phase": "M1",
+      "result": "accepted_reused_and_M7_smoke",
+      "scope": "Six selector sources, direction split, apply/reapply, syntax and async target guards; M7 preview/apply/undo and branch reopen",
+      "evidence": [
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\M1_ACCEPTANCE.json",
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_1005_m7_final\\pending_apply_undo.json",
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_1005_m7_final\\pending_target_switch.json",
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_1005_m7_final\\pending_target_reopen.json"
+      ]
+    },
+    {
+      "phase": "M2",
+      "result": "accepted_reused_and_M7_runtime",
+      "scope": "Nine-branch input paths, model/CLIP labels, exact duplicate advice; M7 branch export and actual prompt inspector",
+      "evidence": [
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\M2_ACCEPTANCE.json",
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_1005_m7_final\\browser_branches.json",
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_1005_m7_final\\actual_prompt_ax.txt",
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_1005_m7_final\\inspector_served_hash.json"
+      ]
+    },
+    {
+      "phase": "M3",
+      "result": "verified_no_production_change_with_limits",
+      "scope": "Three exact model sources and one design reference; 24 reused plus four controlled images; no automatic full-body prefix",
+      "evidence": [
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\M3_ACCEPTANCE.json",
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_0605_m3_model_references\\FINAL_DELIVERY.json"
+      ]
+    },
+    {
+      "phase": "M4",
+      "result": "accepted_reused_and_M7_unload_switch",
+      "scope": "288 numeric, 169 checkbox, 44 retention, 27 reload checks; M7 nine branches plus checked/unchecked unload flags",
+      "evidence": [
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\M4_ACCEPTANCE.json",
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_0705_m4_controls\\FINAL_DELIVERY.json",
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_1005_m7_final\\unload_choice.json"
+      ]
+    },
+    {
+      "phase": "M5",
+      "result": "accepted_reused_with_unchanged_final_sources",
+      "scope": "Pending five-cycle median 239.5 to 90.1 ms, requests 4 to 3; bounded responsive and lifecycle checks",
+      "evidence": [
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\M5_ACCEPTANCE.json",
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_0805_m5_latency\\acceptance_summary.json",
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_1005_m7_final\\final_guard.json"
+      ]
+    },
+    {
+      "phase": "M6",
+      "result": "verified_no_runtime_upgrade",
+      "scope": "74 maintained frontend types, 20 custom dependencies, six GET APIs, ten served hashes; M7 exports contain no unregistered types",
+      "evidence": [
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\M6_ACCEPTANCE.json",
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_0905_m6_dependencies\\FINAL_DELIVERY.json",
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_1005_m7_final\\browser_candidate_acceptance.json"
+      ]
+    },
+    {
+      "phase": "M7",
+      "result": "LIVE_ACCEPTANCE_PASS",
+      "scope": "Four templates pruned, 32 obsolete nodes removed, exact payload preservation, nine branch exports, original graph/storage restored, 1388-file guard",
+      "evidence": [
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_1005_m7_final\\pruning_validation.json",
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_1005_m7_final\\published_candidate_binding.json",
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_1005_m7_final\\browser_candidate_acceptance.json",
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_1005_m7_final\\browser_cleanup.json",
+        "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_workflow_optimization\\runs\\20261004_1005_m7_final\\final_guard.json"
+      ]
+    }
+  ],
+  "limits": [
+    "M7 browser acceptance imported neutral derivatives of exact candidates. Candidate node payload preservation was separately compared offline; user prompt text was not an inference test input.",
+    "Nine branches export expected SaveImage nodes. Export is not actual image generation, refinement or image saving; no M7 inference, formal save, service restart or model unload occurred.",
+    "M3 reuses 24 comparison images and four controlled full-body images. Two HTTP 401 reference gaps remain documented; no default prefix or external workflow was adopted without evidence.",
+    "M5 latency is five bounded warm cycles, action-to-ready-DOM timing, not a long-duration memory certification. Only final accepted 239.5 to 90.1 ms and four to three requests are cited.",
+    "M2a historical original graph snapshot is unavailable; later reproduction and current exact restoration do not retroactively establish M2a byte identity.",
+    "No new physical IME acceptance or optional full refinement pipeline inference in M7. M4 numeric evidence is reused with unchanged handlers; M5 only changed the pending-entry call.",
+    "Legacy Krea2 reference outside maintained production scope lacks three node types. Existing deprecated API consumers remain supported; M6 records their future migration scope."
+  ]
+}

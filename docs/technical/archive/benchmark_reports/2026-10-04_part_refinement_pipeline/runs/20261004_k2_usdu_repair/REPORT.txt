@@ -1,0 +1,37 @@
+Krea2 二放修复：已发布，有限画质回归通过
+
+更新时间：2026-10-04T23:28:26.122683+08:00
+范围：正式 UAP 与同名发布模板中的 node 1192；没有修改节点 ID、连线、种子、默认开关、Anima、22 个子图或前端代码。
+参数：主降噪 0.12 → 0.03；缝补 Half Tile + Intersections / 0.42 → Band Pass / 0.03。
+保留：1.5×、4 步、CFG 1、euler/simple、tile 1024、blur 16、padding 64、seam width 64 / blur 16 / padding 32。
+同步：Krea2 节点的命名参数镜像和说明文字；镜像旧值不是已证实的推理伪影原因。
+
+诊断：纯 OmniSR、全图 VAE 往返及零采样分块没有出现原先明显的规则菱格；增加步数或降噪不解决。
+低降噪 + Band Pass 明显改善本次失败样例。当前源码计算出的 sigma 日程支持减弱重绘的解释，但未截获运行时 sigma，未宣称唯一根因。
+Band Pass 保留局部缝补，避免 Half Tile + Intersections 在更大区域重复重绘。低强度结果接近首采，不能当作强细节增强。
+
+本轮后端任务成功 11/11；其中最终候选四个不同输入通过有限人工视觉检查。其余试验不等于画质通过。
+固定中性成年男性运动服提示词，无 LoRA、无成人区域推理。三张 768×1024 → 1152×1536；另一次默认 768×1344 → 1152×2016 完整首采到二放。
+逐张与各自纯超分结果对照：没有复现旧的明显规则菱格或可见硬接缝，人物构图/面部/手脚轮廓保留；轻微色调/纹理变化仍存在。
+并非跨场景、跨模型、跨 LoRA、大尺寸或九分支全面画质保证。
+
+本轮任务：
+conservative_band_2026100501 | success | 90.279 s | 1355e501-c703-4cb3-b4ac-7c6cdd6176f5
+conservative_band_2026100502 | success | 132.1 s | 68503051-a020-4cfb-af9e-c0cf15ac4bad
+conservative_band_2026100503 | success | 116.968 s | 164c7fe1-d1d9-49c3-8e24-33b167998c40
+conservative_full_2026100502 | success | 117.207 s | 98db1f23-4531-4a5a-8653-5502a46a3a83
+default_size_full_2026100404 | success | 80.855 s | e561b759-4a74-475b-887a-9a1209efe311
+denoise03_no_seam_2026100502 | success | 42.258 s | b04464f3-8b5d-4491-ad8e-dd9c1342edaf
+denoise20_no_seam_2026100502 | success | 126.079 s | 320f274f-4050-4439-a551-d3b330630d8e
+new_base_2026100403 | success | 30.069 s | 7e771b71-8006-4300-98aa-1b9e5ffb7d10
+normal_no_seam_2026100502 | success | 50.175 s | dfcba91b-7982-4ac1-bac0-93c733cf938d
+steps8_no_seam_2026100502 | success | 51.888 s | 2dc9a016-5451-4185-a187-6dcc1a1889d2
+vae_tiles_only_2026100502 | success | 10.614 s | 5de23397-7460-4539-a6ac-b0ec4349cd76
+
+浏览器：隔离临时页面重新从正式文件读取；运行参数和默认关闭检查通过；二放开关可选、开启后路由到二放、关闭后回到基础输出。没有保存正式图或从浏览器提交生成。
+发布：完整 JSON 语义差异仅 node 1192 指定字段；正式与模板及 HTTP 提供的内容 SHA256 一致。
+发布 SHA256：36965b32baad0f86552a0fd7dbb1f989b12155bcbcee156b9389ed4591f9b61b
+原 baseline.json 未改写；新预期哈希独立保存在 post_release_manifest.json。
+收尾：8188 PID 53232 未重启，Qwen PID 51312 保留，队列 0/0；模型已请求卸载。GPU：NVIDIA GeForce RTX 5090 D, 3832 MiB, 32607 MiB, 22 %
+回滚：rollback.py 默认仅校验，--apply 仅恢复本轮两个文件并拒绝后续漂移；不会回滚早先的部位细化修复。
+证据：release_verification.json、release_manifest.json、visual_review.json、browser_acceptance.json、final_runtime_check.json、comparisons/、prompts/、history/、telemetry/。

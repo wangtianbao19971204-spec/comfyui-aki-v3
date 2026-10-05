@@ -1,0 +1,23 @@
+{
+  "status": "accepted",
+  "production_mutated": true,
+  "batch": 94,
+  "version": "2026-09-27.01",
+  "accepted_at": "2026-09-27T12:42:32.947479+08:00",
+  "pid": 31012,
+  "sole_listener_ok": true,
+  "new_sampling_rounds": 0,
+  "historical_clean_streak": 0,
+  "acceptance_protocol": {
+    "mode": "single_consolidated_release_and_total_acceptance",
+    "authorized_at": "2026-09-27",
+    "replaces": "three consecutive clean new sampling rounds",
+    "evidence": "2026-09-27_taxonomy_one_shot/集中修复与验收报告.md",
+    "passed": true,
+    "new_rounds_run": 0
+  },
+  "remaining_adjudicated_defects": 0,
+  "raw_scanner_flags": 15,
+  "next_action": "No additional sampling rounds. Address specific future evidence or new data when requested.",
+  "report": "集中修复与验收报告.md"
+}

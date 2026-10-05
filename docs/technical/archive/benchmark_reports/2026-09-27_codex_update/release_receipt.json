@@ -1,0 +1,143 @@
+{
+  "created_at": "2026-09-27T13:31:13.870613+08:00",
+  "phase": "accepted",
+  "applied": true,
+  "passed": true,
+  "events": [
+    {
+      "phase": "job_0_passed",
+      "at": "2026-09-27T13:31:17.599392+08:00"
+    },
+    {
+      "phase": "previews_ready",
+      "at": "2026-09-27T13:31:21.768819+08:00"
+    },
+    {
+      "phase": "service_stopped",
+      "at": "2026-09-27T13:31:21.949154+08:00"
+    },
+    {
+      "phase": "replacing_files",
+      "at": "2026-09-27T13:31:24.574968+08:00"
+    },
+    {
+      "phase": "rollback_required",
+      "at": "2026-09-27T13:31:26.290192+08:00"
+    },
+    {
+      "phase": "resuming_verified_transaction",
+      "at": "2026-09-27T13:34:37.348453+08:00"
+    },
+    {
+      "phase": "production_starting",
+      "at": "2026-09-27T13:34:39.874859+08:00"
+    },
+    {
+      "phase": "live_acceptance",
+      "at": "2026-09-27T13:39:15.057301+08:00"
+    },
+    {
+      "phase": "continuation_rollback_required",
+      "at": "2026-09-27T13:42:01.851145+08:00"
+    },
+    {
+      "phase": "recovery_starting",
+      "at": "2026-09-27T13:42:04.398558+08:00"
+    },
+    {
+      "phase": "resuming_verified_transaction",
+      "at": "2026-09-27T13:44:01.884163+08:00"
+    },
+    {
+      "phase": "production_starting",
+      "at": "2026-09-27T13:44:04.309538+08:00"
+    },
+    {
+      "phase": "live_acceptance",
+      "at": "2026-09-27T13:48:31.789195+08:00"
+    },
+    {
+      "phase": "accepted",
+      "at": "2026-09-27T13:55:28.837892+08:00"
+    }
+  ],
+  "preflight_sha256": "d18ebb11ab6c144326c922914b8bb53acc0a6189ed5cdf70a622b3cbcc7cebb0",
+  "queue_before": {
+    "queue_running": [],
+    "queue_pending": []
+  },
+  "previews_installed": 8562,
+  "failure": "CalledProcessError(1, ['G:\\\\ComfyUI-aki-v3\\\\python\\\\python.exe', '-X', 'utf8', 'G:\\\\ComfyUI-aki-v3\\\\benchmark_reports\\\\2026-09-27_codex_update\\\\live_acceptance.py'])",
+  "production": {
+    "pid": 34640,
+    "create_time": 1790487844.302592,
+    "command": [
+      "G:\\ComfyUI-aki-v3\\python\\python.exe",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\main.py",
+      "--preview-method",
+      "auto",
+      "--cuda-malloc",
+      "--reserve-vram",
+      "4",
+      "--listen",
+      "127.0.0.1"
+    ],
+    "workbench": {
+      "name": "统一工作台",
+      "version": "1.0.0",
+      "modules": [
+        {
+          "key": "weilin",
+          "label": "共享资料与提示词",
+          "nodes": 4,
+          "ready": true
+        },
+        {
+          "key": "anima",
+          "label": "Anima 标签与随机选择",
+          "nodes": 16,
+          "ready": true
+        },
+        {
+          "key": "gallery",
+          "label": "Gallery 与 UAP",
+          "nodes": 22,
+          "ready": true
+        },
+        {
+          "key": "lora_manager",
+          "label": "LoRA、模型与 Embedding",
+          "nodes": 16,
+          "ready": true
+        },
+        {
+          "key": "completion",
+          "label": "补全与工作流工具",
+          "nodes": 13,
+          "ready": true
+        }
+      ],
+      "nodes": 71,
+      "resource_owner": "weilin",
+      "degraded": false
+    }
+  },
+  "recovery": {
+    "pid": 35384,
+    "create_time": 1790487724.394682,
+    "command": [
+      "G:\\ComfyUI-aki-v3\\python\\python.exe",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\main.py",
+      "--preview-method",
+      "auto",
+      "--cuda-malloc",
+      "--reserve-vram",
+      "4",
+      "--listen",
+      "127.0.0.1"
+    ]
+  },
+  "sole_listener_ok": true,
+  "completed_at": "2026-09-27T13:55:28.837859+08:00",
+  "file_lock_resolved": true
+}

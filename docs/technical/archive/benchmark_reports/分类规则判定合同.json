@@ -1,0 +1,192 @@
+{
+  "version": "2026-10-03.9",
+  "purpose": "Action-level review and release-readiness contract; does not classify raw text automatically",
+  "artifact_kind": "Normative contract, not executable validation code or an automatic classifier",
+  "required_action_fields": [
+    "record_id",
+    "library",
+    "field",
+    "target",
+    "operation",
+    "body_sha256",
+    "current_sha256",
+    "source_bindings",
+    "rule_sha256",
+    "schema_sha256",
+    "category_contract_sha256",
+    "contract_key",
+    "subject",
+    "scope",
+    "polarity",
+    "evidence",
+    "rule_ids",
+    "semantic_status",
+    "action_disposition",
+    "issue_kind",
+    "execution_state",
+    "change_basis",
+    "dependency_checks",
+    "missing_condition",
+    "source_resolution",
+    "admission_basis",
+    "inheritance_check"
+  ],
+  "semantic_status": [
+    "supported",
+    "excluded",
+    "ambiguous",
+    "protected"
+  ],
+  "action_disposition": [
+    "supported",
+    "rejected",
+    "optional",
+    "unresolved",
+    "safety_hold"
+  ],
+  "issue_kind": [
+    "definition_gap",
+    "evidence_missing",
+    "evidence_ambiguity",
+    "application_error",
+    "implementation_gap",
+    "storage_contract_gap",
+    "no_difference",
+    "preference",
+    "protected"
+  ],
+  "execution_state": [
+    "proposal_only",
+    "blocked_definition",
+    "blocked_evidence",
+    "blocked_storage_contract",
+    "blocked_implementation",
+    "blocked_binding",
+    "blocked_related_uncertainty",
+    "isolated_verified",
+    "production_verified",
+    "not_applicable"
+  ],
+  "scope_fields": {
+    "subject": "The asserted entity or medium, not a keyword",
+    "scope": "actual subject, actual environment, whole-image medium, local depiction, source identity, or explicitly unresolved",
+    "polarity": "positive, negative, zero-weight or unresolved; do not repair malformed scope by assumption"
+  },
+  "binding_contract": {
+    "record_id": "Stable library record identity, not sample ordinal alone",
+    "body_sha256": "Hash of exact reviewed UTF-8 body, before formatting or normalization",
+    "current_sha256": "Hash of frozen current classification snapshot; include its serialized snapshot and hashing method",
+    "source_bindings": "List of consulted or required source identities, paths, versions and content hashes; mark unavailable evidence explicitly. Empty list needs a reason that no external source is applicable, never implies all sources checked.",
+    "rule_sha256": "Hash of exact reviewed rulebook",
+    "schema_sha256": "Hash of frozen registered taxonomy plus separately bound alias supplement where used",
+    "category_contract_sha256": "Hash of exact merged category contract artifact",
+    "contract_key": "Exact library + field + registered target and parent contract key; a rule id is not a substitute"
+  },
+  "evidence_contract": {
+    "item_fields": [
+      "source_id",
+      "exact_quote",
+      "subject",
+      "scope",
+      "polarity"
+    ],
+    "validation": "Every quote must occur verbatim in the identified frozen body/source. Quote presence proves only textual binding, not semantic sufficiency. Absence-based removal additionally needs the removal checks. Missing evidence is explicit, never fabricated."
+  },
+  "change_basis_contract": "State intended persisted field before/after, effective semantic coverage before/after and whether the target is derived; a logical theme change is not yet an executable persistence operation.",
+  "dependency_contract": "List required parents, independent retained children/positives, related unresolved actions and protection flags. Per-action semantic support may coexist with a related blocker; such a record cannot be promoted to release-ready.",
+  "parent_removal_gate": "Reject a parent-removal action that would leave an independently valid retained child without its required canonical parent in the effective final classification. A separately proposed child removal must have its own sufficient evidence; never invent a cascading removal. If related child validity/removal remains unresolved, block release and leave parent-removal disposition unresolved. Evaluate the complete justified delta, not an isolated field deletion.",
+  "difference_disposition_gate": "Same-field same-target additions, nonexistent-target removals and restating a derived projection without an actual field change are rejected. A legal real metadata difference with already-covered semantics may be optional. Logical theme presence is determined from all effective contributions, not only a raw themes array.",
+  "execution_mapping": {
+    "implementation_gap": "blocked_implementation until the actual behavior is implemented and tested",
+    "storage_contract_gap": "blocked_storage_contract",
+    "definition_gap": "blocked_definition for the affected action",
+    "evidence_missing_or_ambiguity": "blocked_evidence for the affected action",
+    "stale_input_rule_schema_or_contract_hash": "blocked_binding; reassess affected rules before release",
+    "related_unresolved_dependencies": "blocked_related_uncertainty; unrelated supported semantics do not clear this blocker"
+  },
+  "missing_condition_contract": "For unresolved/blocked decisions provide the exact missing evidence, definition or implementation. Otherwise use null with a short explicit justification; do not fill arbitrary boilerplate.",
+  "admission_logic": [
+    "Look up the exact library, field, parent and registered node. Missing paths are rejected as actions; unexpressed semantics remain a separate gap.",
+    "Map the full claim to subject, scope and polarity, using exact original quotations and the category contract.",
+    "RUN-08: Evaluate each relevant evidence unit against subject, version, polarity, scope and the exact card before aggregating an action. One independent qualified positive supports an addition only after common dependencies and protection gates pass. Keep unrelated unknown branches explicit. Without a qualified positive, unresolved applicable evidence means hold; all known-insufficient evidence means reject the addition. Never infer the inverse removal.",
+    "Determine semantic support before comparing the actual persisted/effective value. A true fact is not a change if already represented.",
+    "For removal, read the full body and relevant bound sources, resolve scope, check independent positives and retained children. A rejected addition never automatically creates an inverse removal.",
+    "Keep independent positive atomic claims; record unresolved only for the specific incompatible inferred attribute, reading layer or version. Preserve original text in both cases.",
+    "Require each changed parent/leaf to be individually justified; broader parents may be supported without a registered leaf. Multi-parent categories are not assumed exclusive.",
+    "Separate semantic qualification from storage/API/runtime readiness. A write-contract gap cannot be hidden by an unrelated supported action.",
+    "Release readiness requires a current rule and input binding, no related unresolved dependencies, exact impact, reversible persistence, actual read/filter validation and production acceptance where claimed."
+  ],
+  "removal_required": [
+    "checked_full_body",
+    "positive_found",
+    "dependent_children_checked",
+    "exclusion_basis",
+    "scope_resolved",
+    "source_resolution"
+  ],
+  "removal_constraints": {
+    "checked_full_body": true,
+    "positive_found": false,
+    "dependent_children_checked": true,
+    "scope_resolved": true,
+    "exclusion_basis": "Nonempty category-specific exclusion or verified absence under the known admission definition; ambiguous admission/scope or missing provenance cannot certify absence",
+    "source_resolution": "consulted with complete required source bindings, or justified not_applicable; never unavailable"
+  },
+  "compatibility": "Existing frozen ledgers remain immutable. New records can attach this as an action assessment sidecar. Legacy unresolved review_count may record semantic_status=supported with execution_state=blocked_storage_contract. No migration of prior statuses is implied.",
+  "release_claims": {
+    "document_published": "Rules only",
+    "isolated_verified": "Exact tested fixture/actions and code hashes plus persisted read/filter and rollback receipt required",
+    "production_verified": "Actual current code/data, input/rule/contract bindings, no related unresolved dependencies, exact impact guard, rollback and live acceptance receipt required"
+  },
+  "conditional_action_fields": {
+    "operation_remove": [
+      "removal_checks"
+    ],
+    "execution_isolated_verified_or_production_verified": [
+      "verification_receipts"
+    ]
+  },
+  "verification_receipt_fields": [
+    "scope",
+    "path",
+    "sha256",
+    "action_assessment_sha256",
+    "record_id",
+    "body_sha256",
+    "before_classification_sha256",
+    "after_classification_sha256",
+    "rule_sha256",
+    "schema_sha256",
+    "category_contract_sha256",
+    "code_sha256",
+    "persistence_read_filter_evidence",
+    "rollback_evidence",
+    "production_acceptance_evidence_if_production_verified"
+  ],
+  "receipt_contract": "Receipt scope and record/action/input/code bindings must match the exact claimed state. action_assessment_sha256 hashes a frozen action assessment excluding verification_receipts and execution_state to avoid self-reference; specify the exact serialization. For isolated_verified or production_verified attach durable receipt path and SHA; changing execution_state alone establishes neither state. supported/optional review actions do not authorize automatic bulk release.",
+  "source_resolution_contract": {
+    "status": [
+      "consulted",
+      "not_applicable",
+      "unavailable"
+    ],
+    "consulted": "List exact applicable frozen sources, versions and SHA; all actual needed sources consulted.",
+    "not_applicable": "Give the action-specific reason its decisive evidence needs no external identity source; empty source_identity is insufficient. Do not label actually missing necessary sources not_applicable, or erase separately recorded unavailable non-decisive branches.",
+    "unavailable": "A missing source necessary for the whole action keeps it unresolved/blocked_evidence. If it affects only a non-decisive evidence branch, record that branch as unavailable without masking another self-sufficient qualified positive; unresolved common dependencies and protection still block the action."
+  },
+  "inheritance_contract": "Bind old action/assessment SHA and exact current rule/contract impact as reviewed_unchanged or redecided; compact legacy ledger is not a full v5 assessment or a legacy admission certificate. Preserve prior rows and emit versioned sidecars.",
+  "admission_basis_contract": "Cite exact target-card core/exclusion clause or a bound original limited certificate. A prior supported proposal/imported label is not such a certificate. Only explicit new C core resolves matching old definition hold.",
+  "validation_tool": {
+    "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_workbench_hourly\\runs\\20261003_162858_rule_v5_convergence\\staged\\review_action_gate.py",
+    "sha256": "a9eb27ea71b2b07d25ad235237955be66d18facd12d6b7406fc22d299ab7184b",
+    "purpose": "Check assessment structure and declared evidence bindings only; no automatic text classification or production write.",
+    "context_trust": "Context independently built and hash-bound from frozen source/current/schema/contract evidence, never copied from proposed action. Tool does not generate or authenticate arbitrary supplied facts.",
+    "coverage": "Subset of critical declared gates, not the full required_action_fields schema or semantic validator.",
+    "adapter": "Independently derive difference, target_present_before and assessment_origin from frozen change_basis evidence, not from proposal declarations."
+  },
+  "current_category_contract": {
+    "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_workbench_hourly\\runs\\20261003_201855_shading_admission_evidence\\staged\\category_contracts.json",
+    "sha256": "b6239b2911d170e9b13c26405f3130445d36c25f929d2dd7d04d70f889b74bc6",
+    "note": "V9 CTG08 clarifies only art-context shading admission; action schema and structural gate unchanged."
+  }
+}

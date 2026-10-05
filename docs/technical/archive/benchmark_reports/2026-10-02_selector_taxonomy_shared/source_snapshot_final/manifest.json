@@ -1,0 +1,478 @@
+{
+  "frozen_at": "2026-10-02T01:30:35.518781+08:00",
+  "production_root": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench",
+  "snapshot_root": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\source_snapshot_final",
+  "scope": "Five JS files and nodes.py changed; seventeen frontend resources kept; formal files preserved.",
+  "source_count": 23,
+  "served_resource_count": 22,
+  "restore_source_count": 6,
+  "keep_source_count": 17,
+  "sources": [
+    {
+      "relative_path": "web/pending_prompts.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\pending_prompts.js",
+      "route": "/extensions/ComfyUI-Unified-Prompt-Workbench/pending_prompts.js",
+      "snapshot_path": "sources/web/pending_prompts.js",
+      "before_path": "before/web/pending_prompts.js",
+      "sha256": "48e436f3485a05b91fa79582d5957e1681f6bbc367a361ce5e68b37dc480d357",
+      "bytes": 20079,
+      "before_sha256": "48e436f3485a05b91fa79582d5957e1681f6bbc367a361ce5e68b37dc480d357",
+      "before_bytes": 20079,
+      "rollback": {
+        "action": "keep"
+      }
+    },
+    {
+      "relative_path": "web/workbench_shell.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\workbench_shell.js",
+      "route": "/extensions/ComfyUI-Unified-Prompt-Workbench/workbench_shell.js",
+      "snapshot_path": "sources/web/workbench_shell.js",
+      "before_path": "before/web/workbench_shell.js",
+      "sha256": "898b110c08a3b850a306278e93f9bfb5c26e9baeac78984095d0e935882477c4",
+      "bytes": 55781,
+      "before_sha256": "898b110c08a3b850a306278e93f9bfb5c26e9baeac78984095d0e935882477c4",
+      "before_bytes": 55781,
+      "rollback": {
+        "action": "keep"
+      }
+    },
+    {
+      "relative_path": "web/prompt_target.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\prompt_target.js",
+      "route": "/extensions/ComfyUI-Unified-Prompt-Workbench/prompt_target.js",
+      "snapshot_path": "sources/web/prompt_target.js",
+      "before_path": "before/web/prompt_target.js",
+      "sha256": "72d4a6d0382ab496cd5d8ba5d5914ebc03f897b1560bbf509dbfb367fe9a040f",
+      "bytes": 18685,
+      "before_sha256": "72d4a6d0382ab496cd5d8ba5d5914ebc03f897b1560bbf509dbfb367fe9a040f",
+      "before_bytes": 18685,
+      "rollback": {
+        "action": "keep"
+      }
+    },
+    {
+      "relative_path": "web/workspace.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\workspace.js",
+      "route": "/extensions/ComfyUI-Unified-Prompt-Workbench/workspace.js",
+      "snapshot_path": "sources/web/workspace.js",
+      "before_path": "before/web/workspace.js",
+      "sha256": "a0924904a8621b57f790b243c6ac12624b7c5d9441e2c8c0807e7ff4c145c0f6",
+      "bytes": 17238,
+      "before_sha256": "a0924904a8621b57f790b243c6ac12624b7c5d9441e2c8c0807e7ff4c145c0f6",
+      "before_bytes": 17238,
+      "rollback": {
+        "action": "keep"
+      }
+    },
+    {
+      "relative_path": "web/static_prompt_inspector.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\static_prompt_inspector.js",
+      "route": "/extensions/ComfyUI-Unified-Prompt-Workbench/static_prompt_inspector.js",
+      "snapshot_path": "sources/web/static_prompt_inspector.js",
+      "before_path": "before/web/static_prompt_inspector.js",
+      "sha256": "12e56837ad2f2026acb7386869f44b765505e05ca500c37f8804c0e85d51b014",
+      "bytes": 2534,
+      "before_sha256": "12e56837ad2f2026acb7386869f44b765505e05ca500c37f8804c0e85d51b014",
+      "before_bytes": 2534,
+      "rollback": {
+        "action": "keep"
+      }
+    },
+    {
+      "relative_path": "web/resource_results.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\resource_results.js",
+      "route": "/extensions/ComfyUI-Unified-Prompt-Workbench/resource_results.js",
+      "snapshot_path": "sources/web/resource_results.js",
+      "before_path": "before/web/resource_results.js",
+      "sha256": "b54fd8c5b8c2d92a7441890fd91712973bb83e38340fad913206d475a7bea10b",
+      "bytes": 4341,
+      "before_sha256": "b54fd8c5b8c2d92a7441890fd91712973bb83e38340fad913206d475a7bea10b",
+      "before_bytes": 4341,
+      "rollback": {
+        "action": "keep"
+      }
+    },
+    {
+      "relative_path": "web/tag_manager.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\tag_manager.js",
+      "route": "/extensions/ComfyUI-Unified-Prompt-Workbench/tag_manager.js",
+      "snapshot_path": "sources/web/tag_manager.js",
+      "before_path": "before/web/tag_manager.js",
+      "sha256": "815effb99f7ae27d8cc800a8e82efdb3f133e1ae5ceb2c8dcb3e845ecf377427",
+      "bytes": 81344,
+      "before_sha256": "815effb99f7ae27d8cc800a8e82efdb3f133e1ae5ceb2c8dcb3e845ecf377427",
+      "before_bytes": 81344,
+      "rollback": {
+        "action": "keep"
+      }
+    },
+    {
+      "relative_path": "web/workbench.css",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\workbench.css",
+      "route": "/extensions/ComfyUI-Unified-Prompt-Workbench/workbench.css",
+      "snapshot_path": "sources/web/workbench.css",
+      "before_path": "before/web/workbench.css",
+      "sha256": "e7ebcd49f46c0605a08276867f2aabe92bad63a5fd4434b0f9baccff0d30cb74",
+      "bytes": 29372,
+      "before_sha256": "e7ebcd49f46c0605a08276867f2aabe92bad63a5fd4434b0f9baccff0d30cb74",
+      "before_bytes": 29372,
+      "rollback": {
+        "action": "keep"
+      }
+    },
+    {
+      "relative_path": "modules/comfyui-anima-tools/js/anima_selector_ui.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_selector_ui.js",
+      "route": "/extensions/comfyui-anima-tools/anima_selector_ui.js",
+      "snapshot_path": "sources/modules/comfyui-anima-tools/js/anima_selector_ui.js",
+      "before_path": "before/modules/comfyui-anima-tools/js/anima_selector_ui.js",
+      "sha256": "80503349e7aca84f25e8a620bcfdb83ef564dfeca869e973a4a03ae88aa80926",
+      "bytes": 39034,
+      "before_sha256": "80503349e7aca84f25e8a620bcfdb83ef564dfeca869e973a4a03ae88aa80926",
+      "before_bytes": 39034,
+      "rollback": {
+        "action": "keep"
+      }
+    },
+    {
+      "relative_path": "modules/comfyui-anima-tools/js/anima_shared_prompt_data.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_shared_prompt_data.js",
+      "route": "/extensions/comfyui-anima-tools/anima_shared_prompt_data.js",
+      "snapshot_path": "sources/modules/comfyui-anima-tools/js/anima_shared_prompt_data.js",
+      "before_path": "before/modules/comfyui-anima-tools/js/anima_shared_prompt_data.js",
+      "sha256": "0cd7c7d0a5416868d267dcd0ab76b3d9c5f3498837f9ddedc51f6a170f38e14c",
+      "bytes": 47008,
+      "before_sha256": "0ece715ee1488cb4a68be647abac5383f3cfc0b442d99628a8385c18ea078e18",
+      "before_bytes": 39068,
+      "rollback": {
+        "action": "restore"
+      }
+    },
+    {
+      "relative_path": "modules/comfyui-anima-tools/js/anima_character_selector.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_character_selector.js",
+      "route": "/extensions/comfyui-anima-tools/anima_character_selector.js",
+      "snapshot_path": "sources/modules/comfyui-anima-tools/js/anima_character_selector.js",
+      "before_path": "before/modules/comfyui-anima-tools/js/anima_character_selector.js",
+      "sha256": "3873d632f7478362b950f5d130cb5c52e60538f06407222410230de3a6a7c56b",
+      "bytes": 108533,
+      "before_sha256": "e996058f084fedd50050dd115a791219fc3d0a4c390a227e4c5ba5f6e618af5d",
+      "before_bytes": 128855,
+      "rollback": {
+        "action": "restore"
+      }
+    },
+    {
+      "relative_path": "modules/comfyui-anima-tools/js/anima_clothing_selector.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_clothing_selector.js",
+      "route": "/extensions/comfyui-anima-tools/anima_clothing_selector.js",
+      "snapshot_path": "sources/modules/comfyui-anima-tools/js/anima_clothing_selector.js",
+      "before_path": "before/modules/comfyui-anima-tools/js/anima_clothing_selector.js",
+      "sha256": "8a740a67c34ed0ef3f01bccb20abb7063b347ee4c86877217e8a7d27e35902eb",
+      "bytes": 60610,
+      "before_sha256": "d9a62b3ad4513d5bdab1f0390f5a05edf0307a5bc451703fd58f7631e9260add",
+      "before_bytes": 60078,
+      "rollback": {
+        "action": "restore"
+      }
+    },
+    {
+      "relative_path": "modules/comfyui-anima-tools/js/anima_pose_selector.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_pose_selector.js",
+      "route": "/extensions/comfyui-anima-tools/anima_pose_selector.js",
+      "snapshot_path": "sources/modules/comfyui-anima-tools/js/anima_pose_selector.js",
+      "before_path": "before/modules/comfyui-anima-tools/js/anima_pose_selector.js",
+      "sha256": "1822407ab8b571b8cc49dfbc7888846f6ca35d143dc4797176f1db7d08c7b7e6",
+      "bytes": 66942,
+      "before_sha256": "1822407ab8b571b8cc49dfbc7888846f6ca35d143dc4797176f1db7d08c7b7e6",
+      "before_bytes": 66942,
+      "rollback": {
+        "action": "keep"
+      }
+    },
+    {
+      "relative_path": "modules/comfyui-anima-tools/js/anima_background_selector.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_background_selector.js",
+      "route": "/extensions/comfyui-anima-tools/anima_background_selector.js",
+      "snapshot_path": "sources/modules/comfyui-anima-tools/js/anima_background_selector.js",
+      "before_path": "before/modules/comfyui-anima-tools/js/anima_background_selector.js",
+      "sha256": "1857c132c970d49758c3a37c2d889dc49950477bd57f5554f8f900f8f2062324",
+      "bytes": 60045,
+      "before_sha256": "ecda7ca0c4519db83bfc9470af20f7593d0e6aac9edd4e85157367f7e111df07",
+      "before_bytes": 57296,
+      "rollback": {
+        "action": "restore"
+      }
+    },
+    {
+      "relative_path": "modules/comfyui-anima-tools/js/anima_artist_selector.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_artist_selector.js",
+      "route": "/extensions/comfyui-anima-tools/anima_artist_selector.js",
+      "snapshot_path": "sources/modules/comfyui-anima-tools/js/anima_artist_selector.js",
+      "before_path": "before/modules/comfyui-anima-tools/js/anima_artist_selector.js",
+      "sha256": "466d338ca36e54919698a05a936610b7a0c178c4d70773b8a320e8bf3f745a6c",
+      "bytes": 96128,
+      "before_sha256": "412904931f7033f2ac68500a86ac480e4a43bc628ea9ee210c486aa313dff838",
+      "before_bytes": 95765,
+      "rollback": {
+        "action": "restore"
+      }
+    },
+    {
+      "relative_path": "modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/js_node/prompt_selector/prompt_selector.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\WeiLin-Comfyui-Tools-V52-FullPromptSelector\\js_node\\prompt_selector\\prompt_selector.js",
+      "route": "/extensions/weilin-comfyui-tools/prompt_selector/prompt_selector.js",
+      "snapshot_path": "sources/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/js_node/prompt_selector/prompt_selector.js",
+      "before_path": "before/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/js_node/prompt_selector/prompt_selector.js",
+      "sha256": "817257bf8e34992f49fba06f93cef913f38b14f277f632d3f5e94e28056ee2b4",
+      "bytes": 344508,
+      "before_sha256": "817257bf8e34992f49fba06f93cef913f38b14f277f632d3f5e94e28056ee2b4",
+      "before_bytes": 344508,
+      "rollback": {
+        "action": "keep"
+      }
+    },
+    {
+      "relative_path": "modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/js_node/prompt_selector/native_library_browser.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\WeiLin-Comfyui-Tools-V52-FullPromptSelector\\js_node\\prompt_selector\\native_library_browser.js",
+      "route": "/extensions/weilin-comfyui-tools/prompt_selector/native_library_browser.js",
+      "snapshot_path": "sources/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/js_node/prompt_selector/native_library_browser.js",
+      "before_path": "before/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/js_node/prompt_selector/native_library_browser.js",
+      "sha256": "e0abc4c9b2e150dfd49939b29da78856c8306de599919b8486d7a6dd1c41099b",
+      "bytes": 31747,
+      "before_sha256": "e0abc4c9b2e150dfd49939b29da78856c8306de599919b8486d7a6dd1c41099b",
+      "before_bytes": 31747,
+      "rollback": {
+        "action": "keep"
+      }
+    },
+    {
+      "relative_path": "modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/dist/javascript/zz_tb_shared_preset_manager.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\WeiLin-Comfyui-Tools-V52-FullPromptSelector\\dist\\javascript\\zz_tb_shared_preset_manager.js",
+      "route": "/weilin/prompt_ui/file/javascript/zz_tb_shared_preset_manager.js",
+      "snapshot_path": "sources/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/dist/javascript/zz_tb_shared_preset_manager.js",
+      "before_path": "before/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/dist/javascript/zz_tb_shared_preset_manager.js",
+      "sha256": "56c83627bf4348dba99b2525ad6488b723061e710b9d8c8d3d9ccda2848d04b7",
+      "bytes": 201612,
+      "before_sha256": "56c83627bf4348dba99b2525ad6488b723061e710b9d8c8d3d9ccda2848d04b7",
+      "before_bytes": 201612,
+      "rollback": {
+        "action": "keep"
+      }
+    },
+    {
+      "relative_path": "modules/comfyui-anima-tools/js/anima_prompt_identity.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_prompt_identity.js",
+      "route": "/extensions/comfyui-anima-tools/anima_prompt_identity.js",
+      "snapshot_path": "sources/modules/comfyui-anima-tools/js/anima_prompt_identity.js",
+      "before_path": "before/modules/comfyui-anima-tools/js/anima_prompt_identity.js",
+      "sha256": "ca9add4662bd45c9fd1ea3f41a51f29c2456c9df6d8a36712e9063141ce850b6",
+      "bytes": 9890,
+      "before_sha256": "ca9add4662bd45c9fd1ea3f41a51f29c2456c9df6d8a36712e9063141ce850b6",
+      "before_bytes": 9890,
+      "rollback": {
+        "action": "keep"
+      }
+    },
+    {
+      "relative_path": "modules/comfyui-anima-tools/js/i18n.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\i18n.js",
+      "route": "/extensions/comfyui-anima-tools/i18n.js",
+      "snapshot_path": "sources/modules/comfyui-anima-tools/js/i18n.js",
+      "before_path": "before/modules/comfyui-anima-tools/js/i18n.js",
+      "sha256": "98e6acbd0cd994021c96889772f3fdd4c0a89ee8b15970fb486dc5220fc6f355",
+      "bytes": 23119,
+      "before_sha256": "98e6acbd0cd994021c96889772f3fdd4c0a89ee8b15970fb486dc5220fc6f355",
+      "before_bytes": 23119,
+      "rollback": {
+        "action": "keep"
+      }
+    },
+    {
+      "relative_path": "modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\ComfyUI-Danbooru-Gallery-V50-GalleryOnly\\js\\quick_group_navigation\\uap_daily_controls.js",
+      "route": "/extensions/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/quick_group_navigation/uap_daily_controls.js",
+      "snapshot_path": "sources/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
+      "before_path": "before/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
+      "sha256": "2f56dfc49b186192835c8c955c552b36fee7faf023ffa9b1ba339c01b8d813be",
+      "bytes": 50794,
+      "before_sha256": "2f56dfc49b186192835c8c955c552b36fee7faf023ffa9b1ba339c01b8d813be",
+      "before_bytes": 50794,
+      "rollback": {
+        "action": "keep"
+      }
+    },
+    {
+      "relative_path": "web/selector_tools.js",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\selector_tools.js",
+      "route": "/extensions/ComfyUI-Unified-Prompt-Workbench/selector_tools.js",
+      "snapshot_path": "sources/web/selector_tools.js",
+      "before_path": "before/web/selector_tools.js",
+      "sha256": "0467f8eeb514c5e483b6e8381910e7d33305a2acaa261fb251a84208e94bcd7a",
+      "bytes": 3989,
+      "before_sha256": "0467f8eeb514c5e483b6e8381910e7d33305a2acaa261fb251a84208e94bcd7a",
+      "before_bytes": 3989,
+      "rollback": {
+        "action": "keep"
+      }
+    },
+    {
+      "relative_path": "modules/comfyui-anima-tools/nodes.py",
+      "production_path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\nodes.py",
+      "route": null,
+      "snapshot_path": "sources/modules/comfyui-anima-tools/nodes.py",
+      "before_path": "before/modules/comfyui-anima-tools/nodes.py",
+      "sha256": "8aba2247fb7046029431571210672048868877b80d28620d269d6f33756741ec",
+      "bytes": 179504,
+      "before_sha256": "92621e38c3d063f0c1753f6d71673e2af9f2d258dbc44df85adedc47d4085f05",
+      "before_bytes": 173924,
+      "rollback": {
+        "action": "restore"
+      }
+    }
+  ],
+  "diffs": [
+    {
+      "relative_path": "modules/comfyui-anima-tools/js/anima_artist_selector.js",
+      "snapshot_path": "diff/modules/comfyui-anima-tools/js/anima_artist_selector.js.diff",
+      "sha256": "339d6d3703c409dae3d3d8789b90ada3f6c006970505f7c4b33175708a23cf1f"
+    },
+    {
+      "relative_path": "modules/comfyui-anima-tools/js/anima_background_selector.js",
+      "snapshot_path": "diff/modules/comfyui-anima-tools/js/anima_background_selector.js.diff",
+      "sha256": "98ef1fa4da1ed289e4679a71f634ee1cb89bbbf762f3e37b896cd4b37c4d7643"
+    },
+    {
+      "relative_path": "modules/comfyui-anima-tools/js/anima_character_selector.js",
+      "snapshot_path": "diff/modules/comfyui-anima-tools/js/anima_character_selector.js.diff",
+      "sha256": "23d352e6e3349b67e5a041d0e9426c0af01c477d8bfacf7001ceb6718c3d8c7c"
+    },
+    {
+      "relative_path": "modules/comfyui-anima-tools/js/anima_clothing_selector.js",
+      "snapshot_path": "diff/modules/comfyui-anima-tools/js/anima_clothing_selector.js.diff",
+      "sha256": "50f3c01c7498a45e98487d50c8319fcfe782ff0b58c3d063251760f5d1a942e5"
+    },
+    {
+      "relative_path": "modules/comfyui-anima-tools/js/anima_shared_prompt_data.js",
+      "snapshot_path": "diff/modules/comfyui-anima-tools/js/anima_shared_prompt_data.js.diff",
+      "sha256": "58bb8065c78ddff3ac29da588cbfe267600e4a0039efc2e7eab9f2bcf3c85304"
+    },
+    {
+      "relative_path": "modules/comfyui-anima-tools/nodes.py",
+      "snapshot_path": "diff/modules/comfyui-anima-tools/nodes.py.diff",
+      "sha256": "eed37f9fe11ed9d689adc275cc73d8b798942cbe962be556fa72b699f0cebf4b"
+    }
+  ],
+  "formal_files": {
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产套件_01_Anima原版_LoRA生产_v2.json": "a5ab2207dbc6c771d2bfc4aef0c47054af65d60b252b1cf863623e0d0ce69717",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产套件_03_Krea2_一体化生产_v2.json": "8e1d2cb98eddb8ce3e61f5bc62a6d7f5ef5aee9dd704af7d090b46a33fcd0622",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产套件_99_释放模型显存_v2.json": "2262c4dce2410c60aac652e9b92915b75329eb6728a608da554b2c29996a5700",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_04_Krea2_指令编辑.json": "d919567c8e60f5c7cf9a5d56c923ca17687154dd4bb8ac77987c586c945982cc",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_05_Anima2.9_裁剪精修回贴.json": "d1762b60dba9b1dd470ec890c0185f2a7d3553ec40bdfe5fdcbda85e89ebb56d",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_06_透明素材_抠图导出.json": "aa27f6cb145872e08f17d9ed249e7e3cf09128aabfee5e513b82cfd9530e9bc9",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_07_Anima原版_左右扩图.json": "f323989a60d15b80aec962adea955966a8d734d76b1779cdfc7110ede60fa24b",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_08_超分_二倍交付.json": "caabbd785fe7a6ce9293d4f5866efbef6ebabdafe3b9c6272e3ddcb39677cf43",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_09_超分_四倍素材.json": "0659024d4f6286a1ef200581ec1a23f1c0c36b2fd690ff264d31f047932700c7",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\UAP统一生产工作台_v2.json": "9c5885654e685b422bc164ff9240ee42d6585824d76cc419e18408edcc49a8c9",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产套件_02_Anima2.9B_动漫生产_v2.json": "d3a5ede958685ee40115f5d95295a50a6c49fc3698536bbfc6877745adb596d0",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json": "8b9f0b94b7ad1a6f370a53f61028c83796f47b481e545d6236a7cf5671eb281d",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\Anima_推荐版_细化可选_手动候选.json": "2854a1f73ea63f2fbeb4c195f9822b9287e1cc2abc45c2e6dd05126c2bac92cb",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json": "00fc313de02efbba9ed983e5b58f8165bf08375e7e6df1cf5b0ea8e65fee6671",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\Krea2_图生图_改图_v1.json": "91030df500c1adb34246c5745fad62be67111a96d5ad5149221a5b38d77766b9",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\Krea2_工作流.json": "9819790683d4344803c6fd7acd432ef7e25ad6eaf8b5ec13733ac9e034637250",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\▶▷Krea2-高清生图优化流(整合).json": "731a0989be555530b04ae6bd32d8c3edebfbe057926fc2099abd2c5d04f1914a",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\UAP统一生产工作台_v1.json": "92f5cc2335ab0acbc95453d02ef0e0c15e43f385b3f4ea8ca245368977ce3a2a",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\WeiLin-Comfyui-Tools-V52-FullPromptSelector\\user_data\\prompt_selector\\data.json": "6f03b6b65d045757e67ab9179a7914a9d4ca0c701eea1d6728ef17bb90c79611",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\WeiLin-Comfyui-Tools-V52-FullPromptSelector\\user_data\\userdatas_zh_CN_tags.db": "eb907aa72f384fb41ba8d7df776ca11175a904d2401b03723a37f6930f067950",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\WeiLin-Comfyui-Tools-V52-FullPromptSelector\\user_data\\promptselector_user_overrides.json": "1165c5aa3430412b4b7d8533d1690e7911346c9f3a9417763d81e2b6055d10c6"
+  },
+  "evidence": {
+    "baseline": {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\baseline.json",
+      "snapshot_path": "evidence/baseline.json",
+      "sha256": "6a1f436ad7978e5fb96ffc0d4b35acd2a9cb99d515f20c3cec0acf9700636dd0"
+    },
+    "live_before": {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\live_before.json",
+      "snapshot_path": "evidence/live_before.json",
+      "sha256": "b07a0df76ec92565593e41aee1cde7c43e4cc79ea5fe41da7d5cb8ad66da30c6"
+    },
+    "nodes_before": {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\nodes_before_receipt.json",
+      "snapshot_path": "evidence/nodes_before.json",
+      "sha256": "8ffa674ed92e1fed32b5b6160092761dd6cceab60daae0cc8847a17f539234f3"
+    },
+    "previous_manifest": {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_character_selector_audit\\source_snapshot_final\\manifest.json",
+      "snapshot_path": "evidence/previous_manifest.json",
+      "sha256": "31dd3a4c45d78b4cff34089aa67e0588d90818c4de6e6bba0313733eeda2c20a"
+    },
+    "preparation": {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\snapshot_tools_preparation_v3.json",
+      "snapshot_path": "evidence/preparation.json",
+      "sha256": "fa5319dffe49b378903cc52dd440ee350705c8990d5bba5b86f2569873ee4554"
+    },
+    "final_guard": {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\final_live_guard.json",
+      "snapshot_path": "evidence/final_guard.json",
+      "sha256": "0014519ca9115e97251009693ff9445521a63819136e133efa6c0f37859a91f0"
+    },
+    "browser": {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\browser_acceptance.json",
+      "snapshot_path": "evidence/browser.json",
+      "sha256": "b27f89b8ea3900744800a8fdcfe1b074ad3d3d140b1549329e06cee74266cc9d"
+    },
+    "restart": {
+      "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\restart_receipt.json",
+      "snapshot_path": "evidence/restart.json",
+      "sha256": "3d898077de15539f1ef69359cf439627821f3f10a8bea33191a483dede5ef726"
+    }
+  },
+  "tool_sha256": {
+    "rollback.py": "241df28cff4184b75aed8ae8c3ec3acff2d29260cce2ccccf49beab23d372d33",
+    "snapshot_contract.py": "97205974f158bab2bb18a2136b7b5371a51faf936dcfda495269bb785068e86e"
+  },
+  "previous_final_package_reference": {
+    "path": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_character_selector_audit\\source_snapshot_final",
+    "tree_sha256": {
+      "manifest.json": "31dd3a4c45d78b4cff34089aa67e0588d90818c4de6e6bba0313733eeda2c20a",
+      "manifest.sha256": "a0e78523435a3451cbac8516174775b5a41ff0ad7fa12e1ef02059c5bbcce174",
+      "rollback.py": "67cce4d5d808ac9e022bd07eef3382b46b9311babda1c3a67b9ba0ee5678abe2",
+      "evidence/browser_final.json": "6819ae71e9dd89604e33ecfe3b272dfce341b3ddf2eef91492d68c04d2899e94",
+      "evidence/final_guard.json": "c21578f610a81e99b6d884eeb32c7f586a345169e1e126345071fb41dc56474f",
+      "evidence/previous_final_manifest.json": "7c08965b2bc0c89e9f2e59419d5b176266e286ce23da54903d77b2459bda3a8f",
+      "evidence/resource_routes.json": "b0c8573d1016017ab6b0d5c6fe9445fcf189a5a43c71afa7af1694ae6046873d",
+      "sources/web/pending_prompts.js": "48e436f3485a05b91fa79582d5957e1681f6bbc367a361ce5e68b37dc480d357",
+      "sources/web/prompt_target.js": "72d4a6d0382ab496cd5d8ba5d5914ebc03f897b1560bbf509dbfb367fe9a040f",
+      "sources/web/resource_results.js": "b54fd8c5b8c2d92a7441890fd91712973bb83e38340fad913206d475a7bea10b",
+      "sources/web/selector_tools.js": "0467f8eeb514c5e483b6e8381910e7d33305a2acaa261fb251a84208e94bcd7a",
+      "sources/web/static_prompt_inspector.js": "12e56837ad2f2026acb7386869f44b765505e05ca500c37f8804c0e85d51b014",
+      "sources/web/tag_manager.js": "815effb99f7ae27d8cc800a8e82efdb3f133e1ae5ceb2c8dcb3e845ecf377427",
+      "sources/web/workbench.css": "e7ebcd49f46c0605a08276867f2aabe92bad63a5fd4434b0f9baccff0d30cb74",
+      "sources/web/workbench_shell.js": "898b110c08a3b850a306278e93f9bfb5c26e9baeac78984095d0e935882477c4",
+      "sources/web/workspace.js": "a0924904a8621b57f790b243c6ac12624b7c5d9441e2c8c0807e7ff4c145c0f6",
+      "sources/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/js_node/prompt_selector/native_library_browser.js": "e0abc4c9b2e150dfd49939b29da78856c8306de599919b8486d7a6dd1c41099b",
+      "sources/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/js_node/prompt_selector/prompt_selector.js": "817257bf8e34992f49fba06f93cef913f38b14f277f632d3f5e94e28056ee2b4",
+      "sources/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/dist/javascript/zz_tb_shared_preset_manager.js": "56c83627bf4348dba99b2525ad6488b723061e710b9d8c8d3d9ccda2848d04b7",
+      "sources/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js": "2f56dfc49b186192835c8c955c552b36fee7faf023ffa9b1ba339c01b8d813be",
+      "sources/modules/comfyui-anima-tools/js/anima_artist_selector.js": "412904931f7033f2ac68500a86ac480e4a43bc628ea9ee210c486aa313dff838",
+      "sources/modules/comfyui-anima-tools/js/anima_background_selector.js": "ecda7ca0c4519db83bfc9470af20f7593d0e6aac9edd4e85157367f7e111df07",
+      "sources/modules/comfyui-anima-tools/js/anima_character_selector.js": "e996058f084fedd50050dd115a791219fc3d0a4c390a227e4c5ba5f6e618af5d",
+      "sources/modules/comfyui-anima-tools/js/anima_clothing_selector.js": "d9a62b3ad4513d5bdab1f0390f5a05edf0307a5bc451703fd58f7631e9260add",
+      "sources/modules/comfyui-anima-tools/js/anima_pose_selector.js": "1822407ab8b571b8cc49dfbc7888846f6ca35d143dc4797176f1db7d08c7b7e6",
+      "sources/modules/comfyui-anima-tools/js/anima_prompt_identity.js": "ca9add4662bd45c9fd1ea3f41a51f29c2456c9df6d8a36712e9063141ce850b6",
+      "sources/modules/comfyui-anima-tools/js/anima_selector_ui.js": "80503349e7aca84f25e8a620bcfdb83ef564dfeca869e973a4a03ae88aa80926",
+      "sources/modules/comfyui-anima-tools/js/anima_shared_prompt_data.js": "0ece715ee1488cb4a68be647abac5383f3cfc0b442d99628a8385c18ea078e18",
+      "sources/modules/comfyui-anima-tools/js/i18n.js": "98e6acbd0cd994021c96889772f3fdd4c0a89ee8b15970fb486dc5220fc6f355",
+      "before/web/workbench.css": "796e4709b29d7761ff378b60bec61e99324941d245f763cea451bb57c98c2e40",
+      "before/modules/comfyui-anima-tools/js/anima_character_selector.js": "d8a024fd25f73a9df26c89e77d375209c8d592b1e3d53d4ee2a9ad121e743983"
+    }
+  },
+  "production_writes": 0,
+  "rollback_apply_executed": false,
+  "deleted_files_on_rollback": 0,
+  "limits": [
+    "Frozen bytes and read-only preflight do not prove an executed rollback.",
+    "Backend restoration requires a controlled restart and fresh browser acceptance."
+  ]
+}

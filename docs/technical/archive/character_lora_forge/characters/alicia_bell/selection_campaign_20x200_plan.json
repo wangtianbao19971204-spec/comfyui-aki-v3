@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "character_id": "alicia_bell",
+  "trigger_token": "alcbl7yo260817",
+  "status": "approved_ready_for_generation",
+  "created_at": "2026-08-18",
+  "campaign": {
+    "production_rounds": 20,
+    "candidates_per_round": 200,
+    "ordinary_candidates_per_round": 100,
+    "morning_star_candidates_per_round": 100,
+    "selected_per_round": 50,
+    "ordinary_selected_per_round": 25,
+    "morning_star_selected_per_round": 25,
+    "total_candidates": 4000,
+    "provisional_selected_total": 1000,
+    "final_gold_target": 200,
+    "final_ordinary_target": 100,
+    "final_morning_star_target": 100,
+    "total_batches": 40,
+    "final_selected_per_batch_floor": 5,
+    "production_run_id": "20260818_20x200_campaign"
+  },
+  "anchors": {
+    "ordinary_fullbody_direction": "runs/20260818_ordinary_vs_morning_star_contrast_base/candidates/ordinary_contrast_001_fullbody.png",
+    "ordinary_eye_anchor": "runs/20260818_eye_color_pupil_contrast_base/candidates/ordinary_eye_contrast_001_bust.png",
+    "morning_star_fullbody_direction": "02_master_refs/morning_star_base_fullbody_translucent_shawl.png",
+    "morning_star_eye_anchor": "02_master_refs/morning_star_base_closeup_translucent_shawl.png",
+    "morning_star_default_outfit_approved_001": "02_master_refs/morning_star_default_idol_outfit_approved_001.png",
+    "morning_star_default_outfit_approved_002": "02_master_refs/morning_star_default_idol_outfit_approved_002.png",
+    "morning_star_anchor_rule": "These two master refs override later simplified single-side-ponytail red-dress variants.",
+    "morning_star_default_outfit_trigger": "Morning Star default idol outfit",
+    "morning_star_alternate_outfit_trigger": "Morning Star alternate idol outfit",
+    "same_clothing_contrast_gate": "If ordinary Alicia and Morning Star intentionally wear the same clothing, they still must separate at first glance by hair structure, eye design, star cue, posture, and virtual-vs-offline presence.",
+    "morning_star_lora_keyword_lock": "01_visual_spec/morning_star_lora_keyword_lock_20260818.md",
+    "form_outfit_separation_matrix": "01_visual_spec/form_outfit_separation_matrix_20260818.md"
+  },
+  "preflight": {
+    "pilot_candidate_count": 16,
+    "required_anchors_before_scaling": [
+      "ordinary_alicia_front_fullbody",
+      "ordinary_alicia_bust_eye_anchor",
+      "morning_star_front_fullbody",
+      "morning_star_bust_virtual_eye_anchor"
+    ]
+  },
+  "rounds": [
+    {
+      "id": "R01",
+      "focus": "core identity front full-body and bust",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R01_ordinary_core_identity",
+      "morning_star_batch_id": "R01_morning_star_core_identity"
+    },
+    {
+      "id": "R02",
+      "focus": "view coverage plus motion diversity: three-quarter, profile, rear-three-quarter, rear, walking, turning, seated, reaching, and performance gestures",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R02_ordinary_view_coverage",
+      "morning_star_batch_id": "R02_morning_star_view_coverage"
+    },
+    {
+      "id": "R03",
+      "focus": "expression and face stability",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R03_ordinary_expression_face",
+      "morning_star_batch_id": "R03_morning_star_expression_face"
+    },
+    {
+      "id": "R04",
+      "focus": "hair eye ribbon hands shoes and stockings details",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R04_ordinary_detail_parts",
+      "morning_star_batch_id": "R04_morning_star_detail_parts"
+    },
+    {
+      "id": "R05",
+      "focus": "ordinary daily clothing variants plus Morning Star default idol outfit coverage with a small explicitly tagged alternate idol outfit branch",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R05_ordinary_outfit_variants",
+      "morning_star_batch_id": "R05_morning_star_default_and_alternate_idol_outfit"
+    },
+    {
+      "id": "R06",
+      "focus": "non-core accessory ablation, Morning Star core-cue stability checks, and same-clothing form contrast tests",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R06_ordinary_accessory_ablation",
+      "morning_star_batch_id": "R06_morning_star_core_cue_stability"
+    },
+    {
+      "id": "R07",
+      "focus": "high-magic city daily and virtual broadcast stage",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R07_ordinary_magic_city_broadcast",
+      "morning_star_batch_id": "R07_morning_star_magic_city_broadcast"
+    },
+    {
+      "id": "R08",
+      "focus": "travel walking seated and relaxed poses",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R08_ordinary_travel_relaxed",
+      "morning_star_batch_id": "R08_morning_star_travel_relaxed"
+    },
+    {
+      "id": "R09",
+      "focus": "formal seasonal weather and outerwear",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R09_ordinary_formal_seasonal",
+      "morning_star_batch_id": "R09_morning_star_formal_seasonal"
+    },
+    {
+      "id": "R10",
+      "focus": "magical-network support healer and streamer contexts",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R10_ordinary_support_streamer",
+      "morning_star_batch_id": "R10_morning_star_support_streamer"
+    },
+    {
+      "id": "R11",
+      "focus": "clean anime reference style stress",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R11_ordinary_clean_style_stress",
+      "morning_star_batch_id": "R11_morning_star_clean_style_stress"
+    },
+    {
+      "id": "R12",
+      "focus": "cinematic anime lighting stress",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R12_ordinary_cinematic_stress",
+      "morning_star_batch_id": "R12_morning_star_cinematic_stress"
+    },
+    {
+      "id": "R13",
+      "focus": "gouache storybook stress",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R13_ordinary_gouache_stress",
+      "morning_star_batch_id": "R13_morning_star_gouache_stress"
+    },
+    {
+      "id": "R14",
+      "focus": "watercolor and ink stress",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R14_ordinary_watercolor_stress",
+      "morning_star_batch_id": "R14_morning_star_watercolor_stress"
+    },
+    {
+      "id": "R15",
+      "focus": "RPG concept art stress",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R15_ordinary_rpg_concept_stress",
+      "morning_star_batch_id": "R15_morning_star_rpg_concept_stress"
+    },
+    {
+      "id": "R16",
+      "focus": "graphic novel limited-palette ink stress",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R16_ordinary_graphic_novel_stress",
+      "morning_star_batch_id": "R16_morning_star_graphic_novel_stress"
+    },
+    {
+      "id": "R17",
+      "focus": "stylized 3D anime render stress",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R17_ordinary_stylized_3d_stress",
+      "morning_star_batch_id": "R17_morning_star_stylized_3d_stress"
+    },
+    {
+      "id": "R18",
+      "focus": "pastel vintage print stress",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R18_ordinary_pastel_print_stress",
+      "morning_star_batch_id": "R18_morning_star_pastel_print_stress"
+    },
+    {
+      "id": "R19",
+      "focus": "repair round for weak coverage and hard rejects",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R19_ordinary_repair_weak_coverage",
+      "morning_star_batch_id": "R19_morning_star_repair_weak_coverage"
+    },
+    {
+      "id": "R20",
+      "focus": "final challenge mixed scenes rare views and edge cases",
+      "ordinary_candidates": 100,
+      "morning_star_candidates": 100,
+      "ordinary_selected": 25,
+      "morning_star_selected": 25,
+      "ordinary_batch_id": "R20_ordinary_final_challenge",
+      "morning_star_batch_id": "R20_morning_star_final_challenge"
+    }
+  ],
+  "scoring": {
+    "hard_reject_first": true,
+    "provisional_accept_threshold": 82,
+    "borderline_review_range": [
+      78,
+      81
+    ],
+    "final_preferred_threshold": 88,
+    "weights": {
+      "identity_likeness": 30,
+      "adult_body_proportions": 20,
+      "technical_anatomy_quality": 15,
+      "prompt_form_correctness": 15,
+      "training_information_value": 10,
+      "style_identity_preservation": 5,
+      "aesthetic_finish": 5
+    },
+    "minimum_identity_score": 24,
+    "minimum_body_score": 16
+  },
+  "final_audit": {
+    "same_stem_png_txt_pairs": true,
+    "captions_trigger_first": true,
+    "exact_duplicate_hash_count": 0,
+    "near_duplicate_dhash_review_threshold": 6,
+    "require_manual_audit": true,
+    "require_coverage_report": true,
+    "promotion_dir": "final_training_200"
+  },
+  "approved_by_user_at": "2026-08-18"
+}

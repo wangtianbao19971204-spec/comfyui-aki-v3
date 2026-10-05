@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "purpose": "Current installed source consolidation into the sole maintenance Git",
+  "mode": "NEW_PATHS_ONLY_SOURCE_IMPORT",
+  "review_sha256": [
+    "bab2849c19332b19a330d543166006afd8617a693f5dbf66d87ba6cd8ac00237"
+  ],
+  "files": [
+    {
+      "source": "anima_lora_forge/vendor/sd-trainer/Download-Anima-Model.bat",
+      "path": "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/Download-Anima-Model.bat",
+      "sha256": "2b070adab8005c664df0c9e16765c6041a7819e7c20c3407a1a5fcbb0b4dc8a4",
+      "bytes": 3175
+    },
+    {
+      "source": "anima_lora_forge/vendor/sd-trainer/Fix-Portable-Bats.bat",
+      "path": "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/Fix-Portable-Bats.bat",
+      "sha256": "49d48da1c7f4ce2f8be7533777b23f5d23880f54c919f12ef987b066cdb1fa3e",
+      "bytes": 538
+    },
+    {
+      "source": "anima_lora_forge/vendor/sd-trainer/README.txt",
+      "path": "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/README.txt",
+      "sha256": "80e4e475726413e3bd02c0256ac6ccd52a10c472c972a1a628e846555a14617e",
+      "bytes": 1915
+    },
+    {
+      "source": "anima_lora_forge/vendor/sd-trainer/Update-SD-Trainer-Release.bat",
+      "path": "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/Update-SD-Trainer-Release.bat",
+      "sha256": "b3964f15f7ec593b4d553bb684443e5bea9abb3ea45bb2764e0e71546148d98d",
+      "bytes": 5652
+    },
+    {
+      "source": "anima_lora_forge/vendor/sd-trainer/Update-SD-Trainer.bat",
+      "path": "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/Update-SD-Trainer.bat",
+      "sha256": "3f32f79d19ee7552c010c0bc5dcf33951f6ac5ac009fa00a08b51b692ad57c77",
+      "bytes": 15359
+    },
+    {
+      "source": "anima_lora_forge/vendor/sd-trainer/install_xformers.bat",
+      "path": "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/install_xformers.bat",
+      "sha256": "2663613adf577e016b5e7d41225ba9f503c991fc7d4fe6d288c86967361da77c",
+      "bytes": 727
+    },
+    {
+      "source": "anima_lora_forge/vendor/sd-trainer/run_gui.bat",
+      "path": "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/run_gui.bat",
+      "sha256": "1677dbcc910290d72faa99e5998988fa82511e6c9d3a442be568df625ebbb833",
+      "bytes": 1294
+    },
+    {
+      "source": "anima_lora_forge/vendor/sd-trainer/run_gui_portable.bat",
+      "path": "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/run_gui_portable.bat",
+      "sha256": "d538d247afdb6ba5589691e123599d16ee6519e554fc8768735e9bb00631c6eb",
+      "bytes": 179
+    },
+    {
+      "source": "anima_lora_forge/vendor/sd-trainer/update/update_dependencies.bat",
+      "path": "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/update/update_dependencies.bat",
+      "sha256": "593fe1286a1317fbc35d9fb53dbf3e16b34607a0f741d478e50871655340ac21",
+      "bytes": 323
+    },
+    {
+      "source": "anima_lora_forge/vendor/sd-trainer/update/update_from_release.bat",
+      "path": "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/update/update_from_release.bat",
+      "sha256": "359a75209be50b59b68eb30119c154f5e868b95ab21f16d93d56131fe3b1d518",
+      "bytes": 104
+    },
+    {
+      "source": "anima_lora_forge/vendor/sd-trainer/update/update_sd_trainer.bat",
+      "path": "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/update/update_sd_trainer.bat",
+      "sha256": "fac4e91c740c1ab84456ac5bd579719d7ccac137a6fea669129faa93f8e923e0",
+      "bytes": 96
+    }
+  ],
+  "file_count": 11,
+  "bytes": 29362,
+  "ownership": {
+    "authority": "snapshot/runtime/<source relative path>",
+    "installed_plugins": "Captured does not mean enabled; production plugin whitelist is unchanged.",
+    "workbench_modules": "Unified workbench modules remain authoritative; outer shims are not a second development copy.",
+    "anima_lora_forge": "Forge and current on-disk trainer source, without restoring upstream deletions.",
+    "character_lora_forge": "Dataset maintenance code only; character projects, review outputs and media stay external.",
+    "qwen21_lab": "Independent lab launcher, actual current core and API graphs; not the production service.",
+    "remote_llm_guard": "Handled by separate credential-aware migration; raw launchers not copied by this importer."
+  },
+  "excluded_reason_counts": {
+    "generated_private_or_backup_directory": 282,
+    "historical_backup_file": 32,
+    "json_requires_explicit_public_source_review": 488,
+    "linked_path_not_followed": 38,
+    "not_a_source_allowlist_extension": 1685,
+    "private_configuration_or_external_payload": 53,
+    "text_data_not_source_allowlist": 82,
+    "yaml_requires_explicit_public_source_review": 89
+  },
+  "external_boundary": [
+    "Model weights, training datasets, previews and generated media",
+    "Python/CUDA environments, node_modules, compiled service binaries and caches",
+    "Credential-bearing files, runtime state, user databases and unreviewed live configuration",
+    "Historical benchmark/backups, old Git metadata and raw private archives",
+    "Unreviewed JSON/YAML/text fixtures, example graphs and non-source binary assets remain in the private exclusion inventory"
+  ],
+  "existing_main_files_modified": false,
+  "production_modified": false,
+  "sealed_by_importer": false,
+  "committed_by_importer": false,
+  "deployed": false,
+  "acceptance_boundary": "Byte identity and isolated import-tool tests only; no cold start, training or GPU inference acceptance."
+}

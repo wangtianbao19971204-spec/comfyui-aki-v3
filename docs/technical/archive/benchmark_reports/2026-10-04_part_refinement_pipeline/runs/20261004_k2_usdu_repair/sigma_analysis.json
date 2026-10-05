@@ -1,0 +1,49 @@
+{
+  "method": "Calculated from inspected local source, not a captured runtime sigma trace",
+  "model_sampling": "Krea2 default ModelType.FLUX / ModelSamplingFlux shift=1.15",
+  "scheduler": "simple",
+  "steps": 4,
+  "sources": [
+    "ComfyUI/comfy/supported_models.py:Krea2",
+    "ComfyUI/comfy/model_sampling.py:ModelSamplingFlux and flux_time_shift",
+    "ComfyUI/comfy/samplers.py:simple_scheduler and KSampler.set_steps"
+  ],
+  "schedules": {
+    "0.03": [
+      0.089263,
+      0.068056,
+      0.046184,
+      0.023615,
+      0
+    ],
+    "0.05": [
+      0.142529,
+      0.109565,
+      0.074913,
+      0.03844,
+      0
+    ],
+    "0.12": [
+      0.303608,
+      0.240218,
+      0.169498,
+      0.090098,
+      0
+    ],
+    "0.2": [
+      0.4412,
+      0.357875,
+      0.259758,
+      0.142529,
+      0
+    ],
+    "0.42": [
+      0.716483,
+      0.612339,
+      0.474444,
+      0.283221,
+      0
+    ]
+  },
+  "interpretation": "UI denoise is a schedule-tail fraction, not sigma itself. The original seam setting starts near sigma 0.716; testing a much weaker redraw/seam pair is motivated, but efficacy must come from actual images."
+}

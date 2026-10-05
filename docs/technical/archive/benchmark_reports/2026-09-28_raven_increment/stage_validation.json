@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "source_rows": 816,
+  "unique_targets": 811,
+  "new_tags": 445,
+  "existing_targets_updated": 366,
+  "images_verified": 816,
+  "source_images_not_primary_preview": 5,
+  "data_sha256": "40490c2c8fded8efb85572292970016ea34462b64a216e454190cb73d9386af6",
+  "baseline_db_sha256": "963fd27e439bdfc79ea0bbe524840c898ffa18ad3c2c14ff5e487d748ce07402",
+  "stage_db_sha256": "eb907aa72f384fb41ba8d7df776ca11175a904d2401b03723a37f6930f067950",
+  "tag_revision_before": 1820872,
+  "tag_revision_after": 1822242,
+  "paired_existing_tags_unchanged_semantically": 0,
+  "rollback_drill_passed": true
+}

@@ -1,0 +1,20 @@
+{
+  "recorded_at": "2026-10-03T23:05:08.9293974+08:00",
+  "status": "diagnosed_data_present_user_window_cause_unconfirmed",
+  "production_changes": [],
+  "clothing_total": 2329,
+  "categories_checked": 93,
+  "category_mismatches": [],
+  "fresh_browser_results": {
+    "eyes_mouth": 201,
+    "gaze": 173,
+    "surprise_tension": 177
+  },
+  "diagnosis": "Category labels show unfiltered catalog totals; results additionally intersect source, query, collection, selected-only, and trait filters. Current single-category matching passes. The screenshot zero-result state has not been reproduced.",
+  "unconfirmed_hypotheses": [
+    "persisted additional filters",
+    "old-page JavaScript"
+  ],
+  "pending_user_check": "Clear filters then select gaze direction again",
+  "qa_filter_cleanup_total": 2329
+}

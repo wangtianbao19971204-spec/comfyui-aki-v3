@@ -1,0 +1,87 @@
+{
+  "run": "20261004_2200_nsfw_force_inpaint",
+  "scope": "2026-10-04_part_refinement_pipeline",
+  "owner_thread": "01a1061f-c0b3-7f40-8168-1bc0ca82582c",
+  "completed_at": "2026-10-04T20:26:57.850624+08:00",
+  "correction_of_earlier_claim": "An earlier report in this scope stated the NSFW detailers had noise_mask_feather = 0/False. That was wrong: it came from zipping a 19-name key list against a 20-element widget array, which shifted every column by one after refiner_ratio. The real values were noise_mask=True, force_inpaint=False, noise_mask_feather=10.",
+  "real_divergence_fixed": "force_inpaint was False on all NSFW detailers while every face/hand/eye branch has it True. With force_inpaint False the detailer skips any region already larger than guide_size - the classic 'the detector box appears but the image does not change' symptom.",
+  "change": {
+    "force_inpaint": [
+      false,
+      true
+    ],
+    "noise_mask_feather": [
+      10,
+      20
+    ]
+  },
+  "nodes_changed": [
+    {
+      "subgraph": "38994e3a",
+      "id": 108007,
+      "title": "[10D2] 男性细化"
+    },
+    {
+      "subgraph": "38994e3a",
+      "id": 108012,
+      "title": "[10D1] 女性细化"
+    },
+    {
+      "subgraph": "cf43ae44",
+      "id": 118007,
+      "title": "[10D2] 男性细化"
+    },
+    {
+      "subgraph": "cf43ae44",
+      "id": 118012,
+      "title": "[10D1] 女性细化"
+    },
+    {
+      "subgraph": "b9284850",
+      "id": 109004,
+      "title": "[10E1] 女性细化"
+    },
+    {
+      "subgraph": "b9284850",
+      "id": 109008,
+      "title": "[10E2] 男性细化"
+    },
+    {
+      "subgraph": "0c046c63",
+      "id": 119004,
+      "title": "[10E1] 女性细化"
+    },
+    {
+      "subgraph": "0c046c63",
+      "id": 119008,
+      "title": "[10E2] 男性细化"
+    }
+  ],
+  "unchanged": "denoise 0.30 (10D) / 0.26 (10E), steps 16/12, cfg per kit, guide 768, max 1280, feather 5, refiner_ratio 0.3, wildcards, tiled encode/decode",
+  "file": {
+    "path": "ComfyUI\\user\\default\\workflows\\UAP统一生产工作台_v2.json",
+    "bytes": 1303830,
+    "sha256_after": "b6e2c7678ffcec7d09ffcfaa3c5880be62a8aff27addec7f8d815b5d8b916344"
+  },
+  "backup": {
+    "path": "ComfyUI\\user\\default\\codex_backups\\2026-10-04_before_nsfw_forceinpaint.json",
+    "bytes": 1303838,
+    "sha256": "bea7cef98eab5e77db1ae5983925d2bfcdcec5e9dcf5299bd7f4ebc598a15a30"
+  },
+  "sha256_before": "bea7cef98eab5e77db1ae5983925d2bfcdcec5e9dcf5299bd7f4ebc598a15a30",
+  "validation": {
+    "static": "0 duplicate node ids across top level and all 20 subgraphs; every link resolves in both directions",
+    "live": "parameter-only change on nodes whose code path is already live-proven (10D/10E NSFW detailers ran in earlier sessions); no new node type or wiring"
+  },
+  "production_changes": {
+    "workflows_modified_in_place": 1,
+    "files_modified": [
+      "ComfyUI\\user\\default\\workflows\\UAP统一生产工作台_v2.json"
+    ],
+    "models_added": 0,
+    "service_restarted": false,
+    "queue_cleared": false,
+    "free_called": false
+  },
+  "rollback": "copy ComfyUI\\user\\default\\codex_backups\\2026-10-04_before_nsfw_forceinpaint.json over ComfyUI\\user\\default\\workflows\\UAP统一生产工作台_v2.json; pre-change sha256 bea7cef98eab5e77db1ae5983925d2bfcdcec5e9dcf5299bd7f4ebc598a15a30"
+}

@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "project_id": "alicia_bell_morning_star_anima_lora_400",
+  "character_id": "alicia_bell_morning_star",
+  "display_name": "Alicia Bell Morning Star - 400 step calibration",
+  "trigger_token": "alcbm7yo260822",
+  "dataset_dir": "../character_lora_forge/characters/alicia_bell/runs/20260818_20x200_campaign/final_training_split_200/morning_star_v5/dataset",
+  "output_root": "runs/alicia_bell_morning_star",
+  "models": {
+    "dit": "../ComfyUI/models/diffusion_models/Anima/anima_baseV10.safetensors",
+    "text_encoder": "../ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors",
+    "vae": "../ComfyUI/models/vae/qwen_image_vae.safetensors",
+    "expected_dit_sha256": "bd43b7cffe1ed1153d9c41e7beb2f18cb1273eafbaa3af3edd6a173dc90a006e",
+    "expected_text_encoder_sha256": "cd2a512003e2f9f3cd3c32a9c3573f820bb28c940f73c57b1ddaa983d9223eba",
+    "expected_vae_sha256": "a70580f0213e67967ee9c95f05bb400e8fb08307e017a924bf3441223e023d1f"
+  },
+  "trainer": {
+    "root": "vendor/sd-trainer/SD-Trainer/vendor/sd-scripts",
+    "script": "anima_train_network.py",
+    "accelerate": "vendor/sd-trainer/python_embeded/Scripts/accelerate.exe",
+    "allow_execute": false
+  },
+  "dashboard": {
+    "root": "vendor/sd-trainer/SD-Trainer",
+    "python": "vendor/sd-trainer/python_embeded/python.exe",
+    "ui_url": "http://127.0.0.1:28000",
+    "monitor_url": "http://127.0.0.1:28000/train-monitor",
+    "tensorboard_url": "http://127.0.0.1:28000/tensorboard.html",
+    "run_api": "http://127.0.0.1:28000/api/run"
+  },
+  "training": {
+    "output_name": "alicia_bell_morning_star_anima_r32",
+    "network_module": "networks.lora_anima",
+    "network_dim": 32,
+    "network_alpha": 16,
+    "learning_rate": 0.00002,
+    "optimizer_type": "AdamW",
+    "lr_scheduler": "constant",
+    "timestep_sampling": "sigmoid",
+    "discrete_flow_shift": 1.0,
+    "max_train_steps": 400,
+    "save_every_n_steps": 100,
+    "mixed_precision": "bf16",
+    "save_precision": "bf16",
+    "resolution": 1024,
+    "batch_size": 1,
+    "num_repeats": 1,
+    "enable_bucket": true,
+    "bucket_no_upscale": true,
+    "min_bucket_reso": 512,
+    "max_bucket_reso": 1536,
+    "bucket_reso_steps": 64,
+    "shuffle_caption": false,
+    "keep_tokens": 1,
+    "cache_text_encoder_outputs": true,
+    "cache_latents": true,
+    "gradient_checkpointing": true,
+    "network_train_unet_only": true,
+    "qwen_image_vae_2d": false,
+    "num_cpu_threads_per_process": 1,
+    "seed": 260823,
+    "extra_args": []
+  },
+  "evaluation": {
+    "checkpoint_steps": [100, 200, 300, 400],
+    "lora_strengths": [0.6, 0.8, 1.0],
+    "required_axes": [
+      "same_person_identity",
+      "face_eyes_and_hair",
+      "body_proportions",
+      "outfit_control",
+      "hosiery_consistency",
+      "accessory_control",
+      "style_flexibility",
+      "anatomy"
+    ],
+    "require_codex_visual_review": true,
+    "enable_preview": false,
+    "preview_prompt": "alcbm7yo260822, masterpiece, best quality, safe, solo, one 23-year-old adult woman, Morning Star virtual singer, warm approachable soft oval face, fair warm luminous skin, warm champagne-gold eyes, peach rose-gold low twin tails tied with wine-red ribbons, exactly one small gold five-point hair star, fully clothed, opaque ivory upper idol dress, plain wine-red collar knot, short translucent ivory gauze shoulder shawl over opaque clothing, plain wine-red high-waist bodice, compact opaque ivory bell skirt with solid wine-red hem, very sheer ivory pantyhose covering both legs and feet, warm skin tone visible through the fabric, wine-red high heels, full body, neutral stage-ready standing pose, plain warm gray studio background, clean anime character art",
+    "preview_negative": "nsfw, nude, underwear, child, teen, ordinary Alicia form, loose everyday hair, teal cardigan, low boots, bare legs, opaque white leggings, opaque heavy tights, knee socks, detached stockings, garters, stocking-top band, dense geometric stocking pattern, metallic stocking stripes, broken hosiery coverage, chest star, oversized gem, multiple people, cropped feet, bad anatomy, text, watermark, signature, worst quality, low quality",
+    "sample_every_n_steps": 100
+  }
+}

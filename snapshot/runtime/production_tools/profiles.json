@@ -1,6 +1,7 @@
 {
   "production": [
     "ComfyUI-Anima-LLLite",
+    "ComfyUI-Anima-2.9B-loraPatch",
     "ComfyUI-Unified-Prompt-Workbench",
     "ComfyUI-Danbooru-Browser-Import",
     "ComfyUI-DazzleSwitch",
@@ -27,6 +28,7 @@
   ],
   "diagnostic": [
     "ComfyUI-Anima-LLLite",
+    "ComfyUI-Anima-2.9B-loraPatch",
     "ComfyUI-Unified-Prompt-Workbench",
     "ComfyUI-Danbooru-Browser-Import",
     "ComfyUI-DazzleSwitch",
@@ -64,6 +66,7 @@
   ],
   "anima": [
     "ComfyUI-Anima-LLLite",
+    "ComfyUI-Anima-2.9B-loraPatch",
     "ComfyUI-Unified-Prompt-Workbench",
     "ComfyUI-DazzleSwitch",
     "comfyui-easy-use",

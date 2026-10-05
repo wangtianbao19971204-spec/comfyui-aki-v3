@@ -1,0 +1,109 @@
+{
+  "created_at": "2026-09-27T12:26:20.784842+08:00",
+  "phase": "accepted",
+  "applied": true,
+  "passed": true,
+  "events": [
+    {
+      "phase": "job_0_passed",
+      "at": "2026-09-27T12:26:22.310295+08:00"
+    },
+    {
+      "phase": "service_stopped",
+      "at": "2026-09-27T12:26:22.440988+08:00"
+    },
+    {
+      "phase": "replacing_files",
+      "at": "2026-09-27T12:26:22.441759+08:00"
+    },
+    {
+      "phase": "production_starting",
+      "at": "2026-09-27T12:26:23.774054+08:00"
+    },
+    {
+      "phase": "live_acceptance",
+      "at": "2026-09-27T12:31:26.428897+08:00"
+    },
+    {
+      "phase": "accepted",
+      "at": "2026-09-27T12:37:13.687079+08:00"
+    }
+  ],
+  "preflight_sha256": "bd440a9b1d7d2663613b0831e0cab90d05b2f1e4ff081a705139a7ee727cb78b",
+  "before_sha256": {
+    "data.json": "7c3ef7dd6de55c1d3ff84d6ddc23abbad1b6e2d4dfcd90efc6c84229c6da1871",
+    "semantic_projection.json": "4ec203442d08b75dca3e0099255eb88ea1755ba5ecf3a8d4c3a8dedf55f88d54",
+    "semantic_refinements.py": "244b641f6058f51008fac8efb90f39c2bbdc7c0dcb9f7246fb53f01401eb20ab"
+  },
+  "queue_before": {
+    "queue_running": [],
+    "queue_pending": []
+  },
+  "installed_sha256": {
+    "data.json": "3f57aa7b2c82e3ac7c6c0c37d9029cbb8b0b0fafeb0d8b6267d39d1558f7733a",
+    "semantic_projection.json": "4ec203442d08b75dca3e0099255eb88ea1755ba5ecf3a8d4c3a8dedf55f88d54",
+    "semantic_refinements.py": "bb11333ea0eb3f081a69191b803759b58888f90429b56ee891b1af3952ab2741"
+  },
+  "production": {
+    "pid": 31012,
+    "create_time": 1790483183.7679129,
+    "command": [
+      "G:\\ComfyUI-aki-v3\\python\\python.exe",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\main.py",
+      "--preview-method",
+      "auto",
+      "--cuda-malloc",
+      "--reserve-vram",
+      "4",
+      "--listen",
+      "127.0.0.1"
+    ],
+    "workbench": {
+      "name": "统一工作台",
+      "version": "1.0.0",
+      "modules": [
+        {
+          "key": "weilin",
+          "label": "共享资料与提示词",
+          "nodes": 4,
+          "ready": true
+        },
+        {
+          "key": "anima",
+          "label": "Anima 标签与随机选择",
+          "nodes": 16,
+          "ready": true
+        },
+        {
+          "key": "gallery",
+          "label": "Gallery 与 UAP",
+          "nodes": 22,
+          "ready": true
+        },
+        {
+          "key": "lora_manager",
+          "label": "LoRA、模型与 Embedding",
+          "nodes": 16,
+          "ready": true
+        },
+        {
+          "key": "completion",
+          "label": "补全与工作流工具",
+          "nodes": 13,
+          "ready": true
+        }
+      ],
+      "nodes": 71,
+      "resource_owner": "weilin",
+      "degraded": false
+    }
+  },
+  "sole_listener_ok": true,
+  "completed_at": "2026-09-27T12:42:12.942648+08:00",
+  "revision_finalization": {
+    "receipt": "revision_finalize/receipt.json",
+    "sha256": "8ffb9ebed6fc879bb32c25962c7f8f32ad90165f89bc9031df382ac4bc5b109b",
+    "final_data_sha256": "99913f55c40536692cc67a672678b3720f18ce0922156952d2c59e723e47060b",
+    "new_revision": "2026-09-27T12:38:09.411647"
+  }
+}

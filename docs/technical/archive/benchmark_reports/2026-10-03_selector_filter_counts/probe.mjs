@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
+const run=new URL('./',import.meta.url);
+const index=JSON.parse(fs.readFileSync(new URL('index.json',run),'utf8'));
+const items=JSON.parse(fs.readFileSync(new URL('clothing.json',run),'utf8')).items;
+const path='G:/ComfyUI-aki-v3/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/js/anima_shared_prompt_data.js';
+const source=fs.readFileSync(path,'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'');
+const context=vm.createContext({items,fetch:async()=>({ok:true,json:async()=>index})});
+vm.runInContext(source,context);
+await vm.runInContext('loadSharedLibraryTaxonomy()',context);
+const result=vm.runInContext(`(()=>{const rows=[];const visit=nodes=>nodes.forEach(node=>{rows.push({key:node.key,label:node.name,expected:node.count,actual:items.filter(item=>itemMatchesCategoryFilters(item,new Set([node.key]))).length});visit(node.children);});visit(buildSharedCategoryTree(items));return {rows,mismatches:rows.filter(x=>x.expected!==x.actual)};})()`,context);
+fs.writeFileSync(new URL('count_probe.json',run),JSON.stringify(result,null,2));
+console.log(JSON.stringify({total:result.rows.length,mismatches:result.mismatches,gaze:result.rows.filter(x=>x.label==='视线方向')},null,2));

@@ -1,0 +1,292 @@
+{
+  "server": "http://127.0.0.1:8188",
+  "output_prefix": "benchmark_anima29_20260824",
+  "models": {
+    "anima_original": {
+      "label": "Anima finetune (miaomiaoHarem anima15)",
+      "builder": "anima_native",
+      "unet": "Anima\\miaomiaoHarem_anima15.safetensors",
+      "clip": "anima_baseV10_txt.safetensors",
+      "clip_type": "stable_diffusion",
+      "vae": "qwen_image_vae.safetensors",
+      "latent_class": "EmptyLatentImage",
+      "shift": 3.0,
+      "steps": 50,
+      "cfg": 7.0,
+      "sampler": "res_multistep",
+      "scheduler": "beta"
+      ,"live_negative": ""
+    },
+    "anima_29b": {
+      "label": "Anima 2.9B preview v1 BF16",
+      "builder": "anima_native",
+      "unet": "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+      "clip": "anima_baseV10_txt.safetensors",
+      "clip_type": "stable_diffusion",
+      "vae": "qwen_image_vae.safetensors",
+      "latent_class": "EmptyLatentImage",
+      "shift": 3.0,
+      "steps": 50,
+      "cfg": 3.5,
+      "sampler": "euler",
+      "scheduler": "sgm_uniform",
+      "live_negative": ""
+    },
+    "krea2": {
+      "label": "Krea2 Dasiwa Turbo Raw cutedisaster V2",
+      "builder": "krea2",
+      "unet": "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+      "clip": "qwen3-vl-4b-heretic.safetensors",
+      "clip_type": "krea2",
+      "vae": "krea2RealVae_v10.safetensors",
+      "latent_class": "EmptySD3LatentImage",
+      "steps": 8,
+      "cfg": 1.0,
+      "sampler": "euler",
+      "scheduler": "simple"
+      ,"live_negative": ""
+    }
+  },
+  "common_negative": "worst quality, low quality, blurry, malformed hands, extra fingers, fused bodies, duplicate subject, bad anatomy, bad perspective, unreadable details, chromatic noise, abstract artifacts",
+  "cases": [
+    {
+      "id": "smoke_single_character",
+      "phase": "smoke",
+      "category": "baseline",
+      "width": 832,
+      "height": 1216,
+      "seed": 2026082401,
+      "prompt": "masterpiece, best quality, anime illustration, full-body portrait. An adult woman with short silver hair stands in a quiet train station, wearing a navy conductor uniform and holding a brass pocket watch in both hands. Warm morning light, clean anatomy, detailed face and hands, coherent background.",
+      "checks": ["one adult woman", "silver short hair", "navy conductor uniform", "pocket watch held with both hands", "train station"]
+    },
+    {
+      "id": "three_character_binding",
+      "phase": "core",
+      "category": "prompt_adherence",
+      "width": 832,
+      "height": 1216,
+      "seed": 2026082402,
+      "prompt": "masterpiece, best quality, anime illustration, wide shot, full bodies. At a rainy train platform, exactly three adult women form a triangle. Left: a silver-haired conductor holds a brass pocket watch. Center: a red-haired traveler kneels beside one blue suitcase. Right: a black-haired student holds a transparent umbrella. One yellow cat sits on the suitcase. A red train arrives behind them. A blue sign above the group clearly reads PLATFORM 9. Wet floor reflections, cinematic lighting, coherent perspective, detailed hands.",
+      "checks": ["exactly three women", "left silver-haired conductor with watch", "center red-haired kneeling traveler", "right black-haired student with transparent umbrella", "one yellow cat on one blue suitcase", "one red train", "PLATFORM 9"]
+    },
+    {
+      "id": "two_person_action",
+      "phase": "core",
+      "category": "hands_and_interaction",
+      "width": 1024,
+      "height": 1024,
+      "seed": 2026082403,
+      "prompt": "masterpiece, best quality, detailed illustration. Inside a small cafe, an adult barista on the left pours a thin stream of tea from a glass pot into a white cup held by an adult customer on the right. Both pairs of hands are visible and do not overlap. A sleeping orange cat rests under the table. Warm window light, natural expressions, accurate fingers, coherent object interaction.",
+      "checks": ["two adults", "barista left", "customer right", "tea stream connects pot and cup", "four visible hands", "orange cat under table"]
+    },
+    {
+      "id": "english_signage",
+      "phase": "core",
+      "category": "typography",
+      "width": 1216,
+      "height": 832,
+      "seed": 2026082404,
+      "prompt": "masterpiece, cinematic night street illustration. A single corner cafe with a large illuminated sign that clearly reads MOONLIGHT CAFE 24H. Below it, a smaller menu board shows exactly three lines: COFFEE 4, TEA 3, CAKE 6. One red bicycle is parked outside. Rain reflections, frontal camera, clean architecture, no people, legible centered typography.",
+      "checks": ["MOONLIGHT CAFE 24H", "COFFEE 4", "TEA 3", "CAKE 6", "one red bicycle", "no people"]
+    },
+    {
+      "id": "architecture_perspective",
+      "phase": "core",
+      "category": "environment",
+      "width": 1216,
+      "height": 832,
+      "seed": 2026082405,
+      "prompt": "masterpiece, highly detailed architectural visualization. A vast brutalist library atrium with exactly three visible floors, a central reflecting pool, two symmetrical staircases, and a circular skylight directly above the pool. Tiny visitors provide scale. Strong one-point perspective, concrete texture, glass railings, realistic indirect daylight, straight structural lines, deep readable space.",
+      "checks": ["three floors", "central pool", "two symmetrical stairs", "circular skylight above pool", "one-point perspective", "straight architecture"]
+    },
+    {
+      "id": "photoreal_carpenter",
+      "phase": "core",
+      "category": "photorealism",
+      "width": 832,
+      "height": 1216,
+      "seed": 2026082406,
+      "prompt": "documentary photograph, full-body portrait of an elderly female carpenter in a sunlit workshop. She wears a faded denim apron and protective glasses, holding a wooden hand plane against a workbench. Fine skin texture, gray hair, sawdust in the air, natural hands, realistic wood grain, restrained colors, 50mm lens, soft window light, candid expression.",
+      "checks": ["elderly woman", "denim apron", "protective glasses", "hand plane at workbench", "realistic skin and wood", "documentary photo look"]
+    },
+    {
+      "id": "anime_action",
+      "phase": "core",
+      "category": "anime_dynamics",
+      "width": 1216,
+      "height": 832,
+      "seed": 2026082407,
+      "prompt": "masterpiece, best quality, dynamic anime key visual. An adult red-haired swordswoman leaps from left to right across a ruined rooftop, drawing one curved sword while her long white coat twists behind her. A mechanical raven flies in the opposite direction. Low-angle camera, strong foreshortening, wind-driven debris, sunset rim light, readable limbs, energetic diagonal composition, crisp face and hands.",
+      "checks": ["one adult swordswoman", "left-to-right leap", "one curved sword", "white coat", "mechanical raven opposite direction", "low angle and foreshortening"]
+    },
+    {
+      "id": "risograph_poster",
+      "phase": "core",
+      "category": "style_control",
+      "width": 832,
+      "height": 1216,
+      "seed": 2026082408,
+      "prompt": "graphic design poster in two-color risograph print style, using only cobalt blue and fluorescent orange on off-white paper. A simplified astronaut waters a single sunflower growing from a small moon. Bold halftone dots, rough ink registration, large empty margins, flat shapes, no gradients, vertical composition. The bottom caption clearly reads GROW BEYOND.",
+      "checks": ["only blue orange and off-white", "astronaut watering sunflower", "small moon", "risograph halftone", "large margins", "GROW BEYOND"]
+    },
+    {
+      "id": "product_design",
+      "phase": "core",
+      "category": "object_coherence",
+      "width": 1024,
+      "height": 1024,
+      "seed": 2026082409,
+      "prompt": "premium product photograph of one transparent glass wristwatch on a matte black pedestal. The watch has a square face, exactly two silver hands showing 10:10, a translucent blue strap, and one small red crown on the right side. Three-quarter front view, clean studio reflections, sharp edges, dark neutral background, centered composition, no text, no extra watches.",
+      "checks": ["one watch", "transparent glass", "square face", "two hands at 10:10", "blue strap", "red crown on right", "no text"]
+    },
+    {
+      "id": "counting_still_life",
+      "phase": "core",
+      "category": "counting",
+      "width": 1024,
+      "height": 1024,
+      "seed": 2026082410,
+      "prompt": "top-down editorial photograph of a dark wooden table containing exactly seven objects: three green pears in a row, two white ceramic cups, one closed red notebook, and one brass key. Nothing overlaps. No other objects. Soft daylight from the upper left, realistic shadows, clean spacing, high detail, balanced square composition.",
+      "checks": ["exactly seven objects", "three green pears", "two white cups", "one red notebook", "one brass key", "nothing overlaps"]
+    },
+    {
+      "id": "attribute_swap",
+      "phase": "core",
+      "category": "attribute_binding",
+      "width": 832,
+      "height": 1216,
+      "seed": 2026082411,
+      "prompt": "masterpiece, full-body anime illustration. Exactly two adult women stand at a rainy bus stop. The woman on the left has white hair, wears a red coat, and holds an open blue umbrella. The woman on the right has black hair, wears a blue coat, and holds an open red umbrella. Between them, one yellow cat sits on one green suitcase. No other people, cats, umbrellas, or suitcases. Wet reflections, cinematic night lighting.",
+      "checks": ["exactly two women", "left white hair red coat blue umbrella", "right black hair blue coat red umbrella", "one yellow cat", "one green suitcase", "no duplicate umbrellas"]
+    },
+    {
+      "id": "low_light_neon",
+      "phase": "core",
+      "category": "lighting",
+      "width": 1216,
+      "height": 832,
+      "seed": 2026082412,
+      "prompt": "cinematic wide shot of a narrow cyberpunk alley at midnight after rain. One delivery rider in a yellow jacket walks away from the camera, carrying a square blue package. Red neon glows only on the left wall, cyan neon only on the right wall. Deep shadows retain detail, wet pavement reflections stay beneath their matching lights, atmospheric steam, realistic scale, no crowd.",
+      "checks": ["one rider walking away", "yellow jacket", "blue square package", "red light left", "cyan light right", "matching reflections", "no crowd"]
+    },
+    {
+      "id": "dance_foreshortening",
+      "phase": "core",
+      "category": "anatomy",
+      "width": 832,
+      "height": 1216,
+      "seed": 2026082413,
+      "prompt": "high-fashion editorial photograph of an adult contemporary dancer performing a deep airborne split above a black stage. One bare hand reaches toward the camera and appears larger through perspective; the other arm extends backward. Flowing emerald fabric follows the motion without hiding the legs. Dramatic overhead spotlight, accurate anatomy, natural fingers and feet, strong foreshortening, full body inside frame.",
+      "checks": ["one adult dancer", "airborne split", "one hand toward camera", "other arm backward", "emerald fabric", "full body", "accurate feet"]
+    },
+    {
+      "id": "natural_landscape",
+      "phase": "advanced",
+      "category": "landscape",
+      "width": 1216,
+      "height": 832,
+      "seed": 2026082414,
+      "prompt": "panoramic landscape photograph of a volcanic valley at dawn. A narrow turquoise river makes an S-curve from the foreground to a distant black mountain. Exactly five white birds fly near the horizon. Yellow moss covers the left bank while dark basalt dominates the right bank. Volumetric mist, realistic geology, subtle color, layered depth, no buildings, no people.",
+      "checks": ["S-curve turquoise river", "black mountain", "five white birds", "yellow moss left", "basalt right", "no buildings or people"]
+    },
+    {
+      "id": "chinese_bookshop_sign",
+      "phase": "advanced",
+      "category": "multilingual_text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2026082415,
+      "prompt": "cinematic evening street in Chengdu, frontal view of one traditional bookshop. The main wooden sign clearly displays exactly four Chinese characters: 月光书店. A smaller vertical red sign reads 今日营业. Two paper lanterns hang symmetrically above the entrance. One adult customer in a green coat enters through the center door. Wet stone pavement, warm interior light, realistic architecture, legible text.",
+      "checks": ["月光书店", "今日营业", "two lanterns", "one customer in green coat", "center entrance"]
+    },
+    {
+      "id": "tag_style_character",
+      "phase": "advanced",
+      "category": "tag_prompting",
+      "width": 832,
+      "height": 1216,
+      "seed": 2026082416,
+      "prompt": "masterpiece, best quality, newest, 1girl, adult, solo, full body, silver bob cut, amber eyes, navy military coat, white gloves, black knee boots, brass pocket watch, standing, train platform, morning fog, soft backlight, detailed face, detailed hands, clean lineart, anime illustration",
+      "checks": ["one adult woman", "silver bob", "amber eyes", "navy coat", "white gloves", "black knee boots", "pocket watch", "anime tag response"]
+    },
+    {
+      "id": "unusual_viewpoint",
+      "phase": "advanced",
+      "category": "camera_control",
+      "width": 832,
+      "height": 1216,
+      "seed": 2026082417,
+      "prompt": "dramatic worm's-eye-view illustration from inside a shallow glass box looking upward. An adult botanist leans over the box, holding a magnifying glass directly above the camera with her right hand while her left hand points to a blue butterfly on the glass edge. Greenhouse ceiling behind her, circular lens distortion, visible hand depth, coherent transparent surfaces, no extra person.",
+      "checks": ["worm's-eye view", "one botanist", "magnifying glass above camera", "left hand points", "blue butterfly", "greenhouse ceiling", "glass perspective"]
+    },
+    {
+      "id": "length_short",
+      "phase": "length",
+      "category": "context_length",
+      "width": 832,
+      "height": 1216,
+      "seed": 2026082418,
+      "prompt": "masterpiece, anime illustration. Three adult women wait on a rainy train platform: a silver-haired conductor with a watch on the left, a kneeling red-haired traveler with a blue suitcase in the center, and a black-haired student with a transparent umbrella on the right. One yellow cat sits on the suitcase. A red train arrives behind them.",
+      "checks": ["short prompt remains coherent", "three women", "correct left center right binding", "cat on suitcase", "red train"]
+    },
+    {
+      "id": "length_medium",
+      "phase": "length",
+      "category": "context_length",
+      "width": 832,
+      "height": 1216,
+      "seed": 2026082418,
+      "prompt": "masterpiece, best quality, cinematic anime illustration, full-body wide shot. At a rain-soaked train station during blue hour, exactly three adult women form a clear triangle without overlapping. On the left, a short silver-haired conductor in a fitted navy uniform and white gloves stands beneath a blue PLATFORM 9 sign and holds an open brass pocket watch in both hands. In the center foreground, a long red-haired traveler wearing an emerald coat kneels beside one upright blue suitcase. One small yellow cat sits on top of that suitcase and looks left. On the right, a black-haired student in a cream sweater and red pleated skirt holds one transparent umbrella above her head. A single red commuter train arrives behind the group with warm windows. Reflections remain directly beneath their corresponding subjects on the wet floor. Cool ambient rain light contrasts with the warm train interior. Accurate hands, distinct faces, coherent anatomy, readable depth, clean perspective, crisp fabric textures, no additional people, cats, suitcases, umbrellas, signs, or trains.",
+      "checks": ["medium prompt remains coherent", "three women", "all clothing and object bindings", "one of each counted object", "PLATFORM 9", "matching reflections"]
+    },
+    {
+      "id": "length_long",
+      "phase": "length",
+      "category": "context_length",
+      "width": 832,
+      "height": 1216,
+      "seed": 2026082418,
+      "prompt": "masterpiece, best quality, cinematic anime illustration, full-body environmental group scene. At a rain-soaked railway station during blue hour, exactly three adult women form a precise triangular composition and never overlap. The station is made from dark steel beams, glass curtain walls, polished charcoal stone, yellow tactile paving, overhead cables, riveted columns, and a long canopy with evenly spaced lamps. On the left, a short silver-haired conductor stands on the yellow safety line beneath one blue rectangular sign that reads PLATFORM 9. She wears a fitted navy double-breasted uniform, a peaked cap with one gold badge, white gloves, black stockings, and polished black shoes. She holds one open brass pocket watch in both hands; the watch face is visible and shows 10:10. She looks toward the center woman rather than at the viewer. In the center foreground, a long red-haired traveler wearing an emerald belted coat kneels on her right knee beside one upright blue hard-shell suitcase. The suitcase has one white luggage label reading NORTH and one silver handle. Exactly one small yellow cat sits on top of that suitcase, with its tail curled to the right and its head turned to the left. The traveler uses her left hand to adjust the cat's red collar while her right hand steadies the suitcase. On the right, a black-haired student stands one step farther from the camera. She wears a cream cable-knit sweater, red pleated skirt, navy socks, and brown ankle boots. She holds exactly one transparent umbrella above her head with her right hand and one closed blue book against her chest with her left arm. Water droplets remain visible on the umbrella surface. A single red commuter train arrives behind the group from the right, with warm amber interior lights, one visible driver window, and no passengers blocking the main subjects. A large electronic departure board in the upper background contains exactly two lines: LAST TRAIN and 23:40. A round analog clock to its right also shows 10:10. Exactly two red paper cranes lie on the lower-left wet floor and one silver coin lies near the lower-right corner. A vending machine against the far wall contains three horizontal rows of colorful cans. Cyan light illuminates the left side, soft neutral light illuminates the center, and warm red light illuminates the right side. Each reflection stays directly beneath the matching person and does not exchange colors. The rails converge toward one tunnel in the distance. Use a slightly elevated wide-angle camera, strong one-point perspective, layered atmospheric mist, realistic rain, accurate anatomy, detailed hands, distinct faces, readable objects, sharp foreground, controlled highlights, fine fabric texture, and deep environmental storytelling. Do not add any other person, cat, suitcase, umbrella, book, watch, paper crane, coin, sign, clock, vending machine, train, or tunnel.",
+      "checks": ["long prompt does not collapse into noise", "three women", "dense attribute binding", "multiple exact counts", "two signs and clock", "one train", "coherent perspective"]
+    },
+    {
+      "id": "aspect_ultrawide",
+      "phase": "aspect",
+      "category": "aspect_ratio",
+      "width": 1536,
+      "height": 640,
+      "seed": 2026082419,
+      "prompt": "cinematic panoramic illustration of a coastal railway crossing at sunset. A red train travels from left to right across the middle distance. In the foreground, one adult woman in a white coat stands on the left while one adult man in a black coat stands on the right, facing each other across the tracks. Ocean on the far left, lighthouse on the far right, coherent horizon, wide balanced composition.",
+      "checks": ["stable ultrawide image", "train left to right", "woman left", "man right", "ocean far left", "lighthouse far right"]
+    },
+    {
+      "id": "aspect_ultratall",
+      "phase": "aspect",
+      "category": "aspect_ratio",
+      "width": 640,
+      "height": 1536,
+      "seed": 2026082420,
+      "prompt": "extreme vertical architectural illustration looking upward through a narrow futuristic elevator shaft. One adult maintenance engineer stands at the bottom, full body visible, shining a flashlight upward. Repeating platforms rise toward a circular opening in the sky. Strong vertical perspective, coherent scale, detailed cables, cool industrial light, no additional people.",
+      "checks": ["stable ultratall image", "one engineer at bottom", "flashlight upward", "repeating platforms", "circular sky opening", "vertical perspective"]
+    },
+    {
+      "id": "aspect_square",
+      "phase": "aspect",
+      "category": "aspect_ratio",
+      "width": 1024,
+      "height": 1024,
+      "seed": 2026082421,
+      "prompt": "symmetrical square illustration of a quiet greenhouse interior. One circular fountain occupies the exact center, two orange trees stand symmetrically left and right, and one adult gardener kneels in the foreground. Glass roof, straight perspective, soft morning fog, balanced negative space, natural colors, no other people.",
+      "checks": ["stable square image", "central circular fountain", "two symmetrical trees", "one gardener", "straight perspective"]
+    }
+  ],
+  "reliability": {
+    "case_ids": ["three_character_binding", "attribute_swap", "dance_foreshortening"],
+    "seeds": [2026082451, 2026082452, 2026082453]
+  },
+  "speed_steps": {
+    "anima_original": [20, 30, 50],
+    "anima_29b": [28, 40, 50],
+    "krea2": [4, 8, 12]
+  }
+}

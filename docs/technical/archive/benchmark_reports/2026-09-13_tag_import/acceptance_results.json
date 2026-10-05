@@ -1,0 +1,15 @@
+{
+  "milestone": "Tag JSON import preflight and atomic operation result",
+  "status": "completed_and_published",
+  "full_goal_complete": false,
+  "production_pid": 13196,
+  "runtime_files": 4,
+  "tests": {"staged_plan": 7, "http": 8, "ui_groups": 9, "prior_quick_group_regression": 5},
+  "browser": "evidence/browser_result.json",
+  "fixture_cleanup": "evidence/browser_cleanup.json",
+  "release": "evidence/release.json",
+  "production_readonly_preflight": "evidence/live_preflight.json",
+  "external_usage": "evidence/external_usage_summary.json",
+  "remaining": ["Other batch move/delete progress, failed subsets and recovery", "Model professional format and ownership checks", "Complete original requirement evidence mapping"],
+  "limits": ["Operation records are response exports, not persistent server history", "Atomic imports do not offer mid-transaction segmented cancellation", "UI mocks complement actual browser evidence; not every race scenario was browser-tested"]
+}

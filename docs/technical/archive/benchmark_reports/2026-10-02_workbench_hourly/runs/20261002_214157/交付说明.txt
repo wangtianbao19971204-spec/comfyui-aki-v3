@@ -1,0 +1,53 @@
+M9 常用流程验证与优化——合并交付
+完成时间：2026-10-02T22:21:20.352290+08:00
+状态：complete（下列已定义范围及测量边界内）。本轮新增生产源码修改0；整个M9仅M9b一处一行服装修复。
+
+一、实际修改及收益
+M9b跳过英文服装标签不使用的中文翻译查找，避免115次重复全量查找。
+同环境7次warm中位数：3708.2 → 854.8ms，减少76.95%；画师对照640.6 → 641.8ms。
+服装3个正常缓存新页：修改后1046.4 / 1048.5 / 1045.9ms。
+115英文/双语标签和48首屏卡片顺序保持一致；查询、选择、清空和焦点回归通过。
+实际补丁、前后对比及回退备份：G:\ComfyUI-aki-v3\benchmark_reports\2026-10-02_workbench_hourly\runs\20261002_205503
+
+二、本轮补齐计时（页面内操作至就绪后双rAF，中位数ms）
+新页每场景3次：控制台显式重开103.9；尺寸筛选50.5；工作区148.5；跨来源搜索409.2；画师725.3。
+T06新页每动作3次：追加104.9；撤销67.0。
+T06热态每动作7次：追加108.6；撤销71.2。值同步自身中位数60.2 / 22.9ms。
+15条新页、20条T06 v2样本全部通过；节点与真实绑定输入逐字核对，负向旁路未变。
+旧T06采集器的秒级rAF尾段保留诊断，不作为生产写入慢点，也不混入v2统计。
+第3页画师789.9ms原样保留，入口前置条件由单独收据补充核实，未因慢值删样。
+
+三、资源与功能验收
+沿用M9a正负向写入/精确撤销、五参数同步恢复、搜索清空及代表选择器键盘/焦点验证；M9b补齐真实资料库F08。
+本轮追加10次服装hoodie查询/关闭，每次39卡；0/5/10关闭后统一等待约5秒：组件DOM0、对应全局监听器1/1/1、新增来源定时器0/0/0。
+页面元素20223/20223/20223。CDP JS堆176.0/200.7/199.4MB；服务RSS1996.1/1996.2/1584.1MB。
+服务RSS分别比对应浏览器快照晚7.070/9.435/9.222秒，是同cycle后续配对，不是精确同时采样。
+全页监听器17126/17329/19008、CDP Nodes41634/41938/48608发生增长，未归因给服装；不声称全页无增长或无泄漏。
+M9b的66.8秒关闭闲置窗口零资源请求证据保留，本轮未重复该已通过项。
+
+四、最终生产与清理守卫
+27源文件、21正式资料/工作流文件无变化；6服务资源SHA和4实际执行源码SHA匹配。
+共享资料实际函数定位line0=1886，SHA09536c432d2be909c1aa6d817de69ff3c95fb869693ad3566d8115f92ec7f932。
+8188仍为PID24420，创建时间相同；队列0/0、模块5/5、usage26未变。
+未提交生成、未重启、未写正式提示词/收藏/资料。测试写入仅在合成副本，mark_used本地拦截。
+清理测试文档时恢复旧图触发39次组件/LoRA/VNCCS初始化POST尝试，均被测试守卫拒绝，全部晚于验收采样；完整记录保留，未当作产品缺陷。
+已撤销至正向M9B synthetic 1063、负向空；截图final_restored.png；随后丢弃本轮文档(3)/(4)。
+已移除全部临时fetch/计时器包装及采集器、关闭测试页19–22、恢复视口，保留用户页18。
+本轮无新回退动作；现有修复备份SHA和生产SHA重新核实，见rollback_preflight.json。
+
+五、结论边界
+- 504-node production topology uses short synthetic prompts; no generation or long-prompt performance benchmark.
+- T01 is first explicit reopen after automatic prerender, not cold construction; other fresh pages retain normal HTTP/server caches.
+- T06 uses synthetic GET/mark_used responses and measures frontend exact synchronization, not backend persistence latency.
+- Two rAF callbacks are paint opportunities, not proof of display pixels; all raw samples and preliminary protocol diagnostics retained.
+- P4 scoped DOM/globals/new timers pass. Whole-page heap/listener/node counts contain unrelated and tooling state; no whole-app leak/no-leak conclusion.
+- Renderer RSS could not be reliably mapped; service RSS is a separate adjacent sample.
+- Physical IME acceptance is inherited from M8; no repeat input requested in M9.
+
+六、后续
+既定常用流程验证计划完成，无新增低频功能、无后台轮询、无依赖变更。
+STATE设为complete；后续自动运行仅核验完成状态，不继续修改源码。新问题按真实复现另开阶段。
+
+权威证据目录：G:\ComfyUI-aki-v3\benchmark_reports\2026-10-02_workbench_hourly\runs\20261002_214157
+关键收据：browser_acceptance.json、fresh_timings_summary.json、t06_summary.json、lifecycle_acceptance.json、final_live_guard.json、browser_cleanup.json、rollback_preflight.json。
+较早M9_CLOSEOUT_DRAFT.txt是最终守卫前草稿；本说明和browser_acceptance.json取代其pending状态。

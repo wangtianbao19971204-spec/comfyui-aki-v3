@@ -1,0 +1,149 @@
+{
+  "at": "2026-10-03T13:28:39.721Z",
+  "method": "Fresh IAB tab 3; released files, actual ComfyUI neutral unsaved graph, local trigger metadata responses mocked, non-GET/HEAD browser requests blocked; no generation.",
+  "cases": [
+    {
+      "name": "actual_prompt_model_cfg_and_connected_loras",
+      "passed": true
+    },
+    {
+      "name": "preview_does_not_write",
+      "passed": true
+    },
+    {
+      "name": "selected_append_and_exact_undo",
+      "passed": true
+    },
+    {
+      "name": "stale_text_preview_rejected",
+      "passed": true,
+      "method": "UI edits then direct developer callback to test stale handler"
+    },
+    {
+      "name": "metadata_409_visible_no_guess",
+      "passed": true
+    },
+    {
+      "name": "late_response_after_rerender_ignored",
+      "passed": true,
+      "method": "deferred fixture response and render lifecycle via CDP"
+    },
+    {
+      "name": "normal_and_narrow_layout_no_horizontal_overflow",
+      "passed": true
+    }
+  ],
+  "defaultLayout": {
+    "areas": [
+      {
+        "height": 75,
+        "readonly": true
+      },
+      {
+        "height": 75,
+        "readonly": true
+      }
+    ],
+    "height": 720,
+    "overflow": false,
+    "root": {
+      "bottom": 423.9270629882813,
+      "height": 719.0625,
+      "left": 14.666666984558104,
+      "right": 469.0104169845581,
+      "top": -295.13543701171875,
+      "width": 454.34375,
+      "x": 14.666666984558104,
+      "y": -295.13543701171875
+    },
+    "width": 1280
+  },
+  "runtime": {
+    "calls": [
+      "/api/lm/loras/get-trigger-words?name=QA_traveler_v2"
+    ],
+    "candidate_injected": false,
+    "module_function_sha256": "5839bf44207866d4e37b0de31757a033aa77fdaeb157490c075a1e744198c9fc",
+    "positive": "adult traveler, blue coat, mountain path",
+    "queue_submitted": false,
+    "readonly": true
+  },
+  "preview": {
+    "before": "adult traveler, blue coat, mountain path",
+    "preview": "adult traveler, blue coat, mountain path, traveler_v2"
+  },
+  "applied": {
+    "stale": "工作流已变化；以下是上次检查结果，请重新检查。",
+    "text": "adult traveler, blue coat, mountain path, traveler_v2"
+  },
+  "undo": "adult traveler, blue coat, mountain path",
+  "previous_runtime": {
+    "blocked": [
+      {
+        "method": "POST",
+        "url": "/api/manager/component/loads"
+      },
+      {
+        "method": "POST",
+        "url": "/api/manager/component/loads"
+      },
+      {
+        "method": "POST",
+        "url": "/api/lm/loras/cycler-list"
+      },
+      {
+        "method": "POST",
+        "url": "/api/lm/register-nodes"
+      },
+      {
+        "method": "POST",
+        "url": "/api/lm/loras/cycler-list"
+      },
+      {
+        "method": "POST",
+        "url": "/api/manager/component/loads"
+      },
+      {
+        "method": "POST",
+        "url": "/api/manager/component/loads"
+      },
+      {
+        "method": "POST",
+        "url": "/api/lm/register-nodes"
+      },
+      {
+        "method": "POST",
+        "url": "/api/lm/loras/cycler-list"
+      },
+      {
+        "method": "POST",
+        "url": "/api/lm/loras/cycler-list"
+      },
+      {
+        "method": "POST",
+        "url": "/api/lm/register-nodes"
+      }
+    ],
+    "calls": [
+      "/api/lm/loras/get-trigger-words?name=QA_traveler_v2",
+      "/api/lm/loras/get-trigger-words?name=QA_traveler_v2",
+      "/api/lm/loras/get-trigger-words?name=QA_traveler_v2",
+      "/api/lm/loras/get-trigger-words?name=QA_traveler_v2",
+      "/api/lm/loras/get-trigger-words?name=QA_traveler_v2"
+    ],
+    "candidate_injected": false,
+    "module_function_sha256": "361d7c5c4773ab9612daae609479e68cc44ee11b0e487c1ff167a44949189b76",
+    "positive": "adult traveler, blue coat, mountain path",
+    "queue_submitted": false,
+    "readonly": true
+  },
+  "final_source_smoke": {
+    "at": "2026-10-03T13:37:14.359Z",
+    "tab": "4",
+    "after_backend_restart": true,
+    "actual_source_inspection": true,
+    "append_and_undo_retested": true,
+    "minor_followup": "Dynamic LoRA strength stays unresolved; sampler discovery limited to supported top-level nodes",
+    "other_cases": "Previously verified behavior unchanged by these two narrow follow-ups"
+  }
+}

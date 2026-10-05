@@ -1,0 +1,220 @@
+{
+  "at": "2026-10-03T21:26:20.324303+08:00",
+  "status": "LIVE_ACCEPTANCE_PASS",
+  "scope": "Version-bound disk cache and all-kind memory reuse in the six-selector catalog adapter",
+  "production_source_files_changed": 1,
+  "derived_catalog_cache_files": 6,
+  "exact_payload_parity": [
+    {
+      "kind": "artist",
+      "count": 40638,
+      "exact_parity_except_revision": true,
+      "cold_cache_ms": 1278.8,
+      "warm_ms": 10.8
+    },
+    {
+      "kind": "pose",
+      "count": 737,
+      "exact_parity_except_revision": true,
+      "cold_cache_ms": 490.0,
+      "warm_ms": 11.1
+    },
+    {
+      "kind": "background",
+      "count": 513,
+      "exact_parity_except_revision": true,
+      "cold_cache_ms": 1052.3,
+      "warm_ms": 10.4
+    },
+    {
+      "kind": "clothing",
+      "count": 2329,
+      "exact_parity_except_revision": true,
+      "cold_cache_ms": 585.7,
+      "warm_ms": 10.6
+    },
+    {
+      "kind": "character",
+      "count": 995,
+      "exact_parity_except_revision": true,
+      "cold_cache_ms": 507.1,
+      "warm_ms": 10.7
+    },
+    {
+      "kind": "style_quality",
+      "count": 4391,
+      "exact_parity_except_revision": true,
+      "cold_cache_ms": 642.8,
+      "warm_ms": 11.5
+    }
+  ],
+  "invalidation_checked": [
+    "source",
+    "projection",
+    "runtime code",
+    "force refresh",
+    "corrupt gzip"
+  ],
+  "http_before": [
+    {
+      "route": "/anima-tools/shared-prompts?kind=clothing&refresh=load-probe",
+      "ttfb_ms": 3456.5,
+      "total_ms": 3456.9,
+      "wire_bytes": 933680,
+      "decoded_bytes": 11707447
+    },
+    {
+      "route": "/anima-tools/shared-prompts?kind=clothing",
+      "ttfb_ms": 128.4,
+      "total_ms": 128.9,
+      "wire_bytes": 933680,
+      "decoded_bytes": 11707447
+    },
+    {
+      "route": "/prompt_selector/library/index",
+      "ttfb_ms": 19.5,
+      "total_ms": 19.6,
+      "wire_bytes": 257750,
+      "decoded_bytes": 257750
+    },
+    {
+      "route": "/anima-tools/favorites",
+      "ttfb_ms": 165.1,
+      "total_ms": 165.1,
+      "wire_bytes": 1259,
+      "decoded_bytes": 1259
+    }
+  ],
+  "http_after": [
+    {
+      "route": "/anima-tools/shared-prompts?kind=clothing",
+      "ttfb_ms": 751.8,
+      "total_ms": 752.2,
+      "wire_bytes": 933680,
+      "decoded_bytes": 11707447,
+      "kind": "clothing",
+      "count": 2329,
+      "exact_staged_parity": true
+    },
+    {
+      "route": "/anima-tools/shared-prompts?kind=pose",
+      "ttfb_ms": 74.9,
+      "total_ms": 75.0,
+      "wire_bytes": 296848,
+      "decoded_bytes": 3487599,
+      "kind": "pose",
+      "count": 737,
+      "exact_staged_parity": true
+    },
+    {
+      "route": "/anima-tools/shared-prompts?kind=background",
+      "ttfb_ms": 46.4,
+      "total_ms": 46.5,
+      "wire_bytes": 204433,
+      "decoded_bytes": 1829609,
+      "kind": "background",
+      "count": 513,
+      "exact_staged_parity": true
+    },
+    {
+      "route": "/anima-tools/shared-prompts?kind=character",
+      "ttfb_ms": 102.8,
+      "total_ms": 103.1,
+      "wire_bytes": 436053,
+      "decoded_bytes": 5006520,
+      "kind": "character",
+      "count": 995,
+      "exact_staged_parity": true
+    },
+    {
+      "route": "/anima-tools/shared-prompts?kind=style_quality",
+      "ttfb_ms": 348.0,
+      "total_ms": 359.2,
+      "wire_bytes": 1263726,
+      "decoded_bytes": 16576020,
+      "kind": "style_quality",
+      "count": 4391,
+      "exact_staged_parity": true
+    },
+    {
+      "route": "/anima-tools/shared-prompts?kind=artist",
+      "ttfb_ms": 1545.5,
+      "total_ms": 1561.5,
+      "wire_bytes": 4403679,
+      "decoded_bytes": 79637332,
+      "kind": "artist",
+      "count": 40638,
+      "exact_staged_parity": true
+    },
+    {
+      "route": "/anima-tools/shared-prompts?kind=clothing",
+      "ttfb_ms": 126.1,
+      "total_ms": 126.5,
+      "wire_bytes": 933680,
+      "decoded_bytes": 11707447
+    },
+    {
+      "route": "/prompt_selector/library/index",
+      "ttfb_ms": 13.6,
+      "total_ms": 13.7,
+      "wire_bytes": 257750,
+      "decoded_bytes": 257750
+    },
+    {
+      "route": "/anima-tools/favorites",
+      "ttfb_ms": 164.9,
+      "total_ms": 165.0,
+      "wire_bytes": 1259,
+      "decoded_bytes": 1259
+    }
+  ],
+  "http_comparison_scope": "Before: forced recomputation in a warm backend. After: first measured request after restart with prebuilt version-matched disk cache. Browser tests used the warmed backend after the HTTP checks.",
+  "browser_first_opens": [
+    {
+      "kind": "clothing",
+      "dom_ms": 605.3,
+      "paint_opportunity_ms": 800.9
+    },
+    {
+      "kind": "pose",
+      "dom_ms": 533,
+      "paint_opportunity_ms": 737.6
+    },
+    {
+      "kind": "背景选择器",
+      "dom_ms": 357.8,
+      "paint_opportunity_ms": 501.9
+    },
+    {
+      "kind": "画风 / 质量选择器",
+      "dom_ms": 2139.3,
+      "paint_opportunity_ms": 2328.3
+    },
+    {
+      "kind": "角色选择器",
+      "dom_ms": 357.8,
+      "paint_opportunity_ms": 573.2
+    },
+    {
+      "kind": "画师选择器",
+      "dom_ms": 1229.1,
+      "paint_opportunity_ms": 1333
+    }
+  ],
+  "browser_functional_checks": [
+    "six topic trees and original counts",
+    "clothing subtopic 2329 -> 1249",
+    "search empty state -> clear restores 2329",
+    "existing character favorite displayed",
+    "no insert or favorite writes"
+  ],
+  "limitations": [
+    "A changed authoritative library or projection causes one rebuild; isolated cold rebuild and writing all caches took 11.88 seconds.",
+    "Style/quality first-open paint opportunity was 2.33 seconds in this browser sample.",
+    "Full ComfyUI plugin startup remains separate; Tag warmup took 144.3 seconds in startup logs.",
+    "Browser paint values are double-requestAnimationFrame opportunities, not physical display measurements."
+  ],
+  "rollback_command": "G:/ComfyUI-aki-v3/python/python.exe -X utf8 G:/ComfyUI-aki-v3/benchmark_reports/2026-10-03_selector_load/release.py rollback",
+  "guard": "final_guard.json",
+  "source_change": "candidate/nodes.py"
+}

@@ -1,0 +1,264 @@
+{
+  "status": "complete",
+  "live_acceptance": true,
+  "changed_files": {
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_character_selector.js": "922e2f668c9847c5730ee02fdf472d36cc84f23f98a059bdf728d8ecc87115ef",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_selector_ui.js": "f996176612e04c46cd56fb20332e2f06bb41ef0c8552944463be9e1dbd6285d4",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\web\\prompt_target.js": "d19f19f76466b461c0601bcced61526cd19e69f8a512c315c384248cff57afea",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\ComfyUI-Danbooru-Gallery-V50-GalleryOnly\\js\\quick_group_navigation\\uap_daily_controls.js": "8b297bc492ec38e25541196c682c52f18e9e0cec420c056e0e61413945ee4721",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\UAP统一生产工作台_v2.json": "79d9035d126637af580ce857f0d275dd75b42f4422739a82797bbcbf1bb871c2",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产套件_01_Anima原版_LoRA生产_v2.json": "e239a05f96e814d7e1f7da45678ed3f36e71442c6635eaba3eb89a5097b8568f",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产套件_02_Anima2.9B_动漫生产_v2.json": "5d1a0e5fcb3923424bd196b9c4adede9b8cd426205e78cc5c18a52092f018cee",
+    "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产套件_03_Krea2_一体化生产_v2.json": "5d051043d019d920fcdb7d8a08850616c1d72a05c572a1996c7b7a3d984fc0b9"
+  },
+  "targeted_tests": {
+    "passed": 10,
+    "tests": [
+      "category replacement survives close/reopen and leaves existing identical text alone",
+      "interleaved category writes preserve and move ranges; undo restores provenance",
+      "manual edits fail closed; new append starts a fresh record",
+      "unknown category, new page key, stale target and stale preview refuse replacement",
+      "generic writes track unaffected ranges and invalidate replaced/overlapping fragments",
+      "cursor insertion shifts ranges and overlapping selection invalidates tracking",
+      "special prompt syntax remains verbatim and only the latest same-kind insertion is replaced",
+      "widget and active-branch validation blocks stale dialogs",
+      "shared primary tags display even without detail_tags; display merges details without changing insertion helpers",
+      "character apply builder stays unchanged"
+    ]
+  },
+  "browser": {
+    "checks": [
+      {
+        "case": "primary_tag_count_and_copy",
+        "passed": true
+      },
+      {
+        "case": "append_primary_prompt",
+        "passed": true
+      },
+      {
+        "case": "reopen_preview_confirm_undo",
+        "passed": true
+      },
+      {
+        "case": "manual_edit_blocks_category_replace",
+        "passed": true
+      },
+      {
+        "case": "optional_details_toggle_preserved",
+        "passed": true
+      },
+      {
+        "case": "daily_pending_entry_and_preview",
+        "passed": true
+      },
+      {
+        "case": "empty_search_escape_restores_cards",
+        "passed": true
+      },
+      {
+        "case": "760px_no_horizontal_overflow_controls_visible",
+        "passed": true
+      },
+      {
+        "case": "escape_close_restores_opener_focus",
+        "passed": true
+      }
+    ],
+    "fixture": "neutral isolated adult traveler records",
+    "no_generation": true
+  },
+  "workflow_pruning": [
+    {
+      "file": "UAP统一生产工作台_v2.json",
+      "removed_nodes": [
+        1006,
+        1007,
+        1008,
+        1009,
+        1058,
+        1070,
+        1071,
+        1072,
+        1073,
+        1078,
+        1193,
+        1194,
+        1195,
+        1196,
+        1221,
+        1222
+      ],
+      "removed_links": [
+        10028,
+        10120,
+        10288
+      ],
+      "removed_groups": [
+        "SW-00B 快捷标签创意拼接 · A1 原版",
+        "SW-00B 快捷标签创意拼接 · A29 2.9B",
+        "SW-00B 快捷标签创意拼接 · K2 Krea2"
+      ],
+      "controllers": [
+        1027,
+        1097,
+        1227
+      ],
+      "retained_nodes_and_links_unchanged": true
+    },
+    {
+      "file": "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "removed_nodes": [
+        544,
+        547,
+        548,
+        549,
+        550
+      ],
+      "removed_links": [
+        621
+      ],
+      "removed_groups": [
+        "SW-00B 快捷标签创意拼接"
+      ],
+      "controllers": [
+        306
+      ],
+      "retained_nodes_and_links_unchanged": true
+    },
+    {
+      "file": "生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "removed_nodes": [
+        544,
+        547,
+        548,
+        549,
+        550
+      ],
+      "removed_links": [
+        621
+      ],
+      "removed_groups": [
+        "SW-00B 快捷标签创意拼接"
+      ],
+      "controllers": [
+        306
+      ],
+      "retained_nodes_and_links_unchanged": true
+    },
+    {
+      "file": "生产套件_03_Krea2_一体化生产_v2.json",
+      "removed_nodes": [
+        545,
+        546,
+        547,
+        548,
+        567,
+        568
+      ],
+      "removed_links": [
+        655
+      ],
+      "removed_groups": [
+        "SW-00B 快捷标签创意拼接"
+      ],
+      "controllers": [
+        306
+      ],
+      "retained_nodes_and_links_unchanged": true
+    }
+  ],
+  "data_diagnostic": {
+    "records": 995,
+    "with_primary_tags": 995,
+    "with_detail_tags": 0,
+    "source_sha256": "c981bbe6e747dc8bb14bf15a1c5ab069e6d0b81be799fffe57cd6d6c764fb4a4"
+  },
+  "guard": {
+    "drift": {
+      "formal": [],
+      "other_sources": []
+    },
+    "guard_counts": {
+      "formal": 77,
+      "other_sources": 1283
+    },
+    "served": {
+      "anima_character_selector.js": true,
+      "anima_selector_ui.js": true,
+      "prompt_target.js": true,
+      "uap_daily_controls.js": true
+    },
+    "live": {
+      "at": "2026-10-03T22:17:09.358232+08:00",
+      "listeners": [
+        {
+          "pid": 21500,
+          "created": 1791034220.28185,
+          "cmdline": [
+            "G:\\ComfyUI-aki-v3\\python\\python.exe",
+            "G:\\ComfyUI-aki-v3\\ComfyUI\\main.py",
+            "--preview-method",
+            "auto",
+            "--cuda-malloc",
+            "--reserve-vram",
+            "4"
+          ]
+        }
+      ],
+      "queue": {
+        "queue_running": [],
+        "queue_pending": []
+      },
+      "status": {
+        "name": "统一工作台",
+        "version": "1.0.0",
+        "modules": [
+          {
+            "key": "weilin",
+            "label": "共享资料与提示词",
+            "nodes": 4,
+            "ready": true
+          },
+          {
+            "key": "anima",
+            "label": "Anima 标签与随机选择",
+            "nodes": 16,
+            "ready": true
+          },
+          {
+            "key": "gallery",
+            "label": "Gallery 与 UAP",
+            "nodes": 22,
+            "ready": true
+          },
+          {
+            "key": "lora_manager",
+            "label": "LoRA、模型与 Embedding",
+            "nodes": 21,
+            "ready": true
+          },
+          {
+            "key": "completion",
+            "label": "补全与工作流工具",
+            "nodes": 13,
+            "ready": true
+          }
+        ],
+        "nodes": 76,
+        "resource_owner": "weilin",
+        "degraded": false
+      }
+    },
+    "rollback_preflight": true
+  },
+  "service_restart": false,
+  "generated_images": 0,
+  "owned_test_tabs_closed": true,
+  "test_environment_note": "Legacy selector test requires browser import mapping and querySelector in its fake DOM. The original harness failed at pre-existing modal code; a report-local adapter passed. Production tests were not edited.",
+  "limitations": [
+    "Category replacement tracks only the latest selector insertion for character/clothing/pose in this page. Manual text changes or page reload invalidate tracking.",
+    "Existing unsaved workflow sessions are retained; reopen the updated v2 file to load graph pruning.",
+    "No image-quality or physical-IME claim."
+  ]
+}

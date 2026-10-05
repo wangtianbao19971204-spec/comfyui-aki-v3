@@ -6,6 +6,8 @@
 
 先查 PROJECT_MAP 和最新收据。正式 UI 代码、资料数据、模型配置、工作流和旧历史流是不同维护范围。现有快照是基线，不自动同步实时目录。
 
+技术接手从 [分层入口](technical/README.md) 开始；每个功能有实现、数据、测试、验收范围与日期式短更新记录。改动时同步对应 MD 或功能 changes 记录，新增功能补 `catalog.json`。历史技术归档不直接执行，也不与部署源码竞争权威。并行任务先协调共享清单与 Git index/refs，不能仅凭工作树一时干净认定另一任务已结束。
+
 所有 ComfyUI 相关代码、工作流、提示词库、数据库、加载器和维护工具均以本仓为唯一修改/提交入口。运行区所有旧 Git（本体、插件、工作台、训练依赖）均不再继续开发提交。功能改动在 `snapshot/runtime/` 对应源码中做，工作流子图随完整 JSON 维护；数据库结构/索引/触发器及迁移记录在 `database/`。不要直接手改资料分片，资料内容通过受审查工具导出后核验 ID、正文、个人字段与来源绑定。
 
 ```powershell
@@ -53,6 +55,8 @@ adopt 只移动维护仓的快照：旧版本保留到 ignored `local/backups/�
 源码内保留了上游 `.gitignore`，所以仅在完整校验/凭证扫描通过之后，对精确的 `snapshot` 路径使用 `git add -f`。不要对运行根或整个维护仓使用强制 add。bundle 工具会检查快照是否全部被 Git 跟踪，防止嵌套忽略规则造成静默遗漏。
 
 ## 4. 生成可移交 Git 文件
+
+需要正式维护版本时，先遵循 [VERSIONING](VERSIONING.md) 完成受审查的 prepare、显式提交与本地 tag，再执行打包。普通开发不自动递增版本；维护版本不替代本体/插件版本。标签、包、部署和实际功能验收分别记录，不能从一个动作推断其他动作完成。
 
 ```powershell
 & ..\..\python\python.exe -X utf8 -B scripts\repository.py bundle --out G:\ComfyUI-local\releases\comfyui-20261006.bundle

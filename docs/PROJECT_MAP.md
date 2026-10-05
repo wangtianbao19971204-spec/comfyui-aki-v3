@@ -19,7 +19,7 @@
 | Tag / 历史数据库 | 同一 WeiLin 模块 `user_data/userdatas_zh_CN_*.db` | backup API → SQL 分片；分组、词条、个人字段、修订、历史均保留 |
 | 预览原图与缩略图 | `prompt_selector/preview`、`preview_thumbnails` | 外部媒体清单，不进 Git；不能视作可随意删除的缓存 |
 | 模型 | `ComfyUI/models` 及生产插件内权重 | 路径/大小/mtime 清单及工作流引用关系；权重本体留在外部 |
-| 网页/法典导入 | `benchmark_reports/source_update_flow` | 当前门禁脚本与说明；其他历史批次数据仍留在原目录 |
+| 网页/法典导入 | `benchmark_reports/source_update_flow` | 当前门禁脚本与说明；审查后的网页抓取、Word解析、图片补全等历史实现另入 `docs/technical/archive`，原数据仍外部 |
 | 角色数据集维护 | `character_lora_forge/` | 当前维护源码；角色项目、图片、审核输出和私密配置外置引用 |
 | Anima 训练维护 | `anima_lora_forge/` | Forge 源码与实际存在的 SD-Trainer/SD-Scripts 本地源码；不恢复现场已删除的上游文件、不携带权重与环境 |
 | 独立 Qwen 实验服务 | `qwen21_lab/` | 当前维护入口及实际使用的独立源码；不是生产 8188 服务，也不代表已通过冷启动验收 |

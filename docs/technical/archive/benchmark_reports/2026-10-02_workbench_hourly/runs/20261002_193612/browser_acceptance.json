@@ -1,0 +1,43 @@
+{
+  "accepted_at": "2026-10-02T20:08:09.606565+08:00",
+  "run_id": "20261002_193612",
+  "source_change": {
+    "run_id": "20261002_193612",
+    "production_root": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench",
+    "relative_path": "modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
+    "backup_path": "source_before/uap_daily_controls.js",
+    "before_sha": "dda10e2de2e198ab6e71b57f7ff7c9abde0fd3938ec5b2d3c8c1a618e445b4ad",
+    "after_sha": "a9fb0eba123dcfc0b1f206afc1ecbb12620190546d7cc669d05b5235e93f7f5e",
+    "change": "Register compositionstart and compositionend with addEventListener so actual IME commit invokes search filtering."
+  },
+  "pre_fix_real_ime": "compositionend committed 尺寸 but old UAP page kept all 10 regions visible; trace in pre_fix_ime_trace.json",
+  "post_fix_user_input": "User confirmed system Pinyin selection in the fresh browser tab for 尺寸 and 角色.",
+  "uap_fresh_tab_dom": {
+    "input": "尺寸",
+    "filtering": true,
+    "sections_total": 10,
+    "sections_hidden": 9,
+    "visible_section": "尺寸 · 种子 · 采样",
+    "status": "找到 1 个区域",
+    "search_focused": true
+  },
+  "workbench_fresh_tab_dom": {
+    "input": "角色",
+    "search_heading": "搜索：角色",
+    "prompt_result_count_displayed": 5659,
+    "result_groups_observed": [
+      "提示词",
+      "基础 Tag",
+      "模型"
+    ],
+    "search_focused": true
+  },
+  "old_tab_caveat": "User's first post-fix 尺寸 entry landed in pre-fix tab; input was 尺寸 but all 10 sections remained visible. Old unsaved tab was preserved, not refreshed.",
+  "evidence_boundary": "Post-fix physical IME commit was user-performed and DOM-confirmed; no post-fix low-level composition event trace was captured. Pre-commit deferral was covered by prior real trace and final-source synthetic check.",
+  "screenshots": "Inspected in browser; not exported because they included formal prompt text.",
+  "guard": "final_live_guard.json",
+  "rollback": "source_before/uap_daily_controls.js and rollback.py; preflight passed",
+  "production_posts": 0,
+  "restarts": 0,
+  "result": "accepted"
+}

@@ -1,0 +1,60 @@
+{
+  "checked_at": "2026-09-28T07:44:06.100393+08:00",
+  "files": [
+    {
+      "file": "web/workbench_shell.js",
+      "disk_matches_tested_version": true,
+      "served_matches_tested_version": true
+    },
+    {
+      "file": "web/tag_manager.js",
+      "disk_matches_tested_version": true,
+      "served_matches_tested_version": true
+    },
+    {
+      "file": "web/workspace.js",
+      "disk_matches_tested_version": true,
+      "served_matches_tested_version": true
+    },
+    {
+      "file": "modules/comfyui-anima-tools/js/anima_selector_ui.js",
+      "disk_matches_tested_version": true,
+      "served_matches_tested_version": true
+    },
+    {
+      "file": "modules/comfyui-anima-tools/js/anima_shared_prompt_data.js",
+      "disk_matches_tested_version": true,
+      "served_matches_tested_version": true
+    },
+    {
+      "file": "modules/comfyui-anima-tools/js/anima_artist_selector.js",
+      "disk_matches_tested_version": true,
+      "served_matches_tested_version": true
+    },
+    {
+      "file": "modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
+      "disk_matches_tested_version": true,
+      "served_matches_tested_version": true
+    },
+    {
+      "file": "modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/js_node/prompt_selector/prompt_selector.js",
+      "disk_matches_tested_version": true,
+      "served_matches_tested_version": true
+    },
+    {
+      "file": "web/studio.css",
+      "disk_matches_tested_version": true,
+      "served_matches_tested_version": true
+    }
+  ],
+  "modules_ready": true,
+  "module_count": 5,
+  "nodes": 71,
+  "existing_passed_new_checks": 15,
+  "browser_recheck": {
+    "attempts": 2,
+    "reset_between_attempts": true,
+    "result": "connection unavailable: nodeRepl.fetch request failed",
+    "visual_acceptance": "not verified"
+  }
+}

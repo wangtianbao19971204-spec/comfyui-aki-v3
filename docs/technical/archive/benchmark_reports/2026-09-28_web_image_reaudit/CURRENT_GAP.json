@@ -1,0 +1,33 @@
+{
+  "schema": "current-web-image-gap/v1",
+  "created_at": "2026-09-28T08:13:14.507377+08:00",
+  "old_release": "r-01892afa9f19ef14c255",
+  "current_release": "r-9a4bf4049f141be7d4d9",
+  "current_published_at": "2026-09-27T08:20:05+00:00",
+  "old_catalog_sha256": "df8610ede0ba753f5626e5a196d3db2e891222dae885ce4991c6b27397cdc442",
+  "current_catalog_sha256": "55bbc2fbff3f5732a317a540ab4a368ee61cdd3b670f47f7990fbf7c7e10ace4",
+  "current_raven_sha256": "97f6e2134b91cc593fababacf8eae56e9602bc18d2c0343211cc875a6bab0827",
+  "current_external_sha256": "74d586af1b1892d02b827a302070d28a3f9cb5fc9287128bd2d5c2d99e326455",
+  "changed_datasets": [
+    {
+      "dataset": "raven_composition",
+      "old_entries": 3315,
+      "current_entries": 4131,
+      "added": 816,
+      "removed": 0,
+      "changed": 565,
+      "changed_fields": {
+        "isNew": 565
+      },
+      "added_with_image": 816
+    }
+  ],
+  "new_image_entries": 816,
+  "new_entries_rating_safe": true,
+  "new_entries_with_same_body_tag": 368,
+  "new_entries_without_same_body_tag": 448,
+  "same_body_tags_with_preview_file": 209,
+  "new_entry_image_count": 816,
+  "new_entry_multi_image_count": 0,
+  "rows_file": "CURRENT_GAP_ROWS.jsonl"
+}

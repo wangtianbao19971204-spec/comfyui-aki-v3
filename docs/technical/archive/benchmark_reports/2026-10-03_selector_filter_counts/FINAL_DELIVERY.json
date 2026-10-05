@@ -1,0 +1,12 @@
+{
+  "status": "complete",
+  "production_changed": true,
+  "changed_files": 1,
+  "confirmed_reproduction": "Collapsed, persisted clothing traits and source filters can intersect a populated category to zero results",
+  "user_original_window_cause": "unconfirmed: Chrome connection unavailable",
+  "behavior": "Show active search, source, and trait filters above results with before/after counts; remove individually or keep current category while clearing extra filters",
+  "verification": "browser_acceptance.json",
+  "guard": "live_guard.json",
+  "rollback": "python release.py rollback",
+  "screenshot": "visible-filter-empty-after.png"
+}

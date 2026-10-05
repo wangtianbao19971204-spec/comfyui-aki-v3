@@ -1,0 +1,161 @@
+{
+  "comparisons": [
+    {
+      "branch": "a1",
+      "node": 1033,
+      "a": 1016,
+      "b": 1017,
+      "label": "基础图 vs 手脚后"
+    },
+    {
+      "branch": "a1",
+      "node": 1034,
+      "a": 1017,
+      "b": 1018,
+      "label": "手脚后 vs 区域后"
+    },
+    {
+      "branch": "a1",
+      "node": 1035,
+      "a": 1018,
+      "b": 1032,
+      "label": "区域后 vs 脸后"
+    },
+    {
+      "branch": "a1",
+      "node": 1036,
+      "a": 1032,
+      "b": 1308,
+      "label": "脸后 vs 眼后"
+    },
+    {
+      "branch": "a29",
+      "node": 1107,
+      "a": 1084,
+      "b": 1085,
+      "label": "基础图 vs 手脚后"
+    },
+    {
+      "branch": "a29",
+      "node": 1108,
+      "a": 1085,
+      "b": 1086,
+      "label": "手脚后 vs 区域后"
+    },
+    {
+      "branch": "a29",
+      "node": 1109,
+      "a": 1086,
+      "b": 1103,
+      "label": "区域后 vs 脸后"
+    },
+    {
+      "branch": "a29",
+      "node": 1110,
+      "a": 1103,
+      "b": 1309,
+      "label": "脸后 vs 眼后"
+    }
+  ],
+  "mirrors": [
+    {
+      "node": 1051,
+      "field": "seam_fix_mode"
+    },
+    {
+      "node": 1051,
+      "field": "seam_fix_denoise"
+    },
+    {
+      "node": 1051,
+      "field": "seam_fix_mask_blur"
+    },
+    {
+      "node": 1051,
+      "field": "seam_fix_padding"
+    },
+    {
+      "node": 1112,
+      "field": "seam_fix_mode"
+    },
+    {
+      "node": 1112,
+      "field": "seam_fix_denoise"
+    },
+    {
+      "node": 1112,
+      "field": "seam_fix_mask_blur"
+    },
+    {
+      "node": 1112,
+      "field": "seam_fix_padding"
+    },
+    {
+      "node": 108007,
+      "field": "force_inpaint"
+    },
+    {
+      "node": 108007,
+      "field": "noise_mask_feather"
+    },
+    {
+      "node": 108012,
+      "field": "force_inpaint"
+    },
+    {
+      "node": 108012,
+      "field": "noise_mask_feather"
+    },
+    {
+      "node": 109004,
+      "field": "force_inpaint"
+    },
+    {
+      "node": 109004,
+      "field": "noise_mask_feather"
+    },
+    {
+      "node": 109008,
+      "field": "force_inpaint"
+    },
+    {
+      "node": 109008,
+      "field": "noise_mask_feather"
+    },
+    {
+      "node": 118007,
+      "field": "force_inpaint"
+    },
+    {
+      "node": 118007,
+      "field": "noise_mask_feather"
+    },
+    {
+      "node": 118012,
+      "field": "force_inpaint"
+    },
+    {
+      "node": 118012,
+      "field": "noise_mask_feather"
+    },
+    {
+      "node": 119004,
+      "field": "force_inpaint"
+    },
+    {
+      "node": 119004,
+      "field": "noise_mask_feather"
+    },
+    {
+      "node": 119008,
+      "field": "force_inpaint"
+    },
+    {
+      "node": 119008,
+      "field": "noise_mask_feather"
+    }
+  ],
+  "generation_widget_values_unchanged": true,
+  "all_modes_unchanged": true,
+  "candidate_sha256": "c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a"
+}

@@ -1,0 +1,10 @@
+{
+  "status": "accepted",
+  "production_mutated": true,
+  "passed": true,
+  "updated_at": "2026-09-28T08:49:26.540922+08:00",
+  "receipt": "release_receipt.json",
+  "report": "渡鸦增量导入与交付.md",
+  "current_site_audit": "current_site_audit.json",
+  "open_next_steps": []
+}

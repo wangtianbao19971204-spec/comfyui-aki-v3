@@ -1,0 +1,586 @@
+{
+  "passed": true,
+  "created_at": "2026-09-27T13:51:12.735229+08:00",
+  "index_equal_to_staged_rebuild": true,
+  "library_revision": {
+    "revision": "2026-09-27T13:12:23.231059+08:00"
+  },
+  "checks": [
+    {
+      "store": "library",
+      "id": "codex-asset-327",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-asset-342",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-asset-343",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-0004",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-0036",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-0249",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-0316",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-0317",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-0489",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-0865",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-0958",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-1036",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-2539",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-3516",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-4068",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-4344",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-4770",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-4792",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-4811",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-4823",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-4992",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-5026",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-5095",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-5139",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-5674",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-5894",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-6056",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-6103",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_6e699406-6168",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_8489ac52-0963",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_8489ac52-1854",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_8489ac52-2249",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_8489ac52-2278",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_8489ac52-2495",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_8489ac52-4194",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_8489ac52-4244",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_8489ac52-4245",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_8489ac52-4247",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_8489ac52-4248",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_8489ac52-4249",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_8489ac52-4250",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_8489ac52-4253",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_8489ac52-4290",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_8489ac52-5342",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_8489ac52-5486",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-codex_8489ac52-5738",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-community_ai_misc-4759",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-enter_codex-0475",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-enter_codex-0476",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-enter_codex-0481",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-mengshen_pack-0279",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-mengshen_pack-0448",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-nai5_community_pack_mengshen_korean_0324",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-nai5_community_pack_mengshen_korean_0418",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-nai5_community_pack_suozhang_0970",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-qianteng-0054",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang-0176",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang-0611",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang-2175",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang-3179",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang-3643",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang-3656",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang-5095",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang-5146",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang-5158",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang-5236",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang-5762",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang-5831",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang_nai5-0071",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang_nai5-0072",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang_nai5-0073",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang_nai5_r18-0161",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang_nai5_r18-0188",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang_nai5_r18-0190",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "codex-suozhang_nai5_r18-0191",
+      "passed": true
+    },
+    {
+      "store": "library",
+      "id": "frag-4dd68f65ba966eed5cb30cbc",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "00e036dc-5a58-4c27-9572-8484422e3df9",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "085a435e-e387-5e6d-9a0a-baca432303b7",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "0d32d703-e6a2-44a5-ac76-02e93f7e524f",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "1b91f3cd-79fd-4fa5-b457-61f20fb5d5dd",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "26851c41-ee69-5a66-92fc-1344cdc1611e",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "27a54f7c-2f78-4ae5-9b33-02185dac4c41",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "2d6211f9-7ad4-5d9c-93bc-e984b66d5e29",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "2edada06-d98a-4472-bac4-760f050019aa",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "3883091f-7112-574f-8b97-62d5c479d2bf",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "4207179b-0aa0-4fd8-afd5-661381e6ed2f",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "54612b49-fb4f-5984-97a7-ca9486e2c9ed",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "597a7114-9b1a-450b-9360-9e782b61fc3d",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "62ac1146-e77e-4a17-a0df-53e15a2d41ec",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "671c01c9-2c78-53e0-b6ed-499f71d7649a",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "82c1d7fe-62d0-5441-8b6b-8bd7e012113d",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "8cca33b1-159d-4960-a842-ed5cd1a740d6",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "9584553e-528e-409f-8c15-46d88d90517c",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "9eb922ea-00f5-4186-9fab-eb133c557422",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "a0e2549e-285d-4f70-999a-140f713fe9c9",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "ac5bf9ee-ea52-4469-b82f-164428994631",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "b99a9438-79eb-58f3-b143-6e9067f6adf1",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "c42d42db-0b03-530b-b07a-7c8648236976",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "d0617b76-9dd8-4c5b-a7d2-d03248dd71b9",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "d1efa72d-0858-58f3-a1e1-7ac3d4935207",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "d2be399d-f4fe-5cd5-a637-f300d4c537dd",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "d5154771-855d-5a0a-a30c-a0eaa1c5c8a0",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "e6293ad2-dc33-5f8d-ab37-d3d4fea45f0d",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "e6dc02bb-faa5-444c-a588-1aed81fd74ba",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "f7ac3a87-5dc5-460d-923c-cba32f76ab5f",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "fe07ed2d-b5cd-5370-ba49-eb42633199c0",
+      "passed": true
+    },
+    {
+      "store": "tags",
+      "id": "fe6fcc05-ad95-52d5-8700-f0ac09648a7b",
+      "passed": true
+    }
+  ],
+  "preview_http_checks": 84,
+  "workbench": {
+    "name": "统一工作台",
+    "version": "1.0.0",
+    "modules": [
+      {
+        "key": "weilin",
+        "label": "共享资料与提示词",
+        "nodes": 4,
+        "ready": true
+      },
+      {
+        "key": "anima",
+        "label": "Anima 标签与随机选择",
+        "nodes": 16,
+        "ready": true
+      },
+      {
+        "key": "gallery",
+        "label": "Gallery 与 UAP",
+        "nodes": 22,
+        "ready": true
+      },
+      {
+        "key": "lora_manager",
+        "label": "LoRA、模型与 Embedding",
+        "nodes": 16,
+        "ready": true
+      },
+      {
+        "key": "completion",
+        "label": "补全与工作流工具",
+        "nodes": 13,
+        "ready": true
+      }
+    ],
+    "nodes": 71,
+    "resource_owner": "weilin",
+    "degraded": false
+  },
+  "queue_empty": true
+}

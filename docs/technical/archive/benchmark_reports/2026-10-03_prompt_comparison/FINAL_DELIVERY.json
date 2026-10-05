@@ -1,0 +1,530 @@
+{
+  "status": "LIVE_ACCEPTANCE_PASS",
+  "phase": "optional cleanup defaults + 24-image prompt comparison",
+  "live": {
+    "at": "2026-10-03T23:54:22.487338+08:00",
+    "owners": [
+      {
+        "pid": 53232,
+        "created": 1791039069.3135595,
+        "cmdline": [
+          "G:\\ComfyUI-aki-v3\\python\\python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "-s",
+          "main.py",
+          "--listen",
+          "127.0.0.1",
+          "--port",
+          "8188",
+          "--disable-auto-launch",
+          "--disable-all-custom-nodes",
+          "--whitelist-custom-nodes",
+          "ComfyUI-Anima-LLLite",
+          "ComfyUI-Unified-Prompt-Workbench",
+          "ComfyUI-Danbooru-Browser-Import",
+          "ComfyUI-DazzleSwitch",
+          "comfyui-easy-use",
+          "ComfyUI-Impact-Pack",
+          "comfyui-impact-subpack",
+          "comfyui-kjnodes",
+          "comfyui-krea2-controlnet",
+          "comfyui-krea2edit",
+          "ComfyUI-Olm-DragCrop",
+          "ComfyUI-Olm-JoyCaption",
+          "ComfyUI-OpenPose-Studio",
+          "ComfyUI-RMBG",
+          "ComfyUI-PixAI-Tagger",
+          "ComfyUI_Comfyroll_CustomNodes",
+          "ComfyUI_UltimateSDUpscale",
+          "comfyui_controlnet_aux",
+          "comfyui_memory_cleanup",
+          "prompt-assistant",
+          "rgthree-comfy",
+          "TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters",
+          "vnccs-utils",
+          "ComfyUI-GGUF",
+          "--preview-method",
+          "auto",
+          "--reserve-vram",
+          "4.0",
+          "--cuda-malloc"
+        ]
+      }
+    ],
+    "queue": {
+      "queue_running": [],
+      "queue_pending": []
+    },
+    "modules": {
+      "name": "统一工作台",
+      "version": "1.0.0",
+      "modules": [
+        {
+          "key": "weilin",
+          "label": "共享资料与提示词",
+          "nodes": 4,
+          "ready": true
+        },
+        {
+          "key": "anima",
+          "label": "Anima 标签与随机选择",
+          "nodes": 16,
+          "ready": true
+        },
+        {
+          "key": "gallery",
+          "label": "Gallery 与 UAP",
+          "nodes": 22,
+          "ready": true
+        },
+        {
+          "key": "lora_manager",
+          "label": "LoRA、模型与 Embedding",
+          "nodes": 21,
+          "ready": true
+        },
+        {
+          "key": "completion",
+          "label": "补全与工作流工具",
+          "nodes": 13,
+          "ready": true
+        }
+      ],
+      "nodes": 76,
+      "resource_owner": "weilin",
+      "degraded": false
+    }
+  },
+  "release": {
+    "sources": {
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\UAP统一生产工作台_v2.json": "85033b4883ce0ab945418a62f49d2f081e0fc1e5a7c8c4840e64a881c8b55fba",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产套件_01_Anima原版_LoRA生产_v2.json": "9c7147bfc0027709c4903bcf2f7ff123df11d483cdca1c042c8bb02ccfec45e4",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产套件_02_Anima2.9B_动漫生产_v2.json": "7111a4bb32e40578379c2941d3360e7c27c63a8b9c9859f1c3643a39534712dc",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产套件_03_Krea2_一体化生产_v2.json": "75b26aaebe76bad25b1615256709d216e87f8b34a27b183a17cab6679c7cbc03",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_04_Krea2_指令编辑.json": "42b8be0861f018322ec9be0ce69d6f509a0fc5fa60ddf7e0203abb0a0eb9f8a6",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_05_Anima2.9_裁剪精修回贴.json": "b93e47d4f626f7cd9ad9c895363f88edc8a325e17263fa7dccf61ee6a0d6f814",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_06_透明素材_抠图导出.json": "32189183436c09f3a9fa19e0e894251f5fedcf62f35e6de69db5f13d96f01fc3",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_07_Anima原版_左右扩图.json": "51aedd909f1110170deb9e9ccee3ed135547e364d8a25227987612db9766fe00",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_08_超分_二倍交付.json": "cea9fd2b4ef4f48ae1464a14b78793d8c4a9e2203d230f57bdb2017f7a42415e",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_09_超分_四倍素材.json": "af48d8a11187611b85f77a8f67c8b42a8f25993488c1bb6fae5fe8992d2b5862",
+      "G:\\ComfyUI-aki-v3\\production_tools\\templates\\UAP统一生产工作台_v2.json": "ff34e8c53cc3ca9e713c5fa8176682aa100b101186d76760272d892d83ef58c7",
+      "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产套件_01_Anima原版_LoRA生产_v2.json": "9522dea063cb92ff5184c099d15d92582ad8417ed4cf49577aad6e9e298f5ffb",
+      "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产套件_02_Anima2.9B_动漫生产_v2.json": "59b6dc262b0fc5e6a7c4bce27d960e1aadeff7fcc79913ebc48ecd1bc8090a3d",
+      "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产套件_03_Krea2_一体化生产_v2.json": "bb66cbdf2273341eb48a4a416718dcbe31191282ad0f46ea06eef31e8a1e76e2",
+      "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产扩展_04_Krea2_指令编辑.json": "9f48682b4dd96132664276d7e889a7171539f82b4fc9a00712185d50f4032a84",
+      "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产扩展_05_Anima2.9_裁剪精修回贴.json": "b93e47d4f626f7cd9ad9c895363f88edc8a325e17263fa7dccf61ee6a0d6f814",
+      "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产扩展_06_透明素材_抠图导出.json": "32189183436c09f3a9fa19e0e894251f5fedcf62f35e6de69db5f13d96f01fc3",
+      "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产扩展_07_Anima原版_左右扩图.json": "51aedd909f1110170deb9e9ccee3ed135547e364d8a25227987612db9766fe00",
+      "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产扩展_08_超分_二倍交付.json": "cea9fd2b4ef4f48ae1464a14b78793d8c4a9e2203d230f57bdb2017f7a42415e",
+      "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产扩展_09_超分_四倍素材.json": "af48d8a11187611b85f77a8f67c8b42a8f25993488c1bb6fae5fe8992d2b5862",
+      "G:\\ComfyUI-aki-v3\\production_tools\\README.md": "b56e42e2bbf3dad5f35fa0eeef0aa296f07c08ca08039ef48943077caca614e8"
+    }
+  },
+  "guard": {
+    "live": {
+      "at": "2026-10-03T23:54:22.487338+08:00",
+      "owners": [
+        {
+          "pid": 53232,
+          "created": 1791039069.3135595,
+          "cmdline": [
+            "G:\\ComfyUI-aki-v3\\python\\python.exe",
+            "-X",
+            "utf8",
+            "-B",
+            "-s",
+            "main.py",
+            "--listen",
+            "127.0.0.1",
+            "--port",
+            "8188",
+            "--disable-auto-launch",
+            "--disable-all-custom-nodes",
+            "--whitelist-custom-nodes",
+            "ComfyUI-Anima-LLLite",
+            "ComfyUI-Unified-Prompt-Workbench",
+            "ComfyUI-Danbooru-Browser-Import",
+            "ComfyUI-DazzleSwitch",
+            "comfyui-easy-use",
+            "ComfyUI-Impact-Pack",
+            "comfyui-impact-subpack",
+            "comfyui-kjnodes",
+            "comfyui-krea2-controlnet",
+            "comfyui-krea2edit",
+            "ComfyUI-Olm-DragCrop",
+            "ComfyUI-Olm-JoyCaption",
+            "ComfyUI-OpenPose-Studio",
+            "ComfyUI-RMBG",
+            "ComfyUI-PixAI-Tagger",
+            "ComfyUI_Comfyroll_CustomNodes",
+            "ComfyUI_UltimateSDUpscale",
+            "comfyui_controlnet_aux",
+            "comfyui_memory_cleanup",
+            "prompt-assistant",
+            "rgthree-comfy",
+            "TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters",
+            "vnccs-utils",
+            "ComfyUI-GGUF",
+            "--preview-method",
+            "auto",
+            "--reserve-vram",
+            "4.0",
+            "--cuda-malloc"
+          ]
+        }
+      ],
+      "queue": {
+        "queue_running": [],
+        "queue_pending": []
+      },
+      "modules": {
+        "name": "统一工作台",
+        "version": "1.0.0",
+        "modules": [
+          {
+            "key": "weilin",
+            "label": "共享资料与提示词",
+            "nodes": 4,
+            "ready": true
+          },
+          {
+            "key": "anima",
+            "label": "Anima 标签与随机选择",
+            "nodes": 16,
+            "ready": true
+          },
+          {
+            "key": "gallery",
+            "label": "Gallery 与 UAP",
+            "nodes": 22,
+            "ready": true
+          },
+          {
+            "key": "lora_manager",
+            "label": "LoRA、模型与 Embedding",
+            "nodes": 21,
+            "ready": true
+          },
+          {
+            "key": "completion",
+            "label": "补全与工作流工具",
+            "nodes": 13,
+            "ready": true
+          }
+        ],
+        "nodes": 76,
+        "resource_owner": "weilin",
+        "degraded": false
+      }
+    },
+    "drift": [],
+    "guard_count": 1365,
+    "rollback_preflight": true
+  },
+  "workflow_verification": [
+    {
+      "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\UAP统一生产工作台_v2.json",
+      "cleanup_count": 9,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产套件_01_Anima原版_LoRA生产_v2.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产套件_03_Krea2_一体化生产_v2.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_04_Krea2_指令编辑.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_05_Anima2.9_裁剪精修回贴.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_06_透明素材_抠图导出.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_07_Anima原版_左右扩图.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_08_超分_二倍交付.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\user\\default\\workflows\\生产扩展_09_超分_四倍素材.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\production_tools\\templates\\UAP统一生产工作台_v2.json",
+      "cleanup_count": 9,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产套件_01_Anima原版_LoRA生产_v2.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产套件_03_Krea2_一体化生产_v2.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产扩展_04_Krea2_指令编辑.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产扩展_05_Anima2.9_裁剪精修回贴.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产扩展_06_透明素材_抠图导出.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产扩展_07_Anima原版_左右扩图.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产扩展_08_超分_二倍交付.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    },
+    {
+      "path": "G:\\ComfyUI-aki-v3\\production_tools\\templates\\生产扩展_09_超分_四倍素材.json",
+      "cleanup_count": 1,
+      "all_default_resident": true,
+      "only_allowed_changes": true
+    }
+  ],
+  "defaults_browser": {
+    "branches": [
+      {
+        "id": "a1",
+        "mode": "resident"
+      },
+      {
+        "id": "a29",
+        "mode": "resident"
+      },
+      {
+        "id": "k2",
+        "mode": "resident"
+      },
+      {
+        "id": "ext04",
+        "mode": "resident"
+      },
+      {
+        "id": "ext05",
+        "mode": "resident"
+      },
+      {
+        "id": "ext06",
+        "mode": "resident"
+      },
+      {
+        "id": "ext07",
+        "mode": "resident"
+      },
+      {
+        "id": "ext08",
+        "mode": "resident"
+      },
+      {
+        "id": "ext09",
+        "mode": "resident"
+      }
+    ],
+    "release": {
+      "promptPreserved": true,
+      "selectedBranchOnly": true
+    },
+    "resident": {
+      "allResident": true,
+      "blockedWrites": [],
+      "promptPreserved": true
+    },
+    "fixture": "neutral unsaved graph initialized from published workflow cleanup values; no formal save"
+  },
+  "report_browser": {
+    "image_elements": 24,
+    "links": [
+      "../交付说明.txt",
+      "../config.json",
+      "../visual_review.json",
+      "../FINAL_DELIVERY.json"
+    ],
+    "loaded": 16,
+    "overflow": false,
+    "closed": true,
+    "wide_screenshot": "report_preview.png",
+    "review": "Pair layout inspected; all 24 originals additionally verified from disk."
+  },
+  "experiment": {
+    "completed": 24,
+    "unique_pixels": 24,
+    "median_seconds": {
+      "A": 12.3405,
+      "B": 12.1205
+    },
+    "peak_gpu_mib": 14262.0,
+    "live": {
+      "at": "2026-10-03T23:47:26.148869+08:00",
+      "owners": [
+        {
+          "pid": 53232,
+          "created": 1791039069.3135595,
+          "cmdline": [
+            "G:\\ComfyUI-aki-v3\\python\\python.exe",
+            "-X",
+            "utf8",
+            "-B",
+            "-s",
+            "main.py",
+            "--listen",
+            "127.0.0.1",
+            "--port",
+            "8188",
+            "--disable-auto-launch",
+            "--disable-all-custom-nodes",
+            "--whitelist-custom-nodes",
+            "ComfyUI-Anima-LLLite",
+            "ComfyUI-Unified-Prompt-Workbench",
+            "ComfyUI-Danbooru-Browser-Import",
+            "ComfyUI-DazzleSwitch",
+            "comfyui-easy-use",
+            "ComfyUI-Impact-Pack",
+            "comfyui-impact-subpack",
+            "comfyui-kjnodes",
+            "comfyui-krea2-controlnet",
+            "comfyui-krea2edit",
+            "ComfyUI-Olm-DragCrop",
+            "ComfyUI-Olm-JoyCaption",
+            "ComfyUI-OpenPose-Studio",
+            "ComfyUI-RMBG",
+            "ComfyUI-PixAI-Tagger",
+            "ComfyUI_Comfyroll_CustomNodes",
+            "ComfyUI_UltimateSDUpscale",
+            "comfyui_controlnet_aux",
+            "comfyui_memory_cleanup",
+            "prompt-assistant",
+            "rgthree-comfy",
+            "TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters",
+            "vnccs-utils",
+            "ComfyUI-GGUF",
+            "--preview-method",
+            "auto",
+            "--reserve-vram",
+            "4.0",
+            "--cuda-malloc"
+          ]
+        }
+      ],
+      "queue": {
+        "queue_running": [],
+        "queue_pending": []
+      },
+      "modules": {
+        "name": "统一工作台",
+        "version": "1.0.0",
+        "modules": [
+          {
+            "key": "weilin",
+            "label": "共享资料与提示词",
+            "nodes": 4,
+            "ready": true
+          },
+          {
+            "key": "anima",
+            "label": "Anima 标签与随机选择",
+            "nodes": 16,
+            "ready": true
+          },
+          {
+            "key": "gallery",
+            "label": "Gallery 与 UAP",
+            "nodes": 22,
+            "ready": true
+          },
+          {
+            "key": "lora_manager",
+            "label": "LoRA、模型与 Embedding",
+            "nodes": 21,
+            "ready": true
+          },
+          {
+            "key": "completion",
+            "label": "补全与工作流工具",
+            "nodes": 13,
+            "ready": true
+          }
+        ],
+        "nodes": 76,
+        "resource_owner": "weilin",
+        "degraded": false
+      }
+    }
+  },
+  "actual_history_matches_submitted_api": true,
+  "paired_graphs_only_differ_in_positive_and_filename": true,
+  "all_images_copied_exactly": true,
+  "visual_reviewer": "assistant model visual inspection",
+  "blind_human_review": false,
+  "production_prompt_content_unchanged": true,
+  "dedicated_cleanup_preserved": true,
+  "historical_v1_preserved": true,
+  "gpu_after_batch_free": "7003 MiB, 19 %",
+  "review": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-03_prompt_comparison\\visual_review.json",
+  "report": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-03_prompt_comparison\\report\\index.html",
+  "rollback": "python manage.py rollback",
+  "next_candidate": "Key framing tags + concise relation sentences; not yet image-tested; no automatic production prompt rewrite."
+}

@@ -1,0 +1,38 @@
+{
+  "cases": [
+    {
+      "case": "resident_updates_two_flags_preserves_prompt",
+      "passed": true
+    },
+    {
+      "case": "busy_queue_no_free",
+      "passed": true
+    },
+    {
+      "case": "idle_queue_free_flags_mocked",
+      "passed": true
+    },
+    {
+      "case": "restore_release_mode",
+      "passed": true
+    },
+    {
+      "case": "model_change_updates_compatibility",
+      "passed": true
+    },
+    {
+      "case": "control_search_finds_memory_section",
+      "passed": true
+    },
+    {
+      "case": "760px_layout_no_overflow",
+      "passed": true
+    },
+    {
+      "case": "29b_warning_visible_for_actual_model",
+      "passed": true
+    }
+  ],
+  "fixture": "unsaved neutral graph; queue/free responses mocked; real backend free verified by benchmark separately",
+  "formal_writes_blocked": true
+}

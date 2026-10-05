@@ -40,6 +40,19 @@ PRUNE = {'.git', '.hg', '.svn', '.venv', 'venv', 'python', 'site-packages', 'sit
          'user_data', 'userdatas', 'lora_userdatas', 'loras_userdatas', 'translate_userdatas',
          'prompt_selector_data_backups', 'random_tag', 'autosave', 'sd-models'}
 TRAINER = 'anima_lora_forge/vendor/sd-trainer/SD-Trainer'
+TRAINER_PORTABLE_FILES = (
+    'Download-Anima-Model.bat',
+    'Fix-Portable-Bats.bat',
+    'install_xformers.bat',
+    'README.txt',
+    'run_gui_portable.bat',
+    'run_gui.bat',
+    'Update-SD-Trainer-Release.bat',
+    'Update-SD-Trainer.bat',
+    'update/update_dependencies.bat',
+    'update/update_from_release.bat',
+    'update/update_sd_trainer.bat',
+)
 LAB_CORE = 'qwen21_lab/ComfyUI'
 CODE_DIRECTORY_EXCEPTIONS = {LAB_CORE + '/comfy_api/input'}
 PUBLIC_JSON_PREFIXES = (
@@ -113,6 +126,13 @@ def selected_roots(runtime):
     for prefix in ('qwen21_lab/workflows_api', TRAINER, LAB_CORE):
         if (runtime / prefix).exists():
             roots.append((runtime / prefix, True))
+    # Reviewed portable wrappers live outside the inner trainer source tree.
+    # Select files, never recurse over the package root, update/ or environments.
+    portable = (runtime / TRAINER).parent
+    for name in TRAINER_PORTABLE_FILES:
+        file = portable / name
+        if file.is_file() or file.is_symlink():
+            roots.append((file, False))
     plugins = runtime / 'ComfyUI/custom_nodes'
     if plugins.is_dir():
         for plugin in plugins.iterdir():

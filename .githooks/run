@@ -10,4 +10,9 @@ elif command -v python3 >/dev/null 2>&1; then
 else
     interpreter=python
 fi
+if [ "${1:-}" = "--staged" ]; then
+    "$interpreter" -X utf8 -B scripts/technical_catalog.py check --staged --enforce-changes
+else
+    "$interpreter" -X utf8 -B scripts/technical_catalog.py check --require-tracked
+fi
 exec "$interpreter" -X utf8 -B scripts/security_guard.py "$@"

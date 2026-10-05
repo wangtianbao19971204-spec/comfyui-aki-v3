@@ -1,0 +1,88 @@
+{
+  "verified_at": "2026-10-01T16:49:00+08:00",
+  "scope": "Real in-app browser, existing unsaved QA workflow 验收副本_六类选择器 (2); no workflow save or queue submission",
+  "baseline": "forest, sunlight",
+  "selectors": [
+    {
+      "kind": "character",
+      "target": "角色 #1 / character_tags",
+      "total": 995,
+      "first_page": 60,
+      "cross_page_selected": 2,
+      "empty_search_kept_selection": true,
+      "escape_cleared_search": true,
+      "only_target_changed_on_apply": true,
+      "all_six_restored_after_undo": true,
+      "reopen_cleared_temporary_selection": true
+    },
+    {
+      "kind": "clothing",
+      "target": "服装 #2 / clothing_tags",
+      "total": 2329,
+      "first_page": 48,
+      "cross_page_selected": 2,
+      "empty_search_kept_selection": true,
+      "escape_cleared_search": true,
+      "only_target_changed_on_apply": true,
+      "all_six_restored_after_undo": true,
+      "page_two_scroll_top_after_fix": 0
+    },
+    {
+      "kind": "pose",
+      "target": "姿势 #3 / pose_tags",
+      "total": 737,
+      "first_page": 48,
+      "cross_page_selected": 2,
+      "empty_search_kept_selection": true,
+      "escape_cleared_search": true,
+      "only_target_changed_on_apply": true,
+      "all_six_restored_after_undo": true,
+      "page_two_scroll_top_after_fix": 0
+    },
+    {
+      "kind": "background",
+      "target": "背景 #4 / background_tags",
+      "total": 513,
+      "first_page": 48,
+      "cross_page_selected": 2,
+      "empty_search_kept_selection": true,
+      "escape_cleared_search": true,
+      "only_target_changed_on_apply": true,
+      "all_six_restored_after_undo": true,
+      "page_two_scroll_top_after_fix": 0
+    },
+    {
+      "kind": "style_quality",
+      "target": "画风质量 #6 / style_quality_tags",
+      "total": 4391,
+      "first_page": 48,
+      "cross_page_selected": 2,
+      "empty_search_kept_selection": true,
+      "escape_cleared_search": true,
+      "only_target_changed_on_apply": true,
+      "all_six_restored_after_undo": true,
+      "page_two_scroll_top_after_fix": 0
+    }
+  ],
+  "fixes": [
+    "Shared character items without supplemental detail tags no longer trigger the official-character lookup on hover or show the misleading unavailable message.",
+    "Clothing, pose and background page navigation clears a one-time restored scroll offset before rendering the next page."
+  ],
+  "validation": {
+    "js_syntax": "4 changed selector files passed node --check",
+    "served_resources_match_disk": 4,
+    "live_pid": 23248,
+    "modules_ready": 5,
+    "nodes": 71,
+    "queue_running": 0,
+    "queue_pending": 0,
+    "formal_data_guards_unchanged": 3,
+    "temporary_browser_tabs_closed": true
+  },
+  "limits": [
+    "This covers the five non-artist selectors' basic cross-page search and append/undo path, not the full X01-X07 matrix.",
+    "The character card supplementary Tags count can be zero; the shared prompt body remains selectable and writes normally.",
+    "Replacement, cancellation, favorites, category management, stale target or source conflicts, full keyboard and IME, narrow viewport/theme matrix, browser P95 and 30-minute stability remain open.",
+    "Six source endpoints still report four prompts pending review, so the entire source library is not certified as fully reviewed."
+  ]
+}

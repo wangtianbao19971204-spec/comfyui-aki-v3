@@ -1,0 +1,207 @@
+{
+  "passed": true,
+  "cycles": {
+    "character_cycles": {
+      "n": 5,
+      "median_ms": 582.2000000476837,
+      "min_ms": 538.1000000238419,
+      "max_ms": 663.4000000357628,
+      "request_counts": [
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "root_nodes": [
+        3054,
+        3054,
+        3054,
+        3054,
+        3054
+      ],
+      "image_elements": [
+        61,
+        61,
+        61,
+        61,
+        61
+      ],
+      "dom_and_listeners_return_to_baseline": true
+    },
+    "pose_cycles": {
+      "n": 5,
+      "median_ms": 699.9000000357628,
+      "min_ms": 690.3000000119209,
+      "max_ms": 757.1999999880791,
+      "request_counts": [
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "root_nodes": [
+        2318,
+        2318,
+        2318,
+        2318,
+        2318
+      ],
+      "image_elements": [
+        49,
+        49,
+        49,
+        49,
+        49
+      ],
+      "dom_and_listeners_return_to_baseline": true
+    },
+    "library_cycles": {
+      "n": 3,
+      "median_ms": 235,
+      "min_ms": 180.19999998807907,
+      "max_ms": 253.80000001192093,
+      "request_counts": [
+        4,
+        4,
+        4
+      ],
+      "root_nodes": [
+        2355,
+        2355,
+        2355
+      ],
+      "image_elements": [
+        36,
+        36,
+        36
+      ],
+      "dom_and_listeners_return_to_baseline": true
+    },
+    "pending_before": {
+      "n": 5,
+      "median_ms": 239.5,
+      "min_ms": 193.29999995231628,
+      "max_ms": 264.19999998807907,
+      "request_counts": [
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "root_nodes": [
+        2459,
+        2459,
+        2459,
+        2459,
+        2459
+      ],
+      "image_elements": [
+        36,
+        36,
+        36,
+        36,
+        36
+      ],
+      "dom_and_listeners_return_to_baseline": true
+    },
+    "pending_after": {
+      "n": 5,
+      "median_ms": 90.10000002384186,
+      "min_ms": 86.5,
+      "max_ms": 98.89999997615814,
+      "request_counts": [
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "root_nodes": [
+        306,
+        306,
+        306,
+        306,
+        306
+      ],
+      "image_elements": [
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "dom_and_listeners_return_to_baseline": true
+    },
+    "library_after": {
+      "n": 3,
+      "median_ms": 206,
+      "min_ms": 182.10000002384183,
+      "max_ms": 246.89999997615817,
+      "request_counts": [
+        4,
+        4,
+        4
+      ],
+      "root_nodes": [
+        2355,
+        2355,
+        2355
+      ],
+      "image_elements": [
+        36,
+        36,
+        36
+      ],
+      "dom_and_listeners_return_to_baseline": true
+    }
+  },
+  "pending_comparison": {
+    "before_median_ms": 239.5,
+    "after_median_ms": 90.10000002384186,
+    "before_requests": 4,
+    "after_requests": 3,
+    "before_root_nodes": 2459,
+    "after_root_nodes": 306,
+    "before_image_elements": 36,
+    "after_image_elements": 6,
+    "removed_hidden_library_cards": 30
+  },
+  "idle_seconds": 35.76919999998808,
+  "apply_undo": {
+    "allWidgetValuesAndModesUnchanged": true,
+    "linksUnchanged": true,
+    "passed": true,
+    "previewEqualsWrite": true,
+    "sidebarPreserved": true,
+    "undoExact": true
+  },
+  "target_switch": {
+    "horizontalOverflow": false,
+    "items": 6,
+    "noHiddenLibraryCards": true,
+    "passed": true,
+    "previewContainsComposition": true,
+    "sidebarPreserved": true,
+    "viewport": [
+      1024,
+      640
+    ]
+  },
+  "guard_count": 1386,
+  "protected_count": 1384,
+  "served_hash_matches": 6,
+  "cleanup": true,
+  "original_user_content_preserved": true,
+  "original_graph_exact_equal": false,
+  "limits": [
+    "First use means first open within a fresh browser page, not a cleared server/disk cache.",
+    "Five warm cycles per selector/pending condition and three per library condition; scoped responsiveness/lifecycle evidence, not hours-long or whole-process memory certification.",
+    "Latency measured in-page from frontend action to ready DOM plus an animation frame; images need not be fully loaded. Image figures are DOM elements, not downloaded-image counts.",
+    "1280x720 before/after comparison uses the same neutral six-item gallery-resolver draft and fixture; 1024x640 is responsive regression.",
+    "No physical IME, image generation, model unload or formal save. Previous M4 numeric tests remain applicable because only the pending-entry call changed.",
+    "Dynamic library content and theme filters load when returning to the library; favorites/recent/group shortcuts remain available in pending view."
+  ]
+}

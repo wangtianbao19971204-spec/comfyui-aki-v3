@@ -1,0 +1,30 @@
+{
+  "changes": [
+    {
+      "file": "UAP统一生产工作台_v2.json",
+      "node": 1049,
+      "before": [
+        true,
+        true
+      ],
+      "after": [
+        false,
+        false
+      ]
+    },
+    {
+      "file": "生产套件_01_Anima原版_LoRA生产_v2.json",
+      "node": 716,
+      "before": [
+        true,
+        true
+      ],
+      "after": [
+        false,
+        false
+      ]
+    }
+  ],
+  "other_workflows_unchanged": true,
+  "basis": "Only the currently measured AnimaYume production branch changes default. Anima 2.9B and Krea2 retain their previous default and expose the selector."
+}

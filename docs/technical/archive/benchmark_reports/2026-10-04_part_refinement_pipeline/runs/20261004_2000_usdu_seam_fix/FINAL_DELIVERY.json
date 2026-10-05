@@ -1,0 +1,80 @@
+{
+  "run": "20261004_2000_usdu_seam_fix",
+  "scope": "2026-10-04_part_refinement_pipeline",
+  "owner_thread": "01a1061f-c0b3-7f40-8168-1bc0ca82582c",
+  "completed_at": "2026-10-04T20:01:10.383362+08:00",
+  "change": "UAP v2 had seam_fix_mode='None' on all three UltimateSDUpscale nodes, i.e. no seam repair at all. Set them to the setting every surveyed hot workflow uses: 'Half Tile + Intersections', seam_fix_denoise 0.42, seam_fix_width 64, seam_fix_mask_blur 16, seam_fix_padding 32.",
+  "file": {
+    "path": "ComfyUI\\user\\default\\workflows\\UAP统一生产工作台_v2.json",
+    "bytes": 1296067,
+    "sha256_after": "23bf6d04080aaec11447201eb6be9bcfd7ae62feaf1fcd463256e6741303cd96"
+  },
+  "backup": {
+    "path": "ComfyUI\\user\\default\\codex_backups\\2026-10-04_before_usdu_seam_fix.json",
+    "bytes": 1604486,
+    "sha256": "9ebbeea511cab04235161f8cce613a608cde54f9a0b181c418bc0f85a66e2d40"
+  },
+  "sha256_before": "9ebbeea511cab04235161f8cce613a608cde54f9a0b181c418bc0f85a66e2d40",
+  "nodes_changed": [
+    {
+      "id": 1051,
+      "title": "[11B] Anima 原生二放精修 (Anima 原版)",
+      "cfg": 7
+    },
+    {
+      "id": 1112,
+      "title": "[11B] Anima 原生二放精修 (Anima 2.9B)",
+      "cfg": 3.5
+    },
+    {
+      "id": 1192,
+      "title": "[11B] Krea2 原生二放",
+      "cfg": 1
+    }
+  ],
+  "params_changed": {
+    "seam_fix_mode": [
+      "None",
+      "Half Tile + Intersections"
+    ],
+    "seam_fix_denoise": [
+      1,
+      0.42
+    ],
+    "seam_fix_mask_blur": [
+      8,
+      16
+    ],
+    "seam_fix_padding": [
+      16,
+      32
+    ]
+  },
+  "unchanged_deliberately": [
+    "no eye detailer added (user decision)",
+    "the SAM3-based 10A/10B/10C face/hand/person route left untouched",
+    "the 10A-10E refinement subgraphs left disabled/bypassed as found",
+    "upstream sampling params (steps 12/12/4, cfg 7/3.5/1, denoise 0.12) left as-is"
+  ],
+  "validation": {
+    "static": "292 nodes / 375 links unchanged; link graph has zero structural errors. The 95 'type not registered' lines from the checker are false positives for rgthree nodes, MarkdownNote, ShowText and subgraph UUID types - the pre-change backup produces an identical set.",
+    "live": "Minimal throwaway workflow (LoadImage -> Anima 2.9B + OmniSR_X4_DIV2K -> UltimateSDUpscale with the new seam settings -> SaveImage) submitted to the live 8188 instance.",
+    "prompt_id": "a047c35c-7c80-42f3-af67-8acf1f4c23a3",
+    "result": "success",
+    "output": "ComfyUI\\output\\_codex_qa\\usdu_seam\\half_tile_intersections_00001_.png",
+    "output_size": "1128x1648 from a 753x1100 input at scale 1.5 - correct",
+    "significance": "confirms the 'Half Tile + Intersections' seam-fix code path executes on this install before it is relied on in production"
+  },
+  "production_changes": {
+    "workflows_modified_in_place": 1,
+    "files_modified": [
+      "ComfyUI\\user\\default\\workflows\\UAP统一生产工作台_v2.json"
+    ],
+    "node_or_core_code_edits": 0,
+    "models_added": 0,
+    "service_restarted": false,
+    "queue_cleared": false,
+    "free_called": false
+  },
+  "rollback": "copy ComfyUI\\user\\default\\codex_backups\\2026-10-04_before_usdu_seam_fix.json over ComfyUI\\user\\default\\workflows\\UAP统一生产工作台_v2.json; sha256 of the pre-change file is 9ebbeea511cab04235161f8cce613a608cde54f9a0b181c418bc0f85a66e2d40"
+}

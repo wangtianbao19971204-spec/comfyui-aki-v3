@@ -1,0 +1,17 @@
+{
+  "status": "repaired_verified_with_limits",
+  "updated_at": "2026-10-04T21:49:57.968624+08:00",
+  "production_sha256": "fdbff196324e01296a4bb1ffed6e1a6d38e49cacc7bf0aa59ddeb9983b6e8a1e",
+  "template_sha256": "fdbff196324e01296a4bb1ffed6e1a6d38e49cacc7bf0aa59ddeb9983b6e8a1e",
+  "neutral_prompt_id": "e3edf6f8-53d6-4078-94d0-e93bca3d835c",
+  "neutral_status": "success",
+  "validation_limits": [
+    "Not a full end-to-end rerun of all nine production branches.",
+    "Current live smoke uses an isolated, clothed neutral 2.9B input with no LoRA; no adult-region inference test.",
+    "Detection coverage must be read from the new mask receipts; a successful no-detection pass is not a demonstrated redraw.",
+    "Main sampler, part subgraphs and USDU parameters/seeds remain independent.",
+    "Batch and LLLite protection is in this ComfyUI workbench frontend; raw external API submissions retain upstream constraints.",
+    "Historical excluded-area detection templates remain on disk but are not integrated into UAP."
+  ],
+  "manifest": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-04_part_refinement_pipeline\\runs\\20261004_repair_audit\\release_manifest.json"
+}

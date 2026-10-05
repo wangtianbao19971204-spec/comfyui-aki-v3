@@ -126,6 +126,80 @@ class SourceImportTests(unittest.TestCase):
         self.source(importer.LAB_CORE + '/input/user_image.py')
         self.assertEqual(self.plan()['new_files'], 5)
 
+    def test_trainer_portable_selection_is_exact_and_nonrecursive(self):
+        portable = 'anima_lora_forge/vendor/sd-trainer/'
+        names = {
+            'Download-Anima-Model.bat', 'Fix-Portable-Bats.bat', 'install_xformers.bat',
+            'README.txt', 'run_gui_portable.bat', 'run_gui.bat',
+            'Update-SD-Trainer-Release.bat', 'Update-SD-Trainer.bat',
+            'update/update_dependencies.bat', 'update/update_from_release.bat',
+            'update/update_sd_trainer.bat',
+        }
+        self.assertEqual(set(importer.TRAINER_PORTABLE_FILES), names)
+        self.assertEqual(len(importer.TRAINER_PORTABLE_FILES), 11)
+        expected = {portable + name for name in names}
+        for relative in expected:
+            self.source(relative, b'@echo off\r\nrem inert wrapper fixture\r\n')
+        for name in ('run_gui_source.bat', 'unreviewed.bat', 'README.local.txt',
+                     'sd-trainer-log.txt', 'package.7z', 'installer.exe',
+                     'update/unreviewed.bat', 'update/nested/update_dependencies.bat',
+                     'python_embeded/helper.py', 'cache/helper.py', 'logs/helper.py',
+                     'backup/run_gui.bat'):
+            self.source(portable + name)
+        inner = importer.TRAINER + '/gui.py'
+        self.source(inner)
+        roots = importer.selected_roots(self.runtime)
+        selected_files = {path.relative_to(self.runtime).as_posix()
+                          for path, recurse in roots if not recurse}
+        self.assertEqual(selected_files, expected)
+        recursive = {path.relative_to(self.runtime).as_posix()
+                     for path, recurse in roots if recurse}
+        self.assertEqual(recursive, {importer.TRAINER})
+        review = self.plan()
+        self.assertEqual({row['source'] for row in review['records']}, expected | {inner})
+        self.assertEqual(review['new_files'], 12)
+        self.assertTrue(all(row['status'] == 'new_source' for row in review['records']))
+        self.assertFalse((self.repo / 'snapshot').exists())
+
+    def test_trainer_portable_allowlist_keeps_credential_gate(self):
+        relative = 'anima_lora_forge/vendor/sd-trainer/run_gui.bat'
+        synthetic = 'sk-' + 'Q7' * 20
+        self.source(relative, ('@set "API_KEY=' + synthetic + '"\r\n').encode())
+        review = self.plan()
+        self.assertEqual(review['new_files'], 0)
+        self.assertEqual(review['records'][0]['status'], 'security_quarantine')
+        self.assertIn('openai_style_key', review['records'][0]['rules'])
+        self.assertNotIn(synthetic, json.dumps(review))
+        self.assertFalse((self.repo / 'snapshot').exists())
+
+    def test_trainer_portable_existing_main_file_is_not_overwritten(self):
+        relative = 'anima_lora_forge/vendor/sd-trainer/update/update_from_release.bat'
+        original = self.source(relative, b'@echo current installed wrapper\r\n')
+        authoritative = self.target(relative, b'@echo reviewed main wrapper\r\n')
+        review = self.plan()
+        self.assertEqual(review['new_files'], 0)
+        self.assertEqual(review['records'][0]['status'], 'existing_different_skip')
+        self.assertEqual(self.apply(review)['files'], 0)
+        self.assertEqual(authoritative.read_bytes(), b'@echo reviewed main wrapper\r\n')
+        self.assertEqual(original.read_bytes(), b'@echo current installed wrapper\r\n')
+
+    def test_trainer_portable_file_name_cannot_select_directory_tree(self):
+        self.source('anima_lora_forge/vendor/sd-trainer/run_gui.bat/nested.py')
+        self.assertEqual(self.plan()['records'], [])
+
+    def test_trainer_portable_symlink_is_not_followed(self):
+        original = self.source('other/wrapper.bat', b'@echo outside scope\r\n')
+        link = self.runtime / 'anima_lora_forge/vendor/sd-trainer/run_gui.bat'
+        link.parent.mkdir(parents=True)
+        try:
+            link.symlink_to(original)
+        except OSError:
+            self.skipTest('Symlink creation unavailable')
+        review = self.plan()
+        self.assertEqual(review['new_files'], 0)
+        self.assertEqual(review['records'][0]['reason'], 'linked_path_not_followed')
+        self.assertFalse((self.repo / 'snapshot').exists())
+
     def test_binary_model_payload_cannot_use_tokenizer_exception(self):
         self.source(importer.LAB_CORE + '/comfy/text_encoders/t5_pile_tokenizer/tokenizer.model', b'vocabulary')
         self.source(importer.LAB_CORE + '/comfy/weights.model', b'not a tokenizer')

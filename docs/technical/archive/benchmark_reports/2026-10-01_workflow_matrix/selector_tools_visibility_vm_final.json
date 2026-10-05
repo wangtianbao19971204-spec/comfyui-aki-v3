@@ -1,0 +1,151 @@
+{
+  "at": "2026-10-01T16:06:55.752Z",
+  "status": "PASS",
+  "testCount": 13,
+  "scope": "Actual mountSelectorTools module and extracted actual daily insertion/selector construction source run over neutral in-memory DOM objects. No browser, API, widget, workflow, source or data writes. Only this test and receipt are evidence files.",
+  "source_sha256": {
+    "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/selector_tools.js": "0467f8eeb514c5e483b6e8381910e7d33305a2acaa261fb251a84208e94bcd7a",
+    "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js": "2f56dfc49b186192835c8c955c552b36fee7faf023ffa9b1ba339c01b8d813be",
+    "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.css": "796e4709b29d7761ff378b60bec61e99324941d245f763cea451bb57c98c2e40",
+    "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/studio.css": "80f30b811ee4a12ddacb5e73e7f524f9dc9b478f8ee38b805ddea3d46020f5cc",
+    "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js": "898b110c08a3b850a306278e93f9bfb5c26e9baeac78984095d0e935882477c4"
+  },
+  "tests": [
+    {
+      "name": "no-target hides row and disables picker and six native entries",
+      "status": "pass"
+    },
+    {
+      "name": "positive target restores row with only positive option and six enabled entries",
+      "status": "pass"
+    },
+    {
+      "name": "negative selection disables all six entries and direct callback refuses open",
+      "status": "pass"
+    },
+    {
+      "name": "target picker synchronizes positive selection once without recursion",
+      "status": "pass"
+    },
+    {
+      "name": "pending native opening locks controls and rejects duplicate callback",
+      "status": "pass"
+    },
+    {
+      "name": "targets removed during open remain hidden and disabled after completion",
+      "status": "pass"
+    },
+    {
+      "name": "negative-only hides row; restored positive target re-enables entries without widget writes",
+      "status": "pass"
+    },
+    {
+      "name": "300 stable refresh calls cause zero hidden or hint mutations; each real transition updates once",
+      "status": "pass"
+    },
+    {
+      "name": "actual CSSOM has matching important hidden guards and no competing important flex declarations",
+      "status": "pass"
+    },
+    {
+      "name": "daily no-source hides prompt actions, builds no selectors, and browses library",
+      "status": "pass"
+    },
+    {
+      "name": "daily negative-only retains negative library target and builds no positive selectors",
+      "status": "pass"
+    },
+    {
+      "name": "daily positive-and-negative creates six entries all routed to positive source",
+      "status": "pass"
+    },
+    {
+      "name": "daily positive source without textarea creates no selector entries",
+      "status": "pass"
+    }
+  ],
+  "dailyCases": [
+    {
+      "name": "daily no-source hides prompt actions, builds no selectors, and browses library",
+      "positive": false,
+      "negative": false,
+      "textarea": true,
+      "entries": 0,
+      "promptActionsHidden": true,
+      "libraryDirection": null
+    },
+    {
+      "name": "daily negative-only retains negative library target and builds no positive selectors",
+      "positive": false,
+      "negative": true,
+      "textarea": true,
+      "entries": 0,
+      "promptActionsHidden": false,
+      "libraryDirection": "negative"
+    },
+    {
+      "name": "daily positive-and-negative creates six entries all routed to positive source",
+      "positive": true,
+      "negative": true,
+      "textarea": true,
+      "entries": 6,
+      "promptActionsHidden": false,
+      "libraryDirection": "positive"
+    },
+    {
+      "name": "daily positive source without textarea creates no selector entries",
+      "positive": true,
+      "negative": false,
+      "textarea": false,
+      "entries": 0,
+      "promptActionsHidden": false,
+      "libraryDirection": "positive"
+    }
+  ],
+  "stableRefreshMutations": [
+    {
+      "state": "positive target unchanged",
+      "refreshCalls": 100,
+      "hiddenMutations": 0,
+      "hintMutations": 0
+    },
+    {
+      "state": "no target unchanged",
+      "refreshCalls": 100,
+      "hiddenMutations": 0,
+      "hintMutations": 0
+    },
+    {
+      "state": "restored positive target unchanged",
+      "refreshCalls": 100,
+      "hiddenMutations": 0,
+      "hintMutations": 0
+    }
+  ],
+  "hiddenCSSContracts": [
+    {
+      "node": "selector toolbar",
+      "matchingImportantHideSelectors": [
+        "#unified-workbench [hidden],#unified-workbench[hidden]",
+        "body :is(#unified-workbench, #uap-daily-desk, #unified-tag-manager, #tb-shared-preset-panel, .uw-selector) [hidden]"
+      ]
+    },
+    {
+      "node": "daily prompt actions",
+      "matchingImportantHideSelectors": [
+        "body :is(#unified-workbench, #uap-daily-desk, #unified-tag-manager, #tb-shared-preset-panel, .uw-selector) [hidden]"
+      ]
+    }
+  ],
+  "jsdomCascadeControl": {
+    "css": "#x [hidden]{display:none!important} #x .row{display:flex}",
+    "computedDisplay": "flex",
+    "cssomHiddenPriority": "important",
+    "expectedBrowserDisplay": "none"
+  },
+  "limits": [
+    "jsdom computed style ignores earlier !important display in the control case; hidden verification here checks actual matching CSSOM declarations and DOM hidden state only. Real-browser rendered hiding belongs to root browser acceptance.",
+    "Native dynamic imports and model generation were not executed. Opening callbacks are controlled promises.",
+    "Daily test uses the actual extracted changed block with neutral host objects; it does not certify the entire createDailyControls lifecycle."
+  ]
+}

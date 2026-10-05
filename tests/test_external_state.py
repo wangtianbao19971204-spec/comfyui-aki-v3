@@ -53,6 +53,51 @@ class ExternalStateTests(unittest.TestCase):
         self.assertFalse(receipt['complete_runtime_restored'])
         self.assertFalse(receipt['service_started'])
 
+    def test_exact_qwen_configs_validate_as_private_references_only(self):
+        plan = self.plan()
+        plan['entries'] = []
+        for index, relative in enumerate(sorted(state.REFERENCE_ONLY_PRIVATE_CONFIG_PATHS)):
+            source = self.runtime / relative
+            source.parent.mkdir(parents=True, exist_ok=True)
+            source.write_text(json.dumps({'local_fixture': self.secret}), encoding='utf-8')
+            plan['entries'].append({
+                'id': f'qwen-config-{index}', 'root': 'runtime',
+                'source': relative, 'target': relative,
+                'category': 'private_config', 'action': 'reference',
+            })
+        with patch.object(state, 'source_fingerprint', side_effect=AssertionError('no inventory')):
+            roots, entries, manifest_hash = state.validate_plan(plan, self.repo)
+        self.assertEqual(len(entries), 3)
+        self.assertEqual(set(roots), {'runtime'})
+        self.assertEqual(len(manifest_hash), 64)
+        self.assertTrue(all(entry['action'] == 'reference' for entry, _ in entries))
+        self.assertNotIn(self.secret, json.dumps(plan))
+
+    def test_exact_qwen_configs_reject_copy_or_reclassification(self):
+        targets = list(state.REFERENCE_ONLY_PRIVATE_CONFIG_PATHS)
+        targets += [target.upper() for target in targets]
+        for target in targets:
+            for category, action in [('private_config', 'copy'), ('mutable_cache', 'copy'),
+                                     ('mutable_cache', 'reference'), ('external_asset', 'reference')]:
+                with self.subTest(target=target, category=category, action=action):
+                    with self.assertRaisesRegex(state.ContractError, 'private_config_reference_only'):
+                        state.validate_plan(self.plan(target=target, category=category, action=action), self.repo)
+
+    def test_qwen_config_allowlist_does_not_accept_path_aliases(self):
+        for target in ['other/qwen21_lab/runtime.json', 'qwen21_lab/runtime-backup.json',
+                       'QWEN21_lab/runtime.json', 'qwen21_lab/runtime.json/child.json',
+                       'qwen21_lab/other_model_paths.yaml']:
+            with self.subTest(target=target):
+                with self.assertRaisesRegex(state.ContractError, 'private_config_(target_not_recognized|reference_only)'):
+                    state.validate_plan(self.plan(target=target, action='reference'), self.repo)
+
+    def test_exact_qwen_config_cannot_shadow_public_payload(self):
+        for target in state.REFERENCE_ONLY_PRIVATE_CONFIG_PATHS:
+            with self.subTest(target=target):
+                self.claim(target)
+                with self.assertRaisesRegex(state.ContractError, 'overlay_would_shadow_public_payload'):
+                    state.validate_plan(self.plan(target=target, action='reference'), self.repo)
+
     def test_path_traversal_aliases_ads_unicode_and_git_rejected(self):
         for target in ['../config.json', 'a\\config.json', '/config.json', 'a:stream', 'NUL.json',
                        '.git/config.json', 'a/../config.json', 'a./config.json', 'ｃonfig.json', 'a//config.json']:

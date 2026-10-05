@@ -1,0 +1,32 @@
+{
+  "file": "alicia_bell_morning_star_anima29_r32_v1.safetensors",
+  "size_bytes": 131241592,
+  "sha256": "aef260a4f99b06c612f17101442be2e80d2b749c33be6eacc731545f922aeca1",
+  "tensor_count": 1200,
+  "lora_module_count": 400,
+  "dtype_counts": {
+    "BF16": 1200
+  },
+  "block_count": 40,
+  "block_min": 0,
+  "block_max": 39,
+  "blocks_contiguous": true,
+  "all_tensors_finite": true,
+  "metadata_summary": {
+    "modelspec.title": "alicia_bell_morning_star_anima29_r32",
+    "modelspec.architecture": "anima-preview/lora",
+    "modelspec.date": "2026-08-24T21:39:47",
+    "ss_steps": "300",
+    "ss_max_train_steps": "400",
+    "ss_network_dim": "32",
+    "ss_network_alpha": "16",
+    "ss_learning_rate": "2e-05",
+    "ss_num_train_images": "200",
+    "ss_sd_model_name": "anima29B_v10_bf16.safetensors",
+    "ss_new_sd_model_hash": "0b3020d1b906155f7eb30667622723e87160632c8c7a5f1c93bdce685f2a346d",
+    "ss_vae_name": "qwen_image_vae.safetensors",
+    "ss_new_vae_hash": "a70580f0213e67967ee9c95f05bb400e8fb08307e017a924bf3441223e023d1f"
+  },
+  "passed": true,
+  "errors": []
+}

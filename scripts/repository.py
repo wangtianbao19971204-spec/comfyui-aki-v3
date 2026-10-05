@@ -73,6 +73,8 @@ def adopt(candidate, *, purpose=None, reviewed_sha256=None):
 
 
 def check_tracked():
+    # A bundle contains committed objects, never an uncommitted approval policy.
+    training_reviews = security_guard.git_training_trigger_reviews(REPO, staged=False)
     tracked = set(run_git('ls-files', '-z').split('\0')) - {''}
     disk = {'snapshot/' + file.relative_to(REPO/'snapshot').as_posix() for file in walk(REPO/'snapshot', set())}
     missing = sorted(disk - tracked)
@@ -84,14 +86,33 @@ def check_tracked():
             raise RuntimeError('Nested Git repository was staged as a submodule')
     for relative in sorted(tracked):
         file = REPO / relative
+        safe_relative = security_guard.safe_report_name(relative)
+        path_findings = security_guard.blocked_path(relative)
+        path_findings.extend(item['rule'] for item in security_guard.name_findings(relative, ''))
+        if path_findings:
+            raise RuntimeError('Tracked path gate failed: ' + safe_relative + ': ' + ', '.join(sorted(path_findings)))
         if file.stat().st_size > 50 * 1024 * 1024:
-            raise RuntimeError('Tracked file exceeds 50 MiB: ' + relative)
+            raise RuntimeError('Tracked file exceeds 50 MiB: ' + safe_relative)
         # bundle() has already verified all snapshot hashes and credentials.
         if relative.startswith('snapshot/'):
             continue
-        findings = scan(file)
+        # Keep the existing text scan and scan every non-snapshot byte stream.
+        # Only the exact reviewed literal rule can be removed; strong signatures,
+        # encoded findings and path/resource rules remain blocking.
+        findings = set(scan(file))
+        scanner = security_guard.StreamScanner()
+        hashed = hashlib.sha256()
+        with file.open('rb') as stream:
+            while block := stream.read(1024 * 1024):
+                hashed.update(block)
+                scanner.feed(block)
+        findings.update(scanner.findings)
+        findings, _ = security_guard.apply_training_trigger_review(
+            hashed.hexdigest(), [relative], findings, training_reviews)
         if findings:
-            raise RuntimeError('Tracked credential scan failed: ' + relative + ': ' + ', '.join(findings))
+            raise RuntimeError('Tracked credential scan failed: ' + safe_relative + ': ' + ', '.join(sorted(findings)))
+    if security_guard.git_training_trigger_reviews(REPO, staged=False)['sha256'] != training_reviews['sha256']:
+        raise RuntimeError('Committed training review registry changed during tracked-file scan')
     return {'tracked_files': len(tracked), 'snapshot_files': len(disk)}
 
 

@@ -4,10 +4,13 @@
 
 这是今后 **ComfyUI 相关修改的唯一主 Git**，不是 Comfy-Org 官方仓库，也不是装好全部模型的整机镜像。日常开发直接改本仓 `snapshot/runtime/` 对应源码；运行目录只作部署目标。数据库结构、迁移、工作流和提示词资料维护也在本仓登记。
 
-按用户最新决定保留真实提示词库、收藏、备注和历史；公开准备的重点是移除密钥、登录配置及插件缓存。所有发现的工作 Git 的本地可得提交历史已接入主仓；原始含凭证图另作私有档案。**没有配置在线远端、没有上传 GitHub。** 本轮只部署了 9 份凭证外置/安全示例文件及运行根维护路由，没有重启、生图或覆盖数据库；不表示完成了全部功能的冷启动验收。
+按用户最新决定保留真实提示词库、收藏、备注和历史；公开准备的重点是移除密钥、登录配置及插件缓存。所有发现的工作 Git 的本地可得提交历史已接入主仓；原始含凭证图另作私有档案。**没有配置在线远端、没有上传 GitHub。** 初次整理仅部署了 9 份凭证外置/安全示例文件及运行根维护路由；后续独立任务另完成了 [Anima 2.9B LoRA 补丁部署与对照验收](docs/technical/training/anima-compat.md)。这些有边界验收不表示完成全部功能或新机器冷启动验收。
 
 ## 从这里开始
 
+- [分层技术接手档案](docs/technical/README.md)：按功能找到真实实现、测试、数据边界和短更新记录；旧技术原件单列历史参考。
+- [最新技术覆盖复核](docs/ACCEPTANCE_TECHNICAL.md)：本轮补源、现场核对、317 项回归与明确保留的限制。
+- [维护包版本与发布](docs/VERSIONING.md)：独立 SemVer、显式自动递增、发布标签与回滚引用；不改本体/插件版本。
 - [项目地图](docs/PROJECT_MAP.md)：每类文件的归属、作用和实际源路径。
 - [工作区与唯一来源](docs/WORKSPACE.md)：主 Git、仓外私密/资源、实际运行目录的关系及清理恢复。
 - [外部状态组合](docs/EXTERNAL_STATE.md)：私密配置、在线库和大资源的显式引用与隔离组合。
@@ -56,6 +59,7 @@ comfyui/
 & ..\..\python\python.exe -X utf8 -B scripts\snapshot.py verify
 & ..\..\python\python.exe -X utf8 -B -m unittest discover -s tests -v
 & ..\..\python\python.exe -X utf8 -B database\tools\contract.py check --against-snapshot
+& ..\..\python\python.exe -X utf8 -B scripts\technical_catalog.py check
 & ..\..\python\python.exe -X utf8 -B scripts\security_guard.py --all-history
 git config --local core.hooksPath .githooks
 git config --local core.longpaths true
@@ -63,3 +67,5 @@ git status --short
 ```
 
 首次 clone 后需自己启用 hooks（Git 不会自动执行仓库脚本）。最新整理见 [工作区整理验收](docs/ACCEPTANCE_WORKSPACE.md)；[统一主仓 v2](docs/ACCEPTANCE_V2.md) 与 [首版验收](docs/ACCEPTANCE.md)保留为历史证据，旧 `comfyui.bundle` 不可公开。不要执行快照中写死旧日期、旧 PID 的历史发布/回滚脚本；也不要整目录上传运行根、仓外根、`maintenance` 或复制本机 `.git` 公开。
+
+后续完整性复核已补迁 445 份网页抓取、图片补全、历史分类、训练参数、UI/工作流实现及证据。精确来源与 SHA 见 [技术归档登记](governance/technical-archive.json)，接手从分层技术档案进入。80 项外部依赖/缺失 fixture 单列在本机审核回执，目录引用不等于备份；旧原文的本机路径保持历史字节，新接手页使用可检查的相对链接。旧验收收据保持原时点，不把补迁或并行新功能倒写成当时已完成。

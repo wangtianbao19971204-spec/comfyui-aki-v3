@@ -1,0 +1,6253 @@
+{
+  "started_at": "2026-10-02T01:10:00.316014+08:00",
+  "passed": true,
+  "baseline_sha256": "b07a0df76ec92565593e41aee1cde7c43e4cc79ea5fe41da7d5cb8ad66da30c6",
+  "nodes_sha256": "8aba2247fb7046029431571210672048868877b80d28620d269d6f33756741ec",
+  "shared_js_sha256": "0cd7c7d0a5416868d267dcd0ab76b3d9c5f3498837f9ddedc51f6a170f38e14c",
+  "checks": [
+    "five_modules_ready",
+    "seventy_six_nodes_ready",
+    "controlled_restart_listener_owner",
+    "queue_empty_before",
+    "index_class_labels_current",
+    "character_enabled",
+    "character_count_unchanged",
+    "character_ordered_ids_unchanged",
+    "character_ids_unique",
+    "character_source_sha_unchanged",
+    "character_taxonomy_schema_v2",
+    "character_canonical_fields_and_eligibility",
+    "character_canonical_tree_owners_and_keys",
+    "artist_enabled",
+    "artist_count_unchanged",
+    "artist_ordered_ids_unchanged",
+    "artist_ids_unique",
+    "artist_source_sha_unchanged",
+    "artist_taxonomy_schema_v2",
+    "artist_canonical_fields_and_eligibility",
+    "artist_canonical_tree_owners_and_keys",
+    "clothing_enabled",
+    "clothing_count_unchanged",
+    "clothing_ordered_ids_unchanged",
+    "clothing_ids_unique",
+    "clothing_source_sha_unchanged",
+    "clothing_taxonomy_schema_v2",
+    "clothing_canonical_fields_and_eligibility",
+    "clothing_canonical_tree_owners_and_keys",
+    "pose_enabled",
+    "pose_count_unchanged",
+    "pose_ordered_ids_unchanged",
+    "pose_ids_unique",
+    "pose_source_sha_unchanged",
+    "pose_taxonomy_schema_v2",
+    "pose_canonical_fields_and_eligibility",
+    "pose_canonical_tree_owners_and_keys",
+    "background_enabled",
+    "background_count_unchanged",
+    "background_ordered_ids_unchanged",
+    "background_ids_unique",
+    "background_source_sha_unchanged",
+    "background_taxonomy_schema_v2",
+    "background_canonical_fields_and_eligibility",
+    "background_canonical_tree_owners_and_keys",
+    "style_quality_enabled",
+    "style_quality_count_unchanged",
+    "style_quality_ordered_ids_unchanged",
+    "style_quality_ids_unique",
+    "style_quality_source_sha_unchanged",
+    "style_quality_taxonomy_schema_v2",
+    "style_quality_canonical_fields_and_eligibility",
+    "style_quality_canonical_tree_owners_and_keys",
+    "artist_initial_page_sixty",
+    "artist_initial_total_unchanged",
+    "artist_source_options_equal_index",
+    "artist_source_counts_exact_ids",
+    "artist_theme_label_person_count",
+    "artist_theme_label_clothing_accessory",
+    "artist_theme_label_expression_gaze",
+    "artist_theme_label_background_environment",
+    "artist_theme_label_composition_camera",
+    "artist_theme_label_lighting_color",
+    "artist_theme_label_style_medium",
+    "artist_theme_label_artist_style",
+    "artist_theme_label_quality_detail",
+    "artist_server_tree_after_inventory_clip_matches_independent_snapshot",
+    "artist_test_source_has_two_pages",
+    "artist_semantic_source_total_matches_snapshot",
+    "artist_semantic_source_page1_exact",
+    "artist_semantic_source_page2_exact",
+    "artist_pages_sixty_and_no_duplicates",
+    "artist_filtered_source_and_theme_on_full_cards",
+    "queue_empty_after",
+    "eighteen_workflows_and_three_formal_data_files_unchanged",
+    "nodes_source_unchanged_during_acceptance",
+    "shared_source_unchanged_during_acceptance"
+  ],
+  "calls": [
+    {
+      "route": "/unified-workbench/status",
+      "method": "GET",
+      "status": 200,
+      "elapsed_seconds": 1.0144,
+      "wire_bytes": 644,
+      "decoded_bytes": 644,
+      "response_sha256": "822fd6393e757fed9c463f2e417b5582136d3c8c868b6bc56521d076d7071e87"
+    },
+    {
+      "route": "/queue",
+      "method": "GET",
+      "status": 200,
+      "elapsed_seconds": 0.0121,
+      "wire_bytes": 42,
+      "decoded_bytes": 42,
+      "response_sha256": "6c1bb554d677ad1ea8526c38e26e141e6faf4f2fab85faaa8d264aeda0e7b4f0"
+    },
+    {
+      "route": "/prompt_selector/library/index",
+      "method": "GET",
+      "status": 200,
+      "elapsed_seconds": 0.0195,
+      "wire_bytes": 257744,
+      "decoded_bytes": 257744,
+      "response_sha256": "a2d5daff61f1036f0be2814bf2874fe29628341069d017f5200755dcc2a11ccd",
+      "snapshot": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\live_api_snapshots\\library_index.json"
+    },
+    {
+      "route": "/anima-tools/shared-prompts?kind=character&index=1",
+      "method": "GET",
+      "status": 200,
+      "elapsed_seconds": 5.9346,
+      "wire_bytes": 256576,
+      "decoded_bytes": 3764283,
+      "response_sha256": "b8e2792b322710cfac5d2e4b09f159eb6a9f7a0d56818afc0c72ec0649bf4ca8",
+      "snapshot": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\live_api_snapshots\\character_index.json"
+    },
+    {
+      "route": "/anima-tools/shared-prompts?kind=artist&index=1",
+      "method": "GET",
+      "status": 200,
+      "elapsed_seconds": 3.5203,
+      "wire_bytes": 2755881,
+      "decoded_bytes": 50783289,
+      "response_sha256": "0c78b8a9c1c1bb495eea26febc78850e0758181e3fb72b405f58f07fdcecf85e",
+      "snapshot": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\live_api_snapshots\\artist_index.json"
+    },
+    {
+      "route": "/anima-tools/shared-prompts?kind=clothing&index=1",
+      "method": "GET",
+      "status": 200,
+      "elapsed_seconds": 3.9608,
+      "wire_bytes": 533676,
+      "decoded_bytes": 9424752,
+      "response_sha256": "0264c754bedc9900c222198570a5c9d168236721e65172da808ed046838ccc01",
+      "snapshot": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\live_api_snapshots\\clothing_index.json"
+    },
+    {
+      "route": "/anima-tools/shared-prompts?kind=pose&index=1",
+      "method": "GET",
+      "status": 200,
+      "elapsed_seconds": 2.7557,
+      "wire_bytes": 187002,
+      "decoded_bytes": 2824630,
+      "response_sha256": "dc285770ec3ff7a5010ce92c7348671d3f26fed4f86bfbedc70bc1bd31e2ed26",
+      "snapshot": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\live_api_snapshots\\pose_index.json"
+    },
+    {
+      "route": "/anima-tools/shared-prompts?kind=background&index=1",
+      "method": "GET",
+      "status": 200,
+      "elapsed_seconds": 2.7209,
+      "wire_bytes": 84098,
+      "decoded_bytes": 1261379,
+      "response_sha256": "ba7d99f9bf26347cda2ef303a3d97d211bf96c74c639f9b30847910d849a7cb3",
+      "snapshot": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\live_api_snapshots\\background_index.json"
+    },
+    {
+      "route": "/anima-tools/shared-prompts?kind=style_quality&index=1",
+      "method": "GET",
+      "status": 200,
+      "elapsed_seconds": 2.9553,
+      "wire_bytes": 647156,
+      "decoded_bytes": 12241926,
+      "response_sha256": "f218c0ad6d7e36395b2cce547ca7e607f185cea64ced33c110bd205c43b1f37a",
+      "snapshot": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\live_api_snapshots\\style_quality_index.json"
+    },
+    {
+      "route": "/anima-tools/artist-page",
+      "method": "POST",
+      "status": 200,
+      "elapsed_seconds": 6.1815,
+      "wire_bytes": 144485,
+      "decoded_bytes": 144485,
+      "response_sha256": "5de63f9d85629e35f18bedbd6eddc2ece7a9c341e0f510928ec447075c67dc59",
+      "snapshot": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\live_api_snapshots\\artist_page_initial.json"
+    },
+    {
+      "route": "/anima-tools/artist-page",
+      "method": "POST",
+      "status": 200,
+      "elapsed_seconds": 0.0856,
+      "wire_bytes": 137573,
+      "decoded_bytes": 137573,
+      "response_sha256": "ef036628e8d42aead4d346a9f5647e38857afaf88b9f81fc1e9ffe7117a1a39c",
+      "snapshot": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\live_api_snapshots\\artist_filtered_page1.json"
+    },
+    {
+      "route": "/anima-tools/artist-page",
+      "method": "POST",
+      "status": 200,
+      "elapsed_seconds": 0.0843,
+      "wire_bytes": 137682,
+      "decoded_bytes": 137682,
+      "response_sha256": "e6b9b4ba712a1daf31fec922ca2fa1bac40220568c5f9b7d956884f2b297ce8e",
+      "snapshot": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-02_selector_taxonomy_shared\\live_api_snapshots\\artist_filtered_page2.json"
+    },
+    {
+      "route": "/queue",
+      "method": "GET",
+      "status": 200,
+      "elapsed_seconds": 0.018,
+      "wire_bytes": 42,
+      "decoded_bytes": 42,
+      "response_sha256": "6c1bb554d677ad1ea8526c38e26e141e6faf4f2fab85faaa8d264aeda0e7b4f0"
+    }
+  ],
+  "production_writes": 0,
+  "formal_data_writes": 0,
+  "queue_writes": 0,
+  "workflow_writes": 0,
+  "browser_actions": 0,
+  "service_restarts": 0,
+  "service": {
+    "listener_pids": [
+      24420
+    ],
+    "modules": [
+      {
+        "key": "weilin",
+        "label": "共享资料与提示词",
+        "nodes": 4,
+        "ready": true
+      },
+      {
+        "key": "anima",
+        "label": "Anima 标签与随机选择",
+        "nodes": 16,
+        "ready": true
+      },
+      {
+        "key": "gallery",
+        "label": "Gallery 与 UAP",
+        "nodes": 22,
+        "ready": true
+      },
+      {
+        "key": "lora_manager",
+        "label": "LoRA、模型与 Embedding",
+        "nodes": 21,
+        "ready": true
+      },
+      {
+        "key": "completion",
+        "label": "补全与工作流工具",
+        "nodes": 13,
+        "ready": true
+      }
+    ],
+    "nodes": 76
+  },
+  "taxonomy_helper_sha256": "05d0506a40c479e2d743357fd276d5b1297b94f1045ce8e4540a14b9515c42f7",
+  "kind_indices": {
+    "character": {
+      "count": 995,
+      "ordered_ids_sha256": "da466d243c8e5abfce7835d1d98ccf0ebbe1e12d2de122ac77468a9d11d290ac",
+      "source_sha256": "6f03b6b65d045757e67ab9179a7914a9d4ca0c701eea1d6728ef17bb90c79611",
+      "revision": "77556a496dd7dd8b3eea3dbcdd3f06fe9d00a49111ca53d7e02e2f92dd69de02",
+      "taxonomy_version": "shared-selector-library-v2",
+      "canonical_tree": [
+        {
+          "key": "shared-theme:identity",
+          "label": "角色与身份",
+          "count": 346,
+          "children": [
+            {
+              "key": "shared-sub:作品角色",
+              "label": "作品角色",
+              "count": 121,
+              "owner": "identity"
+            },
+            {
+              "key": "shared-sub:种族与幻想生物",
+              "label": "种族与幻想生物",
+              "count": 134,
+              "owner": "identity"
+            },
+            {
+              "key": "shared-sub:动物与拟人",
+              "label": "动物与拟人",
+              "count": 21,
+              "owner": "identity"
+            },
+            {
+              "key": "shared-sub:职业与身份",
+              "label": "职业与身份",
+              "count": 63,
+              "owner": "identity"
+            },
+            {
+              "key": "shared-sub:性别表现",
+              "label": "性别表现",
+              "count": 29,
+              "owner": "identity"
+            },
+            {
+              "key": "shared-sub:原创人物",
+              "label": "原创人物",
+              "count": 1,
+              "owner": "identity"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:person_count",
+          "label": "人物数量",
+          "count": 211,
+          "children": []
+        },
+        {
+          "key": "shared-theme:appearance",
+          "label": "外观与身体",
+          "count": 951,
+          "children": [
+            {
+              "key": "shared-sub:身体部位",
+              "label": "身体部位",
+              "count": 726,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:头发与发型",
+              "label": "头发与发型",
+              "count": 189,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:眼睛与瞳色",
+              "label": "眼睛与瞳色",
+              "count": 148,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:体型与肤色",
+              "label": "体型与肤色",
+              "count": 463,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:身体改造与伤痕",
+              "label": "身体改造与伤痕",
+              "count": 181,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:裸露与遮盖",
+              "label": "裸露与遮盖",
+              "count": 473,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:非人特征",
+              "label": "非人特征",
+              "count": 266,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:面部特征",
+              "label": "面部特征",
+              "count": 94,
+              "owner": "appearance"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:clothing_accessory",
+          "label": "服装与配饰",
+          "count": 610,
+          "children": [
+            {
+              "key": "shared-sub:首饰与随身配饰",
+              "label": "首饰与随身配饰",
+              "count": 265,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:服装材质与剪裁",
+              "label": "服装材质与剪裁",
+              "count": 285,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:头饰与发饰",
+              "label": "头饰与发饰",
+              "count": 154,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:上衣与外套",
+              "label": "上衣与外套",
+              "count": 136,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:穿着状态",
+              "label": "穿着状态",
+              "count": 120,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:裤装",
+              "label": "裤装",
+              "count": 38,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:裙装与礼服",
+              "label": "裙装与礼服",
+              "count": 122,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:鞋袜与腿饰",
+              "label": "鞋袜与腿饰",
+              "count": 174,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:奇幻与角色服饰",
+              "label": "奇幻与角色服饰",
+              "count": 90,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:制服与职业装",
+              "label": "制服与职业装",
+              "count": 40,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:泳装与内衣",
+              "label": "泳装与内衣",
+              "count": 94,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:传统与民族服饰",
+              "label": "传统与民族服饰",
+              "count": 43,
+              "owner": "clothing_accessory"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:pose_action",
+          "label": "动作与姿势",
+          "count": 475,
+          "children": [
+            {
+              "key": "shared-sub:手势与肢体动作",
+              "label": "手势与肢体动作",
+              "count": 160,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:束缚与控制",
+              "label": "束缚与控制",
+              "count": 63,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:拥抱与日常互动",
+              "label": "拥抱与日常互动",
+              "count": 11,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:持物与道具互动",
+              "label": "持物与道具互动",
+              "count": 78,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:站姿与跪姿",
+              "label": "站姿与跪姿",
+              "count": 55,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:坐姿与蹲姿",
+              "label": "坐姿与蹲姿",
+              "count": 31,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:性交与体位",
+              "label": "性交与体位",
+              "count": 59,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:暴力与伤害",
+              "label": "暴力与伤害",
+              "count": 34,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:卧姿与趴姿",
+              "label": "卧姿与趴姿",
+              "count": 30,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:射精与体液",
+              "label": "射精与体液",
+              "count": 198,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:移动与运动",
+              "label": "移动与运动",
+              "count": 9,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:战斗与施法",
+              "label": "战斗与施法",
+              "count": 10,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:口部互动",
+              "label": "口部互动",
+              "count": 8,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:手足互动",
+              "label": "手足互动",
+              "count": 15,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:亲密互动",
+              "label": "亲密互动",
+              "count": 37,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:穿脱与整理",
+              "label": "穿脱与整理",
+              "count": 7,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:自慰",
+              "label": "自慰",
+              "count": 6,
+              "owner": "pose_action"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:expression_gaze",
+          "label": "表情与视线",
+          "count": 364,
+          "children": [
+            {
+              "key": "shared-sub:眼口表情",
+              "label": "眼口表情",
+              "count": 191,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:平静与冷淡",
+              "label": "平静与冷淡",
+              "count": 18,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:愤怒与不满",
+              "label": "愤怒与不满",
+              "count": 12,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:喜悦与微笑",
+              "label": "喜悦与微笑",
+              "count": 75,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:视线方向",
+              "label": "视线方向",
+              "count": 123,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:惊讶与紧张",
+              "label": "惊讶与紧张",
+              "count": 148,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:悲伤与哭泣",
+              "label": "悲伤与哭泣",
+              "count": 25,
+              "owner": "expression_gaze"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:background_environment",
+          "label": "背景与环境",
+          "count": 127,
+          "children": [
+            {
+              "key": "shared-sub:天空与天气",
+              "label": "天空与天气",
+              "count": 31,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:植物与花园",
+              "label": "植物与花园",
+              "count": 38,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:建筑与设施",
+              "label": "建筑与设施",
+              "count": 13,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:自然地貌与水域",
+              "label": "自然地貌与水域",
+              "count": 23,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:纯色与抽象背景",
+              "label": "纯色与抽象背景",
+              "count": 12,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:城市与街道",
+              "label": "城市与街道",
+              "count": 6,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:幻想与科幻环境",
+              "label": "幻想与科幻环境",
+              "count": 3,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:室内空间",
+              "label": "室内空间",
+              "count": 26,
+              "owner": "background_environment"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:composition_camera",
+          "label": "构图与镜头",
+          "count": 298,
+          "children": [
+            {
+              "key": "shared-sub:景别与主体占比",
+              "label": "景别与主体占比",
+              "count": 150,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:布局与画面结构",
+              "label": "布局与画面结构",
+              "count": 32,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:焦点与景深",
+              "label": "焦点与景深",
+              "count": 13,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:视角与透视",
+              "label": "视角与透视",
+              "count": 95,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:局部特写",
+              "label": "局部特写",
+              "count": 38,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:文字与图形",
+              "label": "文字与图形",
+              "count": 51,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:多格与连续画面",
+              "label": "多格与连续画面",
+              "count": 1,
+              "owner": "composition_camera"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:lighting_color",
+          "label": "光影与色彩",
+          "count": 143,
+          "children": [
+            {
+              "key": "shared-sub:人工光与发光",
+              "label": "人工光与发光",
+              "count": 83,
+              "owner": "lighting_color"
+            },
+            {
+              "key": "shared-sub:光影效果",
+              "label": "光影效果",
+              "count": 68,
+              "owner": "lighting_color"
+            },
+            {
+              "key": "shared-sub:自然光",
+              "label": "自然光",
+              "count": 9,
+              "owner": "lighting_color"
+            },
+            {
+              "key": "shared-sub:色彩与调色",
+              "label": "色彩与调色",
+              "count": 16,
+              "owner": "lighting_color"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:style_medium",
+          "label": "风格与媒介",
+          "count": 49,
+          "children": [
+            {
+              "key": "shared-sub:艺术流派与视觉风格",
+              "label": "艺术流派与视觉风格",
+              "count": 21,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:绘画与插画",
+              "label": "绘画与插画",
+              "count": 2,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:像素与平面设计",
+              "label": "像素与平面设计",
+              "count": 8,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:摄影与写实",
+              "label": "摄影与写实",
+              "count": 11,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:三维与数字渲染",
+              "label": "三维与数字渲染",
+              "count": 4,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:漫画与线稿",
+              "label": "漫画与线稿",
+              "count": 2,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:动漫与卡通",
+              "label": "动漫与卡通",
+              "count": 7,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:水彩与油画",
+              "label": "水彩与油画",
+              "count": 2,
+              "owner": "style_medium"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:artist_style",
+          "label": "画师与作者",
+          "count": 3,
+          "children": [
+            {
+              "key": "shared-sub:画师标签",
+              "label": "画师标签",
+              "count": 2,
+              "owner": "artist_style"
+            },
+            {
+              "key": "shared-sub:画师组合",
+              "label": "画师组合",
+              "count": 1,
+              "owner": "artist_style"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:quality_detail",
+          "label": "质量与细节",
+          "count": 11,
+          "children": [
+            {
+              "key": "shared-sub:细节与材质",
+              "label": "细节与材质",
+              "count": 6,
+              "owner": "quality_detail"
+            },
+            {
+              "key": "shared-sub:质量与分辨率",
+              "label": "质量与分辨率",
+              "count": 6,
+              "owner": "quality_detail"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:object_prop",
+          "label": "物品与道具",
+          "count": 208,
+          "children": [
+            {
+              "key": "shared-sub:武器与装备",
+              "label": "武器与装备",
+              "count": 59,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:家具与生活用品",
+              "label": "家具与生活用品",
+              "count": 69,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:动物主体",
+              "label": "动物主体",
+              "count": 29,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:交通与机械",
+              "label": "交通与机械",
+              "count": 53,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:食物与饮料",
+              "label": "食物与饮料",
+              "count": 11,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:成人道具",
+              "label": "成人道具",
+              "count": 16,
+              "owner": "object_prop"
+            }
+          ]
+        }
+      ],
+      "source_options": [
+        {
+          "id": "codex-d5c440341fa6",
+          "label": "OC杂项 / 其他手游角色",
+          "count": 4
+        },
+        {
+          "id": "codex-3470fd271f33",
+          "label": "OC杂项 / 动漫角色",
+          "count": 4
+        },
+        {
+          "id": "codex-da828756212d",
+          "label": "OC杂项 / 单机角色",
+          "count": 8
+        },
+        {
+          "id": "codex-4d6e7069c930",
+          "label": "OC杂项 / 文化作品角色",
+          "count": 4
+        },
+        {
+          "id": "codex-013f5b4fe29b",
+          "label": "OC杂项 / 明日方舟角色",
+          "count": 7
+        },
+        {
+          "id": "codex-83913536ff1c",
+          "label": "OC杂项 / 端游角色",
+          "count": 3
+        },
+        {
+          "id": "codex-a5288d848e3a",
+          "label": "OC杂项 / 网络角色",
+          "count": 4
+        },
+        {
+          "id": "codex-96423b36e020",
+          "label": "r18g/重口 / 截肢/人棍",
+          "count": 6
+        },
+        {
+          "id": "codex-43ea27a0b77c",
+          "label": "r18g/重口 / 排泄物",
+          "count": 1
+        },
+        {
+          "id": "codex-9346e7e20675",
+          "label": "r18g/重口 / 杀害",
+          "count": 5
+        },
+        {
+          "id": "codex-9c03df39a214",
+          "label": "r18g/重口 / 杂项",
+          "count": 8
+        },
+        {
+          "id": "codex-9cfe935548b2",
+          "label": "r18g/重口 / 秀色",
+          "count": 2
+        },
+        {
+          "id": "codex-a0b5047491af",
+          "label": "r18g/重口 / 血肉内脏",
+          "count": 1
+        },
+        {
+          "id": "codex-5c801a1274d6",
+          "label": "人外种族 / furry特辑",
+          "count": 6
+        },
+        {
+          "id": "codex-143e1a1b7f2a",
+          "label": "人外种族 / 中外经典",
+          "count": 19
+        },
+        {
+          "id": "codex-177b0666be94",
+          "label": "人外种族 / 人工造物",
+          "count": 44
+        },
+        {
+          "id": "codex-0f5b2aa6c03d",
+          "label": "人外种族 / 动物娘化",
+          "count": 17
+        },
+        {
+          "id": "codex-177aa80dbb35",
+          "label": "人外种族 / 杂项",
+          "count": 8
+        },
+        {
+          "id": "codex-1eb9e5869c0f",
+          "label": "人外种族 / 类人种族",
+          "count": 14
+        },
+        {
+          "id": "codex-d8d557cef8c3",
+          "label": "人外种族 / 西幻魔物",
+          "count": 17
+        },
+        {
+          "id": "codex-0e1935de3661",
+          "label": "各式场景 / 场景 / 人物形象",
+          "count": 6
+        },
+        {
+          "id": "codex-792db2e406eb",
+          "label": "各式场景 / 场景 / 人物环境",
+          "count": 4
+        },
+        {
+          "id": "codex-a9f587774e56",
+          "label": "各式场景 / 场景 / 单纯场景",
+          "count": 1
+        },
+        {
+          "id": "codex-33d48f247f8e",
+          "label": "各式场景 / 场景 / 多人互动",
+          "count": 2
+        },
+        {
+          "id": "codex-3e66cfaf839b",
+          "label": "各式场景 / 场景 / 幻想童话",
+          "count": 4
+        },
+        {
+          "id": "codex-27b0c78f22d5",
+          "label": "各式场景 / 场景 / 恐怖扭曲",
+          "count": 15
+        },
+        {
+          "id": "codex-ae203be75a3e",
+          "label": "各式场景 / 场景 / 情感动作",
+          "count": 12
+        },
+        {
+          "id": "codex-169858793190",
+          "label": "各式场景 / 场景 / 战斗华丽",
+          "count": 12
+        },
+        {
+          "id": "codex-951339a76ba3",
+          "label": "各式场景 / 场景 / 日常生活 / 室内",
+          "count": 3
+        },
+        {
+          "id": "codex-de4542ea0401",
+          "label": "各式场景 / 场景 / 特殊画面",
+          "count": 4
+        },
+        {
+          "id": "codex-06685d42ef78",
+          "label": "各式场景 / 场景 / 美食有关",
+          "count": 1
+        },
+        {
+          "id": "codex-8d02f027991f",
+          "label": "各式场景 / 场景 / 表情包/搞怪",
+          "count": 10
+        },
+        {
+          "id": "codex-0d9ca92f634e",
+          "label": "各式场景 / 质量词",
+          "count": 3
+        },
+        {
+          "id": "codex-85a2b5161b4e",
+          "label": "各式服装 / 人物职业服饰 / 军装",
+          "count": 2
+        },
+        {
+          "id": "codex-6ee0dad57739",
+          "label": "各式服装 / 人物职业服饰 / 常规职业",
+          "count": 3
+        },
+        {
+          "id": "codex-ab9552d399ff",
+          "label": "各式服装 / 人物职业服饰 / 街头人物",
+          "count": 2
+        },
+        {
+          "id": "codex-91dcd0a68625",
+          "label": "各式服装 / 人物职业服饰 / 运动人员",
+          "count": 2
+        },
+        {
+          "id": "codex-a693145b6f88",
+          "label": "各式服装 / 人物职业服饰 / 非常规职业",
+          "count": 1
+        },
+        {
+          "id": "codex-2c65126d48f4",
+          "label": "各式服装 / 人物转化",
+          "count": 22
+        },
+        {
+          "id": "codex-7caab79fa042",
+          "label": "各式服装 / 幻想人物服饰 / 中近世纪",
+          "count": 2
+        },
+        {
+          "id": "codex-207e88e2e66e",
+          "label": "各式服装 / 幻想人物服饰 / 其他",
+          "count": 5
+        },
+        {
+          "id": "codex-9323ef95b21e",
+          "label": "各式服装 / 幻想人物服饰 / 未来科幻",
+          "count": 4
+        },
+        {
+          "id": "codex-1253f6fbb4fe",
+          "label": "各式服装 / 幻想人物服饰 / 游戏服装",
+          "count": 4
+        },
+        {
+          "id": "codex-fee0038f96fe",
+          "label": "各式服装 / 幻想人物服饰 / 西幻奇幻",
+          "count": 8
+        },
+        {
+          "id": "codex-b72d76d99176",
+          "label": "各式服装 / 幻想人物服饰 / 野族传说",
+          "count": 7
+        },
+        {
+          "id": "codex-24ea13a2408d",
+          "label": "各式服装 / 幻想人物服饰 / 魔法特辑",
+          "count": 5
+        },
+        {
+          "id": "codex-2227b5d51a68",
+          "label": "各式服装 / 日常/正装服饰 / 另类服装",
+          "count": 3
+        },
+        {
+          "id": "codex-be82f11d76b0",
+          "label": "各式服装 / 日常/正装服饰 / 夏装",
+          "count": 1
+        },
+        {
+          "id": "codex-d1c83c300d9f",
+          "label": "各式服装 / 日常/正装服饰 / 室内服（运动服、睡衣、正常内衣等）",
+          "count": 2
+        },
+        {
+          "id": "codex-21c7572b4b2e",
+          "label": "各式服装 / 日常/正装服饰 / 日常服",
+          "count": 1
+        },
+        {
+          "id": "codex-414dd7ffc8a0",
+          "label": "各式服装 / 日常/正装服饰 / 校服",
+          "count": 1
+        },
+        {
+          "id": "codex-35b40aad5ca9",
+          "label": "各式服装 / 日常/正装服饰 / 节日庆典礼服",
+          "count": 1
+        },
+        {
+          "id": "codex-29ac44e30f6e",
+          "label": "各式服装 / 服装组件",
+          "count": 1
+        },
+        {
+          "id": "codex-7df9f55b78fa",
+          "label": "各式服装 / 杂项内容",
+          "count": 7
+        },
+        {
+          "id": "codex-2da58411b0c3",
+          "label": "各式服装 / 民族特色服饰 / 中东",
+          "count": 2
+        },
+        {
+          "id": "codex-4852fb1f5ce7",
+          "label": "各式服装 / 民族特色服饰 / 中国",
+          "count": 2
+        },
+        {
+          "id": "codex-f1202946e118",
+          "label": "各式服装 / 民族特色服饰 / 其他",
+          "count": 1
+        },
+        {
+          "id": "codex-9a5e9113d2c9",
+          "label": "各式服装 / 民族特色服饰 / 日本",
+          "count": 5
+        },
+        {
+          "id": "codex-d8acb729a015",
+          "label": "各种涩涩 / 1girl,1boy系列 / 事后",
+          "count": 8
+        },
+        {
+          "id": "codex-8332dd470df2",
+          "label": "各种涩涩 / 1girl,1boy系列 / 宠物调教",
+          "count": 3
+        },
+        {
+          "id": "codex-b553b4ae1d0d",
+          "label": "各种涩涩 / 1girl,1boy系列 / 杂项",
+          "count": 2
+        },
+        {
+          "id": "codex-01dd801711a9",
+          "label": "各种涩涩 / 1girl,1boy系列 / 胁迫强制",
+          "count": 1
+        },
+        {
+          "id": "codex-2fb7cdfac6e6",
+          "label": "各种涩涩 / 1girl,1boy系列 / 调戏猥亵",
+          "count": 14
+        },
+        {
+          "id": "codex-6f2e9ee98b17",
+          "label": "各种涩涩 / 1girl系列 / 另类日常",
+          "count": 7
+        },
+        {
+          "id": "codex-472e4a61da7f",
+          "label": "各种涩涩 / 1girl系列 / 暴露/露出",
+          "count": 11
+        },
+        {
+          "id": "codex-946e70bb93aa",
+          "label": "各种涩涩 / 1girl系列 / 杂项",
+          "count": 17
+        },
+        {
+          "id": "codex-094e6865f899",
+          "label": "各种涩涩 / 1girl系列 / 自慰",
+          "count": 3
+        },
+        {
+          "id": "codex-51f92638a395",
+          "label": "各种涩涩 / 1girl系列 / 诱惑",
+          "count": 23
+        },
+        {
+          "id": "codex-943f34a88f51",
+          "label": "各种涩涩 / 1girl系列 / 隐秘处展示/自拍/直播",
+          "count": 3
+        },
+        {
+          "id": "codex-734ea5edf977",
+          "label": "各种涩涩 / 2+girl/+1boy系列 / 协作侍奉",
+          "count": 7
+        },
+        {
+          "id": "codex-c623e42ba378",
+          "label": "各种涩涩 / 2+girl/+1boy系列 / 双飞/多飞",
+          "count": 1
+        },
+        {
+          "id": "codex-79c59a21b6c5",
+          "label": "各种涩涩 / 2+girl/+1boy系列 / 百合",
+          "count": 12
+        },
+        {
+          "id": "codex-a6c77fc61b8e",
+          "label": "各种涩涩 / 各种组件 / 组件/杂项（女）",
+          "count": 14
+        },
+        {
+          "id": "codex-8f341d5a748f",
+          "label": "各种涩涩 / 各种组件 / 组件/杂项（男）",
+          "count": 3
+        },
+        {
+          "id": "codex-b9635e28b9a2",
+          "label": "各种涩涩 / 视角/强调 / 杂项",
+          "count": 3
+        },
+        {
+          "id": "codex-95ff053de38c",
+          "label": "各种涩涩 / 视角/强调 / 背部/背身",
+          "count": 3
+        },
+        {
+          "id": "codex-3c171ae3f3ea",
+          "label": "各种涩涩 / 视角/强调 / 胸/腹部",
+          "count": 22
+        },
+        {
+          "id": "codex-51a58b247cdc",
+          "label": "各种涩涩 / 视角/强调 / 脚/足底",
+          "count": 9
+        },
+        {
+          "id": "codex-f53fc69f8d9e",
+          "label": "各种涩涩 / 视角/强调 / 腿/下半身",
+          "count": 1
+        },
+        {
+          "id": "codex-8d56eae1408a",
+          "label": "各种涩涩 / 视角/强调 / 裙底/小穴/臀部",
+          "count": 9
+        },
+        {
+          "id": "codex-28a51fc682d5",
+          "label": "各种风格 / 主目录",
+          "count": 2
+        },
+        {
+          "id": "codex-cd7c45beb25f",
+          "label": "基础涩涩 / 其他 / futa特辑",
+          "count": 13
+        },
+        {
+          "id": "codex-64e9b8078cd8",
+          "label": "基础涩涩 / 其他 / NTR",
+          "count": 1
+        },
+        {
+          "id": "codex-e40dda3a74fb",
+          "label": "基础涩涩 / 其他 / 伪娘/男娘特辑",
+          "count": 2
+        },
+        {
+          "id": "codex-7535f3e992fd",
+          "label": "基础涩涩 / 其他 / 大车小孩特辑",
+          "count": 1
+        },
+        {
+          "id": "codex-5945270d3491",
+          "label": "基础涩涩 / 其他 / 攻守反转特辑（四爱/男m）",
+          "count": 1
+        },
+        {
+          "id": "codex-d943285346e0",
+          "label": "基础涩涩 / 各种体位 / 后入/背后位",
+          "count": 1
+        },
+        {
+          "id": "codex-5e8b934c2dd1",
+          "label": "基础涩涩 / 各种体位 / 坐身位",
+          "count": 1
+        },
+        {
+          "id": "codex-88f6081cf5da",
+          "label": "基础涩涩 / 各种体位 / 正身位",
+          "count": 2
+        },
+        {
+          "id": "codex-a85dd35db86a",
+          "label": "基础涩涩 / 各种体位 / 种付位",
+          "count": 1
+        },
+        {
+          "id": "codex-c89968d728be",
+          "label": "基础涩涩 / 各种体位 / 站立位",
+          "count": 1
+        },
+        {
+          "id": "codex-9ea16971fe2f",
+          "label": "基础涩涩 / 各种体位 / 骑乘位",
+          "count": 2
+        },
+        {
+          "id": "codex-8d876a908e60",
+          "label": "基础涩涩 / 非直接交配性爱 / 乳交",
+          "count": 5
+        },
+        {
+          "id": "codex-0a2e66647009",
+          "label": "基础涩涩 / 非直接交配性爱 / 其他",
+          "count": 3
+        },
+        {
+          "id": "codex-520ec9cb0649",
+          "label": "基础涩涩 / 非直接交配性爱 / 口交（类口交/颜射）",
+          "count": 12
+        },
+        {
+          "id": "codex-514d662bf7bd",
+          "label": "基础涩涩 / 非直接交配性爱 / 手交",
+          "count": 4
+        },
+        {
+          "id": "codex-78a04c433eaa",
+          "label": "基础涩涩 / 非直接交配性爱 / 足交",
+          "count": 2
+        },
+        {
+          "id": "codex-4ed1be551e6d",
+          "label": "服饰、人设杂项 / 人设 / 人外",
+          "count": 7
+        },
+        {
+          "id": "codex-7801a27cee1f",
+          "label": "服饰、人设杂项 / 人设 / 伪娘/男娘",
+          "count": 3
+        },
+        {
+          "id": "codex-a2ff455c7440",
+          "label": "服饰、人设杂项 / 人设 / 其他",
+          "count": 14
+        },
+        {
+          "id": "codex-5026533031a2",
+          "label": "服饰、人设杂项 / 人设 / 扶她",
+          "count": 8
+        },
+        {
+          "id": "codex-9c23eb9ce3f8",
+          "label": "服饰、人设杂项 / 人设 / 非原创人物",
+          "count": 20
+        },
+        {
+          "id": "codex-873385ad58de",
+          "label": "服饰、人设杂项 / 服饰",
+          "count": 11
+        },
+        {
+          "id": "codex-ebf7d19c1ed1",
+          "label": "未分类（原分类） / 主目录",
+          "count": 2
+        },
+        {
+          "id": "codex-93613b9783e0",
+          "label": "杂项涩涩 / 兽交 / 其他",
+          "count": 1
+        },
+        {
+          "id": "codex-e91c0c934f4a",
+          "label": "杂项涩涩 / 兽交 / 狗",
+          "count": 2
+        },
+        {
+          "id": "codex-66e89b2e0b9d",
+          "label": "杂项涩涩 / 异种 / 其他异种",
+          "count": 1
+        },
+        {
+          "id": "codex-17707216feb8",
+          "label": "杂项涩涩 / 异种 / 史莱姆",
+          "count": 3
+        },
+        {
+          "id": "codex-78f96129858d",
+          "label": "杂项涩涩 / 异种 / 小精灵/小人",
+          "count": 2
+        },
+        {
+          "id": "codex-11971a2aa56a",
+          "label": "杂项涩涩 / 异种 / 触手",
+          "count": 39
+        },
+        {
+          "id": "codex-8153c3116270",
+          "label": "杂项涩涩 / 异种 / 魔物娘",
+          "count": 10
+        },
+        {
+          "id": "codex-efa65d831153",
+          "label": "杂项涩涩 / 捆绑拘束 / 另类捆绑",
+          "count": 5
+        },
+        {
+          "id": "codex-d76e46509168",
+          "label": "杂项涩涩 / 捆绑拘束 / 拘束凌辱",
+          "count": 3
+        },
+        {
+          "id": "codex-ba2100e1c396",
+          "label": "杂项涩涩 / 捆绑拘束 / 捆绑位置",
+          "count": 1
+        },
+        {
+          "id": "codex-dfc402a2ebcd",
+          "label": "杂项涩涩 / 捆绑拘束 / 捆绑姿势",
+          "count": 5
+        },
+        {
+          "id": "codex-4ea8760ec8d9",
+          "label": "杂项涩涩 / 捆绑拘束 / 捆绑用具",
+          "count": 4
+        },
+        {
+          "id": "codex-dbcc6d2edabb",
+          "label": "杂项涩涩 / 捆绑拘束 / 节日献礼",
+          "count": 1
+        },
+        {
+          "id": "codex-42e6a9e9a23a",
+          "label": "杂项涩涩 / 机械",
+          "count": 2
+        },
+        {
+          "id": "codex-f1624a9850ef",
+          "label": "杂项涩涩 / 杂项",
+          "count": 6
+        },
+        {
+          "id": "codex-2bd19efc901c",
+          "label": "杂项涩涩 / 过激性爱 / 多p/轮奸",
+          "count": 3
+        },
+        {
+          "id": "codex-1958ec7f7f91",
+          "label": "杂项涩涩 / 过激性爱 / 过激",
+          "count": 1
+        },
+        {
+          "id": "codex-e209b296ba88",
+          "label": "涩涩服饰 / cosplay",
+          "count": 11
+        },
+        {
+          "id": "codex-e62eb03a8167",
+          "label": "涩涩服饰 / 内衣泳装 / 内衣",
+          "count": 7
+        },
+        {
+          "id": "codex-adfdf659ac6c",
+          "label": "涩涩服饰 / 内衣泳装 / 睡衣",
+          "count": 5
+        },
+        {
+          "id": "codex-168d98ab647a",
+          "label": "涩涩服饰 / 本职穿搭 / 兔女郎",
+          "count": 2
+        },
+        {
+          "id": "codex-fe2788e14c4d",
+          "label": "涩涩服饰 / 本职穿搭 / 恶堕之后",
+          "count": 1
+        },
+        {
+          "id": "codex-3ac99165f063",
+          "label": "涩涩服饰 / 本职穿搭 / 杂项",
+          "count": 5
+        },
+        {
+          "id": "codex-253ae2a1af2e",
+          "label": "涩涩服饰 / 本职穿搭 / 赛车女郎",
+          "count": 1
+        },
+        {
+          "id": "codex-23898a617bbf",
+          "label": "涩涩服饰 / 本职穿搭 / 连体胶衣/胶质服装",
+          "count": 4
+        },
+        {
+          "id": "codex-3df831a964a0",
+          "label": "涩涩服饰 / 色情改造 / 人体绘制",
+          "count": 8
+        },
+        {
+          "id": "codex-95c86c205ec4",
+          "label": "涩涩服饰 / 色情改造 / 幻想改造",
+          "count": 9
+        },
+        {
+          "id": "codex-ee7fcdc62f4d",
+          "label": "涩涩服饰 / 色情改造 / 日常改造",
+          "count": 11
+        },
+        {
+          "id": "codex-952b2e48b5e0",
+          "label": "涩涩服饰 / 色情改造 / 职业改造 / 偶像",
+          "count": 1
+        },
+        {
+          "id": "codex-ac492929eccd",
+          "label": "涩涩服饰 / 色情改造 / 职业改造 / 其他",
+          "count": 1
+        },
+        {
+          "id": "codex-9556fe1eb270",
+          "label": "涩涩服饰 / 色情改造 / 职业改造 / 军警",
+          "count": 2
+        },
+        {
+          "id": "codex-ff1eb7ff1191",
+          "label": "涩涩服饰 / 色情改造 / 职业改造 / 医护",
+          "count": 6
+        },
+        {
+          "id": "codex-07ffaf2f5dae",
+          "label": "涩涩服饰 / 色情改造 / 职业改造 / 服务",
+          "count": 6
+        },
+        {
+          "id": "codex-0faf2df7a091",
+          "label": "涩涩服饰 / 色情改造 / 裸体遮盖",
+          "count": 15
+        },
+        {
+          "id": "codex-3d4253da44a9",
+          "label": "画廊1 / 主目录",
+          "count": 8
+        },
+        {
+          "id": "codex-fea4507431ce",
+          "label": "画廊2 / 主目录",
+          "count": 10
+        },
+        {
+          "id": "codex-91c41b7e3845",
+          "label": "画廊3 / 主目录",
+          "count": 9
+        },
+        {
+          "id": "codex-db539ce15339",
+          "label": "画廊4 / 主目录",
+          "count": 13
+        },
+        {
+          "id": "codex-5999c8332218",
+          "label": "画廊5 / 主目录",
+          "count": 12
+        },
+        {
+          "id": "codex-ef1f513bf23a",
+          "label": "编纂者杂项 / 编纂者OC",
+          "count": 2
+        },
+        {
+          "id": "codex-559eca0468ae",
+          "label": "群友处收录 / 主目录",
+          "count": 32
+        },
+        {
+          "id": "codex-72ef0a17e42a",
+          "label": "群友色色串收录 / 主目录",
+          "count": 45
+        },
+        {
+          "id": "codex-6222520bdffb",
+          "label": "背景 / 主目录",
+          "count": 29
+        },
+        {
+          "id": "codex-993adbc95645",
+          "label": "自然语言 / 主目录",
+          "count": 3
+        }
+      ]
+    },
+    "artist": {
+      "count": 40638,
+      "ordered_ids_sha256": "10d1c09664af45a569a103377a15cdad05f5a2fc044ce5c4dde9c15f3b15803f",
+      "source_sha256": "6f03b6b65d045757e67ab9179a7914a9d4ca0c701eea1d6728ef17bb90c79611",
+      "revision": "77556a496dd7dd8b3eea3dbcdd3f06fe9d00a49111ca53d7e02e2f92dd69de02",
+      "taxonomy_version": "shared-selector-library-v2",
+      "canonical_tree": [
+        {
+          "key": "shared-theme:person_count",
+          "label": "人物数量",
+          "count": 1,
+          "children": []
+        },
+        {
+          "key": "shared-theme:clothing_accessory",
+          "label": "服装与配饰",
+          "count": 1,
+          "children": [
+            {
+              "key": "shared-sub:奇幻与角色服饰",
+              "label": "奇幻与角色服饰",
+              "count": 1,
+              "owner": "clothing_accessory"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:expression_gaze",
+          "label": "表情与视线",
+          "count": 1,
+          "children": [
+            {
+              "key": "shared-sub:眼口表情",
+              "label": "眼口表情",
+              "count": 1,
+              "owner": "expression_gaze"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:background_environment",
+          "label": "背景与环境",
+          "count": 1,
+          "children": [
+            {
+              "key": "shared-sub:自然地貌与水域",
+              "label": "自然地貌与水域",
+              "count": 1,
+              "owner": "background_environment"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:composition_camera",
+          "label": "构图与镜头",
+          "count": 4,
+          "children": [
+            {
+              "key": "shared-sub:焦点与景深",
+              "label": "焦点与景深",
+              "count": 1,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:视角与透视",
+              "label": "视角与透视",
+              "count": 1,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:布局与画面结构",
+              "label": "布局与画面结构",
+              "count": 1,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:景别与主体占比",
+              "label": "景别与主体占比",
+              "count": 1,
+              "owner": "composition_camera"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:lighting_color",
+          "label": "光影与色彩",
+          "count": 7,
+          "children": [
+            {
+              "key": "shared-sub:光影效果",
+              "label": "光影效果",
+              "count": 2,
+              "owner": "lighting_color"
+            },
+            {
+              "key": "shared-sub:色彩与调色",
+              "label": "色彩与调色",
+              "count": 7,
+              "owner": "lighting_color"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:style_medium",
+          "label": "风格与媒介",
+          "count": 15,
+          "children": [
+            {
+              "key": "shared-sub:艺术流派与视觉风格",
+              "label": "艺术流派与视觉风格",
+              "count": 2,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:三维与数字渲染",
+              "label": "三维与数字渲染",
+              "count": 2,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:水彩与油画",
+              "label": "水彩与油画",
+              "count": 3,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:动漫与卡通",
+              "label": "动漫与卡通",
+              "count": 4,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:像素与平面设计",
+              "label": "像素与平面设计",
+              "count": 4,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:漫画与线稿",
+              "label": "漫画与线稿",
+              "count": 5,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:摄影与写实",
+              "label": "摄影与写实",
+              "count": 2,
+              "owner": "style_medium"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:artist_style",
+          "label": "画师与作者",
+          "count": 40638,
+          "children": [
+            {
+              "key": "shared-sub:画师组合",
+              "label": "画师组合",
+              "count": 38,
+              "owner": "artist_style"
+            },
+            {
+              "key": "shared-sub:画师标签",
+              "label": "画师标签",
+              "count": 40600,
+              "owner": "artist_style"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:quality_detail",
+          "label": "质量与细节",
+          "count": 4,
+          "children": [
+            {
+              "key": "shared-sub:质量与分辨率",
+              "label": "质量与分辨率",
+              "count": 4,
+              "owner": "quality_detail"
+            },
+            {
+              "key": "shared-sub:细节与材质",
+              "label": "细节与材质",
+              "count": 1,
+              "owner": "quality_detail"
+            }
+          ]
+        }
+      ],
+      "source_options": [
+        {
+          "id": "a87c3ced-ff88-5e7b-9ff3-6e72b1aefeb1",
+          "label": "Anima 画师风格 / 一般",
+          "count": 5712
+        },
+        {
+          "id": "ff7e4d74-ca03-54c1-907c-b135d0269f3a",
+          "label": "Anima 画师风格 / 冷门",
+          "count": 20202
+        },
+        {
+          "id": "1e31e395-1705-5213-92a2-1078ffcc3286",
+          "label": "Anima 画师风格 / 常用",
+          "count": 2283
+        },
+        {
+          "id": "7ab82d3f-fa9f-56e1-b672-9328034a302f",
+          "label": "Anima 画师风格 / 热门",
+          "count": 672
+        },
+        {
+          "id": "de43a335-38a9-53b2-b50b-4941726fc20d",
+          "label": "Anima 画师风格 / 较少",
+          "count": 11582
+        },
+        {
+          "id": "addd196e-1de6-58e4-a745-c0f10fc65691",
+          "label": "Anima 画师风格 / 顶级",
+          "count": 149
+        },
+        {
+          "id": "codex-4e284ede2dcd",
+          "label": "Krea2 情绪版 / 397风格 · 封面艺术",
+          "count": 2
+        },
+        {
+          "id": "codex-8d02f027991f",
+          "label": "各式场景 / 场景 / 表情包/搞怪",
+          "count": 1
+        },
+        {
+          "id": "codex-2c65126d48f4",
+          "label": "各式服装 / 人物转化",
+          "count": 1
+        },
+        {
+          "id": "codex-7df9f55b78fa",
+          "label": "各式服装 / 杂项内容",
+          "count": 1
+        },
+        {
+          "id": "codex-79c59a21b6c5",
+          "label": "各种涩涩 / 2+girl/+1boy系列 / 百合",
+          "count": 1
+        },
+        {
+          "id": "codex-28a51fc682d5",
+          "label": "各种风格 / 主目录",
+          "count": 16
+        },
+        {
+          "id": "codex-ebf7d19c1ed1",
+          "label": "未分类（原分类） / 主目录",
+          "count": 5
+        },
+        {
+          "id": "5335ed6b-ae4b-5fc2-bba1-e6d88d2bbabc",
+          "label": "画师串 / 正文画师串",
+          "count": 8
+        },
+        {
+          "id": "codex-559eca0468ae",
+          "label": "群友处收录 / 主目录",
+          "count": 2
+        },
+        {
+          "id": "codex-63c5166dea2b",
+          "label": "这里是N4.5作品 / 站长最喜欢的酒狐",
+          "count": 1
+        }
+      ]
+    },
+    "clothing": {
+      "count": 2329,
+      "ordered_ids_sha256": "4abaeef9e64d6e5fdad00f2f5cc6497dd2a26b285f7670bdd56f29900f7acc99",
+      "source_sha256": "6f03b6b65d045757e67ab9179a7914a9d4ca0c701eea1d6728ef17bb90c79611",
+      "revision": "77556a496dd7dd8b3eea3dbcdd3f06fe9d00a49111ca53d7e02e2f92dd69de02",
+      "taxonomy_version": "shared-selector-library-v2",
+      "canonical_tree": [
+        {
+          "key": "shared-theme:identity",
+          "label": "角色与身份",
+          "count": 207,
+          "children": [
+            {
+              "key": "shared-sub:作品角色",
+              "label": "作品角色",
+              "count": 2,
+              "owner": "identity"
+            },
+            {
+              "key": "shared-sub:职业与身份",
+              "label": "职业与身份",
+              "count": 172,
+              "owner": "identity"
+            },
+            {
+              "key": "shared-sub:种族与幻想生物",
+              "label": "种族与幻想生物",
+              "count": 17,
+              "owner": "identity"
+            },
+            {
+              "key": "shared-sub:动物与拟人",
+              "label": "动物与拟人",
+              "count": 5,
+              "owner": "identity"
+            },
+            {
+              "key": "shared-sub:性别表现",
+              "label": "性别表现",
+              "count": 3,
+              "owner": "identity"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:person_count",
+          "label": "人物数量",
+          "count": 130,
+          "children": []
+        },
+        {
+          "key": "shared-theme:appearance",
+          "label": "外观与身体",
+          "count": 1562,
+          "children": [
+            {
+              "key": "shared-sub:头发与发型",
+              "label": "头发与发型",
+              "count": 244,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:眼睛与瞳色",
+              "label": "眼睛与瞳色",
+              "count": 65,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:身体部位",
+              "label": "身体部位",
+              "count": 1203,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:体型与肤色",
+              "label": "体型与肤色",
+              "count": 257,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:裸露与遮盖",
+              "label": "裸露与遮盖",
+              "count": 661,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:面部特征",
+              "label": "面部特征",
+              "count": 118,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:非人特征",
+              "label": "非人特征",
+              "count": 107,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:身体改造与伤痕",
+              "label": "身体改造与伤痕",
+              "count": 186,
+              "owner": "appearance"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:clothing_accessory",
+          "label": "服装与配饰",
+          "count": 2329,
+          "children": [
+            {
+              "key": "shared-sub:首饰与随身配饰",
+              "label": "首饰与随身配饰",
+              "count": 1549,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:头饰与发饰",
+              "label": "头饰与发饰",
+              "count": 1083,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:上衣与外套",
+              "label": "上衣与外套",
+              "count": 1249,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:裙装与礼服",
+              "label": "裙装与礼服",
+              "count": 1001,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:鞋袜与腿饰",
+              "label": "鞋袜与腿饰",
+              "count": 1319,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:服装材质与剪裁",
+              "label": "服装材质与剪裁",
+              "count": 1512,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:穿着状态",
+              "label": "穿着状态",
+              "count": 584,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:制服与职业装",
+              "label": "制服与职业装",
+              "count": 400,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:裤装",
+              "label": "裤装",
+              "count": 411,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:泳装与内衣",
+              "label": "泳装与内衣",
+              "count": 534,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:奇幻与角色服饰",
+              "label": "奇幻与角色服饰",
+              "count": 519,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:传统与民族服饰",
+              "label": "传统与民族服饰",
+              "count": 220,
+              "owner": "clothing_accessory"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:pose_action",
+          "label": "动作与姿势",
+          "count": 701,
+          "children": [
+            {
+              "key": "shared-sub:手势与肢体动作",
+              "label": "手势与肢体动作",
+              "count": 179,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:拥抱与日常互动",
+              "label": "拥抱与日常互动",
+              "count": 8,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:持物与道具互动",
+              "label": "持物与道具互动",
+              "count": 352,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:暴力与伤害",
+              "label": "暴力与伤害",
+              "count": 25,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:战斗与施法",
+              "label": "战斗与施法",
+              "count": 11,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:射精与体液",
+              "label": "射精与体液",
+              "count": 113,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:站姿与跪姿",
+              "label": "站姿与跪姿",
+              "count": 88,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:坐姿与蹲姿",
+              "label": "坐姿与蹲姿",
+              "count": 53,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:移动与运动",
+              "label": "移动与运动",
+              "count": 17,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:卧姿与趴姿",
+              "label": "卧姿与趴姿",
+              "count": 23,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:束缚与控制",
+              "label": "束缚与控制",
+              "count": 42,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:穿脱与整理",
+              "label": "穿脱与整理",
+              "count": 14,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:性交与体位",
+              "label": "性交与体位",
+              "count": 18,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:亲密互动",
+              "label": "亲密互动",
+              "count": 10,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:口部互动",
+              "label": "口部互动",
+              "count": 2,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:自慰",
+              "label": "自慰",
+              "count": 5,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:手足互动",
+              "label": "手足互动",
+              "count": 8,
+              "owner": "pose_action"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:expression_gaze",
+          "label": "表情与视线",
+          "count": 470,
+          "children": [
+            {
+              "key": "shared-sub:眼口表情",
+              "label": "眼口表情",
+              "count": 201,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:平静与冷淡",
+              "label": "平静与冷淡",
+              "count": 44,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:喜悦与微笑",
+              "label": "喜悦与微笑",
+              "count": 109,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:惊讶与紧张",
+              "label": "惊讶与紧张",
+              "count": 177,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:悲伤与哭泣",
+              "label": "悲伤与哭泣",
+              "count": 14,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:视线方向",
+              "label": "视线方向",
+              "count": 173,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:愤怒与不满",
+              "label": "愤怒与不满",
+              "count": 17,
+              "owner": "expression_gaze"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:background_environment",
+          "label": "背景与环境",
+          "count": 236,
+          "children": [
+            {
+              "key": "shared-sub:植物与花园",
+              "label": "植物与花园",
+              "count": 107,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:自然地貌与水域",
+              "label": "自然地貌与水域",
+              "count": 23,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:天空与天气",
+              "label": "天空与天气",
+              "count": 41,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:建筑与设施",
+              "label": "建筑与设施",
+              "count": 24,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:室内空间",
+              "label": "室内空间",
+              "count": 43,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:纯色与抽象背景",
+              "label": "纯色与抽象背景",
+              "count": 9,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:城市与街道",
+              "label": "城市与街道",
+              "count": 2,
+              "owner": "background_environment"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:composition_camera",
+          "label": "构图与镜头",
+          "count": 288,
+          "children": [
+            {
+              "key": "shared-sub:布局与画面结构",
+              "label": "布局与画面结构",
+              "count": 31,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:景别与主体占比",
+              "label": "景别与主体占比",
+              "count": 148,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:焦点与景深",
+              "label": "焦点与景深",
+              "count": 14,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:视角与透视",
+              "label": "视角与透视",
+              "count": 92,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:局部特写",
+              "label": "局部特写",
+              "count": 30,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:文字与图形",
+              "label": "文字与图形",
+              "count": 48,
+              "owner": "composition_camera"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:lighting_color",
+          "label": "光影与色彩",
+          "count": 152,
+          "children": [
+            {
+              "key": "shared-sub:人工光与发光",
+              "label": "人工光与发光",
+              "count": 62,
+              "owner": "lighting_color"
+            },
+            {
+              "key": "shared-sub:光影效果",
+              "label": "光影效果",
+              "count": 79,
+              "owner": "lighting_color"
+            },
+            {
+              "key": "shared-sub:色彩与调色",
+              "label": "色彩与调色",
+              "count": 24,
+              "owner": "lighting_color"
+            },
+            {
+              "key": "shared-sub:自然光",
+              "label": "自然光",
+              "count": 5,
+              "owner": "lighting_color"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:style_medium",
+          "label": "风格与媒介",
+          "count": 62,
+          "children": [
+            {
+              "key": "shared-sub:动漫与卡通",
+              "label": "动漫与卡通",
+              "count": 2,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:绘画与插画",
+              "label": "绘画与插画",
+              "count": 7,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:艺术流派与视觉风格",
+              "label": "艺术流派与视觉风格",
+              "count": 38,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:像素与平面设计",
+              "label": "像素与平面设计",
+              "count": 1,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:漫画与线稿",
+              "label": "漫画与线稿",
+              "count": 5,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:摄影与写实",
+              "label": "摄影与写实",
+              "count": 9,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:三维与数字渲染",
+              "label": "三维与数字渲染",
+              "count": 2,
+              "owner": "style_medium"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:quality_detail",
+          "label": "质量与细节",
+          "count": 10,
+          "children": [
+            {
+              "key": "shared-sub:质量与分辨率",
+              "label": "质量与分辨率",
+              "count": 3,
+              "owner": "quality_detail"
+            },
+            {
+              "key": "shared-sub:细节与材质",
+              "label": "细节与材质",
+              "count": 7,
+              "owner": "quality_detail"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:object_prop",
+          "label": "物品与道具",
+          "count": 541,
+          "children": [
+            {
+              "key": "shared-sub:交通与机械",
+              "label": "交通与机械",
+              "count": 34,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:家具与生活用品",
+              "label": "家具与生活用品",
+              "count": 231,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:武器与装备",
+              "label": "武器与装备",
+              "count": 239,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:动物主体",
+              "label": "动物主体",
+              "count": 43,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:食物与饮料",
+              "label": "食物与饮料",
+              "count": 45,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:成人道具",
+              "label": "成人道具",
+              "count": 23,
+              "owner": "object_prop"
+            }
+          ]
+        }
+      ],
+      "source_options": [
+        {
+          "id": "codex-d5c440341fa6",
+          "label": "OC杂项 / 其他手游角色",
+          "count": 1
+        },
+        {
+          "id": "codex-da828756212d",
+          "label": "OC杂项 / 单机角色",
+          "count": 3
+        },
+        {
+          "id": "codex-4d6e7069c930",
+          "label": "OC杂项 / 文化作品角色",
+          "count": 2
+        },
+        {
+          "id": "codex-013f5b4fe29b",
+          "label": "OC杂项 / 明日方舟角色",
+          "count": 1
+        },
+        {
+          "id": "codex-83913536ff1c",
+          "label": "OC杂项 / 端游角色",
+          "count": 8
+        },
+        {
+          "id": "codex-a5288d848e3a",
+          "label": "OC杂项 / 网络角色",
+          "count": 2
+        },
+        {
+          "id": "codex-96423b36e020",
+          "label": "r18g/重口 / 截肢/人棍",
+          "count": 1
+        },
+        {
+          "id": "codex-19b8cf9973d5",
+          "label": "r18g/重口 / 暴虐",
+          "count": 4
+        },
+        {
+          "id": "codex-9346e7e20675",
+          "label": "r18g/重口 / 杀害",
+          "count": 2
+        },
+        {
+          "id": "codex-9c03df39a214",
+          "label": "r18g/重口 / 杂项",
+          "count": 1
+        },
+        {
+          "id": "codex-143e1a1b7f2a",
+          "label": "人外种族 / 中外经典",
+          "count": 6
+        },
+        {
+          "id": "codex-177b0666be94",
+          "label": "人外种族 / 人工造物",
+          "count": 9
+        },
+        {
+          "id": "codex-0f5b2aa6c03d",
+          "label": "人外种族 / 动物娘化",
+          "count": 6
+        },
+        {
+          "id": "codex-1eb9e5869c0f",
+          "label": "人外种族 / 类人种族",
+          "count": 3
+        },
+        {
+          "id": "codex-d8d557cef8c3",
+          "label": "人外种族 / 西幻魔物",
+          "count": 3
+        },
+        {
+          "id": "codex-572748169ee5",
+          "label": "单女 / 杂项",
+          "count": 1
+        },
+        {
+          "id": "codex-0e1935de3661",
+          "label": "各式场景 / 场景 / 人物形象",
+          "count": 31
+        },
+        {
+          "id": "codex-792db2e406eb",
+          "label": "各式场景 / 场景 / 人物环境",
+          "count": 7
+        },
+        {
+          "id": "codex-a9f587774e56",
+          "label": "各式场景 / 场景 / 单纯场景",
+          "count": 1
+        },
+        {
+          "id": "codex-33d48f247f8e",
+          "label": "各式场景 / 场景 / 多人互动",
+          "count": 10
+        },
+        {
+          "id": "codex-3e66cfaf839b",
+          "label": "各式场景 / 场景 / 幻想童话",
+          "count": 5
+        },
+        {
+          "id": "codex-27b0c78f22d5",
+          "label": "各式场景 / 场景 / 恐怖扭曲",
+          "count": 2
+        },
+        {
+          "id": "codex-ae203be75a3e",
+          "label": "各式场景 / 场景 / 情感动作",
+          "count": 27
+        },
+        {
+          "id": "codex-169858793190",
+          "label": "各式场景 / 场景 / 战斗华丽",
+          "count": 14
+        },
+        {
+          "id": "codex-951339a76ba3",
+          "label": "各式场景 / 场景 / 日常生活 / 室内",
+          "count": 9
+        },
+        {
+          "id": "codex-1f2e9593a702",
+          "label": "各式场景 / 场景 / 日常生活 / 室外",
+          "count": 10
+        },
+        {
+          "id": "codex-de4542ea0401",
+          "label": "各式场景 / 场景 / 特殊画面",
+          "count": 1
+        },
+        {
+          "id": "codex-06685d42ef78",
+          "label": "各式场景 / 场景 / 美食有关",
+          "count": 4
+        },
+        {
+          "id": "codex-c1927d83051b",
+          "label": "各式场景 / 场景 / 节日庆典",
+          "count": 1
+        },
+        {
+          "id": "codex-8d02f027991f",
+          "label": "各式场景 / 场景 / 表情包/搞怪",
+          "count": 4
+        },
+        {
+          "id": "codex-85a2b5161b4e",
+          "label": "各式服装 / 人物职业服饰 / 军装",
+          "count": 29
+        },
+        {
+          "id": "codex-6ee0dad57739",
+          "label": "各式服装 / 人物职业服饰 / 常规职业",
+          "count": 29
+        },
+        {
+          "id": "codex-480b11821c9b",
+          "label": "各式服装 / 人物职业服饰 / 舞台曲艺",
+          "count": 32
+        },
+        {
+          "id": "codex-812c545980ba",
+          "label": "各式服装 / 人物职业服饰 / 蓝白领",
+          "count": 37
+        },
+        {
+          "id": "codex-ab9552d399ff",
+          "label": "各式服装 / 人物职业服饰 / 街头人物",
+          "count": 20
+        },
+        {
+          "id": "codex-91dcd0a68625",
+          "label": "各式服装 / 人物职业服饰 / 运动人员",
+          "count": 10
+        },
+        {
+          "id": "codex-a693145b6f88",
+          "label": "各式服装 / 人物职业服饰 / 非常规职业",
+          "count": 25
+        },
+        {
+          "id": "codex-2c65126d48f4",
+          "label": "各式服装 / 人物转化",
+          "count": 3
+        },
+        {
+          "id": "codex-7caab79fa042",
+          "label": "各式服装 / 幻想人物服饰 / 中近世纪",
+          "count": 23
+        },
+        {
+          "id": "codex-207e88e2e66e",
+          "label": "各式服装 / 幻想人物服饰 / 其他",
+          "count": 14
+        },
+        {
+          "id": "codex-9323ef95b21e",
+          "label": "各式服装 / 幻想人物服饰 / 未来科幻",
+          "count": 30
+        },
+        {
+          "id": "codex-1253f6fbb4fe",
+          "label": "各式服装 / 幻想人物服饰 / 游戏服装",
+          "count": 10
+        },
+        {
+          "id": "codex-fee0038f96fe",
+          "label": "各式服装 / 幻想人物服饰 / 西幻奇幻",
+          "count": 29
+        },
+        {
+          "id": "codex-b72d76d99176",
+          "label": "各式服装 / 幻想人物服饰 / 野族传说",
+          "count": 8
+        },
+        {
+          "id": "codex-24ea13a2408d",
+          "label": "各式服装 / 幻想人物服饰 / 魔法特辑",
+          "count": 43
+        },
+        {
+          "id": "codex-c85c1855cd38",
+          "label": "各式服装 / 日常/正装服饰 / 冬装",
+          "count": 30
+        },
+        {
+          "id": "codex-2227b5d51a68",
+          "label": "各式服装 / 日常/正装服饰 / 另类服装",
+          "count": 49
+        },
+        {
+          "id": "codex-be82f11d76b0",
+          "label": "各式服装 / 日常/正装服饰 / 夏装",
+          "count": 50
+        },
+        {
+          "id": "codex-d1c83c300d9f",
+          "label": "各式服装 / 日常/正装服饰 / 室内服（运动服、睡衣、正常内衣等）",
+          "count": 35
+        },
+        {
+          "id": "codex-21c7572b4b2e",
+          "label": "各式服装 / 日常/正装服饰 / 日常服",
+          "count": 125
+        },
+        {
+          "id": "codex-414dd7ffc8a0",
+          "label": "各式服装 / 日常/正装服饰 / 校服",
+          "count": 29
+        },
+        {
+          "id": "codex-35b40aad5ca9",
+          "label": "各式服装 / 日常/正装服饰 / 节日庆典礼服",
+          "count": 63
+        },
+        {
+          "id": "codex-29ac44e30f6e",
+          "label": "各式服装 / 服装组件",
+          "count": 1
+        },
+        {
+          "id": "codex-7df9f55b78fa",
+          "label": "各式服装 / 杂项内容",
+          "count": 3
+        },
+        {
+          "id": "codex-2da58411b0c3",
+          "label": "各式服装 / 民族特色服饰 / 中东",
+          "count": 12
+        },
+        {
+          "id": "codex-4852fb1f5ce7",
+          "label": "各式服装 / 民族特色服饰 / 中国",
+          "count": 62
+        },
+        {
+          "id": "codex-f1202946e118",
+          "label": "各式服装 / 民族特色服饰 / 其他",
+          "count": 8
+        },
+        {
+          "id": "codex-9a5e9113d2c9",
+          "label": "各式服装 / 民族特色服饰 / 日本",
+          "count": 26
+        },
+        {
+          "id": "codex-d8acb729a015",
+          "label": "各种涩涩 / 1girl,1boy系列 / 事后",
+          "count": 9
+        },
+        {
+          "id": "codex-c1a5db2f606b",
+          "label": "各种涩涩 / 1girl,1boy系列 / 偷窥/直视",
+          "count": 1
+        },
+        {
+          "id": "codex-caed3a8cc0a0",
+          "label": "各种涩涩 / 1girl,1boy系列 / 场地",
+          "count": 1
+        },
+        {
+          "id": "codex-8332dd470df2",
+          "label": "各种涩涩 / 1girl,1boy系列 / 宠物调教",
+          "count": 1
+        },
+        {
+          "id": "codex-b553b4ae1d0d",
+          "label": "各种涩涩 / 1girl,1boy系列 / 杂项",
+          "count": 7
+        },
+        {
+          "id": "codex-2fb7cdfac6e6",
+          "label": "各种涩涩 / 1girl,1boy系列 / 调戏猥亵",
+          "count": 14
+        },
+        {
+          "id": "codex-6f2e9ee98b17",
+          "label": "各种涩涩 / 1girl系列 / 另类日常",
+          "count": 18
+        },
+        {
+          "id": "codex-472e4a61da7f",
+          "label": "各种涩涩 / 1girl系列 / 暴露/露出",
+          "count": 19
+        },
+        {
+          "id": "codex-946e70bb93aa",
+          "label": "各种涩涩 / 1girl系列 / 杂项",
+          "count": 16
+        },
+        {
+          "id": "codex-094e6865f899",
+          "label": "各种涩涩 / 1girl系列 / 自慰",
+          "count": 6
+        },
+        {
+          "id": "codex-51f92638a395",
+          "label": "各种涩涩 / 1girl系列 / 诱惑",
+          "count": 30
+        },
+        {
+          "id": "codex-943f34a88f51",
+          "label": "各种涩涩 / 1girl系列 / 隐秘处展示/自拍/直播",
+          "count": 8
+        },
+        {
+          "id": "codex-734ea5edf977",
+          "label": "各种涩涩 / 2+girl/+1boy系列 / 协作侍奉",
+          "count": 4
+        },
+        {
+          "id": "codex-79c59a21b6c5",
+          "label": "各种涩涩 / 2+girl/+1boy系列 / 百合",
+          "count": 6
+        },
+        {
+          "id": "codex-a6c77fc61b8e",
+          "label": "各种涩涩 / 各种组件 / 组件/杂项（女）",
+          "count": 2
+        },
+        {
+          "id": "codex-8f341d5a748f",
+          "label": "各种涩涩 / 各种组件 / 组件/杂项（男）",
+          "count": 2
+        },
+        {
+          "id": "codex-b9635e28b9a2",
+          "label": "各种涩涩 / 视角/强调 / 杂项",
+          "count": 4
+        },
+        {
+          "id": "codex-95ff053de38c",
+          "label": "各种涩涩 / 视角/强调 / 背部/背身",
+          "count": 4
+        },
+        {
+          "id": "codex-3c171ae3f3ea",
+          "label": "各种涩涩 / 视角/强调 / 胸/腹部",
+          "count": 7
+        },
+        {
+          "id": "codex-51a58b247cdc",
+          "label": "各种涩涩 / 视角/强调 / 脚/足底",
+          "count": 21
+        },
+        {
+          "id": "codex-f53fc69f8d9e",
+          "label": "各种涩涩 / 视角/强调 / 腿/下半身",
+          "count": 4
+        },
+        {
+          "id": "codex-8d56eae1408a",
+          "label": "各种涩涩 / 视角/强调 / 裙底/小穴/臀部",
+          "count": 18
+        },
+        {
+          "id": "codex-28a51fc682d5",
+          "label": "各种风格 / 主目录",
+          "count": 1
+        },
+        {
+          "id": "codex-cd7c45beb25f",
+          "label": "基础涩涩 / 其他 / futa特辑",
+          "count": 2
+        },
+        {
+          "id": "codex-64e9b8078cd8",
+          "label": "基础涩涩 / 其他 / NTR",
+          "count": 3
+        },
+        {
+          "id": "codex-e40dda3a74fb",
+          "label": "基础涩涩 / 其他 / 伪娘/男娘特辑",
+          "count": 1
+        },
+        {
+          "id": "codex-7535f3e992fd",
+          "label": "基础涩涩 / 其他 / 大车小孩特辑",
+          "count": 6
+        },
+        {
+          "id": "codex-5945270d3491",
+          "label": "基础涩涩 / 其他 / 攻守反转特辑（四爱/男m）",
+          "count": 4
+        },
+        {
+          "id": "codex-71a08e6a5a6c",
+          "label": "基础涩涩 / 各种体位 / 催眠",
+          "count": 6
+        },
+        {
+          "id": "codex-d943285346e0",
+          "label": "基础涩涩 / 各种体位 / 后入/背后位",
+          "count": 6
+        },
+        {
+          "id": "codex-5e8b934c2dd1",
+          "label": "基础涩涩 / 各种体位 / 坐身位",
+          "count": 6
+        },
+        {
+          "id": "codex-40c75c01be20",
+          "label": "基础涩涩 / 各种体位 / 杂项",
+          "count": 3
+        },
+        {
+          "id": "codex-88f6081cf5da",
+          "label": "基础涩涩 / 各种体位 / 正身位",
+          "count": 4
+        },
+        {
+          "id": "codex-2102913d4a92",
+          "label": "基础涩涩 / 各种体位 / 睡奸",
+          "count": 1
+        },
+        {
+          "id": "codex-a85dd35db86a",
+          "label": "基础涩涩 / 各种体位 / 种付位",
+          "count": 4
+        },
+        {
+          "id": "codex-c89968d728be",
+          "label": "基础涩涩 / 各种体位 / 站立位",
+          "count": 4
+        },
+        {
+          "id": "codex-9ea16971fe2f",
+          "label": "基础涩涩 / 各种体位 / 骑乘位",
+          "count": 5
+        },
+        {
+          "id": "codex-8d876a908e60",
+          "label": "基础涩涩 / 非直接交配性爱 / 乳交",
+          "count": 8
+        },
+        {
+          "id": "codex-520ec9cb0649",
+          "label": "基础涩涩 / 非直接交配性爱 / 口交（类口交/颜射）",
+          "count": 12
+        },
+        {
+          "id": "codex-514d662bf7bd",
+          "label": "基础涩涩 / 非直接交配性爱 / 手交",
+          "count": 1
+        },
+        {
+          "id": "codex-a0a36fa4b4b1",
+          "label": "基础涩涩 / 非直接交配性爱 / 素股",
+          "count": 1
+        },
+        {
+          "id": "codex-78a04c433eaa",
+          "label": "基础涩涩 / 非直接交配性爱 / 足交",
+          "count": 8
+        },
+        {
+          "id": "codex-7801a27cee1f",
+          "label": "服饰、人设杂项 / 人设 / 伪娘/男娘",
+          "count": 2
+        },
+        {
+          "id": "codex-a2ff455c7440",
+          "label": "服饰、人设杂项 / 人设 / 其他",
+          "count": 4
+        },
+        {
+          "id": "codex-9c23eb9ce3f8",
+          "label": "服饰、人设杂项 / 人设 / 非原创人物",
+          "count": 4
+        },
+        {
+          "id": "codex-873385ad58de",
+          "label": "服饰、人设杂项 / 服饰",
+          "count": 20
+        },
+        {
+          "id": "codex-ebf7d19c1ed1",
+          "label": "未分类（原分类） / 主目录",
+          "count": 5
+        },
+        {
+          "id": "codex-93613b9783e0",
+          "label": "杂项涩涩 / 兽交 / 其他",
+          "count": 1
+        },
+        {
+          "id": "codex-e91c0c934f4a",
+          "label": "杂项涩涩 / 兽交 / 狗",
+          "count": 2
+        },
+        {
+          "id": "codex-75554ccf36fe",
+          "label": "杂项涩涩 / 兽交 / 马",
+          "count": 2
+        },
+        {
+          "id": "codex-66e89b2e0b9d",
+          "label": "杂项涩涩 / 异种 / 其他异种",
+          "count": 1
+        },
+        {
+          "id": "codex-17707216feb8",
+          "label": "杂项涩涩 / 异种 / 史莱姆",
+          "count": 1
+        },
+        {
+          "id": "codex-e84e7253fcdb",
+          "label": "杂项涩涩 / 异种 / 哥布林",
+          "count": 1
+        },
+        {
+          "id": "codex-78f96129858d",
+          "label": "杂项涩涩 / 异种 / 小精灵/小人",
+          "count": 3
+        },
+        {
+          "id": "codex-11971a2aa56a",
+          "label": "杂项涩涩 / 异种 / 触手",
+          "count": 3
+        },
+        {
+          "id": "codex-8153c3116270",
+          "label": "杂项涩涩 / 异种 / 魔物娘",
+          "count": 1
+        },
+        {
+          "id": "codex-efa65d831153",
+          "label": "杂项涩涩 / 捆绑拘束 / 另类捆绑",
+          "count": 1
+        },
+        {
+          "id": "codex-d76e46509168",
+          "label": "杂项涩涩 / 捆绑拘束 / 拘束凌辱",
+          "count": 7
+        },
+        {
+          "id": "codex-ba2100e1c396",
+          "label": "杂项涩涩 / 捆绑拘束 / 捆绑位置",
+          "count": 4
+        },
+        {
+          "id": "codex-dfc402a2ebcd",
+          "label": "杂项涩涩 / 捆绑拘束 / 捆绑姿势",
+          "count": 13
+        },
+        {
+          "id": "codex-4ea8760ec8d9",
+          "label": "杂项涩涩 / 捆绑拘束 / 捆绑用具",
+          "count": 3
+        },
+        {
+          "id": "codex-f230e1167624",
+          "label": "杂项涩涩 / 捆绑拘束 / 监禁放置",
+          "count": 6
+        },
+        {
+          "id": "codex-dbcc6d2edabb",
+          "label": "杂项涩涩 / 捆绑拘束 / 节日献礼",
+          "count": 2
+        },
+        {
+          "id": "codex-f1624a9850ef",
+          "label": "杂项涩涩 / 杂项",
+          "count": 3
+        },
+        {
+          "id": "codex-2bd19efc901c",
+          "label": "杂项涩涩 / 过激性爱 / 多p/轮奸",
+          "count": 2
+        },
+        {
+          "id": "codex-1958ec7f7f91",
+          "label": "杂项涩涩 / 过激性爱 / 过激",
+          "count": 4
+        },
+        {
+          "id": "codex-e209b296ba88",
+          "label": "涩涩服饰 / cosplay",
+          "count": 42
+        },
+        {
+          "id": "codex-e62eb03a8167",
+          "label": "涩涩服饰 / 内衣泳装 / 内衣",
+          "count": 36
+        },
+        {
+          "id": "codex-2ab688fe5104",
+          "label": "涩涩服饰 / 内衣泳装 / 泳装",
+          "count": 19
+        },
+        {
+          "id": "codex-adfdf659ac6c",
+          "label": "涩涩服饰 / 内衣泳装 / 睡衣",
+          "count": 11
+        },
+        {
+          "id": "codex-168d98ab647a",
+          "label": "涩涩服饰 / 本职穿搭 / 兔女郎",
+          "count": 26
+        },
+        {
+          "id": "codex-fe2788e14c4d",
+          "label": "涩涩服饰 / 本职穿搭 / 恶堕之后",
+          "count": 11
+        },
+        {
+          "id": "codex-3ac99165f063",
+          "label": "涩涩服饰 / 本职穿搭 / 杂项",
+          "count": 17
+        },
+        {
+          "id": "codex-d0130c80d02d",
+          "label": "涩涩服饰 / 本职穿搭 / 舞娘",
+          "count": 4
+        },
+        {
+          "id": "codex-253ae2a1af2e",
+          "label": "涩涩服饰 / 本职穿搭 / 赛车女郎",
+          "count": 6
+        },
+        {
+          "id": "codex-23898a617bbf",
+          "label": "涩涩服饰 / 本职穿搭 / 连体胶衣/胶质服装",
+          "count": 40
+        },
+        {
+          "id": "codex-7ea32f629aec",
+          "label": "涩涩服饰 / 本职穿搭 / 高腰紧身衣",
+          "count": 17
+        },
+        {
+          "id": "codex-a5d914cae700",
+          "label": "涩涩服饰 / 本职穿搭 / 魔法少女",
+          "count": 4
+        },
+        {
+          "id": "codex-3df831a964a0",
+          "label": "涩涩服饰 / 色情改造 / 人体绘制",
+          "count": 1
+        },
+        {
+          "id": "codex-95c86c205ec4",
+          "label": "涩涩服饰 / 色情改造 / 幻想改造",
+          "count": 39
+        },
+        {
+          "id": "codex-ee7fcdc62f4d",
+          "label": "涩涩服饰 / 色情改造 / 日常改造",
+          "count": 100
+        },
+        {
+          "id": "codex-952b2e48b5e0",
+          "label": "涩涩服饰 / 色情改造 / 职业改造 / 偶像",
+          "count": 3
+        },
+        {
+          "id": "codex-ac492929eccd",
+          "label": "涩涩服饰 / 色情改造 / 职业改造 / 其他",
+          "count": 4
+        },
+        {
+          "id": "codex-9556fe1eb270",
+          "label": "涩涩服饰 / 色情改造 / 职业改造 / 军警",
+          "count": 19
+        },
+        {
+          "id": "codex-ff1eb7ff1191",
+          "label": "涩涩服饰 / 色情改造 / 职业改造 / 医护",
+          "count": 9
+        },
+        {
+          "id": "codex-07ffaf2f5dae",
+          "label": "涩涩服饰 / 色情改造 / 职业改造 / 服务",
+          "count": 16
+        },
+        {
+          "id": "codex-0faf2df7a091",
+          "label": "涩涩服饰 / 色情改造 / 裸体遮盖",
+          "count": 4
+        },
+        {
+          "id": "codex-3d4253da44a9",
+          "label": "画廊1 / 主目录",
+          "count": 107
+        },
+        {
+          "id": "codex-fea4507431ce",
+          "label": "画廊2 / 主目录",
+          "count": 100
+        },
+        {
+          "id": "codex-91c41b7e3845",
+          "label": "画廊3 / 主目录",
+          "count": 69
+        },
+        {
+          "id": "codex-db539ce15339",
+          "label": "画廊4 / 主目录",
+          "count": 76
+        },
+        {
+          "id": "codex-5999c8332218",
+          "label": "画廊5 / 主目录",
+          "count": 45
+        },
+        {
+          "id": "codex-fc8b490c38dd",
+          "label": "社区 · AI杂图 / NSFW-限制级别 / r18",
+          "count": 1
+        },
+        {
+          "id": "codex-559eca0468ae",
+          "label": "群友处收录 / 主目录",
+          "count": 61
+        },
+        {
+          "id": "codex-72ef0a17e42a",
+          "label": "群友色色串收录 / 主目录",
+          "count": 40
+        },
+        {
+          "id": "codex-6222520bdffb",
+          "label": "背景 / 主目录",
+          "count": 3
+        },
+        {
+          "id": "codex-993adbc95645",
+          "label": "自然语言 / 主目录",
+          "count": 2
+        }
+      ]
+    },
+    "pose": {
+      "count": 737,
+      "ordered_ids_sha256": "049ad5f5616ec4869606ba6ec36b61fe3db9edeb2c1558d725382428902523ec",
+      "source_sha256": "6f03b6b65d045757e67ab9179a7914a9d4ca0c701eea1d6728ef17bb90c79611",
+      "revision": "77556a496dd7dd8b3eea3dbcdd3f06fe9d00a49111ca53d7e02e2f92dd69de02",
+      "taxonomy_version": "shared-selector-library-v2",
+      "canonical_tree": [
+        {
+          "key": "shared-theme:identity",
+          "label": "角色与身份",
+          "count": 26,
+          "children": [
+            {
+              "key": "shared-sub:种族与幻想生物",
+              "label": "种族与幻想生物",
+              "count": 11,
+              "owner": "identity"
+            },
+            {
+              "key": "shared-sub:职业与身份",
+              "label": "职业与身份",
+              "count": 9,
+              "owner": "identity"
+            },
+            {
+              "key": "shared-sub:性别表现",
+              "label": "性别表现",
+              "count": 6,
+              "owner": "identity"
+            },
+            {
+              "key": "shared-sub:动物与拟人",
+              "label": "动物与拟人",
+              "count": 1,
+              "owner": "identity"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:person_count",
+          "label": "人物数量",
+          "count": 204,
+          "children": []
+        },
+        {
+          "key": "shared-theme:appearance",
+          "label": "外观与身体",
+          "count": 543,
+          "children": [
+            {
+              "key": "shared-sub:身体部位",
+              "label": "身体部位",
+              "count": 434,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:裸露与遮盖",
+              "label": "裸露与遮盖",
+              "count": 177,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:身体改造与伤痕",
+              "label": "身体改造与伤痕",
+              "count": 42,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:头发与发型",
+              "label": "头发与发型",
+              "count": 66,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:面部特征",
+              "label": "面部特征",
+              "count": 33,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:眼睛与瞳色",
+              "label": "眼睛与瞳色",
+              "count": 48,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:体型与肤色",
+              "label": "体型与肤色",
+              "count": 91,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:非人特征",
+              "label": "非人特征",
+              "count": 26,
+              "owner": "appearance"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:clothing_accessory",
+          "label": "服装与配饰",
+          "count": 255,
+          "children": [
+            {
+              "key": "shared-sub:首饰与随身配饰",
+              "label": "首饰与随身配饰",
+              "count": 90,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:泳装与内衣",
+              "label": "泳装与内衣",
+              "count": 39,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:服装材质与剪裁",
+              "label": "服装材质与剪裁",
+              "count": 77,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:穿着状态",
+              "label": "穿着状态",
+              "count": 57,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:鞋袜与腿饰",
+              "label": "鞋袜与腿饰",
+              "count": 58,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:头饰与发饰",
+              "label": "头饰与发饰",
+              "count": 29,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:奇幻与角色服饰",
+              "label": "奇幻与角色服饰",
+              "count": 17,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:传统与民族服饰",
+              "label": "传统与民族服饰",
+              "count": 11,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:制服与职业装",
+              "label": "制服与职业装",
+              "count": 28,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:裙装与礼服",
+              "label": "裙装与礼服",
+              "count": 34,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:上衣与外套",
+              "label": "上衣与外套",
+              "count": 41,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:裤装",
+              "label": "裤装",
+              "count": 13,
+              "owner": "clothing_accessory"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:pose_action",
+          "label": "动作与姿势",
+          "count": 682,
+          "children": [
+            {
+              "key": "shared-sub:手势与肢体动作",
+              "label": "手势与肢体动作",
+              "count": 307,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:暴力与伤害",
+              "label": "暴力与伤害",
+              "count": 68,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:射精与体液",
+              "label": "射精与体液",
+              "count": 283,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:性交与体位",
+              "label": "性交与体位",
+              "count": 128,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:束缚与控制",
+              "label": "束缚与控制",
+              "count": 139,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:站姿与跪姿",
+              "label": "站姿与跪姿",
+              "count": 85,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:坐姿与蹲姿",
+              "label": "坐姿与蹲姿",
+              "count": 85,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:卧姿与趴姿",
+              "label": "卧姿与趴姿",
+              "count": 97,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:移动与运动",
+              "label": "移动与运动",
+              "count": 29,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:战斗与施法",
+              "label": "战斗与施法",
+              "count": 23,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:持物与道具互动",
+              "label": "持物与道具互动",
+              "count": 116,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:口部互动",
+              "label": "口部互动",
+              "count": 50,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:亲密互动",
+              "label": "亲密互动",
+              "count": 94,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:拥抱与日常互动",
+              "label": "拥抱与日常互动",
+              "count": 31,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:穿脱与整理",
+              "label": "穿脱与整理",
+              "count": 8,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:手足互动",
+              "label": "手足互动",
+              "count": 47,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:自慰",
+              "label": "自慰",
+              "count": 20,
+              "owner": "pose_action"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:expression_gaze",
+          "label": "表情与视线",
+          "count": 473,
+          "children": [
+            {
+              "key": "shared-sub:眼口表情",
+              "label": "眼口表情",
+              "count": 296,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:惊讶与紧张",
+              "label": "惊讶与紧张",
+              "count": 220,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:悲伤与哭泣",
+              "label": "悲伤与哭泣",
+              "count": 76,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:视线方向",
+              "label": "视线方向",
+              "count": 146,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:喜悦与微笑",
+              "label": "喜悦与微笑",
+              "count": 105,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:平静与冷淡",
+              "label": "平静与冷淡",
+              "count": 25,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:愤怒与不满",
+              "label": "愤怒与不满",
+              "count": 43,
+              "owner": "expression_gaze"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:background_environment",
+          "label": "背景与环境",
+          "count": 70,
+          "children": [
+            {
+              "key": "shared-sub:植物与花园",
+              "label": "植物与花园",
+              "count": 14,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:纯色与抽象背景",
+              "label": "纯色与抽象背景",
+              "count": 9,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:天空与天气",
+              "label": "天空与天气",
+              "count": 12,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:自然地貌与水域",
+              "label": "自然地貌与水域",
+              "count": 12,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:建筑与设施",
+              "label": "建筑与设施",
+              "count": 6,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:室内空间",
+              "label": "室内空间",
+              "count": 23,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:城市与街道",
+              "label": "城市与街道",
+              "count": 2,
+              "owner": "background_environment"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:composition_camera",
+          "label": "构图与镜头",
+          "count": 343,
+          "children": [
+            {
+              "key": "shared-sub:景别与主体占比",
+              "label": "景别与主体占比",
+              "count": 144,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:视角与透视",
+              "label": "视角与透视",
+              "count": 157,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:文字与图形",
+              "label": "文字与图形",
+              "count": 63,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:局部特写",
+              "label": "局部特写",
+              "count": 35,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:焦点与景深",
+              "label": "焦点与景深",
+              "count": 17,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:布局与画面结构",
+              "label": "布局与画面结构",
+              "count": 20,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:多格与连续画面",
+              "label": "多格与连续画面",
+              "count": 2,
+              "owner": "composition_camera"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:lighting_color",
+          "label": "光影与色彩",
+          "count": 62,
+          "children": [
+            {
+              "key": "shared-sub:光影效果",
+              "label": "光影效果",
+              "count": 41,
+              "owner": "lighting_color"
+            },
+            {
+              "key": "shared-sub:人工光与发光",
+              "label": "人工光与发光",
+              "count": 19,
+              "owner": "lighting_color"
+            },
+            {
+              "key": "shared-sub:自然光",
+              "label": "自然光",
+              "count": 4,
+              "owner": "lighting_color"
+            },
+            {
+              "key": "shared-sub:色彩与调色",
+              "label": "色彩与调色",
+              "count": 5,
+              "owner": "lighting_color"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:style_medium",
+          "label": "风格与媒介",
+          "count": 27,
+          "children": [
+            {
+              "key": "shared-sub:摄影与写实",
+              "label": "摄影与写实",
+              "count": 6,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:艺术流派与视觉风格",
+              "label": "艺术流派与视觉风格",
+              "count": 1,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:动漫与卡通",
+              "label": "动漫与卡通",
+              "count": 17,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:绘画与插画",
+              "label": "绘画与插画",
+              "count": 1,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:漫画与线稿",
+              "label": "漫画与线稿",
+              "count": 3,
+              "owner": "style_medium"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:artist_style",
+          "label": "画师与作者",
+          "count": 4,
+          "children": [
+            {
+              "key": "shared-sub:画师组合",
+              "label": "画师组合",
+              "count": 4,
+              "owner": "artist_style"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:quality_detail",
+          "label": "质量与细节",
+          "count": 4,
+          "children": [
+            {
+              "key": "shared-sub:细节与材质",
+              "label": "细节与材质",
+              "count": 4,
+              "owner": "quality_detail"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:object_prop",
+          "label": "物品与道具",
+          "count": 175,
+          "children": [
+            {
+              "key": "shared-sub:交通与机械",
+              "label": "交通与机械",
+              "count": 4,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:家具与生活用品",
+              "label": "家具与生活用品",
+              "count": 100,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:成人道具",
+              "label": "成人道具",
+              "count": 41,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:武器与装备",
+              "label": "武器与装备",
+              "count": 22,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:动物主体",
+              "label": "动物主体",
+              "count": 14,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:食物与饮料",
+              "label": "食物与饮料",
+              "count": 16,
+              "owner": "object_prop"
+            }
+          ]
+        }
+      ],
+      "source_options": [
+        {
+          "id": "codex-f539a5c2da84",
+          "label": "r18g/重口 / 刑罚",
+          "count": 1
+        },
+        {
+          "id": "codex-96423b36e020",
+          "label": "r18g/重口 / 截肢/人棍",
+          "count": 3
+        },
+        {
+          "id": "codex-43ea27a0b77c",
+          "label": "r18g/重口 / 排泄物",
+          "count": 1
+        },
+        {
+          "id": "codex-19b8cf9973d5",
+          "label": "r18g/重口 / 暴虐",
+          "count": 12
+        },
+        {
+          "id": "codex-9346e7e20675",
+          "label": "r18g/重口 / 杀害",
+          "count": 12
+        },
+        {
+          "id": "codex-9c03df39a214",
+          "label": "r18g/重口 / 杂项",
+          "count": 1
+        },
+        {
+          "id": "codex-177b0666be94",
+          "label": "人外种族 / 人工造物",
+          "count": 3
+        },
+        {
+          "id": "codex-0f5b2aa6c03d",
+          "label": "人外种族 / 动物娘化",
+          "count": 1
+        },
+        {
+          "id": "codex-177aa80dbb35",
+          "label": "人外种族 / 杂项",
+          "count": 3
+        },
+        {
+          "id": "codex-0e1935de3661",
+          "label": "各式场景 / 场景 / 人物形象",
+          "count": 6
+        },
+        {
+          "id": "codex-792db2e406eb",
+          "label": "各式场景 / 场景 / 人物环境",
+          "count": 3
+        },
+        {
+          "id": "codex-33d48f247f8e",
+          "label": "各式场景 / 场景 / 多人互动",
+          "count": 17
+        },
+        {
+          "id": "codex-3e66cfaf839b",
+          "label": "各式场景 / 场景 / 幻想童话",
+          "count": 3
+        },
+        {
+          "id": "codex-27b0c78f22d5",
+          "label": "各式场景 / 场景 / 恐怖扭曲",
+          "count": 6
+        },
+        {
+          "id": "codex-ae203be75a3e",
+          "label": "各式场景 / 场景 / 情感动作",
+          "count": 57
+        },
+        {
+          "id": "codex-169858793190",
+          "label": "各式场景 / 场景 / 战斗华丽",
+          "count": 17
+        },
+        {
+          "id": "codex-951339a76ba3",
+          "label": "各式场景 / 场景 / 日常生活 / 室内",
+          "count": 6
+        },
+        {
+          "id": "codex-1f2e9593a702",
+          "label": "各式场景 / 场景 / 日常生活 / 室外",
+          "count": 5
+        },
+        {
+          "id": "codex-de4542ea0401",
+          "label": "各式场景 / 场景 / 特殊画面",
+          "count": 2
+        },
+        {
+          "id": "codex-06685d42ef78",
+          "label": "各式场景 / 场景 / 美食有关",
+          "count": 6
+        },
+        {
+          "id": "codex-8d02f027991f",
+          "label": "各式场景 / 场景 / 表情包/搞怪",
+          "count": 46
+        },
+        {
+          "id": "codex-4bf858211d7b",
+          "label": "各式场景 / 视角与打光",
+          "count": 4
+        },
+        {
+          "id": "codex-6ee0dad57739",
+          "label": "各式服装 / 人物职业服饰 / 常规职业",
+          "count": 2
+        },
+        {
+          "id": "codex-812c545980ba",
+          "label": "各式服装 / 人物职业服饰 / 蓝白领",
+          "count": 1
+        },
+        {
+          "id": "codex-91dcd0a68625",
+          "label": "各式服装 / 人物职业服饰 / 运动人员",
+          "count": 1
+        },
+        {
+          "id": "codex-a693145b6f88",
+          "label": "各式服装 / 人物职业服饰 / 非常规职业",
+          "count": 2
+        },
+        {
+          "id": "codex-2c65126d48f4",
+          "label": "各式服装 / 人物转化",
+          "count": 5
+        },
+        {
+          "id": "codex-207e88e2e66e",
+          "label": "各式服装 / 幻想人物服饰 / 其他",
+          "count": 2
+        },
+        {
+          "id": "codex-9323ef95b21e",
+          "label": "各式服装 / 幻想人物服饰 / 未来科幻",
+          "count": 1
+        },
+        {
+          "id": "codex-fee0038f96fe",
+          "label": "各式服装 / 幻想人物服饰 / 西幻奇幻",
+          "count": 2
+        },
+        {
+          "id": "codex-24ea13a2408d",
+          "label": "各式服装 / 幻想人物服饰 / 魔法特辑",
+          "count": 1
+        },
+        {
+          "id": "codex-c85c1855cd38",
+          "label": "各式服装 / 日常/正装服饰 / 冬装",
+          "count": 1
+        },
+        {
+          "id": "codex-2227b5d51a68",
+          "label": "各式服装 / 日常/正装服饰 / 另类服装",
+          "count": 1
+        },
+        {
+          "id": "codex-d1c83c300d9f",
+          "label": "各式服装 / 日常/正装服饰 / 室内服（运动服、睡衣、正常内衣等）",
+          "count": 1
+        },
+        {
+          "id": "codex-414dd7ffc8a0",
+          "label": "各式服装 / 日常/正装服饰 / 校服",
+          "count": 1
+        },
+        {
+          "id": "codex-35b40aad5ca9",
+          "label": "各式服装 / 日常/正装服饰 / 节日庆典礼服",
+          "count": 2
+        },
+        {
+          "id": "codex-29ac44e30f6e",
+          "label": "各式服装 / 服装组件",
+          "count": 1
+        },
+        {
+          "id": "codex-7df9f55b78fa",
+          "label": "各式服装 / 杂项内容",
+          "count": 2
+        },
+        {
+          "id": "codex-4852fb1f5ce7",
+          "label": "各式服装 / 民族特色服饰 / 中国",
+          "count": 4
+        },
+        {
+          "id": "codex-9a5e9113d2c9",
+          "label": "各式服装 / 民族特色服饰 / 日本",
+          "count": 1
+        },
+        {
+          "id": "codex-d8acb729a015",
+          "label": "各种涩涩 / 1girl,1boy系列 / 事后",
+          "count": 11
+        },
+        {
+          "id": "codex-caed3a8cc0a0",
+          "label": "各种涩涩 / 1girl,1boy系列 / 场地",
+          "count": 3
+        },
+        {
+          "id": "codex-8332dd470df2",
+          "label": "各种涩涩 / 1girl,1boy系列 / 宠物调教",
+          "count": 8
+        },
+        {
+          "id": "codex-b553b4ae1d0d",
+          "label": "各种涩涩 / 1girl,1boy系列 / 杂项",
+          "count": 9
+        },
+        {
+          "id": "codex-01dd801711a9",
+          "label": "各种涩涩 / 1girl,1boy系列 / 胁迫强制",
+          "count": 3
+        },
+        {
+          "id": "codex-2fb7cdfac6e6",
+          "label": "各种涩涩 / 1girl,1boy系列 / 调戏猥亵",
+          "count": 9
+        },
+        {
+          "id": "codex-6f2e9ee98b17",
+          "label": "各种涩涩 / 1girl系列 / 另类日常",
+          "count": 7
+        },
+        {
+          "id": "codex-472e4a61da7f",
+          "label": "各种涩涩 / 1girl系列 / 暴露/露出",
+          "count": 3
+        },
+        {
+          "id": "codex-946e70bb93aa",
+          "label": "各种涩涩 / 1girl系列 / 杂项",
+          "count": 24
+        },
+        {
+          "id": "codex-cb2c10455717",
+          "label": "各种涩涩 / 1girl系列 / 精液食用",
+          "count": 3
+        },
+        {
+          "id": "codex-094e6865f899",
+          "label": "各种涩涩 / 1girl系列 / 自慰",
+          "count": 14
+        },
+        {
+          "id": "codex-51f92638a395",
+          "label": "各种涩涩 / 1girl系列 / 诱惑",
+          "count": 9
+        },
+        {
+          "id": "codex-943f34a88f51",
+          "label": "各种涩涩 / 1girl系列 / 隐秘处展示/自拍/直播",
+          "count": 1
+        },
+        {
+          "id": "codex-734ea5edf977",
+          "label": "各种涩涩 / 2+girl/+1boy系列 / 协作侍奉",
+          "count": 6
+        },
+        {
+          "id": "codex-79c59a21b6c5",
+          "label": "各种涩涩 / 2+girl/+1boy系列 / 百合",
+          "count": 26
+        },
+        {
+          "id": "codex-a6c77fc61b8e",
+          "label": "各种涩涩 / 各种组件 / 组件/杂项（女）",
+          "count": 12
+        },
+        {
+          "id": "codex-8f341d5a748f",
+          "label": "各种涩涩 / 各种组件 / 组件/杂项（男）",
+          "count": 5
+        },
+        {
+          "id": "codex-b9635e28b9a2",
+          "label": "各种涩涩 / 视角/强调 / 杂项",
+          "count": 4
+        },
+        {
+          "id": "codex-95ff053de38c",
+          "label": "各种涩涩 / 视角/强调 / 背部/背身",
+          "count": 1
+        },
+        {
+          "id": "codex-3c171ae3f3ea",
+          "label": "各种涩涩 / 视角/强调 / 胸/腹部",
+          "count": 2
+        },
+        {
+          "id": "codex-51a58b247cdc",
+          "label": "各种涩涩 / 视角/强调 / 脚/足底",
+          "count": 3
+        },
+        {
+          "id": "codex-f53fc69f8d9e",
+          "label": "各种涩涩 / 视角/强调 / 腿/下半身",
+          "count": 1
+        },
+        {
+          "id": "codex-8d56eae1408a",
+          "label": "各种涩涩 / 视角/强调 / 裙底/小穴/臀部",
+          "count": 4
+        },
+        {
+          "id": "codex-cd7c45beb25f",
+          "label": "基础涩涩 / 其他 / futa特辑",
+          "count": 7
+        },
+        {
+          "id": "codex-64e9b8078cd8",
+          "label": "基础涩涩 / 其他 / NTR",
+          "count": 2
+        },
+        {
+          "id": "codex-7535f3e992fd",
+          "label": "基础涩涩 / 其他 / 大车小孩特辑",
+          "count": 3
+        },
+        {
+          "id": "codex-5945270d3491",
+          "label": "基础涩涩 / 其他 / 攻守反转特辑（四爱/男m）",
+          "count": 4
+        },
+        {
+          "id": "codex-71a08e6a5a6c",
+          "label": "基础涩涩 / 各种体位 / 催眠",
+          "count": 4
+        },
+        {
+          "id": "codex-d943285346e0",
+          "label": "基础涩涩 / 各种体位 / 后入/背后位",
+          "count": 5
+        },
+        {
+          "id": "codex-5e8b934c2dd1",
+          "label": "基础涩涩 / 各种体位 / 坐身位",
+          "count": 1
+        },
+        {
+          "id": "codex-40c75c01be20",
+          "label": "基础涩涩 / 各种体位 / 杂项",
+          "count": 2
+        },
+        {
+          "id": "codex-2cd6372d0812",
+          "label": "基础涩涩 / 各种体位 / 正/逆火车便当",
+          "count": 3
+        },
+        {
+          "id": "codex-2102913d4a92",
+          "label": "基础涩涩 / 各种体位 / 睡奸",
+          "count": 1
+        },
+        {
+          "id": "codex-a85dd35db86a",
+          "label": "基础涩涩 / 各种体位 / 种付位",
+          "count": 2
+        },
+        {
+          "id": "codex-c89968d728be",
+          "label": "基础涩涩 / 各种体位 / 站立位",
+          "count": 1
+        },
+        {
+          "id": "codex-9ea16971fe2f",
+          "label": "基础涩涩 / 各种体位 / 骑乘位",
+          "count": 2
+        },
+        {
+          "id": "codex-8d876a908e60",
+          "label": "基础涩涩 / 非直接交配性爱 / 乳交",
+          "count": 7
+        },
+        {
+          "id": "codex-0a2e66647009",
+          "label": "基础涩涩 / 非直接交配性爱 / 其他",
+          "count": 7
+        },
+        {
+          "id": "codex-520ec9cb0649",
+          "label": "基础涩涩 / 非直接交配性爱 / 口交（类口交/颜射）",
+          "count": 44
+        },
+        {
+          "id": "codex-514d662bf7bd",
+          "label": "基础涩涩 / 非直接交配性爱 / 手交",
+          "count": 7
+        },
+        {
+          "id": "codex-a0a36fa4b4b1",
+          "label": "基础涩涩 / 非直接交配性爱 / 素股",
+          "count": 3
+        },
+        {
+          "id": "codex-78a04c433eaa",
+          "label": "基础涩涩 / 非直接交配性爱 / 足交",
+          "count": 10
+        },
+        {
+          "id": "codex-408b1934071d",
+          "label": "姿势-基础姿势 / 主目录",
+          "count": 7
+        },
+        {
+          "id": "codex-a2ff455c7440",
+          "label": "服饰、人设杂项 / 人设 / 其他",
+          "count": 1
+        },
+        {
+          "id": "codex-9c23eb9ce3f8",
+          "label": "服饰、人设杂项 / 人设 / 非原创人物",
+          "count": 4
+        },
+        {
+          "id": "codex-873385ad58de",
+          "label": "服饰、人设杂项 / 服饰",
+          "count": 5
+        },
+        {
+          "id": "codex-ebf7d19c1ed1",
+          "label": "未分类（原分类） / 主目录",
+          "count": 1
+        },
+        {
+          "id": "codex-512136e3477b",
+          "label": "杂项涩涩 / 兽交",
+          "count": 1
+        },
+        {
+          "id": "codex-93613b9783e0",
+          "label": "杂项涩涩 / 兽交 / 其他",
+          "count": 1
+        },
+        {
+          "id": "codex-356ec6ac00f5",
+          "label": "杂项涩涩 / 兽交 / 虫",
+          "count": 2
+        },
+        {
+          "id": "codex-75554ccf36fe",
+          "label": "杂项涩涩 / 兽交 / 马",
+          "count": 1
+        },
+        {
+          "id": "codex-66e89b2e0b9d",
+          "label": "杂项涩涩 / 异种 / 其他异种",
+          "count": 2
+        },
+        {
+          "id": "codex-29933ae71afe",
+          "label": "杂项涩涩 / 异种 / 兽人",
+          "count": 1
+        },
+        {
+          "id": "codex-17707216feb8",
+          "label": "杂项涩涩 / 异种 / 史莱姆",
+          "count": 5
+        },
+        {
+          "id": "codex-11971a2aa56a",
+          "label": "杂项涩涩 / 异种 / 触手",
+          "count": 4
+        },
+        {
+          "id": "codex-8153c3116270",
+          "label": "杂项涩涩 / 异种 / 魔物娘",
+          "count": 3
+        },
+        {
+          "id": "codex-e21bfb6cd8cd",
+          "label": "杂项涩涩 / 捆绑拘束 / 乱七八糟的粽子特辑",
+          "count": 2
+        },
+        {
+          "id": "codex-efa65d831153",
+          "label": "杂项涩涩 / 捆绑拘束 / 另类捆绑",
+          "count": 1
+        },
+        {
+          "id": "codex-d76e46509168",
+          "label": "杂项涩涩 / 捆绑拘束 / 拘束凌辱",
+          "count": 7
+        },
+        {
+          "id": "codex-ba2100e1c396",
+          "label": "杂项涩涩 / 捆绑拘束 / 捆绑位置",
+          "count": 5
+        },
+        {
+          "id": "codex-dfc402a2ebcd",
+          "label": "杂项涩涩 / 捆绑拘束 / 捆绑姿势",
+          "count": 30
+        },
+        {
+          "id": "codex-4ea8760ec8d9",
+          "label": "杂项涩涩 / 捆绑拘束 / 捆绑用具",
+          "count": 20
+        },
+        {
+          "id": "codex-f230e1167624",
+          "label": "杂项涩涩 / 捆绑拘束 / 监禁放置",
+          "count": 11
+        },
+        {
+          "id": "codex-dbcc6d2edabb",
+          "label": "杂项涩涩 / 捆绑拘束 / 节日献礼",
+          "count": 2
+        },
+        {
+          "id": "codex-42e6a9e9a23a",
+          "label": "杂项涩涩 / 机械",
+          "count": 4
+        },
+        {
+          "id": "codex-f1624a9850ef",
+          "label": "杂项涩涩 / 杂项",
+          "count": 11
+        },
+        {
+          "id": "codex-2bd19efc901c",
+          "label": "杂项涩涩 / 过激性爱 / 多p/轮奸",
+          "count": 4
+        },
+        {
+          "id": "codex-1958ec7f7f91",
+          "label": "杂项涩涩 / 过激性爱 / 过激",
+          "count": 5
+        },
+        {
+          "id": "codex-e62eb03a8167",
+          "label": "涩涩服饰 / 内衣泳装 / 内衣",
+          "count": 2
+        },
+        {
+          "id": "codex-2ab688fe5104",
+          "label": "涩涩服饰 / 内衣泳装 / 泳装",
+          "count": 1
+        },
+        {
+          "id": "codex-ee7fcdc62f4d",
+          "label": "涩涩服饰 / 色情改造 / 日常改造",
+          "count": 1
+        },
+        {
+          "id": "codex-0faf2df7a091",
+          "label": "涩涩服饰 / 色情改造 / 裸体遮盖",
+          "count": 1
+        },
+        {
+          "id": "codex-91c41b7e3845",
+          "label": "画廊3 / 主目录",
+          "count": 1
+        },
+        {
+          "id": "codex-db539ce15339",
+          "label": "画廊4 / 主目录",
+          "count": 1
+        },
+        {
+          "id": "codex-559eca0468ae",
+          "label": "群友处收录 / 主目录",
+          "count": 9
+        },
+        {
+          "id": "codex-72ef0a17e42a",
+          "label": "群友色色串收录 / 主目录",
+          "count": 39
+        },
+        {
+          "id": "codex-6222520bdffb",
+          "label": "背景 / 主目录",
+          "count": 12
+        },
+        {
+          "id": "codex-993adbc95645",
+          "label": "自然语言 / 主目录",
+          "count": 1
+        }
+      ]
+    },
+    "background": {
+      "count": 513,
+      "ordered_ids_sha256": "0080bde700e0c2a83d0d95e5765d973ecb5f6a81d83c8b48d03a7c08d25acbd8",
+      "source_sha256": "6f03b6b65d045757e67ab9179a7914a9d4ca0c701eea1d6728ef17bb90c79611",
+      "revision": "77556a496dd7dd8b3eea3dbcdd3f06fe9d00a49111ca53d7e02e2f92dd69de02",
+      "taxonomy_version": "shared-selector-library-v2",
+      "canonical_tree": [
+        {
+          "key": "shared-theme:identity",
+          "label": "角色与身份",
+          "count": 8,
+          "children": [
+            {
+              "key": "shared-sub:动物与拟人",
+              "label": "动物与拟人",
+              "count": 1,
+              "owner": "identity"
+            },
+            {
+              "key": "shared-sub:种族与幻想生物",
+              "label": "种族与幻想生物",
+              "count": 7,
+              "owner": "identity"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:person_count",
+          "label": "人物数量",
+          "count": 6,
+          "children": []
+        },
+        {
+          "key": "shared-theme:appearance",
+          "label": "外观与身体",
+          "count": 32,
+          "children": [
+            {
+              "key": "shared-sub:身体部位",
+              "label": "身体部位",
+              "count": 19,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:眼睛与瞳色",
+              "label": "眼睛与瞳色",
+              "count": 4,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:非人特征",
+              "label": "非人特征",
+              "count": 9,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:头发与发型",
+              "label": "头发与发型",
+              "count": 3,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:体型与肤色",
+              "label": "体型与肤色",
+              "count": 4,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:裸露与遮盖",
+              "label": "裸露与遮盖",
+              "count": 4,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:面部特征",
+              "label": "面部特征",
+              "count": 1,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:身体改造与伤痕",
+              "label": "身体改造与伤痕",
+              "count": 1,
+              "owner": "appearance"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:clothing_accessory",
+          "label": "服装与配饰",
+          "count": 32,
+          "children": [
+            {
+              "key": "shared-sub:头饰与发饰",
+              "label": "头饰与发饰",
+              "count": 6,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:上衣与外套",
+              "label": "上衣与外套",
+              "count": 4,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:奇幻与角色服饰",
+              "label": "奇幻与角色服饰",
+              "count": 2,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:首饰与随身配饰",
+              "label": "首饰与随身配饰",
+              "count": 19,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:传统与民族服饰",
+              "label": "传统与民族服饰",
+              "count": 1,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:制服与职业装",
+              "label": "制服与职业装",
+              "count": 1,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:泳装与内衣",
+              "label": "泳装与内衣",
+              "count": 1,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:鞋袜与腿饰",
+              "label": "鞋袜与腿饰",
+              "count": 2,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:裤装",
+              "label": "裤装",
+              "count": 1,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:裙装与礼服",
+              "label": "裙装与礼服",
+              "count": 1,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:服装材质与剪裁",
+              "label": "服装材质与剪裁",
+              "count": 4,
+              "owner": "clothing_accessory"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:pose_action",
+          "label": "动作与姿势",
+          "count": 49,
+          "children": [
+            {
+              "key": "shared-sub:束缚与控制",
+              "label": "束缚与控制",
+              "count": 1,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:移动与运动",
+              "label": "移动与运动",
+              "count": 11,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:暴力与伤害",
+              "label": "暴力与伤害",
+              "count": 18,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:手势与肢体动作",
+              "label": "手势与肢体动作",
+              "count": 4,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:站姿与跪姿",
+              "label": "站姿与跪姿",
+              "count": 3,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:持物与道具互动",
+              "label": "持物与道具互动",
+              "count": 10,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:坐姿与蹲姿",
+              "label": "坐姿与蹲姿",
+              "count": 2,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:手足互动",
+              "label": "手足互动",
+              "count": 1,
+              "owner": "pose_action"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:expression_gaze",
+          "label": "表情与视线",
+          "count": 11,
+          "children": [
+            {
+              "key": "shared-sub:眼口表情",
+              "label": "眼口表情",
+              "count": 2,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:喜悦与微笑",
+              "label": "喜悦与微笑",
+              "count": 3,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:惊讶与紧张",
+              "label": "惊讶与紧张",
+              "count": 3,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:视线方向",
+              "label": "视线方向",
+              "count": 1,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:平静与冷淡",
+              "label": "平静与冷淡",
+              "count": 1,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:悲伤与哭泣",
+              "label": "悲伤与哭泣",
+              "count": 1,
+              "owner": "expression_gaze"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:background_environment",
+          "label": "背景与环境",
+          "count": 513,
+          "children": [
+            {
+              "key": "shared-sub:自然地貌与水域",
+              "label": "自然地貌与水域",
+              "count": 205,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:植物与花园",
+              "label": "植物与花园",
+              "count": 211,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:幻想与科幻环境",
+              "label": "幻想与科幻环境",
+              "count": 24,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:天空与天气",
+              "label": "天空与天气",
+              "count": 285,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:建筑与设施",
+              "label": "建筑与设施",
+              "count": 180,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:室内空间",
+              "label": "室内空间",
+              "count": 118,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:城市与街道",
+              "label": "城市与街道",
+              "count": 90,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:纯色与抽象背景",
+              "label": "纯色与抽象背景",
+              "count": 41,
+              "owner": "background_environment"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:composition_camera",
+          "label": "构图与镜头",
+          "count": 71,
+          "children": [
+            {
+              "key": "shared-sub:景别与主体占比",
+              "label": "景别与主体占比",
+              "count": 22,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:焦点与景深",
+              "label": "焦点与景深",
+              "count": 16,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:文字与图形",
+              "label": "文字与图形",
+              "count": 17,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:局部特写",
+              "label": "局部特写",
+              "count": 1,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:布局与画面结构",
+              "label": "布局与画面结构",
+              "count": 25,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:视角与透视",
+              "label": "视角与透视",
+              "count": 14,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:多格与连续画面",
+              "label": "多格与连续画面",
+              "count": 1,
+              "owner": "composition_camera"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:lighting_color",
+          "label": "光影与色彩",
+          "count": 232,
+          "children": [
+            {
+              "key": "shared-sub:人工光与发光",
+              "label": "人工光与发光",
+              "count": 71,
+              "owner": "lighting_color"
+            },
+            {
+              "key": "shared-sub:光影效果",
+              "label": "光影效果",
+              "count": 177,
+              "owner": "lighting_color"
+            },
+            {
+              "key": "shared-sub:色彩与调色",
+              "label": "色彩与调色",
+              "count": 34,
+              "owner": "lighting_color"
+            },
+            {
+              "key": "shared-sub:自然光",
+              "label": "自然光",
+              "count": 77,
+              "owner": "lighting_color"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:style_medium",
+          "label": "风格与媒介",
+          "count": 30,
+          "children": [
+            {
+              "key": "shared-sub:艺术流派与视觉风格",
+              "label": "艺术流派与视觉风格",
+              "count": 7,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:摄影与写实",
+              "label": "摄影与写实",
+              "count": 11,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:动漫与卡通",
+              "label": "动漫与卡通",
+              "count": 1,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:漫画与线稿",
+              "label": "漫画与线稿",
+              "count": 5,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:绘画与插画",
+              "label": "绘画与插画",
+              "count": 5,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:像素与平面设计",
+              "label": "像素与平面设计",
+              "count": 5,
+              "owner": "style_medium"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:quality_detail",
+          "label": "质量与细节",
+          "count": 3,
+          "children": [
+            {
+              "key": "shared-sub:质量与分辨率",
+              "label": "质量与分辨率",
+              "count": 2,
+              "owner": "quality_detail"
+            },
+            {
+              "key": "shared-sub:细节与材质",
+              "label": "细节与材质",
+              "count": 1,
+              "owner": "quality_detail"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:object_prop",
+          "label": "物品与道具",
+          "count": 195,
+          "children": [
+            {
+              "key": "shared-sub:家具与生活用品",
+              "label": "家具与生活用品",
+              "count": 136,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:武器与装备",
+              "label": "武器与装备",
+              "count": 7,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:动物主体",
+              "label": "动物主体",
+              "count": 33,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:食物与饮料",
+              "label": "食物与饮料",
+              "count": 36,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:交通与机械",
+              "label": "交通与机械",
+              "count": 23,
+              "owner": "object_prop"
+            }
+          ]
+        }
+      ],
+      "source_options": [
+        {
+          "id": "codex-9346e7e20675",
+          "label": "r18g/重口 / 杀害",
+          "count": 1
+        },
+        {
+          "id": "codex-5c801a1274d6",
+          "label": "人外种族 / furry特辑",
+          "count": 1
+        },
+        {
+          "id": "codex-1eb9e5869c0f",
+          "label": "人外种族 / 类人种族",
+          "count": 1
+        },
+        {
+          "id": "codex-d8d557cef8c3",
+          "label": "人外种族 / 西幻魔物",
+          "count": 1
+        },
+        {
+          "id": "codex-0e1935de3661",
+          "label": "各式场景 / 场景 / 人物形象",
+          "count": 1
+        },
+        {
+          "id": "codex-792db2e406eb",
+          "label": "各式场景 / 场景 / 人物环境",
+          "count": 10
+        },
+        {
+          "id": "codex-a9f587774e56",
+          "label": "各式场景 / 场景 / 单纯场景",
+          "count": 13
+        },
+        {
+          "id": "codex-3e66cfaf839b",
+          "label": "各式场景 / 场景 / 幻想童话",
+          "count": 1
+        },
+        {
+          "id": "codex-ae203be75a3e",
+          "label": "各式场景 / 场景 / 情感动作",
+          "count": 2
+        },
+        {
+          "id": "codex-169858793190",
+          "label": "各式场景 / 场景 / 战斗华丽",
+          "count": 1
+        },
+        {
+          "id": "codex-1f2e9593a702",
+          "label": "各式场景 / 场景 / 日常生活 / 室外",
+          "count": 4
+        },
+        {
+          "id": "codex-de4542ea0401",
+          "label": "各式场景 / 场景 / 特殊画面",
+          "count": 2
+        },
+        {
+          "id": "codex-06685d42ef78",
+          "label": "各式场景 / 场景 / 美食有关",
+          "count": 1
+        },
+        {
+          "id": "codex-85a2b5161b4e",
+          "label": "各式服装 / 人物职业服饰 / 军装",
+          "count": 2
+        },
+        {
+          "id": "codex-91dcd0a68625",
+          "label": "各式服装 / 人物职业服饰 / 运动人员",
+          "count": 1
+        },
+        {
+          "id": "codex-a693145b6f88",
+          "label": "各式服装 / 人物职业服饰 / 非常规职业",
+          "count": 1
+        },
+        {
+          "id": "codex-2c65126d48f4",
+          "label": "各式服装 / 人物转化",
+          "count": 1
+        },
+        {
+          "id": "codex-946e70bb93aa",
+          "label": "各种涩涩 / 1girl系列 / 杂项",
+          "count": 2
+        },
+        {
+          "id": "codex-51f92638a395",
+          "label": "各种涩涩 / 1girl系列 / 诱惑",
+          "count": 1
+        },
+        {
+          "id": "codex-943f34a88f51",
+          "label": "各种涩涩 / 1girl系列 / 隐秘处展示/自拍/直播",
+          "count": 1
+        },
+        {
+          "id": "codex-28a51fc682d5",
+          "label": "各种风格 / 主目录",
+          "count": 3
+        },
+        {
+          "id": "codex-fe2788e14c4d",
+          "label": "涩涩服饰 / 本职穿搭 / 恶堕之后",
+          "count": 1
+        },
+        {
+          "id": "codex-fea4507431ce",
+          "label": "画廊2 / 主目录",
+          "count": 1
+        },
+        {
+          "id": "codex-559eca0468ae",
+          "label": "群友处收录 / 主目录",
+          "count": 4
+        },
+        {
+          "id": "codex-6222520bdffb",
+          "label": "背景 / 主目录",
+          "count": 448
+        },
+        {
+          "id": "codex-993adbc95645",
+          "label": "自然语言 / 主目录",
+          "count": 8
+        }
+      ]
+    },
+    "style_quality": {
+      "count": 4391,
+      "ordered_ids_sha256": "ee25b52f3df2d202efbf5fede86dca28b461a74b4d86581433444b8a79ba8876",
+      "source_sha256": "6f03b6b65d045757e67ab9179a7914a9d4ca0c701eea1d6728ef17bb90c79611",
+      "revision": "77556a496dd7dd8b3eea3dbcdd3f06fe9d00a49111ca53d7e02e2f92dd69de02",
+      "taxonomy_version": "shared-selector-library-v2",
+      "canonical_tree": [
+        {
+          "key": "shared-theme:identity",
+          "label": "角色与身份",
+          "count": 29,
+          "children": [
+            {
+              "key": "shared-sub:原创人物",
+              "label": "原创人物",
+              "count": 2,
+              "owner": "identity"
+            },
+            {
+              "key": "shared-sub:种族与幻想生物",
+              "label": "种族与幻想生物",
+              "count": 12,
+              "owner": "identity"
+            },
+            {
+              "key": "shared-sub:职业与身份",
+              "label": "职业与身份",
+              "count": 9,
+              "owner": "identity"
+            },
+            {
+              "key": "shared-sub:动物与拟人",
+              "label": "动物与拟人",
+              "count": 1,
+              "owner": "identity"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:person_count",
+          "label": "人物数量",
+          "count": 53,
+          "children": []
+        },
+        {
+          "key": "shared-theme:appearance",
+          "label": "外观与身体",
+          "count": 245,
+          "children": [
+            {
+              "key": "shared-sub:身体部位",
+              "label": "身体部位",
+              "count": 114,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:裸露与遮盖",
+              "label": "裸露与遮盖",
+              "count": 29,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:眼睛与瞳色",
+              "label": "眼睛与瞳色",
+              "count": 11,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:体型与肤色",
+              "label": "体型与肤色",
+              "count": 76,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:身体改造与伤痕",
+              "label": "身体改造与伤痕",
+              "count": 21,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:头发与发型",
+              "label": "头发与发型",
+              "count": 31,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:非人特征",
+              "label": "非人特征",
+              "count": 5,
+              "owner": "appearance"
+            },
+            {
+              "key": "shared-sub:面部特征",
+              "label": "面部特征",
+              "count": 27,
+              "owner": "appearance"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:clothing_accessory",
+          "label": "服装与配饰",
+          "count": 155,
+          "children": [
+            {
+              "key": "shared-sub:首饰与随身配饰",
+              "label": "首饰与随身配饰",
+              "count": 31,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:头饰与发饰",
+              "label": "头饰与发饰",
+              "count": 20,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:上衣与外套",
+              "label": "上衣与外套",
+              "count": 15,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:穿着状态",
+              "label": "穿着状态",
+              "count": 10,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:服装材质与剪裁",
+              "label": "服装材质与剪裁",
+              "count": 70,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:鞋袜与腿饰",
+              "label": "鞋袜与腿饰",
+              "count": 28,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:裙装与礼服",
+              "label": "裙装与礼服",
+              "count": 7,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:奇幻与角色服饰",
+              "label": "奇幻与角色服饰",
+              "count": 16,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:裤装",
+              "label": "裤装",
+              "count": 6,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:传统与民族服饰",
+              "label": "传统与民族服饰",
+              "count": 3,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:泳装与内衣",
+              "label": "泳装与内衣",
+              "count": 15,
+              "owner": "clothing_accessory"
+            },
+            {
+              "key": "shared-sub:制服与职业装",
+              "label": "制服与职业装",
+              "count": 3,
+              "owner": "clothing_accessory"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:pose_action",
+          "label": "动作与姿势",
+          "count": 211,
+          "children": [
+            {
+              "key": "shared-sub:暴力与伤害",
+              "label": "暴力与伤害",
+              "count": 22,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:性交与体位",
+              "label": "性交与体位",
+              "count": 8,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:卧姿与趴姿",
+              "label": "卧姿与趴姿",
+              "count": 9,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:手势与肢体动作",
+              "label": "手势与肢体动作",
+              "count": 45,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:移动与运动",
+              "label": "移动与运动",
+              "count": 10,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:坐姿与蹲姿",
+              "label": "坐姿与蹲姿",
+              "count": 16,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:拥抱与日常互动",
+              "label": "拥抱与日常互动",
+              "count": 7,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:战斗与施法",
+              "label": "战斗与施法",
+              "count": 8,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:持物与道具互动",
+              "label": "持物与道具互动",
+              "count": 64,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:站姿与跪姿",
+              "label": "站姿与跪姿",
+              "count": 17,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:亲密互动",
+              "label": "亲密互动",
+              "count": 9,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:射精与体液",
+              "label": "射精与体液",
+              "count": 40,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:手足互动",
+              "label": "手足互动",
+              "count": 4,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:自慰",
+              "label": "自慰",
+              "count": 2,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:口部互动",
+              "label": "口部互动",
+              "count": 5,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:穿脱与整理",
+              "label": "穿脱与整理",
+              "count": 1,
+              "owner": "pose_action"
+            },
+            {
+              "key": "shared-sub:束缚与控制",
+              "label": "束缚与控制",
+              "count": 14,
+              "owner": "pose_action"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:expression_gaze",
+          "label": "表情与视线",
+          "count": 181,
+          "children": [
+            {
+              "key": "shared-sub:眼口表情",
+              "label": "眼口表情",
+              "count": 27,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:悲伤与哭泣",
+              "label": "悲伤与哭泣",
+              "count": 61,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:视线方向",
+              "label": "视线方向",
+              "count": 39,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:惊讶与紧张",
+              "label": "惊讶与紧张",
+              "count": 28,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:喜悦与微笑",
+              "label": "喜悦与微笑",
+              "count": 36,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:平静与冷淡",
+              "label": "平静与冷淡",
+              "count": 9,
+              "owner": "expression_gaze"
+            },
+            {
+              "key": "shared-sub:愤怒与不满",
+              "label": "愤怒与不满",
+              "count": 4,
+              "owner": "expression_gaze"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:background_environment",
+          "label": "背景与环境",
+          "count": 1409,
+          "children": [
+            {
+              "key": "shared-sub:城市与街道",
+              "label": "城市与街道",
+              "count": 205,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:植物与花园",
+              "label": "植物与花园",
+              "count": 130,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:天空与天气",
+              "label": "天空与天气",
+              "count": 609,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:自然地貌与水域",
+              "label": "自然地貌与水域",
+              "count": 456,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:室内空间",
+              "label": "室内空间",
+              "count": 39,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:建筑与设施",
+              "label": "建筑与设施",
+              "count": 138,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:纯色与抽象背景",
+              "label": "纯色与抽象背景",
+              "count": 198,
+              "owner": "background_environment"
+            },
+            {
+              "key": "shared-sub:幻想与科幻环境",
+              "label": "幻想与科幻环境",
+              "count": 26,
+              "owner": "background_environment"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:composition_camera",
+          "label": "构图与镜头",
+          "count": 2304,
+          "children": [
+            {
+              "key": "shared-sub:景别与主体占比",
+              "label": "景别与主体占比",
+              "count": 417,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:视角与透视",
+              "label": "视角与透视",
+              "count": 470,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:焦点与景深",
+              "label": "焦点与景深",
+              "count": 1139,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:局部特写",
+              "label": "局部特写",
+              "count": 74,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:布局与画面结构",
+              "label": "布局与画面结构",
+              "count": 613,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:文字与图形",
+              "label": "文字与图形",
+              "count": 93,
+              "owner": "composition_camera"
+            },
+            {
+              "key": "shared-sub:多格与连续画面",
+              "label": "多格与连续画面",
+              "count": 28,
+              "owner": "composition_camera"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:lighting_color",
+          "label": "光影与色彩",
+          "count": 3704,
+          "children": [
+            {
+              "key": "shared-sub:光影效果",
+              "label": "光影效果",
+              "count": 2990,
+              "owner": "lighting_color"
+            },
+            {
+              "key": "shared-sub:自然光",
+              "label": "自然光",
+              "count": 449,
+              "owner": "lighting_color"
+            },
+            {
+              "key": "shared-sub:色彩与调色",
+              "label": "色彩与调色",
+              "count": 2595,
+              "owner": "lighting_color"
+            },
+            {
+              "key": "shared-sub:人工光与发光",
+              "label": "人工光与发光",
+              "count": 609,
+              "owner": "lighting_color"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:style_medium",
+          "label": "风格与媒介",
+          "count": 4098,
+          "children": [
+            {
+              "key": "shared-sub:艺术流派与视觉风格",
+              "label": "艺术流派与视觉风格",
+              "count": 2753,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:摄影与写实",
+              "label": "摄影与写实",
+              "count": 1559,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:动漫与卡通",
+              "label": "动漫与卡通",
+              "count": 243,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:三维与数字渲染",
+              "label": "三维与数字渲染",
+              "count": 128,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:像素与平面设计",
+              "label": "像素与平面设计",
+              "count": 482,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:漫画与线稿",
+              "label": "漫画与线稿",
+              "count": 454,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:水彩与油画",
+              "label": "水彩与油画",
+              "count": 171,
+              "owner": "style_medium"
+            },
+            {
+              "key": "shared-sub:绘画与插画",
+              "label": "绘画与插画",
+              "count": 808,
+              "owner": "style_medium"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:artist_style",
+          "label": "画师与作者",
+          "count": 1,
+          "children": [
+            {
+              "key": "shared-sub:画师组合",
+              "label": "画师组合",
+              "count": 1,
+              "owner": "artist_style"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:quality_detail",
+          "label": "质量与细节",
+          "count": 218,
+          "children": [
+            {
+              "key": "shared-sub:细节与材质",
+              "label": "细节与材质",
+              "count": 214,
+              "owner": "quality_detail"
+            },
+            {
+              "key": "shared-sub:质量与分辨率",
+              "label": "质量与分辨率",
+              "count": 10,
+              "owner": "quality_detail"
+            }
+          ]
+        },
+        {
+          "key": "shared-theme:object_prop",
+          "label": "物品与道具",
+          "count": 185,
+          "children": [
+            {
+              "key": "shared-sub:家具与生活用品",
+              "label": "家具与生活用品",
+              "count": 91,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:武器与装备",
+              "label": "武器与装备",
+              "count": 36,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:成人道具",
+              "label": "成人道具",
+              "count": 5,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:动物主体",
+              "label": "动物主体",
+              "count": 6,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:食物与饮料",
+              "label": "食物与饮料",
+              "count": 10,
+              "owner": "object_prop"
+            },
+            {
+              "key": "shared-sub:交通与机械",
+              "label": "交通与机械",
+              "count": 30,
+              "owner": "object_prop"
+            }
+          ]
+        }
+      ],
+      "source_options": [
+        {
+          "id": "codex-a91033942dce",
+          "label": "Krea2 情绪版 / 397风格 · 3D渲染",
+          "count": 65
+        },
+        {
+          "id": "codex-7dc8ce6de8fa",
+          "label": "Krea2 情绪版 / 397风格 · 动漫",
+          "count": 53
+        },
+        {
+          "id": "codex-a5f6fe15e959",
+          "label": "Krea2 情绪版 / 397风格 · 卡通",
+          "count": 22
+        },
+        {
+          "id": "codex-4e284ede2dcd",
+          "label": "Krea2 情绪版 / 397风格 · 封面艺术",
+          "count": 27
+        },
+        {
+          "id": "codex-bb67589b40e3",
+          "label": "Krea2 情绪版 / 397风格 · 摄影",
+          "count": 70
+        },
+        {
+          "id": "codex-069935cea1ed",
+          "label": "Krea2 情绪版 / 397风格 · 数字绘画",
+          "count": 19
+        },
+        {
+          "id": "codex-30556843fa89",
+          "label": "Krea2 情绪版 / 397风格 · 漫画",
+          "count": 35
+        },
+        {
+          "id": "codex-205ad63ea1fe",
+          "label": "Krea2 情绪版 / 397风格 · 素描",
+          "count": 38
+        },
+        {
+          "id": "codex-e3bd67287176",
+          "label": "Krea2 情绪版 / 397风格 · 绘画",
+          "count": 47
+        },
+        {
+          "id": "codex-5cc8377fd5d0",
+          "label": "Krea2 情绪版 / 397风格 · 设计",
+          "count": 19
+        },
+        {
+          "id": "codex-837d251bd1f7",
+          "label": "Krea2 情绪版 / 3D渲染",
+          "count": 65
+        },
+        {
+          "id": "codex-491ebc470fa3",
+          "label": "Krea2 情绪版 / 其他",
+          "count": 17
+        },
+        {
+          "id": "codex-fb6fb6354194",
+          "label": "Krea2 情绪版 / 动漫卡通1",
+          "count": 120
+        },
+        {
+          "id": "codex-4e90a4df4663",
+          "label": "Krea2 情绪版 / 动漫卡通2",
+          "count": 82
+        },
+        {
+          "id": "codex-6db67d7ae00f",
+          "label": "Krea2 情绪版 / 插画1",
+          "count": 120
+        },
+        {
+          "id": "codex-9aec506cb32c",
+          "label": "Krea2 情绪版 / 插画2",
+          "count": 120
+        },
+        {
+          "id": "codex-4b2d6752be7c",
+          "label": "Krea2 情绪版 / 插画3",
+          "count": 120
+        },
+        {
+          "id": "codex-de1d999673a9",
+          "label": "Krea2 情绪版 / 插画4",
+          "count": 120
+        },
+        {
+          "id": "codex-62d7813c89c7",
+          "label": "Krea2 情绪版 / 插画5",
+          "count": 120
+        },
+        {
+          "id": "codex-b0cd5428d1cf",
+          "label": "Krea2 情绪版 / 插画6",
+          "count": 86
+        },
+        {
+          "id": "codex-6e27e6d0dbec",
+          "label": "Krea2 情绪版 / 摄影写实",
+          "count": 36
+        },
+        {
+          "id": "codex-32a1ac288f66",
+          "label": "Krea2 情绪版 / 摄影哥特和神秘1",
+          "count": 120
+        },
+        {
+          "id": "codex-0fdbee489fb5",
+          "label": "Krea2 情绪版 / 摄影哥特和神秘2",
+          "count": 44
+        },
+        {
+          "id": "codex-60321788a7c7",
+          "label": "Krea2 情绪版 / 摄影特效冷1",
+          "count": 120
+        },
+        {
+          "id": "codex-25763c15234a",
+          "label": "Krea2 情绪版 / 摄影特效冷2",
+          "count": 120
+        },
+        {
+          "id": "codex-419b9036a8e2",
+          "label": "Krea2 情绪版 / 摄影特效冷3",
+          "count": 120
+        },
+        {
+          "id": "codex-1f9769615cdf",
+          "label": "Krea2 情绪版 / 摄影特效冷4",
+          "count": 6
+        },
+        {
+          "id": "codex-075eec2bac9e",
+          "label": "Krea2 情绪版 / 摄影特效暖1",
+          "count": 120
+        },
+        {
+          "id": "codex-18c62d4c7ac7",
+          "label": "Krea2 情绪版 / 摄影特效暖2",
+          "count": 74
+        },
+        {
+          "id": "codex-748cc559f1a6",
+          "label": "Krea2 情绪版 / 摄影简洁",
+          "count": 90
+        },
+        {
+          "id": "codex-8a54a0b8ce0b",
+          "label": "Krea2 情绪版 / 摄影超现实1",
+          "count": 120
+        },
+        {
+          "id": "codex-d62a40d30d29",
+          "label": "Krea2 情绪版 / 摄影超现实2",
+          "count": 120
+        },
+        {
+          "id": "codex-477063cd4813",
+          "label": "Krea2 情绪版 / 摄影超现实3",
+          "count": 120
+        },
+        {
+          "id": "codex-d738df7e7740",
+          "label": "Krea2 情绪版 / 摄影超现实4",
+          "count": 120
+        },
+        {
+          "id": "codex-e00830db04f1",
+          "label": "Krea2 情绪版 / 摄影超现实5",
+          "count": 120
+        },
+        {
+          "id": "codex-39443d6e9c6e",
+          "label": "Krea2 情绪版 / 摄影超现实6",
+          "count": 120
+        },
+        {
+          "id": "codex-8383bb1e9dad",
+          "label": "Krea2 情绪版 / 摄影超现实7",
+          "count": 120
+        },
+        {
+          "id": "codex-1d679aa08136",
+          "label": "Krea2 情绪版 / 摄影超现实8",
+          "count": 37
+        },
+        {
+          "id": "codex-4162bcd31b95",
+          "label": "Krea2 情绪版 / 摄影超现模糊感1",
+          "count": 120
+        },
+        {
+          "id": "codex-44ae1ede93cd",
+          "label": "Krea2 情绪版 / 摄影超现模糊感2",
+          "count": 120
+        },
+        {
+          "id": "codex-27b19f67d9f2",
+          "label": "Krea2 情绪版 / 摄影超现模糊感3",
+          "count": 120
+        },
+        {
+          "id": "codex-3b9ae8b5efe9",
+          "label": "Krea2 情绪版 / 摄影超现模糊感4",
+          "count": 120
+        },
+        {
+          "id": "codex-4b5b48f1c3bc",
+          "label": "Krea2 情绪版 / 摄影超现模糊感5",
+          "count": 33
+        },
+        {
+          "id": "codex-a56272a8e013",
+          "label": "Krea2 情绪版 / 数字绘画",
+          "count": 61
+        },
+        {
+          "id": "codex-b972b6e5c544",
+          "label": "Krea2 情绪版 / 电影色调",
+          "count": 40
+        },
+        {
+          "id": "codex-545dfb7bcfbf",
+          "label": "Krea2 情绪版 / 设计1",
+          "count": 120
+        },
+        {
+          "id": "codex-d6b22b6d5940",
+          "label": "Krea2 情绪版 / 设计2",
+          "count": 118
+        },
+        {
+          "id": "codex-a2f6795d693f",
+          "label": "OC杂项 / 其他角色",
+          "count": 1
+        },
+        {
+          "id": "codex-19b8cf9973d5",
+          "label": "r18g/重口 / 暴虐",
+          "count": 1
+        },
+        {
+          "id": "codex-9346e7e20675",
+          "label": "r18g/重口 / 杀害",
+          "count": 3
+        },
+        {
+          "id": "codex-143e1a1b7f2a",
+          "label": "人外种族 / 中外经典",
+          "count": 1
+        },
+        {
+          "id": "codex-0f5b2aa6c03d",
+          "label": "人外种族 / 动物娘化",
+          "count": 1
+        },
+        {
+          "id": "codex-177aa80dbb35",
+          "label": "人外种族 / 杂项",
+          "count": 2
+        },
+        {
+          "id": "codex-0e1935de3661",
+          "label": "各式场景 / 场景 / 人物形象",
+          "count": 4
+        },
+        {
+          "id": "codex-792db2e406eb",
+          "label": "各式场景 / 场景 / 人物环境",
+          "count": 7
+        },
+        {
+          "id": "codex-a9f587774e56",
+          "label": "各式场景 / 场景 / 单纯场景",
+          "count": 5
+        },
+        {
+          "id": "codex-33d48f247f8e",
+          "label": "各式场景 / 场景 / 多人互动",
+          "count": 4
+        },
+        {
+          "id": "codex-3e66cfaf839b",
+          "label": "各式场景 / 场景 / 幻想童话",
+          "count": 6
+        },
+        {
+          "id": "codex-27b0c78f22d5",
+          "label": "各式场景 / 场景 / 恐怖扭曲",
+          "count": 6
+        },
+        {
+          "id": "codex-ae203be75a3e",
+          "label": "各式场景 / 场景 / 情感动作",
+          "count": 8
+        },
+        {
+          "id": "codex-169858793190",
+          "label": "各式场景 / 场景 / 战斗华丽",
+          "count": 20
+        },
+        {
+          "id": "codex-1f2e9593a702",
+          "label": "各式场景 / 场景 / 日常生活 / 室外",
+          "count": 1
+        },
+        {
+          "id": "codex-de4542ea0401",
+          "label": "各式场景 / 场景 / 特殊画面",
+          "count": 18
+        },
+        {
+          "id": "codex-c1927d83051b",
+          "label": "各式场景 / 场景 / 节日庆典",
+          "count": 1
+        },
+        {
+          "id": "codex-8d02f027991f",
+          "label": "各式场景 / 场景 / 表情包/搞怪",
+          "count": 20
+        },
+        {
+          "id": "codex-4bf858211d7b",
+          "label": "各式场景 / 视角与打光",
+          "count": 5
+        },
+        {
+          "id": "codex-0d9ca92f634e",
+          "label": "各式场景 / 质量词",
+          "count": 9
+        },
+        {
+          "id": "codex-ab9552d399ff",
+          "label": "各式服装 / 人物职业服饰 / 街头人物",
+          "count": 1
+        },
+        {
+          "id": "codex-2c65126d48f4",
+          "label": "各式服装 / 人物转化",
+          "count": 5
+        },
+        {
+          "id": "codex-7caab79fa042",
+          "label": "各式服装 / 幻想人物服饰 / 中近世纪",
+          "count": 1
+        },
+        {
+          "id": "codex-7df9f55b78fa",
+          "label": "各式服装 / 杂项内容",
+          "count": 2
+        },
+        {
+          "id": "codex-4852fb1f5ce7",
+          "label": "各式服装 / 民族特色服饰 / 中国",
+          "count": 1
+        },
+        {
+          "id": "codex-c1a5db2f606b",
+          "label": "各种涩涩 / 1girl,1boy系列 / 偷窥/直视",
+          "count": 1
+        },
+        {
+          "id": "codex-8332dd470df2",
+          "label": "各种涩涩 / 1girl,1boy系列 / 宠物调教",
+          "count": 1
+        },
+        {
+          "id": "codex-b553b4ae1d0d",
+          "label": "各种涩涩 / 1girl,1boy系列 / 杂项",
+          "count": 2
+        },
+        {
+          "id": "codex-2fb7cdfac6e6",
+          "label": "各种涩涩 / 1girl,1boy系列 / 调戏猥亵",
+          "count": 8
+        },
+        {
+          "id": "codex-6f2e9ee98b17",
+          "label": "各种涩涩 / 1girl系列 / 另类日常",
+          "count": 4
+        },
+        {
+          "id": "codex-946e70bb93aa",
+          "label": "各种涩涩 / 1girl系列 / 杂项",
+          "count": 5
+        },
+        {
+          "id": "codex-094e6865f899",
+          "label": "各种涩涩 / 1girl系列 / 自慰",
+          "count": 5
+        },
+        {
+          "id": "codex-51f92638a395",
+          "label": "各种涩涩 / 1girl系列 / 诱惑",
+          "count": 4
+        },
+        {
+          "id": "codex-943f34a88f51",
+          "label": "各种涩涩 / 1girl系列 / 隐秘处展示/自拍/直播",
+          "count": 1
+        },
+        {
+          "id": "codex-79c59a21b6c5",
+          "label": "各种涩涩 / 2+girl/+1boy系列 / 百合",
+          "count": 3
+        },
+        {
+          "id": "codex-a6c77fc61b8e",
+          "label": "各种涩涩 / 各种组件 / 组件/杂项（女）",
+          "count": 2
+        },
+        {
+          "id": "codex-8f341d5a748f",
+          "label": "各种涩涩 / 各种组件 / 组件/杂项（男）",
+          "count": 1
+        },
+        {
+          "id": "codex-b9635e28b9a2",
+          "label": "各种涩涩 / 视角/强调 / 杂项",
+          "count": 3
+        },
+        {
+          "id": "codex-95ff053de38c",
+          "label": "各种涩涩 / 视角/强调 / 背部/背身",
+          "count": 1
+        },
+        {
+          "id": "codex-3c171ae3f3ea",
+          "label": "各种涩涩 / 视角/强调 / 胸/腹部",
+          "count": 6
+        },
+        {
+          "id": "codex-51a58b247cdc",
+          "label": "各种涩涩 / 视角/强调 / 脚/足底",
+          "count": 10
+        },
+        {
+          "id": "codex-f53fc69f8d9e",
+          "label": "各种涩涩 / 视角/强调 / 腿/下半身",
+          "count": 5
+        },
+        {
+          "id": "codex-8d56eae1408a",
+          "label": "各种涩涩 / 视角/强调 / 裙底/小穴/臀部",
+          "count": 13
+        },
+        {
+          "id": "codex-28a51fc682d5",
+          "label": "各种风格 / 主目录",
+          "count": 29
+        },
+        {
+          "id": "codex-7535f3e992fd",
+          "label": "基础涩涩 / 其他 / 大车小孩特辑",
+          "count": 1
+        },
+        {
+          "id": "codex-5945270d3491",
+          "label": "基础涩涩 / 其他 / 攻守反转特辑（四爱/男m）",
+          "count": 1
+        },
+        {
+          "id": "codex-d943285346e0",
+          "label": "基础涩涩 / 各种体位 / 后入/背后位",
+          "count": 2
+        },
+        {
+          "id": "codex-5e8b934c2dd1",
+          "label": "基础涩涩 / 各种体位 / 坐身位",
+          "count": 1
+        },
+        {
+          "id": "codex-9ea16971fe2f",
+          "label": "基础涩涩 / 各种体位 / 骑乘位",
+          "count": 1
+        },
+        {
+          "id": "codex-8d876a908e60",
+          "label": "基础涩涩 / 非直接交配性爱 / 乳交",
+          "count": 1
+        },
+        {
+          "id": "codex-0a2e66647009",
+          "label": "基础涩涩 / 非直接交配性爱 / 其他",
+          "count": 1
+        },
+        {
+          "id": "codex-520ec9cb0649",
+          "label": "基础涩涩 / 非直接交配性爱 / 口交（类口交/颜射）",
+          "count": 8
+        },
+        {
+          "id": "codex-78a04c433eaa",
+          "label": "基础涩涩 / 非直接交配性爱 / 足交",
+          "count": 1
+        },
+        {
+          "id": "codex-a2ff455c7440",
+          "label": "服饰、人设杂项 / 人设 / 其他",
+          "count": 1
+        },
+        {
+          "id": "codex-873385ad58de",
+          "label": "服饰、人设杂项 / 服饰",
+          "count": 3
+        },
+        {
+          "id": "codex-ebf7d19c1ed1",
+          "label": "未分类（原分类） / 主目录",
+          "count": 2
+        },
+        {
+          "id": "codex-efa65d831153",
+          "label": "杂项涩涩 / 捆绑拘束 / 另类捆绑",
+          "count": 1
+        },
+        {
+          "id": "codex-dfc402a2ebcd",
+          "label": "杂项涩涩 / 捆绑拘束 / 捆绑姿势",
+          "count": 1
+        },
+        {
+          "id": "codex-f1624a9850ef",
+          "label": "杂项涩涩 / 杂项",
+          "count": 5
+        },
+        {
+          "id": "codex-ee7fcdc62f4d",
+          "label": "涩涩服饰 / 色情改造 / 日常改造",
+          "count": 2
+        },
+        {
+          "id": "codex-0faf2df7a091",
+          "label": "涩涩服饰 / 色情改造 / 裸体遮盖",
+          "count": 2
+        },
+        {
+          "id": "codex-fea4507431ce",
+          "label": "画廊2 / 主目录",
+          "count": 2
+        },
+        {
+          "id": "codex-91c41b7e3845",
+          "label": "画廊3 / 主目录",
+          "count": 2
+        },
+        {
+          "id": "codex-5999c8332218",
+          "label": "画廊5 / 主目录",
+          "count": 1
+        },
+        {
+          "id": "codex-559eca0468ae",
+          "label": "群友处收录 / 主目录",
+          "count": 11
+        },
+        {
+          "id": "codex-72ef0a17e42a",
+          "label": "群友色色串收录 / 主目录",
+          "count": 6
+        },
+        {
+          "id": "codex-6222520bdffb",
+          "label": "背景 / 主目录",
+          "count": 141
+        },
+        {
+          "id": "codex-993adbc95645",
+          "label": "自然语言 / 主目录",
+          "count": 13
+        }
+      ]
+    }
+  },
+  "artist_tree_clipped_metadata": [],
+  "artist_filter_acceptance": {
+    "filters": [
+      "shared-theme:artist_style",
+      "shared-source:ff7e4d74-ca03-54c1-907c-b135d0269f3a"
+    ],
+    "expected_total": 20202,
+    "page1": 60,
+    "page2": 60,
+    "sort": "name-asc",
+    "selected_source": {
+      "id": "ff7e4d74-ca03-54c1-907c-b135d0269f3a",
+      "label": "Anima 画师风格 / 冷门",
+      "count": 20202
+    },
+    "oracle": "Independent grouped predicate over complete artist index snapshot."
+  },
+  "formal_files_unchanged": 21,
+  "queue": {
+    "running": 0,
+    "pending": 0
+  },
+  "finished_at": "2026-10-02T01:11:44.444312+08:00",
+  "check_count": 77,
+  "limits": [
+    "Read-only API and canonical-field acceptance only; browser visuals and prompt insertion are not verified here.",
+    "Canonical trees for all six kinds are independently projected from current live index and complete kind snapshots; artist additionally checks its real server tree after renderer inventory clipping.",
+    "HTTP elapsed times are observations for this run, not a complete frontend, CPU, memory or GPU performance certification."
+  ]
+}

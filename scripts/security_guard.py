@@ -11,9 +11,12 @@ import hashlib
 import io
 import json
 import math
+import os
 import re
+import stat
 import subprocess
 import sys
+import unicodedata
 import zlib
 import zipfile
 from pathlib import Path, PurePosixPath
@@ -330,6 +333,148 @@ class StreamScanner:
         self.tail = joined[-OVERLAP:]
 
 
+TRAINING_REVIEW_FILE = 'governance/training-trigger-reviews.json'
+TRAINING_REVIEW_TYPE = 'reviewed_training_trigger_tokens'
+TRAINING_REVIEW_RULE = 'literal_credential_assignment'
+TRAINING_REVIEW_REASON = 'Reviewed literal training-caption trigger_token; not an authentication credential.'
+TRAINING_REVIEW_LIMIT = 1024 * 1024
+TRAINING_ARCHIVE_PREFIX = 'docs/technical/archive/'
+TRAINING_REVIEW_TARGET = re.compile(
+    r'docs/technical/archive/(?:'
+    r'anima_lora_forge/profiles/[a-z0-9][a-z0-9_.-]*\.json|'
+    r'character_lora_forge/characters/[a-z0-9][a-z0-9_-]*/character\.json)')
+# Any additional domain document needs its own explicit full target here as
+# well as a confirmed registry entry and an exact complete-file digest.
+TRAINING_REVIEW_EXTRA_TARGETS = frozenset({
+    'docs/technical/archive/character_lora_forge/characters/alicia_bell/selection_campaign_20x200_plan.json',
+    'docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/dual_form_base_spec.json',
+    'docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/visual_spec.json',
+})
+
+
+def training_review_target(target):
+    """An exact canonical archive path, never a suffix or directory match."""
+    if not isinstance(target, str) or re.search(r'[\\:*?"<>|\x00-\x1f]', target):
+        return False
+    parts = target.split('/')
+    devices = {'con', 'prn', 'aux', 'nul', *(f'com{i}' for i in range(1, 10)), *(f'lpt{i}' for i in range(1, 10))}
+    if any(part in {'', '.', '..'} or part.rstrip(' .') != part or
+           unicodedata.normalize('NFKC', part) != part or part.split('.')[0].casefold() in devices for part in parts):
+        return False
+    return bool(TRAINING_REVIEW_TARGET.fullmatch(target) or target in TRAINING_REVIEW_EXTRA_TARGETS)
+
+
+def _unique_training_json(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError('Duplicate training review JSON key')
+        result[key] = value
+    return result
+
+
+def parse_training_trigger_reviews(raw):
+    """Missing registry grants nothing; invalid or unconfirmed data never grants."""
+    if raw is None:
+        return {'sha256': None, 'approvals': frozenset(), 'unconfirmed': 0}
+    if not isinstance(raw, bytes) or len(raw) > TRAINING_REVIEW_LIMIT:
+        raise ValueError('Invalid training review registry size')
+    try:
+        data = json.loads(raw, object_pairs_hook=_unique_training_json)
+    except (ValueError, UnicodeError):
+        raise ValueError('Invalid training review registry JSON') from None
+    if not isinstance(data, dict) or set(data) != {'schema', 'review_type', 'entries'} or type(data['schema']) is not int or data['schema'] != 1:
+        raise ValueError('Invalid training review registry schema')
+    if data['review_type'] != TRAINING_REVIEW_TYPE or not isinstance(data['entries'], list) or len(data['entries']) > 10000:
+        raise ValueError('Invalid training review registry scope')
+    approvals, identities, spellings = set(), set(), {}
+    unconfirmed = 0
+    for item in data['entries']:
+        if not isinstance(item, dict) or set(item) != {'target', 'sha256', 'allowed_rules', 'confirmed', 'reason'}:
+            raise ValueError('Invalid training review registry entry')
+        target, digest = item['target'], item['sha256']
+        if not training_review_target(target) or not isinstance(digest, str) or not re.fullmatch(r'[0-9a-f]{64}', digest):
+            raise ValueError('Invalid training review identity')
+        if item['allowed_rules'] != [TRAINING_REVIEW_RULE] or type(item['confirmed']) is not bool or item['reason'] != TRAINING_REVIEW_REASON:
+            raise ValueError('Invalid training review decision')
+        if (target, digest) in identities or spellings.setdefault(target.casefold(), target) != target:
+            raise ValueError('Duplicate or aliased training review identity')
+        identities.add((target, digest))
+        if item['confirmed']:
+            approvals.add((target, digest))
+        else:
+            unconfirmed += 1
+    return {'sha256': hashlib.sha256(raw).hexdigest(), 'approvals': frozenset(approvals), 'unconfirmed': unconfirmed}
+
+
+def load_training_trigger_reviews(path=None):
+    """Read the local reviewed registry without resolving links or echoing data."""
+    path = Path(path) if path is not None else REPO / TRAINING_REVIEW_FILE
+    for part in [*reversed(path.absolute().parents), path.absolute()]:
+        try:
+            info = part.lstat()
+        except FileNotFoundError:
+            continue
+        if stat.S_ISLNK(info.st_mode) or getattr(info, 'st_file_attributes', 0) & 0x400:
+            raise ValueError('Linked training review registry')
+        if stat.S_ISREG(info.st_mode) and info.st_nlink != 1:
+            raise ValueError('Hardlinked training review registry')
+    if not path.exists():
+        return parse_training_trigger_reviews(None)
+    before = path.stat()
+    if not stat.S_ISREG(before.st_mode) or before.st_size > TRAINING_REVIEW_LIMIT:
+        raise ValueError('Invalid training review registry file')
+    with path.open('rb') as stream:
+        opened = os.fstat(stream.fileno())
+        raw = stream.read(TRAINING_REVIEW_LIMIT + 1)
+    after = path.lstat()
+    if not stat.S_ISREG(after.st_mode) or after.st_nlink != 1 or len({(x.st_dev, x.st_ino, x.st_size, x.st_mtime_ns) for x in (before, opened, after)}) != 1 or len(raw) != after.st_size:
+        raise ValueError('Training review registry changed during read')
+    return parse_training_trigger_reviews(raw)
+
+
+def git_training_trigger_reviews(repo, staged=False):
+    """The staged gate uses its index, never an unstaged policy exception."""
+    if staged:
+        lines = git(repo, 'ls-files', '--stage', '-z', '--', TRAINING_REVIEW_FILE).split(b'\0')
+        records = [line for line in lines if line]
+        if not records:
+            return parse_training_trigger_reviews(None)
+        if len(records) != 1:
+            raise ValueError('Unmerged training review registry')
+        header, name = records[0].split(b'\t', 1)
+        mode, oid, stage = header.split()
+        if mode != b'100644' or stage != b'0' or name != TRAINING_REVIEW_FILE.encode():
+            raise ValueError('Invalid staged training review registry')
+    else:
+        head = subprocess.run(['git', '-C', str(repo), 'rev-parse', '--verify', 'HEAD'], capture_output=True)
+        if head.returncode:
+            return parse_training_trigger_reviews(None)
+        records = [line for line in git(repo, 'ls-tree', '-z', 'HEAD', '--', TRAINING_REVIEW_FILE).split(b'\0') if line]
+        if not records:
+            return parse_training_trigger_reviews(None)
+        if len(records) != 1:
+            raise ValueError('Invalid committed training review registry')
+        header, name = records[0].split(b'\t', 1)
+        mode, kind, oid = header.split()
+        if mode != b'100644' or kind != b'blob' or name != TRAINING_REVIEW_FILE.encode():
+            raise ValueError('Invalid committed training review registry')
+    object_id = oid.decode('ascii')
+    if int(git(repo, 'cat-file', '-s', object_id)) > TRAINING_REVIEW_LIMIT:
+        raise ValueError('Training review registry size limit')
+    return parse_training_trigger_reviews(git(repo, 'cat-file', 'blob', object_id))
+
+
+def apply_training_trigger_review(digest, paths, rules, registry):
+    """Remove only the reviewed literal rule, and only for every exact alias."""
+    remaining = set(rules)
+    approvals = registry['approvals']
+    matched = bool(paths and approvals) and all(training_review_target(path) and (path, digest) in approvals for path in paths)
+    removed = {TRAINING_REVIEW_RULE} if matched and TRAINING_REVIEW_RULE in remaining else set()
+    remaining.difference_update(removed)
+    return remaining, removed
+
+
 def archive_magic(prefix):
     """Supported formats are gzip and ZIP; other recognized archives block."""
     signatures = [
@@ -505,6 +650,7 @@ def inventory(repo, staged):
 def scan_objects(repo, entries, staged=False, content_only=False):
     # Keep this here so independent SourceGraph/parallel callers cannot skip refs.
     findings = ref_name_findings(repo)
+    training_reviews = git_training_trigger_reviews(repo, staged)
     reviewed = []
     compressed = []
     sensitive = []
@@ -613,6 +759,11 @@ def scan_objects(repo, entries, staged=False, content_only=False):
                     reviewed.append({'paths': entry['paths'], 'object': oid, 'sha256': digest,
                                      'rule': 'reviewed_ace_syntax_token_scopes', 'matched_rules': sorted(reviewed_rules)})
                     content_rules.difference_update(reviewed_rules)
+            if entry['type'] == 'blob':
+                content_rules, training_removed = apply_training_trigger_review(digest, entry['paths'], content_rules, training_reviews)
+                if training_removed:
+                    reviewed.append({'paths': entry['paths'], 'object': oid, 'sha256': digest,
+                                     'rule': TRAINING_REVIEW_TYPE, 'matched_rules': sorted(training_removed)})
             for path in entry['paths']:
                 findings.extend(name_findings(path, oid))
                 path_rules = blocked_path(path) if entry['type'] == 'blob' and not content_only else []
@@ -659,8 +810,11 @@ def scan_objects(repo, entries, staged=False, content_only=False):
                 combined.feed(left_tail + right_head)
                 for rule in sorted(combined.findings):
                     findings.append({'path': left + ' -> ' + right, 'object': left_oid + ':' + right_oid, 'rule': 'cross_part_' + rule})
+    if git_training_trigger_reviews(repo, staged)['sha256'] != training_reviews['sha256']:
+        findings.append({'path': '<training review registry>', 'object': '', 'rule': 'training_review_registry_changed_during_scan'})
     return sanitize_report_names({'findings': findings, 'reviewed_fixtures': reviewed, 'compressed_objects': compressed,
-                                  'sensitive_named_objects': sensitive, 'scanned_bytes': total, 'cross_part_boundaries': boundaries})
+                                  'sensitive_named_objects': sensitive, 'scanned_bytes': total, 'cross_part_boundaries': boundaries,
+                                  'training_trigger_registry_sha256': training_reviews['sha256']})
 
 
 def run(repo=REPO, staged=False, content_only=False):

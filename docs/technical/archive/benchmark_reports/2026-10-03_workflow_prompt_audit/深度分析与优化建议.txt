@@ -1,0 +1,244 @@
+ComfyUI 工作流、插件与提示词深度分析
+核查日期：2026-10-03，Asia/Shanghai
+性质：当前文件/服务只读审计、公开工作流静态分析、独立文本函数复现。未修改生产工作流、插件、资料库；未提交生图、调用外部识图/改写模型、重启服务。
+
+核心判断
+
+现有能力足够丰富：三个模型家族、共享提示词与选择器、LoRA 管理、PixAI、JoyCaption、外部识图、ControlNet、局部精修、二放、编辑、抠图都有入口。下一轮最有价值的是让“最终用了什么文字、什么模型、什么 LoRA、哪些参数真的生效”变得明确，并减少手动转移和重复加载。
+
+优先做提示词正确性与生效可见性，其次做插件加载与批量运行效率，最后才考虑新增 TIPO、区域提示词或第二套采样系统。资料库分类、导入、正文和收藏不属于这一轮。
+
+一、当前盘点
+
+1. 正式目录包含 18 份工作流 JSON，另有 .index.json 管理索引，不算工作流。
+2. UAP v2：根图 308 节点，20 个子图定义，包含定义内节点共 504 个。这是序列化节点数量，不代表一次生成会执行 504 个节点。
+3. 三个独立生产入口：
+   - 01“Anima原版_LoRA生产”：实际模型 Anima/animayume_v15Base.safetensors；30 步、CFG 7、res_multistep/beta。
+   - 02“Anima2.9B_动漫生产”：anima29B_v10_bf16；28 步、CFG 3.5、euler/sgm_uniform。
+   - 03“Krea2_一体化生产”：DasiwaKrea2TurboRaw_cutedisasterV2Turbo；8 步、CFG 1、euler/simple。
+4. 服务报告 ComfyUI 0.33.0、前端 1.49.6、RTX 5090 D。8188 监听进程 PID 41812，启动命令没有生产插件白名单。
+5. 注册节点总数 2575；object_info 中有 37 个 custom_nodes 来源模块；/extensions 枚举 543 条 JS 地址。地址数含辅助模块和兼容别名，不能直接当作实际执行数量或延迟测量。
+6. production_tools/profiles.json 的 production 配置是 24 个插件目录。当前实际加载范围明显更广。
+7. 统一工作台当前 5/5 模块 ready，合计 76 个节点。旧文档的 71 节点是历史数据。
+8. 当前三套生产流和 UAP v2 在本轮所查常规模型加载器清单中，没有发现不可选的模型名称。旧入口则有失效引用，详见第七节。
+
+二、优先修正的提示词问题
+
+P1-1：清理器会损坏应该原样保留的内容——已用当前源码复现。
+
+当前 PromptCleaningMaid 默认开启下划线转空格，其规则没有识别 Anima 分数标签、LoRA 标识或文本字面量。
+独立、无 GPU 的中性样例复现：
+  score_7                  -> score 7
+  character_trigger_v2     -> character trigger v2
+  <lora:character_v2:0.8>   -> <lora:character v2:0.8>
+  A sign reads "OPEN_24".  -> A sign reads "OPEN 24".
+  blue_hair               -> blue hair（普通 Anima booru 标签的这种处理通常合理）
+  masterpiece, masterpiece -> 原样重复保留
+
+因此不能把“统一格式化”当成模型无关、语义无损的操作。Anima 官方明确说普通标签使用空格，而 score_* 是保留下划线的例外。精确 LoRA 触发词、标识和需要画出的文字也需要保留原文。画师标签的下划线转换是否合理应按模型/命名约定判断，不应一律当作错误。
+
+重要范围限定：三套独立生产流中，#371 -> #369 清理器 -> #373 预览；#369 没有直连主编码器。主正向是 #107 WeiLinPromptUI -> #134 CLIPTextEncode -> #10 KSampler。因此这是候选清理路径里的已证实缺陷，不是“每次生成都被清理器改坏”。
+
+建议最窄修复：
+  - 明确 Tag 与自然语言/编辑指令两种处理模式。
+  - 普通 Tag 才执行下划线转换；保护 score_*、LoRA/Embedding 标识、精确触发词、引号内文字、转义和权重结构。
+  - 重复项仅对明确的同义格式/完全相同标签提示或可撤销合并，不直接重写整段自然语言。
+  - 显示原文/候选差异，用户应用后才进入最终字段。
+验收包括上述中性输入、权重、转义括号、换行、地区语法、不完整括号。保留原始输入可精确撤销。
+
+P1-2：最终提示词入口需要收敛——连线已核实。
+
+现有流程中，清理结果、手动编辑 #374、反推结果和 LoRA 触发词主要是独立预览/手动转移。手动中转本身保护了用户正文，但也容易产生“改了一个框，生成用的是另一个框”的误解。反推与提示词组合功能已有很多，不需要再增加另一个互不相通的编辑器。
+
+建议在现有日常控制台增加一处“本次生效提示词”视图：
+  原始输入/共享选择 -> 候选与差异 -> 应用到当前模型分支的指定字段 -> 最终编码文本
+  显示目标模型、正向、负向是否生效、触发词来源、被折叠的重复项和本次随机结果。
+  避免隐式合并；“追加、替换、撤销”复用已有 prompt_target.js 的目标校验与撤销能力。
+  资料库只负责提供候选，不改变其记录、分类或收藏。
+
+已有 AnimaPromptComposer 会记录 resolved_prompt；AnimaPromptPlusClipEncode 也有最终提示词元数据。应复用这些能力，补齐主流程，不能笼统宣称系统完全没有最终提示词记录。
+
+P1-3：LoRA 加载和触发词进入正向是两回事——连线已核实。
+
+三套生产流均为 LoRA Manager Loader.trigger_words -> ShowText #388。没有从该触发词输出通往主正向 #107/#134 的自动拼接边。启用 LoRA 并不等于它要求的触发词已经出现在本次正向中；前端手动插入仍可能做到，不能据此断言每次都漏词。
+
+建议：当前启用 LoRA 列表显示“触发词已在最终提示词中/缺失/用户明确忽略”；允许勾选后一次追加，保留原文和来源。关闭 LoRA 时不擅自删除用户原写的同名词。附带基模家族提示与加载成功记录。先做提示和可撤销应用，不把所有元数据中的触发词无条件追加。
+
+P1-4：Krea2 普通负向框在当前 CFG=1 路径不提供标准 CFG 引导——参数和源码已核实。
+
+三套之一的 Krea2 主采样为 CFG=1；其原生二放同样为 CFG=1。当前核心 comfy/samplers.py 在 cond_scale 接近 1、未禁用优化时跳过 unconditional 分支；标准公式在 CFG=1 时也仅剩正向预测。
+因此往当前负向框叠加 bad hands、extra fingers、score_*，不能按普通 CFG 的方式改善结果。负向编码仍可能产生前处理开销，但这一轮没有量化其耗时。
+
+建议：
+  - 当前 Turbo 模式显示“普通负向引导不生效”，收起可编辑负向或给出准确状态。
+  - 不为了让负向框起作用而直接把 Turbo CFG 改成 5/7；作者对 DaSiWa Turbo 的推荐本来就是 CFG=1、8 步。
+  - 需要负向约束时，优先调整正向的具体描述，或在独立实验分支验证合适的 Raw/特殊引导方案。
+  - NegPip、CFGZeroStar、自定义采样/引导不能与标准 CFG 结论混为一谈，加入后必须重新检查整条模型路径。
+
+三、模型专属提示词建议
+
+AnimaYume v1.5 / Anima base 家族：
+  - 以模型身份为依据选择前缀，不把所有质量词叠在一起。
+  - Anima 官方 base 建议可从 masterpiece, best quality, score_7 开始，但这只是候选基线，不是 v1.5 的本机最佳值。
+  - 顺序可采用：质量/时期/内容等级 -> 人数 -> 角色与作品 -> @画师 -> 外观服装动作场景 -> 关系描述。
+  - 作者明确支持 Tag 与自然语言混合；复杂关系、多角色属性绑定适合写完整句子。
+  - 对画师使用 @；对角色尽量补作品和主要外观。不要机械增加泛化质量词或把自然语言压成残缺短语。
+
+Anima 2.9B：
+  - 模型卡说明扩展训练 caption 没有 score tags，同时明确仍可使用。应做“无分数标签/单一分数标签”对照，不能声称 score_* 禁止或必然无效。
+  - 模型卡强调详细描述、角色/作品对应、多角色属性绑定。优先增加可见场景事实，而非重复 masterpiece/8K/high quality。
+  - 当前 28 步、CFG 3.5、euler/sgm_uniform 落在作者建议区间，应保留为快速档，另测 40/50 步质量档。
+
+Krea2 DaSiWa Turbo：
+  - 以自然语言完整描述主体、空间关系、服装材质、镜头、背景和光线；必要时前接少量可验证标签。
+  - 默认不继承 Anima 的 score_* 和整套负向模板；它们在这里没有同等依据。
+  - Krea2 文本编码模板本身强调颜色、形状、大小、材质、数量、文字和空间关系，适合按这些维度组织事实。
+  - 当前 euler/simple 不完全等于 DaSiWa 发布页的 euler/linear_quadratic 或 er_sde/simple。列为小规模对照项，不能仅凭不同就判错。
+
+Krea2 指令编辑：
+  - 明确“改什么、改成什么、保留什么”。不要把整幅原图反推文本当成编辑指令。
+  - 示例：Change only the coat to dark green wool. Preserve the person's face, pose, background, camera angle, and lighting.
+
+中性示例（候选写法，未生图验证）：
+
+Anima 候选：
+masterpiece, best quality, safe, 1girl, solo, adult woman, short black hair, brown eyes, yellow raincoat, harbor, overcast sky. An adult traveler stands on the left side of a harbor walkway, holding a closed navy umbrella in her right hand. A red fishing boat sits behind her on the right, with soft overcast lighting and a wide eye-level composition.
+
+Krea2 候选：
+A wide eye-level illustration of an adult traveler standing on the left side of a quiet harbor walkway. She has short black hair and brown eyes, wears a yellow raincoat, and holds a closed navy umbrella in her right hand. A red fishing boat is behind her on the right. Soft overcast light keeps the colors muted and the fabric texture clearly visible.
+
+两种候选都应保留事实；区别是模型适配方式，不是让改写器自由增加人物、服装、配饰或画风。具体长度预算由实际 tokenizer 统计，避免套用 SDXL 的 77-token 经验。
+
+四、反推与自动改写应变得更可控
+
+现有 PixAI、三种 JoyCaption 用途、五模型 API runner 和 judge 功能重叠，但并非必须删除。API 分支和若干反推分支默认关闭，不应声称现在每次出图都调用五个模型。
+
+推荐保留三个清楚的工作模式：
+  直接输入：用户正向 -> 最终编码。
+  从图复现：PixAI 提供标签候选，一路视觉描述提供空间关系与材质，人工审核后应用。
+  创意扩展：用户明确选择后才允许补充场景细节，所有新增内容单独列出。
+
+默认不同时调用三路本地描述+五路外部识图。多模型核对留给困难图，按事实置信度和明确矛盾选择，不简单靠多数票。PixAI 六分类分数可用于显示低置信度项；画师/角色身份识别不应一键视为确定事实。
+
+建议改写器的简短契约：
+“保留用户指定的人数、身份、颜色、衣物、物件、动作与左右关系。锁定角色名、LoRA 触发词、权重和引号内文字。按目标模型整理表达；未启用创意扩展时，不增加未提供的事实。返回最终候选、实际改动列表和需要用户解决的矛盾。不要输出推理过程。”
+
+Tag/自然语言/编辑指令分别处理；展示候选后应用，不自动覆盖最终正向。多角色优先增加清楚的主谓关系，区域提示词留待全局描述仍失败时再验证。
+
+五、模型身份与兼容性比堆提示词更重要
+
+1. “Anima原版_LoRA生产”目前实际是 AnimaYume v1.5。作者当前模型页明确提醒 v1.5 可能影响原版 Anima v1.0 及其衍生模型上训练的 LoRA。应改成准确的模型档名称，按具体 LoRA 做对照。该提醒不是证明所有旧 LoRA 都已失效。
+2. 当前服务模型清单里没有旧流程使用的 Anima/anima_baseV10.safetensors。不能把现有“原版”按钮理解为正在加载原始 base 权重。
+3. 原版 28-block LLLite 权重与 40-block Anima 2.9B 不匹配，当前插件源码已有明确拒绝。应在选择器/控制开关旁提前表达，避免排队后才失败。不要用更强提示词掩盖结构不兼容。
+4. 当前原生 AnimaLLLiteApply 已注册，C 站新工作流也使用它。未来可评估减少独立 LLLite 插件依赖，但要验证遮罩、尺寸、wrapper、模型架构，不能直接替换节点名。
+5. CLIPLoader 保存的 type=stable_diffusion 不能单独作为 Anima 配置错误证据；加载器可能按权重自动识别。本轮没有把它列为缺陷。
+
+六、插件与运行效率
+
+P1：恢复可验证的日常插件配置。
+当前实际服务未使用 production 白名单，额外注册了 WanVideoWrapper、VideoHelperSuite、llm_party、Mira、IPAdapter、AlekPet、civitai-toolkit 等模块。
+建议日常图像生产使用既有 24 插件 profile；视频、维护、实验使用独立配置。先检查当前未保存工作流与工具依赖，在空队列维护窗口切换，保留原启动方式。不能仅依据本轮 18 个文件没引用某节点就卸载插件，OpenPose Studio 和 prompt-assistant 等也可能作为 UI 工具使用。
+潜在收益是减少启动导入、前端资源和冲突面；没有完成冷启动、浏览器或显存 A/B，不能承诺具体提升百分比。
+
+P1：按工作阶段释放显存。
+三套生产流都有串联到最终预览/保存前的 VRAMCleanup，当前 offload_model=true、offload_cache=true。源码每次调用 unload_all_models、gc.collect、soft_empty_cache，并以时间戳保证重新执行。
+这适合单张结束或模型切换；同模型连续试词时可能导致每张重复加载。
+建议“连续试词”保留模型驻留，“切模型/结束工作”释放；保留独立 99 释放入口。实测冷/热两种情形，再决定默认值。跨模型公平比较仍按既有 MODEL_COMPARISON_RUNBOOK 清空；不要把模型比较的卸载纪律套成所有日常批量的默认动作。
+
+P2：保留 UAP 总入口，提供简洁日常视图。
+UAP v2 功能齐全但定义体量大。日常视图优先显示模型、最终提示词、尺寸、种子、采样档、LoRA、结果；反推、ControlNet、SAM3、二放折叠为可选工具。
+复用现有三套生产流和日常控制台，避免复制更多长期维护分叉。发布更新应有统一模板来源与静态连线校验，但不为这件事新建大型工作流框架。
+
+P2：增加生成记录。
+现有 SaveImage 自带 PNG workflow/prompt 元数据，不是“没有元数据”。补充易读取的本次最终正负向、实际模型版本/哈希、LoRA 与强度、触发词、随机结果、采样参数和可选处理开关即可。若确实需要 Civitai 自动识别，再隔离评估 Image Saver；不是第一批必装依赖。
+
+七、旧工作流的可用性
+
+对当前 object_info 模型下拉清单的静态检查找到 17 处不在当前可选清单中的加载器引用，分布于 7 份旧/回退/参考工作流：三份 Anima 推荐旧流、两份 Krea2 旧流、UAP v1、旧高清整合流。
+例：animayume_v10、anima_baseV10、qwen3vl_4b_heretic_fp8、旧 Krea2 GGUF。部分位于被禁用或旁路的父分支内，不能把子节点 mode=0 当作当前必执行。
+旧高清整合流另缺 GetImageSize+、SimpleMathDual+、LoaderGGUF 三类后端节点。rgthree 的 Label/Fast Groups 等前端节点不在 object_info 是正常现象，未计为缺插件。
+
+建议把旧流明确标为“历史参考/需要迁移”，保留原文件。UAP v1 也不应再被无条件描述为随时可用的完整回退：它的模型引用与当前模型集合已经不同。更新状态表时区分“节点存在”“模型存在”“当前分支实跑通过”。
+
+八、C 站成熟方案的实际参考结果
+
+2026-10-03 通过公开 Civitai API 读取页面资料。下载量只作采用规模的线索，不代表画质认证。
+
+1. Legendaer — Anima Workflows V9.0
+   https://civitai.com/models/2426853
+   查询快照：33,620 下载，940 赞。
+   下载 ZIP SHA256 与页面声明一致，解析 5 份 JSON。
+   Basic/Standard/Advanced/独立 Detailer 明确分层；Advanced 中有触发词 Toggle、最终字符串处理、Image Saver 元数据、可选区域提示词和 TIPO 版本。
+   可以借鉴：层级入口、触发词控制、提示词冻结/记录、细化分离。
+   注意：页面写明使用 ComfyUI 0.35.0；本机报告 0.33.0，部分节点未安装，不能照搬高级包。其 30 步/CFG4/er_sde/simple 可作 Anima 对照组，不是本机 AnimaYume 的已验证最优参数。
+
+2. SAN0 — Anima Simple T2I v3.2
+   https://civitai.com/models/2576647
+   查询快照：5,222 下载，194 赞。
+   ZIP 哈希一致，解析两种二放 JSON。
+   明确分开 Ultimate SD Upscale 与 Hires 二采样：作者报告两者对 denoise 和放大尺度敏感性不同。
+   可以借鉴：二放策略分开、底图/最终图比较、元数据完整。
+   作者的 0.65 denoise、1.5 倍等经验仅是候选实验条件；高 denoise 可能改变人物与画风，不能当成保真默认。
+
+3. LatentHeart — Krea2 Image-to-Prompt / Prompt Enhancer / 4K
+   https://civitai.com/models/2738703
+   查询快照：35,353 下载，812 赞。
+   JSON 哈希一致，根图 113 节点，含子图共 167 节点。
+   实际有三种提示词来源、TextGenerate、两次采样、SeedVR2、Civitai 保存组件。
+   可以借鉴：直接输入/改写/参考图三模式、最终输出汇合与生成参数记录。
+   其中附带的解限宣传与补丁不作为本轮优化建议。SeedVR2、RES4LYF 等带来的依赖和资源成本也不能忽略。
+
+4. Krea2 simple gen workflow for high quality realism
+   https://civitai.com/models/2749367
+   查询快照：12,224 下载，222 赞。
+   ZIP 哈希一致，解析两份 JSON，采用 ClownsharKSampler_Beta 双采样及全 Turbo 分支。
+   可以借鉴：快速预览/精修两档；作者也指出动漫等场景可能适合旁路第二次采样。
+   不应仅因“高质量”标题就统一换采样器或增加全套 RES4LYF。
+
+5. N0VA39 Anima All in One 与 lonecatone23 Krea2 Pro Grade
+   https://civitai.com/models/2613172
+   https://civitai.com/models/2726952
+   页面资料可读，下载请求返回 HTML，未得到可验证的工作流 JSON。因此仅参考页面描述，未把它们计入实际结构比较，也未执行或安装其节点。
+
+官方/作者交叉验证：
+   Anima 官方模型卡：https://huggingface.co/circlestone-labs/Anima
+   Anima 2.9B 模型卡：https://huggingface.co/Gazingstars123/Anima-2.9B
+   AnimaYume 作者页：https://civitai.com/models/2385278
+   DaSiWa 作者页：https://civitai.com/models/2760803
+   Comfy-Org Krea2 模型与官方模板：https://huggingface.co/Comfy-Org/Krea-2
+
+九、建议实施顺序与验收
+
+第一阶段：提示词正确性与可见性。
+  保护清理器中的模型特殊词和字面量；显示唯一最终提示词；补 LoRA 触发词缺失提醒及可撤销应用；提示 Krea2 CFG=1 的负向状态；对齐“原版”入口的实际模型名称。
+  完成标准：文本探针保持精确内容；独立中性 QA 工作流验证应用/撤销；实际导出的 API 图与最终文本一致；正式提示词、工作流和资料库没有非预期写入。
+
+第二阶段：运行配置与批量效率。
+  复核 production profile；同模型连跑保留模型、切模型再释放；标记旧模型引用；为 2.9B 控制分支显示兼容性状态。
+  完成标准：当前主生产流依赖齐全，队列空时切换与回退可行；相同模型/提示/种子/尺寸下测冷启动和连续运行，报告具体耗时与峰值显存，不承诺未经验证的加速。
+
+第三阶段：小规模图像对照。
+  先选择最常用一个模型。建议 4 个中性场景 × 3 个固定种子 × 2 种提示词方案 = 24 张；一次只改变提示词方案。
+  场景：单人全身、两位成人属性绑定、明确左右关系、复杂背景与照明。
+  评估：事实遵从、角色一致性、构图、手脸缺陷、风格保持、耗时。把有无 score tags、长短描述、二放、采样器分别列为后续独立变量，不混在一组里。
+  生图验收用新建隔离工作流与中性样例，归档 API prompt/history/图片和参数。本轮未运行该实验，不宣称提示词或采样改动已经提升画质。
+
+新增插件的顺序：
+  第一阶段无需新增插件。
+  TIPO：只在确有标签扩写需求时隔离评估。
+  AttentionCouple/区域提示词：仅在多角色空间绑定持续失败后评估兼容性。
+  Image Saver：需要 C 站自动识别元数据时再评估。
+  SeedVR2/额外采样包：已有 OmniSR/UltimateSDUpscale/局部精修覆盖基础需求，等待受控对照显示真实收益。
+
+十、证据文件
+
+本报告所在目录：G:/ComfyUI-aki-v3/benchmark_reports/2026-10-03_workflow_prompt_audit/
+  workflow_inventory.json：工作流节点/连线/模式/文件 SHA256，文本内容只保存长度与摘要。
+  live_snapshot.json：当前服务节点、扩展、系统、队列读取快照。
+  dependency_checks.json：模型名称和插件来源比对。
+  formatter_probe.json：当前格式化源码、中性输入输出与源文件 SHA256。
+  references/selected_references.json：公开工作流页面、版本、统计、下载校验和结构摘要。
+  references/：公开 API/模型卡原文及下载的工作流，仅供参考，未导入生产。
+  final_guard.json：结束时工作流与探针源码的哈希、监听进程和队列核验。
+
+结论边界：已证实的是连线、参数、可选模型清单、当前服务加载范围和文本清理行为。界面误操作率、浏览器性能、LoRA 成图一致性、采样/提示词画质收益仍需后续隔离验收。当前审计结果不能替代生图实测。

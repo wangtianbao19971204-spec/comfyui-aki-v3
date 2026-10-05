@@ -1,0 +1,2676 @@
+{
+  "schema": 1,
+  "role": "historical_reference_not_deployable",
+  "files": [
+    {
+      "source": "anima_lora_forge/profiles/alicia_bell_calibration_400.json",
+      "path": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_calibration_400.json",
+      "sha256": "a07a29a23cffff2f73348a047d95018502f90fe45df5d3101d4f6e0f0752ccc1",
+      "role": "configuration"
+    },
+    {
+      "source": "anima_lora_forge/profiles/alicia_bell_morning_star_400.json",
+      "path": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_400.json",
+      "sha256": "1c3ed193b89d874d7ce75d8995fdeb85697a952662e58fbd9db2d468c35c28e6",
+      "role": "configuration"
+    },
+    {
+      "source": "anima_lora_forge/profiles/alicia_bell_morning_star_anima29_400.json",
+      "path": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_anima29_400.json",
+      "sha256": "f684756db3969a2bf21b80cc0c59aa6c23d9b65175967bdc0a84c8fa7b6a73c8",
+      "role": "configuration"
+    },
+    {
+      "source": "anima_lora_forge/profiles/alicia_bell_morning_star_anima29_smoke_75.json",
+      "path": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_anima29_smoke_75.json",
+      "sha256": "c05af66c42d96c7432cd77ef3bfd70f03ec148e8980029bf01d3b5ec973b224f",
+      "role": "configuration"
+    },
+    {
+      "source": "anima_lora_forge/profiles/alicia_bell_morning_star_refine_175.json",
+      "path": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_refine_175.json",
+      "sha256": "91459d076547fbba4a710b49f262bc50c22644ccabf3d43d6d8756ac092c97ac",
+      "role": "configuration"
+    },
+    {
+      "source": "anima_lora_forge/profiles/alicia_bell_morning_star_smoke_50.json",
+      "path": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_smoke_50.json",
+      "sha256": "42f4f4e52291ca827d763df8d1a4a893c7ef614173b83e70b43be8365fd33e64",
+      "role": "configuration"
+    },
+    {
+      "source": "anima_lora_forge/profiles/alicia_bell_morning_star_v2_correction_100.json",
+      "path": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_v2_correction_100.json",
+      "sha256": "9ec44695bf4ff32404f127ef9695a1d65fe6a9e11b5d563b49e7bef1bbb273ac",
+      "role": "configuration"
+    },
+    {
+      "source": "anima_lora_forge/profiles/alicia_bell_morning_star_v2_correction_80.json",
+      "path": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_v2_correction_80.json",
+      "sha256": "3194898ec7a85cc082877f1d84d7f8472511488a06358e2766786f2bc91e681f",
+      "role": "configuration"
+    },
+    {
+      "source": "anima_lora_forge/profiles/alicia_bell_morning_star_v3_bow_bundle_40.json",
+      "path": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_v3_bow_bundle_40.json",
+      "sha256": "4d1e0cad3e01f325cee0b544db457348d6c7d557df1cc44b5284387c255b7949",
+      "role": "configuration"
+    },
+    {
+      "source": "anima_lora_forge/profiles/alicia_bell_morning_star_v3_bow_bundle_stress_80.json",
+      "path": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_v3_bow_bundle_stress_80.json",
+      "sha256": "2e9b3c42ab137b59e6ba43b46de052b579b969d0faa4667a5d2d0640eb4d3894",
+      "role": "configuration"
+    },
+    {
+      "source": "anima_lora_forge/profiles/alicia_bell_morning_star_v3_bow_pilot_40.json",
+      "path": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_v3_bow_pilot_40.json",
+      "sha256": "44cd8c4849da3e9f525116ef8e5014dbc0cf30e41eaf6ef7527f6ba2029a0b8b",
+      "role": "configuration"
+    },
+    {
+      "source": "anima_lora_forge/profiles/alicia_bell_ordinary_400.json",
+      "path": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_ordinary_400.json",
+      "sha256": "989a3441a0207e71f23f3fa82f2916b84171b8c024c2b2ed048dde57153c9ad2",
+      "role": "configuration"
+    },
+    {
+      "source": "anima_lora_forge/profiles/alicia_bell_ordinary_smoke_50.json",
+      "path": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_ordinary_smoke_50.json",
+      "sha256": "1e6b56ee385392063dc5aacf64b769f4668783b27a776fe57a75be4898608f62",
+      "role": "configuration"
+    },
+    {
+      "source": "anima_lora_forge/profiles/alicia_bell_smoke.json",
+      "path": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_smoke.json",
+      "sha256": "e3a5879334ed9d29571c4df13719ee9775a609d702ed32775cfe94e57e887495",
+      "role": "configuration"
+    },
+    {
+      "source": "anima_lora_forge/profiles/rosasha.json",
+      "path": "docs/technical/archive/anima_lora_forge/profiles/rosasha.json",
+      "sha256": "5b6fa39af93daf17c4d47d522b0596232158265ac10662cb835e1abf50606be7",
+      "role": "configuration"
+    },
+    {
+      "source": "anima_lora_forge/profiles/rosasha_calibration_400.json",
+      "path": "docs/technical/archive/anima_lora_forge/profiles/rosasha_calibration_400.json",
+      "sha256": "6befc884f83cbec371e0be228e5aefa3087e436a2c191574e0b7fffd6b443a4e",
+      "role": "configuration"
+    },
+    {
+      "source": "anima_lora_forge/profiles/rosasha_smoke.json",
+      "path": "docs/technical/archive/anima_lora_forge/profiles/rosasha_smoke.json",
+      "sha256": "c860bb5fde67145c64c5a1a2be0cab5bbadc1c65ae6685095cc062d433c73993",
+      "role": "configuration"
+    },
+    {
+      "source": "anima_lora_forge/releases/alicia_bell_morning_star_anima29_r32_v1/README.md",
+      "path": "docs/technical/archive/anima_lora_forge/releases/alicia_bell_morning_star_anima29_r32_v1/README.md",
+      "sha256": "49db269ee19223a458a14ed090401c324c8bb01694d1a80ba0e09e3733c91816",
+      "role": "documentation"
+    },
+    {
+      "source": "anima_lora_forge/releases/alicia_bell_morning_star_anima29_r32_v1/evaluation_report.md",
+      "path": "docs/technical/archive/anima_lora_forge/releases/alicia_bell_morning_star_anima29_r32_v1/evaluation_report.md",
+      "sha256": "3f5371e3c9cd483e519706d90a11da08a061d3a02e3fbbc3e873ba353c963c66",
+      "role": "documentation"
+    },
+    {
+      "source": "anima_lora_forge/releases/alicia_bell_morning_star_anima29_r32_v1/prompt_pack.txt",
+      "path": "docs/technical/archive/anima_lora_forge/releases/alicia_bell_morning_star_anima29_r32_v1/prompt_pack.txt",
+      "sha256": "e83d37740de94ec369d3163e79d5f53cdd2b06d225b7f9a166531f3d0316185d",
+      "role": "documentation"
+    },
+    {
+      "source": "anima_lora_forge/releases/alicia_bell_morning_star_anima29_r32_v1/weight_audit.json",
+      "path": "docs/technical/archive/anima_lora_forge/releases/alicia_bell_morning_star_anima29_r32_v1/weight_audit.json",
+      "sha256": "3d27b62bfd49aa7ce8d541e0074b3578d0d1af1ca00ba42a74f52ffc52021a95",
+      "role": "evidence"
+    },
+    {
+      "source": "anima_lora_forge/releases/alicia_bell_morning_star_anima_r32_v1/README.md",
+      "path": "docs/technical/archive/anima_lora_forge/releases/alicia_bell_morning_star_anima_r32_v1/README.md",
+      "sha256": "658ff294e26d05e56b60b3cd56b657a1505d8fbbea6eb6d2dd5e88478084afdd",
+      "role": "documentation"
+    },
+    {
+      "source": "anima_lora_forge/releases/alicia_bell_morning_star_anima_r32_v1/evaluation_report.md",
+      "path": "docs/technical/archive/anima_lora_forge/releases/alicia_bell_morning_star_anima_r32_v1/evaluation_report.md",
+      "sha256": "9410d66081ece9fd44b3543b26b0cd69b83deba455df9d09c18602f42f6571d5",
+      "role": "documentation"
+    },
+    {
+      "source": "anima_lora_forge/releases/alicia_bell_morning_star_anima_r32_v1/prompt_pack.txt",
+      "path": "docs/technical/archive/anima_lora_forge/releases/alicia_bell_morning_star_anima_r32_v1/prompt_pack.txt",
+      "sha256": "338833ed02d2fec9843ed88b0883e0dc688630edef607a375b59a3bb6f068edf",
+      "role": "documentation"
+    },
+    {
+      "source": "anima_lora_forge/releases/alicia_bell_morning_star_anima_r32_v1/weight_audit.json",
+      "path": "docs/technical/archive/anima_lora_forge/releases/alicia_bell_morning_star_anima_r32_v1/weight_audit.json",
+      "sha256": "920fd59751cd37f43c9168d74b8ebf9c27a3ee6ac9936934de5d31d947bf88ee",
+      "role": "evidence"
+    },
+    {
+      "source": "anima_lora_forge/releases/alicia_bell_ordinary_anima_r32_v1/README.md",
+      "path": "docs/technical/archive/anima_lora_forge/releases/alicia_bell_ordinary_anima_r32_v1/README.md",
+      "sha256": "fbaacf5697b13cb00921dd2ee9e3d672c3ad5c75ac2b08ce930deb51d4ba18d1",
+      "role": "documentation"
+    },
+    {
+      "source": "anima_lora_forge/releases/alicia_bell_ordinary_anima_r32_v1/evaluation_report.md",
+      "path": "docs/technical/archive/anima_lora_forge/releases/alicia_bell_ordinary_anima_r32_v1/evaluation_report.md",
+      "sha256": "dc8448355decfecb77b341ab20887103f7d4b4fde08c3c35029adfd2f31fcbcc",
+      "role": "documentation"
+    },
+    {
+      "source": "anima_lora_forge/releases/alicia_bell_ordinary_anima_r32_v1/prompt_pack.txt",
+      "path": "docs/technical/archive/anima_lora_forge/releases/alicia_bell_ordinary_anima_r32_v1/prompt_pack.txt",
+      "sha256": "10158cfa95d9d7091c199ba4ac350c767de435b6e7e1fb3dec4f418b53f7475f",
+      "role": "documentation"
+    },
+    {
+      "source": "anima_lora_forge/releases/alicia_bell_ordinary_anima_r32_v1/weight_audit.json",
+      "path": "docs/technical/archive/anima_lora_forge/releases/alicia_bell_ordinary_anima_r32_v1/weight_audit.json",
+      "sha256": "b729ef726187401feabf0332b85a5310af27786ed07fda93b455ce3ac4c60e81",
+      "role": "evidence"
+    },
+    {
+      "source": "anima_lora_forge/releases/rosasha_anima_r32_v1/README.md",
+      "path": "docs/technical/archive/anima_lora_forge/releases/rosasha_anima_r32_v1/README.md",
+      "sha256": "02fffc97fb0ab27f0e7c21b64f32929603a63dded46918b7ab8be3b76e5c4590",
+      "role": "documentation"
+    },
+    {
+      "source": "anima_lora_forge/releases/rosasha_anima_r32_v1/evaluation_report.md",
+      "path": "docs/technical/archive/anima_lora_forge/releases/rosasha_anima_r32_v1/evaluation_report.md",
+      "sha256": "81f4d6ce7258b82d4f6ed94deceecca725b973a244e1ac5fa53c9c4278c0d490",
+      "role": "documentation"
+    },
+    {
+      "source": "anima_lora_forge/releases/rosasha_anima_r32_v1/prompt_pack.txt",
+      "path": "docs/technical/archive/anima_lora_forge/releases/rosasha_anima_r32_v1/prompt_pack.txt",
+      "sha256": "bbb3e1d419a7d8736e8e4aafddd5ee8a3025835c963f233c4f800fdd602e2fcd",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-08-24_anima_anima29_krea2/benchmark_config.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/benchmark_config.json",
+      "sha256": "ddbdb73d3fa769b5c0ab901f6e7146a7d635fe9edebc2822d222dbdf4ecedfa3",
+      "role": "configuration"
+    },
+    {
+      "source": "benchmark_reports/2026-08-24_anima_anima29_krea2/report/三模型详细对比报告.md",
+      "path": "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/report/三模型详细对比报告.md",
+      "sha256": "28c8b6a6e6d1ef2a2a8301c577cb42f99585414fb226f80689b915e550a0aefa",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/build_anima29_workflow.ps1",
+      "path": "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/build_anima29_workflow.ps1",
+      "sha256": "8d8c74f50310ca549c6c6e89c6972a79b6f065cbef14e96442238b8f79680213",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/build_final_report.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/build_final_report.py",
+      "sha256": "7789669d2eb724f2655a835b5bd617ab8b97536ca83c677af069c70ac1a03f36",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/build_manual_scores_29.ps1",
+      "path": "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/build_manual_scores_29.ps1",
+      "sha256": "c6d785b3c3172009414f060ef06874f9655f5cfcdc46dece6ffcc49d2f13628f",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/build_report_assets.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/build_report_assets.py",
+      "sha256": "8dbb4adf0102f156f7213cf8a34cd43127356c55cd77525967d87a03679f725c",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/make_contact_sheets.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/make_contact_sheets.py",
+      "sha256": "7e7b54b4173818b13a199736661bf70bc2a2a5102cc0032ede21f1ef49f69edb",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/prepare_reused_baselines.ps1",
+      "path": "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/prepare_reused_baselines.ps1",
+      "sha256": "2e2923ee820124b4c02c3354a1e5ba98bb4d43b69f5ba33bd6019a88f92c4980",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/render_report.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/render_report.py",
+      "sha256": "5166b60e6f2f4d6a0d516582323212d6f85cbffcd72c6fc864b8d3ccd3577e0b",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/run_benchmark.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/run_benchmark.py",
+      "sha256": "1a53dff59d911ffe8525b440ab2f362a3c8c882a82a136477a3b80434bba6402",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/run_length_boundary.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/run_length_boundary.py",
+      "sha256": "9dcd5f86c83a43e3955774fe7c4c00e202468b7e26bd7b2794485401c2938825",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/run_length_boundary_controls.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/run_length_boundary_controls.py",
+      "sha256": "cfea6a4f9f5add79445a7cf53da2dc4e4b8ac77be9dcb79d63c4fc1e5b67b2a0",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/unload_all_models.ps1",
+      "path": "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/unload_all_models.ps1",
+      "sha256": "a926205bb51064b9dc411acaa18d0217096176fc3a3d1d577e2631c07f252702",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-13_tag_import/Tag导入预览与结果交付.md",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-13_tag_import/Tag导入预览与结果交付.md",
+      "sha256": "ad74d7c20deae9dbcb3d05e24c2bcc13fb067ffea93ea1a4b3e0875a2c14793a",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-13_tag_import/acceptance_results.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-13_tag_import/acceptance_results.json",
+      "sha256": "f67ae011395cc619f03bdb9acf071adaaf98ffb63cb6c566ca4c0299d351f3ac",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-13_tag_import/tag_import_ui.test.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-13_tag_import/tag_import_ui.test.mjs",
+      "sha256": "7acb856e8bb30c8f863fc6d3fc738d615f86c70633a75a5f886216875e332dfc",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-13_tag_import/test_plan_staged.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-13_tag_import/test_plan_staged.py",
+      "sha256": "023b5444253e873c3e64d583fae360330065f0b8097352a70384caefb002ea89",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-13_tag_import/test_tag_http.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-13_tag_import/test_tag_http.py",
+      "sha256": "6cb91f4262e86481808e23dd5545b070107231600f62f2c8c4d52abb300dd4f9",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-15_tag_folder_classification/repo_src/NovelAI-Tag-main/LICENSE",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-15_tag_folder_classification/repo_src/NovelAI-Tag-main/LICENSE",
+      "sha256": "865d0cd16d7aaa581483636572731b92efcf2997d5d9246f689299cff10f8aa3",
+      "role": "license"
+    },
+    {
+      "source": "benchmark_reports/2026-09-15_tag_folder_classification/repo_src/NovelAI-Tag-main/tools/codex_update_match.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-15_tag_folder_classification/repo_src/NovelAI-Tag-main/tools/codex_update_match.py",
+      "sha256": "5e63a3cac2ebb35702919622690b1a1494f00d3252eb12755b92c5be2f030828",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-15_tag_folder_classification/repo_src/NovelAI-Tag-main/tools/convert.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-15_tag_folder_classification/repo_src/NovelAI-Tag-main/tools/convert.py",
+      "sha256": "48b343b5296c9d5656fbedb801583532530a6ff2ffbbd9ceb92e5aaa724ce31f",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-15_tag_folder_classification/repo_src/NovelAI-Tag-main/tools/migrate_suozhang_char_prompts.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-15_tag_folder_classification/repo_src/NovelAI-Tag-main/tools/migrate_suozhang_char_prompts.py",
+      "sha256": "f6ea6bd39325b1efd67231f85d5e565287c77c5d7fbaea889bfaa1e1aa9f0f53",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-20_consecutive_motion_recall/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-20_consecutive_motion_recall/context_parent_rules.py",
+      "sha256": "e52835869579c5b5897c2f65ecb092725ad6d011b6fee6cb123633183e46e58e",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-20_consecutive_named_contexts/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-20_consecutive_named_contexts/context_parent_rules.py",
+      "sha256": "d4a4ee692a3ade909152e61f959910c471bdd596d807cd17514b9d54d4ec7855",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-20_consecutive_object_contexts/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-20_consecutive_object_contexts/context_parent_rules.py",
+      "sha256": "d97a48146fc439badfff6e0d7e49a292cdef7ebb291c87f15c3442cce357ee24",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-20_consecutive_parent_contexts/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-20_consecutive_parent_contexts/context_parent_rules.py",
+      "sha256": "be2e713303b7d5aa1b433824608be9bb2ca1b00e86a57efab711586196f7e02d",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-20_taxonomy_audit/verify_filter_pool.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-20_taxonomy_audit/verify_filter_pool.py",
+      "sha256": "e0b579748b19e8059c9bc427d24e88a2b63a1f32de77e636b55793dcc08333d6",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-20_topic_drilldown/verify_backend.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-20_topic_drilldown/verify_backend.py",
+      "sha256": "0ff4747b5ef4b42372dca7c48d8747155d0b3a1f85f4ffb746d330555474c378",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_action_scope/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_action_scope/context_parent_rules.py",
+      "sha256": "2a27ca8efb8cdeaab9a5beeae5053bcbf90c147026c95c8c14626bbbfb4e91b6",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_attribute_relations/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_attribute_relations/context_parent_rules.py",
+      "sha256": "b9e007a809bc36e737e27e4057fe0abcb4767dec97d5a46c619e85aae7d5072c",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_camera_recall/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_camera_recall/context_parent_rules.py",
+      "sha256": "a30578f225746e49b7fe571ed70a2189e8b76a1b0673410f2f1070fbccc3bbf4",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_context_completion/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_context_completion/context_parent_rules.py",
+      "sha256": "87d4abc624054802764702d8a00c9e6a8bb6064a590dc2455d1905354e83233e",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_context_precision/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_context_precision/context_parent_rules.py",
+      "sha256": "d0ba77a2814ecc610ca6c32d9ef4c2bf19126dbef037de4ac8c3a236cddd1f6a",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_core_recall/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_core_recall/context_parent_rules.py",
+      "sha256": "b1347317c65c89cb107d5f4c9d9ca259c0c4dd83e9c27fb2dee5d08e8075ca33",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_environment_props/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_environment_props/context_parent_rules.py",
+      "sha256": "fb2add38d931ca24cfa51fe36dce7e1273414332008e7b37ae72ab1e2e9d85c0",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_evidence_recall/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_evidence_recall/context_parent_rules.py",
+      "sha256": "1281a69e907ea9fe869e5bd6b2f978f7ff234cb8ec2a36331348d100c87d145b",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_language_contexts/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_language_contexts/context_parent_rules.py",
+      "sha256": "51dd809259ae620023e3fc4746c361ae604e3c5a24ce9e3d43e63a7545155b45",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_literal_core/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_literal_core/context_parent_rules.py",
+      "sha256": "539802917ac336a9d22312b3202b8f0642263d02d4705e0e67837897a7a15354",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_material_contexts/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_material_contexts/context_parent_rules.py",
+      "sha256": "14d9fc5b9c3f9c29c502f5f2560ec486719a39bbc65d438e5d752cf12a97f491",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_media_metaphors/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_media_metaphors/context_parent_rules.py",
+      "sha256": "ceae9056c868963b25d95677342ad07ab2cb7ab87aa794be211395e5b5741f6c",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_object_boundaries/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_object_boundaries/context_parent_rules.py",
+      "sha256": "60ae60f6aff111130dc87902dc47109f35e2190a480af210ed086cfd1d4c96b4",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_prose_recall/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_prose_recall/context_parent_rules.py",
+      "sha256": "457ce830b77d71f512b75f7fbb035a97b922a43f50cb9135a20842e0a2e0b021",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_prose_scene/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_prose_scene/context_parent_rules.py",
+      "sha256": "f0fad86c44e0184d7fd5596bd2be3cce12bd4c1c05477dba97b38181bca35cc4",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_relation_recall/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_relation_recall/context_parent_rules.py",
+      "sha256": "79e6dc7ee1ccbd3851e2902fcebd63caf9c62fbbbcbce1c6ae26923ee187eb28",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_role_scene/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_role_scene/context_parent_rules.py",
+      "sha256": "06a686402f2e41a5391fdc963b8d6d06cb4981853895e91aafc1a99702649470",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_scene_recall/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_scene_recall/context_parent_rules.py",
+      "sha256": "f29bdb0cf66d6d044eb65ecec8c093039d64b607f9277801b04158608414c2fb",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_structured_recall/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_structured_recall/context_parent_rules.py",
+      "sha256": "da7896a26f0b9e02cc7162d112b411840670e6d29fc180256f8e559c49cf161e",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_subject_contexts/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_subject_contexts/context_parent_rules.py",
+      "sha256": "0de71088325a10ecdd1e0fd2057c0a91b969c28c3f454ad6e8345e5b1e222f14",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-21_consecutive_tag_guards/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-21_consecutive_tag_guards/context_parent_rules.py",
+      "sha256": "ff5ddef42e512134bd8d205eff60e33dc0aa295c3be00f7005e6e84e7e29c0e6",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-22_consecutive_animal_simile/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-22_consecutive_animal_simile/context_parent_rules.py",
+      "sha256": "c4e5092ceba28d3d69c02b6f80fbc078e0227370201898703d70803d786272a2",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-22_consecutive_bun_leg_lift/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-22_consecutive_bun_leg_lift/context_parent_rules.py",
+      "sha256": "8a15d89ef59f9974d669774eb6ec6276b06ed8f4406eb9b6c24f24d7c1dc7f46",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-22_consecutive_camera_holding/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-22_consecutive_camera_holding/context_parent_rules.py",
+      "sha256": "532a40f611bfdb15fd5b7606541c5ee3d5cc45f2ab0911fb5cba52fc6675387a",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-22_consecutive_creature_on_body/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-22_consecutive_creature_on_body/context_parent_rules.py",
+      "sha256": "9ab93957e53a6088eca58d6a7218d74b4a15046bf1fabe9026506ac9953e750b",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-22_consecutive_ears_tail_exposure/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-22_consecutive_ears_tail_exposure/context_parent_rules.py",
+      "sha256": "f042fdad416c9f8402a04fe1bc2927991b9753237b06f308c99506ac9c5bad71",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-22_consecutive_exposure_butterfly_fluid/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-22_consecutive_exposure_butterfly_fluid/context_parent_rules.py",
+      "sha256": "cc7532475f60b77bd4d3b0d6b9b713e6a917e1afb38cf40a0e97f8742207fadd",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-22_consecutive_exposure_guards/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-22_consecutive_exposure_guards/context_parent_rules.py",
+      "sha256": "c1093d1eb70c0ca51e7c68d457ecdc51565fdff2a0a901c929afe7402c1372ee",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-22_consecutive_identity_v/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-22_consecutive_identity_v/context_parent_rules.py",
+      "sha256": "f594226181902aa900f81c8adbb90419b100a019b3c167f2d1d6f84127cd84fa",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-22_consecutive_metaphor_guard/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-22_consecutive_metaphor_guard/context_parent_rules.py",
+      "sha256": "56633bfe56f404bb53ba548f2af4b548b3ae51124458404b68882329d1875909",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-22_consecutive_palette_fabric/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-22_consecutive_palette_fabric/context_parent_rules.py",
+      "sha256": "61cd7740097b53047ffc6aa7b5b3acb9f1863f771016d3574a5dc9634df0b94e",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-22_consecutive_reveal_nipples_names/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-22_consecutive_reveal_nipples_names/context_parent_rules.py",
+      "sha256": "7ac388dd3856e239f012bccf47d1fe8f7cc8d33f44d1b61a5e32b21fffc679f3",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-22_consecutive_reveal_verb/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-22_consecutive_reveal_verb/context_parent_rules.py",
+      "sha256": "e0f50f89afc4331a80f5a4e0ae7ef6ad667e6878e17b8b519030fc28daa3d9e7",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-22_consecutive_sword_art_title/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-22_consecutive_sword_art_title/context_parent_rules.py",
+      "sha256": "319f6cd5275d3297fc534262ce49a8ddeb9d10e0461af81c118525da1fef7865",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-22_consecutive_weapon_title_water/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-22_consecutive_weapon_title_water/context_parent_rules.py",
+      "sha256": "3f8f98eb730e5cfb671f0b96405f4f77c82c5424778d666ebe804df82fe43388",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-22_consecutive_weapon_token/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-22_consecutive_weapon_token/context_parent_rules.py",
+      "sha256": "4a3d5a422f6f39c70efe2d44378f6b2f9ecee20dd5ac5679c515adf0aa796427",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-22_consecutive_work_exposure_fluid/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-22_consecutive_work_exposure_fluid/context_parent_rules.py",
+      "sha256": "c61b7864145a044edae05da69a3d9fe0333631b5d6e588773dc36d7dd8260892",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-22_consecutive_work_title_recall/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-22_consecutive_work_title_recall/context_parent_rules.py",
+      "sha256": "94e7faca05df2c516c22305b63928fe898ce2d0fa872db0cbe170986d73ee2c6",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-23_consecutive_backlog_wave1/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-23_consecutive_backlog_wave1/context_parent_rules.py",
+      "sha256": "446d6cb73c02a7d66c77e41c517f20bc7851adcae8460235d4943ffeb880b0d0",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-23_consecutive_backlog_wave1/review_amendments.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-23_consecutive_backlog_wave1/review_amendments.py",
+      "sha256": "00f14218be29c4d4d45fcaf2b87f0f0668165d6855ae84836f47d17f94eb69e5",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-23_consecutive_backlog_wave1/verify_linkage_backend.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-23_consecutive_backlog_wave1/verify_linkage_backend.py",
+      "sha256": "05cb523270e503950381b73d51c317748b32fe72cfab2043889823d2f49d4f43",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-23_consecutive_depiction_guard/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-23_consecutive_depiction_guard/context_parent_rules.py",
+      "sha256": "1056de366cc25b7adcce9048e52f3c282df9f243cdf7b89b5c470211a8d65375",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-23_consecutive_phrase_object_guard/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-23_consecutive_phrase_object_guard/context_parent_rules.py",
+      "sha256": "2e7de16013965fa035f461e22bad710ae28ca423ab7c09fe1fefd8cdafb54a01",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-23_consecutive_round135_batch1_controlled_radius/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-23_consecutive_round135_batch1_controlled_radius/context_parent_rules.py",
+      "sha256": "cfc5e71133a8adf16b34125b9d0b9bfe7b4ea47b6ff2277a8b7e938b1f5f9d54",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-23_consecutive_round135_batch1_controlled_radius/historical_replay_amendment.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-23_consecutive_round135_batch1_controlled_radius/historical_replay_amendment.py",
+      "sha256": "b0832f112067d570be9ce7fbfa3a978a4eb43d7d62217e5fcaabad10f483d4cc",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-23_consecutive_round135_batch2_expression_gaze_pose_release/context_parent_rules.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-23_consecutive_round135_batch2_expression_gaze_pose_release/context_parent_rules.py",
+      "sha256": "c6dc44cd86502742a357a0ed93febd9426339496ccbaa997900f8e0f7d08b08c",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-23_consecutive_round135_batch2_expression_gaze_pose_release/transaction_common.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-23_consecutive_round135_batch2_expression_gaze_pose_release/transaction_common.py",
+      "sha256": "66204bbc0cc7bfa0cdd8ff296f8d552c461927c9fadb39dd6b300689fd1882ce",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-25_full_coverage/full_coverage_scan.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-25_full_coverage/full_coverage_scan.py",
+      "sha256": "5b5bde9f2205daac9adfdce4b08024e0ed13f30f9aa969a98b7b897c3a3b6347",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-25_full_coverage/g6_current_source_contract.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-25_full_coverage/g6_current_source_contract.py",
+      "sha256": "be5f31604908a5b90362264af1cca00ade10780ddade64020ef4b8273a05d389",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-25_full_coverage/release_gate.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-25_full_coverage/release_gate.py",
+      "sha256": "95c5116888d33004e1bd28ddca5a8251eb8fd1412baeed8eeb2b460c05d44c17",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-25_full_coverage/strict_replay.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-25_full_coverage/strict_replay.py",
+      "sha256": "c39d0aebdeb4e6319db75f0b8108505f72f4781d9f972c0a1f80df13c0f801ab",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-25_taxonomy_convergence/reviewer_backend_v3/verify_g6.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-25_taxonomy_convergence/reviewer_backend_v3/verify_g6.py",
+      "sha256": "829508da82f03fae967e912fe42dca8e2757975e91f87277d44f572c323499eb",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/adjudicate_scan.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/adjudicate_scan.py",
+      "sha256": "73f1439ac55eee74d6583286be8c78f552ba16b23dd178a1ebbd108a1c111445",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/audit_remaining.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/audit_remaining.py",
+      "sha256": "201edad375c4925c30ec66dc7ab242b52dc3888e93594baa4d4b7e4363ee1349",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/common.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/common.py",
+      "sha256": "181e74ec29906600207a3077c2196560aff16e78bdc7cdafc11eddd8cbae822a",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/finish.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/finish.py",
+      "sha256": "776da6f6216d540547f1bef900e451e8229d3f29e079c9bc76c22aa0c2b88ac5",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/historical_original.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/historical_original.py",
+      "sha256": "57d04124b0b4ea9309462942f278673e76a710b3b2834ef31069ef5526a2bd8d",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/live_acceptance.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/live_acceptance.py",
+      "sha256": "69594593d8d326e0cbe49dd20b9a42c252b92be5ef2d7c53c857203232fca17a",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/live_contract.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/live_contract.py",
+      "sha256": "2ee4335c6c951da64cbd63ad6825aa4727787b9b6fc9ff3ac9f3e60a96a157d4",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/preflight.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/preflight.py",
+      "sha256": "bdaf147d3cea4155e090fcb94592d6587cf67b143477740e939d357b96d4ba92",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/record_reviews.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/record_reviews.py",
+      "sha256": "803b0062d88edd5d2692b89b22b24c73c1f333426cd1b4ed3c353d8a82c90569",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/release.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/release.py",
+      "sha256": "2f2da4220b988cd8a63f4cb905f7193c38f81abc334e3b8490df6cd67f14a5b5",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/review_cues.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/review_cues.py",
+      "sha256": "c9b933d547f7b5d2c5579e71dd242a314c11ff27571f5e52aba09c985093b1c5",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/scan_stage.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/scan_stage.py",
+      "sha256": "7c76d3e3993cbd322be7189170bdb825ebcd5384bc1b7f70349032ba932796bf",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/show_candidates.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/show_candidates.py",
+      "sha256": "0a513e65cb51e5c9e0adcd5e3a91019345d9aa5410e9aef72a57d206d50e2871",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/snapshot.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/snapshot.py",
+      "sha256": "487114188901137a2630c5a71f29a34fae60b203eeab284ae83f98d068c603b0",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/stage.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/stage.py",
+      "sha256": "b60dfe4382485353588930fe1d04b3f4085d114dc863b9034ef968bb6a1b3676",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/stage_contract.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/stage_contract.py",
+      "sha256": "2927cb514619f25cb5d3183196012df7472dd4ccfe559a300f30f02bc0514523",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/verify_presence.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/verify_presence.py",
+      "sha256": "fc917830b8eaf25ef11fe9a6567bbaafaacf4df542fbc60842ac96a43fc8f48a",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_classification_closeout/分类收尾核对与写回报告.md",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_classification_closeout/分类收尾核对与写回报告.md",
+      "sha256": "c42cd6454a5caf01da39a81f4571b8b0aafbe755ee94c4df1ddf59546944b920",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_exclusion_review/review.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_exclusion_review/review.py",
+      "sha256": "671be4e5595b552ae613e8c463cf335c9f768565e3e9f6c9c4e336f4535e68c6",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/EXECUTION_STATE.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/EXECUTION_STATE.json",
+      "sha256": "3ed4ce710fe02d00ecfcc097adfbe8d4f71c7e0677594d5ab410a5ae96b9c8e2",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/acquire_web.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/acquire_web.py",
+      "sha256": "a935dcc78da261090dc55664857a850e7eaf8a1ee43542b49fbc2c8f053e15d6",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/audit_matching.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/audit_matching.py",
+      "sha256": "341f63a2b8344c544471295fd3a417c7778109ded4ac1a70e4bc7b894148ba08",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/compare_documents.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/compare_documents.py",
+      "sha256": "b5a5df4723c7f22d65475be73c6a584826145d09b9b13a82add9a07c92a0da45",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/continue_release.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/continue_release.py",
+      "sha256": "9d2b6e19fae64212b81039adce194811a409589ed849a2fe6f0028d52b75f7ec",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/db_fingerprint.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/db_fingerprint.py",
+      "sha256": "5ee78a75374f24311125116f7381fef862a94683a08c400b586987d7fcd1d409",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/extract_documents.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/extract_documents.py",
+      "sha256": "cdc5d106230b05578ebdf583fe13b68e9f53ccf44152b4f16df3603c7c5ded89",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/fetch_catalog.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/fetch_catalog.py",
+      "sha256": "e9f7056de8df5b6912802694d1a962ab47faa675da7fc1cb3295b850088d433d",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/fetch_images.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/fetch_images.py",
+      "sha256": "5cdefb0b0e9c0863b6f2aa524bf68b916e23ed322dafa3349ac64c85dade7782",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/finalize_stage.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/finalize_stage.py",
+      "sha256": "849f87c8ff92a921a39ac913325f807a72783de6ef3dec2e718f5a9f904dec4e",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/finish.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/finish.py",
+      "sha256": "6cf1035ba2ff265cce4b2333edbca80aace478b827d1146b2242f56c7b7e8800",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/historical_compatibility.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/historical_compatibility.py",
+      "sha256": "804dce68dec9c46eb51cc0da2880eac1533f9f4552f1597542dd0b7cdb64919c",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/image_link_validation.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/image_link_validation.json",
+      "sha256": "6d208e0614809fb02b5b7e073592911d61092ff514596eff27caf4352918299b",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/inspect_sources.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/inspect_sources.py",
+      "sha256": "7ef778811a069325f75c8e1f479ae2357a5cd50775458fc616423baf9d3c71e4",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/live_acceptance.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/live_acceptance.json",
+      "sha256": "539378e9db398a726c33890c04519745c412c4a19834b572dfb6a7f0bee54288",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/live_acceptance.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/live_acceptance.py",
+      "sha256": "54aea720d529a5a20b2afc88e3b291c458fe73b2daebe02928cd4c465296ebb3",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/live_contract.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/live_contract.py",
+      "sha256": "3c4c07a4aecd9d2227a04d24dd68aa66f288316ccb105e93115c2a4599ff5290",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/parse_documents.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/parse_documents.py",
+      "sha256": "c99ea89fb2474071a7e0b7409efefe99b0b034b1dc48ef7b90e6d9318f6e3693",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/preflight.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/preflight.py",
+      "sha256": "b4dca04e3b2ae683344df97c9bcc0c71076dda82fbdec1ff275640f09a869dba",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/prepare_stage.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/prepare_stage.py",
+      "sha256": "a08a6499cfc99c8b98200cc2ed505a0d6e19198b158b9ac035f661e68f757d3d",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/release.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/release.py",
+      "sha256": "06da907ac9ec7265a3df02bb79f530cf10af271f030633305a9e6f39f5e1b4f6",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/release_receipt.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/release_receipt.json",
+      "sha256": "951c7b078fda4adbb615d240e0250f13c0f3a71fad72491894f7e5c416db83ab",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/review_document_gaps.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/review_document_gaps.py",
+      "sha256": "c3c8da956c081f21d63f3943b501cc6a82edc11515a2fc584365cce083377cf4",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/scan_stage.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/scan_stage.py",
+      "sha256": "7b77377f7bb4eaf53d7e31838ed8bc7248fa38b7e7a9e2b82486e81fad8b661b",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/stage_contract.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/stage_contract.json",
+      "sha256": "c0a62d91da53c3807231343ac7fc8eae7dc2c7cb5afedb930eacb60a0f052295",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/stage_contract.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/stage_contract.py",
+      "sha256": "83b00c197f7f913469e888a96a644f385801a7db1508d1db887d0d7ac8126d10",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/stage_engine.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/stage_engine.py",
+      "sha256": "e9dca8c979474231b94a0e88cf1478a91a60868b8932f0c6be1cb35c67381b5c",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/update_common.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/update_common.py",
+      "sha256": "936eb900850fd87706e50501eff6ea297c68578cfb618fcc1a38ecc02b81c4ba",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/validate_documents.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/validate_documents.py",
+      "sha256": "8bdf995a1f6054e0791a01a6773443dd55976b1fed6f9969ae5375fd440f6aa4",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/validate_stage.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/validate_stage.py",
+      "sha256": "87807049f277d5248aadfc0cc1cb2b7d37f0326895770f4a85823e4339f4a5eb",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/verify_image_links.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/verify_image_links.py",
+      "sha256": "22f0b4c77df3972bb02d9461fdc92bfb803217d8886791ecb4ca9347389390d2",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/verify_scan_and_engine.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/verify_scan_and_engine.py",
+      "sha256": "ad5500d61a43cf9128014c2e20fe8a4bec21cf106ede632f396798f2f0c58c57",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_codex_update/全站资料更新与验收报告.md",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/全站资料更新与验收报告.md",
+      "sha256": "a718daed9e16b42d1ef8a23af8d859028f18651919e4154cb80f8294ddd238c0",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_llama_verified_writeback/common.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_llama_verified_writeback/common.py",
+      "sha256": "181e74ec29906600207a3077c2196560aff16e78bdc7cdafc11eddd8cbae822a",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_llama_verified_writeback/independent_review.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_llama_verified_writeback/independent_review.py",
+      "sha256": "8c082c913da48ad92eb6f05c37ad496d49ff4a969c82fd4cbea705cdcf5d0b9a",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_remaining_classification/EXECUTION_STATE.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_remaining_classification/EXECUTION_STATE.json",
+      "sha256": "ea44576ac9f345acf4b030a1ef80ad184c11350d24a3a0abd2454daea094aed0",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_remaining_classification/finish_review.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_remaining_classification/finish_review.py",
+      "sha256": "35ce3803f754789d7c8b9cd4932c2e7a31c67885d3d3f88683f8920defa626fa",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_remaining_classification/inventory.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_remaining_classification/inventory.py",
+      "sha256": "12909ef3eef195c314b4c419947a193f9fe7618b367415a0481edd24d0a61473",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_remaining_classification/inventory_summary.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_remaining_classification/inventory_summary.json",
+      "sha256": "66df001577261c923b37ad6b5c163fea271893c41205fb44dc7789f63c2f6db4",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_remaining_classification/source_review.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_remaining_classification/source_review.py",
+      "sha256": "a229013a0dd99ac3dc704453e33b392e0938ca5fe60da9f0f96950b0b933209b",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_remaining_classification/剩余分类核对报告.md",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_remaining_classification/剩余分类核对报告.md",
+      "sha256": "65d34a7bc179405bf53d78c2d20b536679ba71affe2c3f89b67f8c89873c8de6",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/EXECUTION_STATE.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/EXECUTION_STATE.json",
+      "sha256": "8dd68bb2c73477d235f1b6d26d0bdfe7fb3e11ccebb55c3ec633fc7746e91a52",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/approve_impact.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/approve_impact.py",
+      "sha256": "34aa1ee889d585968b2771a432cdbbc878fde7f016595e0bcc3f2616c575f62e",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/bind_amendments.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/bind_amendments.py",
+      "sha256": "8a615b2b0cb33978451ee2a3a57641dff0e5523b7a9fee92540fb3f93489ee4c",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/boundary_tests.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/boundary_tests.py",
+      "sha256": "c119034e6f0e0534215e928a45c46d8853006563785e29819e3ef0b31d60f070",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/build_candidate.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/build_candidate.py",
+      "sha256": "e749ef4bc4de5a51636f8e0ac7b0b660f8976973a0ec978813830304e134b6a2",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/common.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/common.py",
+      "sha256": "d67e1e81dea5d5640ff1921c1eac9668da3758d46a94ef65552a41a7362eb0f4",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/exact_contract_tests.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/exact_contract_tests.json",
+      "sha256": "20bce6bdc69294c159d7f8c268787e2d56ee4ac499fa884a3f35762c939d3dcf",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/finalize_revision.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/finalize_revision.py",
+      "sha256": "5dc4d536dd6f01d1b898f1d348968ca2371148f678149f7c2d03f75b6ed44a60",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/finish.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/finish.py",
+      "sha256": "4d36853be7c17faf5b883a46b19a9d5e18ae50e493ef150fa430df92e6d651b8",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/fixture_preflight.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/fixture_preflight.py",
+      "sha256": "057ec61f2e1685901a0ed47f2ff60a601064adebb078e192a5637a45c1bb3dd4",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/focused.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/focused.py",
+      "sha256": "dbc6740157f13479e130bba104ee5db06cc5cc3e7e79133e8237a9118b13595c",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/gate_final.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/gate_final.py",
+      "sha256": "c67b35e4c21b4919d3d5c03ea04fd5bdb57fd3855ed5d6bd38fa4bbd77d29ab3",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/live_cases.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/live_cases.py",
+      "sha256": "0fa48868d635958c7ddee34dfca62546f7a57133ee534d5ebc47e784daa99503",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/measure.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/measure.py",
+      "sha256": "3088688a6246dd1a2eba832d76a0057b43bd7db6ab635f62e721a58d7c716f0d",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/measure_final.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/measure_final.py",
+      "sha256": "d2cc0ff09da489eade173b055e643f2532e82ff10f3301cd3df62849bc2445dd",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/preflight.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/preflight.py",
+      "sha256": "5c469d6f09b45b17c901d6a1a82845de5025c863f57d79f1b7887435a2738014",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/prepare.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/prepare.py",
+      "sha256": "90123d61ddc077eb1e48b803a3e1e4d21b1e5e6bcdd3e6962b5f7334fbfbd42b",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/probe_workbench.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/probe_workbench.py",
+      "sha256": "0359bd9e643fcd0857dd5cf839ba6cd49e060dac7d966d02b2679e2833b9c9c1",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/release.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/release.py",
+      "sha256": "8b056e9dd37c19f437bee1e9b60c59454ca843d8bae9dc7c3d4dac022ad4b553",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/release_receipt.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/release_receipt.json",
+      "sha256": "e7752b80ccc2f8a543a42835a4877c19c504a0a265df7303c7389dc1ff6cce37",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/review_impact.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/review_impact.py",
+      "sha256": "01618f106eabd8e2d44ede19f5bc00648748c106265bced82ee7d4953148bc63",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/scan_stage.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/scan_stage.py",
+      "sha256": "8ab11529b1f092d0d5bd4c7f8a6c75ca1bafb92371433ef239e9082913170c84",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/supplement_historical116.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/supplement_historical116.py",
+      "sha256": "4393a04e23c4f1f197f89a3553d7fb3a33f3f00c3ef61dbb982ba146f13a1805",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/test_exact_contract.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/test_exact_contract.py",
+      "sha256": "cdd313a2bc3496a65fce37b65a21826657521a51dd2e382fa5ed9895c075ca2b",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/test_strict_replay.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/test_strict_replay.py",
+      "sha256": "34bba2a12b5d2a791e52e324acb2d6be24318282ce364d54f5304067159b15e4",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/tighten_candidate.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/tighten_candidate.py",
+      "sha256": "7b3b554711b0d96f5e16b287ff2fd796e75a08df34dff10362463b481b8eddaa",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/validate_data.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/validate_data.py",
+      "sha256": "18de29e232b8fb50cdf0fd71de58aa424d3412dc3c9140ff7999f10de39880f4",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-27_taxonomy_one_shot/集中修复与验收报告.md",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-27_taxonomy_one_shot/集中修复与验收报告.md",
+      "sha256": "85d65739fcf587d83a792c0a63e2f738a6f7bf86bb89e637a5f02e1c55da39f3",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_raven_increment/EXECUTION_STATE.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/EXECUTION_STATE.json",
+      "sha256": "4d6e9c130e1472c2e1a052aa68e13db0060ec3c02a995c84ae79558919266378",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_raven_increment/attempt1_rollback_receipt.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/attempt1_rollback_receipt.json",
+      "sha256": "52c3ba3dd8939d1247543a814ade430d0a382b493775c99ef0213cc001e8f153",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_raven_increment/audit_current_site.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/audit_current_site.py",
+      "sha256": "d00093b8f3649033762f05ba29a7adc08579a78f53b0ef50df6488f1b37e12f4",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_raven_increment/current_site_audit.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/current_site_audit.json",
+      "sha256": "5ccc29b9fbb118657162a60e115b54f5a6a204e18ed1f69cc01a9387602ca30a",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_raven_increment/fetch_images.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/fetch_images.py",
+      "sha256": "5cdefb0b0e9c0863b6f2aa524bf68b916e23ed322dafa3349ac64c85dade7782",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_raven_increment/inspect.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/inspect.py",
+      "sha256": "b6344764153ba37080f0f87e4dcf0f154f84a32e804dac20eb759ebbfdf523cd",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_raven_increment/live_acceptance.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/live_acceptance.json",
+      "sha256": "8fafae218207fbbf563f77de9f502114853a3299c5d8d627b0a62afa0a7698f8",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_raven_increment/live_acceptance.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/live_acceptance.py",
+      "sha256": "d892987d471c016639f3280d5107a0d33ea58dba5769b503fee0ebf1f1000387",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_raven_increment/preflight.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/preflight.py",
+      "sha256": "0e3682c63d24ab07474554da6eaabff8f3b110dc79c0854425e6b95fa77edd30",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_raven_increment/prepare_images.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/prepare_images.py",
+      "sha256": "37d067cf0a0b553e2910f7dcccc6ae3cd9d230f1cd127799a5a052abb26089cf",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_raven_increment/release.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/release.py",
+      "sha256": "a35c46c4aab34fb5dec3deb545d2537cdea115d2b11a18ff217f06ecebf07791",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_raven_increment/release_receipt.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/release_receipt.json",
+      "sha256": "490875f12bf0288bc92bbda27fd952827d3656fc39ac8ee3179b2e37a69b158a",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_raven_increment/stage_increment.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/stage_increment.py",
+      "sha256": "d9b10b2793d352d4f7b3e50f676b0f29b9e75618865b8f76c86ef58393a965b3",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_raven_increment/stage_validation.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/stage_validation.json",
+      "sha256": "c73dd236d07aba5406f5cea4f3c269105580312907b718c49f093aa0ea652756",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_raven_increment/validate_increment.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/validate_increment.py",
+      "sha256": "dc454c9ba595f5ad410b883753b4b7da07460f2557b45a3ca6cb1b949c205291",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_raven_increment/渡鸦增量导入与交付.md",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/渡鸦增量导入与交付.md",
+      "sha256": "82be70cc06892ce4767d28888d2f3c0e88bc60fe86e8d54105114b08eb8305b8",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_web_image_reaudit/AUDIT.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_web_image_reaudit/AUDIT.json",
+      "sha256": "6f606d8bbbf4646a40e8fe70fa3374c6385ea5be54680fd4af377250558ba007",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_web_image_reaudit/CURRENT_GAP.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_web_image_reaudit/CURRENT_GAP.json",
+      "sha256": "c467e6eb7681644b9fffd21317211e5604d55aea1f4b636d8423ef5241d70aac",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_web_image_reaudit/WEB_IMAGE_AUDIT.md",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_web_image_reaudit/WEB_IMAGE_AUDIT.md",
+      "sha256": "be6e77f22cc1c6e6388693134e8c7206ed45149ca32169baf9fce23b3bb8ecf4",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_web_image_reaudit/audit_web_images.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_web_image_reaudit/audit_web_images.py",
+      "sha256": "2a1ef8092166f4d123b5e9bdc9f0bf709236e00ff5e2487a11e6268e48bca0b9",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_web_image_reaudit/current_gap.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_web_image_reaudit/current_gap.py",
+      "sha256": "de3f8a36986b860b81d8bca4e3fefd8cb2b25bef6516b284d1810eeb945bb086",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_workflow_ui/canvas_theme/canvas_scope.test.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_workflow_ui/canvas_theme/canvas_scope.test.mjs",
+      "sha256": "d9182f2feb07325b88eca0cf466527fd4f3e69f4a99625aad505f0983730f3cf",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_workflow_ui/evidence/acceptance_recheck.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_workflow_ui/evidence/acceptance_recheck.json",
+      "sha256": "a8f822aad406d56e252adcbf3b782f4aabc065afbfe11c7efb844bcac40893d9",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_workflow_ui/tests/interactions.test.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_workflow_ui/tests/interactions.test.mjs",
+      "sha256": "fbb233733298043c71cc66e6ca3fe5c0b01f761be684300d6e3de9a557dfa87a",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_workflow_ui/unified_variants/identity.test.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_workflow_ui/unified_variants/identity.test.mjs",
+      "sha256": "effbba83acdd6dc53b8013336770cec281bb9a269bced19f67506d2e95167f23",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_workflow_ui/unified_variants/theme.test.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_workflow_ui/unified_variants/theme.test.mjs",
+      "sha256": "a6edd4d9a78fa4ea2dd70f014a147766e774ccb39096ddd41f0237680bca8348",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_workflow_ui/unified_variants/variants.test.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_workflow_ui/unified_variants/variants.test.mjs",
+      "sha256": "fa2fc450742e244872697db6d387cdc94501ea69401cb36ae7b9b394246f1417",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_workflow_ui/unified_variants/更新说明.md",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_workflow_ui/unified_variants/更新说明.md",
+      "sha256": "e1a5607c8061da98d7770d25990ec41605a0ac6e3c3abb181eeae7fa3e41889d",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-28_workflow_ui/交付说明.md",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-28_workflow_ui/交付说明.md",
+      "sha256": "8e0d5d1d02b8c5153118d680b3b600769845c10508017a7512a15ceffbc4d4ef",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/build_fixtures.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/build_fixtures.py",
+      "sha256": "86654fc70329c0bd2611af36103f62001adf47e1d334e69e94473274747f94c4",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/delivery_2026-10-01_215307/阶段交付说明.md",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/delivery_2026-10-01_215307/阶段交付说明.md",
+      "sha256": "234f2fe4e27a876d9f43c30401a081f76c88c43c2f40fb440afca40eee8fd640",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/extension_loader.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/extension_loader.mjs",
+      "sha256": "5df3d6d28603d53c2f80ddf38e6288c3524ce375f41585f4ef47fc3506d3192a",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/favorite_identity_review.test.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/favorite_identity_review.test.mjs",
+      "sha256": "e4b895ba46e7871bab812ecce84d28d173b97c0018cdb8a6ec23e48424997071",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/five_selector_browser_acceptance_2026-10-01.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/five_selector_browser_acceptance_2026-10-01.json",
+      "sha256": "eb2cf4850f0c05ce81b06434513454bc7e411d49c176aaba73878285f025a560",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/native_async_guard.test.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/native_async_guard.test.mjs",
+      "sha256": "aa58140c141615be98bc7b8d27ffe41095c6a5dcab16a2f17a376078e0e613a5",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/native_paged_browser.test.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/native_paged_browser.test.mjs",
+      "sha256": "ef944e6ddf5eab9378c01e9f78dc73331119bc70d069bec94bb2bb4f113c8a5e",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/pending_preview.test.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/pending_preview.test.mjs",
+      "sha256": "e160c1b7a6bb24dda4a1061a3f041531e309fcccd518c1736edc5116f6974519",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/saved_selection_resolve.test.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/saved_selection_resolve.test.py",
+      "sha256": "241a5bc837851612ff0b200daecb2fbddb5923ff8864920122698abf3bb7427e",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/selector_branch_undo.test.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/selector_branch_undo.test.mjs",
+      "sha256": "0d54bf9f37d8057fd9fc4cbeba7a0bbb8d04244fd144957c86a8eca47d7a0572",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/selector_branch_undo_pass_2026-10-01.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/selector_branch_undo_pass_2026-10-01.json",
+      "sha256": "0a15b68ea38153a1e6135fde9f2d34197458abab8e1053e8192c54dda3327a37",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/selector_capabilities.md",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/selector_capabilities.md",
+      "sha256": "04e38d19ded6216746205b3f2fb400373ed571ef3ccd61940b37a9cec0861f9a",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/selector_favorites.test.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/selector_favorites.test.mjs",
+      "sha256": "fbeb0647fc26957942981d226f58516107e5eceecd9b049ee064661aee7b29d9",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/selector_lifecycle.test.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/selector_lifecycle.test.mjs",
+      "sha256": "29a61cc6d3afb6e16d80768d9efc050d7cdd6402de0a6b91908f7a7e7eb67cdc",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/selector_scope.test.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/selector_scope.test.mjs",
+      "sha256": "d3b401bbc8fcef74c0d7ad822038b8d7f393d47f8130df6d39d80671493fe01a",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/selector_validation_refresh.test.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/selector_validation_refresh.test.mjs",
+      "sha256": "6f4a2048041861ef9fc3c783a9f6e39912618ee8d09021ca1472a03a6f364fe1",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/test_artist_page_contract.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/test_artist_page_contract.py",
+      "sha256": "738fabb35d4fe62986c93f490fd4c4f4165d78c9ca405f6e4eafcb45f3ec33e1",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_next_workbench/validate_fixtures.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_next_workbench/validate_fixtures.py",
+      "sha256": "478c46facc5466f4296ce34cbb773147a10f288dd98ee60010a400a9740ede65",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_overnight_optimization/ARCHITECTURE_ANALYSIS.md",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_overnight_optimization/ARCHITECTURE_ANALYSIS.md",
+      "sha256": "36778a88fdd24ed0bd31d5ee4c4baa9b9468f5fe4780dbe59a965bae1353d283",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_overnight_optimization/UX_REPORT.md",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_overnight_optimization/UX_REPORT.md",
+      "sha256": "a7cb20992b1ee0a4166ee902a6f7d84d29f88ad8061265b197635bfec1eb0767",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_overnight_optimization/measure_dom_cycles.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_overnight_optimization/measure_dom_cycles.py",
+      "sha256": "8210040873df775e0c577e10ef5b132e97e5f28f762f9313dbe877aa0ba318bc",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_overnight_optimization/measure_runtime.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_overnight_optimization/measure_runtime.py",
+      "sha256": "993475a2a77252aa98c1fd869321d3d8c30df0cd01dcc306f8cb11784be3d256",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_overnight_optimization/ux_interaction_tests.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_overnight_optimization/ux_interaction_tests.py",
+      "sha256": "b3271aa1c561d3459a99c9fdb710eedda87e5767a4026aea01f725c9ff52622b",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_ui_efficiency/browser_checks.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_ui_efficiency/browser_checks.json",
+      "sha256": "5933d0031948e0081f067a03c25584a73572d910defbe0d17d0a2c2dcb3ee46a",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_ui_efficiency/efficiency.test.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_ui_efficiency/efficiency.test.mjs",
+      "sha256": "66d23ace9d3d24599dd7f56b3154992aefc8270ecedff54b294c1692512f19eb",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-09-30_ui_efficiency/验收说明.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-09-30_ui_efficiency/验收说明.txt",
+      "sha256": "3cfcbd3c628115678bafb0e66ca9537d7c04a289b8de771795be2737459506e3",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-01_gallery_card_fix/verification.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-01_gallery_card_fix/verification.json",
+      "sha256": "007e780550012a5d4f3ade639a7225566b33e6aabc7cbd70f8873e6d10478845",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-01_workflow_matrix/inspect_all_17.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-01_workflow_matrix/inspect_all_17.py",
+      "sha256": "7558d4819b815ee48194582cd0a198675926060600a41d11c8565ad6153d5785",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-01_workflow_matrix/selector_tools_visibility_vm_final.cjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-01_workflow_matrix/selector_tools_visibility_vm_final.cjs",
+      "sha256": "b91362b5a4ee499b028fb7eb333f76816e1b9edcfd59bcb8da290dc60e0da004",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-01_workflow_matrix/selector_tools_visibility_vm_final.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-01_workflow_matrix/selector_tools_visibility_vm_final.json",
+      "sha256": "2b77be948d4fda64d4cf5ed5011b190dcad7da340a77c786f373c65890060dea",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-01_workflow_matrix/workflow_matrix_all_17_corrected.md",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-01_workflow_matrix/workflow_matrix_all_17_corrected.md",
+      "sha256": "afa5a11dfd51da04670ff2400b93a5ddf11352869b4b19d8dfc3902b6eea7a35",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-01_workflow_matrix/本轮工作流核对与交付说明.md",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-01_workflow_matrix/本轮工作流核对与交付说明.md",
+      "sha256": "750efab7e07e99444f33042bc9befecd1886530d2266f8589c43cf4dae9cb837",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/backend_canonical_contract.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/backend_canonical_contract.json",
+      "sha256": "69aa64a0ee1dc2ba769c3915ef80995236796571ae83ecc6a9f119fb0d1f66d1",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/browser_acceptance.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/browser_acceptance.json",
+      "sha256": "b27f89b8ea3900744800a8fdcfe1b074ad3d3d140b1549329e06cee74266cc9d",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/capture_baseline.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/capture_baseline.py",
+      "sha256": "03a11a330fb5b3697db448d97c61323748fb04fc289fdb04d305446b17b6fba2",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/capture_live_before.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/capture_live_before.py",
+      "sha256": "d562f41a0bd7906fc17cb262e514495bbfb3e6aae16093f81b67223bc9c3ced5",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/controlled_restart.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/controlled_restart.py",
+      "sha256": "ea787e55f5665cb97e4f5be504e59b957db32a5467ffd2345a4715d2a0e5c614",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/final_live_guard.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/final_live_guard.json",
+      "sha256": "0014519ca9115e97251009693ff9445521a63819136e133efa6c0f37859a91f0",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/freeze_source_snapshot_final.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/freeze_source_snapshot_final.py",
+      "sha256": "c9ea26c6757ebc98ddb0879f765af7903a10ab4ccb4eca1f3166ad84e2eaa824",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/frontend_canonical_contract.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/frontend_canonical_contract.json",
+      "sha256": "86a03008d047fb01b1cb87ae209d5bdc1b8f40bb085cfe7b4456e3e18b54caed",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/live_api_acceptance.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/live_api_acceptance.json",
+      "sha256": "8754c9d6b90dcec64f453136a17bb63a49eeecce5567eb3ebd5ea232c9dad5bf",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/prepare_snapshot_tools.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/prepare_snapshot_tools.py",
+      "sha256": "0378f1a7016434a3ecafe699a19e822c4f1ee9f3d6bd0c5df0963c6ba24193ce",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/rollback.template.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/rollback.template.py",
+      "sha256": "241df28cff4184b75aed8ae8c3ec3acff2d29260cce2ccccf49beab23d372d33",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/snapshot_contract.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/snapshot_contract.py",
+      "sha256": "97205974f158bab2bb18a2136b7b5371a51faf936dcfda495269bb785068e86e",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/source_snapshot_final/README.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/source_snapshot_final/README.txt",
+      "sha256": "b75eabb0da9b8910865e0e7e52aacb6b57478841c04afee7a0c12d6ffcda8c10",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/source_snapshot_final/manifest.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/source_snapshot_final/manifest.json",
+      "sha256": "ad36799c9b95777f445321ef99e28b10995f3ad3796af8fd21bc6810442477ad",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/source_snapshot_final/rollback.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/source_snapshot_final/rollback.py",
+      "sha256": "241df28cff4184b75aed8ae8c3ec3acff2d29260cce2ccccf49beab23d372d33",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/source_snapshot_final/snapshot_contract.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/source_snapshot_final/snapshot_contract.py",
+      "sha256": "97205974f158bab2bb18a2136b7b5371a51faf936dcfda495269bb785068e86e",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/test_artist_page_contract_adapted.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/test_artist_page_contract_adapted.py",
+      "sha256": "0dbf5a3676166c230fa9d0ee2c6fc15bfdcccddddcc7c1f04acda13d9f0655ea",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/test_canonical_selector_backend.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/test_canonical_selector_backend.py",
+      "sha256": "ae23193d21a66a8ba8d71899d9956bd390225125a093d122d3ab35ac34cb1f7b",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/test_canonical_selector_frontend.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/test_canonical_selector_frontend.mjs",
+      "sha256": "6db743d53f9f8396c5589ae172d89af6fb91fdcb314d4b09cbde254f2fcb7648",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/test_snapshot_guards.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/test_snapshot_guards.py",
+      "sha256": "536fb8c75b62a2ea23148563005af60f271ccb5c71ebb7d416151545dac68223",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/verify_live_api_acceptance.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/verify_live_api_acceptance.py",
+      "sha256": "8a2e9709eef15d6eebb82c9ba985f851bb82cef8b032e7c1e5e6b594f4236017",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/verify_selector_final_guard.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/verify_selector_final_guard.py",
+      "sha256": "376705282d76388bc59b88a96eb904d4e831ef679167988d17d2436338b4639a",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_selector_taxonomy_shared/交付说明.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/交付说明.txt",
+      "sha256": "6efe0b208cf2916868b86d584de6d85e167f1e6cb229e96fa835686f86de1028",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_193612/browser_acceptance.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_193612/browser_acceptance.json",
+      "sha256": "0e0fc503fd450fce66e7394962c5ae3b7990be3eafe16dfd2f1ae5eb7585031b",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_193612/verify_run.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_193612/verify_run.py",
+      "sha256": "3b1851c031bf01e42f87fa4e65db37f3ce345299147ca99d801b59d4bc3073f4",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_202141/browser_acceptance.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_202141/browser_acceptance.json",
+      "sha256": "c49496ed7c4f6acac9736ec51af557ca777010003f59507ae06689aff9500e8b",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_202141/make_clean_fixture.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_202141/make_clean_fixture.py",
+      "sha256": "69d42205c2dcf2326c9c4917f548829ffb6d1a9aa2622c77b23b3483dc87746e",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_205503/test_clothing_trait_labels.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_205503/test_clothing_trait_labels.mjs",
+      "sha256": "acd9a62b7c8e994994f29880387a0791955e12a117d78e8a5b67cc81e1b0cafd",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/LIFECYCLE_README.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/LIFECYCLE_README.txt",
+      "sha256": "460f0298fb9262524262f27c15235dbb8d87be218d4351ce18d97225ac9690ef",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/T06_README.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/T06_README.txt",
+      "sha256": "bf6d5b305fa466eb12ae73c7e21b3ee3960253d8036471fff299efb57d7bc560",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/browser_acceptance.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/browser_acceptance.json",
+      "sha256": "feba920a84d5969c4651d3b704ecfbf64bf3a9c336c32e0be26c3a8d359f11ab",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/browser_measurement.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/browser_measurement.js",
+      "sha256": "91ce05662af64c6f2739e10eb33389f392c446bcbbf126c8b44f6adac6e01b7c",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/lifecycle_acceptance.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/lifecycle_acceptance.json",
+      "sha256": "c14d0da773f5546b091d8b328b34c479df9b69b516822cd6ae14e8f1babfb9d1",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/lifecycle_collector.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/lifecycle_collector.js",
+      "sha256": "8e5e2b31b62c5d645fa4424bbbecf55bc2e52769b5195bab34bd2924d329b69c",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/lifecycle_service_sample.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/lifecycle_service_sample.py",
+      "sha256": "c291b4949815627932be686a8231163e40981625afcd4ff2c460f49d5587a017",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/review_lifecycle.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/review_lifecycle.py",
+      "sha256": "13642ed8b113d8eef5a7633cead4e690db473971dcf9157b1e7a55dabf6aabf1",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/summarize_t06.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/summarize_t06.py",
+      "sha256": "112a6c996d64e403dc6d061f20725db72608b83462d07d465d2cc791d4633d3f",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/summarize_timings.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/summarize_timings.py",
+      "sha256": "a5d075ab8358646396aa8d81a1699d7ee0f7dd8dded58714ce4aa58cf90cd135",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/t06_collector.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/t06_collector.js",
+      "sha256": "b85c5cb95f5eff854653c12ba9bf25dd30a4337652696e1e823037f8025b54f8",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/t06_fixture_selfcheck.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/t06_fixture_selfcheck.mjs",
+      "sha256": "90bed57f2bbd872404d6ebd38056ad7794425529986af122264443bcafbf382e",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/t06_observer_selfcheck.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/t06_observer_selfcheck.mjs",
+      "sha256": "fee99d49781f086ae81c9b858671c6e010e2bc6b128d52894f9656175d251fec",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/t06_value_reader.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/t06_value_reader.js",
+      "sha256": "a1c392a64dbbc287487941ca39273a0f65b985483f33dd8942e03902470dcf84",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/交付说明.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/交付说明.txt",
+      "sha256": "e26d442a5489099a78cc8f7e23d6cd3b56a5df5320e4683ccdee7ef0c5746d05",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261003_015012_R1_autonomous/UI_FINAL_ACCEPTANCE.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261003_015012_R1_autonomous/UI_FINAL_ACCEPTANCE.json",
+      "sha256": "0729752d97f7e6ae867f3b324496fe021421ed8794439bcbb37c25d2ab90149f",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-02_workbench_hourly/runs/20261003_015012_R1_autonomous/最终交付说明.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261003_015012_R1_autonomous/最终交付说明.txt",
+      "sha256": "4bbd7efc584bfbfcad03f3c1fc23518de9e123d2b0e6c184bc51e87486a4a7f2",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_comparison/FINAL_DELIVERY.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_comparison/FINAL_DELIVERY.json",
+      "sha256": "8302ee3cc02c592f63a94d92e26bdd41aaf2f121ba62e89869dcdb9393c4d485",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_comparison/build_report.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_comparison/build_report.py",
+      "sha256": "86154e579d2c78940a22cf4e44d02eec4ec3477e1fcb81aec26aa409163024b3",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_comparison/experiment.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_comparison/experiment.py",
+      "sha256": "94958342ca1984da589624dd719a803a0df503ceefd893a1f71031bea2e5e7f1",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_comparison/manage.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_comparison/manage.py",
+      "sha256": "b26b23afeceb3dd16148b2b9fd80b26c7dfcb90915f6c2736722ee40309af1eb",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_comparison/交付说明.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_comparison/交付说明.txt",
+      "sha256": "2fde0e7ffe328253f036e27cd5e28b3ac7a1427e9edf8856262044c507c532d5",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_phase1/browser_acceptance.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_phase1/browser_acceptance.json",
+      "sha256": "84f24b71f7eea7d6f277bbae633538964cccdf590a346cfb8a158a88072585dd",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_phase1/browser_fixture.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_phase1/browser_fixture.js",
+      "sha256": "985bfa9bb476746b18b89e9252d8d2e02d6458be494e6b1a77ed325f71de588f",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_phase1/neutral_fixture.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_phase1/neutral_fixture.json",
+      "sha256": "d03ea53f880247e3790a873c61600bcbb073ed931c61d7241c084c652940daa2",
+      "role": "configuration"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_phase1/test_cleaner.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_phase1/test_cleaner.py",
+      "sha256": "e8948334fabde450af42ae630a39a041901b2062a34ea7741b1df5b460a74f50",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_phase1/test_inspector.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_phase1/test_inspector.mjs",
+      "sha256": "4c8d59bb3e9b5fcd76da08783c16928f3dfa7df45f5dabe770205d6729fce68e",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_phase1/交付说明.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_phase1/交付说明.txt",
+      "sha256": "1385c248b7277d52dbdcb317910293f0e67c7f250154abb86f0916dbad8f9b2a",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_phase2/FINAL_DELIVERY.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_phase2/FINAL_DELIVERY.json",
+      "sha256": "518041e79a84ca36a51f308987af74d007a0da79d8c7994aca07eb2ba26a6217",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_phase2/browser_fixture.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_phase2/browser_fixture.js",
+      "sha256": "4618dc5d97840eb0c050820ba31234c46c10df4567ce5a3a6208534a067b0010",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_phase2/manage.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_phase2/manage.py",
+      "sha256": "67c77d0ab54d0a394b1a6e7039d03b97cf63e8a72b6c78f5310eb4b8aa7540a2",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_phase2/prune_workflows.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_phase2/prune_workflows.py",
+      "sha256": "f8bafdcbd4b33ee2fb4a7e2d5dfc98f0afe07072c048e98ab350eb9277944ba7",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_phase2/test_loader.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_phase2/test_loader.mjs",
+      "sha256": "b5a711276075b7bec37d2f2a8393d5fdc514a63535f4282c996d0c4068c3b38f",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_phase2/test_prompt.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_phase2/test_prompt.mjs",
+      "sha256": "57332dc35c13dd437ad944728bf2a4777ebb2e374512f540cb797469fcadc1f0",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_phase2/test_selector_legacy_adapter.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_phase2/test_selector_legacy_adapter.mjs",
+      "sha256": "9d8c093380ba706b8fae8bbd3866eee41906197baec5990d2fdf8787fedbb12c",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_prompt_phase2/交付说明.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_prompt_phase2/交付说明.txt",
+      "sha256": "919f9ed37e9a446eabb0a0685b6c3093bd6275f55c82734ae0960e66aa595d55",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_remove_character_details/FINAL_DELIVERY.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_remove_character_details/FINAL_DELIVERY.json",
+      "sha256": "ffae483f14a00e186f01e3ac5960b6ba662807caf9aa21011a9b2bc5034cc205",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_remove_character_details/check_insertion.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_remove_character_details/check_insertion.mjs",
+      "sha256": "0bb90e7fe379b2bfaa252d12d2f77808f6f98146c2d8bf4f4f3eaa5d13c24e0e",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_runtime_phase2/browser_acceptance.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_runtime_phase2/browser_acceptance.json",
+      "sha256": "a0107aa740656585ac138f9907a4bd60512c00ca02c773ae7793530302df992e",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_runtime_phase2/choose_defaults.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_runtime_phase2/choose_defaults.py",
+      "sha256": "f86ee5682d4253981b8a86e2d2b90377376b961c485ea67e738b1099a5654509",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_runtime_phase2/default_policy.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_runtime_phase2/default_policy.json",
+      "sha256": "caa7a3b4f604fa30a614a035bdb2f94fea2b7ecda4682df442dce8f76930fd72",
+      "role": "configuration"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_runtime_phase2/inventory.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_runtime_phase2/inventory.py",
+      "sha256": "b2d1a40317cd9f5878abbc580b7604432e64943eb81f7e6c0bac4e9b7ae00db2",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_runtime_phase2/manage.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_runtime_phase2/manage.py",
+      "sha256": "52c7a851e64d52ec65ac93aafe62f6107d57875ba813423fbeb8e4fcfdf1a5f6",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_runtime_phase2/measure.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_runtime_phase2/measure.py",
+      "sha256": "b3c7e58489321cb1eee1dbf8443a011d395bb5eadccf36391c61d53c42d6168b",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_runtime_phase2/test_runtime.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_runtime_phase2/test_runtime.mjs",
+      "sha256": "bc5f97a05c3b221e577a4b8901c8911c89cb87b75f09ee10bcf2e0246e5a5a1b",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_runtime_phase2/交付说明.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_runtime_phase2/交付说明.txt",
+      "sha256": "94dca8463fe98aca508ccfdd6f1e3972d1231c727da85df61ce01150303199c1",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_selector_filter_counts/DIAGNOSIS.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_selector_filter_counts/DIAGNOSIS.json",
+      "sha256": "fa32ae0998ed7c188e088eaca7980334ea44feeb5af04def362e74c9ba63a0eb",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_selector_filter_counts/FINAL_DELIVERY.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_selector_filter_counts/FINAL_DELIVERY.json",
+      "sha256": "fd655d261d6ed7f7989b00634da91e1a56951facf4e7cc3f51aa60e0c63b4f37",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_selector_filter_counts/navigation_probe.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_selector_filter_counts/navigation_probe.mjs",
+      "sha256": "7150303d1b3cc7a9350ee7c90810421c303ae6229215c0c2cd5455740bf98780",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_selector_filter_counts/probe.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_selector_filter_counts/probe.mjs",
+      "sha256": "9bf3001fe85c489b99f9e9c327c161a39456405ef74d3d0391709e062096e70f",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_selector_load/FINAL_DELIVERY.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_selector_load/FINAL_DELIVERY.json",
+      "sha256": "f8e9dd8a708f5b217d1c4351e186c10ec1d9eaa103c0bdfa3fc13bb517335732",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_selector_load/live_check.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_selector_load/live_check.py",
+      "sha256": "d43e61a125893dfbadedc2ce3639c6fef47aeac7118e0ad61ab84757f107715e",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_selector_load/verify.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_selector_load/verify.py",
+      "sha256": "06425a5081a32dd0447a186950d9c84317315b0dcc6f897cdca22902dfe48c5c",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_selector_topics/FINAL_DELIVERY.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_selector_topics/FINAL_DELIVERY.json",
+      "sha256": "990b11315116a348c19fca9cf028deab2d626613cd0665206b77d50c70d3eae2",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_selector_topics/verify.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_selector_topics/verify.mjs",
+      "sha256": "13e50ef26db0f420c5f8f60d321b7edfd43be3c53c5ffd26737dc16767a4d42c",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_workflow_prompt_audit/audit.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_workflow_prompt_audit/audit.py",
+      "sha256": "91b9fde59dd58f3b3ce7dc20a8f8844a4f3ca4fbbc147565a6497841a2cc2811",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_workflow_prompt_audit/dependency_checks.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_workflow_prompt_audit/dependency_checks.json",
+      "sha256": "db223dac7f0c386b192070cd9939ecd0eb9988fb93332344d1344863958de0a2",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_workflow_prompt_audit/research.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_workflow_prompt_audit/research.py",
+      "sha256": "3d4cca4e50387a1a0d1e218f05fa92be1f84f993caf4a23d09853cdbc28ad887",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-03_workflow_prompt_audit/深度分析与优化建议.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-03_workflow_prompt_audit/深度分析与优化建议.txt",
+      "sha256": "352ebe1d499b60766add460fbb77662646338ac9144714973603089d59d0175c",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_full_workflow_review/REPORT.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_full_workflow_review/REPORT.txt",
+      "sha256": "05cd114c0a9ae9426a0f890c1d5afc35a418bced714dec6feb78709c5f72eb67",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_full_workflow_review/build_component_catalog.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_full_workflow_review/build_component_catalog.py",
+      "sha256": "6094d21cda10faf54db1b93de5b80109772448743ceb4f67bf3a29e921430c6c",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_full_workflow_review/inventory.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_full_workflow_review/inventory.py",
+      "sha256": "9cd8fc4aac5c9df76b1cc7dbea79f81ce1a1379941c9b9bbf2e97d2c48fba549",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/REPORT.md",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/REPORT.md",
+      "sha256": "a16bfe61f4fe8416e1c2cc5282abd20d0e4e4c12501e2b56a819a6dec6f3c21f",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_2000_usdu_seam_fix/FINAL_DELIVERY.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_2000_usdu_seam_fix/FINAL_DELIVERY.json",
+      "sha256": "24c3939e1656b23baa46cfa458ea0aecf0271e57eb5c1c3b8abe3d594480daf3",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_2140_10BC_yolo_sam_align/FINAL_DELIVERY.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_2140_10BC_yolo_sam_align/FINAL_DELIVERY.json",
+      "sha256": "4db1da96318512cbe9ff965cecb857b7c74ed0f05117603ecb617b3c40088265",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_2200_nsfw_force_inpaint/FINAL_DELIVERY.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_2200_nsfw_force_inpaint/FINAL_DELIVERY.json",
+      "sha256": "3c63de8bcafe2f8876d828b6acb4e79a56ec54c79ca7fb6d13fc27840ff8e1e7",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_k2_usdu_repair/REPORT.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_k2_usdu_repair/REPORT.txt",
+      "sha256": "7218c0af68464d2a906e0a17edd0f8069d3c62af805793b1a3102915ff8c9673",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_k2_usdu_repair/compare.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_k2_usdu_repair/compare.py",
+      "sha256": "db11eb3013191126bdf0e0f58724c8b9e641b0c0bdb0d300b97a3eb5cbd086a8",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_k2_usdu_repair/compare_regression.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_k2_usdu_repair/compare_regression.py",
+      "sha256": "f303dfce540cb252c58217a662793a9d46eeceb8adfaae8634cdea710d06c2fb",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_k2_usdu_repair/sigma_analysis.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_k2_usdu_repair/sigma_analysis.json",
+      "sha256": "609954cbc10b6c89ac9c4c36775956f8398c759b6da87c0c50a78a9c0e0202f4",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_k2_usdu_repair/test_repair.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_k2_usdu_repair/test_repair.py",
+      "sha256": "6be8ecc9f586586c57d712ba95cc8e3e41738193dcf5ff05873bad4d668a653e",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_live_acceptance/acceptance.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_live_acceptance/acceptance.py",
+      "sha256": "ff6f226a6da6ab246274baea515388ac3068a3160b39b30734b8c1c2995132f0",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_repair_audit/FINAL_DELIVERY.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_repair_audit/FINAL_DELIVERY.json",
+      "sha256": "61d2f52e38c3c8c6032cabcda0102422c85850b9bdef5f2dec4487c4c2e4f94f",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_repair_audit/REPORT.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_repair_audit/REPORT.txt",
+      "sha256": "405e0eb986dbefe7a659a61fd60ad3404b7c900f978d43e4925421811933815d",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_repair_audit/inspect_workflow.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_repair_audit/inspect_workflow.py",
+      "sha256": "7f74ecfed75bbe682cbaa46b78edb0de4a9820fd9d51825efc89817b994df5f3",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_repair_audit/make_fixture.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_repair_audit/make_fixture.py",
+      "sha256": "7cb6d38093dd8bc9ffe012e41d86806b3c3803f86fd8a98b8eb9fac70e9a0142",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_repair_audit/make_inference_fixture.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_repair_audit/make_inference_fixture.py",
+      "sha256": "7c16660a64d98cec598c2fea5c3178c0818f9705ffc20158685fe4ec640ad89c",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_repair_audit/repair.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_repair_audit/repair.py",
+      "sha256": "f049b0baf9dc613c5ea59000d3a96cf20d63f5ad5422a6536ef68761af8ceda3",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_repair_audit/test_runtime.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261004_repair_audit/test_runtime.mjs",
+      "sha256": "e0574990e18f1c27dd501e4eb7d08e89ac21b2ff8d272bbcdbef9acf7c9d7144",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_native_e2e_acceptance/acceptance.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_native_e2e_acceptance/acceptance.py",
+      "sha256": "8c939c6371ea7e2361ffa93de89a7cfc811bbbe4eefc0b34f1d679ded1551a46",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_native_e2e_acceptance/export_fixture.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_native_e2e_acceptance/export_fixture.js",
+      "sha256": "fdf7c7ed168659d4408619dab2e633b0dedc4bc006929b4f17c3075d16396b86",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_native_e2e_acceptance/measure.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_native_e2e_acceptance/measure.py",
+      "sha256": "9e89acdebe91cabf9694e367e8c32e0b5f28222ebace5aadef8cd1a64b576f16",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_native_e2e_acceptance/preflight_models.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_native_e2e_acceptance/preflight_models.py",
+      "sha256": "6c5360ad541b7c34519efb902b5ffbb81484ae072b446602f2237b87541fb4e9",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/browser_acceptance.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/browser_acceptance.json",
+      "sha256": "ce66c28549e46812e91772dcdea66691d1870768dca52c8febf7f121ad419c47",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/test_candidate.cjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/test_candidate.cjs",
+      "sha256": "f41856be46b8ca0b2c7205fc0fb5f6be5a4670e2e728affc991a683aeb313d93",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/freeze.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/freeze.py",
+      "sha256": "0cf9f7c4919c909a99c85320b8bce733890a98042be54a08a948c866fbf4606c",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/prepare_candidate.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/prepare_candidate.py",
+      "sha256": "634cec65f7c3652ec4d35f054372fd8077d1d6f4d443dee04199982a010bccc3",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/stage_workflow.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/stage_workflow.py",
+      "sha256": "daa2ef8006d0198858e9349e0dbbc669d68194b6b352e698708bff21b4aa91cb",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/test_candidate.cjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/test_candidate.cjs",
+      "sha256": "9507d13ca5ce4d3836850c7288f465b83cbc769c99a1ae755752d002f5dc3775",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/test_structure.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/test_structure.py",
+      "sha256": "92e562b72303aaf903829606ccde6fbdc2f464e5386d0b3b351c2c0a0e2a843f",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/workflow_changes.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/workflow_changes.json",
+      "sha256": "0b212c71756aab096adf51e9f11939f35270d9624cd1b9d5ae4d57b9f77c8b01",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_segmentation_research/sources_final.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_segmentation_research/sources_final.json",
+      "sha256": "78d2d03606bb24ca03d9ee740de3f775bd861e56a04abdb8c5e374cfe6397a66",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0205_m1_pending_cycle/test_cycle.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0205_m1_pending_cycle/test_cycle.mjs",
+      "sha256": "a10627288c2a016d2506f3ee8d9517598cb81ed74de06c089f26b52d5a17b7f3",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0205_m1_pending_cycle/test_mode_regression.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0205_m1_pending_cycle/test_mode_regression.mjs",
+      "sha256": "d4ac6f2d08949da6ab3e3f70eee37c8ffea77aef9ecc0fcfda023fc1bb0d459d",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0300_m1_sources/browser_fixture.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0300_m1_sources/browser_fixture.js",
+      "sha256": "d0680e4a8950812bf84a19a6a7b9f87cf570670b71e17c41e9d796512147e153",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0300_m1_sources/test_sources.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0300_m1_sources/test_sources.mjs",
+      "sha256": "8f12a45e8ee1bf5807664407ee56bde478d0a371a0fb1ac2421551965b222966",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0300_m1_sources/verify.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0300_m1_sources/verify.py",
+      "sha256": "2448a49dccd32db84b528d922cc65c10e4385e014cc5e9f366e1408dd31bd769",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0400_m2_graph_audit/audit.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0400_m2_graph_audit/audit.py",
+      "sha256": "2fc794e84601693b681f4cd9ec791441577a8525d4b04927d48f070f68a93d17",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0400_m2_graph_audit/browser_fixture.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0400_m2_graph_audit/browser_fixture.js",
+      "sha256": "ae4031f491d2d0dedc32e2d5c6934b27fdbb532deda7a677ae46836b9a0012fb",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0400_m2_graph_audit/test_paths.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0400_m2_graph_audit/test_paths.mjs",
+      "sha256": "4c3e82c19a88eb04c4d1630a514574a0961fd6d879122cb65eb313e24cd16422",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0400_m2_graph_audit/test_regression.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0400_m2_graph_audit/test_regression.mjs",
+      "sha256": "bd8376a4945b4969bd0f024e6704855a4332badb6d145e4e1ed51292a36fb4cc",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0500_m2_restore_targets/audit_remaining.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0500_m2_restore_targets/audit_remaining.py",
+      "sha256": "dd578347a770b45dd5204d11805023ba2b2db3322434f7e0cdf664766b9516c5",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0500_m2_restore_targets/check_branch.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0500_m2_restore_targets/check_branch.js",
+      "sha256": "f1015d9b80256cdcecf47b3f09bce8172931d4b7c132eb7b6a4e12fbae898113",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0500_m2_restore_targets/prepare_fixtures.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0500_m2_restore_targets/prepare_fixtures.py",
+      "sha256": "fceadc80532bc18c8fe52db966dea78df107b9fe4ca755a3f2990ec8fd575fc5",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0705_m4_controls/acceptance_summary.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0705_m4_controls/acceptance_summary.json",
+      "sha256": "29fafab580c22e6104579e17e188793b439b127953fab68640888260b097138d",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0705_m4_controls/audit_numeric_browser.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0705_m4_controls/audit_numeric_browser.js",
+      "sha256": "04fa2e3a1b0eb96c91758bc83207acfbfcc44fced2ed5c637a4f2347ce8963c5",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0705_m4_controls/roundtrip_prepare.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0705_m4_controls/roundtrip_prepare.js",
+      "sha256": "f86b03cd14eb73fb5e2519c77f113a0ced5545467767f914101f0b2f7864ea7d",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0705_m4_controls/roundtrip_verify.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0705_m4_controls/roundtrip_verify.js",
+      "sha256": "e3e5cb64e0397ddfa2b6c8260b1ab97cca9876bfa772c081eaea86581d1e139a",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0705_m4_controls/test_numeric.mjs",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0705_m4_controls/test_numeric.mjs",
+      "sha256": "236ee6a85f7526e0391f3b96ee940972c050b2c1783b6baffea0f73dc2ee8c00",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0805_m5_latency/acceptance_summary.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0805_m5_latency/acceptance_summary.json",
+      "sha256": "2c7821eb19ffd1cf2fede88df7ad70cef6081c555b1ff0cb5e2327d96c53fe98",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0805_m5_latency/audit.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0805_m5_latency/audit.py",
+      "sha256": "4a27a00d03baa47d57d1ff36bb388d00ccce369737ab9fc3649c1d50fd9993c0",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0805_m5_latency/character_cycles.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0805_m5_latency/character_cycles.js",
+      "sha256": "2c28fc391be854e5aef3a3a010171885d9c44d6c019a87413e734b69227298ed",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0805_m5_latency/library_cycles.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0805_m5_latency/library_cycles.js",
+      "sha256": "321a40ffc8e458d19ffdfb5f8e4d803b15833ff27fd4b167e689fd1283b7ec0b",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0805_m5_latency/pending_cycles.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0805_m5_latency/pending_cycles.js",
+      "sha256": "5aecbefc90e90c159b29219e97c65d75c4554aa93fa698e5ceed739367de9041",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0805_m5_latency/pending_setup.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0805_m5_latency/pending_setup.js",
+      "sha256": "1cc775a12ff0a2e0e8823e93c5708038539f8c541f11772921390b73a498cef4",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0805_m5_latency/pose_cycles.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0805_m5_latency/pose_cycles.js",
+      "sha256": "ea7109fbf4ede254bf6f451f4697cd8a2aafd85a95ffd0995bc8733990a5abfe",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0805_m5_latency/setup_browser.js",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0805_m5_latency/setup_browser.js",
+      "sha256": "8b0b8877c9f7be7111d0736889a9ea22c5d12f39f30fdf4cb99170f0b5a8f799",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/REPORT.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/REPORT.txt",
+      "sha256": "2fe5361108b2317223ccbef38c0b69ade3a297ac833e1b53463b5339dcf22bf4",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/accept.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/accept.py",
+      "sha256": "f58d51faaf9e592b70a266cbdaf97c2052cb9a0ddb5d021e5e365f887826941a",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/guard.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/guard.py",
+      "sha256": "8f0a9372bc53613f4e9f5571914cf7dced3dc55144fe8930fca99e8363c0f226",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/inventory.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_0905_m6_dependencies/inventory.py",
+      "sha256": "0e1aa3c1bbb292df980042e45913b2c12eea810f813953652c9b749302ea14d1",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_1005_m7_final/REPORT.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_1005_m7_final/REPORT.txt",
+      "sha256": "34bc306437e7c78d825e43ec5a21cb3757eb81a4bebf29fca80c6d301903cfa9",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_1005_m7_final/final_regression_matrix.json",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_1005_m7_final/final_regression_matrix.json",
+      "sha256": "08e6dcfd7753472fa51919c0ab5116b063675679a66ae800ad802d8ae49cc4da",
+      "role": "evidence"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_1005_m7_final/fixtures.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_1005_m7_final/fixtures.py",
+      "sha256": "c3c69ffee390492fad1bb440969aab9721d2c62a9cd43724909033ce8f2cb06d",
+      "role": "test"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_1005_m7_final/manage.py",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_1005_m7_final/manage.py",
+      "sha256": "e6f7ce76144ddec0424275952a444ab3093bfe51fcae2c3e74d556db546df494",
+      "role": "implementation"
+    },
+    {
+      "source": "benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_1105_detail_selectors/REPORT.txt",
+      "path": "docs/technical/archive/benchmark_reports/2026-10-04_workflow_optimization/runs/20261004_1105_detail_selectors/REPORT.txt",
+      "sha256": "f20a719e7da51db1e74ec79e95a0b2d90369ad3a931a0d37db068a410271b140",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/MODEL_COMPARISON_RUNBOOK.md",
+      "path": "docs/technical/archive/benchmark_reports/MODEL_COMPARISON_RUNBOOK.md",
+      "sha256": "a645a6d130f401aa92a9ead187612d62c07a0ece393c540ca0923b237053c3b2",
+      "role": "standard"
+    },
+    {
+      "source": "benchmark_reports/分类主题目录.md",
+      "path": "docs/technical/archive/benchmark_reports/分类主题目录.md",
+      "sha256": "ab7e93f91c54bddf4322d76016c057235a3b85bb701367be00c40102543fe826",
+      "role": "standard"
+    },
+    {
+      "source": "benchmark_reports/分类准入边界表.md",
+      "path": "docs/technical/archive/benchmark_reports/分类准入边界表.md",
+      "sha256": "4f17bf8b5d9bc08ff35e893f7fef83a24c7110e39c25239d5dec9c0bcbcbe04d",
+      "role": "standard"
+    },
+    {
+      "source": "benchmark_reports/分类工作入口.md",
+      "path": "docs/technical/archive/benchmark_reports/分类工作入口.md",
+      "sha256": "7788b2361c954debc6a924e4399e369938ae04c7f3392ca2015e08b96adf36d5",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/分类标准.md",
+      "path": "docs/technical/archive/benchmark_reports/分类标准.md",
+      "sha256": "c4241c0d2720abfde943b3ca0699a5cc60f399fd0a906de794c6947ae5fb0a1f",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/分类标准变更记录.md",
+      "path": "docs/technical/archive/benchmark_reports/分类标准变更记录.md",
+      "sha256": "a7fcfd002ce299a96624feb1852e1c14f3a4b4f5425d3b7b157a538923f549ca",
+      "role": "documentation"
+    },
+    {
+      "source": "benchmark_reports/分类规则判定合同.json",
+      "path": "docs/technical/archive/benchmark_reports/分类规则判定合同.json",
+      "sha256": "a62b953fc1103ffbb6fb0336c48d2dec1280304b8532c6bcd480bccbbecafdd9",
+      "role": "standard"
+    },
+    {
+      "source": "benchmark_reports/分类规则历史补充索引.md",
+      "path": "docs/technical/archive/benchmark_reports/分类规则历史补充索引.md",
+      "sha256": "c72e9d669c38ea368bc8843730f578ee81fd5ea808d8fa8d1a14d4b1461f9561",
+      "role": "standard"
+    },
+    {
+      "source": "benchmark_reports/分类规则总册.md",
+      "path": "docs/technical/archive/benchmark_reports/分类规则总册.md",
+      "sha256": "bea5130a5981b5ad320652a4be570ad855cdf862ba853d002a9a0c2ae64bf659",
+      "role": "standard"
+    },
+    {
+      "source": "benchmark_reports/分类规则注册目录.md",
+      "path": "docs/technical/archive/benchmark_reports/分类规则注册目录.md",
+      "sha256": "3b65b4d2c3d37696e27ed0f0f4fa3c831d54b7b594bfb61eec680d18f0596710",
+      "role": "standard"
+    },
+    {
+      "source": "character_lora_forge/characters/alicia_bell/01_visual_spec/aesthetic_polish_notes_20260818.md",
+      "path": "docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/aesthetic_polish_notes_20260818.md",
+      "sha256": "efed1c7955eb352a105c6fb83297b86483e3660a65eed97f046f15b293b1e6e9",
+      "role": "documentation"
+    },
+    {
+      "source": "character_lora_forge/characters/alicia_bell/01_visual_spec/clarity_idol_research_20260818.md",
+      "path": "docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/clarity_idol_research_20260818.md",
+      "sha256": "ede0c8fdc51ccf2a4ba5564150163092c9a70772c8e45858ed3c736dc535ed23",
+      "role": "documentation"
+    },
+    {
+      "source": "character_lora_forge/characters/alicia_bell/01_visual_spec/dual_form_base_spec.json",
+      "path": "docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/dual_form_base_spec.json",
+      "sha256": "719d3e499f8cf20353bdd950b86dbf659c9e69a5f4c2ce040efbef5cf79272d8",
+      "role": "configuration"
+    },
+    {
+      "source": "character_lora_forge/characters/alicia_bell/01_visual_spec/form_outfit_separation_matrix_20260818.md",
+      "path": "docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/form_outfit_separation_matrix_20260818.md",
+      "sha256": "66ed117fe184a65acf7460be9f21e0feb4c7159a22d60d7eabf3b5969dc86f9c",
+      "role": "documentation"
+    },
+    {
+      "source": "character_lora_forge/characters/alicia_bell/01_visual_spec/idol_design_research_20260817.md",
+      "path": "docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/idol_design_research_20260817.md",
+      "sha256": "94f18cb7e978b0af13461c271024f555ccb77a3c8a22a27d1c161f7d87bbd58a",
+      "role": "documentation"
+    },
+    {
+      "source": "character_lora_forge/characters/alicia_bell/01_visual_spec/morning_star_lora_keyword_lock_20260818.md",
+      "path": "docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/morning_star_lora_keyword_lock_20260818.md",
+      "sha256": "68793dd81392e37c5cc98928897cbac4dc3e818aa501edc878d35596c3eebe90",
+      "role": "documentation"
+    },
+    {
+      "source": "character_lora_forge/characters/alicia_bell/01_visual_spec/ordinary_vs_morning_star_contrast_notes_20260818.md",
+      "path": "docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/ordinary_vs_morning_star_contrast_notes_20260818.md",
+      "sha256": "acaed618d074ebd515b70a90508dc55bba3f691aa26d8fd45959bfa1cb0af439",
+      "role": "documentation"
+    },
+    {
+      "source": "character_lora_forge/characters/alicia_bell/01_visual_spec/sheer_avatar_difference_notes_20260818.md",
+      "path": "docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/sheer_avatar_difference_notes_20260818.md",
+      "sha256": "9f0eadb13e42ff067ab26b3aaabc669f71f85fef12ae36e15a2c1040e9d29379",
+      "role": "documentation"
+    },
+    {
+      "source": "character_lora_forge/characters/alicia_bell/01_visual_spec/split_lora_contract_20260822.md",
+      "path": "docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/split_lora_contract_20260822.md",
+      "sha256": "ff37fbeadb649360ddd1a0da486a9c3b1cbb61f51609b9fefeec2d3efc5c0f8d",
+      "role": "documentation"
+    },
+    {
+      "source": "character_lora_forge/characters/alicia_bell/01_visual_spec/visual_spec.json",
+      "path": "docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/visual_spec.json",
+      "sha256": "a81fea8d3a8a841b055ebaea704ca944426cf4a19da3a052226e41b1c4a908b0",
+      "role": "configuration"
+    },
+    {
+      "source": "character_lora_forge/characters/alicia_bell/character.json",
+      "path": "docs/technical/archive/character_lora_forge/characters/alicia_bell/character.json",
+      "sha256": "fbe2010f3870038605165ba5e8e642e2a46c1ab5cc5d3cc839569e068df2ba90",
+      "role": "configuration"
+    },
+    {
+      "source": "character_lora_forge/characters/alicia_bell/gold_package_plan.md",
+      "path": "docs/technical/archive/character_lora_forge/characters/alicia_bell/gold_package_plan.md",
+      "sha256": "a600fe6c479d1ee663cff0f97c2645316be04b5f8c9606fcacc1f0a866e35307",
+      "role": "documentation"
+    },
+    {
+      "source": "character_lora_forge/characters/alicia_bell/gold_selection_strategy_review_20260818.md",
+      "path": "docs/technical/archive/character_lora_forge/characters/alicia_bell/gold_selection_strategy_review_20260818.md",
+      "sha256": "d59da1d6ad4a813a7da18cb2e7ea560ffcbca2af33d9fe1d180126ef620e5a65",
+      "role": "documentation"
+    },
+    {
+      "source": "character_lora_forge/characters/alicia_bell/selection_campaign_20x200_plan.json",
+      "path": "docs/technical/archive/character_lora_forge/characters/alicia_bell/selection_campaign_20x200_plan.json",
+      "sha256": "ba955352972a21bd07069792dc8a555e4258017e610b32b0d38d2c1a45674be0",
+      "role": "configuration"
+    },
+    {
+      "source": "character_lora_forge/characters/rosasha/README.md",
+      "path": "docs/technical/archive/character_lora_forge/characters/rosasha/README.md",
+      "sha256": "c80b2c088f6514b402f57b4c4285016e5ba9cd80d1da0c5ee1cfb9b166fd22bf",
+      "role": "documentation"
+    },
+    {
+      "source": "civitai_workflow_study/报告-Civitai近三月热门工作流人体部件与NSFW细化分析.md",
+      "path": "docs/technical/archive/civitai_workflow_study/报告-Civitai近三月热门工作流人体部件与NSFW细化分析.md",
+      "sha256": "716cf2d20d9af802c7334f723dd8f47d07e9f71745485c11e49e6f6d276ae7a2",
+      "role": "documentation"
+    },
+    {
+      "source": "civitai_workflow_study/检测器到细化器数据流.json",
+      "path": "docs/technical/archive/civitai_workflow_study/检测器到细化器数据流.json",
+      "sha256": "b0347e68fdfff90e3919e1314292b86fe8acf3f530adb5ad1d9a66e00362c044",
+      "role": "evidence"
+    },
+    {
+      "source": "civitai_workflow_study/统计数据.json",
+      "path": "docs/technical/archive/civitai_workflow_study/统计数据.json",
+      "sha256": "7627b5838ef4437189bf087aa3f5ec2838b3641d5300c3697d166c11620315ff",
+      "role": "evidence"
+    },
+    {
+      "source": "civitai_workflow_study/选中细化链路.json",
+      "path": "docs/technical/archive/civitai_workflow_study/选中细化链路.json",
+      "sha256": "ce8e9bae80ebccf4111e44022bc4af168d4dc4f2434007f2813d544984465aca",
+      "role": "evidence"
+    },
+    {
+      "source": "civitai_workflow_study/逐工作流明细.json",
+      "path": "docs/technical/archive/civitai_workflow_study/逐工作流明细.json",
+      "sha256": "e0aa6b77065b12df4a0a7df68110307f621ec46950ae2fd653bc56764fb4c780",
+      "role": "evidence"
+    }
+  ]
+}

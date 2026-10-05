@@ -1,0 +1,90 @@
+{
+  "passed": true,
+  "created_at": "2026-09-27T13:27:14.161654+08:00",
+  "data_sha256": "68eaa214ec65ba477ffa38d0558de39ec43139bae5a2a65fcb35131d93074fe6",
+  "engine_sha256": "07103aa7656ed75326aadcf6ae8199177bc01f6682b8ce38d868fe0ec9e2d394",
+  "index_sha256": "7fc8d0da9bf359dfc76d5a6e7a30c3c87080d3ab60f7b2e7a795432c7c6ca95d",
+  "indexed_records": 324887,
+  "review_counts": {
+    "classified": 324661,
+    "reviewed": 226,
+    "pending": 4
+  },
+  "fixture_checks": 73,
+  "historical_checks": 10452,
+  "query_checks": [
+    {
+      "params": {},
+      "total": 324887,
+      "deterministic": true
+    },
+    {
+      "params": {
+        "pool_filters": "detail:hair.long"
+      },
+      "total": 22191,
+      "deterministic": true
+    },
+    {
+      "params": {
+        "pool_filters": "detail:hair.long;detail:hair.very_long",
+        "pool_mode": "all"
+      },
+      "total": 7371,
+      "deterministic": true
+    },
+    {
+      "params": {
+        "query": "twintails"
+      },
+      "total": 36046,
+      "deterministic": true
+    },
+    {
+      "params": {
+        "view": "favorites"
+      },
+      "total": 2,
+      "deterministic": true
+    },
+    {
+      "params": {
+        "usage": "positive",
+        "content_type": "atomic_tag"
+      },
+      "total": 40602,
+      "deterministic": true
+    },
+    {
+      "params": {
+        "pool_filters": "count:1girl;detail:hair.long"
+      },
+      "total": 19936,
+      "deterministic": true
+    },
+    {
+      "params": {
+        "pool_filters": "sub:光影效果"
+      },
+      "total": 21123,
+      "deterministic": true
+    },
+    {
+      "params": {
+        "pool_filters": "detail:light_effect.soft"
+      },
+      "total": 7711,
+      "deterministic": true
+    },
+    {
+      "params": {
+        "pool_filters": "sub:头饰与发饰;detail:hair.long"
+      },
+      "total": 9923,
+      "deterministic": true
+    }
+  ],
+  "full_exact_count_delta": true,
+  "unexplained_replay_failures": 0,
+  "publisher_revision_cases": 2
+}

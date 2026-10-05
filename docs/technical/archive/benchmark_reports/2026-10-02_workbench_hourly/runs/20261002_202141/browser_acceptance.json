@@ -1,0 +1,67 @@
+{
+  "run_id": "20261002_202141",
+  "completed_at": "2026-10-02T20:52:15.269729+08:00",
+  "milestone": "M9a_frequent_flow_functional_baseline",
+  "status": "baseline_verified",
+  "scope": "Batch A: isolated common-flow correctness, representative read-only search and selection",
+  "browser": {
+    "test_tab": "8",
+    "preserved_user_tab": "3",
+    "viewport": [
+      1280,
+      720
+    ],
+    "ua": "Chrome/154.0.0.0 Windows NT 10.0 Win64 x64",
+    "fresh_page_loaded": true
+  },
+  "verified": [
+    "UAP/Workbench open-return focus and single console",
+    "UAP size filter and clear",
+    "Global character then hoodie query and Escape clear",
+    "Clothing hoodie and artist 柚子社 keyboard selection without apply",
+    "Positive and negative synthetic append plus exact UI/node undo",
+    "Five parameter UI/node synchronization and restoration",
+    "Synthetic detail and return",
+    "1280x720 workbench geometry without horizontal overflow"
+  ],
+  "not_run": [
+    "F08 live-library query and pagination",
+    "P2 7 warm and 3 fresh-page latency samples",
+    "P4 10 cycles plus 60-second idle window"
+  ],
+  "production_source_changes": 0,
+  "formal_data_writes": 0,
+  "generations": 0,
+  "restarts": 0,
+  "served_sha_matches": 5,
+  "executed_script_sha_matches": 4,
+  "executed_sha_limit": "Debugger scriptParsed buffer was truncated; shared manager executed-source SHA was not separately captured. Its served/disk SHA matched. No source was changed in this run.",
+  "screenshots": [
+    "screenshots/restored-console.png",
+    "screenshots/positive-insert.png",
+    "screenshots/clothing-selected.png",
+    "screenshots/artist-selected.png"
+  ],
+  "evidence": [
+    "functional_cases.json",
+    "final_isolated_insert.json",
+    "executed_sources.json",
+    "final_live_guard.json",
+    "fixture_provenance.json"
+  ],
+  "cleanup": {
+    "test_documents_3_and_4_closed": true,
+    "test_tab_8_closed": true,
+    "interception_cleared": true,
+    "cache_restored": true,
+    "viewport_reset": true,
+    "remaining_tabs": [
+      "3"
+    ]
+  },
+  "limits": [
+    "No latency or memory-leak conclusion; tool timeouts excluded from product performance evidence.",
+    "No source defect established from startup console errors: the same three errors also appeared in a successfully loaded page.",
+    "Interception was reenabled after test-tool timeouts before final write cases. Only synthetic rows were used for all write cases."
+  ]
+}

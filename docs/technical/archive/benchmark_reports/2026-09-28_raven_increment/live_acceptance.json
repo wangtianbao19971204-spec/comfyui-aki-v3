@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "created_at": "2026-09-28T08:49:25.784659+08:00",
+  "source_release": "r-9a4bf4049f141be7d4d9",
+  "source_rows": 816,
+  "tag_api_verified": 811,
+  "image_http_verified": 816,
+  "db_fingerprint_equal_to_stage": true,
+  "resource_index_unchanged": true,
+  "data_sha256": "40490c2c8fded8efb85572292970016ea34462b64a216e454190cb73d9386af6",
+  "production_owner_pid": 48336,
+  "queue_empty": true,
+  "workbench_nodes": 71,
+  "degraded": false
+}

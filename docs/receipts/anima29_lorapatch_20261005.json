@@ -1,0 +1,129 @@
+{
+  "receipt": "anima29_lorapatch_20261005",
+  "scope": "Deploy ComfyUI-Anima-2.9B-loraPatch as a production runtime patch so original 28-block Anima LoRAs target the correct blocks of 40-block Anima 2.9B.",
+  "upstream": {
+    "repo": "https://github.com/sparklingcoffee777/ComfyUI-Anima-2.9B-loraPatch",
+    "pinned_commit": "045f240210b52037e6dd3d8328d776463fe54b96",
+    "commit_date": "2026-08-17T17:11:08Z",
+    "registry_id": "comfyui-anima-2.9b-lorapatch",
+    "registry_version": "1.0.0",
+    "license": "GPL-3.0",
+    "fetched_via": "codeload.github.com tarball (github.com:443 intermittently blocked on this host)",
+    "tarball_sha256": "b1507319495334a49541cf12d2d95172297fddc3b436a9a32997601e88c5aa1c"
+  },
+  "prerequisite_check": {
+    "local_comfyui_version": "0.33.0",
+    "model_detection_deviation_from_upstream_v0_33_0": "none (sha256 identical)",
+    "upstream_v0_32_0_behaviour": "num_blocks hardcoded to 28",
+    "upstream_v0_33_0_behaviour": "num_blocks derived with count_blocks()",
+    "detector_run_on_local_files": [
+      "Anima-2.9B/anima29B_v10_bf16.safetensors -> anima, 40 blocks",
+      "Anima-2.9B/JANIMAAnima_v1029B_bf16.safetensors -> anima, 40 blocks",
+      "Anima/JANIMA_v10.safetensors -> anima, 28 blocks",
+      "checkpoints/Anima/silvermoonmixAnimaEvolved_v23.safetensors -> anima, 28 blocks"
+    ],
+    "conclusion": "blocksPatch sibling project is NOT required here; 40-block loading is already native."
+  },
+  "source_staged_in_git": {
+    "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-2.9B-loraPatch/",
+    "files_sha256": {
+      "__init__.py": "51114d41ca7e81d3d8e8dea240b752bfb6280b02186ed94591cbc0bdffb9488c",
+      ".gitattributes.upstream": "d5b5f14401f3daec7ee917c607a471d3e7c121228879a018b3308b7ee14199de",
+      ".gitignore": "d291635076a3292a22886221f877dc68f0d5d9a5bdfa132f2ee661b29591be4e",
+      "LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "pyproject.toml": "7d1324fa9bb1c7b37052224408e32cb3550bedad72749b0c32d947413b7f0c6d",
+      "README.ja.md": "f57f3f60ef7d0724219eaa07ec0cefdd838ee22c1b9f3bd819680a9f110f4803",
+      "README.md": "58ff75e153a916d357e484890663cc0a0d639d11d130a5fc9bed8e1c1dba213f"
+    },
+    "all_files_verbatim_from_upstream": true,
+    "whitelist_change": {
+      "file": "snapshot/runtime/production_tools/profiles.json",
+      "added_to_profiles": ["production", "diagnostic", "anima"],
+      "not_added_to_profiles": ["lean", "krea", "legacy", "maintenance"],
+      "sha256_before": "5ac094888707fc1cd38507a6624f7e07442a496b227e34c99e24b375fe9e55ab",
+      "sha256_after": "756f81aef3c9d02a74b0f1a309fc41ed573b7fea996cea8b5697a2d3f3333bfd"
+    },
+    "seal": {
+      "previous_manifest_sha256": "4cb84a06865ca70112ee000eed8a2c1926ca24261e04b96e8be94ff382bd6f34",
+      "added": 7,
+      "changed": ["production_tools/profiles.json"],
+      "removed": [],
+      "live_deployed_flag_written_by_seal": false
+    }
+  },
+  "deployment": {
+    "target_runtime": "G:\\ComfyUI-aki-v3",
+    "deploy_plan_operations": {
+      "add": 7,
+      "replace": 1,
+      "delete_requires_review_skipped": "ComfyUI/custom_nodes/TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters/models_cache.json"
+    },
+    "deployed_node_dir": "ComfyUI/custom_nodes/ComfyUI-Anima-2.9B-loraPatch/",
+    "deployed_file_hashes_match_git_source": true,
+    "rollback_backup_dir": "maintenance/comfyui/local/backups/20261005_133017_anima29_lorapatch/",
+    "rollback_notes": "Restore production_tools/profiles.json from before/, or remove the custom_nodes/ComfyUI-Anima-2.9B-loraPatch directory. Both restore the pre-deployment behaviour; the node is only loaded because it is on the production whitelist.",
+    "service": {
+      "runtime_pid_before": 53232,
+      "runtime_pid_after": 12536,
+      "launcher": "production_tools/launch.py production --memory-mode original --preview-method auto --cuda-malloc --reserve-vram 4",
+      "whitelist_contains_node": true,
+      "queue_before_stop": "0/0",
+      "queue_after_restart": "0/0"
+    },
+    "activation_log_line": "[INFO] [Anima 2.9B LoRA Patch] installed (base block j -> 2.9B block [0, 1, 3, 4, 6, 7]...). Set ANIMA_LORA_REMAP=0 to disable."
+  },
+  "acceptance": {
+    "method": "Same prompt, same seed (645613437897959), same sampler (28 steps, cfg 3.5, euler, sgm_uniform, shift 3), 768x1344. Only the patch state and LoRA strengths vary.",
+    "prompt_positive": "1girl, solo, upper body, outdoors, cherry blossoms, blue sky, detailed background, masterpiece, best quality",
+    "prompt_negative": "worst quality, low quality, bad anatomy, watermark, signature, blurry",
+    "loras_used": [
+      "anima/画风与画师/anima-base-1-painterly-v2.safetensors",
+      "anima/角色与人物/remielle-dan-zzz-anima-Tanger.safetensors"
+    ],
+    "remap_log_line_observed": "[Anima 2.9B LoRA Patch] 28-block LoRA on 40-block Anima-2.9B: remapped 1040 target keys to the expanded block layout.",
+    "remap_events_per_job": 2,
+    "lora_key_not_loaded_warnings": 0,
+    "images": {
+      "AB_Anima29_before_00001_.png": {
+        "sha256": "846450f7fe2faf837c9103d38281190ecfe6920313e97c3f45d0f2eaeceebcb1",
+        "state": "pre-deployment server, no patch, both LoRAs @1.0"
+      },
+      "AB_Anima29_after_00001_.png": {
+        "sha256": "e169cbf0614ba9e39c46db3d7dc03e1d5e7ca25a4057618d2ae9dc7a328b0596",
+        "state": "post-deployment, patch active, both LoRAs @1.0"
+      },
+      "AB29_remapOff_00001_.png": {
+        "sha256": "2426c39e9fc8a50339824baced1c33324db8d352d185f829035e65565de39fb4",
+        "state": "patch installed but ANIMA_LORA_REMAP=0, both LoRAs @1.0 (control)"
+      },
+      "AB29_ctl_noLora_00001_.png": {
+        "sha256": "56e2341ff671c881bc3dd4ed4013d1e479c67fb40ee7bedef8fb51bde5d637e",
+        "state": "patch active, no LoRA, model baseline"
+      },
+      "AB29_style07_00001_.png": {
+        "sha256": "548091e48ca9e995b40103075ce5ca6564e34dc2496d9a4c0d62dd4925d93633",
+        "state": "patch active, painterly style LoRA @0.7 only"
+      },
+      "AB29_char07_00001_.png": {
+        "sha256": "0c1110ca63320cd670757549278bb018e0524ce28bfcfc94f75543155d25551b",
+        "state": "patch active, character LoRA @0.7 only"
+      },
+      "AB29_both07_00001_.png": {
+        "sha256": "9f530c7560c4c81bbaf246e30f8479932ee0ef6fb1e3a76e104c0decd993e078",
+        "state": "patch active, both LoRAs @0.7"
+      }
+    },
+    "pixel_comparison": {
+      "before_vs_patch_off": {"mean_abs_diff": 3.31, "max": 184, "pct_pixels_gt8": 14.9, "reading": "visually identical; residual GPU nondeterminism between processes"},
+      "before_vs_patch_on": {"mean_abs_diff": 37.64, "max": 235, "pct_pixels_gt8": 99.8, "reading": "decisively different; patch is the cause"},
+      "noLora_vs_before": {"mean_abs_diff": 22.62, "max": 232, "pct_pixels_gt8": 86.7, "reading": "unpatched LoRAs were not inert, they were targeting wrong layers"}
+    },
+    "verdict": "Patch is active and behaves as documented. Base 28-block LoRAs now influence the 2.9B model on the correct layers. Individual LoRAs at 0.7 render coherent results; the baked production strength of 1.0 (stacked) over-applies and washes the image out."
+  },
+  "open_items": [
+    "Git commit of the staged source and profile change is deliberately NOT made; held for the parallel maintenance/packaging thread.",
+    "snapshot/manifest.json development_revision.live_deployed still says false and runtime_after is not written; requires the same packaging window.",
+    "CHANGELOG.md entry not written (path reserved by the parallel packaging thread).",
+    "Workflow strength re-tuning on the Anima 2.9B recommended workflows is proposed but NOT applied - workflow values are user data."
+  ]
+}

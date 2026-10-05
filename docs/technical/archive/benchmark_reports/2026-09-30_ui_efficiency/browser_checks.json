@@ -1,0 +1,34 @@
+{
+  "checks": [
+    {
+      "check": "UAP 1440px and 700px layout",
+      "pass": true
+    },
+    {
+      "check": "Library real search completion and direct copy buttons",
+      "pass": true
+    },
+    {
+      "check": "Three themes; empty search; basic Tag cards with real preview images",
+      "pass": true
+    },
+    {
+      "check": "Character selector: real 60-card grid, ArrowRight focus index 1, search and Escape stay in panel",
+      "pass": true
+    },
+    {
+      "check": "Clothing selector: rendered 48 cards; native accessibility search produced zero-result state",
+      "pass": true,
+      "note": "Playwright locators timed out; verified through accessibility input instead"
+    },
+    {
+      "check": "Pose selector: 48-card first page and native search empty state",
+      "pass": true
+    },
+    {
+      "check": "Artist selector: 40638 available items, first page 60, native search empty state",
+      "pass": true
+    }
+  ],
+  "boundary": "Read-only browsing/search and focus on production; no generated images, model changes, prompt writes, favorite changes or metadata writes. Native WeiLin paging tested with jsdom only; GPU/FPS/heap change not benchmarked."
+}

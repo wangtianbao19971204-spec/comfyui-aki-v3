@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-01",
+  "file": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\ComfyUI-Danbooru-Gallery-V50-GalleryOnly\\js\\danbooru_gallery\\danbooru_gallery.js",
+  "backup": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-01_gallery_card_fix\\before\\danbooru_gallery.js",
+  "before_sha256": "af4c2d4b50f7b7710dc8ddbd1262c7310c61b285f8f1e04a3d916d9bc1e37fec",
+  "after_sha256": "ca85009a3c0deb9e894f70b8f6fc59ee5c2b15e41b148e41428b81f810c04156",
+  "served_sha256": "ca85009a3c0deb9e894f70b8f6fc59ee5c2b15e41b148e41428b81f810c04156",
+  "served_matches_disk": true,
+  "syntax": "pass",
+  "existing_frontend_tests": {
+    "passed": 13,
+    "failed": 0
+  },
+  "browser": {
+    "loaded": 40,
+    "icon_size": "20x20",
+    "wide": {
+      "footer_outside_card": 0,
+      "viewport": "1280x720",
+      "card_overlaps": 0
+    },
+    "cards": 40,
+    "source": "live Civitai favorites, UAP gallery #1056",
+    "keyboard_focus": "pass",
+    "narrow": {
+      "footer_outside_card": 0,
+      "viewport": "760x900",
+      "card_overlaps": 0
+    },
+    "source_links": 40
+  },
+  "queue": {
+    "queue_running": [],
+    "queue_pending": []
+  }
+}

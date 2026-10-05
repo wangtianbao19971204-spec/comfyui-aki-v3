@@ -1,0 +1,133 @@
+{
+  "status": "complete",
+  "at": "2026-10-03T15:15:38.327411+08:00",
+  "scope": "Six selector topic navigation and classification captions",
+  "changes": [
+    "Corresponding library topic first and expanded by default",
+    "Subtopic names/order from live library index; full wrapping in narrow sidebar",
+    "Card caption shows library topic/subtopics, all memberships in tooltip",
+    "Source kept as optional filter; source-directory fallback removed from character series badges"
+  ],
+  "data_reclassification": false,
+  "formal_data_modified": false,
+  "service_restarted": false,
+  "queue_modified": false,
+  "candidate_cases": 6,
+  "browser_cases": [
+    {
+      "kind": "clothing",
+      "filteredTotal": "共 1249 款服装 | 显示第 1-48 款",
+      "allContainSubtopic": true,
+      "cards": 48
+    },
+    {
+      "kind": "pose",
+      "childLabel": "手势与肢体动作",
+      "count": 307,
+      "expanded": "flex",
+      "firstChild": "shared-sub:手势与肢体动作",
+      "firstTheme": "shared-theme:pose_action",
+      "allContainSubtopic": true,
+      "cards": 48,
+      "totalText": "generic: 共 307 个姿势 | 显示第 1-48 个"
+    },
+    {
+      "kind": "background",
+      "childLabel": "室内空间",
+      "count": 118,
+      "expanded": "flex",
+      "firstChild": "shared-sub:室内空间",
+      "firstTheme": "shared-theme:background_environment",
+      "allContainSubtopic": true,
+      "cards": 48,
+      "totalText": "generic: 共 118 个背景 | 显示第 1-48 个"
+    },
+    {
+      "kind": "character",
+      "childLabel": "作品角色",
+      "count": 121,
+      "expanded": "flex",
+      "firstChild": "shared-sub:作品角色",
+      "firstTheme": "shared-theme:identity",
+      "allContainSubtopic": true,
+      "cards": 60,
+      "totalText": "generic: 共 121 个角色 | 显示第 1-60 个"
+    },
+    {
+      "kind": "artist",
+      "firstTheme": "shared-theme:artist_style",
+      "firstChild": "shared-sub:画师标签",
+      "count": 40600,
+      "allContainSubtopic": true,
+      "cards": 60,
+      "totalText": "generic: 共 40600 个画师风格 | 显示第 1-60 个"
+    },
+    {
+      "kind": "style_quality",
+      "childLabel": "摄影与写实",
+      "count": 1559,
+      "expanded": "flex",
+      "firstChild": "shared-sub:摄影与写实",
+      "firstTheme": "shared-theme:style_medium",
+      "allContainSubtopic": true,
+      "cards": 48,
+      "totalText": "generic: 共 1559 条 | 显示第 1-48 条"
+    }
+  ],
+  "final_character_browser": {
+    "cards": 60,
+    "remainingSeriesBadges": 0,
+    "topic": "角色与身份 · 作品角色"
+  },
+  "live": {
+    "passed": true,
+    "health": {
+      "unchanged_guarded_files": 53,
+      "queue": [
+        0,
+        0
+      ],
+      "listener_pid": 39188,
+      "modules_ready": 5
+    },
+    "served": [
+      {
+        "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_shared_prompt_data.js",
+        "url": "/extensions/comfyui-anima-tools/anima_shared_prompt_data.js",
+        "sha256": "0b6ebdc8250c4c78f9ec77556ffade7233c944da4c9c7f5fe93c9856a868eaa1"
+      },
+      {
+        "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_pose_selector.js",
+        "url": "/extensions/comfyui-anima-tools/anima_pose_selector.js",
+        "sha256": "3b20a1021d8d037f7a43f2736b861a965ed6aa344b3ef9a04af708f17811a74e"
+      },
+      {
+        "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_clothing_selector.js",
+        "url": "/extensions/comfyui-anima-tools/anima_clothing_selector.js",
+        "sha256": "ec4d8b3c37518b8068f35c483d875b5a3038e282feb1afdf5dc861f6785ba7a6"
+      },
+      {
+        "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_background_selector.js",
+        "url": "/extensions/comfyui-anima-tools/anima_background_selector.js",
+        "sha256": "ac270d02b3101d36cebb8eee7150467301bd27eea53ea8b3d8ffb7b90be4e8b8"
+      },
+      {
+        "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_character_selector.js",
+        "url": "/extensions/comfyui-anima-tools/anima_character_selector.js",
+        "sha256": "d01afe9fe69b9e63ca06c355c6c2fb02d022e7828eb26e4e274e7353ccb4cafd"
+      },
+      {
+        "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\comfyui-anima-tools\\js\\anima_artist_selector.js",
+        "url": "/extensions/comfyui-anima-tools/anima_artist_selector.js",
+        "sha256": "579f7b747d705b82d89481d157ce7270b6fa7a01eca4dd0a50ef78a73a8e554c"
+      }
+    ],
+    "rollback_preflight_passed": true
+  },
+  "limitations": [
+    "Existing ComfyUI graph/preload startup errors observed in temporary test page; recovered in another fresh page.",
+    "No physical IME, prompt insertion, or favorite-persistence tests were performed for this display-only change."
+  ],
+  "rollback": "release.py rollback (exact current source hashes and guarded files required)",
+  "separate_scope": "Other active category-contract task and its lock/state left untouched"
+}

@@ -1,0 +1,72 @@
+{
+  "status": "LIVE_ACCEPTANCE_PASS",
+  "at": "2026-10-03T22:58:02.952252+08:00",
+  "scope": "Remove character selector supplemental-details dropdown and its direct/pending composition paths and matching editor field",
+  "files_changed": 4,
+  "source_checks": {
+    "passed": true,
+    "checks": [
+      "direct character insertion preserves main prompt bytes and ignores extras",
+      "changed-target guard still rejects stale writes",
+      "all six pending source types preserve main prompt bytes",
+      "old character pending details flag no longer appends extras"
+    ],
+    "production_data_writes": 0
+  },
+  "browser": {
+    "passed": true,
+    "freshTab": "8",
+    "characterCount": 995,
+    "renderedCards": 60,
+    "removedContentChooserCount": 0,
+    "resourceEditorOpened": true,
+    "removedSupplementalFieldCount": 0,
+    "appliedToRealWorkflow": false,
+    "savedResource": false,
+    "screenshot": "character-footer.png"
+  },
+  "guard": {
+    "passed": true,
+    "health": {
+      "queue": [
+        1,
+        0
+      ],
+      "pid": 53232,
+      "modules_ready": 5,
+      "unchanged_guards": 58,
+      "concurrent_other_scope_changes": {
+        "C:\\Users\\Administrator\\AppData\\Local\\ComfyUI-LoRA-Manager\\settings.json": {
+          "sha256": "01aa1daa5251fc9144ab5901c2f99bba715b9ef67809182664a1e81cbc154aa1",
+          "receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-03_runtime_phase2\\restart.json",
+          "only_change": "startup library updated_at timestamp; owned by the other restart task"
+        },
+        "G:\\ComfyUI-aki-v3\\ComfyUI\\custom_nodes\\ComfyUI-Unified-Prompt-Workbench\\modules\\ComfyUI-Danbooru-Gallery-V50-GalleryOnly\\js\\quick_group_navigation\\uap_daily_controls.js": {
+          "sha256": "598a66f09b04b0c1bab94d2caa351f73c43c9b573512277165efd43c29edeb36",
+          "receipt": "G:\\ComfyUI-aki-v3\\benchmark_reports\\2026-10-03_runtime_phase2\\release.json"
+        }
+      }
+    },
+    "served": [
+      {
+        "url": "/extensions/comfyui-anima-tools/anima_character_selector.js",
+        "sha256": "e5fcb990b2ad4f812e426e2965032eec47fda38a394ba1ee517b54537b465e64"
+      },
+      {
+        "url": "/extensions/comfyui-anima-tools/anima_selector_ui.js",
+        "sha256": "36aa302bae618aacd1d7f37d8bfae575f1f3588de4977bfa36562b25db7d0315"
+      },
+      {
+        "url": "/extensions/ComfyUI-Unified-Prompt-Workbench/pending_prompts.js",
+        "sha256": "4fc33561b76b4d25adf589d068f4fbc2c1d26400dedc92911fbf6f0257f3421b"
+      },
+      {
+        "url": "/weilin/prompt_ui/file/javascript/zz_tb_shared_preset_manager.js",
+        "sha256": "a5b7ede9bae5703ddd42489eb2536c46078a6857851c4fc72484a171e0ee92eb"
+      }
+    ],
+    "rollback_ready": true
+  },
+  "rollback": "python release.py rollback",
+  "backend_restart_by_this_task": false
+}

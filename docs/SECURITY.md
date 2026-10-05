@@ -25,17 +25,23 @@ git config --local core.hooksPath .githooks
 
 本地 pre-commit 强制 index 门禁，pre-push 强制全历史门禁；bundle 工具也内置全历史门禁。GitHub CI 对新推送/PR 跑工具测试、快照、数据库契约和全部可达历史扫描。新 clone 不会自动启用 hooks，须执行上面的 repo-local 配置。
 
-## 这次历史凭证处理
+## 历史凭证处理与后续整理
 
 旧本体实验分支发现 1 处硬编码 API key；维护首版的两份上游插件源码共 3 处旧 GitCode token。公开历史仅精确去除这些确认值，保留提交消息、作者/提交者时间、父链与全部本地 commits，old→new 映射在 `docs/history`。受影响签名不沿用为有效签名；原对象及签名只留在私有备份。
 
-`maintenance/private-archives/`、旧克隆/离线还原和 ignored local 可能包含原值，**一律不可整目录公开复制**。旧 `maintenance/comfyui.bundle` 已可恢复移动到 `maintenance/private-archives/legacy-history-20261005/comfyui-first-private.bundle`，对应原交付回执也在同目录。主仓本轮换成新对象库，但以后仍应只通过受审查 refs / 新 bundle 发布，不直接复制本机 `.git`，以免未引用对象或本地配置泄漏。生产插件没有在本轮回写，旧上游 token 是否仍有效没有联网测试；若凭证属于你控制的账户，应在供应方撤销/轮换，历史清洗不等于撤销。
+上述数字是早期 Core/Workbench 迁移阶段，不覆盖后续所有插件补迁。旧 `maintenance/private-archives/`、旧私有 bundle、克隆/还原及审计材料后来已按回执迁入本机仓外根 `G:\ComfyUI-local`，当前归属以 [WORKSPACE](WORKSPACE.md) 和对应移动日志为准，不能再按旧路径执行恢复命令。这些材料可能含原值，**一律不可整目录公开复制**。
+
+后续仍只通过受审查 refs / 新 bundle 发布，不直接复制本机 `.git`，以免不可达对象或本地配置泄漏。public-v2 阶段没有回写生产；public-v3 后续明确窄部署了 9 份安全文件及根维护路由，范围见 [整理验收](ACCEPTANCE_WORKSPACE.md)。不要把阶段说明混成现在的部署状态。旧凭证是否有效没有联网测试；若属于自己控制的账户，应在供应方撤销/轮换，历史清洗不等于撤销。
 
 规则扫描不是无遗漏证明；今后上传任何远端之前，仍需人工复核新增文件、SQL/个人资料以及全部 Git 历史。发现真实密钥时不要仅删工作树文件，应先停止发布、轮换密钥，再处理受影响历史。
+
+训练技术归档内的 18 份历史参数中，`trigger_token` 经语义核对是 caption 身份触发词而非鉴权。`governance/training-trigger-reviews.json` 绑定精确完整归档路径和整文件 SHA-256，只移除 `literal_credential_assignment` 这一误报；强密钥格式、其他规则、路径别名和变更后的字节仍拒绝。暂存门禁读取 index 登记，全历史与打包读取 HEAD 登记；没有登记或未经确认不授予例外。这不是按目录、字段名或训练文件类型放行。
 
 ## 权限与许可证
 
 上游许可证随源码保留，不给整仓套一个会覆盖第三方权利的统一新许可证。模型、第三方网页资料、图片与本地整合代码的授权分别管理。Git 私仓也不是对内容再分发权的自动授权。
+
+所长法典相关 NovelAI-Tag 来源明确区分软件工具的 MIT 条款与法典正文、原分类、配图及汇编结构。用户允许保留真实提示词解决的是本地资料/隐私取舍，不能自动推导这些上游资料已获公开再分发授权；正式 GitHub 公开前须另核授权或另行确定公开数据范围。本轮不为此擅删真实库，也不上传任何内容。
 
 本轮没有配置在线远端、推送、在线模型调用、上传或新的遥测。后续增加 GitHub/GitLab 远端需要用户明确指定目的地；当前可见性偏好为公开。
 

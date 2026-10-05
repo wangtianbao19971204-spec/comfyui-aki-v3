@@ -1,0 +1,168 @@
+{
+  "schema": 1,
+  "review_type": "reviewed_training_trigger_tokens",
+  "entries": [
+    {
+      "target": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_calibration_400.json",
+      "sha256": "a07a29a23cffff2f73348a047d95018502f90fe45df5d3101d4f6e0f0752ccc1",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    },
+    {
+      "target": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_400.json",
+      "sha256": "1c3ed193b89d874d7ce75d8995fdeb85697a952662e58fbd9db2d468c35c28e6",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    },
+    {
+      "target": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_anima29_400.json",
+      "sha256": "f684756db3969a2bf21b80cc0c59aa6c23d9b65175967bdc0a84c8fa7b6a73c8",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    },
+    {
+      "target": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_anima29_smoke_75.json",
+      "sha256": "c05af66c42d96c7432cd77ef3bfd70f03ec148e8980029bf01d3b5ec973b224f",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    },
+    {
+      "target": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_refine_175.json",
+      "sha256": "91459d076547fbba4a710b49f262bc50c22644ccabf3d43d6d8756ac092c97ac",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    },
+    {
+      "target": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_smoke_50.json",
+      "sha256": "42f4f4e52291ca827d763df8d1a4a893c7ef614173b83e70b43be8365fd33e64",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    },
+    {
+      "target": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_v2_correction_100.json",
+      "sha256": "9ec44695bf4ff32404f127ef9695a1d65fe6a9e11b5d563b49e7bef1bbb273ac",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    },
+    {
+      "target": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_v2_correction_80.json",
+      "sha256": "3194898ec7a85cc082877f1d84d7f8472511488a06358e2766786f2bc91e681f",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    },
+    {
+      "target": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_v3_bow_bundle_40.json",
+      "sha256": "4d1e0cad3e01f325cee0b544db457348d6c7d557df1cc44b5284387c255b7949",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    },
+    {
+      "target": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_v3_bow_bundle_stress_80.json",
+      "sha256": "2e9b3c42ab137b59e6ba43b46de052b579b969d0faa4667a5d2d0640eb4d3894",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    },
+    {
+      "target": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_morning_star_v3_bow_pilot_40.json",
+      "sha256": "44cd8c4849da3e9f525116ef8e5014dbc0cf30e41eaf6ef7527f6ba2029a0b8b",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    },
+    {
+      "target": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_ordinary_400.json",
+      "sha256": "989a3441a0207e71f23f3fa82f2916b84171b8c024c2b2ed048dde57153c9ad2",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    },
+    {
+      "target": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_ordinary_smoke_50.json",
+      "sha256": "1e6b56ee385392063dc5aacf64b769f4668783b27a776fe57a75be4898608f62",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    },
+    {
+      "target": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_smoke.json",
+      "sha256": "e3a5879334ed9d29571c4df13719ee9775a609d702ed32775cfe94e57e887495",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    },
+    {
+      "target": "docs/technical/archive/character_lora_forge/characters/alicia_bell/character.json",
+      "sha256": "fbe2010f3870038605165ba5e8e642e2a46c1ab5cc5d3cc839569e068df2ba90",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    },
+    {
+      "target": "docs/technical/archive/character_lora_forge/characters/alicia_bell/selection_campaign_20x200_plan.json",
+      "sha256": "ba955352972a21bd07069792dc8a555e4258017e610b32b0d38d2c1a45674be0",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    },
+    {
+      "target": "docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/dual_form_base_spec.json",
+      "sha256": "719d3e499f8cf20353bdd950b86dbf659c9e69a5f4c2ce040efbef5cf79272d8",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    },
+    {
+      "target": "docs/technical/archive/character_lora_forge/characters/alicia_bell/01_visual_spec/visual_spec.json",
+      "sha256": "a81fea8d3a8a841b055ebaea704ca944426cf4a19da3a052226e41b1c4a908b0",
+      "allowed_rules": [
+        "literal_credential_assignment"
+      ],
+      "confirmed": true,
+      "reason": "Reviewed literal training-caption trigger_token; not an authentication credential."
+    }
+  ]
+}

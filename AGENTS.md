@@ -4,6 +4,9 @@
 - 工作区与仓外资料边界见 docs/WORKSPACE.md、docs/EXTERNAL_STATE.md；旧 Git 只作仓外私有历史。禁止在运行根/插件/训练依赖重新 init 或让更新器覆盖主仓权威。可变运行数据比 Git 导出新时保留现场数据，不能按源码权威规则反向覆盖。
 - 运行目录是 manifest 记录的 source_root，仅作部署目标。没有明确部署请求，不将仓库变更写回运行目录，不重启、清队列、释放模型或提交生图。
 - 先读 README、docs/PROJECT_MAP.md、docs/KNOWN_ISSUES.md、snapshot/manifest.json 和对应范围最新收据。历史说明不能覆盖实时证据。
+- 功能接手先沿 docs/technical/README.md 与 catalog.json 找唯一实现、测试及数据边界。每次功能代码变更同步更新对应技术 MD，或新增 docs/technical/changes/<feature-id>/ 下的日期式短说明；新增功能必须登记目录，不仅写总 CHANGELOG。
+- docs/technical/archive 是带来源/哈希的历史实现参考，不是自动部署源。旧固定路径、PID、日期的脚本不能直接重跑；复用先提炼成主仓受测、参数化的维护工具。原件或未携带数据只在仓外时必须如实标记，不以路径表冒充代码备份。
+- 独立维护包版本由 governance/version.json 管理；普通开发不自动递增。先按 docs/VERSIONING.md 审核，再显式 prepare/提交/tag；不改第三方版本，不自动 push，不把 prepared/标签/包/部署/线上验收混为一谈。并行维护先协调清单和 Git index/refs 写入窗口。
 - 工作流、子图、节点模式、提示词、LoRA、种子和参数属于用户数据。改 UI 不得顺带改这些值；细化/二放继续由工作台选择，不能自行默认启用。
 - 代码权威入口是统一包及其 modules；旧同名兼容目录不要各改一套。维护本体时保留 Comfy-Org 上游提交、许可证和本地差异。
 - 不使用 git add . 扫描整套运行环境。本仓库只接纳审核过的 snapshot、脚本与文档。密钥、Cookie、令牌、用户认证配置、权重、数据库二进制、预览媒体和输出图不进 Git。
