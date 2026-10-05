@@ -1,17 +1,17 @@
 {
   "schema": 1,
   "package": "comfyui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "state": "prepared",
   "tag_prefix": "comfyui-v",
   "prepared": {
-    "base_commit": "b2d326240a39ebe8699caf4b1aaf45f697ae8094",
-    "previous_version": "0.0.0",
+    "base_commit": "afeb642880077cb7997426f7a6489150ca1a2f59",
+    "previous_version": "0.1.0",
     "bump": "minor",
-    "notes_path": "docs/releases/comfyui-v0.1.0.json",
-    "notes_sha256": "c3df3afc92bd0008e19f345232c6b74fdeb205901ba58903c30c50d0eedf3129",
-    "snapshot_manifest_sha256": "c52867f73b37bfc288817ce592b7d07db7993ecf699ba9506fef36572f0a310c",
-    "review_sha256": "f1cef2f5beef3b1b994364a2a90745ebdaff9f6b259cc27ddf3769ee431ece92",
-    "rollback_receipt_sha256": "4946f33f0b6da5770c8b23c28ea1b1371bb1116037859998ea27a4b4c553fad2"
+    "notes_path": "docs/releases/comfyui-v0.2.0.json",
+    "notes_sha256": "da2fa24087a0d5055ec8443fe4f54eacce22566c6cc8569249508c74e906836a",
+    "snapshot_manifest_sha256": "cae3538f6c38a29ba797a39c460e1680497e16d514f156fa9ff94a59504cb5f5",
+    "review_sha256": "29cacbbdaca412e01afcbf8f8662b4e17c7184d4ec6029958d14bf6f530ccfd1",
+    "rollback_receipt_sha256": "5a4a73b5b491115a4ccbb01fff5f02d349d320c91eb7679637f1bcb51eb36442"
   }
 }

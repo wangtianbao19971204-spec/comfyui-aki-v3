@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "package": "comfyui",
+  "version": "0.2.0",
+  "base_commit": "afeb642880077cb7997426f7a6489150ca1a2f59",
+  "snapshot_manifest_sha256": "cae3538f6c38a29ba797a39c460e1680497e16d514f156fa9ff94a59504cb5f5",
+  "review_sha256": "29cacbbdaca412e01afcbf8f8662b4e17c7184d4ec6029958d14bf6f530ccfd1",
+  "reviewed_notes": {
+    "schema": 1,
+    "summary": "comfyui 0.2.0：日常维护入口、保守暂存扫描复用、支持文件漏收修复与版本化离线交付。",
+    "components": [
+      "maintenance-and-security",
+      "runtime-support-capture",
+      "external-resource-contracts",
+      "handoff-and-recovery-documentation"
+    ],
+    "changes": [
+      "增加 maintain.py 的状态、first-parent 历史、暂存快检和备份规则入口；正式发布继续使用完整历史门禁。",
+      "本地暂存扫描只复用精确绑定且干净的正文结果，仍逐对象重哈希、核对路径与跨分片边界；压缩和审核例外不缓存。",
+      "补齐 25 份构建配置、默认配置、WASM、训练器标记、补丁和许可证原字节，新增 13 项漏收回归；快照为 8524 个逻辑项。",
+      "仓外 v5 清单登记 365 项，其中 347 项为引用；新增 11 份支撑资源和 Gallery 数据库位置，不复制模型或改在线数据库。",
+      "保留 Anima 任务的限定强度对照交接；本维护版本不修改用户工作流数值，也不重做 GPU 推理。",
+      "现行说明修正过时进行态；新版 bundle 与随包回执绑定提交、SHA、全新 clone 和隔离还原，旧 public-v3 包及历史记录保留。"
+    ],
+    "tests": [
+      "源码覆盖批次完整维护回归 364/364 PASS，13 项漏收回归包含精确配置、凭证门禁、路径逃逸、禁止覆盖和真实支持文件契约；回执 source-coverage-20261005 与当前未变维护代码对应。",
+      "本轮数据库结构契约通过，16 项技术功能目录/679 个引用和 445 份历史技术原件通过检查。",
+      "本轮仓外 v5 verify-dry-run 通过：365 项、347 个 reference；不是资源备份或完整环境恢复。",
+      "4 份 WASM 验证、rgthree 默认配置解析和 25 个 Git blob/运行原件摘要已通过；本轮不做前端构建、冷启动或 GPU 验收。",
+      "本轮完整回归复跑、标签全历史门禁、打包全历史门禁、新 clone 与隔离还原的最终结果另由 release-20261005-v020 仓外收据记录；prepare 本身不是这些门禁通过的证明。"
+    ],
+    "rollback": {
+      "target_commit": "365981fcfa4850cc799592b418674f2c0d29b088",
+      "receipt_id": "release-20261005-v020-recovery",
+      "receipt_sha256": "5a4a73b5b491115a4ccbb01fff5f02d349d320c91eb7679637f1bcb51eb36442",
+      "scope": [
+        "前一维护版本 0.1.0 的隔离 Git 源码恢复引用；不执行主工作树回退或生产部署。"
+      ],
+      "limitations": [
+        "回滚未执行；不授权 hard reset、重启、清队列、在线数据库覆盖或旧配置回写。",
+        "模型、预览、环境、凭证和最新运行资料保持仓外；同盘文件与引用不构成独立灾备。",
+        "旧 public-v3 包不含 0.1.0 及之后内容；新版包必须另有匹配的最终验收回执。",
+        "不推送 GitHub，不增加在线 remote；第三方资料的公开再分发许可仍须另行核对。"
+      ]
+    }
+  },
+  "runtime_deployed": false
+}
