@@ -24,7 +24,7 @@ WB = 'ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench'
 LIBRARY = WB + '/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/user_data'
 LIBRARY_DATABASES = ('userdatas_zh_CN_danbooru.db', 'userdatas_zh_CN_history.db', 'userdatas_zh_CN_tags.db')
 WEIGHTS = {'.safetensors', '.ckpt', '.pt', '.pth', '.onnx', '.gguf', '.bin', '.engine'}
-TEXT = {'.py', '.pyi', '.mako', '.js', '.mjs', '.cjs', '.ts', '.tsx', '.vue', '.svelte', '.css', '.scss', '.sass', '.less', '.html', '.json', '.jsonl', '.yaml', '.yml', '.toml', '.ini', '.cfg', '.md', '.rst', '.txt', '.csv', '.tsv', '.sql', '.xml', '.sh', '.ps1', '.psm1', '.bat', '.cmd', '.example', '.lock', '.map', '.in', '.c', '.cc', '.cpp', '.h', '.hpp', '.cu', '.cuh', '.glsl', '.frag', '.vert'}
+TEXT = {'.py', '.pyi', '.mako', '.js', '.mjs', '.cjs', '.ts', '.tsx', '.mts', '.cts', '.patch', '.vue', '.svelte', '.css', '.scss', '.sass', '.less', '.html', '.json', '.jsonl', '.yaml', '.yml', '.toml', '.ini', '.cfg', '.md', '.rst', '.txt', '.csv', '.tsv', '.sql', '.xml', '.sh', '.ps1', '.psm1', '.bat', '.cmd', '.example', '.lock', '.map', '.in', '.c', '.cc', '.cpp', '.h', '.hpp', '.cu', '.cuh', '.glsl', '.frag', '.vert'}
 ASSETS = {'.png', '.jpg', '.jpeg', '.webp', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.otf', '.mp3', '.webmanifest', '.gz'}
 SKIP_DIRS = {'.git', '.hg', '.svn', '__pycache__', 'node_modules', '.cache', '.pytest_cache', '.hypothesis', '.agents', '.benchmarks', '.omo', '.specs', '.venv', 'venv', 'logs', 'temp', 'output', 'input', 'preview', 'preview_thumbnails', 'user_data', 'lora_userdatas', 'loras_userdatas', 'translate_userdatas', 'prompt_selector_data_backups', 'random_tag'}
 PRIVATE_NAME = re.compile(r'^(?:\.env(?:\..*)?|(?:.*[_-])?(?:credentials|secrets|cookies|accounts|auth|tokens|providers|settings)(?:\.(?:json|yaml|yml|ini|toml))|config\.(?:json|yaml|yml|ini))$', re.I)
@@ -37,8 +37,43 @@ PUBLIC_CONFIG_PATHS = {
     'ComfyUI/comfy/text_encoders/byt5_tokenizer/added_tokens.json',
     'qwen21_lab/ComfyUI/comfy/text_encoders/byt5_tokenizer/added_tokens.json',
     'ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_mesh_graphormer/modeling/bert/bert-base-uncased/config.json',
+    'anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/qwen3_06b/config.json',
+    'anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/t5_old/config.json',
     *('ComfyUI/custom_nodes/comfyui-easy-use/locales/' + language + '/settings.json' for language in ('en', 'fr', 'ja', 'ko', 'ru', 'zh')),
 }
+# Shipped defaults and executable web support are source dependencies, not
+# arbitrary .default/.wasm payloads. Path approval never waives content scanning.
+REVIEWED_SUPPORT_FILES = frozenset({
+    'ComfyUI/custom_nodes/rgthree-comfy/rgthree_config.json.default',
+    *('ComfyUI/custom_nodes/rgthree-comfy/' + tree + '/lib/' + filename
+      for tree in ('src_web', 'web')
+      for filename in ('tree-sitter.wasm', 'tree-sitter-python.wasm')),
+    *('anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/' + relative
+      for relative in ('dev/COMMIT_ID', 'stable/COMMIT_ID', 'portable/UPDATER_VERSION')),
+})
+SOURCE_SPECIAL_NAMES = frozenset({
+    'LICENSE', 'COPYING', 'NOTICE', 'Dockerfile', '.gitignore', '.gitattributes',
+    '.gitattributes.upstream', 'CODEOWNERS', 'put_blueprints_here', 'VERSION',
+    'PORTABLE_BUILD', 'requirements.txt.filtered',
+})
+TOKENIZER_SOURCE_FILES = frozenset({
+    'ComfyUI/comfy/text_encoders/t5_pile_tokenizer/tokenizer.model',
+    'qwen21_lab/ComfyUI/comfy/text_encoders/t5_pile_tokenizer/tokenizer.model',
+})
+
+
+def source_license_name(name):
+    """Recognize extensionless upstream notices without admitting executables."""
+    return bool(re.fullmatch(r'(?:LICENSE|COPYING|NOTICE)(?:[-_][A-Za-z0-9][A-Za-z0-9_-]*)?|THIRD_PARTY_NOTICES', name))
+
+
+def supported_source_payload(relative):
+    """Shared capture/seal type policy; private paths and byte gates stay separate."""
+    path = Path(relative)
+    return (path.suffix.lower() in TEXT | ASSETS or path.name in SOURCE_SPECIAL_NAMES
+            or source_license_name(path.name) or relative in REVIEWED_SUPPORT_FILES
+            or relative in TOKENIZER_SOURCE_FILES)
+
 # Reviewed synthetic URL/redaction fixtures. Any edit requires another review.
 REVIEWED_SECURITY_FIXTURES = {
     'runtime/' + WB + '/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/tests/test_v53_legacy_security.py': '06d5f2680138c9fa4919fc13afd362fe3c969fe58c1c54d635380fe80181e7a1',
@@ -233,9 +268,7 @@ def selected_sources(root, registered_manifest=None):
             omitted.append({'path': rel, 'reason': 'private_or_machine_config'}); return
         if any(word in name for word in ['.backup', '.before-', '.before_', '.bak', '.disabled']) or file.suffix.lower() in WEIGHTS:
             return
-        tokenizer_asset = rel in {'ComfyUI/comfy/text_encoders/t5_pile_tokenizer/tokenizer.model',
-                                 'qwen21_lab/ComfyUI/comfy/text_encoders/t5_pile_tokenizer/tokenizer.model'}
-        if not tokenizer_asset and file.suffix.lower() not in TEXT | ASSETS and file.name not in {'LICENSE', 'COPYING', 'NOTICE', 'Dockerfile', '.gitignore', '.gitattributes', 'CODEOWNERS', 'put_blueprints_here', 'VERSION', 'PORTABLE_BUILD', 'requirements.txt.filtered'}:
+        if not supported_source_payload(rel):
             return
         if file.stat().st_size > 48 * 1024 * 1024:
             omitted.append({'path': rel, 'reason': 'large_optional_source_asset', 'bytes': file.stat().st_size}); return

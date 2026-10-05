@@ -29,6 +29,8 @@ Custom Scripts 的 `C/web/js/autocompleter.js`、`common/autocomplete.js` 使用
 
 ## 数据与私密边界
 
+Gallery 另有 `G/py/shared/data/tags_cache.db`，用于热度词/译文等补全缓存；它不是 WeiLin 的三库 SQL 检查点，也不是预览图片。已加入仓外 v5 计划的 `mutable_db` + `reference` 项。保留现场库；将来复制须用 SQLite backup API 并检查 WAL，不删除后盲目重建，也不从 Git 的旧库导出覆盖它。放置路径见 [支持文件契约](../../../governance/runtime-support.json)。
+
 真实图位于 WeiLin `user_data/prompt_selector/preview/`，缩略图在 `preview_thumbnails/`。Git 保留正文、绑定信息、模型/媒体位置清单及一个中性格式样例，不含全量图片 payload；见 [外部资源](../../EXTERNAL_ASSETS.md)。
 
 下载 URL 不保存签名参数或鉴权；图库 Cookie、API key、插件缓存不进档案。图片改绑应保留来源与个人选择，不能因正文重复就删除第二来源图。
@@ -42,6 +44,8 @@ Custom Scripts 的 `C/web/js/autocompleter.js`、`common/autocomplete.js` 使用
 - 已归档 [图库 verification.json](../archive/benchmark_reports/2026-10-01_gallery_card_fix/verification.json)，记录 13 项旧前端测试、40 卡片在两尺寸无重叠/越界及来源链接/键盘焦点通过；这是历史图库 UI 证据，不是当前 Tag 图覆盖率证据。
 
 ## 更新记录
+
+- 2026-10-05：补登记当前服务打开的 Gallery `tags_cache.db`；只核对文件身份与外部归属，不导出正文、不覆盖/清理数据库或重新验收图库 UI。
 
 - 2026-09-28：增量图片与主预览绑定完成固定批次验收。
 - 2026-10-01：图库卡片布局与来源链接交互修复。

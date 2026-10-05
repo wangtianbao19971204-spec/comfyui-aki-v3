@@ -22,6 +22,8 @@
 
 权威列表：`snapshot/inventory/models.json`；工作流引用检查：`snapshot/inventory/workflow_models.json`。清单的 `sha256: null` 表示尚未计算，不是已验真。新获取/替换的关键资源应记录确切版本、无鉴权来源页、许可、字节数和实际 SHA-256。不要将签名下载链接、查询参数内令牌或账户信息保存到公开说明。
 
+特殊格式的补充放置契约见 [runtime-support.json](../governance/runtime-support.json)：T5/ChatGLM 的 `.model` 分词文件、DensePose `.torchscript`、MediaPipe `.task`，以及 MANO/网格的 `.pkl`、`.npy`、`.npz`。它们没有伪装成源码上传；恢复时保留完整相对目录并核对配套版本。`.pkl` 等只作文件指纹登记，不为清点而反序列化。MANO 等资源仍受自己的许可限制，不随 GitHub 仓库自动分发。
+
 目录型模型需要**同一版本的完整目录**，包括存在的 config、tokenizer、vocab/merges、processor/preprocessor、标签映射、分片 index 与全部权重 shard。自定义模型代码需人工审查并记录来源，不因文件小就自动可信；不从其他版本拼凑。除加载器明确支持单文件形式外，不能只保留 `model.safetensors`。`extra_model_paths` 或目录链接引用的外盘路径由使用者本地配置，不把本机用户名/私有绝对目录写成公共默认值。
 
 ## 提示词预览放置与绑定

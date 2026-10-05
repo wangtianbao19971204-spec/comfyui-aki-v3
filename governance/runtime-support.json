@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "purpose": "Required support files discovered by the 2026-10-05 coverage audit; paths are relative to the runtime root.",
+  "public_sources": [
+    "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/vue-widgets/vite.config.mts",
+    "ComfyUI/custom_nodes/rgthree-comfy/rgthree_config.json.default",
+    "ComfyUI/custom_nodes/rgthree-comfy/src_web/lib/tree-sitter-python.wasm",
+    "ComfyUI/custom_nodes/rgthree-comfy/src_web/lib/tree-sitter.wasm",
+    "ComfyUI/custom_nodes/rgthree-comfy/web/lib/tree-sitter-python.wasm",
+    "ComfyUI/custom_nodes/rgthree-comfy/web/lib/tree-sitter.wasm",
+    "anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/dev/COMMIT_ID",
+    "anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/stable/COMMIT_ID",
+    "anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/portable/UPDATER_VERSION",
+    "anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/qwen3_06b/config.json",
+    "anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/t5_old/config.json",
+    "ComfyUI/custom_nodes/comfyui-easy-use/py/modules/dit/pixArt/LICENSE-Pixart",
+    "ComfyUI/custom_nodes/ComfyUI-GGUF/tools/lcpp.patch",
+    "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/LICENSE-MHR",
+    "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/LICENSE-MIT",
+    "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/LICENSE-SAM",
+    "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/NOTICE-MHR",
+    "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/THIRD_PARTY_NOTICES",
+    "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_1",
+    "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_2",
+    "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_3",
+    "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_4",
+    "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_5",
+    "qwen21_lab/ComfyUI/custom_nodes/ComfyUI-GGUF/tools/lcpp.patch",
+    "tools/llama.cpp/LICENSE-LLVM-OpenMP"
+  ],
+  "external_resources": [
+    {
+      "source": "anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/t5_old/spiece.model",
+      "category": "external_asset",
+      "purpose": "Bundled T5 tokenizer vocabulary used by the default training tokenizer path."
+    },
+    {
+      "source": "ComfyUI/custom_nodes/comfyui-easy-use/py/modules/kolors/chatglm/tokenizer/tokenizer.model",
+      "category": "external_asset",
+      "purpose": "Kolors/ChatGLM tokenizer; restore alongside its matching configuration."
+    },
+    {
+      "source": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/LayerNorm/DensePose-TorchScript-with-hint-image/densepose_r50_fpn_dl.torchscript",
+      "category": "external_asset",
+      "purpose": "DensePose detector weight, not source code."
+    },
+    {
+      "source": "ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_controlnet_aux/mesh_graphormer/hand_landmarker.task",
+      "category": "external_asset",
+      "purpose": "MediaPipe hand-landmark model used by the mesh preprocessing path."
+    },
+    {
+      "source": "ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_mesh_graphormer/modeling/data/J_regressor_extra.npy",
+      "category": "external_asset",
+      "purpose": "Mesh joint regression data; keep the matching upstream data version."
+    },
+    {
+      "source": "ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_mesh_graphormer/modeling/data/J_regressor_h36m_correct.npy",
+      "category": "external_asset",
+      "purpose": "Mesh joint regression data; keep the matching upstream data version."
+    },
+    {
+      "source": "ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_mesh_graphormer/modeling/data/MANO_LEFT.pkl",
+      "category": "external_asset",
+      "purpose": "Licensed left-hand geometry; preserve the original and verify permission separately. Do not deserialize for inventory."
+    },
+    {
+      "source": "ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_mesh_graphormer/modeling/data/MANO_RIGHT.pkl",
+      "category": "external_asset",
+      "purpose": "Licensed right-hand geometry; preserve the original and verify permission separately. Do not deserialize for inventory."
+    },
+    {
+      "source": "ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_mesh_graphormer/modeling/data/mano_downsampling.npz",
+      "category": "external_asset",
+      "purpose": "Hand mesh downsampling data paired with the geometry files."
+    },
+    {
+      "source": "ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_mesh_graphormer/modeling/data/mesh_downsampling.npz",
+      "category": "external_asset",
+      "purpose": "Body mesh downsampling data paired with the geometry files."
+    },
+    {
+      "source": "ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_mesh_graphormer/modeling/data/smpl_431_faces.npy",
+      "category": "external_asset",
+      "purpose": "Body mesh face topology paired with the geometry files."
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/py/shared/data/tags_cache.db",
+      "category": "mutable_db",
+      "purpose": "Live Gallery autocomplete/translation cache, distinct from the three WeiLin databases. Keep current state; use SQLite backup API for any future copy."
+    }
+  ],
+  "restore_rule": "Public files come from the current manifest. External resources stay outside Git at the same relative runtime paths and must be supplied before using their dependent features. A reference is not a backup or permission to redistribute.",
+  "scope_limit": "This contract covers the reviewed support-file omissions, not all dependencies of every installed or disabled plugin."
+}

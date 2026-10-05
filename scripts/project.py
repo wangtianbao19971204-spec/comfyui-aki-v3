@@ -7,8 +7,8 @@ import json
 import os
 from pathlib import Path
 
-from snapshot import (ASSETS, REPO, TEXT, digest, is_link, now, payload_relative,
-                      private_config, safe_path, save, verify, walk)
+from snapshot import (REPO, digest, is_link, now, payload_relative,
+                      private_config, safe_path, save, supported_source_payload, verify, walk)
 from security_guard import blocked_path
 
 
@@ -31,10 +31,7 @@ def source_entries(repo):
             raise ValueError('Runtime data or external assets must stay outside Git: ' + relative)
         if payload_relative(relative) != file.relative_to(snapshot).as_posix():
             raise ValueError('Store upstream attributes as .gitattributes.upstream: ' + relative)
-        special = file.name in {'LICENSE', 'COPYING', 'NOTICE', 'Dockerfile', '.gitignore', 'CODEOWNERS', 'put_blueprints_here', '.gitattributes.upstream', 'VERSION', 'PORTABLE_BUILD', 'requirements.txt.filtered'}
-        tokenizer = relative in {'ComfyUI/comfy/text_encoders/t5_pile_tokenizer/tokenizer.model',
-                                 'qwen21_lab/ComfyUI/comfy/text_encoders/t5_pile_tokenizer/tokenizer.model'}
-        if not special and not tokenizer and file.suffix.lower() not in TEXT | ASSETS:
+        if not supported_source_payload(relative):
             raise ValueError('Unsupported source payload; keep generated data outside the checkout: ' + relative)
         if file.stat().st_size > 50 * 1024 * 1024:
             raise ValueError('Source file exceeds 50 MiB: ' + relative)

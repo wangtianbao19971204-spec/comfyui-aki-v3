@@ -12,13 +12,14 @@ import os
 from pathlib import Path
 import re
 
-from snapshot import REPO, digest, is_link, now, payload_relative, portable_parts, private_config, safe_path
+from snapshot import (REPO, REVIEWED_SUPPORT_FILES, digest, is_link, now, payload_relative,
+                      portable_parts, private_config, safe_path, source_license_name)
 from security_guard import StreamScanner, blocked_path
 import security_guard
 
 
 MAX_SOURCE = 50 * 1024 * 1024
-SOURCE_SUFFIXES = {'.py', '.pyi', '.js', '.mjs', '.cjs', '.ts', '.tsx', '.vue', '.svelte',
+SOURCE_SUFFIXES = {'.py', '.pyi', '.js', '.mjs', '.cjs', '.ts', '.tsx', '.mts', '.cts', '.patch', '.vue', '.svelte',
                    '.css', '.scss', '.sass', '.less', '.html', '.sql', '.sh', '.ps1', '.psm1',
                    '.bat', '.cmd', '.toml', '.ini', '.cfg', '.md', '.rst', '.c', '.cc', '.cpp',
                    '.h', '.hpp', '.cu', '.cuh', '.glsl', '.frag', '.vert', '.svg',
@@ -185,6 +186,8 @@ def rejection(relative):
     lower = path.name.casefold()
     if any(marker in lower for marker in ('.backup', '.before-', '.before_', '.bak', '.disabled')):
         return 'historical_backup_file'
+    if relative in REVIEWED_SUPPORT_FILES or source_license_name(path.name):
+        return None
     if path.suffix.lower() == '.json':
         if relative in PUBLIC_JSON_PATHS or path.name in PUBLIC_JSON_NAMES or relative.startswith(PUBLIC_JSON_PREFIXES):
             return None

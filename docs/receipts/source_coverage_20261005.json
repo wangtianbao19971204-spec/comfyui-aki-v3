@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "receipt": "source-coverage-20261005",
+  "date": "2026-10-05",
+  "scope": "Capture reviewed runtime support-file omissions and register external dependencies without deployment.",
+  "base_commit": "35e65bbf9258d7220c2f3e0a19ba94b2df9f1a51",
+  "public_sources": {
+    "contract": "governance/runtime-support.json",
+    "import_receipt": "governance/runtime-support-import.json",
+    "added_files": 25,
+    "added_bytes": 1475623,
+    "existing_payloads_changed": 0,
+    "payloads_removed": 0,
+    "runtime_worktree_and_index_sha256_match": true,
+    "manifest_sha256": "cae3538f6c38a29ba797a39c460e1680497e16d514f156fa9ff94a59504cb5f5",
+    "snapshot_file_entries": 8515,
+    "snapshot_total_entries": 8524
+  },
+  "external_registration": {
+    "plan_version": 5,
+    "added_resource_references": 11,
+    "added_mutable_database_references": 1,
+    "total_entries": 365,
+    "reference_only_entries": 347,
+    "resource_bytes_hashed": 285409331,
+    "verify_dry_run_pass": true,
+    "copied_or_deserialized_assets": false,
+    "database_copied_or_modified": false,
+    "complete_runtime_restored": false,
+    "boundary": "A reference is not a backup. Directory references are not recursive content hashes."
+  },
+  "verification": {
+    "maintenance_suite": {
+      "entrypoint": "python -X utf8 -B -m unittest discover -s tests",
+      "tests": 364,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 162.280,
+      "new_source_support_regressions": 13
+    },
+    "snapshot_pass": true,
+    "wasm_validation": "4 of 4 original payloads accepted by WebAssembly.validate",
+    "rgthree_default_config": "JSON parse passed after removing whole-line comments",
+    "technical_catalog_staged_require_tracked_pass": true,
+    "staged_security": {
+      "pass": true,
+      "findings": 0,
+      "mode": "local-staged-only",
+      "clean_content_cache_used": true,
+      "all_object_bytes_rehashed": true,
+      "all_history_scanned": false,
+      "publication_evidence": false
+    },
+    "record_boundary": "Checks cover the changed tools and captured payloads. The final committed tree and final staged scan are bound by the private FINAL.json receipt, avoiding a self-referential commit hash."
+  },
+  "production_guard": {
+    "pass": true,
+    "protected_paths": 8510,
+    "unplanned_drift": 0,
+    "service_identity_unchanged": true,
+    "running_queue": 0,
+    "pending_queue": 0,
+    "ready_modules": 5,
+    "new_source_originals_checked_separately": 25
+  },
+  "not_performed": [
+    "Production deployment, restart, workflow changes, training or image generation",
+    "TypeScript compilation or frontend build; local Vue build dependencies are absent",
+    "Cold-start acceptance or complete reconstruction of every installed or disabled plugin",
+    "Model or database migration, automatic backup, encryption or off-disk recovery",
+    "GitHub push, new remote, release tag or maintenance version increment"
+  ],
+  "rollback": "This is a code and inventory-only commit. Review its inverse against the recorded base; never overwrite live databases or external assets from historical exports."
+}

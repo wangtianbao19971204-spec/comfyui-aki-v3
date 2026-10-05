@@ -15,6 +15,10 @@
 
 本轮在线数据库、模型和预览仍保持原位置，使用 `reference`。小型配置可机械备份到 `private-config/`，但不是应用自动同步的第二份权威；应用修改后需重新登记/备份。
 
+当前补齐支持资源的计划为仓外 `plans/external-runtime-plan-v5.json`，最新清单入口为 `manifests/external-runtime-current.json`。v5 在先前 353 项基础上加入 11 份分词/检测/几何资源和 1 份 Gallery 缓存库，共 365 项；旧清单保留为带时间点的证据，不自动升级为当前清单。每次主仓 manifest 或现场配置变化后均须重新 inventory，不能因为文件名带 current 就跳过指纹验证。
+
+这些新增资源的可移植相对路径、角色和用途存于 [支持文件契约](../governance/runtime-support.json)；真实数据库指纹仍只存仓外。新增项全为 reference，不生成权重副本或数据库备份。
+
 ## 使用与边界
 
 计划 JSON 为 `schema: 1`，包含 `roots`（仓外绝对本机根映射）与 `entries`。每项只允许 `id`、`root`、`source`、`target`、`category`、`action`，其中 source/target 必须为规范的 `/` 相对路径。不得包含密钥值。示意 entry：

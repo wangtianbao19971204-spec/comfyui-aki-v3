@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-05T06:09:47.885015+00:00",
+  "created_at": "2026-10-05T07:52:30.127343+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -6308,6 +6308,13 @@
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-GGUF/tools/fix_lines_ending.py",
       "sha256": "f12b56c7a64413cc12570448f84f59587bab6b3bc57276cff7e61ca8fb5c5cc0",
       "bytes": 1018,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-GGUF/tools/lcpp.patch",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-GGUF/tools/lcpp.patch",
+      "sha256": "60532cb65970e061987d2a916088e24c9a3196ce47a68d72d26d3ae403efa2ef",
+      "bytes": 21729,
       "kind": "file"
     },
     {
@@ -22432,6 +22439,13 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/vue-widgets/vite.config.mts",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/vue-widgets/vite.config.mts",
+      "sha256": "38537df24027126ad72ca2ab6d0738ceda906444d5d71543e75a75f6646a43c1",
+      "bytes": 4746,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/vue-widgets/vitest.config.ts",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/vue-widgets/vitest.config.ts",
       "sha256": "0aa6a5fbc8ce1a038e88a25ea8dba22d3fedbf97453e2861a2325fcf89a1069f",
@@ -23570,6 +23584,41 @@
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/bigvgan.py",
       "sha256": "0ae67b2db0112987974308929ee222b43545c3b4e941a99030787be55990066f",
       "bytes": 1769,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_1",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_1",
+      "sha256": "dc2e017a9a4430fbd21aa83345310fa34b7050d6c1d7a06d30436f7e5c4be2f4",
+      "bytes": 1087,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_2",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_2",
+      "sha256": "c3816ce4c3465e45b2d2c318c05af3e0050def54434b2c9f8ab0995b7760881f",
+      "bytes": 1088,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_3",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_3",
+      "sha256": "a4e4b2468504e54741ba589a2dd3c2d39469511d6c805951e36e2c5c9943ccae",
+      "bytes": 11555,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_4",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_4",
+      "sha256": "8c4a503f8af60737a58ffec285e313c908c522b75f8c6d6cdf1350a765e74f5b",
+      "bytes": 1558,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_5",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_5",
+      "sha256": "01ea888e8036ad7b0b7e094cdb47772da4d5d2e8dbd4a10bde20e34dbd786513",
+      "bytes": 1073,
       "kind": "file"
     },
     {
@@ -29324,6 +29373,13 @@
       "path": "runtime/ComfyUI/custom_nodes/comfyui-easy-use/py/modules/dit/config.py",
       "sha256": "4ecaee54010d98dd65747ff655fd3f7115f30f916ff36adf991be046f7ea3faf",
       "bytes": 2495,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/comfyui-easy-use/py/modules/dit/pixArt/LICENSE-Pixart",
+      "path": "runtime/ComfyUI/custom_nodes/comfyui-easy-use/py/modules/dit/pixArt/LICENSE-Pixart",
+      "sha256": "20b067f86de375aae6db0f283ab2e65de24d537733b89bd58432c101259d84cf",
+      "bytes": 34522,
       "kind": "file"
     },
     {
@@ -39064,6 +39120,13 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/rgthree-comfy/rgthree_config.json.default",
+      "path": "runtime/ComfyUI/custom_nodes/rgthree-comfy/rgthree_config.json.default",
+      "sha256": "9972ebc54facf57ee44e469ea61f2ce1dc54719e08e40bea0f0c825f26083c13",
+      "bytes": 2025,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/rgthree-comfy/src_web/comfyui/any_switch.ts",
       "path": "runtime/ComfyUI/custom_nodes/rgthree-comfy/src_web/comfyui/any_switch.ts",
       "sha256": "f1ddc4b9be5914a420a82f3b8ee44fbf2d738d92927048da2d0115a5c4420844",
@@ -39645,10 +39708,24 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/rgthree-comfy/src_web/lib/tree-sitter-python.wasm",
+      "path": "runtime/ComfyUI/custom_nodes/rgthree-comfy/src_web/lib/tree-sitter-python.wasm",
+      "sha256": "8c93692fb368e288a5824cee55773c9b3602804f513bda48c97661e52e9c2da2",
+      "bytes": 457796,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/rgthree-comfy/src_web/lib/tree-sitter.js",
       "path": "runtime/ComfyUI/custom_nodes/rgthree-comfy/src_web/lib/tree-sitter.js",
       "sha256": "20324e6cdd263917a04943e9532298ff6a55b7b09694d2bdb3f2af69ae2caf1a",
       "bytes": 154810,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/rgthree-comfy/src_web/lib/tree-sitter.wasm",
+      "path": "runtime/ComfyUI/custom_nodes/rgthree-comfy/src_web/lib/tree-sitter.wasm",
+      "sha256": "1340a1d8a45bd63c5adbfa83cd376f2611985e82537e8c733fd5489c9c357ea8",
+      "bytes": 205491,
       "kind": "file"
     },
     {
@@ -40324,10 +40401,24 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/rgthree-comfy/web/lib/tree-sitter-python.wasm",
+      "path": "runtime/ComfyUI/custom_nodes/rgthree-comfy/web/lib/tree-sitter-python.wasm",
+      "sha256": "8c93692fb368e288a5824cee55773c9b3602804f513bda48c97661e52e9c2da2",
+      "bytes": 457796,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/rgthree-comfy/web/lib/tree-sitter.js",
       "path": "runtime/ComfyUI/custom_nodes/rgthree-comfy/web/lib/tree-sitter.js",
       "sha256": "20324e6cdd263917a04943e9532298ff6a55b7b09694d2bdb3f2af69ae2caf1a",
       "bytes": 154810,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/rgthree-comfy/web/lib/tree-sitter.wasm",
+      "path": "runtime/ComfyUI/custom_nodes/rgthree-comfy/web/lib/tree-sitter.wasm",
+      "sha256": "1340a1d8a45bd63c5adbfa83cd376f2611985e82537e8c733fd5489c9c357ea8",
+      "bytes": 205491,
       "kind": "file"
     },
     {
@@ -40993,6 +41084,41 @@
       "path": "runtime/ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/LICENSE",
       "sha256": "34b092f15afb50e6f21a1f1f1b28c68165f4d65bcb36754dedf09f16a473aee2",
       "bytes": 1609,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/LICENSE-MHR",
+      "path": "runtime/ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/LICENSE-MHR",
+      "sha256": "3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5",
+      "bytes": 11560,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/LICENSE-MIT",
+      "path": "runtime/ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/LICENSE-MIT",
+      "sha256": "13af1064c3295b83f660ab2d4d9dd0539e074503bc79c7b0d3d5d9e3f567f3bd",
+      "bytes": 1093,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/LICENSE-SAM",
+      "path": "runtime/ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/LICENSE-SAM",
+      "sha256": "315341214aa835fd11de2922fbeae30f741d1c8ba214173974bbf0046ef9afa5",
+      "bytes": 8256,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/NOTICE-MHR",
+      "path": "runtime/ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/NOTICE-MHR",
+      "sha256": "953fa9902a65022fa4f1e72e68fe6a4f26366931ff9fc33dbc1fcff95fb7006c",
+      "bytes": 1723,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/THIRD_PARTY_NOTICES",
+      "path": "runtime/ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/THIRD_PARTY_NOTICES",
+      "sha256": "2a96da83588a1ce26c9094a7768ba06a098b2f46a950990c72633404c245a24d",
+      "bytes": 3921,
       "kind": "file"
     },
     {
@@ -46463,6 +46589,13 @@
       "kind": "file"
     },
     {
+      "source": "anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/dev/COMMIT_ID",
+      "path": "runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/dev/COMMIT_ID",
+      "sha256": "f3128433ffeb68fe82ccad9ba538afb1e04b2c3d642d3ecd0cee69242dc9f5d1",
+      "bytes": 40,
+      "kind": "file"
+    },
+    {
       "source": "anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/dev/LICENSE.md",
       "path": "runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/dev/LICENSE.md",
       "sha256": "faeb63342ddf1231a3ed1abd8c64c98f5d9c24388ce9b931b081f8bb557d84d7",
@@ -47541,6 +47674,13 @@
       "kind": "file"
     },
     {
+      "source": "anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/portable/UPDATER_VERSION",
+      "path": "runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/portable/UPDATER_VERSION",
+      "sha256": "7c468f5e59f2871b946e051445493bbcace531d597edbbcc9935e7d02d025114",
+      "bytes": 3,
+      "kind": "file"
+    },
+    {
       "source": "anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/portable/bootstrap_portable_updaters.ps1",
       "path": "runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/portable/bootstrap_portable_updaters.ps1",
       "sha256": "9c16c8b55da4c649dce73a3ad2f5a631709ae3345a2e9850aaaab58e1815149c",
@@ -47685,6 +47825,13 @@
       "path": "runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/stable/.gitignore",
       "sha256": "57da8faf23542725e6b2a5291ecb5d9b219d434ae134ed66459460a31d652ff7",
       "bytes": 79,
+      "kind": "file"
+    },
+    {
+      "source": "anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/stable/COMMIT_ID",
+      "path": "runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/stable/COMMIT_ID",
+      "sha256": "68751d1f491845b15acc975eca7e76bcb7dc0898eb5918cbd915fbb262929972",
+      "bytes": 40,
       "kind": "file"
     },
     {
@@ -48437,6 +48584,13 @@
       "kind": "file"
     },
     {
+      "source": "anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/qwen3_06b/config.json",
+      "path": "runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/qwen3_06b/config.json",
+      "sha256": "19a7f4d1b0d23df7c0ce5d1b8d77b1698678910e17f2b2fa6dd430ac4931c3c7",
+      "bytes": 757,
+      "kind": "file"
+    },
+    {
       "source": "anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/qwen3_06b/merges.txt",
       "path": "runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/qwen3_06b/merges.txt",
       "sha256": "b8e04af9c950e393054010dcef499c3f005e803e9b2da1a09b96a26c33266eb1",
@@ -48462,6 +48616,13 @@
       "path": "runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/qwen3_06b/vocab.json",
       "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
       "bytes": 2776833,
+      "kind": "file"
+    },
+    {
+      "source": "anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/t5_old/config.json",
+      "path": "runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/t5_old/config.json",
+      "sha256": "f59550f9095104a1d970031bf7ae640b92866fbb19cac7bd0e1ce4d09d32d776",
+      "bytes": 1254,
       "kind": "file"
     },
     {
@@ -57418,6 +57579,13 @@
       "kind": "file"
     },
     {
+      "source": "qwen21_lab/ComfyUI/custom_nodes/ComfyUI-GGUF/tools/lcpp.patch",
+      "path": "runtime/qwen21_lab/ComfyUI/custom_nodes/ComfyUI-GGUF/tools/lcpp.patch",
+      "sha256": "3f486d5be5a359061daa3ff208acae5afe6233262894b44103843914d7b986fa",
+      "bytes": 21278,
+      "kind": "file"
+    },
+    {
       "source": "qwen21_lab/ComfyUI/custom_nodes/ComfyUI-GGUF/tools/read_tensors.py",
       "path": "runtime/qwen21_lab/ComfyUI/custom_nodes/ComfyUI-GGUF/tools/read_tensors.py",
       "sha256": "8edead4f867f3573518b9620157129f086a824c9a941f26adcf52db9b589098a",
@@ -59357,6 +59525,13 @@
       "kind": "file"
     },
     {
+      "source": "tools/llama.cpp/LICENSE-LLVM-OpenMP",
+      "path": "runtime/tools/llama.cpp/LICENSE-LLVM-OpenMP",
+      "sha256": "fdad1758a9e1f9d5a81e18879b3406772115edc92c24bfa36b70c654f325e8e4",
+      "bytes": 19741,
+      "kind": "file"
+    },
+    {
       "source": "tools/llama.cpp/download_qwen38_27b.ps1",
       "path": "runtime/tools/llama.cpp/download_qwen38_27b.ps1",
       "sha256": "535b615959b8aad5f7fd9aa16a8f8ce550cd03ce921a2f6dd2029388e1658d9b",
@@ -60279,50 +60454,7 @@
     "vnccs-utils"
   ],
   "runtime_before": null,
-  "runtime_after": {
-    "queue": {
-      "running": 0,
-      "pending": 0
-    },
-    "listeners": [
-      {
-        "pid": 12536,
-        "created": 1791179140.4163213
-      }
-    ],
-    "modules": [
-      {
-        "key": "weilin",
-        "label": "共享资料与提示词",
-        "nodes": 4,
-        "ready": true
-      },
-      {
-        "key": "anima",
-        "label": "Anima 标签与随机选择",
-        "nodes": 16,
-        "ready": true
-      },
-      {
-        "key": "gallery",
-        "label": "Gallery 与 UAP",
-        "nodes": 22,
-        "ready": true
-      },
-      {
-        "key": "lora_manager",
-        "label": "LoRA、模型与 Embedding",
-        "nodes": 21,
-        "ready": true
-      },
-      {
-        "key": "completion",
-        "label": "补全与工作流工具",
-        "nodes": 13,
-        "ready": true
-      }
-    ]
-  },
+  "runtime_after": null,
   "scope": "Core + production plugin sources + workflows + full authoritative prompt JSON and three logical SQL databases; external weights/media are inventories, not payloads",
   "accepted_runtime_deployments": [
     {
@@ -60335,29 +60467,40 @@
     }
   ],
   "development_revision": {
-    "note": "Capture eleven existing SD-Trainer portable launcher and maintenance sources; no runtime deployment; accepted Anima 2.9B patch evidence remains in docs/receipts/anima29_lorapatch_20261005.json",
-    "previous_manifest_sha256": "7d930a51316f8d572d99d77c5b29fc6578565de0150e38158049ad293bd15663",
+    "note": "Capture 25 reviewed support dependencies, licenses and build files already present at runtime; capture only, no production deployment or workflow changes",
+    "previous_manifest_sha256": "c52867f73b37bfc288817ce592b7d07db7993ecf699ba9506fef36572f0a310c",
     "source_changes": {
       "added": [
-        "anima_lora_forge/vendor/sd-trainer/Download-Anima-Model.bat",
-        "anima_lora_forge/vendor/sd-trainer/Fix-Portable-Bats.bat",
-        "anima_lora_forge/vendor/sd-trainer/README.txt",
-        "anima_lora_forge/vendor/sd-trainer/Update-SD-Trainer-Release.bat",
-        "anima_lora_forge/vendor/sd-trainer/Update-SD-Trainer.bat",
-        "anima_lora_forge/vendor/sd-trainer/install_xformers.bat",
-        "anima_lora_forge/vendor/sd-trainer/run_gui.bat",
-        "anima_lora_forge/vendor/sd-trainer/run_gui_portable.bat",
-        "anima_lora_forge/vendor/sd-trainer/update/update_dependencies.bat",
-        "anima_lora_forge/vendor/sd-trainer/update/update_from_release.bat",
-        "anima_lora_forge/vendor/sd-trainer/update/update_sd_trainer.bat"
+        "ComfyUI/custom_nodes/ComfyUI-GGUF/tools/lcpp.patch",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/vue-widgets/vite.config.mts",
+        "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_1",
+        "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_2",
+        "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_3",
+        "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_4",
+        "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_5",
+        "ComfyUI/custom_nodes/comfyui-easy-use/py/modules/dit/pixArt/LICENSE-Pixart",
+        "ComfyUI/custom_nodes/rgthree-comfy/rgthree_config.json.default",
+        "ComfyUI/custom_nodes/rgthree-comfy/src_web/lib/tree-sitter-python.wasm",
+        "ComfyUI/custom_nodes/rgthree-comfy/src_web/lib/tree-sitter.wasm",
+        "ComfyUI/custom_nodes/rgthree-comfy/web/lib/tree-sitter-python.wasm",
+        "ComfyUI/custom_nodes/rgthree-comfy/web/lib/tree-sitter.wasm",
+        "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/LICENSE-MHR",
+        "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/LICENSE-MIT",
+        "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/LICENSE-SAM",
+        "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/NOTICE-MHR",
+        "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/THIRD_PARTY_NOTICES",
+        "anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/dev/COMMIT_ID",
+        "anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/portable/UPDATER_VERSION",
+        "anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/stable/COMMIT_ID",
+        "anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/qwen3_06b/config.json",
+        "anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/t5_old/config.json",
+        "qwen21_lab/ComfyUI/custom_nodes/ComfyUI-GGUF/tools/lcpp.patch",
+        "tools/llama.cpp/LICENSE-LLVM-OpenMP"
       ],
       "removed": [],
       "changed": []
     },
     "live_deployed": false,
-    "capture_only": true,
-    "capture_receipt": "governance/trainer-portable-source-import.json",
-    "capture_note": "Eleven already-existing runtime launcher sources were copied into Git without modifying or executing them. live_deployed=false refers to this capture-only seal, not the separately accepted Anima patch deployment.",
     "removed_sources": [
       {
         "source": "ComfyUI/custom_nodes/TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters/models_cache.json",

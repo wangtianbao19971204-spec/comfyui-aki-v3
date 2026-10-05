@@ -9,5 +9,6 @@
 *.woff2 binary
 *.ttf binary
 *.gz binary
+*.wasm binary
 # Schema baselines retain SQLite's original trigger whitespace for fingerprints.
 database/schema/v1/*.sql whitespace=-blank-at-eol
