@@ -2,6 +2,8 @@
 
 这个目录只包含可公开的提交映射、校验结果和迁移说明；不包含原始 `.git`、reflog 内容、私有配置或任何凭证原值。
 
+2026-10-05 工作区整合已将下述 25 个安全聚合入口与 241 个标签接入主仓，合并提交为 `d3f266a988ac5052a2da557131b893f5a658dc0d`。11,440 个映射提交全部为 `main` 的祖先，合并前后维护 tree 相同；临时 `refs/import/workspace/*` 已移除。原工作区 29 处 Git 元数据已仓外退休，位置与公开映射见 `governance/retired-git.json`。本页后续旧操作命令仅用于解释已执行迁移，不应在当前主仓重复运行。
+
 - [完整说明](PUBLIC_HISTORY_IMPORT_NOTES.md)：哪些历史保留、为什么少量 SHA 必须变化，以及原签名如何归档。
 - `core-public-map.json` / `workbench-public-map.json` / `main-public-map.json`：全部原提交及 refs 到公开提交的映射。
 - `*-public-verify.json`：逐提交元数据、消息、父节点顺序与变化树核验。

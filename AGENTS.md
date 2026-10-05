@@ -1,6 +1,6 @@
 # comfyui 维护约定
 
-- 本仓库是所有 ComfyUI 相关修改的唯一开发与提交入口；源码直接改 snapshot/runtime，结构/迁移改 database，资料内容维护 snapshot/library 的受审查导出。不要在运行目录的两个旧 Git 继续开发/提交。
+- 本仓库是所有 ComfyUI 相关修改的唯一开发与提交入口；源码直接改 snapshot/runtime，结构/迁移改 database，资料内容维护 snapshot/library 的受审查导出。运行根、本体、插件、工作台和训练依赖的旧 Git 均已退休，不在这些目录重新开发/提交。
 - 工作区与仓外资料边界见 docs/WORKSPACE.md、docs/EXTERNAL_STATE.md；旧 Git 只作仓外私有历史。禁止在运行根/插件/训练依赖重新 init 或让更新器覆盖主仓权威。可变运行数据比 Git 导出新时保留现场数据，不能按源码权威规则反向覆盖。
 - 运行目录是 manifest 记录的 source_root，仅作部署目标。没有明确部署请求，不将仓库变更写回运行目录，不重启、清队列、释放模型或提交生图。
 - 先读 README、docs/PROJECT_MAP.md、docs/KNOWN_ISSUES.md、snapshot/manifest.json 和对应范围最新收据。历史说明不能覆盖实时证据。
