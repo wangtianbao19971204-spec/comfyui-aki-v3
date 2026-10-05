@@ -4,7 +4,7 @@
 
 ## 日常最短路径
 
-1. `python -X utf8 -B scripts/maintain.py status`：看当前 Git、未提交改动、最后本地标签和 hooks。它不检查在线服务，不把旧部署收据当当前状态，也不冒称已有异盘备份。
+1. `python -X utf8 -B scripts/maintain.py status`：看当前 Git、未提交改动、最后本地标签、hooks 与已登记的备份回执。它不检查在线服务，不把旧部署收据当当前状态；备份验收记录与当前代码/资料覆盖情况分别显示。
 2. 改对应源码、运行相关测试；同一功能沿用现行技术 MD，只补一条“改什么／为什么／验证与限制”的短记录。不要复制整套交付文档。
 3. 精确 `git add -- <本次文件>` 后运行 `python -X utf8 -B scripts/maintain.py check-staged`，再明确提交。检查针对 **index**，不会把编辑器里未暂存的修复当成已入库；源码修改仍需下面的 seal/专项验证。
 4. 需要部署时按下面流程做精确比较、回滚准备和真实验收；需要正式维护版本时再走 VERSIONING。普通代码修改不顺手刷新整套资料库。
@@ -87,7 +87,27 @@ bundle 包含已提交的全部 refs/可达历史；不包含 ignored 文件、�
 
 ## 6. 备份与保留规则（不是执行回执）
 
-唯一规则表为 [retention-policy.json](../governance/retention-policy.json)。目前 `rules-only`、备份目的地未设、无自动备份/清理任务；显示这些规则不代表已经创建副本或验收恢复。
+唯一规则表为 [retention-policy.json](../governance/retention-policy.json)。它保持 `rules-only`，不保存本机实际备份目的地，也不执行备份/清理。规则中的 `independent_backup_verified: false` 只表示规则本身不作验收，不能拿它否认另有已验收的手动备份。
+
+### 登记与查看实际备份
+
+真实路径和验收回执只在仓外。对已验收的关键资料备份，在本仓的 Git 本地配置登记索引（不改全局配置、不提交私密路径）：
+
+```powershell
+git config --local comfyui.backupIndex <仓外回执索引的绝对路径>
+python -X utf8 -B scripts/maintain.py status
+# 临时检查另一份索引，不改变已登记的索引：
+python -X utf8 -B scripts/maintain.py status --backup-index <仓外回执索引的绝对路径> --json
+```
+
+索引沿用手动关键备份的 schema 1：`main_git`、`backup_root`、`final_receipt`、`final_receipt_sha256`、`batch_id` 和已验收状态。解析器核对主仓归属、最终回执 SHA、绑定的阶段回执/清单 SHA、来源提交、数据库完整性记录、跨物理磁盘记录及配套副本回执；所有列入清单的有效载荷只核对存在、大小和普通文件身份。它不调用复制/恢复或在线数据库，不打开配置和数据库正文。
+
+- 未登记：显示“无法判定”，不声称没有备份。换机器或新 clone 需重新登记本机索引。
+- 无法访问或损坏：显示不可访问/核验失败，不降级采用旧副本或仅相信文件名和 `pass` 字段。
+- 回执链有效：显示资料备份时间、源码版本/提交、资料数量和排除范围。HEAD 不同或有未提交修改时，明确不覆盖当前完整工作树。
+- `--json` 的 `recorded_acceptance` 与 `receipt_chain_verified` 只描述记录及其摘要；`payload_sha256_rechecked`、`physical_disks_rechecked`、`live_data_freshness_checked` 保持 false。原固定 `independent_backup_verified` 状态字段已由这些精确字段替代，保留规则的同名字段不变。
+
+快查不是重新逐字节验收、当前权限/磁盘拓扑复检、冷启动或备份之后资料的实时同步证明。哈希绑定也不是对可同时修改索引和回执的本机管理员的防伪认证。复制出去的历史失败回执可以保留，但成功数据必须由最终回执精确指定；不自动删除旧候选，不建立定时任务。若以后备份格式变化，应升级解析与测试，不能放宽校验后直接显示通过。
 
 | 内容 | 目标保留规则 |
 |---|---|

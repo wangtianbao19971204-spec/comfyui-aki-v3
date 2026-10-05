@@ -46,7 +46,8 @@ class MaintenanceEntryTests(unittest.TestCase):
         self.assertFalse(state['local_release']['exists'])
         self.assertFalse(state['runtime']['checked_live'])
         self.assertIsNone(state['runtime']['deployment_commit'])
-        self.assertFalse(state['backup']['independent_backup_verified'])
+        self.assertEqual(state['backup']['status'], 'not_configured')
+        self.assertFalse(state['backup']['recorded_acceptance'])
 
     def test_annotated_tag_is_recognized_without_changing_version_counter(self):
         self.git('tag', '-a', 'comfyui-v0.1.0', '-m', 'Release')
@@ -78,6 +79,15 @@ class MaintenanceEntryTests(unittest.TestCase):
         before = index.read_bytes()
         maintain.collect_status(self.repo)
         self.assertEqual(before, index.read_bytes())
+
+    def test_backup_index_uses_repo_local_config_and_explicit_override(self):
+        self.git('config', '--local', 'comfyui.backupIndex', str(self.repo.parent / 'private-index.json'))
+        with mock.patch.object(maintain.backup_status, 'inspect', return_value={}) as query:
+            maintain.collect_status(self.repo)
+            self.assertEqual(query.call_args.args[1], str(self.repo.parent / 'private-index.json'))
+            explicit = self.repo.parent / 'override.json'
+            maintain.collect_status(self.repo, backup_index=explicit)
+            self.assertEqual(query.call_args.args[1], explicit)
 
     def test_history_omits_merged_branch_internals(self):
         self.git('checkout', '-b', 'imported')

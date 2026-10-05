@@ -466,6 +466,7 @@
       "document": "docs/technical/operations/source-of-truth.md",
       "implementation": [
         "scripts/maintain.py",
+        "scripts/backup_status.py",
         "scripts/staged_scan_cache.py",
         "governance/retention-policy.json",
         "governance/runtime-support.json",
@@ -485,6 +486,7 @@
       ],
       "tests": [
         "tests/test_maintain.py",
+        "tests/test_backup_status.py",
         "tests/test_staged_scan_cache.py",
         "tests/test_snapshot.py",
         "tests/test_project.py",

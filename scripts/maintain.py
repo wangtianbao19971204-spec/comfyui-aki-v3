@@ -10,6 +10,7 @@ import subprocess
 import sys
 
 import security_guard as guard
+import backup_status
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -70,7 +71,7 @@ def policy(repo):
     return value
 
 
-def collect_status(repo=ROOT):
+def collect_status(repo=ROOT, backup_index=None):
     repo = Path(repo).absolute()
     head = git(repo, 'rev-parse', 'HEAD').stdout.decode().strip()
     version = read_json(repo, 'governance/version.json')
@@ -86,7 +87,11 @@ def collect_status(repo=ROOT):
     hook = git(repo, 'config', '--local', '--get', 'core.hooksPath', allowed=(0, 1)).stdout.decode().strip()
     state = changes(repo)
     manifest = read_json(repo, 'snapshot/manifest.json')
-    backup = policy(repo)
+    policy(repo)
+    if backup_index is None:
+        configured = git(repo, 'config', '--local', '--get', 'comfyui.backupIndex', allowed=(0, 1)).stdout.decode('utf-8').strip()
+        backup_index = configured or None
+    backup = backup_status.inspect(repo, backup_index, head, not state)
     return {
         'checked_at': datetime.now(timezone.utc).isoformat(),
         'repository': str(repo), 'branch': safe_text(git(repo, 'branch', '--show-current').stdout.decode().strip()),
@@ -100,8 +105,7 @@ def collect_status(repo=ROOT):
                     'manifest_captured_at': manifest.get('created_at'),
                     'recorded_bounded_deployments': len(manifest.get('accepted_runtime_deployments', [])),
                     'note': 'Recorded receipts are historical, bounded evidence; this status does not inspect or certify the running application.'},
-        'backup': {'mode': backup['mode'], 'destination_configured_by_this_policy': False,
-                   'independent_backup_verified': False, 'automatic_actions': False},
+        'backup': backup,
         'modified_production': False,
     }
 
@@ -132,6 +136,7 @@ def main():
     commands = parser.add_subparsers(dest='command', required=True)
     status_parser = commands.add_parser('status', help='Current Git/tag state; never a live-runtime acceptance')
     status_parser.add_argument('--json', action='store_true')
+    status_parser.add_argument('--backup-index', type=Path, help='Local private backup index; overrides repo-local comfyui.backupIndex')
     history_parser = commands.add_parser('history', help='Only the maintenance first-parent history')
     history_parser.add_argument('--limit', type=int, default=10)
     check_parser = commands.add_parser('check-staged', help='Check staged bytes and documentation, using the local cache')
@@ -146,7 +151,7 @@ def main():
         elif args.command == 'backup-policy':
             print(json.dumps(policy(ROOT), ensure_ascii=False, indent=2))
         else:
-            report = collect_status()
+            report = collect_status(backup_index=args.backup_index)
             if args.json:
                 print(json.dumps(report, ensure_ascii=False, indent=2))
             else:
@@ -159,7 +164,8 @@ def main():
                     print('  ' + item['status'] + ' ' + item['path'])
                 print('提交保护：' + ('已配置' if report['hooks_configured'] else '未配置，请按 MAINTENANCE 启用'))
                 print('运行状态：未实测；Git 标签不等于当前部署版本。')
-                print('备份状态：已制定规则，尚未配置/验收异盘备份；不会自动删除。')
+                for line in backup_status.lines(report['backup']):
+                    print(line)
         return 0
     except Exception as exc:
         # Metadata and Git errors may contain paths or private values.
