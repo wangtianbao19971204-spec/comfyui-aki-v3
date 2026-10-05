@@ -20,6 +20,11 @@
 | 预览原图与缩略图 | `prompt_selector/preview`、`preview_thumbnails` | 外部媒体清单，不进 Git；不能视作可随意删除的缓存 |
 | 模型 | `ComfyUI/models` 及生产插件内权重 | 路径/大小/mtime 清单及工作流引用关系；权重本体留在外部 |
 | 网页/法典导入 | `benchmark_reports/source_update_flow` | 当前门禁脚本与说明；其他历史批次数据仍留在原目录 |
+| 角色数据集维护 | `character_lora_forge/` | 当前维护源码；角色项目、图片、审核输出和私密配置外置引用 |
+| Anima 训练维护 | `anima_lora_forge/` | Forge 源码与实际存在的 SD-Trainer/SD-Scripts 本地源码；不恢复现场已删除的上游文件、不携带权重与环境 |
+| 独立 Qwen 实验服务 | `qwen21_lab/` | 当前维护入口及实际使用的独立源码；不是生产 8188 服务，也不代表已通过冷启动验收 |
+| 根辅助工具 | `scripts/`、`tools/`、`remote_llm_guard/` | 公开可维护代码；远端鉴权从仓外 JSON 读取，二进制服务环境/模型不入库 |
+| 其他安装插件 | `ComfyUI/custom_nodes/` | 受审查源码补迁；被捕获不等于启用，不变更 production 白名单 |
 | 验收与已知问题 | 当前 part_refinement_pipeline STATE 指向的收据 | 当前 UI、工作流与推理证据分开保存，不互相替代 |
 
 ## 当前流程边界
@@ -32,4 +37,6 @@ UAP 保留九个工作分支：Anima 原版、Anima 2.9B、Krea2 生产，Krea2 
 
 ## 捕获范围不是全部磁盘镜像
 
-当前 production 配置之外的插件记录在 `inventory/upstreams.json`，但不把所有视频/旧 LLM/已禁用包拷进生产基线。Python 前端分发包、CUDA、下载模型、LoRA Manager 的大型 Civitai 缓存、图库缓存、源网页原件、训练项目和历史 benchmark 媒体仍为外部资源。迁移前根据实际用途补齐，不可声称仅 clone 即可完全复现整台机器。
+首版只捕获 production 插件；工作区整理补入其他已安装插件和独立维护项目的受审查源码，但**没有启用这些插件或改变生产配置**。代码归属不等于运行白名单。Python 前端分发包、CUDA、下载模型、LoRA Manager 的大型 Civitai 缓存、图库缓存、源网页原件、训练项目和历史 benchmark 媒体仍为外部资源。迁移前根据实际用途补齐，不可声称仅 clone 即可完全复现整台机器。
+
+运行旧 Git 退休后的记录见 `governance/retired-git.json`，新历史映射见 `docs/history/`。真实目录与归档布局见 [WORKSPACE.md](WORKSPACE.md)。实际活动来源由主仓受审查文件清单确定，不能把仓外旧 benchmark 副本当成同名组件的新权威。

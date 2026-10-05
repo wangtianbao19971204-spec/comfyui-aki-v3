@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "paths": {
+    "python": "python/python.exe",
+    "pythonw": "python/pythonw.exe",
+    "launcher": "YourLauncher.exe"
+  },
+  "environment": {
+    "AUTODL_TOKEN": "<local-token>",
+    "AUTODL_INSTANCE_UUID": "<instance-id>",
+    "AUTODL_START_COMMAND": "<reviewed-remote-start-command>",
+    "COMFY_URL": "http://127.0.0.1:8188",
+    "LEASE_HEALTH_URL": "https://example.invalid/health",
+    "LEASE_HEARTBEAT_URL": "https://example.invalid/heartbeat",
+    "LEASE_SECRET": "<local-heartbeat-secret>",
+    "CHECK_INTERVAL_SECONDS": "30",
+    "LOCAL_HEARTBEAT_LOG_PATH": "<absolute-local-log-path>",
+    "AUTODL_MAX_WAIT_SECONDS": "900",
+    "AUTODL_RETRY_SECONDS": "15",
+    "AUTODL_SSH_HOST": "<ssh-host>",
+    "AUTODL_SSH_PORT": "22",
+    "AUTODL_SSH_USER": "root",
+    "AUTODL_SSH_KEY": "<absolute-local-key-path-or-empty>",
+    "AUTODL_SSH_START_COMMAND": "<reviewed-remote-start-command>",
+    "AUTODL_SSH_FALLBACK_AFTER_ATTEMPTS": "2"
+  }
+}

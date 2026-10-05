@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "project_id": "new_character_anima_lora",
+  "character_id": "new_character",
+  "display_name": "新角色",
+  "trigger_token": "unique_trigger",
+  "dataset_dir": "../character_lora_forge/characters/new_character/final_training",
+  "output_root": "runs/new_character",
+  "models": {
+    "dit": "../ComfyUI/models/diffusion_models/Anima/anima_baseV10.safetensors",
+    "text_encoder": "../ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors",
+    "vae": "../ComfyUI/models/vae/qwen_image_vae.safetensors"
+  },
+  "trainer": {
+    "root": "vendor/sd-trainer/SD-Trainer/vendor/sd-scripts",
+    "script": "anima_train_network.py",
+    "accelerate": "vendor/sd-trainer/python_embeded/Scripts/accelerate.exe",
+    "allow_execute": false
+  },
+  "dashboard": {
+    "root": "vendor/sd-trainer/SD-Trainer",
+    "python": "vendor/sd-trainer/python_embeded/python.exe",
+    "ui_url": "http://127.0.0.1:28000",
+    "monitor_url": "http://127.0.0.1:28000/train-monitor",
+    "tensorboard_url": "http://127.0.0.1:28000/tensorboard.html",
+    "run_api": "http://127.0.0.1:28000/api/run"
+  },
+  "training": {
+    "output_name": "new_character_anima_r32",
+    "network_module": "networks.lora_anima",
+    "network_dim": 32,
+    "network_alpha": 16,
+    "learning_rate": "2e-5",
+    "optimizer_type": "AdamW",
+    "lr_scheduler": "constant",
+    "timestep_sampling": "sigmoid",
+    "discrete_flow_shift": 1.0,
+    "max_train_steps": 1000,
+    "save_every_n_steps": 200,
+    "mixed_precision": "bf16",
+    "save_precision": "bf16",
+    "resolution": 1024,
+    "batch_size": 1,
+    "num_repeats": 1,
+    "enable_bucket": true,
+    "bucket_no_upscale": true,
+    "min_bucket_reso": 512,
+    "max_bucket_reso": 1536,
+    "bucket_reso_steps": 64,
+    "shuffle_caption": false,
+    "keep_tokens": 1,
+    "cache_text_encoder_outputs": true,
+    "cache_latents": true,
+    "gradient_checkpointing": true,
+    "network_train_unet_only": true,
+    "qwen_image_vae_2d": true,
+    "num_cpu_threads_per_process": 1,
+    "seed": 42,
+    "extra_args": []
+  },
+  "evaluation": {
+    "checkpoint_steps": [
+      400,
+      600,
+      800,
+      1000
+    ],
+    "lora_strengths": [
+      0.6,
+      0.8,
+      1.0
+    ],
+    "require_codex_visual_review": true
+    ,
+    "enable_preview": true,
+    "preview_prompt": "unique_trigger, masterpiece, best quality, safe, solo, full body, neutral standing pose, simple background",
+    "sample_every_n_steps": 200
+  }
+}

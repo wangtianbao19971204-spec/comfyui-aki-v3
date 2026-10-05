@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "verifier_contract": 2,
+  "commits_verified": 4641,
+  "refs_verified": 190,
+  "public_ref_set_verified": 327,
+  "source_tag_set_and_symbolic_ref_targets_exact": true,
+  "annotated_tags_verified": 135,
+  "tree_pairs_verified": 11070,
+  "changed_tree_pairs_verified": 4206,
+  "root_tree_pairs_verified": 4468,
+  "messages_metadata_and_available_parent_order_preserved": true,
+  "only_declared_payload_or_gitlink_exclusions": true,
+  "missing_shallow_edges_verified": 0,
+  "externalized_payloads_absent_from_object_storage": true,
+  "all_locally_stored_commits_covered": true,
+  "public_commit_coverage_exact": true,
+  "fsck_strict_passed": true
+}

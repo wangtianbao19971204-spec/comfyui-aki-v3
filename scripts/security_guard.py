@@ -73,6 +73,56 @@ for _fixture_sha, _fixture_path in REVIEWED_CORE_FIXTURES.items():
     REVIEWED_FIXTURES[_fixture_sha] = 'reviewed_upstream_synthetic_security_test'
     FIXTURE_ENDS[_fixture_sha] = _fixture_path
 
+# Reviewed non-credential character training trigger in an audit record.
+# Ace's versioned syntax-token scopes have a separate exact-byte/path registry.
+REVIEWED_SOURCE_LITERALS = {
+    '633e43d12fd347edba569b97b9e23dea4698a840ec022e938f8f268d49a4e473':
+        'character_lora_forge/tools/merge_alicia_morning_star_replacements.py',
+}
+for _source_sha, _source_path in REVIEWED_SOURCE_LITERALS.items():
+    REVIEWED_FIXTURES[_source_sha] = 'reviewed_noncredential_domain_token'
+    FIXTURE_ENDS[_source_sha] = _source_path
+
+SOURCE_REVIEW_RULES = frozenset({'literal_credential_assignment', 'escaped_literal_credential_assignment'})
+
+
+def load_source_review_file(path=REPO / 'governance/security-review-fixtures.json'):
+    """Exact independently reviewed bytes and file paths, never a directory skip."""
+    if Path(path).stat().st_size > 1024 * 1024:
+        raise ValueError('Source review registry size limit')
+    data = json.loads(Path(path).read_bytes())
+    required = {'schema', 'review', 'allowed_rules', 'entries'}
+    if not isinstance(data, dict) or set(data) != required or type(data['schema']) is not int or data['schema'] != 1:
+        raise ValueError('Invalid source review registry schema')
+    if data['review'] != 'reviewed_ace_syntax_token_scopes' or not isinstance(data['allowed_rules'], list) or set(data['allowed_rules']) != SOURCE_REVIEW_RULES:
+        raise ValueError('Invalid source review registry scope')
+    if not isinstance(data['entries'], list) or len(data['entries']) > 10000:
+        raise ValueError('Invalid source review registry entries')
+    result = {}
+    for item in data['entries']:
+        if not isinstance(item, dict) or set(item) != {'sha256', 'path_ends'}:
+            raise ValueError('Invalid source review entry')
+        sha, ends = item['sha256'], item['path_ends']
+        if not isinstance(sha, str) or not re.fullmatch(r'[0-9a-f]{64}', sha) or sha in result:
+            raise ValueError('Invalid or duplicate source review digest')
+        if not isinstance(ends, list) or not ends or any(not isinstance(end, str) for end in ends) or len(set(ends)) != len(ends):
+            raise ValueError('Invalid source review paths')
+        for end in ends:
+            if re.search(r'[\\:*?"<>|\x00-\x1f]', end) or any(part in {'', '.', '..'} or part.rstrip(' .') != part for part in end.split('/')):
+                raise ValueError('Nonportable source review path')
+            if not end.endswith('.js') or '/ace-builds/' not in end:
+                raise ValueError('Source review scope must remain an exact Ace file')
+        result[sha] = tuple(ends)
+    return result
+
+
+REVIEWED_ACE_SOURCE_PATHS = load_source_review_file()
+
+
+def reviewed_ace_paths(digest, paths):
+    ends = REVIEWED_ACE_SOURCE_PATHS.get(digest, ())
+    return bool(paths and ends) and all(any(path == end or path.endswith('/' + end) for end in ends) for path in paths)
+
 REVIEWED_HISTORICAL_PATHS = {
     ('snapshot/runtime/ComfyUI/custom_nodes/TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters/models_cache.json',
      '256920e0f444fce3358401b72bc1529e32d3954690ec2f1cd397aaf9251df3c6'): 'reviewed_model_names_only_cache',
@@ -113,11 +163,21 @@ def git(repo, *args, input_data=None):
     return result.stdout
 
 
-def refs(repo):
+def _raw_ref_lines(repo):
+    """Internal comparison input only; never include raw secret-bearing names in a report."""
     result = subprocess.run(['git', '-C', str(repo), 'show-ref'], capture_output=True)
     if result.returncode not in {0, 1}:
         raise RuntimeError('Cannot read Git refs')
-    return result.stdout.decode('utf-8', errors='replace').splitlines()
+    return result.stdout.decode('utf-8', errors='surrogateescape').splitlines()
+
+
+def refs(repo):
+    # Stable opaque names preserve ref-change comparisons without leaking a name.
+    result = []
+    for line in _raw_ref_lines(repo):
+        oid, name = line.split(' ', 1)
+        result.append(oid + ' ' + safe_report_name(name))
+    return result
 
 
 def entropy(value):
@@ -190,6 +250,64 @@ def patterns(block):
         if plausible(match.group(1)):
             result.add('bearer_token')
     return result
+
+
+def strong_name_rules(name):
+    """Names get strong signatures only, not entropy/assignment heuristics."""
+    data = name.encode('utf-8', errors='surrogateescape')
+    result = set()
+    for rule, pattern in STRONG.items():
+        if not any(needle in data for needle in RULE_NEEDLES[rule]):
+            continue
+        for match in pattern.finditer(data):
+            if rule == 'url_userinfo' and placeholder(match.group().split(b'://', 1)[1].split(b':', 1)[1][:-1]):
+                continue
+            result.add(rule)
+            break
+    return result
+
+
+def name_digest(name):
+    return hashlib.sha256(name.encode('utf-8', errors='surrogateescape')).hexdigest()
+
+
+def safe_report_name(name):
+    return '<redacted-name:sha256:' + name_digest(name) + '>' if strong_name_rules(name) else name
+
+
+def sanitize_report_names(value):
+    """Defense in depth for paths in compressed/fixture/boundary/ref metadata."""
+    if isinstance(value, str):
+        return safe_report_name(value)
+    if isinstance(value, list):
+        return [sanitize_report_names(item) for item in value]
+    if isinstance(value, dict):
+        return {safe_report_name(key) if isinstance(key, str) else key: sanitize_report_names(item)
+                for key, item in value.items()}
+    return value
+
+
+def name_findings(name, oid, kind='filename'):
+    rules = strong_name_rules(name)
+    if not rules:
+        return []
+    digest = name_digest(name)
+    return [{'path': '<redacted-name:sha256:' + digest + '>', 'object': oid,
+             'rule': kind + '_' + rule, 'name_sha256': digest} for rule in sorted(rules)]
+
+
+def ref_name_findings(repo):
+    names = {}
+    for line in _raw_ref_lines(repo):
+        oid, name = line.split(' ', 1)
+        names[name] = oid
+    # The staged gate also protects the first commit on a named unborn branch.
+    symbolic = subprocess.run(['git', '-C', str(repo), 'symbolic-ref', '-q', 'HEAD'], capture_output=True)
+    if symbolic.returncode not in {0, 1}:
+        raise RuntimeError('Cannot inspect symbolic HEAD')
+    if symbolic.returncode == 0:
+        names.setdefault(symbolic.stdout.decode('utf-8', errors='surrogateescape').strip(), '')
+    return [finding for name, oid in names.items() for finding in name_findings(name, oid, 'refname')]
 
 
 class StreamScanner:
@@ -341,7 +459,8 @@ def inventory(repo, staged):
             if stage != '0':
                 raise RuntimeError('Index contains unresolved merges')
             if mode == '160000':
-                gitlinks.append({'path': path, 'object': oid, 'rule': 'nested_gitlink'})
+                gitlinks.append({'path': safe_report_name(path), 'object': oid, 'rule': 'nested_gitlink'})
+                gitlinks.extend(name_findings(path, oid))
                 continue
             objects.setdefault(oid, set()).add(path)
     else:
@@ -365,7 +484,8 @@ def inventory(repo, staged):
                 if set(oid) == {'0'}:
                     continue
                 if mode == b'160000':
-                    gitlinks.append({'path': path, 'object': oid, 'rule': 'nested_gitlink'})
+                    gitlinks.append({'path': safe_report_name(path), 'object': oid, 'rule': 'nested_gitlink'})
+                    gitlinks.extend(name_findings(path, oid))
                 else:
                     objects.setdefault(oid, set()).add(path)
     query = b''.join(oid.encode('ascii') + b'\n' for oid in objects)
@@ -375,11 +495,16 @@ def inventory(repo, staged):
         oid, kind, size = line.split()
         if kind in {'blob', 'commit', 'tag'}:
             selected.append({'object': oid, 'type': kind, 'bytes': int(size), 'paths': sorted(objects[oid])})
+        elif kind == 'tree':
+            # Empty historical directories/tree refs have no leaf blob to scan.
+            for path in objects[oid]:
+                gitlinks.extend(name_findings(path, oid))
     return selected, gitlinks
 
 
 def scan_objects(repo, entries, staged=False, content_only=False):
-    findings = []
+    # Keep this here so independent SourceGraph/parallel callers cannot skip refs.
+    findings = ref_name_findings(repo)
     reviewed = []
     compressed = []
     sensitive = []
@@ -482,7 +607,14 @@ def scan_objects(repo, entries, staged=False, content_only=False):
             if fixture and fixture_paths_match and content_rules:
                 reviewed.append({'paths': entry['paths'], 'object': oid, 'sha256': digest, 'rule': fixture, 'matched_rules': sorted(content_rules)})
                 content_rules.clear()
+            if reviewed_ace_paths(digest, entry['paths']):
+                reviewed_rules = content_rules & SOURCE_REVIEW_RULES
+                if reviewed_rules:
+                    reviewed.append({'paths': entry['paths'], 'object': oid, 'sha256': digest,
+                                     'rule': 'reviewed_ace_syntax_token_scopes', 'matched_rules': sorted(reviewed_rules)})
+                    content_rules.difference_update(reviewed_rules)
             for path in entry['paths']:
+                findings.extend(name_findings(path, oid))
                 path_rules = blocked_path(path) if entry['type'] == 'blob' and not content_only else []
                 if entry['type'] == 'blob' and entry['bytes'] > MAX_BLOB and not content_only:
                     path_rules.append('oversize_git_blob')
@@ -527,8 +659,8 @@ def scan_objects(repo, entries, staged=False, content_only=False):
                 combined.feed(left_tail + right_head)
                 for rule in sorted(combined.findings):
                     findings.append({'path': left + ' -> ' + right, 'object': left_oid + ':' + right_oid, 'rule': 'cross_part_' + rule})
-    return {'findings': findings, 'reviewed_fixtures': reviewed, 'compressed_objects': compressed,
-            'sensitive_named_objects': sensitive, 'scanned_bytes': total, 'cross_part_boundaries': boundaries}
+    return sanitize_report_names({'findings': findings, 'reviewed_fixtures': reviewed, 'compressed_objects': compressed,
+                                  'sensitive_named_objects': sensitive, 'scanned_bytes': total, 'cross_part_boundaries': boundaries})
 
 
 def run(repo=REPO, staged=False, content_only=False):
@@ -537,8 +669,7 @@ def run(repo=REPO, staged=False, content_only=False):
     index_before = git(repo, 'ls-files', '--stage', '-z') if staged else None
     entries, gitlinks = inventory(repo, staged)
     result = scan_objects(repo, entries, staged=staged, content_only=content_only)
-    if not content_only:
-        result['findings'].extend(gitlinks)
+    result['findings'].extend(item for item in gitlinks if not content_only or item['rule'] != 'nested_gitlink')
     refs_after = refs(repo)
     if refs_before != refs_after:
         result['findings'].append({'path': '<git refs>', 'object': '', 'rule': 'refs_changed_during_scan'})
@@ -552,11 +683,34 @@ def run(repo=REPO, staged=False, content_only=False):
     return result
 
 
+def scan_names(repo=REPO, staged=False):
+    """Supplemental cheap name audit; this does not scan any payload content."""
+    repo = Path(repo).resolve()
+    before = refs(repo)
+    index_before = git(repo, 'ls-files', '--stage', '-z') if staged else None
+    entries, extra = inventory(repo, staged)
+    findings = ref_name_findings(repo)
+    findings.extend(item for item in extra if item['rule'].startswith('filename_'))
+    findings.extend(finding for entry in entries for path in entry['paths']
+                    for finding in name_findings(path, entry['object']))
+    if before != refs(repo):
+        findings.append({'path': '<git refs>', 'object': '', 'rule': 'refs_changed_during_scan'})
+    if staged and index_before != git(repo, 'ls-files', '--stage', '-z'):
+        findings.append({'path': '<git index>', 'object': '', 'rule': 'index_changed_during_scan'})
+    return sanitize_report_names({'schema': 1, 'pass': not findings, 'mode': 'names-only-staged' if staged else 'names-only-all-history',
+                                  'scanned_objects': len(entries), 'scanned_blobs': sum(item['type'] == 'blob' for item in entries),
+                                  'scanned_bytes': 0, 'cross_part_boundaries': 0, 'refs': before,
+                                  'findings': findings, 'reviewed_fixtures': [], 'compressed_objects': [],
+                                  'payloads_scanned': False, 'offline': True,
+                                  'limits': ['Names-only is supplemental and never replaces the full publication gate.']})
+
+
 def run_pre_push(repo, records):
     """Reject raw/unreferenced push roots which an --all scan cannot cover."""
     repo = Path(repo).resolve()
     before = refs(repo)
     roots = set()
+    push_name_findings = []
     for line in records.splitlines():
         if not line.strip():
             continue
@@ -565,17 +719,21 @@ def run_pre_push(repo, records):
             raise ValueError('Invalid pre-push protocol')
         if set(parts[1]) != {'0'}:
             roots.add(parts[1])
+            push_name_findings.extend(name_findings(parts[0], parts[1], 'push_refname'))
+            push_name_findings.extend(name_findings(parts[2], parts[1], 'push_refname'))
     if roots:
         reachable = {line.split(b' ', 1)[0].decode('ascii') for line in git(repo, 'rev-list', '--objects', '--all').splitlines()}
         missing = sorted(roots - reachable)
         if missing:
             return {'schema': 1, 'pass': False, 'mode': 'pre-push', 'scanned_objects': 0, 'scanned_blobs': 0,
                     'scanned_bytes': 0, 'cross_part_boundaries': 0, 'reviewed_fixtures': [], 'compressed_objects': [],
-                    'findings': [{'path': '<push root; create a local branch or tag before audit>', 'object': oid,
+                    'findings': push_name_findings + [{'path': '<push root; create a local branch or tag before audit>', 'object': oid,
                                   'rule': 'unscanned_unreferenced_push_root'} for oid in missing]}
         report = run(repo, staged=False)
         report['mode'] = 'pre-push'
         report['push_roots'] = sorted(roots)
+        report['findings'].extend(push_name_findings)
+        report['pass'] = not report['findings']
         if before != report['refs'] or before != refs(repo):
             report['findings'].append({'path': '<git refs>', 'object': '', 'rule': 'refs_changed_during_pre_push'})
             report['pass'] = False
@@ -594,11 +752,15 @@ def main():
     parser.add_argument('--repo', type=Path, default=REPO)
     parser.add_argument('--report', type=Path)
     parser.add_argument('--audit-content-only', action='store_true', help='Audit imported upstream content; not a publication payload gate')
+    parser.add_argument('--names-only', action='store_true', help='Supplemental strong filename/refname check without reading payloads; not a publication gate')
     args = parser.parse_args()
     try:
-        if args.pre_push and args.audit_content_only:
+        if args.pre_push and (args.audit_content_only or args.names_only):
             raise ValueError('Pre-push cannot bypass the payload gate')
-        report = run_pre_push(args.repo, sys.stdin.read()) if args.pre_push else run(args.repo, args.staged, args.audit_content_only)
+        if args.names_only and args.audit_content_only:
+            raise ValueError('Names-only cannot be combined with a content-only audit')
+        report = (scan_names(args.repo, args.staged) if args.names_only else
+                  run_pre_push(args.repo, sys.stdin.read()) if args.pre_push else run(args.repo, args.staged, args.audit_content_only))
     except Exception as exc:
         # Exception text can originate in a malformed object; never echo it.
         print(json.dumps({'pass': False, 'error': type(exc).__name__, 'rule': 'scan_failed_closed'}))

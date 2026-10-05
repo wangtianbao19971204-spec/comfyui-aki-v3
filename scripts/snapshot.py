@@ -35,6 +35,7 @@ PRIVATE_PATHS = {
 PUBLIC_CONFIG_PATHS = {
     'ComfyUI/.github/ISSUE_TEMPLATE/config.yml',
     'ComfyUI/comfy/text_encoders/byt5_tokenizer/added_tokens.json',
+    'qwen21_lab/ComfyUI/comfy/text_encoders/byt5_tokenizer/added_tokens.json',
     'ComfyUI/custom_nodes/comfyui_controlnet_aux/src/custom_mesh_graphormer/modeling/bert/bert-base-uncased/config.json',
     *('ComfyUI/custom_nodes/comfyui-easy-use/locales/' + language + '/settings.json' for language in ('en', 'fr', 'ja', 'ko', 'ru', 'zh')),
 }
@@ -194,9 +195,17 @@ def upstream(path, root):
     url = git(path, 'remote', 'get-url', 'origin') if own_git else None
     if url:
         url = re.sub(r'(https?://)[^/@]+@', r'\1', url).split('?')[0].split('#')[0]
-    return {'path': path.relative_to(root).as_posix(), 'own_git': own_git,
+    result = {'path': path.relative_to(root).as_posix(), 'own_git': own_git,
             'head': git(path, 'rev-parse', 'HEAD') if own_git else None,
             'upstream': url, 'tracked_dirty': bool(git(path, 'status', '--porcelain', '--untracked-files=no')) if own_git else None}
+    registry = REPO / 'governance/retired-git.json'
+    if not own_git and registry.is_file():
+        for entry in json.loads(registry.read_text(encoding='utf-8'))['repositories']:
+            if entry['runtime_path'] == result['path']:
+                result.update(git_metadata_retired=True, recorded_original_head=entry.get('original_head'),
+                              history_provenance='governance/retired-git.json')
+                break
+    return result
 
 
 def health():
@@ -214,18 +223,19 @@ def health():
     return {'queue': {'running': 0, 'pending': 0}, 'listeners': [{'pid': pid, 'created': psutil.Process(pid).create_time()} for pid in listeners], 'modules': status['modules']}
 
 
-def selected_sources(root):
+def selected_sources(root, registered_manifest=None):
     selected = {}
     omitted = []
     def offer(file):
         rel = file.relative_to(root).as_posix()
         name = file.name.lower()
-        if private_config(rel):
+        if private_config(rel) or blocked_path('snapshot/runtime/' + rel):
             omitted.append({'path': rel, 'reason': 'private_or_machine_config'}); return
         if any(word in name for word in ['.backup', '.before-', '.before_', '.bak', '.disabled']) or file.suffix.lower() in WEIGHTS:
             return
-        tokenizer_asset = rel == 'ComfyUI/comfy/text_encoders/t5_pile_tokenizer/tokenizer.model'
-        if not tokenizer_asset and file.suffix.lower() not in TEXT | ASSETS and file.name not in {'LICENSE', 'COPYING', 'NOTICE', 'Dockerfile', '.gitignore', '.gitattributes', 'CODEOWNERS', 'put_blueprints_here'}:
+        tokenizer_asset = rel in {'ComfyUI/comfy/text_encoders/t5_pile_tokenizer/tokenizer.model',
+                                 'qwen21_lab/ComfyUI/comfy/text_encoders/t5_pile_tokenizer/tokenizer.model'}
+        if not tokenizer_asset and file.suffix.lower() not in TEXT | ASSETS and file.name not in {'LICENSE', 'COPYING', 'NOTICE', 'Dockerfile', '.gitignore', '.gitattributes', 'CODEOWNERS', 'put_blueprints_here', 'VERSION', 'PORTABLE_BUILD', 'requirements.txt.filtered'}:
             return
         if file.stat().st_size > 48 * 1024 * 1024:
             omitted.append({'path': rel, 'reason': 'large_optional_source_asset', 'bytes': file.stat().st_size}); return
@@ -259,6 +269,19 @@ def selected_sources(root):
         file = root / LIBRARY / name
         if file.exists():
             offer(file)
+    # Source additions accepted into the single main checkout remain in scope
+    # on later accepted-deployment captures, even outside the production profile.
+    registered_manifest = registered_manifest or REPO / 'snapshot/manifest.json'
+    if registered_manifest.is_file():
+        registered = json.loads(registered_manifest.read_text(encoding='utf-8'))
+        if manifest_path_failures(registered):
+            raise ValueError('Registered main source manifest is invalid')
+        for entry in registered['files']:
+            if entry['kind'] != 'file':
+                continue
+            file = safe_path(root, entry['source'])
+            if file.is_file() and not is_link(root / entry['source']):
+                offer(file)
     return selected, omitted, plugins
 
 
@@ -385,7 +408,7 @@ def capture(root, out, offline=False):
                 media_count += 1; media_bytes += stat.st_size
     save(inventory / 'library_media_summary.json', {'files': media_count, 'bytes': media_bytes, 'media_in_git': False, 'hashes_computed': False})
     all_plugins = [p for p in (root / 'ComfyUI/custom_nodes').iterdir() if p.is_dir() and not p.name.startswith('.') and p.name != '__pycache__']
-    save(inventory / 'upstreams.json', {'core': upstream(root / 'ComfyUI', root), 'plugins': [{**upstream(p, root), 'production_profile': p.name in plugins, 'source_captured': p.name in plugins} for p in sorted(all_plugins)]})
+    save(inventory / 'upstreams.json', {'core': upstream(root / 'ComfyUI', root), 'plugins': [{**upstream(p, root), 'production_profile': p.name in plugins, 'source_captured': any(relative.startswith(p.relative_to(root).as_posix() + '/') for relative in selected)} for p in sorted(all_plugins)]})
     save(inventory / 'excluded_private_configs.json', omitted)
     save(inventory / 'environment.json', {'python': sys.version, 'platform': platform.platform(), 'packages': sorted([{'name':d.metadata.get('Name','unknown'), 'version':d.version} for d in importlib.metadata.distributions()], key=lambda x:x['name'].lower()), 'python_runtime_in_git':False})
     references = []

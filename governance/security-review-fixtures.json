@@ -1,0 +1,486 @@
+{
+  "schema": 1,
+  "review": "reviewed_ace_syntax_token_scopes",
+  "allowed_rules": [
+    "literal_credential_assignment",
+    "escaped_literal_credential_assignment"
+  ],
+  "entries": [
+    {
+      "sha256": "00f4d699975067b0038305ee24f5f8b00ebb59c53e8d9f031ed261b7c08b19d1",
+      "path_ends": [
+        "IDENode/lib/ace-builds/src-min-noconflict/mode-javascript.js",
+        "web_alekpet_nodes/lib/idenode/ace-builds/src-min-noconflict/mode-javascript.js"
+      ]
+    },
+    {
+      "sha256": "04916666fcbfa2c359afaba1f89260ce4b94facc4722a364dbcd9b74014f9581",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-html_ruby.js"
+      ]
+    },
+    {
+      "sha256": "0f0e68f77a4e88bc56abd611b22e6810f866eb11a9232810a8571a7e81c2673b",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-haml.js"
+      ]
+    },
+    {
+      "sha256": "18aee44cd70319a4baa3393bcc8cded2681c1dc7433fc0aa600f20a851a925ef",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-crystal.js"
+      ]
+    },
+    {
+      "sha256": "190dcb759b8152660d334a3b80496d7af211d6b64967abca3fb5d00bc291da9c",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-twig.js"
+      ]
+    },
+    {
+      "sha256": "1be041eefe0e8b422ff9ab608b80c20ada75440c0fd295b8d6879afa593fc6c2",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-latte.js"
+      ]
+    },
+    {
+      "sha256": "1d9a15dc5652b74c02fdc160d8b4f464391ace2a3d1668ab6bddc8d697d55364",
+      "path_ends": [
+        "IDENode/lib/ace-builds/src-min-noconflict/mode-javascript.js",
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-javascript.js"
+      ]
+    },
+    {
+      "sha256": "26f78d1224bbd5742c661f70eb7af3546dfa4eb2ba52fb50cdb15117ecf3a1cc",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-gobstones.js"
+      ]
+    },
+    {
+      "sha256": "2a153a96eee6206e060dba504e2faddb5d76d15e4d8a8e7f4c8c88f901145d13",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-rhtml.js"
+      ]
+    },
+    {
+      "sha256": "2b6773da78bff166fee80419f60b5e448b922699cfee1a20facf4fada44c3cc7",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-csound_score.js"
+      ]
+    },
+    {
+      "sha256": "2cc68b9533464b34e65e3c64570e184048e2f55573495d60ce61723b10ea0600",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-objectivec.js"
+      ]
+    },
+    {
+      "sha256": "326708010b26c3a6acfb878b9df8a6ed917a4888a64bb1c0d85cc759c269b050",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-tsx.js"
+      ]
+    },
+    {
+      "sha256": "3839287cd45cfaacc29094ec03057e8705b21116febd14987af528f52f603c8f",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-nsis.js"
+      ]
+    },
+    {
+      "sha256": "3ccfe88cd37a17f6628bac07851addf26281d58c3d31b59082dd01b86a72c609",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-mask.js"
+      ]
+    },
+    {
+      "sha256": "431e38d2f641454a193d10673be23f20bccecdd2384015a47076a94c023fee75",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-visualforce.js"
+      ]
+    },
+    {
+      "sha256": "50b6c95e41b05e9e036486c6b9e1de82201ea3396d778aba13b4e0df1eea1892",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-liquid.js"
+      ]
+    },
+    {
+      "sha256": "5a9331410df578fed4161908c34781ab3489e374dbb64c44858285ae59c0b311",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-xquery.js"
+      ]
+    },
+    {
+      "sha256": "5b53e76306ab715289390f02230fbdecb4ad6fe2e2d94bb85fdec6070e3fc659",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-svg.js"
+      ]
+    },
+    {
+      "sha256": "5c304e8129041119e23b8d2956e41cfbc55c8ae3fda9ef853c7a3b3f096a2eb3",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-mediawiki.js"
+      ]
+    },
+    {
+      "sha256": "600cdc8753e219a520f3a92001cc6ace3c4ee1f256f8ac75e854c97face92541",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-soy_template.js"
+      ]
+    },
+    {
+      "sha256": "605b19fe237900bd785779a2df2b9f70a7d62e28d3386837bf5084ac8123e53e",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-jade.js"
+      ]
+    },
+    {
+      "sha256": "642ad6a628ac35925123fe65ff541830929f9caa19cbee0c7beb1ad5266859ec",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-jsp.js"
+      ]
+    },
+    {
+      "sha256": "65ab9324488e72e14d2aa2d6dad52498ff5f1b206c519895136139d1775b61d2",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-zig.js"
+      ]
+    },
+    {
+      "sha256": "6763149ec9a7967bcb954c57722d975a6b9a320c242c75978ca7b096a696f6d0",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-lsl.js"
+      ]
+    },
+    {
+      "sha256": "67decdd99b9589d9d49f87076ef65390003ede478c4c6098da824e0f52104e65",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-velocity.js"
+      ]
+    },
+    {
+      "sha256": "6b7c42a4b6abcadbabc49af68614ff1629502e8e4b18629e541cb0fd886dfa78",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-alda.js"
+      ]
+    },
+    {
+      "sha256": "6c2151c64212f8f9f20726090ab217a5bc792c0794fdb5c807841d215295a010",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-xml.js"
+      ]
+    },
+    {
+      "sha256": "71858133ad840b091460fc5901ee3b7d497e19c68df2e05082ee989d6f71cf24",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-io.js"
+      ]
+    },
+    {
+      "sha256": "744ae7a5365d3bfe961ab80627b22d890f0c909befb48c5cf1a6f0f46ff7b07e",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-handlebars.js"
+      ]
+    },
+    {
+      "sha256": "7bc6c14f99bd720e7340b75b8fa712001830d96bc6754fafd837663ae388faeb",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-sjs.js"
+      ]
+    },
+    {
+      "sha256": "7e6932d60f053a8a8c42e3c610e8d2f10250f71a90d51383ee4ca236ee737a0f",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-html_elixir.js"
+      ]
+    },
+    {
+      "sha256": "898849d6a9b9838d3ff39678b25b3552d153d3af14b62ce5e814c3f3f3d0f2a7",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-csound_orchestra.js"
+      ]
+    },
+    {
+      "sha256": "8ac5c43ea91f9bd5f6451e84c3384f6741e987be37d08453e84ce57aa9b3975f",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-rust.js"
+      ]
+    },
+    {
+      "sha256": "8b60660ab725f77dee50bb343520051d221df3867fad9e82ae51765ea1c7540d",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-smithy.js"
+      ]
+    },
+    {
+      "sha256": "8b6e46935e3f32daa95278c9f7aeb40093fa791779a55f382528a6e104300705",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-vue.js"
+      ]
+    },
+    {
+      "sha256": "8e4f45878971936996eef03cb5f84cb913add17d264ac3c9fb24b7eb513f175b",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-nunjucks.js"
+      ]
+    },
+    {
+      "sha256": "8ec1d2fc1974c0394b22c8f9eecf524c9c31b61aca41c1dac158578269e1222a",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-actionscript.js"
+      ]
+    },
+    {
+      "sha256": "935ec961d9623dcc712692963744be286bb6290293ba9a081110b4c059795b3b",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-markdown.js"
+      ]
+    },
+    {
+      "sha256": "97a0dc97e1fd68a547f9eb8a703eb1a2d2fba31e11e91f28eb0c29ed7dc5a3a2",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-ejs.js"
+      ]
+    },
+    {
+      "sha256": "97d68471a25363220d918ba953a3751d9e4ebc444453e08d868aa1c123dd007d",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-html.js"
+      ]
+    },
+    {
+      "sha256": "97e2601058062875038db35b721b5b0112b2d7de9e6f52b29023deefbc5f00d3",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-pgsql.js"
+      ]
+    },
+    {
+      "sha256": "9f3248a578f52bf0751163d0f98ab7251898564ec32d6d3d5734ae5d6782ab89",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-vala.js"
+      ]
+    },
+    {
+      "sha256": "a1f0a1d7fddb758db2cc18b2c5bc1a110f2f11ed885d750c95e42e0502fc2919",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-ini.js"
+      ]
+    },
+    {
+      "sha256": "a2606d48c4af0c46884671d24c44ec3a727e10822caa97e464734b27b22db693",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-csound_document.js"
+      ]
+    },
+    {
+      "sha256": "acc1bdfd61e11daf0c3426ad79cbf1f2dbfc3fd934b961ef4000b469328c1561",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-fsl.js"
+      ]
+    },
+    {
+      "sha256": "b000173d24df05f2aa257344460a09409ce28baf9584e4a856de9b0e0dd8dbb2",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-scala.js"
+      ]
+    },
+    {
+      "sha256": "b23ef01b79ae3249a05aebe94edc588d807731d9e194d16a3c12a56f5bcf733d",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-jsx.js"
+      ]
+    },
+    {
+      "sha256": "b59fb60a447de32b973500d89f132f7c025dee0545c6ba56ffe2bf0da8feddf6",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-elixir.js"
+      ]
+    },
+    {
+      "sha256": "b5a7875bc98b79ac7a00184f198b7b10779da259555711faa8752b75a5a4cd4c",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-d.js"
+      ]
+    },
+    {
+      "sha256": "b5be026a4bf7ea17258b9653a30eb6ffdb0d7e1b172b1050c4fed57a6808f396",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-jssm.js"
+      ]
+    },
+    {
+      "sha256": "b8490c52ef4d2f7c837dbb748cd76b19e58c97df549f7e8a7e981a0ae7b8d09b",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-maze.js"
+      ]
+    },
+    {
+      "sha256": "bb278a983f3dddb70d187d473a2235afe33470e03b5fb9855b9c2d401cb8ed69",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-eiffel.js"
+      ]
+    },
+    {
+      "sha256": "be5d309215450541832c6363f1f5452bce5fef1b067419add93609924826cc12",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-java.js"
+      ]
+    },
+    {
+      "sha256": "c0035d5af71563f05918b341c7ecf31f8ccb417a7950a679d867d235ebc0d6f0",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-erlang.js"
+      ]
+    },
+    {
+      "sha256": "c2f1d13dde7f8707ce2f3f85c9653703e964fb5bfd2c5d9c3fb6783b8215d73e",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-logtalk.js"
+      ]
+    },
+    {
+      "sha256": "c7c2cd05251f6fb48bd9222acb369f612a64b38d86e1fe27ede0ad28804de3dc",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-smarty.js"
+      ]
+    },
+    {
+      "sha256": "c8a3576fc7f325ad620f8e2a7254118f34198df4e1d6ac6ff798ee3c5582c4a6",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-django.js"
+      ]
+    },
+    {
+      "sha256": "cb24095e03b65f7ac2d6ab00a3bcefa67b1a3ebf0f927622cd7eab72487da289",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-ftl.js"
+      ]
+    },
+    {
+      "sha256": "ccaee39fd67c12c5746e8ad3ea6969ee3460b378ba19c1f3bcdd55d949f355e2",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-ruby.js"
+      ]
+    },
+    {
+      "sha256": "cf2a66bedd197d4d76bab8a2ea2f16af9fc8afb27aa3bc48636467e894184701",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-wollok.js"
+      ]
+    },
+    {
+      "sha256": "d01a5669502e69c2674cb8a3fe39012df7693a0eff5066b0d7ae478a8594e7c3",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-prql.js"
+      ]
+    },
+    {
+      "sha256": "d0a74bd8e499cf3a6dc54edf4ecc33978235dbb0e0aa172454a456530f280f77",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-coldfusion.js"
+      ]
+    },
+    {
+      "sha256": "d1b59fd518c52d261af5a3678a341d93dd9f83c65e24e437cce9a1ba2cc68c4e",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-typescript.js"
+      ]
+    },
+    {
+      "sha256": "d2031ab173f4f58cfd22338e5c148124694b16c97ede8eb88018c92c6858250e",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-php_laravel_blade.js"
+      ]
+    },
+    {
+      "sha256": "d292e6bcfe90b602c6ed4d7e7238a9709e5c7525a1e2203ad0f0378dc3bfd93a",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-slim.js"
+      ]
+    },
+    {
+      "sha256": "d737f2c312927f2ab4c22d32784fd4762f8f28f5e2745ce55c33fef1bd08068a",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-curly.js"
+      ]
+    },
+    {
+      "sha256": "d7852ce32fb5b72679b02e9547d4c314cb17851a267c9b1b3524eef091d1953c",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-astro.js"
+      ]
+    },
+    {
+      "sha256": "db8c85c6f81c4727d1fbb4c425359283c9b55a14dc7ef1d82468a5dd682f2509",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-razor.js"
+      ]
+    },
+    {
+      "sha256": "df4d63aceccf614fb1d3d042dee6457c16216decc64cb04f2b7adb6537ee9e45",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-jsoniq.js"
+      ]
+    },
+    {
+      "sha256": "e6f215ad8bb5260146822ab866e6c2b8a7a2393e54c5b6cbddf9a57a7b85ba8e",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-stylus.js"
+      ]
+    },
+    {
+      "sha256": "e8609a548c00da7a460ba2aabc82f9fab71c405b9fe309c2f4e5f2c355e89063",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-cirru.js"
+      ]
+    },
+    {
+      "sha256": "ee548bc00490dd1fb9fca0633d9ed7c1e2c68fc6b38a393688ffcb1a548ec3a7",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-php.js"
+      ]
+    },
+    {
+      "sha256": "eea85eb40fc0770f6c92c2e1d3e1b431c731f1e826ad5b9aa108b0e50fa23f17",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-pig.js"
+      ]
+    },
+    {
+      "sha256": "ef26f2f7ebf8e8bbf6293445291582d3823f16396ff4b8c0644714483704acd8",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-redshift.js"
+      ]
+    },
+    {
+      "sha256": "f6831de50c30e72248d9f462e96bba4d5c2ddeecac114065a49e41a45f34bdb9",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-kotlin.js"
+      ]
+    },
+    {
+      "sha256": "f6f42ed857a6fc196703828ec0fee30b87312f080bc7fde5bdf2b6bbee502d1d",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-groovy.js"
+      ]
+    },
+    {
+      "sha256": "fa00f2587fab2fc53b5455f725a3bd2c3b4a565afce376ca6dfef034cdca8b2a",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-haskell.js"
+      ]
+    },
+    {
+      "sha256": "fcc4612730a2947d9cb849a7ac1116eb0a8dba156ff16a68047ae22607646f00",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-luapage.js"
+      ]
+    },
+    {
+      "sha256": "fe31227de65c91ed1d69b787313628dff369d881b83ecc2fb7a21dbf5ceb24df",
+      "path_ends": [
+        "PythonNode/lib/ace-builds/src-min-noconflict/mode-forth.js"
+      ]
+    }
+  ]
+}

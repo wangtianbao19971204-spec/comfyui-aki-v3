@@ -7,7 +7,17 @@
 - `*-public-verify.json`：逐提交元数据、消息、父节点顺序与变化树核验。
 - `core-archive-receipt.json`：已构造的历史聚合节点与覆盖证明。
 
-## 更换主仓 Git 数据库，保留工作树
+## 本轮安全镜像
+
+24 个插件仓与 SD-Trainer 的全部本地已存图已另行准备，包含 22 个 reflog-only 提交；不重复前版 Core/Workbench 的迁移。精确入口、refs/标签计数、映射与最终复验的哈希见 [25 仓统一清单](workspace-plugin-public-inventory.json)，例外与工具边界见 [插件历史说明](WORKSPACE_PLUGIN_HISTORY.md)。
+
+本机安全镜像位于仓外 `G:\ComfyUI-local\staging\history\<mirror_name>`。各镜像入口均为清单列明 SHA 的 `refs/heads/history-archive`；标签使用清单中的 `legacy/workspace/<component>/` 命名空间。`<component>-public-map.json`、`<component>-archive-receipt.json` 与 `verifier_contract: 2` 的 `<component>-public-verified.json` 是本轮公开凭据。早期未跟踪的阶段性 verify 报告已可恢复移动到仓外审计目录，不重复留在主仓。
+
+这些记录说明**隔离镜像已通过验收**，不自动等于已经纳入 `main`。主维护者还需按清单执行本地 fetch、保持当前 tree 的历史合并、入口祖先检查及最终主仓全历史安全验收；接入状态由后续主仓验收记录确认。SD-Trainer 仅有一个浅仓本地提交，缺失的两个父提交已明确登记，不能称为远端全历史。外置内容的原字节、原签名与机器配置始终留在私有档案，不公开原 `.git`。
+
+全历史文件名/refname 的补充扫描见 `workspace-plugin-public-name-audit.json`；它不读载荷，不能替代每个镜像已经执行的完整 payload 门禁。
+
+## 前版：更换主仓 Git 数据库，保留工作树
 
 活动维护仓不能只重指向 `main` 后就沿用旧对象库，因为旧凭证仍可能留在其他 refs、reflogs 或不可达 objects 内。已选定的迁移路径是：
 
@@ -19,13 +29,13 @@
 
 以上步骤只作用于 `maintenance/comfyui` 的 Git 数据库；不替换生产运行目录、工作流、数据库、模型或服务。迁移操作的具体完成状态以最终交付回执为准，本页不是“已替换活动主仓”的证明。
 
-## 已准备的安全历史入口
+## 前版 Core / Workbench 安全历史入口
 
 Core 聚合入口：`e67e9981220834adb7c2921d669251c3e58d7071`，位于隔离镜像的 `refs/heads/history-archive`。它使用空 tree，13 个说明性聚合提交覆盖全部 754 个 tips，单提交最多 64 个 parents；共可达 10,857 个提交，其中原公开 legacy commits 为 10,844 个。
 
 Workbench 安全入口：`cc3bc63d55843f94b79f4e16042e03eccbfcc56e`，可达 2 个原始提交。Core 的 197 个原 tags 使用 `legacy/core/tags/*` 前缀导入，唯一 annotated tag 对象保持原 SHA。
 
-在已切换到安全对象库的维护仓内，以下命令只从本地安全镜像导入，不联网：
+以下是前版迁移时的本地命令记录，不应按旧相对路径重新执行已完成的导入。`local/history-audit` 在本轮收尾将归档到 `G:\ComfyUI-local\archives\20261005\audits\history-audit`；完成状态查移动收据。需要核验前版原件时从该明确的仓外位置读取，不能据这里的旧路径另建活动仓。
 
 ```powershell
 git fetch --no-tags ./local/history-audit/public-core.git refs/heads/history-archive:refs/import/core-history 'refs/tags/*:refs/tags/legacy/core/tags/*'

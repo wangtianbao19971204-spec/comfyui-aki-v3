@@ -31,8 +31,9 @@ def source_entries(repo):
             raise ValueError('Runtime data or external assets must stay outside Git: ' + relative)
         if payload_relative(relative) != file.relative_to(snapshot).as_posix():
             raise ValueError('Store upstream attributes as .gitattributes.upstream: ' + relative)
-        special = file.name in {'LICENSE', 'COPYING', 'NOTICE', 'Dockerfile', '.gitignore', 'CODEOWNERS', 'put_blueprints_here', '.gitattributes.upstream'}
-        tokenizer = relative == 'ComfyUI/comfy/text_encoders/t5_pile_tokenizer/tokenizer.model'
+        special = file.name in {'LICENSE', 'COPYING', 'NOTICE', 'Dockerfile', '.gitignore', 'CODEOWNERS', 'put_blueprints_here', '.gitattributes.upstream', 'VERSION', 'PORTABLE_BUILD', 'requirements.txt.filtered'}
+        tokenizer = relative in {'ComfyUI/comfy/text_encoders/t5_pile_tokenizer/tokenizer.model',
+                                 'qwen21_lab/ComfyUI/comfy/text_encoders/t5_pile_tokenizer/tokenizer.model'}
         if not special and not tokenizer and file.suffix.lower() not in TEXT | ASSETS:
             raise ValueError('Unsupported source payload; keep generated data outside the checkout: ' + relative)
         if file.stat().st_size > 50 * 1024 * 1024:

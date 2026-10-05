@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "component": "ComfyUI-Olm-JoyCaption",
+  "source_original_commit_count": 2,
+  "source_ref_reachable_commits": 2,
+  "source_reflog_only_commits": 0,
+  "source_fully_unreachable_commits": 0,
+  "public_commit_count": 2,
+  "commit_map": {
+    "04283c50992bde335066153a2e5c1a8ec80a33d6": "04283c50992bde335066153a2e5c1a8ec80a33d6",
+    "c21a30c59559d46b1d090928f8f0cfb87f77e913": "c21a30c59559d46b1d090928f8f0cfb87f77e913"
+  },
+  "unchanged_commit_ids": 2,
+  "rewritten_commit_ids": 0,
+  "refs": [
+    {
+      "ref": "refs/heads/main",
+      "oid": "c21a30c59559d46b1d090928f8f0cfb87f77e913",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": null,
+      "public_oid": "c21a30c59559d46b1d090928f8f0cfb87f77e913"
+    },
+    {
+      "ref": "refs/remotes/origin/HEAD",
+      "oid": "c21a30c59559d46b1d090928f8f0cfb87f77e913",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": "refs/remotes/origin/main",
+      "public_oid": "c21a30c59559d46b1d090928f8f0cfb87f77e913"
+    },
+    {
+      "ref": "refs/remotes/origin/main",
+      "oid": "c21a30c59559d46b1d090928f8f0cfb87f77e913",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": null,
+      "public_oid": "c21a30c59559d46b1d090928f8f0cfb87f77e913"
+    }
+  ],
+  "recovered_tips": {},
+  "all_graph_tips": {
+    "c21a30c59559d46b1d090928f8f0cfb87f77e913": "c21a30c59559d46b1d090928f8f0cfb87f77e913"
+  },
+  "tag_map": {},
+  "externalized_blobs": {},
+  "reference_roots": {},
+  "missing_shallow_parents": [],
+  "shallow_boundary_commits": [],
+  "stripped_invalid_signatures": [],
+  "stripped_tag_signatures": [],
+  "redactions": [],
+  "fsck_strict_passed": true,
+  "all_commit_metadata_and_messages_preserved": true,
+  "parent_order_preserved_except_documented_missing_shallow_parents": true,
+  "limitations": [
+    "Only locally stored history is available; no remote was fetched.",
+    "Removed payload bytes and original signatures remain only in the private original Git archive.",
+    "Credential detection is heuristic; exact findings require independent review."
+  ]
+}

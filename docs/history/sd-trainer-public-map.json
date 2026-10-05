@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "component": "SD-Trainer",
+  "source_original_commit_count": 1,
+  "source_ref_reachable_commits": 1,
+  "source_reflog_only_commits": 0,
+  "source_fully_unreachable_commits": 0,
+  "public_commit_count": 1,
+  "commit_map": {
+    "1592b11545b58e21f962aa13e54fda1d7c529f92": "ff3a1c519bab0efef30bf565641d8705e71abe49"
+  },
+  "unchanged_commit_ids": 0,
+  "rewritten_commit_ids": 1,
+  "refs": [
+    {
+      "ref": "refs/heads/main",
+      "oid": "1592b11545b58e21f962aa13e54fda1d7c529f92",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": null,
+      "public_oid": "ff3a1c519bab0efef30bf565641d8705e71abe49"
+    },
+    {
+      "ref": "refs/remotes/origin/HEAD",
+      "oid": "1592b11545b58e21f962aa13e54fda1d7c529f92",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": "refs/remotes/origin/main",
+      "public_oid": "ff3a1c519bab0efef30bf565641d8705e71abe49"
+    },
+    {
+      "ref": "refs/remotes/origin/main",
+      "oid": "1592b11545b58e21f962aa13e54fda1d7c529f92",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": null,
+      "public_oid": "ff3a1c519bab0efef30bf565641d8705e71abe49"
+    }
+  ],
+  "recovered_tips": {},
+  "all_graph_tips": {
+    "1592b11545b58e21f962aa13e54fda1d7c529f92": "ff3a1c519bab0efef30bf565641d8705e71abe49"
+  },
+  "tag_map": {},
+  "externalized_blobs": {},
+  "reference_roots": {
+    "376fa34e94cada269461e68649fdf780cd902cc4": {
+      "public_tree": "4047546f72a06037500b29dc7b02083df9793b7f",
+      "reference_blob": "c72a1f3be4bbec47f6ae344c4f0b65b8a668fb2e",
+      "externalized_entries": [
+        {
+          "path": "mikazuki/dataset-tag-editor",
+          "object": "8ee3a6f30c046f3c89c531dc1abbff2d2a466bcf",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    }
+  },
+  "missing_shallow_parents": [
+    {
+      "commit": "1592b11545b58e21f962aa13e54fda1d7c529f92",
+      "missing_parent": "366a9e9426f712a908ae90f41118a7d0e37ae564",
+      "parent_position": 0
+    },
+    {
+      "commit": "1592b11545b58e21f962aa13e54fda1d7c529f92",
+      "missing_parent": "cf432201034ad892420d49941122c2bc32c06a68",
+      "parent_position": 1
+    }
+  ],
+  "shallow_boundary_commits": [
+    "1592b11545b58e21f962aa13e54fda1d7c529f92"
+  ],
+  "stripped_invalid_signatures": [
+    {
+      "old_commit": "1592b11545b58e21f962aa13e54fda1d7c529f92",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    }
+  ],
+  "stripped_tag_signatures": [],
+  "redactions": [],
+  "fsck_strict_passed": true,
+  "all_commit_metadata_and_messages_preserved": true,
+  "parent_order_preserved_except_documented_missing_shallow_parents": true,
+  "limitations": [
+    "Only locally stored history is available; no remote was fetched.",
+    "Removed payload bytes and original signatures remain only in the private original Git archive.",
+    "Credential detection is heuristic; exact findings require independent review."
+  ]
+}

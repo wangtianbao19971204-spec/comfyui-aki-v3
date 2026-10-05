@@ -9,6 +9,8 @@
 ## 从这里开始
 
 - [项目地图](docs/PROJECT_MAP.md)：每类文件的归属、作用和实际源路径。
+- [工作区与唯一来源](docs/WORKSPACE.md)：主 Git、仓外私密/资源、实际运行目录的关系及清理恢复。
+- [外部状态组合](docs/EXTERNAL_STATE.md)：私密配置、在线库和大资源的显式引用与隔离组合。
 - [日常维护](docs/MAINTENANCE.md)：主仓开发、封装清单、隔离验收、授权部署与打包。
 - [历史迁移](docs/history/README.md)：完整图、reflog 补迁、脱敏映射与私有原件。
 - [数据库契约](docs/DATABASE.md)：三库结构、虚构测试资料、未来有序迁移入口。

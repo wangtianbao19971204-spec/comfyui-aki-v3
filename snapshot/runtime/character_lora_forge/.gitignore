@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+characters/*/runs/
+characters/*/03_seed_v0/*
+characters/*/04_v0_outputs/*
+characters/*/05_dataset_v1/*
+characters/*/06_rejected/*
+!characters/*/03_seed_v0/.gitkeep
+!characters/*/04_v0_outputs/.gitkeep
+!characters/*/05_dataset_v1/.gitkeep
+!characters/*/06_rejected/.gitkeep

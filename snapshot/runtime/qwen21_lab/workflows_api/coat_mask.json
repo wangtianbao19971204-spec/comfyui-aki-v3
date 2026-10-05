@@ -1,0 +1,144 @@
+{
+  "1": {
+    "class_type": "UnetLoaderGGUFAdvanced",
+    "inputs": {
+      "unet_name": "qwen-image-2.1-UC-BF16.gguf",
+      "dequant_dtype": "bfloat16",
+      "patch_dtype": "bfloat16",
+      "patch_on_device": false
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen3vl_8b_bf16.safetensors",
+      "type": "qwen_image",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "hands.png"
+    }
+  },
+  "5": {
+    "class_type": "TextEncodeQwenImage21",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ],
+      "images.image_1": [
+        "4",
+        0
+      ],
+      "prompt": "Create a precise binary segmentation mask of the red coat in <image1>. Every part of the red coat, including both sleeves and cuffs, must be solid white. Everything else must be solid black: hands, face, hair, scarf and background. Preserve the exact original position, size and outline of the coat. No shading, no gray, no text, no extra objects.",
+      "negative_prompt": "",
+      "resolution": 512
+    }
+  },
+  "6": {
+    "class_type": "QwenImage21Cache",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "device": "auto",
+      "dtype": "default"
+    }
+  },
+  "7": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "6",
+        0
+      ],
+      "positive": [
+        "5",
+        0
+      ],
+      "negative": [
+        "5",
+        1
+      ],
+      "latent_image": [
+        "5",
+        2
+      ],
+      "seed": 20261004,
+      "steps": 25,
+      "cfg": 1.0,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1.0
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "7",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "SaveImageAdvanced",
+    "inputs": {
+      "images": [
+        "8",
+        0
+      ],
+      "filename_prefix": "qa/coat_mask_512_25",
+      "format": "png",
+      "format.bit_depth": "8-bit",
+      "format.input_color_space": "sRGB"
+    }
+  },
+  "10": {
+    "class_type": "ImageToMask",
+    "inputs": {
+      "image": [
+        "8",
+        0
+      ],
+      "channel": "alpha"
+    }
+  },
+  "11": {
+    "class_type": "MaskToImage",
+    "inputs": {
+      "mask": [
+        "10",
+        0
+      ]
+    }
+  },
+  "12": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "11",
+        0
+      ],
+      "filename_prefix": "qa/coat_mask_512_25_mask"
+    }
+  }
+}

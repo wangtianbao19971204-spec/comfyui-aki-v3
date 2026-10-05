@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "component": "comfyui-krea2edit",
+  "source_original_commit_count": 18,
+  "source_ref_reachable_commits": 18,
+  "source_reflog_only_commits": 0,
+  "source_fully_unreachable_commits": 0,
+  "public_commit_count": 18,
+  "commit_map": {
+    "e55907682a3821c834693b47594f829da119be4b": "e55907682a3821c834693b47594f829da119be4b",
+    "17af88332728c97ab5c7d26296b2cae59c935976": "17af88332728c97ab5c7d26296b2cae59c935976",
+    "207c52d52b25f5ed23cd9bc5c2d88c6cf3026686": "207c52d52b25f5ed23cd9bc5c2d88c6cf3026686",
+    "b5d3c2f3485ea9990ca8190b930a209c9f6d5e39": "b5d3c2f3485ea9990ca8190b930a209c9f6d5e39",
+    "dc7940f437e59a1e74b9a74e98b7e900a8bd62cd": "dc7940f437e59a1e74b9a74e98b7e900a8bd62cd",
+    "223a9383eabf991cb2120663162441383da50f27": "223a9383eabf991cb2120663162441383da50f27",
+    "bf7bf561f37000bca9503438e8098e8710082525": "bf7bf561f37000bca9503438e8098e8710082525",
+    "67d017a8f5ae24291af4384505d1bad8baecb993": "67d017a8f5ae24291af4384505d1bad8baecb993",
+    "26dd9c64fd4c87fb56fcd732a68f41ca27dbe882": "26dd9c64fd4c87fb56fcd732a68f41ca27dbe882",
+    "7e68e90983b25e64dd02ac5d0c10593ea72a4cde": "7e68e90983b25e64dd02ac5d0c10593ea72a4cde",
+    "94965c1aa3875c62db67e52bff66454ad4201c71": "94965c1aa3875c62db67e52bff66454ad4201c71",
+    "cae442e11b59bcba04ed82f4c01ffe3752531fe1": "cae442e11b59bcba04ed82f4c01ffe3752531fe1",
+    "4a8db424287d28da1d8eb00b35cf083eda7e34aa": "4a8db424287d28da1d8eb00b35cf083eda7e34aa",
+    "a05400b4ec17479f775e073c81f095ea3e857d3a": "a05400b4ec17479f775e073c81f095ea3e857d3a",
+    "d644d9d0079e5e5425b5144067c7c0d83ed3159d": "d644d9d0079e5e5425b5144067c7c0d83ed3159d",
+    "e3ae00971d31679f490b27c762bf3f79334ba86c": "e3ae00971d31679f490b27c762bf3f79334ba86c",
+    "bdfa8b267fdb13730868d435b277dcfe696ec083": "bdfa8b267fdb13730868d435b277dcfe696ec083",
+    "86f886dac23013d88996e3a2e99093ba44d322fb": "86f886dac23013d88996e3a2e99093ba44d322fb"
+  },
+  "unchanged_commit_ids": 18,
+  "rewritten_commit_ids": 0,
+  "refs": [
+    {
+      "ref": "refs/heads/main",
+      "oid": "86f886dac23013d88996e3a2e99093ba44d322fb",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": null,
+      "public_oid": "86f886dac23013d88996e3a2e99093ba44d322fb"
+    },
+    {
+      "ref": "refs/remotes/origin/HEAD",
+      "oid": "86f886dac23013d88996e3a2e99093ba44d322fb",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": "refs/remotes/origin/main",
+      "public_oid": "86f886dac23013d88996e3a2e99093ba44d322fb"
+    },
+    {
+      "ref": "refs/remotes/origin/main",
+      "oid": "86f886dac23013d88996e3a2e99093ba44d322fb",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": null,
+      "public_oid": "86f886dac23013d88996e3a2e99093ba44d322fb"
+    },
+    {
+      "ref": "refs/tags/v1.2.4",
+      "oid": "39b16d4cb79585c19ef08e1db35008fffb5ce9e6",
+      "type": "tag",
+      "peeled": "4a8db424287d28da1d8eb00b35cf083eda7e34aa",
+      "symbolic": null,
+      "public_oid": "39b16d4cb79585c19ef08e1db35008fffb5ce9e6"
+    },
+    {
+      "ref": "refs/tags/v1.2.5",
+      "oid": "dff2fe626ace7203106c8c33836bf59696bb2f97",
+      "type": "tag",
+      "peeled": "bdfa8b267fdb13730868d435b277dcfe696ec083",
+      "symbolic": null,
+      "public_oid": "dff2fe626ace7203106c8c33836bf59696bb2f97"
+    }
+  ],
+  "recovered_tips": {},
+  "all_graph_tips": {
+    "86f886dac23013d88996e3a2e99093ba44d322fb": "86f886dac23013d88996e3a2e99093ba44d322fb"
+  },
+  "tag_map": {
+    "39b16d4cb79585c19ef08e1db35008fffb5ce9e6": "39b16d4cb79585c19ef08e1db35008fffb5ce9e6",
+    "dff2fe626ace7203106c8c33836bf59696bb2f97": "dff2fe626ace7203106c8c33836bf59696bb2f97"
+  },
+  "externalized_blobs": {},
+  "reference_roots": {},
+  "missing_shallow_parents": [],
+  "shallow_boundary_commits": [],
+  "stripped_invalid_signatures": [],
+  "stripped_tag_signatures": [],
+  "redactions": [],
+  "fsck_strict_passed": true,
+  "all_commit_metadata_and_messages_preserved": true,
+  "parent_order_preserved_except_documented_missing_shallow_parents": true,
+  "limitations": [
+    "Only locally stored history is available; no remote was fetched.",
+    "Removed payload bytes and original signatures remain only in the private original Git archive.",
+    "Credential detection is heuristic; exact findings require independent review."
+  ]
+}

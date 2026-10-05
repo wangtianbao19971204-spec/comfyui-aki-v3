@@ -1,0 +1,259 @@
+{
+  "schema": 1,
+  "pass": true,
+  "components": [
+    {
+      "component": "comfyui-anima-lllite",
+      "pass": true,
+      "archive_commit": "2a731f302520ba483c8dbfcb52d835bda9313f0e",
+      "mode": "names-only-all-history",
+      "scanned_objects": 28,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "bfa5400dfee8df506e586d8dd51594c73111338704d67d4285f3596db3cd6002"
+    },
+    {
+      "component": "comfyui-dazzleswitch",
+      "pass": true,
+      "archive_commit": "12d4c9f4610721d135a2d8642743cd81cb45a2a8",
+      "mode": "names-only-all-history",
+      "scanned_objects": 75,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "fb6d9fe13ea1d07e5a29288a9526d84e3a586d1becaa70e3c92013b25d6e8a39"
+    },
+    {
+      "component": "comfyui-gguf",
+      "pass": true,
+      "archive_commit": "bbbd207b09680effffc582c97ffcabb0b4f00e19",
+      "mode": "names-only-all-history",
+      "scanned_objects": 527,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "8e831d478b1f7bd5c2023ee7a20aa156c15e66c28b45564bdc41d526837b3d71"
+    },
+    {
+      "component": "comfyui-impact-pack",
+      "pass": true,
+      "archive_commit": "a6f3b9d0a2746d2ff9d958dad4859105a0b35baf",
+      "mode": "names-only-all-history",
+      "scanned_objects": 3576,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "8befbaa9b07b5382b6d97290032377768b3c79ce581de717fee2d2bef5586576"
+    },
+    {
+      "component": "comfyui-krea2-controlnet",
+      "pass": true,
+      "archive_commit": "d678f4c50fd86f9700b1e2ceb0a0796aecf8da5b",
+      "mode": "names-only-all-history",
+      "scanned_objects": 28,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "b2a507fb4c859c54e934c2356000b3df07b2c70ae3f8c010152b4c061ef3c2cb"
+    },
+    {
+      "component": "comfyui-krea2edit",
+      "pass": true,
+      "archive_commit": "125e8d9530f90de515a6ea1080db1710db96c835",
+      "mode": "names-only-all-history",
+      "scanned_objects": 63,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "832eb29e358786471edf7b5644ed9f4482b1dc6361cd852d48ded1a005e90108"
+    },
+    {
+      "component": "comfyui-ltxvideo",
+      "pass": true,
+      "archive_commit": "0ca7ab9924b59943c0358f32b50e54c8cce4dd0c",
+      "mode": "names-only-all-history",
+      "scanned_objects": 460,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "738ce1bd2949158cf80545eabd469472f696cd9ec72e583d445ac573ee7e4ebd"
+    },
+    {
+      "component": "comfyui-manager",
+      "pass": true,
+      "archive_commit": "7bb3bb5f3530cf804de80a7027b53ad7ef72d198",
+      "mode": "names-only-all-history",
+      "scanned_objects": 17088,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "4d8747855b1cdc1fec3e4239a6106576fae7a4cbd968542c37bd37a60a77c2ae"
+    },
+    {
+      "component": "comfyui-olm-dragcrop",
+      "pass": true,
+      "archive_commit": "2903b6b42d318ff146a4730b8fd928b1c7e0f70b",
+      "mode": "names-only-all-history",
+      "scanned_objects": 51,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "2e357836249e9e769b8b2f283b2dd7a3a6c23904e43f7a6306a825edefc55b0b"
+    },
+    {
+      "component": "comfyui-olm-joycaption",
+      "pass": true,
+      "archive_commit": "35a320050275de6bcceb2aeda5d1876ec22c318a",
+      "mode": "names-only-all-history",
+      "scanned_objects": 19,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "20dad3f580d684d7229035804a06c8e3eee7286e77b7f550885e06353b58efcd"
+    },
+    {
+      "component": "comfyui-openpose-studio",
+      "pass": true,
+      "archive_commit": "f9adf6eba32221db1c36f03dc9dda33aee26bdd9",
+      "mode": "names-only-all-history",
+      "scanned_objects": 291,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "0f2224be82c72b0691dd9eb743d66de49bc63ae7380504d8c99745afd321fdc1"
+    },
+    {
+      "component": "comfyui-rmbg",
+      "pass": true,
+      "archive_commit": "94a04d13fbff89ca4b6e5c94610547215ae854fa",
+      "mode": "names-only-all-history",
+      "scanned_objects": 1073,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "f32519b4961bb2ae7e10fad0fbae7206ba26256529603009cf18fa0deaeaf45f"
+    },
+    {
+      "component": "comfyui-sortlist",
+      "pass": true,
+      "archive_commit": "c7209fd474aaa850464eaf9da2afada13727933a",
+      "mode": "names-only-all-history",
+      "scanned_objects": 507,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "c5ea24bbec9fed2066d63f343474052dbe7becff281f80f036b3ecffbb5716df"
+    },
+    {
+      "component": "comfyui-videohelpersuite",
+      "pass": true,
+      "archive_commit": "8d72b1622a88d4d5f404a91f0ba0987fd5fe3f5f",
+      "mode": "names-only-all-history",
+      "scanned_objects": 1717,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "c5ca77c48baceda6b91b681227823a999fd74729361a47ce728366aad6eb8a55"
+    },
+    {
+      "component": "comfyui-wanvideowrapper",
+      "pass": true,
+      "archive_commit": "fa6eba4cdb9281da66fabf992a223c33edfff73e",
+      "mode": "names-only-all-history",
+      "scanned_objects": 3877,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "a907bbb10372292e1ba141a34296741bc885b5cf066b27e9267ba052b95fe2c3"
+    },
+    {
+      "component": "comfyui_comfyroll_customnodes",
+      "pass": true,
+      "archive_commit": "4c818846324829fef7622f1fc1df65612b50abd3",
+      "mode": "names-only-all-history",
+      "scanned_objects": 1633,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "021149f0992a26cd68b1875d7e566097d2ebeca6558c5b9c24592dbfe04b5fa4"
+    },
+    {
+      "component": "comfyui_controlnet_aux",
+      "pass": true,
+      "archive_commit": "9991f4b28e1192d3fab04bf85a466adae24d8918",
+      "mode": "names-only-all-history",
+      "scanned_objects": 3465,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "df775efa878f970dac089b269fb94989a52bbf7d5591315c58953943ea50e84b"
+    },
+    {
+      "component": "comfyui_custom_nodes_alekpet",
+      "pass": true,
+      "archive_commit": "2cd3ecad8031d920abdf8ce93c5e657624b3a457",
+      "mode": "names-only-all-history",
+      "scanned_objects": 2146,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "ae3965c84648fc7bf9b2393e80e30b032147e1d1cb5de31d9a11aa307518dc8e"
+    },
+    {
+      "component": "comfyui_ipadapter_plus",
+      "pass": true,
+      "archive_commit": "ba86df18963f251091e30b7efc986104f2d2d1fe",
+      "mode": "names-only-all-history",
+      "scanned_objects": 576,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "1261022adb606310ed940633536611204263e35b6009ffaae843335bdd2398c2"
+    },
+    {
+      "component": "comfyui_mira",
+      "pass": true,
+      "archive_commit": "4ed36a53fb840778f4baed98d487d0ae15265a65",
+      "mode": "names-only-all-history",
+      "scanned_objects": 499,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "c128e87d65e946a1b1121a20eb508215784c99f7d06de6f55f998839ca9b77f9"
+    },
+    {
+      "component": "comfyui_ultimatesdupscale",
+      "pass": true,
+      "archive_commit": "12e233b6a1e12b6fcde8af1f26667f748c9196e9",
+      "mode": "names-only-all-history",
+      "scanned_objects": 479,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "cd26a3ac9ad1be0f42bcea206088b4c9ca88ca0e9f25c0f075b1d6024ec45655"
+    },
+    {
+      "component": "llama-cpp_vllm-nightly",
+      "pass": true,
+      "archive_commit": "f3e3381171580777c49e38737e8283f218eb910e",
+      "mode": "names-only-all-history",
+      "scanned_objects": 180,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "4c692826554cba4ec428625410c78c290ca390f8e394470e2afbb544b3c318c3"
+    },
+    {
+      "component": "rgthree-comfy",
+      "pass": true,
+      "archive_commit": "1a6396a3ad659227bd104f5833f0566fa7003030",
+      "mode": "names-only-all-history",
+      "scanned_objects": 2937,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "3894df2953d51189776b4794fa523ac052dd6628471592b673444641966714b6"
+    },
+    {
+      "component": "sd-trainer",
+      "pass": true,
+      "archive_commit": "3d1aab0f87b2448fc5053cd48da21046d705a82b",
+      "mode": "names-only-all-history",
+      "scanned_objects": 795,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "573ed6efb0ff3a02c806917245f1838b65e8345421f34645828cb3f54df8ee5a"
+    },
+    {
+      "component": "vnccs-utils",
+      "pass": true,
+      "archive_commit": "7fc189cc9414fa79dc2a29dc01fad4309b135854",
+      "mode": "names-only-all-history",
+      "scanned_objects": 939,
+      "finding_count": 0,
+      "payloads_scanned": false,
+      "local_full_report_sha256": "b0e71451348da9718ec39eedbfed3cf5ab206477553416c4d9c64261e3a9bbbf"
+    }
+  ],
+  "supplemental_only": true,
+  "does_not_replace_full_payload_gate": true,
+  "source_or_main_refs_modified": false
+}

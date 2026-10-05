@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "authoritative_git": "maintenance/comfyui",
+  "authoritative_sources": "snapshot/runtime",
+  "library_checkpoints": "snapshot/library",
+  "database_contracts": "database",
+  "external_root_environment_variable": "COMFYUI_EXTERNAL_ROOT",
+  "external_root_example": "../ComfyUI-local",
+  "runtime_is_deployment_only": true,
+  "private_config_directory": "private-config",
+  "machine_manifests_directory": "manifests",
+  "original_histories_directory": "archives",
+  "runtime_mutable_data_policy": "keep current application data; never overwrite from an older Git checkpoint",
+  "upstream_update_policy": "review and test in main Git before scoped runtime deployment",
+  "publication_policy": "publish reviewed main Git refs only; never archive the workspace or external root for upload"
+}

@@ -1,0 +1,2984 @@
+{
+  "schema": 1,
+  "component": "ComfyUI_UltimateSDUpscale",
+  "source_original_commit_count": 182,
+  "source_ref_reachable_commits": 182,
+  "source_reflog_only_commits": 0,
+  "source_fully_unreachable_commits": 0,
+  "public_commit_count": 182,
+  "commit_map": {
+    "5a993a22d07070d15a234c76be5f0d586f7b63cd": "5a993a22d07070d15a234c76be5f0d586f7b63cd",
+    "d4fab1e433c63a2fae20fc92fbc83b80b513684b": "d4fab1e433c63a2fae20fc92fbc83b80b513684b",
+    "056fd63732e62130ac1591b62f6971855d8da413": "025e0663002d0b994d6b6d87a3b3c5023b250327",
+    "3dc6690f7f41f7147138220a93738a0a35ea699d": "8299eacda761cfd49c54bf4deccb144adce11bfb",
+    "9fb4478d711451c3b472d379b7aa082904c61701": "5100ea3acb35b6146e999354fa32cd09ea1db513",
+    "c2e7ca4043083f9f9bb2b76b02c4b360f38d902d": "c4f01fdf0ac4376514796aab9a9b25f4b993da33",
+    "248bd848cd19f28e73582d37453fca057093542f": "44a39893c78cc9d0f63d3fb7de1de473dd4d9e3c",
+    "89d25025741f57271fc95579812a8d0f1f1696df": "687cc8ada60bb0e7e27099445f8412ce8a8a0e4a",
+    "789eb8446b278b4d472c98191f162284f3347967": "ba912c0763705a884aee902fc17654affd0d7c80",
+    "aba0ccc2cf11e990d9e1d9b8025f62ed725fc141": "38f2e22e33a24a97241e84b6526f2769d2876663",
+    "054b4767adf8c32a03c890e8aa6f1c8a854f8f26": "cc1c890de448309b3a1c22cfa63e5f4a7ceb8ab2",
+    "dc2e5d9d169e5ee16aae5ce7f00b5ae38556103e": "26a3129ccb6574d1855f52b73d007fadb68e8b46",
+    "411e936de5be2abad11e619f98c6e52e87d13bb2": "80e856da1553d37b08e0c8e2ab6a634659a3f23e",
+    "728d5ec027244c7e72ef60f1da14961a7d654beb": "46e3404186fda5139737bec111eb8fdfe0eaf43a",
+    "603333a64889239379efaa960c2d96c684f436e5": "15de83d21229d00af912ff2ba6d88a15dcd16e3f",
+    "b99fd62b8f53599a68f41384dedc692c2ee41b18": "256f7901d331f8f11508def2986c1ed56720c8a1",
+    "f5129bf911af587186a450a35661e1b5e399c840": "03c529a24af3afe91befc368c5a70aadf1d2b8b0",
+    "c17c6b1104af5e65c2e957decf601ee3ee02f3f2": "376f0307ecef042f381661e5f247c81928d68b70",
+    "21e883be1ad8c783d960a30e5969c7373a34b1f6": "ccb846fd6f7b6a7f9e038984eac2cea62bd1192a",
+    "998a84b490c8389e32bf96edcd2578fce099aece": "2d8a36d81e270614e03fca387e14e8af3d463b60",
+    "8787e0ce4da165a6ecc8a8d951889a3f41a55bbb": "04873ba61e53bcde6ef560423f51bf76b319fb43",
+    "7db830a4dc0ccc9b7a00ad9b8216cc6681b82beb": "5931cb06d0aed6e2d256211bf6c711557d95f76f",
+    "1f9afc19ae55f3cae60ee2c292e5aa43bf40e3b7": "8544fc1ecd6512e2eaed225fb68b2d64796caef4",
+    "4be9cc94b48f586da1f018dd430018e433abdcaf": "6943e3fa35346bb6a0f1433696df1e10d0c57b75",
+    "d33df2f49cbe14210725fc046220a55f86cbe98a": "108a15d455b957c9756002ab63c06f81ce1ec54e",
+    "a960727dd009711a9443d149f19f5814a369fee8": "3ed725427b847d12e1a8e63b398b165c55361bf7",
+    "32b95ede6c034a2cb9a101dd3ed5d256cdb80d71": "26caef5550aa1d140f6d75e8ee89954d93735594",
+    "56897049eca640022917e689a3168cd6082129e8": "d6078bafecce49bf067d1fe585bbc0edf0e5c792",
+    "02c17d562daf71d357fca83e6e95fb432c48bccb": "6ec37fc7013a64e95ee15130db0864cf9c4b03d0",
+    "325cdb35fa08363c2f88635d0f0c7871dae18903": "1ca6f1a6372909fdde4aa06718f140613e5a25c3",
+    "3cdd9a99d21707972119297ff7770ceefbe29365": "57bdb758213db53552ad643a05b9dd6bf4c53221",
+    "151d9f98c27e8d40b79f3670b8f840e6b5a10040": "e6342878cb27c99b79c517d7f1d567a94f9de27a",
+    "3be9d383e8bfe941dd40c13df24ac8c588ca187f": "d53687e063950fb295024453eed4d8fa0f9b4ba5",
+    "1aadb511ae506b64e15ccbbc094a7cd5a462d72a": "a953963aaa3b60fc23bb707b5cb9d38667691ab8",
+    "af1bd3a257680fe8416c5730ec90f880bf9dd96c": "eeff6cdb816f0c7c31af96a50cecce79920eec71",
+    "23729d2e2eb4d8401009058e93a76b539e8c26a4": "be54b7d644189b3393bebfb6d161670b7fe92da9",
+    "c04801611f2d996f359028c5c0f8142aff33e445": "c24ff50acedccbfde350f1ffa7956ecf87f3df21",
+    "0cb6c54eb37bc148ce6771484bfacb562cfc4846": "d2145cb8093a09f50bc7dceafe9906b6d374d78a",
+    "ebeca1daff3b68ce16ed5554b47a9b5ddd515e00": "a0cd86923086cd928e222e54389e2d30e3880487",
+    "286be7c285f9a289a31a24d3fce77402bf3b4099": "6078a2d55c63abbd63656549775f818df057fbec",
+    "c89eccf0de0499abc2a22b605d7a27bce25f82ce": "5eb7f78fe810396a91d7a4e01ffd69dca742e8c6",
+    "86ffbc1a0c811ddbd68baaa70b515107a6aa2fa3": "21558610c66e325c6ed86ec851b302ea08291bce",
+    "4a49f70337ca584beaee8be58929afc9cda54cfc": "918c3b4474bd7357f18b563af8a9f83bd24b84a8",
+    "08580cdd285a5010eb8b8241475faa5e556a68d3": "f6c6e48d2cebc1b11087dafc79f7d44dcee3124d",
+    "2aa4d7cc6c205995cca849fb86ddfc24e9ad504b": "b5f6d6e32cf22a9ff1f2c761b725dfca3b4739a9",
+    "e1de8dbd9021751e0d71203d862c2994337ad652": "13f749bb4c580527636d1db86c459c4b0c39abc5",
+    "4f5893cbda327ff4891d9ae5711d989ca8780d14": "463d295212114a99d010a0d46165a391ca6bfd7c",
+    "3071766a30ef1060207977b48441a63c862940ed": "baae93967af5d26176b7ea264679f57630ab8ee9",
+    "10a80a614101059e2803122be8daa2dbefcfe38a": "10c8a76930ee8801b756f8f7b29904f95ba22861",
+    "ebba577070cfa5de7beff661a0e69f7f4714b790": "15a329dd654a92c9cde87925a45db9969af1733b",
+    "523956963e8dff388859f0078fba762f44f05350": "f616db7467790058b60cda27e0ef991104d95b6f",
+    "e0f776f3a4299b85f5dcbc2dfa8859ea3c7ebfca": "cef1c71b338ff39a776813c6f4ccaaa2f8a19254",
+    "f1c7c28eec2ca4dbfb8c911e64e141754f9d0194": "173fbe0d278df95cf17512dcdd8f556ea9f94bb0",
+    "619d56357e87650b5f92a11da0fa3bea21a45834": "bd850430598c6d539d16d0accd2734b7eef8375d",
+    "c774cc9f4d5fd0ee5b266550bb163d7dcc322e73": "cfdc22d6f578acb3a2100e86427b54895f4c02ef",
+    "c3181020e0fe0fdea43cbf6fc9213e29af38011c": "53d989d02f09afad85151ea660b65036037cae08",
+    "1a3e46409e797b500272991226287c02ab7a58c0": "aa627be2b7d44b86786cae082b7efbae58ba0c6e",
+    "79e0e3b496b0d1891d6d01fb663e48a5bfddf6b5": "6bd5c0ec0c94005519a8c6dbd626b6f3b20a70c3",
+    "6ea48202a76ccf5904ddfa85f826efa80dd50520": "7eaabaffaa2117333da8d342e811795722c32103",
+    "149e1f0d6c92111f722fe1f2d5b5714e3ec3e6fa": "af5df63128d02491f034577264d21bb6cb3e3e57",
+    "bcefc5b1c412ff13c4209a6bf82215fc6ead12f3": "f949819b3523796a95801da5005a509519e1edf8",
+    "6c115611209824586463af68816851648c291d9f": "2f45704890f33a973f9d9a21ec4640588cbbfb8f",
+    "b303386bd363df16ad6706a13b3b47a1c2a1ea49": "7332dae7c04f21a65712a908b52c9d45464c0963",
+    "7c678ce25ec605570b8915ea6270ea017c0b1d74": "e3906961bc2cc21e23accf4f04ba0f8102dc3051",
+    "233f8b8ef999c35d1bdf98741632234977e6719f": "e75266501b83f770a7af7930a9d22d92593500e7",
+    "473a6084c31ac0b3c20180be19aeaf6c00cb3115": "a71c1abd6481551fa9efa2664655a83c201a7cce",
+    "6d49325c84cc9d024a1deca6dc925c7c3ecac8f1": "1938210f272cb9097a07a8cebca0741daf3d3bad",
+    "10b7624846405060b8cf20d9a8e9466b83f876c2": "051c6f21c023dfc25d3dc023f54d2842c4a56761",
+    "b557097cf5dd889b55ec994084e1acef9934c88e": "1fa45ccfbe01d98005535b3fd99cfa425de1ea5b",
+    "f8da8fefa0b18aeb9f9917566fdec3dcf247ca4d": "f7264d9c66b5739b4a2490f8fd9a62ca84aeeb1e",
+    "a7681842044f55eec003845f2f775f3d46a7bd40": "3766840b16a00f3ce356a62d978528b10c49bff7",
+    "f55e3d870e232117f90db514327721c7b0fd81f6": "4a61f6792f8ce25bf39891669d782850bf8d29bd",
+    "6e411128cefa2833526c28531e53151a95bf94cc": "7c99c2809faf75e28f20d7e24868bc8634425542",
+    "70083f5d449c498ee0fb35f5293c91cebac4b758": "658a9c25ad343c4089e9db11d1c2ffb76ae99e72",
+    "4161f8abc280943801cd5fb79b6fe481ec55376f": "bfcaac72b96fcfa7021045cd61f4d1c22ea15c05",
+    "e617ff20e7ef5baf6526c5ff4eb46a35d24ecbba": "6f2ac9bbdd565955fddc47ae37110d026847f691",
+    "ab2048c7a37dd53b4a7d9c4acf5e15c6a0855280": "7fd55eb89001b32ed5bf605f84a9b3c1b1ef8433",
+    "ff3fdfeee03de46d4462211cffd165d27155e858": "d1d39381b94819a12fadd0799a3b6a6aee3569e2",
+    "8b8f993c0d2b3f49054ea34923fec8a4a4086536": "069ec4b1aa1b8c2d73dbacaca8ea6f7a40d2e375",
+    "975c4721414c959713474ba086b1c11b46a2c85d": "694950a4f0f6303331653377b612680289752b83",
+    "ee8f81b7001177c3c579ac0abfcbcb49a5cfdab3": "71c43eb4825a4b7bdd0efaa5403c8a2e17d685c1",
+    "f89f5ff9dc6638085f537254d9821cc635e0bb37": "0f85e86b2636171ab9757e4df77098da42ca75f3",
+    "e7b3e631da3a30ed659cfeb55fd48cf4edfc81f6": "c1470e93891cbd841c06c1f9a9c7981bf480e476",
+    "1b6e60d4f1e7ef325ea4b6268f41c03bd18eee5b": "93651b41d49360da01b74ae927aba983b9e6a40a",
+    "8642daf6281e4ebbdf2daca18539c0ab6c2c63f4": "45b2f19349f82c13e56171c509b5b46965a6b594",
+    "71f6adcdbb0d432352cda82cbfe107dab86e1d6a": "3837d102717f406125d5091ca5410e39aaaba91b",
+    "a3352d06c79323edd52fc10b8968369da5a1f872": "3787afcd2103526265edfbff0e73a7fe4b538422",
+    "efd821146b7511402d002460490f1120c92d6a6b": "6a1b69c8c4a59646142375a6322e4067b446fe01",
+    "edc4c951d4d21a8514487fe19bf51131f558de2a": "83740df311207977c44356d582ffbfcf16bd7fe2",
+    "c304c39c3e137df9b56dec1cb63014dfc117105a": "a3909996f8e09f8d1a215e0399f1dcdfc300c6af",
+    "778a475dde8116a2066fe07f6c9ca15554e0b5be": "4a759c3386cc8f5a888ffa3bac6286329537788f",
+    "459005141fcaae1f4f03a114386982341702a6dc": "010165b96be21f4bf07f322e2b8ef657348cc95a",
+    "a245fee459026cdab53fec8921824a33ce409d86": "6a597d93ff947867ccc4f29604b175826d9b7af9",
+    "3a7240723d0ffdb45276cf628a31d1d83b7887f7": "ac01b50b655fcd92369e5b5562907e2c200f4fd2",
+    "4ab93ca0d467dbd5619ce6f0b968cb62c849e35e": "0b27493e6fc9ff88c3eb802d8d76954f24a2405c",
+    "a351b3f8c6e157feb993ca89881199393a02cde3": "a5c6c504b0a092510b951a33d757985ffc244ad0",
+    "79a70154530a84b5ada228dce33b457bb3b0da9c": "8b83d20aab47da01fb91fa5fc2cc72700c6baf57",
+    "23b7ea3c4b3e1801a1f8803ff6992c2daa21e429": "edfff1174153faa42bf5d72ea051c5f75af8f522",
+    "d033884dbcd18bb43cc9ff70a0b13164bff4d333": "25daffd6f7dcb53ae649b91d4f9a250a3153e276",
+    "3d2b9d0b81d03b82f427bed951b8ccd284f01467": "4c6c7cb83ba52d7b60c41dbd31c46065f0c5519c",
+    "2f21d73dba703096de66c3ea73064316458656e3": "f05f617dc52df4e63b8415aa066658880737bfed",
+    "eba8e381597f5b4abe93518c7b94c878fadca48f": "7959d1dd187dc1b69c98638a2351d38cb98afdfe",
+    "156440ca9f362882c83739645c9fd958a305f65d": "cc86f88f309da4a28f84c05c94780c44a9dfbc89",
+    "95fb26043d341c79246f0e137aabc64c19d67d37": "e920c7cf727f050076fe4b2db106ea924e0e88ff",
+    "444a9fb156930a8ac1cc1e269870372d80e77ce1": "5ac5bf7e1795b7d36772263bea64f9ec74133255",
+    "8ab4c9780b5098184ef20850d2e1a6340a09c6a0": "5db11243e0f95e17b328af8125dc9472d9031065",
+    "627c871f14532b164331f08d0eebfbf7404161ee": "f5d3fb6f8fdf1519df66123db79d7d43afb28a1b",
+    "b34d795e9d1030b25b552cd44452f18bbd18a60b": "b6a896b7609c2a9698358a4767e173c4241f83fc",
+    "5b7c485a5e1c5802f086c63d282f89e8734f0546": "9a95ca783e37dd840aad1f237e4fc486c940f831",
+    "fe7ca919ab2f68e0812cce8b7dd09680be72836c": "14196272754b577f955c373cbd1c7f996cbfac10",
+    "871c7cb134797f6ed68e323090532f77110194a7": "811af8df4945363e3d2160b7089f6094725e5d6e",
+    "c48d60df1ee24b47c4e6acacaf1038aff2698cf3": "69362534bab4d05909dd5c939a12e30298924420",
+    "0a4e94ee7d022f45efdf5ceac00127d9c01cdfc7": "c5de3535a0ec25b25eb5a3363a75047899e7887c",
+    "0ab26f559ad5ba7d124be70244b3a1186b85574d": "2220a30593816bc5aac78474a43fadd259710276",
+    "5e02909c4136a3e1a029d9ddf454ed451ef19c82": "424483bea32434a00f8a4a965d940b60e07136e7",
+    "1ff35eb196b246fc634a40a98f83eaa36e4b26f8": "1fddc37a6b16b0c560e8ae0382915d9bf02a90d4",
+    "ee70406a55528b17f68c818f55a834f692cdfde7": "773844ca48c780ffafe2d2c91791ead7067176f1",
+    "0792e0b67cdfbb1528af1dfa3804ba8bbd457029": "ee7e107253bd64a00bf5ff4185395ae17ed6df96",
+    "8dfc7140f7791617344b1cac5e76e5646b071672": "08065c7c022a2e8ee81480106f00f63893943861",
+    "33f8a780b99e51de9a1be86f5a07e01ca229a70d": "84ada0e817042d6e2b482002c426b6a7b8ef6490",
+    "16d138aa7b63501d1cbd1be65a3d7fcce1a31cbc": "38ff64cde0d3a2cb2d9820d9a7846863bc8864be",
+    "4d89e409b08960354d2d40724585f9daf1b78a42": "79986842b31e9472edca4006287d04b38479424b",
+    "ca44750429cbf7702f022abe577be5e0b449f937": "95455548ace9ab73119f4beb4c52dfb940866e80",
+    "eed8da9e05630005694f76da197b1d2a382d3e51": "8154bf69b23b86d31b0bd745b7f3f72ce63ee5e1",
+    "d2e386aa79da510d5df47eb6a13c776f4a8edb25": "01cc089fce794341ec18e4c9a7b3bd3143319f6d",
+    "e618c2411c6d39b40e29b378625e2921699401fd": "317a18353a3668b4f438e2931f38e240f398ce06",
+    "87fcf6c3340dc8240d08f9d90fa5aa758f5a2cc1": "0650b37f0904304ca51a8de46f54e1eede8e31aa",
+    "d6b575adb878c3d1c7a357f700b5c1001ccb8bd9": "5f24bd8d71baeb456bfc1e7cebab20c26b6296c6",
+    "53fd7e3ebdf46f3a312e011f8b4a52568fa221f0": "71d6db593173aa526a0a4cdb7010e2e927fbb449",
+    "722db1e27a61d4cf89e21b7f31c367d831059e73": "9fb629a4d00858ce6d50accd433dbd31428d3b86",
+    "6f271e4d555468915f638cfaee6b0928bb1f4769": "72ddf232272e1f1a864bba33ab7ddc42c1949504",
+    "24a740d8ab46a69a797f7fa981333b2b09c01077": "a7850f54d6137e28b12ff0a6d09c8177d5e0ae8e",
+    "46c7f5fb37fd8fca7e30d2bbbabe8c229cebbda3": "afaa0e631549facae17bf066e1e9795bcdcc0b6e",
+    "c2563b6df45017eaf450ae83e4bae0985f37c17b": "3b344c77deb03e8426fc8b60359975768e8584d0",
+    "0b8632365eaf7d96c26200260d8c78e327efa72e": "82c3b284904dc9d72f6ffeb19d63a36501a75511",
+    "f93d15777d9abd013b3d82e31fc56aeb74d97d1a": "b04129c5b74f8d31821837fe2e0aa8332ff3b1e2",
+    "2a5f6f47c4f4c16ca8a538009efe0ac175a4d13f": "d2e3efe9ad1badb0956e1434a9686460cb74edaf",
+    "cb693076650326e420586648fba93cce034f4e3c": "227bec7840c462d3278931b2767493dd9d46273a",
+    "005b2234479527554b7efd29b1f6a43cbd679a9d": "b2539860fb30407a0925d46e9a170f739acec5a6",
+    "876cee04850bbea9175b364587cc4273e79d2abb": "fb3e5b063cf0ecdd9e390bdee26458f3004d803b",
+    "87f8f05603955455986f913c41302f8e84d9d884": "6ab52116b16d50af6fb28d0dd98a7299f3847942",
+    "a6e2e9fbc534c094f82822911907acbecf659aba": "83b9139c63ba6bed6cdaa61d1c98e3e268ee3322",
+    "177019948d900fcd97e5b4167ceae259dd9dd312": "e9c9a92c8545fe9d70242eeed1881e70221b08f8",
+    "70a0b101475bd814f5134926c13a987dac4dfce4": "cb3e5ac4c312d75b0240edb05091474f99770b4b",
+    "58bea24108e26925a446a077c0991556cb8621ba": "6c1ddab067aeb07e3ad6b9603d9dfe0d03ab666d",
+    "c8a1dd559d366e3b62094b57088df38cf7c5074f": "096054f0b82c70b97b9786e89f32f3b283bac955",
+    "15a6a75b031fc6a76d38693a34c009aea2bfe6d5": "73f83567dd419c1d7a2eeee406904f0ab5f6ba6b",
+    "71b9a48fa99646687818fac226dec128e8b88afc": "096eb369e901d6d1d906c41d667a99882f2100af",
+    "de3af276202c4207ffcbea83b82538080942a925": "c16334553170ab022091c187064b317423c0fc59",
+    "cebdf5fbce0c63d80c0120166d94235ed8fa9fec": "d14dba4dcc4583707acb35993b4a648093b45fed",
+    "48ab1d0d8eef47e5d047615d2b804bf6b0be3c0e": "1d2a21d751aba5fe1ca433e9b1870f07d1363089",
+    "c374e3ada0436b3e6849bfbdd04befede4e45d22": "200a68ef79409bf0109fcf0de8ade40cf231899d",
+    "6c1c6fe12aafbf735025670ebddc9f598b7a9841": "fed1c17a7a60f5a33529ac4c0b0fddb0061fc518",
+    "2c3622e08e19b6696f0927b1d33fec759564be2e": "47694cdc0612d236d8b4aa7ec4bd6c200d5b23fb",
+    "a0b7e492b6dc9d0128af55b324b0b7daad5d1bd2": "3732d8d552ca389eb19da0a70028e986f4aa324e",
+    "02a19f63a8f66f3af25490634cf18de0912fcc0b": "ee579add857bfc65d2fb4a30112e30854af54200",
+    "48ffea161ffffe9be08733d7c03c50ca900242e0": "b84e6b780c44e72e9a5ff68e4faa8329a137a42c",
+    "32f02e7621ff6b15f9cab555eb800b7285a16683": "0f3df21c140125b35bfda80abf734e54d5158d63",
+    "fe0196319f19b71248269b73f0b0287f33cc2e47": "a5721b05169a0d899f40cc28a9f0c429b2d49b51",
+    "4eed7a7d76765cf8b23e5286f8b016880b72df8e": "ca4eb0db31316a91e743d03ea5e458b4bb40ccfe",
+    "5d3887fad7142b4688b5eeb0d6c7c6e0593f4b48": "b3c88d15b1d5658455780d25b5700d02f3fccfc7",
+    "6a4594da4c52043d388599efc20893ef8d07b5a0": "6a90357cc6e72fc8759aae63a27b54666c942309",
+    "bb8e9a3b38b56837fe07a4b70b4bf80c94f57bd3": "3d1fdc3e090e0d9144de04d38ea773cf6ca524aa",
+    "3054e22c6902c52361df3b675b85e19864046079": "fb3457e3329e398354f8a9e517f00c6176482d53",
+    "44d83685c706d1bd34d597c2a71cd3e3a42cddae": "2557a984f1bb30af613bac56a9341773e36d1e37",
+    "6b210655dbdbc928bc5554d891af50010072800b": "b905b84f3ac2c0a4b98eb25cbbdfde4aa0e56dae",
+    "f4d4f66dc970c521ed988d6b96a0807405f65417": "0cd3bffb487326cb14296238666d2c59180a601e",
+    "9863a3be5b65232808f1c146a233f801ec0a2dcf": "7bb8017a4fc60fb0cb4976efd9b11a90bb833efe",
+    "0aec7fad0031de150370c4bbbeb05fb4f82797fd": "6f9f6b36eb4df00331da670ae41ea9d07b8a75e8",
+    "cf5d6b55d128e47e0bc5482d8aded6f975272722": "8e876bf9c246d5a5202072dd9ed079a175fa6bde",
+    "a80fc25a6f566828f04f0d5ec37e67eb628b0fe3": "f24949b33d8dec6a4f4ee4988cf6a31c17602ae3",
+    "297331e718fcbab66a645b99899dd1bba8ebfe54": "d190bd7817afdcf9b166db76b7a7a8fbd433d7af",
+    "23d507f987a32f436388140b6c9dcf6ed9908dbd": "d64eb070a63f8ca95654633656b5d2fbb8ffa788",
+    "e3cded109b51c5711a3d5a2e89715b6ad7a1523e": "9715810b0fd8d0c5e7f943c0ca5f344528477a91",
+    "eae7106a7b9f70120e05cb6a05555c4ff1dd1d64": "8a59f261becd963b977475e419f893e89a3ed3c4",
+    "5b76d5576b2037f3ac293d89cfdb3d5c988a1155": "1146ab0a16f9eeb3fac7c5e1e0df37d7f21c46f3",
+    "06d558da3ff655f05bbd77e050d654fc98b14eca": "2b51934eca8ee53f6e111116457d4927ce49a94d",
+    "3a1ad0cb4550f5c6d98c1aa9f789e7576aa4ad0a": "e83171d18deda690aef8df0055e0461f7f89df49",
+    "34a3c2c0d8a0321d4f9a355092f105046e56d998": "28cb87d8a8b35e95f3189050b8e50233ef8dcafd",
+    "c164c303c099b9b5d117d15f438604377432e8d2": "21536547fac6279843658c0f49ed36a423e5441a",
+    "f68498064d6dd5d87b5325a481ee7d67c1168744": "dd592e575820c5f635271df87b4fa1355f228f8f",
+    "bebd5696fddd61cb0d08949a222c508898ab5577": "7c2d794cfbf67f63909d0ad97b4110972e5038ab"
+  },
+  "unchanged_commit_ids": 2,
+  "rewritten_commit_ids": 180,
+  "refs": [
+    {
+      "ref": "refs/heads/main",
+      "oid": "bebd5696fddd61cb0d08949a222c508898ab5577",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": null,
+      "public_oid": "7c2d794cfbf67f63909d0ad97b4110972e5038ab"
+    },
+    {
+      "ref": "refs/remotes/origin/HEAD",
+      "oid": "bebd5696fddd61cb0d08949a222c508898ab5577",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": "refs/remotes/origin/main",
+      "public_oid": "7c2d794cfbf67f63909d0ad97b4110972e5038ab"
+    },
+    {
+      "ref": "refs/remotes/origin/main",
+      "oid": "bebd5696fddd61cb0d08949a222c508898ab5577",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": null,
+      "public_oid": "7c2d794cfbf67f63909d0ad97b4110972e5038ab"
+    },
+    {
+      "ref": "refs/remotes/origin/mps-noncontiguous-fix",
+      "oid": "23b7ea3c4b3e1801a1f8803ff6992c2daa21e429",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": null,
+      "public_oid": "edfff1174153faa42bf5d72ea051c5f75af8f522"
+    },
+    {
+      "ref": "refs/remotes/origin/test",
+      "oid": "71b9a48fa99646687818fac226dec128e8b88afc",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": null,
+      "public_oid": "096eb369e901d6d1d906c41d667a99882f2100af"
+    }
+  ],
+  "recovered_tips": {},
+  "all_graph_tips": {
+    "23b7ea3c4b3e1801a1f8803ff6992c2daa21e429": "edfff1174153faa42bf5d72ea051c5f75af8f522",
+    "bebd5696fddd61cb0d08949a222c508898ab5577": "7c2d794cfbf67f63909d0ad97b4110972e5038ab"
+  },
+  "tag_map": {},
+  "externalized_blobs": {},
+  "reference_roots": {
+    "008d55010a2fc58f718599248d253148168bd9ba": {
+      "public_tree": "bafccadb04fb19bef5f1588a6e651ff6fc559845",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "0322294f886209d6775d7d495480cc25fbe59ef1": {
+      "public_tree": "97a25eea71455683c0f2034803089240d28cb187",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "0379b7c90e5cc61cf88884869cb10c8271f98586": {
+      "public_tree": "de53bfd34e5fc4079fc180f4ed616c581a3e524e",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "047d99a60bffafcf9b34b419508984ed5f043991": {
+      "public_tree": "91d42d50132525420884247ef1251e08a4874618",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "059ec62b18f26093e05dbb91c146b450332d4f5e": {
+      "public_tree": "9bcfc8e271645eb97454dade44410431c981be0a",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "0715753d8f76b4aabea4c47da2f24d1240bcf7ef": {
+      "public_tree": "2051d8274e95f078b33e2fd01378bf8159e175f0",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "08718212b53dd03aaa020a815dcf6bf6a95cc19d": {
+      "public_tree": "fe0e71ad2b7835a91575f62dd3b8549388900875",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "0cdfa6832122f1324ea0c49890464432e49ec151": {
+      "public_tree": "bf9c5152b01b61f662ecd2251f8f224c1e9a9980",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "0f2879de39f46279f9f4bf2dbd0535d0a1935494": {
+      "public_tree": "cd1317bc60005a26214c02019010455dfa73dd9a",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "1279e6ed19f5f9e8e178377e287cdb5c7db973b8": {
+      "public_tree": "665bfd05f6d58a7a8df5fc5c38b26270562f639c",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "13641bbfb13b2258e76725ddf199b9956341d55f": {
+      "public_tree": "ac99b9b50978fa0f322674dbe83b88b0d902736a",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "1389be89273f16d503c7b45f404597ab5b698e39": {
+      "public_tree": "1d0bdaecf7126344ffcf73bfd12f0b25e92e2001",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "16516283d0a93c0e10f5493ad2fe54810e5b105e": {
+      "public_tree": "9168a37b4d7938bfd9b58f8fb333c2fa255056b4",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "167b35023e0eaefe22cd8c7c89cde7850d24faad": {
+      "public_tree": "a0955b5f8eedf6e2e1a931778e1ac187ef27d2e3",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "16a4a452440475233ab0a72d0e12962adeaa936a": {
+      "public_tree": "d17b1aeb4e803bc7a8e5c3cfd38cccdc8d623e2a",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "1cb101803c18ae108a8588164cf448c3785c3a2c": {
+      "public_tree": "387c27233e443cef210c025371ca66400979c0ef",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "1cc23ac0bedfb13a2a294011d32702a311f87356": {
+      "public_tree": "589f25e6d0c2cf412894e3f2007c5383c82f9bea",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "1d15bfed67bc1a78deb2e20b620005106ca7d5bf": {
+      "public_tree": "e4c6ec47283c39b2c8c6f83800056bdc3e2f45f0",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "1d2b09a7d192736ef6778bb85a2ee3bede97ee1c": {
+      "public_tree": "fbac964e4559363891d5840e6aaf3785d2328ea0",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "1e2697018097689bd832d7741adebbd043fd556f": {
+      "public_tree": "786db88ccfc7bde382b53059d31bbb473d6aeb9e",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "1f1fb2427346d417bdaabf263dd49341acdea8a8": {
+      "public_tree": "e931466dbeff4c54216a646549d61be289c0673f",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "1f6a3f865c4714951d137e22119bbe24fc7c4aaf": {
+      "public_tree": "4d2b00bd917bcea4de52debaa2c0cb2cf2c969ea",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "2503577a463793f84ad1d6035fbe5eb61f9fcd23": {
+      "public_tree": "03b675359f06484cc127dff0b63556eab598b8dd",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "259681591e4986363c136f8208a505b99669a183": {
+      "public_tree": "9b09eace7882dca1ce70ed4c81e6c3206308a8da",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "269d8609bbe9d99d1324ca44b19e47fd537aa9b7": {
+      "public_tree": "e46625f0c68fc53f434b5f5b9c9c15e3108ceb75",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "27c2ea495700c64959dee62e16c6e3b8b4a53b62": {
+      "public_tree": "acf1b0e4a0b464fd6bedecd5ec9d199bdef9200f",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "2a22a65c80f8b136d2dc467549d0ba8bcc6f2209": {
+      "public_tree": "16fdad127bd1c210dba63d916ffcdd529abe1e73",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "2b0f8092e445fa37db99b7c70361d41ef42c8fe7": {
+      "public_tree": "ab6f97a7ce18c695ca94544b5aa5278fa994707b",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "2be0df76a29343f596304ad43daa246988fb7654": {
+      "public_tree": "c3d858abbe5bed60ffa2edb4870398ec5ebb3192",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "2ee73eb55456588739a94998480d972eaefb2d87": {
+      "public_tree": "2d2c799c98e239dd3efd58045dd822fac1ede1f2",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "35621b57e8953f7defb3f10da78f20eb5548527b": {
+      "public_tree": "2da17007e4e4f8687ee42fd67ba774c07803e1ce",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "36401b8f34db5d3380625f281bb18e62eb5c177e": {
+      "public_tree": "ef368d56d1dbc91d690892611ea5478cd87ecd80",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "374392bb5a03e31c52e29c7d0a258c3add99a34b": {
+      "public_tree": "e8b80269cd00dcc791e285e75bf1d62dd34d9a3f",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "38681968d6fbc4c7cea651749e4f4caccb491a4b": {
+      "public_tree": "06424db226cf339b800ec8b3a1c29a1d59537043",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "3893e5a28f862865661384ab3c9c195387a84a0f": {
+      "public_tree": "61139c30e7296d666394a2ba32d3e5359967b8bd",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "3a201b9f0aee63a694b1d8f097c077162f06af90": {
+      "public_tree": "172121b8c0e48319daf8c566149c7298992c8aa9",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "3aeb578db82f795237f3c2988d3b05e60fcda151": {
+      "public_tree": "9a245383eb76153e11f2229a88ae2f03c53576e8",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "3c417d4c974eac045e705e8bd448855b955a5643": {
+      "public_tree": "81c467f688c89ec0af7df1d28ca63e53c52fdd7b",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "3db02a20d396b8bda8f8bf382d83f8071da2a2d1": {
+      "public_tree": "498eea5946404d399fb17cd6996221c807715f46",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "404622a7da4c89c8bb18d8a909715f2fbd4f9ed6": {
+      "public_tree": "d70608ecb20ca25a83d0532a5ff2420c674bb7dd",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "4061b4103244c9aad609a94de6818bb2599ee975": {
+      "public_tree": "9195919ddad0f8bbf47cdb6d3597f500940fef70",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "41db2b8b4feeb81cb401e71a6fde67ede6463c69": {
+      "public_tree": "c4b75eba481e8847fe7d3dbad3d9e5fdf358f38f",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "43f62a57d0f3989878a56fb7fd463356b7a68f27": {
+      "public_tree": "aa86e31726c3d2b82e50370bc345599fdd6ea820",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "440f2365c223523f6b95e334a4d63cbe287a4056": {
+      "public_tree": "5c329a82b0a71101715087e262b4f2904b4696c3",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "45dc267d2cf95c79f88a6f38caba77265b528a02": {
+      "public_tree": "4923ca522955dd967396b06e74333d5f267eb5df",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "469a91d7d0d2a408f9da785de4347dd215a6a704": {
+      "public_tree": "2ce4cdccc9c92a29fac96841e7f5ce413dad38d7",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "4a459e292bd4fced69f84669b30862f6a7851a85": {
+      "public_tree": "b76e5e684ea69831a94d9d23324419aba3520fea",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "4b746babd45cfd9ac69d6cb9591a3c3152887b2c": {
+      "public_tree": "28725903791acd3bee11ed7e00149606d2d64dfa",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "4bf1516bc3be372b7a46328d3b22adacd742aeae": {
+      "public_tree": "09fbe7ff76c67179b961fc94170afc19ec73daa9",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "4fe995d01a902e01a7c94306642839d2bf2df1ee": {
+      "public_tree": "32b4e02aa737277673c74d3a72c999e8f34116cf",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "500212ae1324c5cfa6cfd74c534842f5fd088798": {
+      "public_tree": "7b26d489b3f0605767cf6bd4b66e1c9e5fdd84e3",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "5035539e7027d3d9024356edbbd7679858cf0d36": {
+      "public_tree": "77e6ea2e9926e19d74069e0b256106206f6bcd77",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "508e21a6ebba70966e484e1bd4c51ab9da66c7b6": {
+      "public_tree": "100c8da0d36be5e3e92e397a8d87252fda9279ea",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "523c0dbfa35baaffe482ae8adf6219e4547ecf7a": {
+      "public_tree": "26f1292efec87d4e6239b3d43b8baf58fc03ca59",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "562d86a7b6a014269d200467e6af364a1773490e": {
+      "public_tree": "0f0bae5ede2b5ef4ce53f1fdbd123d9771019cfc",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "59af7b706a4aeabf8367925c878749fcb8b89faf": {
+      "public_tree": "0b11d6bbe72b46b440c22b81ea1b6b226d4490d0",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "5a7c816aedc21c5aeb0a57d89e615cc6efda9d32": {
+      "public_tree": "c4273ae7f9958332244bbaa3a296c47d6c34ba49",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "5c7c09e6346e7b51b457b9e0a97e0768b59121c9": {
+      "public_tree": "3536d9517be820c4569e90c71646d8127abe75cf",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "5c976d8124de0a7c0ff2e2d0aa61b2a9788e4687": {
+      "public_tree": "492c75546d92b3084a295d26e6df74668c7f1cfa",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "5cb01f98266a9098f1b60d20cd15fec920f3ded9": {
+      "public_tree": "a5ecf25120a1ba18e9256d65c7e0cd726fcfef2d",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "5e3f92c70ca954e5fbce404b6218829653545b8e": {
+      "public_tree": "63d66842c3e1c1d30244640e95beeae695ee3893",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "5eba4a35b7ec9616248d0fc42e351c0c9a9c5d4f": {
+      "public_tree": "ee042436deb71689979db3b4501fcf772dd5c0c2",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "600d5eb2237cb82411546711b8ddd0c3d671a7c1": {
+      "public_tree": "b2ae881ea9afb3dd07bb357a68973b9f4b0ca51f",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "60e02b49411a72ce7f9c3fbd852bf0ab84bf8ad8": {
+      "public_tree": "e91da765a66a8ae68944e0f7ab1574799799c673",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "64fb66b3ded686aa3f8ccdb47e4a9b9d54d85a14": {
+      "public_tree": "d3c5fb778c76bda15f94c5949929ca7f74a63085",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "6546872ec23ca5d218625b158093479e65954116": {
+      "public_tree": "3cff187865dcaeb039c10dfc58767d2dff29c1aa",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "6a46168c4591710dbfd9c846f5f3bd34b17a3628": {
+      "public_tree": "6b272d59aace2fcd4260083228ec63850d487b07",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "6b121bf925ead850a301d22897a771034ed10603": {
+      "public_tree": "416f2db444a5a7cf52fd0042502aa0107103ac20",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "6ccf0281110b40e714a2e411524142472d6e4f37": {
+      "public_tree": "0fe52d97dd3caba34f3f336534ed99e6e6f1a738",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "6d70b797ff94b0b9ce97aa1f21ca799f3b33a07a": {
+      "public_tree": "f7012b73841786173a6701b9565b35188d6fefb6",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "6e60a7d45695b2a49a1d41ea62f730ba653b5266": {
+      "public_tree": "7c49b3ffb1be1546a8a1256ac0f9bbf686c727fb",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "70fce4a8f07d56b8014bd2fba41c60f80345e674": {
+      "public_tree": "d69b5dcb44664de5c750e5b3a358c08a99734e27",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "72219b2659d28766182181de644bc5656481e78d": {
+      "public_tree": "76c4305e6f504c98c1b2ba2d58a4e052f4586470",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "72e41b3efede39973bcb79ffc135208f380d31e9": {
+      "public_tree": "3ad233dc43dc92b153793a4310991f75bc89ca70",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "747aa7e6584fc1cfa00fdc8e4752ddf50dc72b91": {
+      "public_tree": "206beaffd83c8a9b9966d904e8b13b175867d7fe",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "7533add3a19212c9b9bc9d83fb5437b9bcef4db1": {
+      "public_tree": "0818ee3b5a78305b0bb3afbdc01329cb04c9a9ec",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "76830aa1755861455eab305015962a82db9a4b2a": {
+      "public_tree": "850272b0e1147ecb01bf61088d657f0c87b7b258",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "77ef494c81dd88d205e6d627983252eb4972c1c2": {
+      "public_tree": "6a5ff561d8b7fe155a79a7e19048c70f05fe3d4f",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "7922b315d42316e86f981eff15466e11a75a04bf": {
+      "public_tree": "2b881666dffe1a14994868a27c8dd5bd3be2734f",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "79faf49c26e6104f2f54afcbafc36fa2526c170d": {
+      "public_tree": "97b57a2b2e4633c7b041c7be29a04f84188128c2",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "7af50a105d5f18ace574443154281550734b5b8a": {
+      "public_tree": "73dd014c14207b1dabef80d12f5b51bd94d50081",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "7b58fad85c69802c374c30686879d495bb89647d": {
+      "public_tree": "9a79aee2b5598af4b6ea5ec4fdf486cadbfac325",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "811b63bc42947ba05d32a9f69058deddfe67281d": {
+      "public_tree": "c38bc28c709cbcaba8cfe3902ce1fbae6835c2dc",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "849b9fd1365edbcd325c34ad7f84d1f6284bee2e": {
+      "public_tree": "0d02855b74815c553964be529ac1a960a4e9f5ab",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "85a4c69f6bf6844034554b1ef7296c1b9510db67": {
+      "public_tree": "f478aef38424694b9cbfda5be9e709e00d684730",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "85cd879a280039d241cae9e767039ca616017ae9": {
+      "public_tree": "bc2bfd5784a12bab77a09c1018c6da6c5f2f79ba",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "85f9c7226498e90a6f515e08546a750393f84d21": {
+      "public_tree": "0e0797f7f6527afbf9a9020fa1c38e9361916301",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "878b735a100d96e44205df6e2d255a7fe3292bc0": {
+      "public_tree": "dcd0b3b5ea064911a225f9d26ea35e1d9f178d8f",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "8836360b6ad842bcc28c4c82b186be120ad0f1ef": {
+      "public_tree": "cedf10d86f85fd086e1a814eb961c8143e4069c8",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "88f7aca9adfc2de2246d88ce2bd2dddc9b129dd7": {
+      "public_tree": "11035d9236289ab49bad61972eeb5a58050f46ec",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "8c38f809060d1b46aa11c449ea2dd63854f5e5e0": {
+      "public_tree": "20e4ad175035616e6be1dbb524bc8474dbff9c3d",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "8d0d7555eb963d8d8c531edfe54a2b596d6b10db": {
+      "public_tree": "f81f02aca8f639b96197f57651d4c0f340476306",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "8e4a187d162dabe7569db79fb9e1bb4ff2ec067e": {
+      "public_tree": "e1c069de528f7af35869986c6386f7e6d05ad405",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "8f647d0355fceb9bee64b0546bbef899258b83ab": {
+      "public_tree": "f953069d91e35e42c47922ac258fa52bb78bc1b8",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "940869818549ef84ce36d1cf63d7b0ba0e6b5bec": {
+      "public_tree": "fa9a945efe3717410a5109ec0f4e51bdc729ff90",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "973c1746e1aa42e17da0d17be5ec5252fd68b68b": {
+      "public_tree": "b004078981a4a0f981b0a3ede2f8a6cc6dd5c6ba",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "97b509f87ef17de11151a4b5ae95164b99744e4a": {
+      "public_tree": "238ab9cb3d1105f34d95466d98e95c0aafed2dda",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "986b22cf2a5c3016557453dbba64165fc5fa44c0": {
+      "public_tree": "4b73d8f7cb520751d184dee73126fbad98e3e2dc",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "9aafb2eaeb31cafe8123f5600e768265db2c96b1": {
+      "public_tree": "a18c6cee27e5bfd8dcb53c155d651ef9feb1653b",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "9c90bcb7cfee5a62ad020acfe3180c806ca6467c": {
+      "public_tree": "78ef2cfffc6172978d6081da95540545bf2c42ef",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "a205ebc5ae758ddfcf6facc439d1beeeb7a64854": {
+      "public_tree": "0e6675c5cdb0fc463070fc68df73e86029e5606d",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "a4a1749cab3b0901f24ea2669bf15bd9d27c1d8c": {
+      "public_tree": "67c1b535974f33d81ee70c9b5836dff8dafa9571",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "a75d67908014ab6747e9252ce708a2c13eff6601": {
+      "public_tree": "99a2b4aebde5cb1f9fa50b0e8fd4739d745b3609",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "a7fcfbf72b701cf968b1b1f88f13ccc2bb45f1d1": {
+      "public_tree": "0ebc0413b0ec9c5681df096f09ec54dcaadfa5b2",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "ab05365845f79c47e35d94541c5c50ebd2457ada": {
+      "public_tree": "297d50ab5eb98d1172c25a1155c705febfd7d501",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "ab2c22d7dafd27d9377dc195c0b11479bbbef803": {
+      "public_tree": "e9b06310f7148d59f9668eb63cdc47f9dfe59833",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "ad98ff9604e31304fc4bdef3814bdc6b1d2991ee": {
+      "public_tree": "1804f0df0e38e47debffaa02cbe93e8bc74b0aeb",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "afbb40d4b864337b8c7ac187cc4d77f7c3d1f298": {
+      "public_tree": "8aaf157be5369b64be0c5ca39a9a5e637c9a9596",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "b1453b9b8521ebc1ef922c4b02981ea665630da4": {
+      "public_tree": "7a0615832fb725f66c60484ab1410573958e5dbb",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "b16a2c3c8ec20c5d2911f33482dead69f7d61ddc": {
+      "public_tree": "49506492f614e8b152fdd28f8db41957a77b7e40",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "b18018fa8a749ca98937771ff7604e637b217de7": {
+      "public_tree": "1fdc8e047bb3e6ac028fdb9225d2076ab0f16441",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "b2d2e84db1a024aed539d9d2dbe3bd657b0ec522": {
+      "public_tree": "0c1a94e78da70f0f9375c9fdc960a818aac3a99a",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "b317898bc650f97c54cb641f3130867e82be0b98": {
+      "public_tree": "878a15d880356b6b8b0115e9113c27cdebe06c1b",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "b3a9e9d0f505344194f0c18ca1b8ed12321df006": {
+      "public_tree": "245a0962492ea5d7884bf0a13280fdd29835c8d4",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "b3c0b48895a3752e1575c8ac8cfb6a2e612d3f4f": {
+      "public_tree": "0ac0fe332b8f2f20e10bc7fe177e31b9c7f9aecb",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "b49cc53cbc1ac27b0b4432c44861840867dccbcd": {
+      "public_tree": "e080a5c8bf090968eb756e597eb518fcc28da628",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "b695bc32ea1fd34136ae08b2b5b746651ff32e72": {
+      "public_tree": "3978aa9fbb93f7454ba778e7dffbb43be6c05773",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "b6bab929c9af030a682a5bc0702a70a4f1c7ee30": {
+      "public_tree": "b693c8002e95e0c909360444c56cdbed1623e224",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "ba811162c82f38b6ebdf8dab365cc13bf26d2804": {
+      "public_tree": "6e1d25752488bb86f4ef39686692fa868b9fcc6c",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "bafff1a5676779cb7c5e3e0a0c31df1b9cbd2477": {
+      "public_tree": "f3475b6f4fd3d47355145c5a4d46cc5190983ad3",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "bb0c5cd08b8d83f143407d78d6006bf2b48a33f5": {
+      "public_tree": "f3eaab09a3b3ef9a06a1df7a634f2f5a6147f443",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "bd399b8148d13ea8da543c3350eeaeccefe1ba21": {
+      "public_tree": "ef8016e3cebc0fa3d4f5018d1e7a75b74e07a8da",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "bd5d6c70a7a2121b874c662f84a3c46569e717e3": {
+      "public_tree": "7d63eb8d8a7de35e9877fd82c116e8558f5c7051",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "bedcdd607552892888eea5b536b8ae7506aa4e43": {
+      "public_tree": "1e9b04190407d7d667b9633391c9dcccdb6db69c",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "c476966bbe4c8cabacdc522d2501f46334cab2f7": {
+      "public_tree": "5ef567b7084d53743c546807dd86d4f98c71e28f",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "c5dfd63f05b3e692d23036927d0d04f6c59335d3": {
+      "public_tree": "cc5cafab83905347deed9e2c43aa37ef1c720e9c",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "c61367037bf3dc3fc0bd4b546ed2b1799a110117": {
+      "public_tree": "359fc52a9546c2ba5848b13e3e0fd6c564c9985a",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "c6fd31898a1d2f6cd9713a690f9672b162502636": {
+      "public_tree": "9aec3ca7cebc75d34323a9c92329c02e97ac04e7",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "c85ff7025d7d7800b30961ae8ade2b9f697a0301": {
+      "public_tree": "ffe14c4972e1235cb3653a4442e837c5a086c022",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "cb2a19c001cb67a54b907f5eab2d2710a3feb143": {
+      "public_tree": "143812effb1a19bc44b2b60e4468ef80b4e5ae53",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "cb84216d8318cc5c2550179ba9e41415fd6506bd": {
+      "public_tree": "2a3cb3a0242d41ac5279f7b29dd46c91bdf929f1",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "ccba0a17fdf15b23f0e5fce01c7df21e6b3d86bb": {
+      "public_tree": "a80bffbc494426be4d175e515e6785f49f26b952",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "ccf1af2531b8e4fe7838b35079daab20b5918fba": {
+      "public_tree": "96a99370ee108baf76323cb0fa7e0df1cf980361",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "cd30980cb069cfca16315f7d66230cc8d9eed10d": {
+      "public_tree": "24a5f0e816c91f987f7d7d5be54f1e9b9f5e6b75",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "ce3d302e493b8671949a1729e989ab0156ae5f3a": {
+      "public_tree": "15dc0772101ad2c53894e69e7a42cb77581ff9d8",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "ce596b06e821cd088cb84faefffa621310c7985e": {
+      "public_tree": "6aba07154b86f8bcafecce53234dc5a22e1bf7b8",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "ce64b9f908de7128df550e0178ba9a10fc6065a6": {
+      "public_tree": "7269183ce9d6a80288ee9bdd16c652559bcf6ce9",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "cfd609c297c267f5b57314d59119478cd811d892": {
+      "public_tree": "a0c473dae48722530f1969668c563eb255863d06",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "d0d8c310aaab55dc9ffe53eb2124c0f297b3b597": {
+      "public_tree": "c657dd2b79b3cd3b91e60d458bcda04bc3b27985",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "d1d64e2faf6b987fab8720138a708b1efb524324": {
+      "public_tree": "04958e1e112ff389912b35e6449fbe52620b353b",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "d27114b774fabd24c6812c1f7807a0b616804ce8": {
+      "public_tree": "36d6406f50918ec6bd74668f3e24153dbd9abf9f",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "d4a4ec5722ba426d26895b193f7d827d582fdf6a": {
+      "public_tree": "ce9789f369c18eee3f5dd0f52f29507160f3421c",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "d7bb1a0bdaa510686e444d6c8333ce3f067d3b5f": {
+      "public_tree": "440aeab7cd78b86fcefbe38346f18c99144f064b",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "da5188422edc4e7aab1d197810b8640aeac24040": {
+      "public_tree": "40c3fffe7dd411145fbb2d59bc8bb0af00a9d711",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "dcc5927a9a4a44485131c8f11f311563a8667c66": {
+      "public_tree": "3ae55c91e7e22f2bff0183e3e56cbe7c7ea17a24",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "dda1dfc9b3256fec114084ba6eb6cb9621808bd2": {
+      "public_tree": "0e57cad6e99ca60239e1fa143e421742a2c90592",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "e47d1a214c11c3fca6208e7482577ac6f82eeaa2": {
+      "public_tree": "d8d67a7313277dd4c465ad885da2b94e29b6d1c1",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "e675b670d36ebd962184f937fd6a99893c5b2021": {
+      "public_tree": "1fedc08e5ae1ce5737f50a8f4497dc68d6a333f8",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "e8f5f5080ae28aba23c4032025fdb106a25c9233": {
+      "public_tree": "c0e8ac8e16d781ba92cba771cc81dbac9cbe072f",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "ea19b9e9835cf9acf458b48274b564f59025d9b4": {
+      "public_tree": "6776d0c79aaa4e5d145d207222321d3045e709f0",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "eb398f05e437d32d9bad7bf687cbd0f9a722ee07": {
+      "public_tree": "7e521a7a413f7333f30d9a96abcab4961da64875",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "ebbb6e3eaffcfa7408e82b81c77c90811cda4fc1": {
+      "public_tree": "f30f0fa94cc08851b435e1b2f5a7680523926fb5",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "efe076e5402591bb3509d1a65da301b4855acb62": {
+      "public_tree": "a1496ce1af603731366977cc421488388f46ba45",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "f0ffd3dd9e77a85edd291611c7bd19c81657f145": {
+      "public_tree": "23d4a3519bb2d94af344fca3bdbe28be914c9367",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "f2e90e4d76040a2e0f7f1da6b21c11a2bc7e2404": {
+      "public_tree": "924ed93ee606279be9b3433d5f25b479d55e7063",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "f3d552873ce4403803b7a2c2cb733090f384af34": {
+      "public_tree": "bc93f14c9f3a28eb7453c8ea6c4d77555fdb38a0",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "f5ab238d178b8447241beb62a11e756223508f91": {
+      "public_tree": "efc70ff83535638286452b7d1f3a686cc7cff82b",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "f65d2f22bd1ebca8c8087df333d4a752c09448eb": {
+      "public_tree": "a433c155200e570df99de7ad6086f9bfbc05701d",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "f6668e162c38eebb644c727e4b9e18af417fd7fc": {
+      "public_tree": "321368a9033e93282418fccf5cb1e8796b3e3d45",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "f7689b8045281ebdebf961abbeeb58f89c46de4a": {
+      "public_tree": "b58cb150381e86125c59ba26efe2882437bf0aff",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "f903c8212d3ce1e1f117458e8865461068c6afdb": {
+      "public_tree": "5b9824945a1cfb8c4ab404adb4109d84926d29f3",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "fae4ec53a4a48b6465e1f190d571b4b82315228b": {
+      "public_tree": "e217f7d25272f3ed52aa8f3a57837241fc0f8881",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "fe156b71c7304948ab3a205550ff1352f2db2a3e": {
+      "public_tree": "49f54ecf43fe3bdfb83312d511d000e2a3e4b69a",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "fe42d07652e671e397e25e18131fef37641f6062": {
+      "public_tree": "3ea1391629394b7b8e1297911e21842647c84c48",
+      "reference_blob": "34f3c8962c491a8ef8be9495a465c8253d4c946c",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "756bb50573ccc86ad2620b49f01f46d91a6fd682",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "ff30a9affae26ea3b9d7e8c10680bf9d88e709c3": {
+      "public_tree": "55533d17ef1f77ad0c0408924e5d02d2805ca0cd",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    },
+    "fffa8b24e065c1ae6c2f55fdad28b47fd4f48252": {
+      "public_tree": "591f72a621bb9a8a57f66cb0091346a27d253bc3",
+      "reference_blob": "08a260f6052fecd61ae3051cf35b1042312d82d1",
+      "externalized_entries": [
+        {
+          "path": "repositories/ultimate_sd_upscale",
+          "object": "2322caa480535b1011a1f9c18126d85ea444f146",
+          "git_mode": "160000",
+          "reasons": [
+            "nested_gitlink"
+          ],
+          "restore": "Obtain the dependency at this original commit separately; no dependency files are invented."
+        }
+      ]
+    }
+  },
+  "missing_shallow_parents": [],
+  "shallow_boundary_commits": [],
+  "stripped_invalid_signatures": [
+    {
+      "old_commit": "89d25025741f57271fc95579812a8d0f1f1696df",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "789eb8446b278b4d472c98191f162284f3347967",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "411e936de5be2abad11e619f98c6e52e87d13bb2",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "b99fd62b8f53599a68f41384dedc692c2ee41b18",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "21e883be1ad8c783d960a30e5969c7373a34b1f6",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "32b95ede6c034a2cb9a101dd3ed5d256cdb80d71",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "56897049eca640022917e689a3168cd6082129e8",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "3be9d383e8bfe941dd40c13df24ac8c588ca187f",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "ebba577070cfa5de7beff661a0e69f7f4714b790",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "e0f776f3a4299b85f5dcbc2dfa8859ea3c7ebfca",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "619d56357e87650b5f92a11da0fa3bea21a45834",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "6ea48202a76ccf5904ddfa85f826efa80dd50520",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "f55e3d870e232117f90db514327721c7b0fd81f6",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "4161f8abc280943801cd5fb79b6fe481ec55376f",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "e617ff20e7ef5baf6526c5ff4eb46a35d24ecbba",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "ff3fdfeee03de46d4462211cffd165d27155e858",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "8b8f993c0d2b3f49054ea34923fec8a4a4086536",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "ee8f81b7001177c3c579ac0abfcbcb49a5cfdab3",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "e7b3e631da3a30ed659cfeb55fd48cf4edfc81f6",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "71f6adcdbb0d432352cda82cbfe107dab86e1d6a",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "a3352d06c79323edd52fc10b8968369da5a1f872",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "c304c39c3e137df9b56dec1cb63014dfc117105a",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "778a475dde8116a2066fe07f6c9ca15554e0b5be",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "a245fee459026cdab53fec8921824a33ce409d86",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "3a7240723d0ffdb45276cf628a31d1d83b7887f7",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "4ab93ca0d467dbd5619ce6f0b968cb62c849e35e",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "2f21d73dba703096de66c3ea73064316458656e3",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "eba8e381597f5b4abe93518c7b94c878fadca48f",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "156440ca9f362882c83739645c9fd958a305f65d",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "444a9fb156930a8ac1cc1e269870372d80e77ce1",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "627c871f14532b164331f08d0eebfbf7404161ee",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "5b7c485a5e1c5802f086c63d282f89e8734f0546",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "fe7ca919ab2f68e0812cce8b7dd09680be72836c",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "ca44750429cbf7702f022abe577be5e0b449f937",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "eed8da9e05630005694f76da197b1d2a382d3e51",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "6c1c6fe12aafbf735025670ebddc9f598b7a9841",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "f4d4f66dc970c521ed988d6b96a0807405f65417",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "3a1ad0cb4550f5c6d98c1aa9f789e7576aa4ad0a",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    },
+    {
+      "old_commit": "34a3c2c0d8a0321d4f9a355092f105046e56d998",
+      "removed_headers": [
+        "gpgsig"
+      ]
+    }
+  ],
+  "stripped_tag_signatures": [],
+  "redactions": [],
+  "fsck_strict_passed": true,
+  "all_commit_metadata_and_messages_preserved": true,
+  "parent_order_preserved_except_documented_missing_shallow_parents": true,
+  "limitations": [
+    "Only locally stored history is available; no remote was fetched.",
+    "Removed payload bytes and original signatures remain only in the private original Git archive.",
+    "Credential detection is heuristic; exact findings require independent review."
+  ]
+}

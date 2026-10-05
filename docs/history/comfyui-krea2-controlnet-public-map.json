@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "component": "comfyui-krea2-controlnet",
+  "source_original_commit_count": 8,
+  "source_ref_reachable_commits": 8,
+  "source_reflog_only_commits": 0,
+  "source_fully_unreachable_commits": 0,
+  "public_commit_count": 8,
+  "commit_map": {
+    "5e10d80c018856c3991275714b32e63ba495ffbc": "5e10d80c018856c3991275714b32e63ba495ffbc",
+    "c81a36cce83ec92d5e150f43c65d1affa41968d9": "c81a36cce83ec92d5e150f43c65d1affa41968d9",
+    "899f20f9d3e580d9506368bc407171da467a0ae6": "899f20f9d3e580d9506368bc407171da467a0ae6",
+    "1ccd57da738dcaf39b2d6759287f1171e82189ed": "1ccd57da738dcaf39b2d6759287f1171e82189ed",
+    "5000f123f264b48cf88214f8cc9718ded5cb31e8": "5000f123f264b48cf88214f8cc9718ded5cb31e8",
+    "fe1acc06cb6608e1febbf519b0884c98adff9442": "fe1acc06cb6608e1febbf519b0884c98adff9442",
+    "aa1f062a7c5e5a60e12d778be3996f701b52dd5a": "aa1f062a7c5e5a60e12d778be3996f701b52dd5a",
+    "79ebfd3bd80d2180b334dd7ce57f3c9ddaa0848f": "79ebfd3bd80d2180b334dd7ce57f3c9ddaa0848f"
+  },
+  "unchanged_commit_ids": 8,
+  "rewritten_commit_ids": 0,
+  "refs": [
+    {
+      "ref": "refs/heads/main",
+      "oid": "79ebfd3bd80d2180b334dd7ce57f3c9ddaa0848f",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": null,
+      "public_oid": "79ebfd3bd80d2180b334dd7ce57f3c9ddaa0848f"
+    },
+    {
+      "ref": "refs/remotes/origin/HEAD",
+      "oid": "79ebfd3bd80d2180b334dd7ce57f3c9ddaa0848f",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": "refs/remotes/origin/main",
+      "public_oid": "79ebfd3bd80d2180b334dd7ce57f3c9ddaa0848f"
+    },
+    {
+      "ref": "refs/remotes/origin/main",
+      "oid": "79ebfd3bd80d2180b334dd7ce57f3c9ddaa0848f",
+      "type": "commit",
+      "peeled": null,
+      "symbolic": null,
+      "public_oid": "79ebfd3bd80d2180b334dd7ce57f3c9ddaa0848f"
+    }
+  ],
+  "recovered_tips": {},
+  "all_graph_tips": {
+    "79ebfd3bd80d2180b334dd7ce57f3c9ddaa0848f": "79ebfd3bd80d2180b334dd7ce57f3c9ddaa0848f"
+  },
+  "tag_map": {},
+  "externalized_blobs": {},
+  "reference_roots": {},
+  "missing_shallow_parents": [],
+  "shallow_boundary_commits": [],
+  "stripped_invalid_signatures": [],
+  "stripped_tag_signatures": [],
+  "redactions": [],
+  "fsck_strict_passed": true,
+  "all_commit_metadata_and_messages_preserved": true,
+  "parent_order_preserved_except_documented_missing_shallow_parents": true,
+  "limitations": [
+    "Only locally stored history is available; no remote was fetched.",
+    "Removed payload bytes and original signatures remain only in the private original Git archive.",
+    "Credential detection is heuristic; exact findings require independent review."
+  ]
+}

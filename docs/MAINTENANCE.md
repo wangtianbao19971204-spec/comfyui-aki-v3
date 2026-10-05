@@ -6,7 +6,7 @@
 
 先查 PROJECT_MAP 和最新收据。正式 UI 代码、资料数据、模型配置、工作流和旧历史流是不同维护范围。现有快照是基线，不自动同步实时目录。
 
-所有 ComfyUI 相关代码、工作流、提示词库、数据库、加载器和维护工具均以本仓为唯一修改/提交入口。两个运行区旧 Git 不再继续开发提交。功能改动在 `snapshot/runtime/` 对应源码中做，工作流子图随完整 JSON 维护；数据库结构/索引/触发器及迁移记录在 `database/`。不要直接手改资料分片，资料内容通过受审查工具导出后核验 ID、正文、个人字段与来源绑定。
+所有 ComfyUI 相关代码、工作流、提示词库、数据库、加载器和维护工具均以本仓为唯一修改/提交入口。运行区所有旧 Git（本体、插件、工作台、训练依赖）均不再继续开发提交。功能改动在 `snapshot/runtime/` 对应源码中做，工作流子图随完整 JSON 维护；数据库结构/索引/触发器及迁移记录在 `database/`。不要直接手改资料分片，资料内容通过受审查工具导出后核验 ID、正文、个人字段与来源绑定。
 
 ```powershell
 git config --local core.hooksPath .githooks
@@ -55,7 +55,7 @@ adopt 只移动维护仓的快照：旧版本保留到 ignored `local/backups/�
 ## 4. 生成可移交 Git 文件
 
 ```powershell
-& ..\..\python\python.exe -X utf8 -B scripts\repository.py bundle --out ..\comfyui-20261006.bundle
+& ..\..\python\python.exe -X utf8 -B scripts\repository.py bundle --out G:\ComfyUI-local\releases\comfyui-20261006.bundle
 ```
 
 bundle 包含已提交的全部 refs/可达历史；不包含 ignored 文件、未提交内容、外部权重和媒体。工具要求干净工作树、快照完整性和完整历史凭证/资源门禁通过，再核验 fsck、bundle、refs 稳定性和 SHA-256，不接触远端。不能用 `--audit-content-only` 代替公开门禁，也不能绕过 hooks 发布。

@@ -1,0 +1,33 @@
+[metadata]
+name = "Anima Fast LoRA - 角色通用"
+version = "1.0"
+author = "SD-Trainer Next"
+train_type = "anima-lora-fast"
+description = "适合需要更快训练的角色 LoRA。Fast 插件当前不支持 Automagic，因此使用 AdamW8bit。"
+
+[data]
+method = "lora"
+network_module = "networks.lora_anima"
+network_dim = 16
+network_alpha = 16
+
+resolution = "1024,1024"
+enable_bucket = true
+train_batch_size = 1
+gradient_checkpointing = true
+
+optimizer_type = "AdamW8bit"
+learning_rate = 0.0001
+
+mixed_precision = "bf16"
+cache_latents = false
+cache_latents_to_disk = false
+cache_text_encoder_outputs = false
+cache_text_encoder_outputs_to_disk = false
+skip_cache_check = true
+
+torch_compile = true
+static_token_count = 4096
+compile_mode = "blocks"
+dynamo_backend = "inductor"
+attn_mode = "flash"

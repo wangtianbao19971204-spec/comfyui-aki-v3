@@ -1,0 +1,337 @@
+{
+  "schema_version": 1,
+  "captured_from_prompt_id": "b1fad83b-d3b2-4005-9c07-da9ace48fbe4",
+  "output_node_id": "13",
+  "graph": {
+    "2": {
+      "inputs": {
+        "unet_name": "Anima\\animayume_v10.safetensors",
+        "weight_dtype": "default"
+      },
+      "class_type": "UNETLoader",
+      "_meta": {
+        "title": "[02C-UNET] 底模Anima Diffusion Model · UNET"
+      }
+    },
+    "6": {
+      "inputs": {
+        "text": "worst quality, low quality, score_1, score_2, score_3, artist name, text, watermark, logo, signature, bad anatomy, bad hands, extra fingers, blurry, jpeg artifacts",
+        "clip": [
+          "112",
+          1
+        ]
+      },
+      "class_type": "CLIPTextEncode",
+      "_meta": {
+        "title": "[04D-NEG-ENCODE] Negative CLIP · 负向编码"
+      }
+    },
+    "10": {
+      "inputs": {
+        "seed": [
+          "542",
+          0
+        ],
+        "steps": 30,
+        "cfg": 5.0,
+        "sampler_name": "er_sde",
+        "scheduler": "simple",
+        "denoise": 1.0,
+        "model": [
+          "510",
+          0
+        ],
+        "positive": [
+          "134",
+          0
+        ],
+        "negative": [
+          "6",
+          0
+        ],
+        "latent_image": [
+          "520",
+          0
+        ]
+      },
+      "class_type": "KSampler",
+      "_meta": {
+        "title": "[06B-SAMPLER] Sampler · Anima Base"
+      }
+    },
+    "12": {
+      "inputs": {
+        "samples": [
+          "10",
+          0
+        ],
+        "vae": [
+          "166",
+          0
+        ]
+      },
+      "class_type": "VAEDecode",
+      "_meta": {
+        "title": "[06C-VAE-DECODE] VAE Decode"
+      }
+    },
+    "13": {
+      "inputs": {
+        "images": [
+          "12",
+          0
+        ]
+      },
+      "class_type": "PreviewImage",
+      "_meta": {
+        "title": "[06D-PREVIEW] Preview · 最终图"
+      }
+    },
+    "107": {
+      "inputs": {
+        "positive": "masterpiece, best quality, highly detailed, very aesthetic,\nfull body character illustration, character reference, character card style, full body standing, solo, 1girl,\n\nadult female lalafell, clearly adult personality despite youthful appearance,\npetite, short, softly rounded proportions, agile small body,\nhoney blonde fluffy curled hair, black ribbon headband, emerald green eyes, soft round cheeks,\ncalm expression, confident, slightly proud, warm and reliable,\n\ndeep crimson classical dress, layered red dress, ivory lace, black ribbons, rose motifs, subtle thorn motifs,\nelegant small princess style, refined but practical travel outfit,\nsubtle merchant details, subtle cook details, spice pouch, small utility pouch, lightly domestic fantasy vibe,\n\ntwo small Nagant M1895-inspired revolvers holstered at the waist,\nmatching pair of compact revolvers,\nsmall visible grips only,\nclosed leather holsters,\nweapons are secondary, not weapon-focused,\n\nnatural standing pose, relaxed elegant pose,\none hand lightly holding skirt, the other hand relaxed or holding a very small simple object,\nnot holding a book, not holding a gun,\nclear outfit presentation, clear silhouette, design-focused illustration,\n\nclean light background, subtle rose petals, subtle thorn ring, decorative emblem motifs, minimal background,\nanime fantasy character design",
+        "auto_random": false,
+        "lora_str": "",
+        "temp_str": "",
+        "temp_lora_str": "",
+        "random_template": ""
+      },
+      "class_type": "WeiLinPromptUI",
+      "_meta": {
+        "title": "[04A-FINAL-IN] 最终正向输入 · 人工确认"
+      }
+    },
+    "112": {
+      "inputs": {
+        "__lm_autocomplete_meta_text": {
+          "version": 1,
+          "textWidgetName": "text",
+          "lastAccepted": {
+            "start": 0,
+            "end": 45,
+            "insertedText": "<lora:background_detailer_v1-step00000200:1>,",
+            "textSnapshot": "<lora:background_detailer_v1-step00000200:1>,"
+          }
+        },
+        "text": "",
+        "loras": {
+          "__value__": []
+        },
+        "model": [
+          "2",
+          0
+        ],
+        "clip": [
+          "165",
+          0
+        ],
+        "lora_stack": [
+          "385",
+          0
+        ]
+      },
+      "class_type": "Lora Loader (LoraManager)",
+      "_meta": {
+        "title": "[02B3-LORA-LOADER] LoRA加载器"
+      }
+    },
+    "134": {
+      "inputs": {
+        "text": [
+          "107",
+          0
+        ],
+        "clip": [
+          "112",
+          1
+        ]
+      },
+      "class_type": "CLIPTextEncode",
+      "_meta": {
+        "title": "[04C-POS-ENCODE] Positive CLIP · 正向编码"
+      }
+    },
+    "165": {
+      "inputs": {
+        "clip_name": "anima_baseV10_txt.safetensors",
+        "type": "stable_diffusion",
+        "device": "default"
+      },
+      "class_type": "CLIPLoader",
+      "_meta": {
+        "title": "[02D-CLIP] Anima Text Encoder · CLIP"
+      }
+    },
+    "166": {
+      "inputs": {
+        "vae_name": "qwen_image_vae.safetensors"
+      },
+      "class_type": "VAELoader",
+      "_meta": {
+        "title": "[02E-VAE] Anima VAE"
+      }
+    },
+    "167": {
+      "inputs": {
+        "shift": 3.0,
+        "model": [
+          "112",
+          0
+        ]
+      },
+      "class_type": "ModelSamplingAuraFlow",
+      "_meta": {
+        "title": "[02F-SHIFT] Sampling Shift · AuraFlow"
+      }
+    },
+    "384": {
+      "inputs": {
+        "__lm_autocomplete_meta_text": {
+          "version": 1,
+          "textWidgetName": "text",
+          "lastAccepted": {
+            "start": 64,
+            "end": 94,
+            "insertedText": "<lora:anima_footRepair足袜修复:1>,",
+            "textSnapshot": "<lora:anima-灯光概念:1.00><lora:anima-masterpiece-美学品质修正器 - 杰作:1.00><lora:anima_footRepair足袜修复:1>,"
+          }
+        },
+        "text": "<lora:anima-灯光概念:1.00><lora:anima-masterpiece-美学品质修正器 - 杰作:1.00><lora:anima_footRepair足袜修复:1.00>",
+        "loras": {
+          "__value__": [
+            {
+              "name": "anima-灯光概念",
+              "strength": 1,
+              "active": true,
+              "expanded": false,
+              "clipStrength": 1,
+              "locked": false
+            },
+            {
+              "name": "anima-masterpiece-美学品质修正器 - 杰作",
+              "strength": "1.00",
+              "active": true,
+              "expanded": false,
+              "clipStrength": "1.00",
+              "locked": false
+            },
+            {
+              "name": "anima_footRepair足袜修复",
+              "strength": 1,
+              "active": true,
+              "expanded": false,
+              "clipStrength": 1,
+              "locked": false
+            }
+          ]
+        },
+        "lora_stack": [
+          "390",
+          0
+        ]
+      },
+      "class_type": "Lora Stacker (LoraManager)",
+      "_meta": {
+        "title": "[02B1-LORA-STACK-A] LoRA组A · 基础/修复/概念"
+      }
+    },
+    "385": {
+      "inputs": {
+        "__lm_autocomplete_meta_text": {
+          "version": 1,
+          "textWidgetName": "text",
+          "lastAccepted": {
+            "start": 0,
+            "end": 42,
+            "insertedText": "<lora:ANIMA_Niji_Sweet_Spot_v4@NJSW33T:1>,",
+            "textSnapshot": "<lora:ANIMA_Niji_Sweet_Spot_v4@NJSW33T:1>,"
+          }
+        },
+        "text": "",
+        "loras": {
+          "__value__": []
+        },
+        "lora_stack": [
+          "384",
+          0
+        ]
+      },
+      "class_type": "Lora Stacker (LoraManager)",
+      "_meta": {
+        "title": "[02B2-LORA-STACK-B] LoRA组B · 风格/补充"
+      }
+    },
+    "390": {
+      "inputs": {
+        "__lm_autocomplete_meta_text": {
+          "version": 1,
+          "textWidgetName": "text",
+          "lastAccepted": {
+            "start": 27,
+            "end": 52,
+            "insertedText": "<lora:anima-镇海chenhai:1>,",
+            "textSnapshot": "<lora:anima-能代Noshiro:0.80><lora:anima-镇海chenhai:1>,"
+          }
+        },
+        "text": "",
+        "loras": {
+          "__value__": []
+        }
+      },
+      "class_type": "Lora Stacker (LoraManager)",
+      "_meta": {
+        "title": "[02B3-LORA-STACK-C] LoRA组A · 角色/姿势"
+      }
+    },
+    "510": {
+      "inputs": {
+        "select": "(none)",
+        "mode": "priority",
+        "select_override": 0,
+        "input_03": [
+          "167",
+          0
+        ]
+      },
+      "class_type": "DazzleSwitch",
+      "_meta": {
+        "title": "[02G-MODEL-AUTO] 模型自动选择 · Control有则用无则回退"
+      }
+    },
+    "519": {
+      "inputs": {
+        "width": 1344,
+        "height": 768,
+        "batch_size": 1
+      },
+      "class_type": "EmptyLatentImage",
+      "_meta": {
+        "title": "[06A2-CANVAS-MANUAL] 手动出图尺寸 · 回退"
+      }
+    },
+    "520": {
+      "inputs": {
+        "select": "(none)",
+        "mode": "priority",
+        "select_override": 0,
+        "input_02": [
+          "519",
+          0
+        ]
+      },
+      "class_type": "DazzleSwitch",
+      "_meta": {
+        "title": "[06A3-CANVAS-SELECT] 出图尺寸自动选择 · 参考图优先/手动回退"
+      }
+    },
+    "542": {
+      "inputs": {
+        "seed": 1119391985106616
+      },
+      "class_type": "easy seed",
+      "_meta": {
+        "title": "随机种"
+      }
+    }
+  }
+}
