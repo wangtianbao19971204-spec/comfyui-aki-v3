@@ -1,0 +1,139 @@
+{
+  "schema": 1,
+  "receipt_id": "workspace-audit-20261006",
+  "checked_at": "2026-10-06T21:05:00+08:00",
+  "pass": true,
+  "scope": "Read-only verification that the checkout is the sole development Git, that the public history contains no credentials, and that machine-specific paths and external-resource examples are accounted for.",
+  "maintenance_commit": "49d173b80a59433f94132099a7e83889c88630c3",
+  "maintenance_version": "0.2.0",
+  "new_version_or_tag_created": false,
+  "git_uniqueness": {
+    "sole_development_git": "G:\\ComfyUI-aki-v3\\maintenance\\comfyui\\.git",
+    "sole_development_git_holds": true,
+    "runtime_git_directories_observed": 1,
+    "unexpected_git_directories": 0,
+    "retired_git_markers_registered": 29,
+    "retired_markers_still_present": 0,
+    "scan_covers": "Every directory under the runtime root except .cache, output, temp and node_modules; reparse points are not followed, so junction targets outside the root are not counted as runtime repositories.",
+    "note": "G:\\ComfyUI-aki-v3\\git is the launcher's PortableGit distribution, not a repository."
+  },
+  "external_repositories": {
+    "root": "G:\\ComfyUI-local",
+    "bare_git_directories": 61,
+    "nested_worktree_git_directories": 7,
+    "classification": "archive_and_validation_only",
+    "development_allowed": false,
+    "note": "Retired history, audit clones and validation clones. They are not developable sources and are not published."
+  },
+  "publication_credential_scan": {
+    "command": "python -X utf8 -B scripts/security_guard.py --all-history --report <external>",
+    "mode": "all-history",
+    "pass": true,
+    "scanned_objects": 81188,
+    "scanned_blobs": 58614,
+    "scanned_bytes": 7529270807,
+    "cross_part_boundaries": 118,
+    "finding_count": 0,
+    "reviewed_fixture_count": 116,
+    "compressed_object_count": 14,
+    "report_location": "G:\\ComfyUI-local\\receipts\\publication-scan-20261006\\all-history.json",
+    "covers": "All reachable commits, tags, blobs and historical path aliases, including deleted files, commit/tag messages and compressed payloads.",
+    "does_not_cover": "Legal/redistribution rights for third-party text, images and models; and machine-specific absolute paths, which are not credentials."
+  },
+  "tracked_path_exposure": {
+    "total_occurrences": 196,
+    "total_distinct_files": 127,
+    "contains_credentials": false,
+    "matched_text_included": false,
+    "patterns": ["workspace_absolute_path", "windows_user_profile"],
+    "occurrences_by_area": {
+      "snapshot_custom_nodes": 88,
+      "docs_technical_archive": 54,
+      "snapshot_character_lora_forge": 15,
+      "snapshot_production_tools": 13,
+      "snapshot_anima_lora_forge": 7,
+      "docs_current": 5,
+      "snapshot_evidence": 4,
+      "snapshot_runtime_root": 4,
+      "snapshot_tools": 4,
+      "governance": 1,
+      "snapshot_remote_llm_guard": 1
+    },
+    "assessment": "Machine-specific absolute paths only. Most are deliberate local-layout statements in this machine's own documentation and in offline helper scripts; none is a credential.",
+    "decision": "Not rewritten. The archived originals are byte-registered in governance/technical-archive.json, so rewriting them would invalidate the archive registry for a non-credential detail. Use scripts/workspace_audit.py to re-measure, and relocate paths by runtime root when moving machines.",
+    "external_full_report": "G:\\ComfyUI-local\\receipts\\workspace-audit-20261006\\audit.json"
+  },
+  "documentation_coverage": {
+    "catalog_features_before": 16,
+    "catalog_features_after": 17,
+    "added_feature": "runtime-independent-services",
+    "added_document": "docs/technical/runtime/independent-services.md",
+    "covered_previously_missing": [
+      "snapshot/runtime/qwen21_lab/",
+      "snapshot/runtime/tools/",
+      "runtime-root launch and stop scripts"
+    ],
+    "every_runtime_top_level_area_has_an_owning_feature": true
+  },
+  "external_example_coverage": {
+    "verified_present": [
+      "examples/external-assets/asset-record.example.json",
+      "examples/external-assets/locations.json",
+      "examples/external-assets/preview.example.svg",
+      "examples/external-assets/README.md",
+      "governance/workspace-layout.example.json",
+      "database/contract.json",
+      "database/fixtures/tags.example.json",
+      "database/fixtures/history.example.json",
+      "database/fixtures/danbooru.example.json",
+      "snapshot/runtime/remote_llm_guard/remote-llm.config.example.json",
+      "snapshot/runtime/ComfyUI/extra_model_paths.yaml.example",
+      "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-custom-scripts/pysssss.example.json",
+      "snapshot/runtime/anima_lora_forge/templates/new_character.profile.json"
+    ],
+    "mapping": {
+      "model_weights": "examples/external-assets/asset-record.example.json + locations.json",
+      "preview_and_thumbnail_media": "examples/external-assets/preview.example.svg + README.md",
+      "private_configuration": "snapshot/runtime/remote_llm_guard/remote-llm.config.example.json",
+      "workspace_layout": "governance/workspace-layout.example.json",
+      "database_contract_and_rows": "database/contract.json + database/fixtures/*.example.json",
+      "plugin_local_settings": "comfyui-custom-scripts/pysssss.example.json",
+      "extra_model_paths": "ComfyUI/extra_model_paths.yaml.example",
+      "training_profile": "anima_lora_forge/templates/new_character.profile.json",
+      "workflows": "real workflow JSON is tracked in Git, so no synthetic sample is needed"
+    },
+    "note": "No payload, weight, real preview or credential is included by any example file."
+  },
+  "live_instance_equation": {
+    "statement": "Local instance = reviewed public Git files + large asset and image caches outside Git + private configuration store outside Git.",
+    "git_role": "Sole development and commit source: code, workflows/subgraphs, reviewed prompt exports, database contracts and migrations, maintenance tooling.",
+    "external_assets_role": "Models, prompt-library previews/thumbnails, plugin-owned weights, environment and current mutable databases; registered by relative path and not copied into Git.",
+    "private_config_role": "API keys, session material and machine settings; never public and never a second development source.",
+    "private_store_is_a_git_repository": false,
+    "private_store_note": "G:\\ComfyUI-local is a plain local directory with restricted ACLs, not a versioned Git repository and not encrypted. Calling it a private store does not imply version history, automatic sync or off-site backup.",
+    "verified_by": "scripts/external_state.py (offline manifest and private overlay), scripts/workspace_audit.py (uniqueness and exposure)"
+  },
+  "tests": {
+    "workspace_audit_tests": 11,
+    "workspace_audit_failed": 0,
+    "covered": [
+      "sole checkout recognised",
+      "extra repository breaks the sole claim",
+      "retired marker reappearance named",
+      "reparse points not followed",
+      "skip directories not descended",
+      "bare archives classified separately",
+      "missing external root tolerated",
+      "matched text never emitted",
+      "untracked files ignored",
+      "audit is read-only",
+      "git failure fails closed"
+    ]
+  },
+  "boundaries": [
+    "Credential scanning proves absence of detected secrets, not absence of every possible secret pattern.",
+    "The Git uniqueness check covers this host's runtime root and external root only.",
+    "Machine paths were measured, not rewritten; a future sanitisation pass would need a separate reviewed plan.",
+    "No production service, database, workflow or prompt library was modified; no dependency was installed and nothing was uploaded."
+  ]
+}

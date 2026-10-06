@@ -172,6 +172,40 @@
       ]
     },
     {
+      "id": "runtime-independent-services",
+      "document": "docs/technical/runtime/independent-services.md",
+      "implementation": [
+        "snapshot/runtime/qwen21_lab/boot.py",
+        "snapshot/runtime/qwen21_lab/control.py",
+        "snapshot/runtime/qwen21_lab/start.ps1",
+        "snapshot/runtime/qwen21_lab/stop.ps1",
+        "snapshot/runtime/qwen21_lab/unload.ps1",
+        "snapshot/runtime/qwen21_lab/README.txt",
+        "snapshot/runtime/tools/start_comfyui.ps1",
+        "snapshot/runtime/tools/llama.cpp/start_vl_server.ps1",
+        "snapshot/runtime/tools/llama.cpp/download_qwen38_27b.ps1",
+        "snapshot/runtime/启动_ComfyUI_生产.cmd",
+        "snapshot/runtime/启动_ComfyUI_轻量.cmd",
+        "snapshot/runtime/启动_ComfyUI_诊断.cmd",
+        "snapshot/runtime/启动_ComfyUI_Anima.cmd",
+        "snapshot/runtime/启动_ComfyUI_Krea2.cmd",
+        "snapshot/runtime/停止_ComfyUI_生产.cmd",
+        "snapshot/runtime/测试_远端LLM心跳.bat",
+        "snapshot/runtime/启动_绘世_自动唤醒远端LLM.bat"
+      ],
+      "tests": [],
+      "evidence": [
+        "docs/receipts/workspace_audit_20261006.json"
+      ],
+      "acceptance": "checked-source",
+      "watch": [
+        "snapshot/runtime/qwen21_lab/",
+        "snapshot/runtime/tools/",
+        "snapshot/runtime/启动_ComfyUI_生产.cmd",
+        "snapshot/runtime/停止_ComfyUI_生产.cmd"
+      ]
+    },
+    {
       "id": "library-web-import",
       "document": "docs/technical/library/web-import.md",
       "implementation": [
@@ -467,6 +501,7 @@
       "implementation": [
         "scripts/maintain.py",
         "scripts/backup_status.py",
+        "scripts/workspace_audit.py",
         "scripts/staged_scan_cache.py",
         "governance/retention-policy.json",
         "governance/runtime-support.json",
@@ -487,6 +522,7 @@
       "tests": [
         "tests/test_maintain.py",
         "tests/test_backup_status.py",
+        "tests/test_workspace_audit.py",
         "tests/test_staged_scan_cache.py",
         "tests/test_snapshot.py",
         "tests/test_project.py",

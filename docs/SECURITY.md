@@ -54,3 +54,15 @@ pre-commit 使用 `--staged --cache-staged`；`--staged` 单独运行仍完全�
 本轮没有配置在线远端、推送、在线模型调用、上传或新的遥测。后续增加 GitHub/GitLab 远端需要用户明确指定目的地；当前可见性偏好为公开。
 
 `.bundle` 是离线 Git 交接包，不是要提交到 GitHub 的普通文件。后续从主仓或 bundle 克隆后推送受审查的 `main` 和所需 tags；不要把整个 bundle、私有档案或 `maintenance` 文件夹作为网页上传内容。当前门禁将单个 Git blob 限制为 50 MiB；真实资料的可逆分片不是模型权重的分片上传渠道。
+
+## 机器路径与公开范围
+
+凭证门禁只判定凭证；机器绝对路径（本机运行根、Windows 用户目录）是另一类暴露面，需要单独衡量。本仓同时充当**本机维护记录**，因此本机文档与离线辅助脚本中会保留这些路径：WORKSPACE、MAINTENANCE、PROJECT_MAP 等页描述的就是本机布局，去掉反而降低可读性。它们不是凭证，也不能当作公共默认值——换机器时按运行根重新定位。
+
+`scripts/workspace_audit.py` 只读统计这类暴露，输出文件名与计数、**不输出命中正文**，也不修改任何文件：
+
+```powershell
+python -X utf8 -B scripts/workspace_audit.py --out <仓外周报.json>
+```
+
+当前基线（2026-10-06）为 196 处 / 127 个受跟踪文件，全部是路径形态，`contains_credentials: false`；分区计数与决议见 [工作区审计收据](receipts/workspace_audit_20261006.json)。**不为此改写历史技术归档**：那些原件的字节已登记在 `governance/technical-archive.json`，为一条非凭证细节破坏归档校验并不值得。若将来确实要脱敏，须另立计划、重新登记归档哈希，并同步 `docs/technical/archive` 的引用。
