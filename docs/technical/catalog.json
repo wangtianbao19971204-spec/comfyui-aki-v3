@@ -28,7 +28,9 @@
         "snapshot/runtime/production_tools/test_browser_receiver.cjs",
         "snapshot/runtime/production_tools/test_browser_bridge_server.py"
       ],
-      "evidence": ["docs/receipts/browser_bridge_20261006.json"],
+      "evidence": [
+        "docs/receipts/browser_bridge_20261006.json"
+      ],
       "acceptance": "checked-source",
       "watch": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/",
@@ -149,20 +151,23 @@
         "snapshot/runtime/production_tools/merge_unified_workflow.py",
         "snapshot/runtime/production_tools/validate_uap_workflow.py",
         "snapshot/runtime/production_tools/analyze_workflow_dependencies.py",
-        "docs/technical/archive/benchmark_reports/2026-10-04_full_workflow_review/build_component_catalog.py"
+        "docs/technical/archive/benchmark_reports/2026-10-04_full_workflow_review/build_component_catalog.py",
+        "snapshot/runtime/production_tools/layout_uap_workbench.py"
       ],
       "tests": [
         "snapshot/runtime/production_tools/validate_uap_workflow.py",
         "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/test_structure.py",
         "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/test_candidate.cjs",
-        "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_native_e2e_acceptance/acceptance.py"
+        "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_native_e2e_acceptance/acceptance.py",
+        "snapshot/runtime/production_tools/test_uap_browser_retirement.py"
       ],
       "evidence": [
         "snapshot/evidence/20261005_workflow_product_repair/FINAL_DELIVERY.json",
         "snapshot/evidence/20261005_native_e2e_acceptance/REPORT.txt",
         "docs/technical/archive/civitai_workflow_study/报告-Civitai近三月热门工作流人体部件与NSFW细化分析.md",
         "docs/technical/archive/civitai_workflow_study/检测器到细化器数据流.json",
-        "docs/technical/archive/civitai_workflow_study/逐工作流明细.json"
+        "docs/technical/archive/civitai_workflow_study/逐工作流明细.json",
+        "docs/receipts/browser_workflow_retirement_20261006.json"
       ],
       "acceptance": "historical",
       "watch": [
@@ -170,7 +175,9 @@
         "snapshot/runtime/production_tools/templates/",
         "snapshot/runtime/production_tools/merge_unified_workflow.py",
         "snapshot/runtime/production_tools/validate_uap_workflow.py",
-        "snapshot/runtime/production_tools/analyze_workflow_dependencies.py"
+        "snapshot/runtime/production_tools/analyze_workflow_dependencies.py",
+        "snapshot/runtime/production_tools/layout_uap_workbench.py",
+        "snapshot/runtime/production_tools/test_uap_browser_retirement.py"
       ],
       "examples": [
         "snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json"

@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-06T14:49:07.487938+00:00",
+  "created_at": "2026-10-06T15:24:23.019467+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -44463,8 +44463,8 @@
     {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-      "sha256": "c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a",
-      "bytes": 1453483,
+      "sha256": "96e76b3638c0dacfd1eef1727ba9b6ce9b8157c98cb166d3986737a7b40ac766",
+      "bytes": 1435659,
       "kind": "file"
     },
     {
@@ -50672,8 +50672,8 @@
     {
       "source": "production_tools/UAP统一工作台说明.md",
       "path": "runtime/production_tools/UAP统一工作台说明.md",
-      "sha256": "8bc0a72b6752acd0b893718fcb5e3943b373a4541483ea0e3687018cc1f2462d",
-      "bytes": 7227,
+      "sha256": "2dbf2e2f77a9cc7368a8fe846ace05fad6176f1ca4017a52b50d4efbaa16a768",
+      "bytes": 7909,
       "kind": "file"
     },
     {
@@ -50721,15 +50721,15 @@
     {
       "source": "production_tools/layout_uap_workbench.py",
       "path": "runtime/production_tools/layout_uap_workbench.py",
-      "sha256": "0feec8eec3aa91ed4ae6eb06815e3050c8654be11ed3f236e88e8003137418b4",
-      "bytes": 20624,
+      "sha256": "4711dc921ee9ad62f63ffe8e37090ac54ad84717f41fb2298459c8cfd653ad45",
+      "bytes": 20349,
       "kind": "file"
     },
     {
       "source": "production_tools/merge_unified_workflow.py",
       "path": "runtime/production_tools/merge_unified_workflow.py",
-      "sha256": "a57c4efb58037035b05b594b005eacc69b554193601aaa979ce08cc463f86641",
-      "bytes": 32118,
+      "sha256": "d545abaa1df9fe6384d67cf44303360677fb8c977908158f790882d41e81da2e",
+      "bytes": 37522,
       "kind": "file"
     },
     {
@@ -50763,8 +50763,8 @@
     {
       "source": "production_tools/templates/UAP统一生产工作台_v2.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v2.json",
-      "sha256": "c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a",
-      "bytes": 1453483,
+      "sha256": "96e76b3638c0dacfd1eef1727ba9b6ce9b8157c98cb166d3986737a7b40ac766",
+      "bytes": 1435659,
       "kind": "file"
     },
     {
@@ -50866,6 +50866,13 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/test_uap_browser_retirement.py",
+      "path": "runtime/production_tools/test_uap_browser_retirement.py",
+      "sha256": "e350d2ae135209edf5a16990c74570110710e21b6189ef4216772b2b8da8b9a4",
+      "bytes": 14747,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/test_uap_compact_widgets.cjs",
       "path": "runtime/production_tools/test_uap_compact_widgets.cjs",
       "sha256": "e8a4dff23db5621ff29d23ac4c5e6382adec18b93201e00d3d90d1e8838f56c2",
@@ -50910,8 +50917,8 @@
     {
       "source": "production_tools/validate_uap_workflow.py",
       "path": "runtime/production_tools/validate_uap_workflow.py",
-      "sha256": "7ff2e5eb86357fc6fc996b9a8a1c55cf6eb2c76f5b50010406074a0485dd1913",
-      "bytes": 9589,
+      "sha256": "9969a025a5344d561d60acc666ecb905697b3b39392a57a96e23e03ce632313c",
+      "bytes": 9623,
       "kind": "file"
     },
     {
@@ -60523,24 +60530,20 @@
     }
   ],
   "development_revision": {
-    "note": "Five-site Tampermonkey bridge and guarded workbench inbox; isolated acceptance only, not deployed",
-    "previous_manifest_sha256": "cae3538f6c38a29ba797a39c460e1680497e16d514f156fa9ff94a59504cb5f5",
+    "note": "Retire old browser receiver paths in formal and canonical UAP v2; preserve PixAI interfaces and user values; no deployment",
+    "previous_manifest_sha256": "b003f659e3df18ed94ad49cbdc82a711f072e86ce99061c0555c80d0e4617c9a",
     "source_changes": {
       "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/aki_tags_bridge.user.js",
-        "ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/tests/test_userscript.cjs",
-        "ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/tests/test_workbench_bridge.py",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/browser_import.js",
-        "production_tools/browser_bridge_fixture.html",
-        "production_tools/test_browser_bridge_server.py",
-        "production_tools/test_browser_pending.cjs",
-        "production_tools/test_browser_receiver.cjs"
+        "production_tools/test_uap_browser_retirement.py"
       ],
       "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/danbooru_browser_import.py",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/pending_prompts.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js"
+        "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+        "production_tools/UAP统一工作台说明.md",
+        "production_tools/layout_uap_workbench.py",
+        "production_tools/merge_unified_workflow.py",
+        "production_tools/templates/UAP统一生产工作台_v2.json",
+        "production_tools/validate_uap_workflow.py"
       ]
     },
     "live_deployed": false,

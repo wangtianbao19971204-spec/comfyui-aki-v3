@@ -1,4 +1,8 @@
-"""Build the visual UAP layout without changing the production graph."""
+"""Historical layout algorithm; direct rebuilding of production is retired.
+
+Export the current canonical template with merge_unified_workflow.py instead.
+The functions below preserve the old algorithm for explicit historical review.
+"""
 
 from __future__ import annotations
 
@@ -341,18 +345,8 @@ def audit(data, before):
 
 
 if __name__ == "__main__":
-    result, before = build()
-    receipt = audit(result, before)
-    if receipt["errors"]:
-        print(json.dumps(receipt, ensure_ascii=False, indent=2))
-        raise SystemExit(1)
-    stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    if OUTPUT.exists():
-        backup = REPORT_DIR / "backups" / f"{stamp}_{OUTPUT.name}"
-        backup.parent.mkdir(parents=True, exist_ok=True)
-        backup.write_bytes(OUTPUT.read_bytes())
-    write_json(OUTPUT, result)
-    write_json(ROOT / "production_tools/templates" / OUTPUT.name, result)
-    receipt["workflow_sha256"] = hashlib.sha256(OUTPUT.read_bytes()).hexdigest()
-    write_json(REPORT_DIR / "uap_visual_layout_validation.json", receipt)
-    print(json.dumps(receipt, ensure_ascii=False, indent=2))
+    raise SystemExit(
+        "Historical layout rebuild is retired: it restores old workflow receivers and parameters. "
+        "Use merge_unified_workflow.py --output <NEW candidate.json> to export the canonical v2 template; "
+        "review and deploy the candidate with guards. No files were changed."
+    )

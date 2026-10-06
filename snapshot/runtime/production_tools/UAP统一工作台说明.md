@@ -55,22 +55,21 @@
 
 冻结模板位于 `production_tools/templates/UAP统一生产工作台_v2.json`。旧 v2 布局备份在 `benchmark_reports/2026-09-06_plugin_optimization/backups/20260906_163753_UAP统一生产工作台_v2.json`；v1 和原始九套工作流继续保留。
 
-对当前文件重新压紧部件并排布（保留当前提示词、参数、连线和分支状态，自动备份）：
+当前维护从唯一主仓 `maintenance/comfyui` 进行。网页提示词由五站脚本直接发送到工作台待采用区，正式 v2 和权威模板已移除图内旧接收部件；两套 Anima 的 PixAI 图片反推保留，输出为本地反推结果。修改仍需按范围部署，主仓提交不等于运行页面已加载。
+
+在主仓根目录，沿用开始使用页已核验的 `$comfyPython`：
 
 ```powershell
-.\python\python.exe -X utf8 .\production_tools\arrange_uap_daily_controls.py
+# 只读检查现行 v2，包括内嵌连线、旧接收器和分支/阶段引用。
+& $comfyPython -X utf8 -B snapshot/runtime/production_tools/merge_unified_workflow.py --validate
+# 从权威模板导出全新候选，保留当前参数，不覆盖正式文件或模板。
+$uapCandidate = Join-Path $env:TEMP ('uap-v2-candidate-' + [guid]::NewGuid().ToString('N') + '.json')
+& $comfyPython -X utf8 -B snapshot/runtime/production_tools/merge_unified_workflow.py --output $uapCandidate
 ```
 
-浏览器可能按控件原生下限校正少数节点尺寸。通过工作流菜单保存后，可运行 `arrange_uap_daily_controls.py --repack-measured` 仅重新排布，不再设置尺寸。本轮以浏览器校正后的尺寸验收。运行离线布局脚本后需刷新工作台，避免旧画布再次保存覆盖文件。
+复核候选、保留运行基线和回滚，再将桥接源码、正式工作流与模板一并按明确范围部署。旧 `layout_uap_workbench.py` 的直接执行入口已封闭；`--legacy-sources` 仅供历史实验候选，旧独立流不能作为现行 v2 的自动更新来源。布局维护需另作候选，不能重跑会直接覆盖正式图/模板的历史布局命令。详见主仓 [工作流说明](../../../docs/technical/runtime/workflows.md)。
 
-从原始生产模板重建再应用紧凑布局：
-
-```powershell
-.\python\python.exe -X utf8 .\production_tools\layout_uap_workbench.py
-.\python\python.exe -X utf8 .\production_tools\arrange_uap_daily_controls.py
-```
-
-再生成会覆盖当前 v2，并自动备份已有文件；如果在 v2 修改了个人提示词或设置，应先另存个人副本。旧 `merge_unified_workflow.py --compact` 生成上一版布局，不用于更新本版。
+以下记录为早期布局和交互验收历史，不代表本次新接收流程已在生产生效：
 
 静态验收记录：`benchmark_reports/2026-09-06_plugin_optimization/uap_visual_layout_validation.json`。浏览器交互验收另记在 `uap_visual_ui_validation.json`；静态脚本不再把未执行的 UI 检查标为通过。本轮不提交生成队列，验收范围是布局、导航与分支模式切换。
 
@@ -79,3 +78,5 @@
 2026-09-07 的集中控制台与继续压缩验收在 `benchmark_reports/2026-09-07_uap_daily_controls/验收说明.md`；该目录 `before_live.json` 为这一轮开始时的个人工作台。最新一轮已检查实际字段回写、LoRA 添加/强度/删除、工具开关作用范围、分支只读保护及原节点往返。
 
 2026-09-07 插件融合更新：常用控制台新增各 LoRA 栏的 LoRA Manager 浏览器入口、WeiLin 编辑入口、指定正向/负向的共享预设插入，以及 Anima 选择器与标签组开关。具体用法与兼容边界见 production_tools/插件融合使用说明.md；验收与回退备份在 enchmark_reports/2026-09-07_plugin_fusion/。
+
+2026-10-06：现行网页接收迁至统一工作台；正式 v2 与权威模板删除旧接收路径，保留 PixAI 反推接口与用户参数，并改为从权威模板导出全新候选。

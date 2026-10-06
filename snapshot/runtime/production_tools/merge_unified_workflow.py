@@ -626,7 +626,7 @@ def merge(output: Path | None, compact: bool = False) -> dict[str, Any]:
     return merged
 
 
-def validate(data: dict[str, Any]) -> list[str]:
+def validate(data: dict[str, Any], *, forbid_browser_receiver: bool = False) -> list[str]:
     errors: list[str] = []
     node_ids = [n.get("id") for n in data.get("nodes", [])]
     if len(node_ids) != len(set(node_ids)):
@@ -665,6 +665,69 @@ def validate(data: dict[str, Any]) -> list[str]:
         node_type = node.get("type")
         if isinstance(node_type, str) and node_type.startswith("uap-") and node_type not in def_set:
             errors.append(f"node {node.get('id')} points to missing embedded subgraph {node_type}")
+    if forbid_browser_receiver:
+        graphs = [data, *data.get("definitions", {}).get("subgraphs", [])]
+        for graph_index, graph in enumerate(graphs):
+            nodes = {node["id"]: node for node in graph.get("nodes", [])}
+            if len(nodes) != len(graph.get("nodes", [])):
+                errors.append(f"graph {graph_index} has duplicate node ids")
+            virtual = {item["id"] for item in (graph.get("inputNode", {}), graph.get("outputNode", {})) if "id" in item}
+            links = {}
+            for link in graph.get("links", []):
+                if isinstance(link, dict):
+                    row = [link.get(key) for key in ("id", "origin_id", "origin_slot", "target_id", "target_slot")]
+                elif isinstance(link, list) and len(link) >= 5:
+                    row = link[:5]
+                else:
+                    errors.append(f"graph {graph_index} has malformed link")
+                    continue
+                if any(type(value) is not int for value in row):
+                    errors.append(f"graph {graph_index} has invalid link fields")
+                    continue
+                link_id, origin, origin_slot, target, target_slot = row
+                if link_id in links:
+                    errors.append(f"graph {graph_index} has duplicate link {link_id}")
+                links[link_id] = (origin, origin_slot, target, target_slot)
+                if origin not in nodes and origin not in virtual or target not in nodes and target not in virtual:
+                    errors.append(f"graph {graph_index} link {link_id} points to missing node")
+            for link_id, (origin, origin_slot, target, target_slot) in links.items():
+                source_ports = graph.get("inputs", []) if origin == graph.get("inputNode", {}).get("id") else nodes.get(origin, {}).get("outputs", [])
+                target_ports = graph.get("outputs", []) if target == graph.get("outputNode", {}).get("id") else nodes.get(target, {}).get("inputs", [])
+                if not 0 <= origin_slot < len(source_ports) or not 0 <= target_slot < len(target_ports):
+                    errors.append(f"graph {graph_index} link {link_id} points to missing port")
+                    continue
+                source_links = source_ports[origin_slot].get("linkIds" if origin in virtual else "links") or []
+                target_links = target_ports[target_slot].get("linkIds", []) if target in virtual else [target_ports[target_slot].get("link")]
+                if link_id not in source_links or link_id not in target_links:
+                    errors.append(f"graph {graph_index} link {link_id} is absent from its endpoint ports")
+            for node in graph.get("nodes", []):
+                if node.get("type") == "DanbooruBrowserImportV05":
+                    errors.append(f"graph {graph_index} node {node['id']} uses retired browser receiver; use workbench pending prompts")
+                for slot, inp in enumerate(node.get("inputs", [])):
+                    link_id = inp.get("link")
+                    if link_id is not None and (link_id not in links or links[link_id][2:] != (node["id"], slot)):
+                        errors.append(f"graph {graph_index} node {node['id']} input {slot} has inconsistent link")
+                for slot, out in enumerate(node.get("outputs", [])):
+                    for link_id in out.get("links") or []:
+                        if link_id not in links or links[link_id][:2] != (node["id"], slot):
+                            errors.append(f"graph {graph_index} node {node['id']} output {slot} has inconsistent link")
+            for direction, virtual_key, slots in (("input", "inputNode", graph.get("inputs", [])), ("output", "outputNode", graph.get("outputs", []))):
+                virtual_id = graph.get(virtual_key, {}).get("id")
+                for slot, port in enumerate(slots):
+                    for link_id in port.get("linkIds") or []:
+                        expected = (virtual_id, slot)
+                        endpoint = links.get(link_id, (None, None, None, None))
+                        if (endpoint[:2] if direction == "input" else endpoint[2:]) != expected:
+                            errors.append(f"graph {graph_index} virtual {direction} {slot} has inconsistent link")
+        for branch in data.get("extra", {}).get("uap_workbench", {}).get("branches", []):
+            branch_ids = set(branch.get("nodeIds", []))
+            if not branch_ids <= node_set:
+                errors.append(f"branch {branch.get('id')} refers to missing node")
+            if not set(branch.get("modes", {})) <= {str(node_id) for node_id in branch_ids}:
+                errors.append(f"branch {branch.get('id')} has obsolete saved mode")
+            for stage in branch.get("stages", []):
+                if any(title not in titles for title in stage.get("groups", [])):
+                    errors.append(f"branch {branch.get('id')} stage {stage.get('id')} refers to missing group")
     return errors
 
 
@@ -681,6 +744,7 @@ def main() -> int:
         parser.error("Choose --validate to check the current UAP, or --output <new candidate.json> to export. Production is never overwritten.")
     raw_output = args.output or OPTIMIZED_OUTPUT
     output = (raw_output if raw_output.is_absolute() else ROOT / raw_output).resolve()
+    canonical_payload = None
     if args.validate:
         data = read_json(output)
     else:
@@ -689,12 +753,21 @@ def main() -> int:
             parser.error("Refusing production/template output. Export to a candidate directory, review and publish with guards.")
         if output.exists():
             parser.error("Candidate already exists; choose a new path. No files were changed.")
-        data = merge(None, compact=args.compact) if args.legacy_sources else read_json(CANONICAL_SOURCE)
-    errors = validate(data)
+        if args.legacy_sources:
+            data = merge(None, compact=args.compact)
+        else:
+            canonical_payload = CANONICAL_SOURCE.read_bytes()
+            data = json.loads(canonical_payload)
+    errors = validate(data, forbid_browser_receiver=not args.legacy_sources)
     if errors:
         raise SystemExit("Validation failed:\n- " + "\n- ".join(errors))
     if not args.validate:
-        write_json(output, data)
+        if args.legacy_sources:
+            write_json(output, data)
+        else:
+            output.parent.mkdir(parents=True, exist_ok=True)
+            with output.open("xb") as stream:
+                stream.write(canonical_payload)
     digest = hashlib.sha256(output.read_bytes()).hexdigest()
     print(json.dumps({
         "output": str(output),

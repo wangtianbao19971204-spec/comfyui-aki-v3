@@ -9,7 +9,7 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-from merge_unified_workflow import DEFAULT_OUTPUT, ROOT, SOURCES, read_json, validate
+from merge_unified_workflow import OPTIMIZED_OUTPUT, ROOT, SOURCES, read_json, validate
 
 
 REPORT = ROOT / "benchmark_reports" / "2026-09-06_plugin_optimization" / "uap_integration_validation.json"
@@ -35,13 +35,13 @@ def main() -> int:
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--workflow", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--workflow", type=Path, default=OPTIMIZED_OUTPUT)
     parser.add_argument("--report", type=Path, default=REPORT)
     args = parser.parse_args()
     workflow = args.workflow if args.workflow.is_absolute() else ROOT / args.workflow
     report_path = args.report if args.report.is_absolute() else ROOT / args.report
     data = read_json(workflow)
-    errors = validate(data)
+    errors = validate(data, forbid_browser_receiver=True)
     source_paths = [ROOT / "ComfyUI" / "user" / "default" / "workflows" / spec["file"] for spec in SOURCES]
     titles = {g.get("title") for g in data.get("groups", [])}
     qgn = data.get("extra", {}).get("qgn_navigation_groups", [])

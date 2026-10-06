@@ -178,7 +178,7 @@
         },
         "previewExposures": [],
         "uap_compact_widgets": true,
-        "uap_layout_group": "SW-01C 图库导入与 PixAI 标签反推 · A1 原版"
+        "uap_layout_group": "SW-01C PixAI 标签反推 · A1 原版"
       }
     },
     {
@@ -1687,7 +1687,7 @@
         "showNav": true,
         "showAllGraphs": false,
         "sort": "custom alphabet",
-        "customSortAlphabet": "SW-03A 创意图库与提示词模板 · A1 原版,SW-01B 在线五模型反推 · A1 原版,SW-01C 图库导入与 PixAI 标签反推 · A1 原版,SW-01D JoyCaption 三路反推 · A1 原版,SW-05 线稿与姿态控制 · A1 原版,SW-09 VNCCS 光影控制 · A1 原版,SW-10V 仅预览：细化与终稿对比 · A1 原版",
+        "customSortAlphabet": "SW-03A 创意图库与提示词模板 · A1 原版,SW-01B 在线五模型反推 · A1 原版,SW-01C PixAI 标签反推 · A1 原版,SW-01D JoyCaption 三路反推 · A1 原版,SW-05 线稿与姿态控制 · A1 原版,SW-09 VNCCS 光影控制 · A1 原版,SW-10V 仅预览：细化与终稿对比 · A1 原版",
         "toggleRestriction": "default",
         "uap_compact_widgets": true,
         "uap_layout_group": "CTRL-00 工具与细化组件总开关 · A1 原版"
@@ -1728,13 +1728,13 @@
           "links": []
         }
       ],
-      "title": "[01C] 图库 / PixAI 结果（复制到 00W-1）",
+      "title": "[01C] PixAI 结果（复制到 00W-1）",
       "properties": {
         "Node name for S&R": "ShowText|pysssss",
         "cnr_id": "comfyui-custom-scripts",
         "ver": "1.2.5",
         "uap_compact_widgets": true,
-        "uap_layout_group": "SW-01C 图库导入与 PixAI 标签反推 · A1 原版"
+        "uap_layout_group": "SW-01C PixAI 标签反推 · A1 原版"
       },
       "color": "#332922",
       "bgcolor": "#593930"
@@ -4729,7 +4729,7 @@
         },
         "previewExposures": [],
         "uap_compact_widgets": true,
-        "uap_layout_group": "SW-01C 图库导入与 PixAI 标签反推 · A29 2.9B"
+        "uap_layout_group": "SW-01C PixAI 标签反推 · A29 2.9B"
       }
     },
     {
@@ -6675,7 +6675,7 @@
         "showNav": true,
         "showAllGraphs": false,
         "sort": "custom alphabet",
-        "customSortAlphabet": "SW-03A 创意图库与提示词模板 · A29 2.9B,SW-01B 在线五模型反推 · A29 2.9B,SW-01C 图库导入与 PixAI 标签反推 · A29 2.9B,SW-01D JoyCaption 三路反推 · A29 2.9B,SW-05 线稿与姿态控制 · A29 2.9B,SW-09 VNCCS 光影控制 · A29 2.9B,SW-10V 仅预览：细化与终稿对比 · A29 2.9B",
+        "customSortAlphabet": "SW-03A 创意图库与提示词模板 · A29 2.9B,SW-01B 在线五模型反推 · A29 2.9B,SW-01C PixAI 标签反推 · A29 2.9B,SW-01D JoyCaption 三路反推 · A29 2.9B,SW-05 线稿与姿态控制 · A29 2.9B,SW-09 VNCCS 光影控制 · A29 2.9B,SW-10V 仅预览：细化与终稿对比 · A29 2.9B",
         "toggleRestriction": "default",
         "uap_compact_widgets": true,
         "uap_layout_group": "CTRL-00 工具与细化组件总开关 · A29 2.9B"
@@ -6716,13 +6716,13 @@
           "links": []
         }
       ],
-      "title": "[01C] 图库 / PixAI 结果（复制到 00W-1）",
+      "title": "[01C] PixAI 结果（复制到 00W-1）",
       "properties": {
         "Node name for S&R": "ShowText|pysssss",
         "cnr_id": "comfyui-custom-scripts",
         "ver": "1.2.5",
         "uap_compact_widgets": true,
-        "uap_layout_group": "SW-01C 图库导入与 PixAI 标签反推 · A29 2.9B"
+        "uap_layout_group": "SW-01C PixAI 标签反推 · A29 2.9B"
       },
       "color": "#332922",
       "bgcolor": "#593930"
@@ -10856,113 +10856,6 @@
       "bgcolor": "#1F2A1E"
     },
     {
-      "id": 1148,
-      "type": "DanbooruBrowserImportV05",
-      "pos": [
-        20,
-        17830
-      ],
-      "size": [
-        540,
-        240
-      ],
-      "flags": {
-        "collapsed": false
-      },
-      "order": 53,
-      "mode": 2,
-      "inputs": [
-        {
-          "localized_name": "refresh_token",
-          "name": "refresh_token",
-          "type": "INT",
-          "widget": {
-            "name": "refresh_token"
-          },
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "localized_name": "merged_tags",
-          "name": "merged_tags",
-          "type": "STRING",
-          "links": [
-            10198
-          ]
-        },
-        {
-          "localized_name": "artist_tags",
-          "name": "artist_tags",
-          "type": "STRING",
-          "links": []
-        },
-        {
-          "localized_name": "character_tags",
-          "name": "character_tags",
-          "type": "STRING",
-          "links": []
-        },
-        {
-          "localized_name": "copyright_tags",
-          "name": "copyright_tags",
-          "type": "STRING",
-          "links": []
-        },
-        {
-          "localized_name": "general_tags",
-          "name": "general_tags",
-          "type": "STRING",
-          "links": []
-        },
-        {
-          "localized_name": "meta_tags",
-          "name": "meta_tags",
-          "type": "STRING",
-          "links": []
-        },
-        {
-          "localized_name": "source_url",
-          "name": "source_url",
-          "type": "STRING",
-          "links": []
-        },
-        {
-          "localized_name": "image_url",
-          "name": "image_url",
-          "type": "STRING",
-          "links": []
-        },
-        {
-          "localized_name": "post_id",
-          "name": "post_id",
-          "type": "STRING",
-          "links": []
-        },
-        {
-          "localized_name": "raw_json",
-          "name": "raw_json",
-          "type": "STRING",
-          "links": []
-        }
-      ],
-      "title": "[01B-BROWSER-IMPORT] D站/C站浏览器导入 · 默认关闭",
-      "properties": {
-        "Node name for S&R": "DanbooruBrowserImportV05",
-        "label": "读取浏览器脚本发送到 /danbooru_browser_import_v05 的最新 payload。D站发送 tags，C站发送 tags/prompt/image_url/source_url；发送后 Queue 刷新。",
-        "uap_compact_widgets": true,
-        "uap_layout_group": "SW-01E D站 / C站浏览器导入 · K2 Krea2"
-      },
-      "widgets_values": [
-        0
-      ],
-      "widgets_values_named": {
-        "refresh_token": 0
-      },
-      "color": "#3F6A78",
-      "bgcolor": "#182B34"
-    },
-    {
       "id": 1149,
       "type": "LoadImage",
       "pos": [
@@ -12975,57 +12868,6 @@
       },
       "color": "#A36B34",
       "bgcolor": "#2E2118"
-    },
-    {
-      "id": 1180,
-      "type": "ShowText|pysssss",
-      "pos": [
-        580,
-        17830
-      ],
-      "size": [
-        320,
-        100
-      ],
-      "flags": {
-        "collapsed": false
-      },
-      "order": 126,
-      "mode": 2,
-      "inputs": [
-        {
-          "localized_name": "text",
-          "name": "text",
-          "type": "STRING",
-          "link": 10198
-        }
-      ],
-      "outputs": [
-        {
-          "localized_name": "字符串",
-          "name": "STRING",
-          "shape": 6,
-          "type": "STRING",
-          "slot_index": 0,
-          "links": []
-        }
-      ],
-      "title": "[01E2] 浏览器导入预览（复制到 00W-1）",
-      "properties": {
-        "Node name for S&R": "ShowText|pysssss",
-        "cnr_id": "comfyui-custom-scripts",
-        "ver": "1.2.5",
-        "uap_compact_widgets": true,
-        "uap_layout_group": "SW-01E D站 / C站浏览器导入 · K2 Krea2"
-      },
-      "widgets_values": [
-        "masterpiece, best quality, score_7, safe, very aesthetic, ultra-detailed, pale_skin, fair_skin, high contrast, huge filesize, light particles, abstract, asdxohnxs abstract, realistic, @gpt-image-2, 1girl, solo, dynamic pose:1.4, floor sitting pose:1.3, left arm pressing ground:1.4, left hand flat on wet floor:1.3, right leg bent at knee, folded close to body:1.3, left leg raised straight up vertically 90 degrees:1.5, right arm raised upward:1.3, right hand elegant wrist bend:1.3, fingers slightly spread:1.2, graceful hand gesture:1.2, body leaning back supported by left arm:1.3, acrobatic floor pose:1.2, anatomically correct hips:1.5, anatomically correct thighs:1.5, natural hip joint:1.4, correct pelvis orientation:1.4, thighs clearly separated:1.4, no leg overlap:1.3, natural inner thigh gap:1.3, correct femur angle from hip socket:1.3, blonde long hair, flowing hair, hair ornament, white flower hair clip, green eyes, slight smile, confident expression, white gothic dress, white lace dress, white lace gloves:1.2, lace sleeve details:1.3, white thigh-high stockings, lace stocking tops, white platform combat boots, buckle boots, knee-high boots on raised leg, water vortex ring:1.3, water droplets flying:1.2, reflective wet floor:1.2, ripples on water surface:1.2, dark background, dramatic lighting, volumetric light, rim lighting, cinematic composition, full body shot, dynamic angle, The image uses dramatic cinematic photography with dynamic angles, atmospheric lighting, low contrast, and soft depth of field. Their clothing features rich fabric detail, layered material textures with realistic textile shading, and subtle surface variation. The image uses natural coloring, soft shading, filmic contrast, soft subsurface lighting, and atmospheric shadows to create a moody, dynamic, and immersive scene while maintaining a clearly illustrated anime aesthetic. (muted colors:1.3, low saturation:1.2, desaturated, somber tone, chiaroscuro, heavy shadows, vintage aesthetic"
-      ],
-      "widgets_values_named": {
-        "text_0": "masterpiece, best quality, score_7, safe, very aesthetic, ultra-detailed, pale_skin, fair_skin, high contrast, huge filesize, light particles, abstract, asdxohnxs abstract, realistic, @gpt-image-2, 1girl, solo, dynamic pose:1.4, floor sitting pose:1.3, left arm pressing ground:1.4, left hand flat on wet floor:1.3, right leg bent at knee, folded close to body:1.3, left leg raised straight up vertically 90 degrees:1.5, right arm raised upward:1.3, right hand elegant wrist bend:1.3, fingers slightly spread:1.2, graceful hand gesture:1.2, body leaning back supported by left arm:1.3, acrobatic floor pose:1.2, anatomically correct hips:1.5, anatomically correct thighs:1.5, natural hip joint:1.4, correct pelvis orientation:1.4, thighs clearly separated:1.4, no leg overlap:1.3, natural inner thigh gap:1.3, correct femur angle from hip socket:1.3, blonde long hair, flowing hair, hair ornament, white flower hair clip, green eyes, slight smile, confident expression, white gothic dress, white lace dress, white lace gloves:1.2, lace sleeve details:1.3, white thigh-high stockings, lace stocking tops, white platform combat boots, buckle boots, knee-high boots on raised leg, water vortex ring:1.3, water droplets flying:1.2, reflective wet floor:1.2, ripples on water surface:1.2, dark background, dramatic lighting, volumetric light, rim lighting, cinematic composition, full body shot, dynamic angle, The image uses dramatic cinematic photography with dynamic angles, atmospheric lighting, low contrast, and soft depth of field. Their clothing features rich fabric detail, layered material textures with realistic textile shading, and subtle surface variation. The image uses natural coloring, soft shading, filmic contrast, soft subsurface lighting, and atmospheric shadows to create a moody, dynamic, and immersive scene while maintaining a clearly illustrated anime aesthetic. (muted colors:1.3, low saturation:1.2, desaturated, somber tone, chiaroscuro, heavy shadows, vintage aesthetic"
-      },
-      "color": "#3F6A78",
-      "bgcolor": "#182B34"
     },
     {
       "id": 1181,
@@ -16401,7 +16243,7 @@
         "showNav": true,
         "showAllGraphs": false,
         "sort": "custom alphabet",
-        "customSortAlphabet": "SW-03A 创意图库与提示词模板 · K2 Krea2,SW-01B 在线五模型反推 · K2 Krea2,SW-01C PixAI 标签反推 · K2 Krea2,SW-01D JoyCaption 三路反推 · K2 Krea2,SW-01E D站 / C站浏览器导入 · K2 Krea2,SW-05V 参考预处理阶段检查与临时保存 · K2 Krea2,SW-05K Krea2 Depth ControlNet-LoRA · K2 Krea2,SW-09 VNCCS 姿势参考 · K2 Krea2,SW-10V 仅预览：输入 / 基础 / 二放对比 · K2 Krea2",
+        "customSortAlphabet": "SW-03A 创意图库与提示词模板 · K2 Krea2,SW-01B 在线五模型反推 · K2 Krea2,SW-01C PixAI 标签反推 · K2 Krea2,SW-01D JoyCaption 三路反推 · K2 Krea2,SW-05V 参考预处理阶段检查与临时保存 · K2 Krea2,SW-05K Krea2 Depth ControlNet-LoRA · K2 Krea2,SW-09 VNCCS 姿势参考 · K2 Krea2,SW-10V 仅预览：输入 / 基础 / 二放对比 · K2 Krea2",
         "toggleRestriction": "default",
         "uap_compact_widgets": true,
         "uap_layout_group": "CTRL-00 可选分组总开关 · K2 Krea2"
@@ -23442,14 +23284,6 @@
       "STRING"
     ],
     [
-      10198,
-      1148,
-      0,
-      1180,
-      0,
-      "STRING"
-    ],
-    [
       10199,
       1184,
       1,
@@ -25205,7 +25039,7 @@
     },
     {
       "id": 1006,
-      "title": "SW-01C 图库导入与 PixAI 标签反推 · A1 原版",
+      "title": "SW-01C PixAI 标签反推 · A1 原版",
       "bounding": [
         0,
         2080,
@@ -25505,7 +25339,7 @@
     },
     {
       "id": 1033,
-      "title": "SW-01C 图库导入与 PixAI 标签反推 · A29 2.9B",
+      "title": "SW-01C PixAI 标签反推 · A29 2.9B",
       "bounding": [
         0,
         8100,
@@ -25969,18 +25803,6 @@
         654
       ],
       "color": "#596882",
-      "flags": {}
-    },
-    {
-      "id": 1074,
-      "title": "SW-01E D站 / C站浏览器导入 · K2 Krea2",
-      "bounding": [
-        0,
-        17770,
-        916,
-        314
-      ],
-      "color": "#48685B",
       "flags": {}
     },
     {
@@ -30451,153 +30273,6 @@
         "widgets": [],
         "nodes": [
           {
-            "id": 104000,
-            "type": "DanbooruBrowserImportV05",
-            "pos": [
-              -6940,
-              -4660
-            ],
-            "size": [
-              460,
-              230
-            ],
-            "flags": {
-              "collapsed": true
-            },
-            "order": 0,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "refresh_token",
-                "name": "refresh_token",
-                "type": "INT",
-                "widget": {
-                  "name": "refresh_token"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "merged_tags",
-                "name": "merged_tags",
-                "type": "STRING",
-                "links": [
-                  308000,
-                  308004
-                ]
-              },
-              {
-                "localized_name": "artist_tags",
-                "name": "artist_tags",
-                "type": "STRING",
-                "links": []
-              },
-              {
-                "localized_name": "character_tags",
-                "name": "character_tags",
-                "type": "STRING",
-                "links": []
-              },
-              {
-                "localized_name": "copyright_tags",
-                "name": "copyright_tags",
-                "type": "STRING",
-                "links": []
-              },
-              {
-                "localized_name": "general_tags",
-                "name": "general_tags",
-                "type": "STRING",
-                "links": []
-              },
-              {
-                "localized_name": "meta_tags",
-                "name": "meta_tags",
-                "type": "STRING",
-                "links": []
-              },
-              {
-                "localized_name": "source_url",
-                "name": "source_url",
-                "type": "STRING",
-                "links": []
-              },
-              {
-                "localized_name": "image_url",
-                "name": "image_url",
-                "type": "STRING",
-                "links": []
-              },
-              {
-                "localized_name": "post_id",
-                "name": "post_id",
-                "type": "STRING",
-                "links": []
-              },
-              {
-                "localized_name": "raw_json",
-                "name": "raw_json",
-                "type": "STRING",
-                "links": []
-              }
-            ],
-            "title": "[01C1] 图库文本导入",
-            "properties": {
-              "Node name for S&R": "DanbooruBrowserImportV05",
-              "label": "读取浏览器脚本发送到 /danbooru_browser_import_v05 的最新 payload。D站发送 tags，C站发送 tags/prompt/image_url/source_url；发送后 Queue 刷新。"
-            },
-            "widgets_values": [
-              0
-            ],
-            "widgets_values_named": {
-              "refresh_token": 0
-            },
-            "color": "#3F6A78",
-            "bgcolor": "#182B34"
-          },
-          {
-            "id": 104001,
-            "type": "ShowText|pysssss",
-            "pos": [
-              -6940,
-              -4610
-            ],
-            "size": [
-              360,
-              170
-            ],
-            "flags": {},
-            "order": 1,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "text",
-                "name": "text",
-                "type": "STRING",
-                "link": 308000
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "字符串",
-                "name": "STRING",
-                "shape": 6,
-                "type": "STRING",
-                "slot_index": 0,
-                "links": []
-              }
-            ],
-            "title": "[01C1] 图库文本预览",
-            "properties": {
-              "Node name for S&R": "ShowText|pysssss",
-              "cnr_id": "comfyui-custom-scripts",
-              "ver": "1.2.5"
-            },
-            "color": "#3F6A78",
-            "bgcolor": "#182B34"
-          },
-          {
             "id": 104003,
             "type": "PixAITagger",
             "pos": [
@@ -30683,7 +30358,8 @@
                 "type": "STRING",
                 "slot_index": 0,
                 "links": [
-                  308002
+                  308002,
+                  308004
                 ]
               },
               {
@@ -30770,14 +30446,6 @@
         "groups": [],
         "links": [
           {
-            "id": 308000,
-            "origin_id": 104000,
-            "origin_slot": 0,
-            "target_id": 104001,
-            "target_slot": 0,
-            "type": "STRING"
-          },
-          {
             "id": 308002,
             "origin_id": 104003,
             "origin_slot": 0,
@@ -30795,7 +30463,7 @@
           },
           {
             "id": 308004,
-            "origin_id": 104000,
+            "origin_id": 104003,
             "origin_slot": 0,
             "target_id": -20,
             "target_slot": 0,
@@ -40909,153 +40577,6 @@
         "widgets": [],
         "nodes": [
           {
-            "id": 114000,
-            "type": "DanbooruBrowserImportV05",
-            "pos": [
-              -6940,
-              -4660
-            ],
-            "size": [
-              460,
-              230
-            ],
-            "flags": {
-              "collapsed": true
-            },
-            "order": 0,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "refresh_token",
-                "name": "refresh_token",
-                "type": "INT",
-                "widget": {
-                  "name": "refresh_token"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "merged_tags",
-                "name": "merged_tags",
-                "type": "STRING",
-                "links": [
-                  328000,
-                  328004
-                ]
-              },
-              {
-                "localized_name": "artist_tags",
-                "name": "artist_tags",
-                "type": "STRING",
-                "links": []
-              },
-              {
-                "localized_name": "character_tags",
-                "name": "character_tags",
-                "type": "STRING",
-                "links": []
-              },
-              {
-                "localized_name": "copyright_tags",
-                "name": "copyright_tags",
-                "type": "STRING",
-                "links": []
-              },
-              {
-                "localized_name": "general_tags",
-                "name": "general_tags",
-                "type": "STRING",
-                "links": []
-              },
-              {
-                "localized_name": "meta_tags",
-                "name": "meta_tags",
-                "type": "STRING",
-                "links": []
-              },
-              {
-                "localized_name": "source_url",
-                "name": "source_url",
-                "type": "STRING",
-                "links": []
-              },
-              {
-                "localized_name": "image_url",
-                "name": "image_url",
-                "type": "STRING",
-                "links": []
-              },
-              {
-                "localized_name": "post_id",
-                "name": "post_id",
-                "type": "STRING",
-                "links": []
-              },
-              {
-                "localized_name": "raw_json",
-                "name": "raw_json",
-                "type": "STRING",
-                "links": []
-              }
-            ],
-            "title": "[01C1] 图库文本导入",
-            "properties": {
-              "Node name for S&R": "DanbooruBrowserImportV05",
-              "label": "读取浏览器脚本发送到 /danbooru_browser_import_v05 的最新 payload。D站发送 tags，C站发送 tags/prompt/image_url/source_url；发送后 Queue 刷新。"
-            },
-            "widgets_values": [
-              0
-            ],
-            "widgets_values_named": {
-              "refresh_token": 0
-            },
-            "color": "#3F6A78",
-            "bgcolor": "#182B34"
-          },
-          {
-            "id": 114001,
-            "type": "ShowText|pysssss",
-            "pos": [
-              -6940,
-              -4610
-            ],
-            "size": [
-              360,
-              170
-            ],
-            "flags": {},
-            "order": 1,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "text",
-                "name": "text",
-                "type": "STRING",
-                "link": 328000
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "字符串",
-                "name": "STRING",
-                "shape": 6,
-                "type": "STRING",
-                "slot_index": 0,
-                "links": []
-              }
-            ],
-            "title": "[01C1] 图库文本预览",
-            "properties": {
-              "Node name for S&R": "ShowText|pysssss",
-              "cnr_id": "comfyui-custom-scripts",
-              "ver": "1.2.5"
-            },
-            "color": "#3F6A78",
-            "bgcolor": "#182B34"
-          },
-          {
             "id": 114003,
             "type": "PixAITagger",
             "pos": [
@@ -41141,7 +40662,8 @@
                 "type": "STRING",
                 "slot_index": 0,
                 "links": [
-                  328002
+                  328002,
+                  328004
                 ]
               },
               {
@@ -41228,14 +40750,6 @@
         "groups": [],
         "links": [
           {
-            "id": 328000,
-            "origin_id": 114000,
-            "origin_slot": 0,
-            "target_id": 114001,
-            "target_slot": 0,
-            "type": "STRING"
-          },
-          {
             "id": 328002,
             "origin_id": 114003,
             "origin_slot": 0,
@@ -41253,7 +40767,7 @@
           },
           {
             "id": 328004,
-            "origin_id": 114000,
+            "origin_id": 114003,
             "origin_slot": 0,
             "target_id": -20,
             "target_slot": 0,
@@ -49517,7 +49031,7 @@
               "label": "参考与反推",
               "groups": [
                 "CORE-01A 参考图输入（反推共用源） · A1 原版",
-                "SW-01C 图库导入与 PixAI 标签反推 · A1 原版",
+                "SW-01C PixAI 标签反推 · A1 原版",
                 "SW-01D JoyCaption 三路反推 · A1 原版",
                 "SW-01B 在线五模型反推 · A1 原版"
               ]
@@ -49728,7 +49242,7 @@
               "label": "参考与反推",
               "groups": [
                 "CORE-01A 参考图输入（反推共用源） · A29 2.9B",
-                "SW-01C 图库导入与 PixAI 标签反推 · A29 2.9B",
+                "SW-01C PixAI 标签反推 · A29 2.9B",
                 "SW-01D JoyCaption 三路反推 · A29 2.9B",
                 "SW-01B 在线五模型反推 · A29 2.9B"
               ]
@@ -49819,7 +49333,6 @@
             1145,
             1146,
             1147,
-            1148,
             1149,
             1150,
             1151,
@@ -49851,7 +49364,6 @@
             1177,
             1178,
             1179,
-            1180,
             1181,
             1182,
             1183,
@@ -49919,7 +49431,6 @@
             "1145": 0,
             "1146": 0,
             "1147": 0,
-            "1148": 2,
             "1149": 2,
             "1150": 2,
             "1151": 2,
@@ -49951,7 +49462,6 @@
             "1177": 0,
             "1178": 0,
             "1179": 0,
-            "1180": 2,
             "1181": 0,
             "1182": 2,
             "1183": 0,
@@ -50018,8 +49528,7 @@
                 "CORE-01A 输入图与反推共用源 · K2 Krea2",
                 "SW-01C PixAI 标签反推 · K2 Krea2",
                 "SW-01B 在线五模型反推 · K2 Krea2",
-                "SW-01D JoyCaption 三路反推 · K2 Krea2",
-                "SW-01E D站 / C站浏览器导入 · K2 Krea2"
+                "SW-01D JoyCaption 三路反推 · K2 Krea2"
               ]
             },
             {

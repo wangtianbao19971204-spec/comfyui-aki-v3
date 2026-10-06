@@ -1,0 +1,159 @@
+{
+  "schema": 1,
+  "date": "2026-10-06",
+  "receipt_id": "browser-workflow-retirement-20261006-01",
+  "base_commit": "1b667367387755b6c75cc9c67e3fd074b59149da",
+  "status": "reviewed-source-not-deployed",
+  "scope": [
+    "formal UAP v2",
+    "canonical v2 template",
+    "current validation and candidate export",
+    "retired historical layout CLI",
+    "corresponding guide and tests"
+  ],
+  "graph_change": {
+    "pass": true,
+    "strict_edit_scope_pass": true,
+    "removed_receivers": 3,
+    "removed_exclusive_previews": 3,
+    "removed_links": 3,
+    "pixai_exports_rebound": 2,
+    "root_before": {
+      "nodes": 293,
+      "links": 387,
+      "groups": 113
+    },
+    "root_after": {
+      "nodes": 291,
+      "links": 386,
+      "groups": 112
+    },
+    "embedded_subgraphs": 22,
+    "unaffected_subgraphs_unchanged": 20,
+    "remaining_prompt_lora_seed_modes_positions_sizes_preserved": true,
+    "subgraph_interfaces_preserved": true,
+    "legitimate_node_1074_preserved": true,
+    "historical_source_stats_preserved": true,
+    "formal_template_byte_equal": true
+  },
+  "formal_and_template_before_sha256": "c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a",
+  "formal_and_template_after_sha256": "96e76b3638c0dacfd1eef1727ba9b6ce9b8157c98cb166d3986737a7b40ac766",
+  "verification": {
+    "strict_preservation_audit_pass": true,
+    "preservation_receipt_sha256": "de847875ca2f0eee43c3cb7b41e6c4eac33d58bf7e5d61acdf760bb8c2d4b3d5",
+    "static_validator_pass": true,
+    "static_validator_receipt_sha256": "f4579c4fe65fdf94333cdcfc5c719e5cf3f875831c5b8c93c3d59803819559a2",
+    "unit_tests": {
+      "tests": 15,
+      "all_pass": true,
+      "log_sha256": "afc2633c0b6bb021f3a1c9c80e52d36d01027d687e68059011dbb456bc0c0cb9",
+      "isolated_temp_cli_fixtures": true
+    },
+    "ui_acceptance": "new UAP not loaded in production browser",
+    "gpu_acceptance": false
+  },
+  "deployment_preparation": {
+    "prepared": true,
+    "applied": false,
+    "combined_bridge_workflow_files": 11,
+    "existing_files_backed_up": 9,
+    "rollback_hashes_match": true,
+    "plan_sha256": "f0948b1e1e8c16bae1955f1ae74da2c177131cab25eb0242c15c5311fd8ffa52",
+    "browser_installation_separate": true,
+    "requires_explicit_deployment_authorization": true
+  },
+  "preserved": [
+    "all remaining prompt/LoRA/seed/widget values and modes",
+    "all node positions and sizes",
+    "Anima PixAI input/output UUIDs and wrappers",
+    "historical source counts and 20 unrelated subgraphs",
+    "historical v1 and independent workflows",
+    "legacy backend node registration for old workflows"
+  ],
+  "boundaries": [
+    "No production workflow replacement or backend restart",
+    "No queue submission or generation",
+    "Chrome userscript remains uninstalled",
+    "No new maintenance version, tag, remote or push"
+  ],
+  "source_files": [
+    {
+      "path": "snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+      "sha256": "96e76b3638c0dacfd1eef1727ba9b6ce9b8157c98cb166d3986737a7b40ac766",
+      "bytes": 1435659
+    },
+    {
+      "path": "snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json",
+      "sha256": "96e76b3638c0dacfd1eef1727ba9b6ce9b8157c98cb166d3986737a7b40ac766",
+      "bytes": 1435659
+    },
+    {
+      "path": "snapshot/runtime/production_tools/merge_unified_workflow.py",
+      "sha256": "d545abaa1df9fe6384d67cf44303360677fb8c977908158f790882d41e81da2e",
+      "bytes": 37522
+    },
+    {
+      "path": "snapshot/runtime/production_tools/validate_uap_workflow.py",
+      "sha256": "9969a025a5344d561d60acc666ecb905697b3b39392a57a96e23e03ce632313c",
+      "bytes": 9623
+    },
+    {
+      "path": "snapshot/runtime/production_tools/layout_uap_workbench.py",
+      "sha256": "4711dc921ee9ad62f63ffe8e37090ac54ad84717f41fb2298459c8cfd653ad45",
+      "bytes": 20349
+    },
+    {
+      "path": "snapshot/runtime/production_tools/UAP统一工作台说明.md",
+      "sha256": "2dbf2e2f77a9cc7368a8fe846ace05fad6176f1ca4017a52b50d4efbaa16a768",
+      "bytes": 7909
+    },
+    {
+      "path": "snapshot/runtime/production_tools/test_uap_browser_retirement.py",
+      "sha256": "e350d2ae135209edf5a16990c74570110710e21b6189ef4216772b2b8da8b9a4",
+      "bytes": 14747
+    }
+  ],
+  "git_checks": {
+    "source_seal": {
+      "pass": true,
+      "live_deployed": false,
+      "source_hashes_match": 7,
+      "source_changes": {
+        "added": [
+          "production_tools/test_uap_browser_retirement.py"
+        ],
+        "removed": [],
+        "changed": [
+          "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+          "production_tools/UAP统一工作台说明.md",
+          "production_tools/layout_uap_workbench.py",
+          "production_tools/merge_unified_workflow.py",
+          "production_tools/templates/UAP统一生产工作台_v2.json",
+          "production_tools/validate_uap_workflow.py"
+        ]
+      }
+    },
+    "staged_index": {
+      "pass": true,
+      "technical_catalog_pass": true,
+      "features": 18,
+      "referenced_files": 737,
+      "affected_features": [
+        "runtime-core",
+        "runtime-workbench",
+        "runtime-workflows"
+      ],
+      "credential_guard_pass": true,
+      "finding_count": 0,
+      "all_index_bytes_rehashed": true,
+      "diff_check_preserves_crlf": true,
+      "ordinary_local_commit_only": true
+    },
+    "full_history_at_base_commit": {
+      "pass": true,
+      "finding_count": 0,
+      "scanned_objects": 81252,
+      "scope": "previous bridge commit; this revision requires staged checks, future publication requires a fresh all-history gate"
+    }
+  }
+}
