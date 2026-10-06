@@ -6,7 +6,7 @@ param(
 )
 
 # One reviewed cleanup request, bound to its published path/hash receipt.
-# Preview is the default. Codex has not executed this file's deletion mode.
+# Preview is the default; deletion mode was used for this reviewed cleanup.
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $receiptPath = Join-Path $repoRoot 'docs/receipts/model_checkpoint_cleanup_20261007.json'

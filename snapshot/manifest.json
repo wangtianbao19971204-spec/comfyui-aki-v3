@@ -60490,8 +60490,8 @@
     },
     {
       "path": "inventory/model_sources.json",
-      "sha256": "2d8fa9497e867d26082bce7e1160c6c10d50b0927160e84ae20eb2272440c434",
-      "bytes": 735093
+      "sha256": "2720c81406359f53adc7390382aa6e57b58947afaae8a6cc8facd73ac76d2040",
+      "bytes": 733138
     }
   ],
   "production_plugins": [
