@@ -1,0 +1,278 @@
+{
+  "schema": 1,
+  "date": "2026-10-06",
+  "receipt_id": "browser-live-deployment-20261006-01",
+  "created_at": "2026-10-06T15:56:36.547187+00:00",
+  "source_commit": "f399ab955b67ee038751332bdb15bc4e5bd926d9",
+  "status": "deployed-live-bounded-acceptance-pass",
+  "deployment_request": "更新运行区实例",
+  "scope_files": [
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/danbooru_browser_import.py",
+      "runtime_exists_before": true,
+      "before_sha256": "923fb47c144887e973aad9b168c6c5d7811990d2703e4558ec4be1474176a38f",
+      "after_sha256": "4c687e28fc73b33746b7508f38f22ba821cd6061bef403680d03c276cd92c03f",
+      "rollback_sha256": "923fb47c144887e973aad9b168c6c5d7811990d2703e4558ec4be1474176a38f",
+      "workflow_data_review_completed": false
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/pending_prompts.js",
+      "runtime_exists_before": true,
+      "before_sha256": "997705203ac780111155751b983b1938682bf0c9487fb6684d5faabfa83fa0fa",
+      "after_sha256": "c401043ec7b05de3411720dbfa52c0bba8329c1d1bc7ceb57b2e7e39de2c0722",
+      "rollback_sha256": "997705203ac780111155751b983b1938682bf0c9487fb6684d5faabfa83fa0fa",
+      "workflow_data_review_completed": false
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
+      "runtime_exists_before": true,
+      "before_sha256": "a0aa27555e772cb85ec2423a99ac7150249d35f2946c4dc894561608dc5dabb6",
+      "after_sha256": "3a70878c77a4c49f214b57275461b65bc0de13a22425b9ce47bab045f0e5896d",
+      "rollback_sha256": "a0aa27555e772cb85ec2423a99ac7150249d35f2946c4dc894561608dc5dabb6",
+      "workflow_data_review_completed": false
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/browser_import.js",
+      "runtime_exists_before": false,
+      "before_sha256": null,
+      "after_sha256": "0fab4eb17eb33fac547f6faa45f48d25c0bed2f5438ce73f80903df1ff7fd8e3",
+      "rollback_sha256": null,
+      "workflow_data_review_completed": false
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/aki_tags_bridge.user.js",
+      "runtime_exists_before": false,
+      "before_sha256": null,
+      "after_sha256": "3e818bd747943c2232cb987ee0342b8cb550ca9660393f93037ea4d001f86820",
+      "rollback_sha256": null,
+      "workflow_data_review_completed": false
+    },
+    {
+      "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+      "runtime_exists_before": true,
+      "before_sha256": "c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a",
+      "after_sha256": "96e76b3638c0dacfd1eef1727ba9b6ce9b8157c98cb166d3986737a7b40ac766",
+      "rollback_sha256": "c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a",
+      "workflow_data_review_completed": true
+    },
+    {
+      "source": "production_tools/templates/UAP统一生产工作台_v2.json",
+      "runtime_exists_before": true,
+      "before_sha256": "c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a",
+      "after_sha256": "96e76b3638c0dacfd1eef1727ba9b6ce9b8157c98cb166d3986737a7b40ac766",
+      "rollback_sha256": "c00cab75d4c4264376b355d735de87fa96077c0e23889252bc763de1921e6f2a",
+      "workflow_data_review_completed": true
+    },
+    {
+      "source": "production_tools/merge_unified_workflow.py",
+      "runtime_exists_before": true,
+      "before_sha256": "a57c4efb58037035b05b594b005eacc69b554193601aaa979ce08cc463f86641",
+      "after_sha256": "d545abaa1df9fe6384d67cf44303360677fb8c977908158f790882d41e81da2e",
+      "rollback_sha256": "a57c4efb58037035b05b594b005eacc69b554193601aaa979ce08cc463f86641",
+      "workflow_data_review_completed": false
+    },
+    {
+      "source": "production_tools/validate_uap_workflow.py",
+      "runtime_exists_before": true,
+      "before_sha256": "7ff2e5eb86357fc6fc996b9a8a1c55cf6eb2c76f5b50010406074a0485dd1913",
+      "after_sha256": "9969a025a5344d561d60acc666ecb905697b3b39392a57a96e23e03ce632313c",
+      "rollback_sha256": "7ff2e5eb86357fc6fc996b9a8a1c55cf6eb2c76f5b50010406074a0485dd1913",
+      "workflow_data_review_completed": false
+    },
+    {
+      "source": "production_tools/layout_uap_workbench.py",
+      "runtime_exists_before": true,
+      "before_sha256": "0feec8eec3aa91ed4ae6eb06815e3050c8654be11ed3f236e88e8003137418b4",
+      "after_sha256": "4711dc921ee9ad62f63ffe8e37090ac54ad84717f41fb2298459c8cfd653ad45",
+      "rollback_sha256": "0feec8eec3aa91ed4ae6eb06815e3050c8654be11ed3f236e88e8003137418b4",
+      "workflow_data_review_completed": false
+    },
+    {
+      "source": "production_tools/UAP统一工作台说明.md",
+      "runtime_exists_before": true,
+      "before_sha256": "8bc0a72b6752acd0b893718fcb5e3943b373a4541483ea0e3687018cc1f2462d",
+      "after_sha256": "2dbf2e2f77a9cc7368a8fe846ace05fad6176f1ca4017a52b50d4efbaa16a768",
+      "rollback_sha256": "8bc0a72b6752acd0b893718fcb5e3943b373a4541483ea0e3687018cc1f2462d",
+      "workflow_data_review_completed": false
+    }
+  ],
+  "applied_files": 11,
+  "existing_rollback_files": 9,
+  "new_files": 2,
+  "backend_restart": {
+    "performed": true,
+    "startup_args_preserved": true,
+    "before": 5636,
+    "after": {
+      "pid": 14028,
+      "created": 1791301084.542215
+    },
+    "queue_empty_before_stop": true
+  },
+  "live": {
+    "five_modules_ready": true,
+    "legacy_compatibility_node_registered": true,
+    "pixai_registered": true,
+    "queue": {
+      "running": 0,
+      "pending": 0
+    },
+    "served_js_hashes_match": 3,
+    "executed_js_hashes": [
+      {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/browser_import.js",
+        "sha256": "0fab4eb17eb33fac547f6faa45f48d25c0bed2f5438ce73f80903df1ff7fd8e3"
+      },
+      {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/pending_prompts.js",
+        "sha256": "c401043ec7b05de3411720dbfa52c0bba8329c1d1bc7ceb57b2e7e39de2c0722"
+      },
+      {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
+        "sha256": "3a70878c77a4c49f214b57275461b65bc0de13a22425b9ce47bab045f0e5896d"
+      }
+    ],
+    "real_http_post": true,
+    "service_ack_confirmed": true,
+    "pending_before": 0,
+    "pending_after": 0,
+    "positive_negative_split": true,
+    "no_automatic_target_write": true,
+    "positive_apply_serialization_and_undo": true,
+    "negative_apply_serialization_and_undo": true,
+    "draft_write_read_and_original_preserved": true,
+    "workflow_http_sha256": "96e76b3638c0dacfd1eef1727ba9b6ce9b8157c98cb166d3986737a7b40ac766",
+    "workflow_page": {
+      "nodes": 291,
+      "legacyReceivers": 0,
+      "missingNodes": [],
+      "subgraphs": 22
+    },
+    "origin_host_rejection": [
+      {
+        "case": "foreign_origin",
+        "expected": 403,
+        "actual": 403
+      },
+      {
+        "case": "foreign_host",
+        "expected": 403,
+        "actual": 403
+      }
+    ]
+  },
+  "preservation": {
+    "protected_paths": 8544,
+    "unplanned_content_drift": 0,
+    "consistent_sqlite_backups": 8,
+    "sqlite_integrity_pass": true,
+    "sqlite_logical_content_unchanged": true,
+    "physical_wal_changed": 3,
+    "wal_mechanism_not_independently_verified": true,
+    "pose_refresh_metadata_restored_only_fields": [
+      "last_checked",
+      "last_error",
+      "status"
+    ],
+    "pose_before_and_automatic_versions_retained": true,
+    "browser_local_and_session_storage_restored": true,
+    "test_tabs_closed": true,
+    "new_formal_workflow_files": [],
+    "rollback_readiness_pass": true
+  },
+  "limits": {
+    "tampermonkey_installed_version_updated": false,
+    "live_five_site_gm_transport_verified": false,
+    "production_document_reload_confirmed": false,
+    "reload_note": "An attempted reload did not establish a new document; production checks covered session storage write/read, separate target adoption/undo and real newly loaded UAP. Earlier isolated reload acceptance remains separate evidence.",
+    "gpu_generation_submitted": false,
+    "database_replacement": false,
+    "models_downloaded": false,
+    "package_version_changed": false,
+    "tag_created": false,
+    "remote_push": false,
+    "scope_only_not_entire_snapshot_deployed": true
+  },
+  "external_evidence": [
+    {
+      "name": "prepared.json",
+      "sha256": "736c982f8e31d4d3b63acb8793a6d7b99b2e0a836867d22295258373961f679b"
+    },
+    {
+      "name": "preflight-reconciliation.json",
+      "sha256": "c506b8adae501a09ed00252bec04ed662f3ea1f031018de59a6f64d71feee03b"
+    },
+    {
+      "name": "applied.json",
+      "sha256": "15cdcf7e2f41524d39e17cd5ee2a922ff2bc478682963cabe9910ad987e71a74"
+    },
+    {
+      "name": "stopped.json",
+      "sha256": "45f1446bd475ce2a8a90ed0841c131bfff238c0776cbd52da809a70f1751adeb"
+    },
+    {
+      "name": "started.json",
+      "sha256": "4651d3214b1d1ddb787bad20970b6632df880953950a3983b4ca903dd1e0b53d"
+    },
+    {
+      "name": "live-prebrowser.json",
+      "sha256": "175fdb386340ccffeeedf453d80da8a7a98230938c6c3f0185b03ad6e20b9fa3"
+    },
+    {
+      "name": "real-http-send.json",
+      "sha256": "e784f1a9d70b672159bf75699fd4fbd556d72d4854caed49db9278074b06a82a"
+    },
+    {
+      "name": "browser-received.json",
+      "sha256": "205ec3a965d2d5d0f1bbf33229bddb7cb6e6b99128b177bd367c5b5342dd4c06"
+    },
+    {
+      "name": "positive-applied.json",
+      "sha256": "9dc9054c253ca11a13aa009251624a5781d5e83dc7c7f3112c3c0f421a284d16"
+    },
+    {
+      "name": "negative-applied.json",
+      "sha256": "d1683e3a470343cd012ace9a19343a31b3438be15ec078f13b8fe5a768b3b773"
+    },
+    {
+      "name": "undo-final.json",
+      "sha256": "9c0702e7f44a12ca709d3d3d3f844a077be92c4dee6ed87e14a3d2129fee0de7"
+    },
+    {
+      "name": "persisted-draft.json",
+      "sha256": "4446e3bef1a964e3a66b0fdd33e2b2548c59425fba95f6b29883e01cda7a63c8"
+    },
+    {
+      "name": "production-workflow-loaded.json",
+      "sha256": "c09b0b7c42cc3ba8a601a3ec8ff4ca372f117cbaff57bc81854ca91a4e268edc"
+    },
+    {
+      "name": "browser-cleanup.json",
+      "sha256": "472aa4524dbbfe5f4de1fa51a1f0af6c0cf95527d6b8cf42fc3ea2b5345bc583"
+    },
+    {
+      "name": "postbrowser-pose-cache-restoration.json",
+      "sha256": "6d78d261b6528c0945626ae38bd2cc1abcd94a38ae27b0ee1887f4b10603f981"
+    },
+    {
+      "name": "runtime-workflow-validation.json",
+      "sha256": "bdfa4b66e7fe1726400415185fa6903c670bacf8e2d3759f8db83e7f8ae54de9"
+    },
+    {
+      "name": "independent-static-review.json",
+      "sha256": "2ebcbc55724ae56011d988fe74226a356a4848c57deab34b5c601b6178d2089b"
+    },
+    {
+      "name": "live-final-guard.json",
+      "sha256": "352327b3c589b9ac72ddbf5e475b09b4d6d827e2cb1cb84774f6e7da4c87c04a"
+    },
+    {
+      "name": "rollback-readiness.json",
+      "sha256": "dfd1f938470de71ead948529a6c99be088842be36da6f5ca6fd063e8575096cb"
+    },
+    {
+      "name": "workbench-receiving.png",
+      "sha256": "26a0e519e30f053b839c0ef5791931d53ed3cacac4529241bfcc2de804517996"
+    }
+  ]
+}

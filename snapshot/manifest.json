@@ -60527,6 +60527,17 @@
       "source_and_live_hashes_matched": 8,
       "removed_external_cache_not_deleted": true,
       "note": "Deployment and inference were performed by the coordinated patch task. Packaging rechecked file hashes, readiness and queue only; this does not certify every captured historical feature."
+    },
+    {
+      "scope": "Only the 11 browser bridge, current UAP retirement and maintenance protection files enumerated in the receipt; no library adoption or full runtime capture",
+      "receipt": "docs/receipts/browser_live_deployment_20261006.json",
+      "confirmed_at": "2026-10-06T15:56:36.547187+00:00",
+      "source_commit": "f399ab955b67ee038751332bdb15bc4e5bd926d9",
+      "source_and_live_hashes_matched": 11,
+      "executed_frontend_hashes_matched": 3,
+      "workflow_page_loaded": true,
+      "gpu_generation_submitted": false,
+      "whole_snapshot_live_deployed": false
     }
   ],
   "development_revision": {

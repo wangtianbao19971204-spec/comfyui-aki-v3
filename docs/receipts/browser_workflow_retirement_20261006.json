@@ -155,5 +155,7 @@
       "scanned_objects": 81252,
       "scope": "previous bridge commit; this revision requires staged checks, future publication requires a fresh all-history gate"
     }
-  }
+  },
+  "status_scope": "original source-stage state at receipt time; subsequent deployment is recorded separately",
+  "subsequent_runtime_deployment": "docs/receipts/browser_live_deployment_20261006.json"
 }

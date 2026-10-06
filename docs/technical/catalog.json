@@ -29,7 +29,8 @@
         "snapshot/runtime/production_tools/test_browser_bridge_server.py"
       ],
       "evidence": [
-        "docs/receipts/browser_bridge_20261006.json"
+        "docs/receipts/browser_bridge_20261006.json",
+        "docs/receipts/browser_live_deployment_20261006.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -82,7 +83,9 @@
         "snapshot/runtime/production_tools/validate_lean_profile.py",
         "snapshot/runtime/production_tools/test_plugin_fusion.cjs"
       ],
-      "evidence": [],
+      "evidence": [
+        "docs/receipts/browser_live_deployment_20261006.json"
+      ],
       "acceptance": "checked-source",
       "watch": [
         "snapshot/runtime/",
@@ -125,7 +128,8 @@
         "snapshot/evidence/20261005_workbench_anime_polish/REPORT.txt",
         "snapshot/evidence/20261005_workflow_product_repair/REPORT.txt",
         "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/browser_acceptance.json",
-        "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261003_015012_R1_autonomous/UI_FINAL_ACCEPTANCE.json"
+        "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261003_015012_R1_autonomous/UI_FINAL_ACCEPTANCE.json",
+        "docs/receipts/browser_live_deployment_20261006.json"
       ],
       "acceptance": "historical",
       "watch": [
@@ -167,7 +171,8 @@
         "docs/technical/archive/civitai_workflow_study/报告-Civitai近三月热门工作流人体部件与NSFW细化分析.md",
         "docs/technical/archive/civitai_workflow_study/检测器到细化器数据流.json",
         "docs/technical/archive/civitai_workflow_study/逐工作流明细.json",
-        "docs/receipts/browser_workflow_retirement_20261006.json"
+        "docs/receipts/browser_workflow_retirement_20261006.json",
+        "docs/receipts/browser_live_deployment_20261006.json"
       ],
       "acceptance": "historical",
       "watch": [

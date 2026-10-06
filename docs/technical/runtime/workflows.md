@@ -16,7 +16,7 @@
 
 常规导出和现行校验递归拒绝旧接收节点，并检查内嵌连接、端口回指及分支/阶段引用。`--legacy-sources` 仅可导出历史实验候选，不能据此覆盖正式图。旧 `layout_uap_workbench.py` 的直接重建/覆盖入口已封闭，避免从旧独立流恢复接收部件与旧参数。
 
-[专项测试](../../../snapshot/runtime/production_tools/test_uap_browser_retirement.py)与[清理收据](../../receipts/browser_workflow_retirement_20261006.json)记录结构和保持性验收。当前仅完成主仓源码修改；尚未部署或在生产页面重新加载新图，不声称已经生效或通过 GPU 验收。
+[专项测试](../../../snapshot/runtime/production_tools/test_uap_browser_retirement.py)与[清理收据](../../receipts/browser_workflow_retirement_20261006.json)记录结构和保持性验收。已完成本次 11 文件运行区部署，并从真实服务在新页面加载新版 UAP；291 节点、22 子图，未报告缺节点、旧接收器为零，见[运行区部署收据](../../receipts/browser_live_deployment_20261006.json)。此次未提交 GPU 任务，不能据此更新画质结论。
 
 ## 细化与参数链
 
@@ -37,6 +37,8 @@
 [产品整改回执](../../../snapshot/evidence/20261005_workflow_product_repair/FINAL_DELIVERY.json)区分结构/保持性、浏览器和 GPU；[真实执行报告](../../../snapshot/evidence/20261005_native_e2e_acceptance/REPORT.txt)是另一轮有限样例。现存 ext05 背景矩形/横带、ext07 扩图接缝问题见 [已知问题](../../KNOWN_ISSUES.md)。区域分支不能以结构检查冒充已实跑，单种子结果也不保证所有风格/遮挡/LoRA。
 
 ## 更新记录
+
+- 2026-10-06：经用户明确请求，将网页桥接、UAP 清理与维护保护共 11 文件部署到运行区，保留启动参数重载后端。真实收件、正负方向采用/序列化/撤销、新版 UAP 实页加载与三份执行源码摘要通过；五模块就绪、队列为空、保护范围与数据库逻辑内容保持。Chrome 油猴安装、五站当前网页 GM 发送及生产整页刷新仍为单独边界，见[运行区部署收据](../../receipts/browser_live_deployment_20261006.json)。
 
 - 2026-10-06：网页接收迁至工作台待采用区，清理正式 v2/权威模板的三处旧接收路径，保留 PixAI 反推接口与原用户参数；补递归结构门禁并封闭历史布局覆盖入口。
 - 2026-10-05：明确九分支、内嵌子图与实际细化顺序，修正阶段对比/镜像描述、提交目标及窄屏交互；保持用户参数和默认关闭策略。

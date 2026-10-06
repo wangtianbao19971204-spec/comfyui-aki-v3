@@ -156,5 +156,7 @@
     "requires_explicit_deployment_authorization": true,
     "browser_installation_separate": true,
     "plan_sha256": "b7fea6580fad533b0b007c9a087e74e07c55cbdde6c9218f22fa3f239ebaa52d"
-  }
+  },
+  "status_scope": "original source-stage state at receipt time; subsequent deployment is recorded separately",
+  "subsequent_runtime_deployment": "docs/receipts/browser_live_deployment_20261006.json"
 }
