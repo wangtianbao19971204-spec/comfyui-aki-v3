@@ -503,7 +503,8 @@
         "tests/test_training_trigger_reviews.py"
       ],
       "evidence": [
-        "docs/receipts/source_coverage_20261005.json"
+        "docs/receipts/source_coverage_20261005.json",
+        "docs/receipts/isolated_boot_20261006.json"
       ],
       "acceptance": "checked-source",
       "watch": [

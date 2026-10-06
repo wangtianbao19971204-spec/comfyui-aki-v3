@@ -10,6 +10,10 @@
 - 当前 UI 静态模型家族清单需要在新增或同名替换模型时复核。
 - raw Tag 与 codex-* 资料的主题消费者契约仍有独立维护范围；不要利用相似正文自动跨身份合并。
 - 捕获的源码、配置和文字库有可逆校验；权重/预览媒体只做目录清单，Python/CUDA 和机器凭证也不在 bundle 内。
-- 整机新环境冷启动、GPU 出图和所有插件迁移没有因为建 Git 仓而重新验收；离线物化成功只能证明捕获内容可还原。
+- 已在本机完成一次隔离冷启动（物化新树 + 备用端口 + 25 个生产插件）：5/5 模块、76 节点、1,939 个节点类型、队列 0/0，运行区零改动，见[隔离启动收据](receipts/isolated_boot_20261006.json)。仍未验收的是独立依赖环境、GPU 出图质量、具体工作流以及整机迁移。
+- `triton` 在本机缺失，使 `ComfyUI-RMBG` 的 `SAM3Segment` 未注册；`vnccs-utils` 的 SAM3 节点正常，当前 UAP 工作流只引用 RMBG/BiRefNet，暂不受影响。
+- Comfyroll 的 `CR Output Flow Frames`、`CR XY From Folder`、`CR XY Save Grid Image` 在 `INPUT_TYPES` 阶段报错；其余 Comfyroll 节点正常。
+- 冷缓存启动较慢：prompt-assistant 与统一包导入各约 83 / 129 秒，随后约 247 秒预热资料缓存。
+- 部分生产插件在导入期检查依赖并在缺失时 `pip install`（WeiLin、Impact-Pack）；裸机首次启动会联网改动解释器，重建前须先预装。
 
 对应原始 UI/工作流/推理收据保存在 `snapshot/evidence/`，三个种类的 latest 指针保持独立。

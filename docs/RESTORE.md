@@ -55,6 +55,19 @@ python -X utf8 -B scripts\snapshot.py materialize --dest G:\ComfyUI-local\valida
 
 隔离不能只改端口：现有 `production_tools/launch.py` 对非 8188 端口只另设 ComfyUI 自身的 SQLite 路径，插件仍可能访问系统用户资料。LoRA Manager 已提供 `LORA_MANAGER_SETTINGS_DIR`，应只在验证子进程中将它固定到全新验证树的私有目录，避免回落到真实用户配置及缓存。其只读路径解析已核对能跳过系统目录和旧配置回退；其他插件的可写位置、环境依赖与网络初始化仍须逐项核对。不要直接复用带真实绝对路径的 settings；这项路径检查不是完整隔离启动验收。
 
+### 隔离启动实测（2026-10-06）
+
+已按上面的方式完整走通一次：物化到全新目录（8,524 项校验），再用运行区 Python 从物化树启动 25 个生产白名单插件，全部写入限制在该树内。结果 5/5 工作台模块、76 节点、1,939 个注册节点类型、队列 0/0，HTTP 就绪约 180 秒；停机后运行区四个根的文件数、总字节和最新修改时间前后完全一致。证据见[隔离启动收据](../receipts/isolated_boot_20261006.json)，原始日志在验证树的 `validation-logs/`。
+
+同轮发现、重建新机器时必须先处理的环境行为：
+
+- **导入期就可能自动装包**：统一包 WeiLin 的 `install_requirements()` 与 Impact-Pack 的 `ensure_onnx_package()` 都在 import 阶段检查，缺包会直接 `pip install`。本机已满足（`uuid7`/`aiosqlite`、`onnxruntime 1.23.2`）所以未触发；裸机首次启动会改解释器并联网，必须先预装。
+- **导入期改进程环境**：`comfyui_controlnet_aux/__init__.py` 全局设置 `NPU_DEVICE_COUNT`、`MMCV_WITH_OPS`、`PYTORCH_ENABLE_MPS_FALLBACK`；RMBG 只在显式开启 `SDMATTE_CPU_ONLY` 时才清空 `CUDA_VISIBLE_DEVICES`。
+- **启动期联网**：Danbooru Gallery 的标签同步会在启动阶段访问远端，本机失败但未阻断启动。
+- 其余 `pip install` 调用点（controlnet_aux、easy-use、Comfyroll、RMBG 提示文字）在节点执行或模型加载时才触发，或已被注释。
+
+已知缺口：`triton` 缺失（Windows 无官方轮子）使 RMBG 的 `SAM3Segment` 未注册，但 `vnccs-utils` 的 SAM3 节点正常，且当前 UAP 工作流只引用 RMBG/BiRefNet；Comfyroll 有 3 个节点在 `INPUT_TYPES` 阶段报错。冷缓存导入较慢（prompt-assistant 83 秒、统一包 129 秒，之后约 247 秒预热缓存）。这只是“能启动并注册节点”，不等于出图质量、GPU 推理或某个具体工作流通过。
+
 ## 不是完整灾备镜像
 
 本 bundle 可还原管理范围内的代码、保存工作流、提示词 JSON 和三库逻辑数据。模型、预览、认证、Python/CUDA 运行环境与旧历史媒资需要独立备份。建议把这些外部资源与 bundle 一起离线存放，并分别记录校验值；不要把“Git 可克隆”误认为“全部数据已异地备份”。
