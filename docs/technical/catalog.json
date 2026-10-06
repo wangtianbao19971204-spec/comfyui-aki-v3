@@ -201,7 +201,8 @@
         "snapshot/inventory/workflow_models.json",
         "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/run_benchmark.py",
         "scripts/model_sources.py",
-        "snapshot/inventory/model_sources.json"
+        "snapshot/inventory/model_sources.json",
+        "scripts/remove_reviewed_eval_checkpoints.ps1"
       ],
       "tests": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/test_checkpoint_loaders.py",
@@ -214,7 +215,8 @@
         "docs/technical/archive/benchmark_reports/MODEL_COMPARISON_RUNBOOK.md",
         "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/report/三模型详细对比报告.md",
         "docs/receipts/model_sources_20261007.json",
-        "docs/receipts/model_source_recount_20261007.json"
+        "docs/receipts/model_source_recount_20261007.json",
+        "docs/receipts/model_checkpoint_cleanup_20261007.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -222,7 +224,8 @@
         "scripts/model_sources.py",
         "tests/test_model_sources.py",
         "snapshot/inventory/model_sources.json",
-        "examples/external-assets/model-source.example.json"
+        "examples/external-assets/model-source.example.json",
+        "scripts/remove_reviewed_eval_checkpoints.ps1"
       ],
       "examples": [
         "examples/external-assets/asset-record.example.json",

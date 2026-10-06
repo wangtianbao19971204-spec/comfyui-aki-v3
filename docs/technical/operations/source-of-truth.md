@@ -30,6 +30,7 @@
 
 ## 更新记录
 
+- 2026-10-07：用户要求删除评估权重但执行环境阻止实际操作；保留现场真实存在标志，仅登记待清理／不迁移意图与 51 个精确目标。源 metadata 与对应 manifest 摘要同步，历史收据保持冻结；手动工具不创建权重回滚副本，未执行状态见[清理收据](../../receipts/model_checkpoint_cleanup_20261007.json)。
 - 2026-10-07：模型来源复核将 19 个本地训练文件细分为 4 成品版本和 15 评估文件、17 份不同内容；只修订来源 metadata、易读表与说明，并更新 manifest 中该单项摘要／大小。旧模型盘点、运行 payload、在线数据和历史来源收据保持原样；新增[复核收据](../../receipts/model_source_recount_20261007.json)说明计数与证据边界。
 - 2026-10-07：模型迁移公开来源以 [model_sources.json](../../../snapshot/inventory/model_sources.json) 为唯一登记入口，易读表由受测离线工具生成并校验同步；在 manifest 只新增这一 metadata 的摘要／大小，既有 runtime 与 library entries 保持原样。本轮不对整套 snapshot seal、不重捕获或认可旧库，也不部署；外部网址和来源映射不能代替权重备份，见[模型维护](../../MODELS.md)。
 - 2026-10-06：补[首次取得主仓与后续更新](../../GETTING_STARTED.md)，统一他机 Python/hooks 和只读完整性检查入口，明确快照先物化、外部资源另补、不同运行根 capture/adopt 尚无自动迁移入口。全新独立克隆的 9,319 文件字节、可达对象集合、strict fsck、技术目录、快照及真实 pre-commit 均通过；验证副本只作验收。见[本地克隆审计](../../receipts/pull_audit_20261006.json)。当前无在线远端，此轮不证明互联网拉取、新机器依赖冷装或 GPU 运行；未部署或改动运行数据。

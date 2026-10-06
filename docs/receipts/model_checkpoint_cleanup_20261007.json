@@ -1,0 +1,468 @@
+{
+  "schema": 1,
+  "receipt_id": "model-checkpoint-cleanup-20261007-01",
+  "base_commit": "12e6cd4c793f106f0862e99d3e036d9ff19250a9",
+  "prepared_at": "2026-10-06T16:57:55.018016+00:00",
+  "pass": false,
+  "status": "blocked_by_execution_policy_not_applied",
+  "authorization": "User explicitly requested deletion without retaining the 15 evaluation checkpoints, then selected cleanup in both runtime and training locations while keeping four finished versions.",
+  "scope": "15 runtime evaluation weights, 15 matching training originals, 15 sidecars, 2 identical nonselected fallback aliases and 4 unselected final aliases whose checkpoint tensor payloads match; preserve four selected release identities.",
+  "plan_sha256": "30294f56be1f6b44d2dc9d57af1a0d2be782269f88d5bb37a01861a3b568b2e2",
+  "counts": {
+    "runtime_evaluation_weights": 15,
+    "matching_training_originals": 15,
+    "runtime_metadata_sidecars": 15,
+    "retired_fallback_aliases": 2,
+    "retired_training_final_aliases": 4,
+    "total_file_paths": 51,
+    "preserved_finished_versions": 4
+  },
+  "targets": [
+    {
+      "role": "runtime_evaluation",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_eval/alicia_bell_r32_step0100.safetensors",
+      "sha256": "8e983a94dab7656e4e4b30fbe85536205d14d39ba1dca24a14b1dd7435147ea1",
+      "bytes": 91878480
+    },
+    {
+      "role": "training_evaluation",
+      "path": "anima_lora_forge/runs/alicia_bell/alicia_bell_calibration_400_v1/weights/alicia_bell_anima_r32_calibration-step00000100.safetensors",
+      "sha256": "8e983a94dab7656e4e4b30fbe85536205d14d39ba1dca24a14b1dd7435147ea1",
+      "bytes": 91878480
+    },
+    {
+      "role": "evaluation_metadata",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_eval/alicia_bell_r32_step0100.metadata.json",
+      "sha256": "57b3d594a3f20a6b2a1cb4024657226dbc05e75415f2fe4682cbf80532f79cc9",
+      "bytes": 1896
+    },
+    {
+      "role": "runtime_evaluation",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_eval/alicia_bell_r32_step0200.safetensors",
+      "sha256": "71b336cb4c4e112affc2114cf74851342c81956bb2238f6b91a7460fda9d1a8a",
+      "bytes": 91878480
+    },
+    {
+      "role": "training_evaluation",
+      "path": "anima_lora_forge/runs/alicia_bell/alicia_bell_calibration_400_v1/weights/alicia_bell_anima_r32_calibration-step00000200.safetensors",
+      "sha256": "71b336cb4c4e112affc2114cf74851342c81956bb2238f6b91a7460fda9d1a8a",
+      "bytes": 91878480
+    },
+    {
+      "role": "evaluation_metadata",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_eval/alicia_bell_r32_step0200.metadata.json",
+      "sha256": "ad8fa808a1656307a6548ac30ab6ff5feffacf9438fed6fdb3ef35cb8635b55e",
+      "bytes": 1895
+    },
+    {
+      "role": "runtime_evaluation",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_eval/alicia_bell_r32_step0300.safetensors",
+      "sha256": "466637abd2cbb35872a5bbef02ed71d1b9fece313dd275042053eac4c3db8124",
+      "bytes": 91878480
+    },
+    {
+      "role": "training_evaluation",
+      "path": "anima_lora_forge/runs/alicia_bell/alicia_bell_calibration_400_v1/weights/alicia_bell_anima_r32_calibration-step00000300.safetensors",
+      "sha256": "466637abd2cbb35872a5bbef02ed71d1b9fece313dd275042053eac4c3db8124",
+      "bytes": 91878480
+    },
+    {
+      "role": "evaluation_metadata",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_eval/alicia_bell_r32_step0300.metadata.json",
+      "sha256": "312cf1cf2355d9e959a3093b33a0615b33ddb627bc3c010a11066a17fa25aea5",
+      "bytes": 1896
+    },
+    {
+      "role": "runtime_evaluation",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_eval/alicia_bell_r32_step0400.safetensors",
+      "sha256": "e8e2e733d1bed3e50caf03db120cca283768efe8f3bf0ddef21a618913b9403b",
+      "bytes": 91878480
+    },
+    {
+      "role": "training_evaluation",
+      "path": "anima_lora_forge/runs/alicia_bell/alicia_bell_calibration_400_v1/weights/alicia_bell_anima_r32_calibration-step00000400.safetensors",
+      "sha256": "e8e2e733d1bed3e50caf03db120cca283768efe8f3bf0ddef21a618913b9403b",
+      "bytes": 91878480
+    },
+    {
+      "role": "evaluation_metadata",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_eval/alicia_bell_r32_step0400.metadata.json",
+      "sha256": "269efea7dbbe51412f0223579d790a3a2b918adcfaf4ab8a2a203a41488770a5",
+      "bytes": 1896
+    },
+    {
+      "role": "runtime_evaluation",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0100.safetensors",
+      "sha256": "0be6f5247b69dbafde9e7abaa989ec0a513385e2d2423ba52c27b2f050127a63",
+      "bytes": 91897728
+    },
+    {
+      "role": "training_evaluation",
+      "path": "anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_400_v2/weights/alicia_bell_morning_star_anima_r32-step00000100.safetensors",
+      "sha256": "0be6f5247b69dbafde9e7abaa989ec0a513385e2d2423ba52c27b2f050127a63",
+      "bytes": 91897728
+    },
+    {
+      "role": "evaluation_metadata",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0100.metadata.json",
+      "sha256": "2ca4009aae49b47acdea18f9892a0675be84cfd3398e66dbd7b5341be3ac667b",
+      "bytes": 1826
+    },
+    {
+      "role": "runtime_evaluation",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0125.safetensors",
+      "sha256": "9bfefc07089af170c61df8dcee3c66790088e9b5585a648be6bb53130767aac1",
+      "bytes": 91897744
+    },
+    {
+      "role": "training_evaluation",
+      "path": "anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_refine_175_v1/weights/alicia_bell_morning_star_anima_r32_refine-step00000125.safetensors",
+      "sha256": "9bfefc07089af170c61df8dcee3c66790088e9b5585a648be6bb53130767aac1",
+      "bytes": 91897744
+    },
+    {
+      "role": "evaluation_metadata",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0125.metadata.json",
+      "sha256": "44282f792a48e8e42828f2795c18d54e9ead2a5d82f257e58038adabb692b89a",
+      "bytes": 1840
+    },
+    {
+      "role": "runtime_evaluation",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0150.safetensors",
+      "sha256": "e62f86968ab6e75eb60c2da03c4ff8ff22f3c0504722c54f5eca662354301920",
+      "bytes": 91897744
+    },
+    {
+      "role": "training_evaluation",
+      "path": "anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_refine_175_v1/weights/alicia_bell_morning_star_anima_r32_refine-step00000150.safetensors",
+      "sha256": "e62f86968ab6e75eb60c2da03c4ff8ff22f3c0504722c54f5eca662354301920",
+      "bytes": 91897744
+    },
+    {
+      "role": "evaluation_metadata",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0150.metadata.json",
+      "sha256": "7d78f20d9ae88a7a88267a3ae772e295e20b39d568db126a3f6864e441b6a832",
+      "bytes": 1839
+    },
+    {
+      "role": "runtime_evaluation",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0175.safetensors",
+      "sha256": "5ef8c4e76baad4c5d6772ccaab77f8bc37891e38aa8f58ba619502f1d474fab7",
+      "bytes": 91897744
+    },
+    {
+      "role": "training_evaluation",
+      "path": "anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_refine_175_v1/weights/alicia_bell_morning_star_anima_r32_refine-step00000175.safetensors",
+      "sha256": "5ef8c4e76baad4c5d6772ccaab77f8bc37891e38aa8f58ba619502f1d474fab7",
+      "bytes": 91897744
+    },
+    {
+      "role": "evaluation_metadata",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0175.metadata.json",
+      "sha256": "b51356b4485869e4dc8b7946ccf18317c9cfe1329784f6c20c168f701006caec",
+      "bytes": 1840
+    },
+    {
+      "role": "runtime_evaluation",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0200.safetensors",
+      "sha256": "c9d179f8b27516934681869579f6a802dabdf63b90350985f9c1466325b04716",
+      "bytes": 91897728
+    },
+    {
+      "role": "training_evaluation",
+      "path": "anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_400_v2/weights/alicia_bell_morning_star_anima_r32-step00000200.safetensors",
+      "sha256": "c9d179f8b27516934681869579f6a802dabdf63b90350985f9c1466325b04716",
+      "bytes": 91897728
+    },
+    {
+      "role": "evaluation_metadata",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0200.metadata.json",
+      "sha256": "e5a888011fb8c885d5c00a4695c4beed83a2e9798c495eacc3fa921170bb43ae",
+      "bytes": 1824
+    },
+    {
+      "role": "runtime_evaluation",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0300.safetensors",
+      "sha256": "4977857a2ae0e5c8c7b962854d014d0bbf00014a831ad89884eb97713ab57411",
+      "bytes": 91897728
+    },
+    {
+      "role": "training_evaluation",
+      "path": "anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_400_v2/weights/alicia_bell_morning_star_anima_r32-step00000300.safetensors",
+      "sha256": "4977857a2ae0e5c8c7b962854d014d0bbf00014a831ad89884eb97713ab57411",
+      "bytes": 91897728
+    },
+    {
+      "role": "evaluation_metadata",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0300.metadata.json",
+      "sha256": "29538420aaafddf049dbf2d5d408f2a4a1bd55635eb54c5ba38407dd0777ba01",
+      "bytes": 1826
+    },
+    {
+      "role": "runtime_evaluation",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0400.safetensors",
+      "sha256": "3f984b3e2f216f311c958f15accda3ad9df5c540f62bf17fdc4e02cd6acef273",
+      "bytes": 91897728
+    },
+    {
+      "role": "training_evaluation",
+      "path": "anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_400_v2/weights/alicia_bell_morning_star_anima_r32-step00000400.safetensors",
+      "sha256": "3f984b3e2f216f311c958f15accda3ad9df5c540f62bf17fdc4e02cd6acef273",
+      "bytes": 91897728
+    },
+    {
+      "role": "evaluation_metadata",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0400.metadata.json",
+      "sha256": "ecbae48d2f5afa3df2f4030660b12f901b17896c21dabc4d7a317ca52fe3ee8b",
+      "bytes": 1826
+    },
+    {
+      "role": "runtime_evaluation",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_ordinary_eval/step0100.safetensors",
+      "sha256": "d6480d10393c63b0f15920d595c302849ab60f137e467d7462d818e804657453",
+      "bytes": 91895752
+    },
+    {
+      "role": "training_evaluation",
+      "path": "anima_lora_forge/runs/alicia_bell_ordinary/alicia_bell_ordinary_400_v4/weights/alicia_bell_ordinary_anima_r32-step00000100.safetensors",
+      "sha256": "d6480d10393c63b0f15920d595c302849ab60f137e467d7462d818e804657453",
+      "bytes": 91895752
+    },
+    {
+      "role": "evaluation_metadata",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_ordinary_eval/step0100.metadata.json",
+      "sha256": "69d07f7920f0d720daf544a3b370eabc2cdf91a32bf88570e6dc85618b00f7c3",
+      "bytes": 1820
+    },
+    {
+      "role": "runtime_evaluation",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_ordinary_eval/step0200.safetensors",
+      "sha256": "37923c45bef3c5e8af3921e3cfca570dfa3434929f84822b3e56c2887270854c",
+      "bytes": 91895752
+    },
+    {
+      "role": "training_evaluation",
+      "path": "anima_lora_forge/runs/alicia_bell_ordinary/alicia_bell_ordinary_400_v4/weights/alicia_bell_ordinary_anima_r32-step00000200.safetensors",
+      "sha256": "37923c45bef3c5e8af3921e3cfca570dfa3434929f84822b3e56c2887270854c",
+      "bytes": 91895752
+    },
+    {
+      "role": "evaluation_metadata",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_ordinary_eval/step0200.metadata.json",
+      "sha256": "9e035983d5cd9273b0061656038591633deaac7f436678b84d15f5e4f5677f9f",
+      "bytes": 1821
+    },
+    {
+      "role": "runtime_evaluation",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_ordinary_eval/step0300.safetensors",
+      "sha256": "fd34bac14788c44da8e69f2f730578053078508e13f0806395f28e6aa81522bd",
+      "bytes": 91895752
+    },
+    {
+      "role": "training_evaluation",
+      "path": "anima_lora_forge/runs/alicia_bell_ordinary/alicia_bell_ordinary_400_v4/weights/alicia_bell_ordinary_anima_r32-step00000300.safetensors",
+      "sha256": "fd34bac14788c44da8e69f2f730578053078508e13f0806395f28e6aa81522bd",
+      "bytes": 91895752
+    },
+    {
+      "role": "evaluation_metadata",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_ordinary_eval/step0300.metadata.json",
+      "sha256": "2306bab5038a452c51866b9c09e6a1c87e0bbdb8a3ceacf91fd5dd865794f4f9",
+      "bytes": 1821
+    },
+    {
+      "role": "runtime_evaluation",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_ordinary_eval/step0400.safetensors",
+      "sha256": "aa6a803e3037184336ef987c2ad29cf5138f91e8faec2d7f340df40d481c4973",
+      "bytes": 91895752
+    },
+    {
+      "role": "training_evaluation",
+      "path": "anima_lora_forge/runs/alicia_bell_ordinary/alicia_bell_ordinary_400_v4/weights/alicia_bell_ordinary_anima_r32-step00000400.safetensors",
+      "sha256": "aa6a803e3037184336ef987c2ad29cf5138f91e8faec2d7f340df40d481c4973",
+      "bytes": 91895752
+    },
+    {
+      "role": "evaluation_metadata",
+      "path": "ComfyUI/models/loras/anima/自训评估/alicia_bell_ordinary_eval/step0400.metadata.json",
+      "sha256": "27052ceac0d99d9a31ee9151e842dae2deafe70663bd64b0b3ddf2c65f8c3095",
+      "bytes": 1821
+    },
+    {
+      "role": "retired_evaluation_fallback_alias",
+      "path": "anima_lora_forge/releases/alicia_bell_morning_star_anima_r32_v1/fallback_step0125.safetensors",
+      "sha256": "9bfefc07089af170c61df8dcee3c66790088e9b5585a648be6bb53130767aac1",
+      "bytes": 91897744
+    },
+    {
+      "role": "retired_evaluation_fallback_alias",
+      "path": "anima_lora_forge/releases/alicia_bell_ordinary_anima_r32_v1/fallback_step0200.safetensors",
+      "sha256": "37923c45bef3c5e8af3921e3cfca570dfa3434929f84822b3e56c2887270854c",
+      "bytes": 91895752
+    },
+    {
+      "role": "training_checkpoint_final_alias",
+      "path": "anima_lora_forge/runs/alicia_bell/alicia_bell_calibration_400_v1/weights/alicia_bell_anima_r32_calibration.safetensors",
+      "sha256": "9f4a8903b578887988e34d53c6cffbb9f3a725f04d45caa51a945e1c5948938b",
+      "bytes": 91878480,
+      "same_checkpoint_source": "anima_lora_forge/runs/alicia_bell/alicia_bell_calibration_400_v1/weights/alicia_bell_anima_r32_calibration-step00000400.safetensors",
+      "tensor_payload_sha256": "4d7b58fd2b4726ee8fa9745759ddd1c848caa202450669eecb4af5f4121c4bd7",
+      "source_tensor_payload_sha256": "4d7b58fd2b4726ee8fa9745759ddd1c848caa202450669eecb4af5f4121c4bd7",
+      "metadata_session_step_output_matched": true
+    },
+    {
+      "role": "training_checkpoint_final_alias",
+      "path": "anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_400_v2/weights/alicia_bell_morning_star_anima_r32.safetensors",
+      "sha256": "1a77af401e5df52b3dd03de69edfb08431a1383b31ddfa81196613681adffbc3",
+      "bytes": 91897728,
+      "same_checkpoint_source": "anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_400_v2/weights/alicia_bell_morning_star_anima_r32-step00000400.safetensors",
+      "tensor_payload_sha256": "b2efaf369f5cc95408f8b339357b27c641c5fc4f3d6e0f33c2bc31d0a0ef3c97",
+      "source_tensor_payload_sha256": "b2efaf369f5cc95408f8b339357b27c641c5fc4f3d6e0f33c2bc31d0a0ef3c97",
+      "metadata_session_step_output_matched": true
+    },
+    {
+      "role": "training_checkpoint_final_alias",
+      "path": "anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_refine_175_v1/weights/alicia_bell_morning_star_anima_r32_refine.safetensors",
+      "sha256": "d311e9e41d06e60af59b2bb1642c1c2172b8d94c37a5908d330d901162fee624",
+      "bytes": 91897744,
+      "same_checkpoint_source": "anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_refine_175_v1/weights/alicia_bell_morning_star_anima_r32_refine-step00000175.safetensors",
+      "tensor_payload_sha256": "5b40c3e36bb4c16978cdecf9f4c1d2163def823f40489164a2e79d5779b9aee3",
+      "source_tensor_payload_sha256": "5b40c3e36bb4c16978cdecf9f4c1d2163def823f40489164a2e79d5779b9aee3",
+      "metadata_session_step_output_matched": true
+    },
+    {
+      "role": "training_checkpoint_final_alias",
+      "path": "anima_lora_forge/runs/alicia_bell_ordinary/alicia_bell_ordinary_400_v4/weights/alicia_bell_ordinary_anima_r32.safetensors",
+      "sha256": "4d4788b419c65163d23f92b798a01bc06221182ab8ba9823722bb68fbcefb69a",
+      "bytes": 91895752,
+      "same_checkpoint_source": "anima_lora_forge/runs/alicia_bell_ordinary/alicia_bell_ordinary_400_v4/weights/alicia_bell_ordinary_anima_r32-step00000400.safetensors",
+      "tensor_payload_sha256": "bedca1b11f5d93028f4709f02bbdfdac23feaa0abc766ce654afa4d2316a3f0b",
+      "source_tensor_payload_sha256": "bedca1b11f5d93028f4709f02bbdfdac23feaa0abc766ce654afa4d2316a3f0b",
+      "metadata_session_step_output_matched": true
+    }
+  ],
+  "preserved": [
+    {
+      "path": "ComfyUI/models/loras/anima/自训角色/alicia_bell_morning_star_anima29_r32_v1.safetensors",
+      "sha256": "aef260a4f99b06c612f17101442be2e80d2b749c33be6eacc731545f922aeca1",
+      "bytes": 131241592
+    },
+    {
+      "path": "anima_lora_forge/releases/alicia_bell_morning_star_anima29_r32_v1/alicia_bell_morning_star_anima29_r32_v1.safetensors",
+      "sha256": "aef260a4f99b06c612f17101442be2e80d2b749c33be6eacc731545f922aeca1",
+      "bytes": 131241592
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训角色/alicia_bell_morning_star_anima_r32_v1.safetensors",
+      "sha256": "e62f86968ab6e75eb60c2da03c4ff8ff22f3c0504722c54f5eca662354301920",
+      "bytes": 91897744
+    },
+    {
+      "path": "anima_lora_forge/releases/alicia_bell_morning_star_anima_r32_v1/alicia_bell_morning_star_anima_r32_v1.safetensors",
+      "sha256": "e62f86968ab6e75eb60c2da03c4ff8ff22f3c0504722c54f5eca662354301920",
+      "bytes": 91897744
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训角色/alicia_bell_ordinary_anima_r32_v1.safetensors",
+      "sha256": "fd34bac14788c44da8e69f2f730578053078508e13f0806395f28e6aa81522bd",
+      "bytes": 91895752
+    },
+    {
+      "path": "anima_lora_forge/releases/alicia_bell_ordinary_anima_r32_v1/alicia_bell_ordinary_anima_r32_v1.safetensors",
+      "sha256": "fd34bac14788c44da8e69f2f730578053078508e13f0806395f28e6aa81522bd",
+      "bytes": 91895752
+    },
+    {
+      "path": "ComfyUI/models/loras/anima/自训角色/rosasha_anima_r32_v1.safetensors",
+      "sha256": "3b3679bfc88d4a4187f4318093917c8ab7c1c37f6b9cc2cf6535faa0eb803834",
+      "bytes": 91886168
+    },
+    {
+      "path": "anima_lora_forge/releases/rosasha_anima_r32_v1/rosasha_anima_r32_v1.safetensors",
+      "sha256": "3b3679bfc88d4a4187f4318093917c8ab7c1c37f6b9cc2cf6535faa0eb803834",
+      "bytes": 91886168
+    }
+  ],
+  "preflight": {
+    "queue": {
+      "queue_endpoint_http": 200,
+      "running_count": 0,
+      "pending_count": 0,
+      "references_target_eval_files": false
+    },
+    "active_matching_training_processes": 0,
+    "ntfs_evaluation_links": {
+      "installed_and_training_originals_share_inode": true,
+      "finished_versions_have_distinct_file_identities": true
+    },
+    "saved_production_or_history_workflow_references": 0,
+    "historical_evaluation_tools_and_manifests_are_not_production_dependencies": true,
+    "historical_evaluation_reruns_with_retired_weights_supported": false
+  },
+  "backup_policy": "No new checkpoint weight copies, archives, recycle-bin or rollback payload are retained. Receipts contain paths/hashes only.",
+  "checks": {
+    "disk_removal": "not_applied; all 51 targets still present",
+    "finished_weight_hashes": {
+      "pass": true,
+      "preserved_paths": 8,
+      "distinct_finished_versions": 4
+    },
+    "source_catalogue": {
+      "pass": true,
+      "sha256": "2d8fa9497e867d26082bce7e1160c6c10d50b0927160e84ae20eb2272440c434",
+      "rendered_document_sha256": "c75d8cdd183b0596839ac9ed7440502c762f6c2bde040891547ec8db707f81a4"
+    },
+    "snapshot_integrity": {
+      "pass": true,
+      "entries": 8533,
+      "failure_count": 0
+    },
+    "real_commit_hook": "pending",
+    "technical_catalogue": {
+      "pass": true,
+      "features": 18,
+      "referenced_files": 747
+    },
+    "manual_helper_validation": {
+      "parser_syntax_errors": 0,
+      "read_only_preview": {
+        "mode": "preview",
+        "pending_files": 51,
+        "already_absent": 0,
+        "preserved_versions": 4
+      },
+      "preview_log_sha256": "7195afa776b75d8def7d62f0f9d0ecbce429dfa5a36f7ffe116761e4189ae701",
+      "tampered_target_binding_rejected": true,
+      "tampered_preservation_binding_rejected": true,
+      "independent_static_review_pass": true,
+      "deletion_mode_executed": false
+    }
+  },
+  "runtime_checkpoint_cleanup_applied": false,
+  "service_restarted": false,
+  "queue_cleared": false,
+  "database_replaced": false,
+  "remote_push": false,
+  "rollback": "No checkpoint-weight rollback: user requested deletion without backup. Preserve four selected finished weights, datasets, prompts and training source.",
+  "blocked_at": "2026-10-06T17:00:55.486284+00:00",
+  "execution_policy": {
+    "batch_delete_rejected": true,
+    "single_explicit_hash_checked_file_delete_rejected": true,
+    "stated_reason": "blocked by policy",
+    "tool_commands_executed": false,
+    "all_51_target_files_still_present": true,
+    "user_authorization_already_explicit": true
+  },
+  "manual_helper": "scripts/remove_reviewed_eval_checkpoints.ps1",
+  "manual_execution_result": "not_observed",
+  "source_catalogue": {
+    "previous_sha256": "9507a30fc5a5e03ae63947ebf4a6fbcca32364990a39f6bb30b70179b2ebeede",
+    "sha256": "2d8fa9497e867d26082bce7e1160c6c10d50b0927160e84ae20eb2272440c434",
+    "actual_presence_flags_changed": false,
+    "pending_evaluation_count": 15,
+    "planned_remaining_active_loras": 286,
+    "actual_observed_loras": 301
+  },
+  "helper_sha256": "6dc2220db022e3b0b885aaf03cc0a1d0597b3e8bb3980cb804255c0f8ec4193d",
+  "prepared_review_completed_at": "2026-10-06T17:05:29.242053+00:00"
+}

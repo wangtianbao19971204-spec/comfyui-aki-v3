@@ -9,7 +9,8 @@
     "上游声明摘要与实际本机 SHA 分开；只有 local_sha256 非空项本轮读取过全部内容。",
     "工作流引用是静态字符串匹配；正式 UAP v2 按当前原文件重查，其他工作流关系沿用捕获时记录，模式开关及 GPU 未验收。",
     "来源页／下载入口不包含鉴权值、原始缓存或签名链接。网站版本、版权许可和资源可用性需下载时复核。",
-    "2026-10-07 计数复核：19 个本地训练权重路径实际为 4 个成品使用版本、15 个评估检查点，内容去重后为 17 份；对应 2 个角色、6 个已匹配训练 session，不是 19 个独立成品。详见 docs/receipts/model_source_recount_20261007.json。"
+    "2026-10-07 计数复核：19 个本地训练权重路径实际为 4 个成品使用版本、15 个评估检查点，内容去重后为 17 份；对应 2 个角色、6 个已匹配训练 session，不是 19 个独立成品。详见 docs/receipts/model_source_recount_20261007.json。",
+    "2026-10-07 清理请求：15 个评估权重及对应训练副本／别名待删除，不迁移或恢复；执行环境策略阻止，全部仍存在。来源目录的 observed_present 和 local_sha256 继续反映现场，不把计划写成已删除。"
   ],
   "assets": [
     {
@@ -10053,6 +10054,7 @@
         ]
       },
       "notes": [
+        "当前须保留的成品；其正式发布副本为 anima_lora_forge/releases/alicia_bell_morning_star_anima29_r32_v1/alicia_bell_morning_star_anima29_r32_v1.safetensors。评估路径及训练源路径待清理，恢复使用此成品或正式发布副本。",
         "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。",
         "模型家族来自保存的版本元数据：Anima 2.9B v1.0 BF16；加载前按原发布说明和当前底模核对。"
       ]
@@ -10082,9 +10084,9 @@
         ]
       },
       "notes": [
+        "当前须保留的成品；其正式发布副本为 anima_lora_forge/releases/alicia_bell_morning_star_anima_r32_v1/alicia_bell_morning_star_anima_r32_v1.safetensors。评估路径及训练源路径待清理，恢复使用此成品或正式发布副本。",
         "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。",
-        "模型家族来自保存的版本元数据：Anima Base v1.0；加载前按原发布说明和当前底模核对。",
-        "相同内容的另一个已保留位置：ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0150.safetensors；两个位置均保留，不计作两个不同内容。"
+        "模型家族来自保存的版本元数据：Anima Base v1.0；加载前按原发布说明和当前底模核对。"
       ]
     },
     {
@@ -10112,9 +10114,9 @@
         ]
       },
       "notes": [
+        "当前须保留的成品；其正式发布副本为 anima_lora_forge/releases/alicia_bell_ordinary_anima_r32_v1/alicia_bell_ordinary_anima_r32_v1.safetensors。评估路径及训练源路径待清理，恢复使用此成品或正式发布副本。",
         "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。",
-        "模型家族来自保存的版本元数据：Anima Base v1.0；加载前按原发布说明和当前底模核对。",
-        "相同内容的另一个已保留位置：ComfyUI/models/loras/anima/自训评估/alicia_bell_ordinary_eval/step0300.safetensors；两个位置均保留，不计作两个不同内容。"
+        "模型家族来自保存的版本元数据：Anima Base v1.0；加载前按原发布说明和当前底模核对。"
       ]
     },
     {
@@ -10142,6 +10144,7 @@
         ]
       },
       "notes": [
+        "当前须保留的成品；其正式发布副本为 anima_lora_forge/releases/rosasha_anima_r32_v1/rosasha_anima_r32_v1.safetensors。评估路径及训练源路径待清理，恢复使用此成品或正式发布副本。",
         "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
       ]
     },
@@ -10160,9 +10163,9 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
-        "original_weight_required": true,
-        "reproducibility": "weights_backup_required",
+        "recipe_reference": "docs/receipts/model_checkpoint_cleanup_20261007.json",
+        "original_weight_required": false,
+        "reproducibility": "用户指定待清理，不迁移／不恢复",
         "notes": [
           "文件身份：训练过程的评估检查点；不是单独成品；训练步数 100。",
           "本机训练输出：anima_lora_forge/runs/alicia_bell/alicia_bell_calibration_400_v1/weights/alicia_bell_anima_r32_calibration-step00000100.safetensors；本轮完整 SHA-256 与现有文件一致。",
@@ -10170,7 +10173,7 @@
         ]
       },
       "notes": [
-        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
+        "2026-10-07 用户要求删除，不备份／迁移／恢复。执行环境阻止删除，文件当前仍存在；此处存在状态和摘要未伪造为已清理。"
       ]
     },
     {
@@ -10188,9 +10191,9 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
-        "original_weight_required": true,
-        "reproducibility": "weights_backup_required",
+        "recipe_reference": "docs/receipts/model_checkpoint_cleanup_20261007.json",
+        "original_weight_required": false,
+        "reproducibility": "用户指定待清理，不迁移／不恢复",
         "notes": [
           "文件身份：训练过程的评估检查点；不是单独成品；训练步数 200。",
           "本机训练输出：anima_lora_forge/runs/alicia_bell/alicia_bell_calibration_400_v1/weights/alicia_bell_anima_r32_calibration-step00000200.safetensors；本轮完整 SHA-256 与现有文件一致。",
@@ -10198,7 +10201,7 @@
         ]
       },
       "notes": [
-        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
+        "2026-10-07 用户要求删除，不备份／迁移／恢复。执行环境阻止删除，文件当前仍存在；此处存在状态和摘要未伪造为已清理。"
       ]
     },
     {
@@ -10216,9 +10219,9 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
-        "original_weight_required": true,
-        "reproducibility": "weights_backup_required",
+        "recipe_reference": "docs/receipts/model_checkpoint_cleanup_20261007.json",
+        "original_weight_required": false,
+        "reproducibility": "用户指定待清理，不迁移／不恢复",
         "notes": [
           "文件身份：训练过程的评估检查点；不是单独成品；训练步数 300。",
           "本机训练输出：anima_lora_forge/runs/alicia_bell/alicia_bell_calibration_400_v1/weights/alicia_bell_anima_r32_calibration-step00000300.safetensors；本轮完整 SHA-256 与现有文件一致。",
@@ -10226,7 +10229,7 @@
         ]
       },
       "notes": [
-        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
+        "2026-10-07 用户要求删除，不备份／迁移／恢复。执行环境阻止删除，文件当前仍存在；此处存在状态和摘要未伪造为已清理。"
       ]
     },
     {
@@ -10244,9 +10247,9 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
-        "original_weight_required": true,
-        "reproducibility": "weights_backup_required",
+        "recipe_reference": "docs/receipts/model_checkpoint_cleanup_20261007.json",
+        "original_weight_required": false,
+        "reproducibility": "用户指定待清理，不迁移／不恢复",
         "notes": [
           "文件身份：训练过程的评估检查点；不是单独成品；训练步数 400。",
           "本机训练输出：anima_lora_forge/runs/alicia_bell/alicia_bell_calibration_400_v1/weights/alicia_bell_anima_r32_calibration-step00000400.safetensors；本轮完整 SHA-256 与现有文件一致。",
@@ -10254,7 +10257,7 @@
         ]
       },
       "notes": [
-        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
+        "2026-10-07 用户要求删除，不备份／迁移／恢复。执行环境阻止删除，文件当前仍存在；此处存在状态和摘要未伪造为已清理。"
       ]
     },
     {
@@ -10272,9 +10275,9 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
-        "original_weight_required": true,
-        "reproducibility": "weights_backup_required",
+        "recipe_reference": "docs/receipts/model_checkpoint_cleanup_20261007.json",
+        "original_weight_required": false,
+        "reproducibility": "用户指定待清理，不迁移／不恢复",
         "notes": [
           "文件身份：训练过程的评估检查点；不是单独成品；训练步数 100。",
           "本机训练输出：anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_400_v2/weights/alicia_bell_morning_star_anima_r32-step00000100.safetensors；本轮完整 SHA-256 与现有文件一致。",
@@ -10282,7 +10285,7 @@
         ]
       },
       "notes": [
-        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
+        "2026-10-07 用户要求删除，不备份／迁移／恢复。执行环境阻止删除，文件当前仍存在；此处存在状态和摘要未伪造为已清理。"
       ]
     },
     {
@@ -10300,9 +10303,9 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
-        "original_weight_required": true,
-        "reproducibility": "weights_backup_required",
+        "recipe_reference": "docs/receipts/model_checkpoint_cleanup_20261007.json",
+        "original_weight_required": false,
+        "reproducibility": "用户指定待清理，不迁移／不恢复",
         "notes": [
           "文件身份：训练过程的评估检查点；不是单独成品；训练步数 125。",
           "本机训练输出：anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_refine_175_v1/weights/alicia_bell_morning_star_anima_r32_refine-step00000125.safetensors；本轮完整 SHA-256 与现有文件一致。",
@@ -10310,7 +10313,7 @@
         ]
       },
       "notes": [
-        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
+        "2026-10-07 用户要求删除，不备份／迁移／恢复。执行环境阻止删除，文件当前仍存在；此处存在状态和摘要未伪造为已清理。"
       ]
     },
     {
@@ -10328,9 +10331,9 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
-        "original_weight_required": true,
-        "reproducibility": "weights_backup_required",
+        "recipe_reference": "docs/receipts/model_checkpoint_cleanup_20261007.json",
+        "original_weight_required": false,
+        "reproducibility": "用户指定待清理，不迁移／不恢复",
         "notes": [
           "文件身份：训练过程的评估检查点；不是单独成品；训练步数 150。",
           "本机训练输出：anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_refine_175_v1/weights/alicia_bell_morning_star_anima_r32_refine-step00000150.safetensors；本轮完整 SHA-256 与现有文件一致。",
@@ -10338,8 +10341,7 @@
         ]
       },
       "notes": [
-        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。",
-        "相同内容的另一个已保留位置：ComfyUI/models/loras/anima/自训角色/alicia_bell_morning_star_anima_r32_v1.safetensors；两个位置均保留，不计作两个不同内容。"
+        "2026-10-07 用户要求删除，不备份／迁移／恢复。执行环境阻止删除，文件当前仍存在；此处存在状态和摘要未伪造为已清理。"
       ]
     },
     {
@@ -10357,9 +10359,9 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
-        "original_weight_required": true,
-        "reproducibility": "weights_backup_required",
+        "recipe_reference": "docs/receipts/model_checkpoint_cleanup_20261007.json",
+        "original_weight_required": false,
+        "reproducibility": "用户指定待清理，不迁移／不恢复",
         "notes": [
           "文件身份：训练过程的评估检查点；不是单独成品；训练步数 175。",
           "本机训练输出：anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_refine_175_v1/weights/alicia_bell_morning_star_anima_r32_refine-step00000175.safetensors；本轮完整 SHA-256 与现有文件一致。",
@@ -10367,7 +10369,7 @@
         ]
       },
       "notes": [
-        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
+        "2026-10-07 用户要求删除，不备份／迁移／恢复。执行环境阻止删除，文件当前仍存在；此处存在状态和摘要未伪造为已清理。"
       ]
     },
     {
@@ -10385,9 +10387,9 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
-        "original_weight_required": true,
-        "reproducibility": "weights_backup_required",
+        "recipe_reference": "docs/receipts/model_checkpoint_cleanup_20261007.json",
+        "original_weight_required": false,
+        "reproducibility": "用户指定待清理，不迁移／不恢复",
         "notes": [
           "文件身份：训练过程的评估检查点；不是单独成品；训练步数 200。",
           "本机训练输出：anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_400_v2/weights/alicia_bell_morning_star_anima_r32-step00000200.safetensors；本轮完整 SHA-256 与现有文件一致。",
@@ -10395,7 +10397,7 @@
         ]
       },
       "notes": [
-        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
+        "2026-10-07 用户要求删除，不备份／迁移／恢复。执行环境阻止删除，文件当前仍存在；此处存在状态和摘要未伪造为已清理。"
       ]
     },
     {
@@ -10413,9 +10415,9 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
-        "original_weight_required": true,
-        "reproducibility": "weights_backup_required",
+        "recipe_reference": "docs/receipts/model_checkpoint_cleanup_20261007.json",
+        "original_weight_required": false,
+        "reproducibility": "用户指定待清理，不迁移／不恢复",
         "notes": [
           "文件身份：训练过程的评估检查点；不是单独成品；训练步数 300。",
           "本机训练输出：anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_400_v2/weights/alicia_bell_morning_star_anima_r32-step00000300.safetensors；本轮完整 SHA-256 与现有文件一致。",
@@ -10423,7 +10425,7 @@
         ]
       },
       "notes": [
-        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
+        "2026-10-07 用户要求删除，不备份／迁移／恢复。执行环境阻止删除，文件当前仍存在；此处存在状态和摘要未伪造为已清理。"
       ]
     },
     {
@@ -10441,9 +10443,9 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
-        "original_weight_required": true,
-        "reproducibility": "weights_backup_required",
+        "recipe_reference": "docs/receipts/model_checkpoint_cleanup_20261007.json",
+        "original_weight_required": false,
+        "reproducibility": "用户指定待清理，不迁移／不恢复",
         "notes": [
           "文件身份：训练过程的评估检查点；不是单独成品；训练步数 400。",
           "本机训练输出：anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_400_v2/weights/alicia_bell_morning_star_anima_r32-step00000400.safetensors；本轮完整 SHA-256 与现有文件一致。",
@@ -10451,7 +10453,7 @@
         ]
       },
       "notes": [
-        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
+        "2026-10-07 用户要求删除，不备份／迁移／恢复。执行环境阻止删除，文件当前仍存在；此处存在状态和摘要未伪造为已清理。"
       ]
     },
     {
@@ -10469,9 +10471,9 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
-        "original_weight_required": true,
-        "reproducibility": "weights_backup_required",
+        "recipe_reference": "docs/receipts/model_checkpoint_cleanup_20261007.json",
+        "original_weight_required": false,
+        "reproducibility": "用户指定待清理，不迁移／不恢复",
         "notes": [
           "文件身份：训练过程的评估检查点；不是单独成品；训练步数 100。",
           "本机训练输出：anima_lora_forge/runs/alicia_bell_ordinary/alicia_bell_ordinary_400_v4/weights/alicia_bell_ordinary_anima_r32-step00000100.safetensors；本轮完整 SHA-256 与现有文件一致。",
@@ -10479,7 +10481,7 @@
         ]
       },
       "notes": [
-        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
+        "2026-10-07 用户要求删除，不备份／迁移／恢复。执行环境阻止删除，文件当前仍存在；此处存在状态和摘要未伪造为已清理。"
       ]
     },
     {
@@ -10497,9 +10499,9 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
-        "original_weight_required": true,
-        "reproducibility": "weights_backup_required",
+        "recipe_reference": "docs/receipts/model_checkpoint_cleanup_20261007.json",
+        "original_weight_required": false,
+        "reproducibility": "用户指定待清理，不迁移／不恢复",
         "notes": [
           "文件身份：训练过程的评估检查点；不是单独成品；训练步数 200。",
           "本机训练输出：anima_lora_forge/runs/alicia_bell_ordinary/alicia_bell_ordinary_400_v4/weights/alicia_bell_ordinary_anima_r32-step00000200.safetensors；本轮完整 SHA-256 与现有文件一致。",
@@ -10507,7 +10509,7 @@
         ]
       },
       "notes": [
-        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
+        "2026-10-07 用户要求删除，不备份／迁移／恢复。执行环境阻止删除，文件当前仍存在；此处存在状态和摘要未伪造为已清理。"
       ]
     },
     {
@@ -10525,9 +10527,9 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
-        "original_weight_required": true,
-        "reproducibility": "weights_backup_required",
+        "recipe_reference": "docs/receipts/model_checkpoint_cleanup_20261007.json",
+        "original_weight_required": false,
+        "reproducibility": "用户指定待清理，不迁移／不恢复",
         "notes": [
           "文件身份：训练过程的评估检查点；不是单独成品；训练步数 300。",
           "本机训练输出：anima_lora_forge/runs/alicia_bell_ordinary/alicia_bell_ordinary_400_v4/weights/alicia_bell_ordinary_anima_r32-step00000300.safetensors；本轮完整 SHA-256 与现有文件一致。",
@@ -10535,8 +10537,7 @@
         ]
       },
       "notes": [
-        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。",
-        "相同内容的另一个已保留位置：ComfyUI/models/loras/anima/自训角色/alicia_bell_ordinary_anima_r32_v1.safetensors；两个位置均保留，不计作两个不同内容。"
+        "2026-10-07 用户要求删除，不备份／迁移／恢复。执行环境阻止删除，文件当前仍存在；此处存在状态和摘要未伪造为已清理。"
       ]
     },
     {
@@ -10554,9 +10555,9 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
-        "original_weight_required": true,
-        "reproducibility": "weights_backup_required",
+        "recipe_reference": "docs/receipts/model_checkpoint_cleanup_20261007.json",
+        "original_weight_required": false,
+        "reproducibility": "用户指定待清理，不迁移／不恢复",
         "notes": [
           "文件身份：训练过程的评估检查点；不是单独成品；训练步数 400。",
           "本机训练输出：anima_lora_forge/runs/alicia_bell_ordinary/alicia_bell_ordinary_400_v4/weights/alicia_bell_ordinary_anima_r32-step00000400.safetensors；本轮完整 SHA-256 与现有文件一致。",
@@ -10564,7 +10565,7 @@
         ]
       },
       "notes": [
-        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
+        "2026-10-07 用户要求删除，不备份／迁移／恢复。执行环境阻止删除，文件当前仍存在；此处存在状态和摘要未伪造为已清理。"
       ]
     },
     {
