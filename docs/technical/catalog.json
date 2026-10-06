@@ -51,6 +51,10 @@
         "snapshot/runtime/production_tools/profiles.json",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/__init__.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules.json"
+      ],
+      "examples": [
+        "docs/technical/runtime/independent-services.md",
+        "snapshot/runtime/ComfyUI/extra_model_paths.yaml.example"
       ]
     },
     {
@@ -93,6 +97,10 @@
         "snapshot/runtime/production_tools/test_uap_navigation.cjs",
         "snapshot/runtime/production_tools/test_uap_daily_controls.cjs",
         "snapshot/runtime/production_tools/test_uap_compact_widgets.cjs"
+      ],
+      "examples": [
+        "snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+        "snapshot/runtime/production_tools/UAP统一工作台说明.md"
       ]
     },
     {
@@ -126,6 +134,9 @@
         "snapshot/runtime/production_tools/merge_unified_workflow.py",
         "snapshot/runtime/production_tools/validate_uap_workflow.py",
         "snapshot/runtime/production_tools/analyze_workflow_dependencies.py"
+      ],
+      "examples": [
+        "snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json"
       ]
     },
     {
@@ -154,6 +165,10 @@
       "acceptance": "checked-source",
       "watch": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/"
+      ],
+      "examples": [
+        "examples/external-assets/asset-record.example.json",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/settings.json.example"
       ]
     },
     {
@@ -169,6 +184,10 @@
       "acceptance": "checked-source",
       "watch": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-PixAI-Tagger/"
+      ],
+      "examples": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-PixAI-Tagger/README.md",
+        "examples/external-assets/asset-record.example.json"
       ]
     },
     {
@@ -203,6 +222,9 @@
         "snapshot/runtime/tools/",
         "snapshot/runtime/启动_ComfyUI_生产.cmd",
         "snapshot/runtime/停止_ComfyUI_生产.cmd"
+      ],
+      "examples": [
+        "docs/technical/runtime/independent-services.md"
       ]
     },
     {
@@ -246,6 +268,10 @@
       "acceptance": "historical",
       "watch": [
         "snapshot/runtime/benchmark_reports/source_update_flow/"
+      ],
+      "examples": [
+        "snapshot/runtime/benchmark_reports/source_update_flow/historical_batch.json",
+        "examples/external-assets/annotations.example.json"
       ]
     },
     {
@@ -293,6 +319,9 @@
       "watch": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/tag_manager.js"
+      ],
+      "examples": [
+        "database/fixtures/tags.example.json"
       ]
     },
     {
@@ -335,6 +364,9 @@
       "watch": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/selector_tools.js"
+      ],
+      "examples": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/tests/anima_shared_prompt_data.test.mjs"
       ]
     },
     {
@@ -383,6 +415,10 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_resource.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Custom-Scripts/web/js/autocompleter.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Custom-Scripts/web/js/common/autocomplete.js"
+      ],
+      "examples": [
+        "examples/external-assets/annotations.example.json",
+        "examples/external-assets/preview.example.svg"
       ]
     },
     {
@@ -414,6 +450,10 @@
       "acceptance": "checked-source",
       "watch": [
         "snapshot/runtime/character_lora_forge/"
+      ],
+      "examples": [
+        "examples/external-assets/annotations.example.json",
+        "snapshot/runtime/character_lora_forge/README.md"
       ]
     },
     {
@@ -475,6 +515,9 @@
       "acceptance": "checked-source",
       "watch": [
         "snapshot/runtime/anima_lora_forge/"
+      ],
+      "examples": [
+        "snapshot/runtime/anima_lora_forge/templates/new_character.profile.json"
       ]
     },
     {
@@ -493,6 +536,9 @@
       "acceptance": "historical",
       "watch": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-2.9B-loraPatch/"
+      ],
+      "examples": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-2.9B-loraPatch/README.md"
       ]
     },
     {
@@ -540,7 +586,8 @@
       ],
       "evidence": [
         "docs/receipts/source_coverage_20261005.json",
-        "docs/receipts/isolated_boot_20261006.json"
+        "docs/receipts/isolated_boot_20261006.json",
+        "docs/receipts/reassurance_20261006.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -557,7 +604,16 @@
         "tests/test_technical_archive.py",
         "tests/test_security_guard.py",
         "tests/test_security_names.py",
-        "tests/test_training_trigger_reviews.py"
+        "tests/test_training_trigger_reviews.py",
+        "governance/",
+        "examples/",
+        "snapshot/library/",
+        "snapshot/inventory/"
+      ],
+      "examples": [
+        "governance/workspace-layout.example.json",
+        "docs/MAINTENANCE.md",
+        "examples/external-assets/annotations.example.json"
       ]
     },
     {
@@ -589,6 +645,9 @@
         "tests/test_release.py",
         "tests/test_repository.py",
         "tests/test_technical_catalog.py"
+      ],
+      "examples": [
+        "docs/VERSIONING.md"
       ]
     },
     {
@@ -607,6 +666,11 @@
       "watch": [
         "database/",
         "tests/test_database_contract.py"
+      ],
+      "examples": [
+        "database/fixtures/tags.example.json",
+        "database/fixtures/history.example.json",
+        "database/fixtures/danbooru.example.json"
       ]
     },
     {
@@ -626,6 +690,9 @@
         "snapshot/runtime/remote_llm_guard/",
         "scripts/extract_remote_llm.py",
         "tests/test_remote_llm_config.py"
+      ],
+      "examples": [
+        "snapshot/runtime/remote_llm_guard/remote-llm.config.example.json"
       ]
     }
   ]

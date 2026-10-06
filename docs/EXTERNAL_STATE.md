@@ -19,6 +19,8 @@
 
 这些新增资源的可移植相对路径、角色和用途存于 [支持文件契约](../governance/runtime-support.json)；真实数据库指纹仍只存仓外。新增项全为 reference，不生成权重副本或数据库备份。
 
+2026-10-06 再次核验时，旧 current 清单有一份配置与三库 WAL 指纹变化，已保留旧清单并重新 inventory。最新时间点清单为仓外 `manifests/external-runtime-recheck-20261006-01.json`，current 已切到该清单；18 份 copy 小配置另外物化到新的私密备份目录，347 份 reference 仍只登记位置。本次没有创建数据库备份或复制模型/图片，不能称完整实例已经备份或移机还原。后续再次漂移仍须重新登记；摘要见 [复核收据](receipts/reassurance_20261006.json)。
+
 ## 使用与边界
 
 计划 JSON 为 `schema: 1`，包含 `roots`（仓外绝对本机根映射）与 `entries`。每项只允许 `id`、`root`、`source`、`target`、`category`、`action`，其中 source/target 必须为规范的 `/` 相对路径。不得包含密钥值。示意 entry：

@@ -25,7 +25,9 @@ python -X utf8 -B scripts/technical_catalog.py check
 python -X utf8 -B scripts/technical_catalog.py check --staged --enforce-changes
 ```
 
-检查实现/测试/证据文件和可移植相对链接，并根据最具体的源码归属要求对应说明随提交更新。它不自动验证 UI、语义准确率或 GPU 画质；功能实测仍是独立门禁。
+检查实现/测试/证据/示例文件和可移植相对链接，并根据最具体的源码归属要求对应说明随提交更新。17 项功能各有非空 `examples` 清单：可以是现行操作说明、真实工作流模板、隔离测试样例或明确标为虚构的格式/标注文件，不能以路径引用冒充真实媒体或功能实测。缺文件、未跟踪或仅在工作树补齐而未进入暂存区的示例不能通过相应门禁。
+
+源码以外的 `governance/`、`examples/`、`snapshot/library/` 和 `snapshot/inventory/` 更新同样需要对应技术记录；这不授权手工改库分片或覆盖在线数据。它不自动验证 UI、语义准确率或 GPU 画质；功能实测仍是独立门禁。
 
 ## 唯一来源与资料边界
 
@@ -37,4 +39,5 @@ python -X utf8 -B scripts/technical_catalog.py check --staged --enforce-changes
 
 ## 更新记录
 
+- 2026-10-06：再次复核 17 项功能并登记 28 个示例入口；补多来源图片、缩略图、源输入、缓存和训练图/caption 的虚构标注样例，以及独立服务的领域导航。示例存在性与治理/资料改动说明纳入提交检查；最新复核见 [收据](../receipts/reassurance_20261006.json)。
 - 2026-10-05：从统一主仓拓展为按功能分层接手；补核实现备份遗漏，增加功能目录、短技术更新约束和独立维护版本机制。并行功能改动以各自最终收据为准。

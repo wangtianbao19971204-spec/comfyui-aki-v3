@@ -4,6 +4,8 @@
 
 仓库唯一视觉占位样例在 [`examples/external-assets/preview.example.svg`](../examples/external-assets/preview.example.svg)，是自行绘制的中性 SVG，不读取真实图库。登记格式见 [`asset-record.example.json`](../examples/external-assets/asset-record.example.json)，机器可读的目录表见 [`locations.json`](../examples/external-assets/locations.json)。没有制造假的 `.safetensors`、`.pt`、`.gguf` 或能被加载器误认的空模型文件。
 
+多图片、缓存、源输入与训练数据的标注格式见 [`annotations.example.json`](../examples/external-assets/annotations.example.json)：虚构 Tag 记录保留两来源图片、原图/缩略图与主预览关系；源网页/Word 以独立来源身份和冻结输入路径登记；缓存标明可变数据类别；训练图与同名 TXT caption 成对登记，并记录视角、服装与审核状态。该文件只解释保存关系，不定义生产加载器接口，不带真实图片、缓存、文档或鉴权值。
+
 ## 路径怎么理解
 
 下文 `ComfyUI/...` 均相对**运行根**，不是仓库的 `snapshot/` 根，也不是某台机器的盘符。离线还原生成运行目录后，才把外部文件放到对应位置；不要把权重复制到 `snapshot/runtime/` 后强制加入 Git。
@@ -42,3 +44,7 @@
 真实提示词内容按用户决定保留；示例、库结构和代码同在一个主仓库。所有可达提交和引用都须扫描凭证，尤其旧插件缓存、设置、日志、下载 URL 和 `.env`。大资源目录及其缓存继续忽略；不能用 `git add -f` 绕过资源/凭证边界。模型/媒体是否可以外部分发还受各自许可约束，登记不构成再分发授权。
 
 本页只定义放置规范与示例，不会自动下载、迁移、启用任何模型或运行工作流。
+
+## 更新记录
+
+- 2026-10-06：补齐仓外多图片、缓存、源网页/Word 和训练图/caption 的虚构标注样例；明确示例不替代原件、配套版本、资源指纹或实际恢复验收。

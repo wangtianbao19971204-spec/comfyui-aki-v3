@@ -12,6 +12,7 @@ from collections import Counter
 import json
 import os
 from pathlib import Path
+import stat
 import subprocess
 import sys
 
@@ -27,7 +28,9 @@ EXPOSURE_PATTERNS = (
     (r'C:\\Users\\Administrator', 'windows_user_profile'),
 )
 
-WALK_SKIP = {'.cache', '.git', '__pycache__', 'node_modules', 'output', 'temp'}
+# Scan cache/output directories too: a repository marker there still breaks the
+# claim that the runtime has one development Git. Only Git metadata is opaque.
+WALK_SKIP = {'.git'}
 
 AREA_RULES = (
     ('docs/technical/archive/', 'docs_technical_archive'),
@@ -55,31 +58,70 @@ AREA_RULES = (
 
 def is_reparse_point(path):
     """True for a symlink or a Windows junction, so a walk never crosses out."""
-    if os.path.islink(path):
-        return True
-    checker = getattr(os.path, 'isjunction', None)
-    return bool(checker and checker(path))
+    info = Path(path).lstat()
+    return bool(stat.S_ISLNK(info.st_mode)
+                or getattr(info, 'st_file_attributes', 0) & 0x400)
+
+
+def scan_repository_markers(root, label):
+    """Find .git files/directories/links and bare-repository shapes, read-only.
+
+    Marker contents, including worktree .git files and bare HEAD files, are
+    never read. Traversal failures are reported so callers can fail closed.
+    """
+    root = Path(root).absolute()
+    markers, bare, errors = [], [], []
+    skipped_reparse_points = 0
+
+    def failure(exc):
+        errors.append({'root': label, 'path': str(getattr(exc, 'filename', None) or root),
+                       'error': type(exc).__name__})
+
+    try:
+        root_present = root.is_dir() and not is_reparse_point(root)
+    except OSError as exc:
+        failure(exc)
+        root_present = False
+    if not root_present:
+        return {'root_present': False, 'git_markers': markers,
+                'bare_repositories': bare, 'traversal_errors': errors,
+                'skipped_reparse_points': skipped_reparse_points}
+
+    for directory, folders, names in os.walk(root, followlinks=False, onerror=failure):
+        base = Path(directory)
+        # A bare repository need not have a *.git name. Recognise its layout
+        # without reading HEAD or descending through links.
+        if 'HEAD' in names and {'objects', 'refs'}.issubset(folders):
+            bare.append({'root': label, 'path': str(base), 'kind': 'bare_shape'})
+        keep = []
+        # Ordinary output/media files need no stat or content read here.
+        for name in [*folders, *(name for name in names if name.casefold() == '.git')]:
+            path = base / name
+            try:
+                linked = is_reparse_point(path)
+            except OSError as exc:
+                failure(exc)
+                continue
+            if name.casefold() == '.git':
+                kind = 'reparse' if linked else 'directory' if name in folders else 'file'
+                markers.append({'root': label, 'path': str(path), 'kind': kind})
+                continue
+            if name in folders:
+                if linked:
+                    skipped_reparse_points += 1
+                else:
+                    keep.append(name)
+        folders[:] = keep
+    return {'root_present': True,
+            'git_markers': sorted(markers, key=lambda item: item['path'].casefold()),
+            'bare_repositories': sorted(bare, key=lambda item: item['path'].casefold()),
+            'traversal_errors': errors,
+            'skipped_reparse_points': skipped_reparse_points}
 
 
 def scan_git_directories(root, label):
-    """Return every .git directory under root without following reparse points."""
-    root = Path(root).resolve()
-    found = []
-    for directory, folders, _ in os.walk(root, followlinks=False):
-        base = Path(directory)
-        keep = []
-        for name in folders:
-            path = base / name
-            if is_reparse_point(path):
-                continue
-            if name == '.git':
-                found.append({'root': label, 'path': str(path)})
-                continue
-            if name in WALK_SKIP:
-                continue
-            keep.append(name)
-        folders[:] = keep
-    return sorted(found, key=lambda item: item['path'].casefold())
+    """Compatibility entry point; includes .git files and link markers too."""
+    return scan_repository_markers(root, label)['git_markers']
 
 
 def scan_bare_git_directories(root, label):
@@ -112,21 +154,25 @@ def read_retired(repo=REPO):
 
 def classify_runtime_repos(runtime, repo=REPO):
     """Compare observed repositories with the retired-Git registry."""
-    runtime = Path(runtime).resolve()
-    repo = Path(repo).resolve()
-    expected = (repo / '.git').resolve()
+    runtime = Path(runtime).absolute()
+    repo = Path(repo).absolute()
+    expected = repo / '.git'
     retired = read_retired(repo)
     retired_paths = {item['runtime_path'] for item in retired['repositories']}
-    observed = scan_git_directories(runtime, 'runtime')
+    scanned = scan_repository_markers(runtime, 'runtime')
+    observed = scanned['git_markers']
+    expected_present = any(Path(item['path']) == expected and item['kind'] == 'directory'
+                           for item in observed)
+    expected_location = repo == runtime / SOLE_DEVELOPMENT_GIT
     unexpected = []
     still_present = []
     for item in observed:
         path = Path(item['path'])
-        if path.resolve() == expected:
+        if path == expected and item['kind'] == 'directory':
             continue
         unexpected.append(item)
         try:
-            relative = path.parent.resolve().relative_to(runtime).as_posix()
+            relative = path.parent.relative_to(runtime).as_posix()
         except ValueError:
             continue
         if relative in retired_paths:
@@ -134,11 +180,27 @@ def classify_runtime_repos(runtime, repo=REPO):
     return {
         'sole_development_git': str(expected),
         'sole_development_git_expected_relative': SOLE_DEVELOPMENT_GIT,
-        'observed_git_directories': observed,
+        'runtime_root_present': scanned['root_present'],
+        'expected_git_directory_observed': expected_present,
+        'expected_repository_location_matches': expected_location,
+        'observed_git_directories': [item for item in observed if item['kind'] == 'directory'],
+        'observed_git_markers': observed,
         'observed_count': len(observed),
         'unexpected_git_directories': unexpected,
+        'unexpected_git_markers': unexpected,
+        'unexpected_bare_git_repositories': scanned['bare_repositories'],
+        'traversal_errors': scanned['traversal_errors'],
+        'scan_scope': {'all_runtime_subdirectories': True,
+                       'git_metadata_entered': False,
+                       'reparse_points_followed': False,
+                       'skipped_reparse_points': scanned['skipped_reparse_points'],
+                       'git_file_contents_read': False},
         'retired_markers_registered': retired.get('retired_git_markers'),
         'retired_markers_still_present': still_present,
+        'sole_development_git_holds': bool(scanned['root_present'] and expected_present
+                                          and expected_location and not unexpected
+                                          and not scanned['bare_repositories']
+                                          and not scanned['traversal_errors']),
     }
 
 
@@ -156,7 +218,9 @@ def classify_external_repos(external):
         'bare_git_directories': bare,
         'bare_count': len(bare),
         'classification': 'archive_and_validation_only',
-        'note': 'Archived history and validation clones are not development sources.',
+        'note': ('Archived history and validation clones are not development sources. '
+                 'This is a presence inventory and role boundary, not permission '
+                 'to develop in or publish any external repository.'),
     }
 
 
@@ -231,10 +295,6 @@ def audit(runtime=DEFAULT_RUNTIME, external=DEFAULT_EXTERNAL, repo=REPO):
         'runtime_root': str(Path(runtime).resolve()),
         'git_uniqueness': {
             **uniqueness,
-            'sole_development_git_holds': (
-                not uniqueness['unexpected_git_directories']
-                and not uniqueness['retired_markers_still_present']
-            ),
         },
         'external_repositories': external_repos,
         'tracked_path_exposure': exposure,

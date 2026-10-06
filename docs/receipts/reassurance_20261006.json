@@ -1,0 +1,171 @@
+{
+  "schema": 1,
+  "receipt_id": "reassurance-20261006",
+  "state": "completed_diagnostics",
+  "pass": true,
+  "checked_at": "2026-10-06T21:29:42.570400+08:00",
+  "review_base_commit": "c517e937307a375f791ee9fd26c7c27172b065a2",
+  "maintenance_version": "0.2.0",
+  "new_version_or_tag_created": false,
+  "git_uniqueness": {
+    "sole_development_git": "maintenance/comfyui",
+    "holds": true,
+    "observed_markers": 1,
+    "unexpected_markers": 0,
+    "unexpected_bare_repositories": 0,
+    "traversal_errors": 0,
+    "retired_markers_registered": 29,
+    "retired_markers_present": 0,
+    "scan_scope": {
+      "all_runtime_subdirectories": true,
+      "git_metadata_entered": false,
+      "reparse_points_followed": false,
+      "skipped_reparse_points": 199,
+      "git_file_contents_read": false
+    },
+    "runtime_agents_matches_versioned_authority": true,
+    "external_bare_archives": 61,
+    "external_validation_clones": 7,
+    "external_development_allowed": false,
+    "external_report_sha256": "926950b86adebf8ef4823cac8edb113968f201816c29b2d5ba9c6284c91a953c"
+  },
+  "external_state": {
+    "stale_previous_manifest_entries": 4,
+    "drift_roles": [
+      "one_private_configuration",
+      "three_sqlite_WAL_fingerprints"
+    ],
+    "inventory_entries": 365,
+    "configuration_copies_in_new_private_directory": 18,
+    "reference_entries": 347,
+    "sqlite_backups_created": 0,
+    "old_manifest_retained": true,
+    "current_manifest_refreshed": true,
+    "source_files_modified": false,
+    "full_asset_content_hashes_verified": false,
+    "complete_runtime_restored": false,
+    "external_refresh_report_sha256": "2e48af6230e56ef96378174312ebc90003ed3e22e2c5d02f102d7b9fd94a533e",
+    "fresh_manifest_sha256": "19ddec91e201d18e0b388d6c9bf4ea7083158784d02029dbc74e4fc05eae801b"
+  },
+  "documentation": {
+    "features": 17,
+    "features_with_nonempty_examples": 17,
+    "example_references": 28,
+    "annotated_external_example": "examples/external-assets/annotations.example.json",
+    "historical_archive_files": 445,
+    "examples_are_format_or_usage_references_not_test_results": true,
+    "change_note_enforcement_covers": [
+      "runtime_source",
+      "maintenance_scripts",
+      "database_contracts",
+      "tests",
+      "hooks_ci",
+      "governance",
+      "examples",
+      "library_checkpoints",
+      "resource_inventories"
+    ],
+    "referenced_files": 715
+  },
+  "publication_checks": {
+    "all_history": {
+      "pass": true,
+      "mode": "all-history",
+      "scanned_objects": 81197,
+      "scanned_blobs": 58622,
+      "scanned_bytes": 7529367010,
+      "cross_part_boundaries": 118,
+      "finding_count": 0,
+      "reviewed_fixture_count": 116,
+      "compressed_object_count": 14,
+      "review_base_commit": "c517e937307a375f791ee9fd26c7c27172b065a2",
+      "external_report_sha256": "d2b9e411e5bfbd99130091cdacae796a4f2a9ff6cc56efd95f6e3603582f47c2",
+      "scope": "Full reachable history at review_base_commit; current changes separately require the entire-index gate. Unreachable local objects and external private archives are excluded."
+    },
+    "new_commit_content": {
+      "gate": "Entire-index security and technical documentation checks before local commit",
+      "required": true,
+      "final_frozen_bytes_and_commit_bound_in_external_receipt": "reassurance-20261006-01/final-checks",
+      "future_publication_requires_fresh_all_history_gate": true
+    },
+    "current_source_media_metadata": {
+      "pass": true,
+      "media_count": 184,
+      "findings": 0,
+      "parse_errors": 0,
+      "metadata_values_emitted": false,
+      "external_report_sha256": "9a3c48a98bbad6a5302e6cb5b53037d18a44813f539f785f9a35cf9bdfe9e842",
+      "scope": "Current tracked media bytes match index. Image EXIF/GPS/XMP and PNG text plus MP3 ID3 header metadata inspected. This is supplemental metadata review, not an all-history payload scan."
+    },
+    "raw_local_git_copy_allowed": false,
+    "pre_edit_unreachable_objects": 11,
+    "remote_count": 0,
+    "personal_information_retained": [
+      "User-approved prompt/library text",
+      "Upstream Git author names and email addresses",
+      "Machine-specific paths",
+      "Upstream source example and interface media"
+    ],
+    "absolute_no_privacy_claim": false,
+    "third_party_redistribution_rights_not_certified": true
+  },
+  "validation": {
+    "focused_tests": {
+      "pass": true,
+      "tests": 121,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "snapshot_verify": {
+      "pass": true,
+      "entries": 8524
+    },
+    "initial_test_import_attempt": "Module lookup failed before any test ran; corrected by loading the repository tests directory explicitly.",
+    "runtime_source_comparison": {
+      "pass": true,
+      "managed_kind_file_match": true,
+      "replace_or_add_candidates": 0,
+      "retained_private_cache_deletion_candidates": 1,
+      "retained_cache_source": "ComfyUI/custom_nodes/TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters/models_cache.json",
+      "retained_cache_registered_externally": true,
+      "no_runtime_files_deleted": true,
+      "external_report_sha256": "85cb2f8ad964f53ce7fb416e7e99445059d19364f4179931d6129896a6e3088b",
+      "scope": "Current manifest file payloads match deployed sources; mutable JSON/SQL data checkpoints are not compared to latest online database data. Source-path coverage of selected maintenance trees had no missing publicly admissible candidate."
+    },
+    "technical_catalog": {
+      "pass": true,
+      "features": 17,
+      "referenced_files": 715,
+      "archive_files": 445
+    },
+    "all_required_diagnostic_results_pass": true
+  },
+  "live_observation": {
+    "read_only": true,
+    "service_started": false,
+    "queue_cleared": false,
+    "checked_live": true,
+    "queue_running": 0,
+    "queue_pending": 0,
+    "port": 8188,
+    "observed_pid": 5636,
+    "production_modified": false
+  },
+  "instance_composition": [
+    "Reviewed deployed Git files",
+    "External model and image assets plus caches",
+    "External private configuration",
+    "Matching dependency environment",
+    "Application latest mutable databases and records"
+  ],
+  "private_store_is_git": false,
+  "private_store_automatically_encrypted_or_synced": false,
+  "limits": [
+    "Credential rules and supplemental current-media metadata inspection are not an absolute absence-of-privacy proof.",
+    "User previews/models and large-cache directory references are not backups or complete content hash verification.",
+    "Current database state is external and newer than Git checkpoints; no database was replaced.",
+    "Directory junction targets are not recursively expanded by the Git marker check.",
+    "No publication, service restart, queue clearance, inference, download or production deployment occurred."
+  ]
+}

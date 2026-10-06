@@ -13,7 +13,8 @@ import unicodedata
 
 REPO = Path(__file__).resolve().parent.parent
 CATALOG = "docs/technical/catalog.json"
-SOURCE_PREFIXES = ("snapshot/runtime/", "scripts/", "database/", "tests/", ".githooks/", ".github/")
+SOURCE_PREFIXES = ("snapshot/runtime/", "snapshot/library/", "snapshot/inventory/", "scripts/",
+                   "database/", "tests/", "governance/", "examples/", ".githooks/", ".github/")
 ARCHIVE = "docs/technical/archive"
 ARCHIVE_REGISTRY = "governance/technical-archive.json"
 ARCHIVE_README = ARCHIVE + "/README.md"
@@ -274,10 +275,10 @@ def check(repo=REPO, staged=False, enforce_changes=False, require_tracked=False)
             errors.append(identity + ": invalid or shared feature document")
         documents.add(document)
         paths = [document]
-        for key in ("implementation", "tests", "evidence"):
+        for key in ("implementation", "tests", "evidence", "examples"):
             values = feature.get(key, [])
-            if not isinstance(values, list) or (key == "implementation" and not values):
-                errors.append(identity + ": missing implementation list")
+            if not isinstance(values, list) or (key in {"implementation", "examples"} and not values):
+                errors.append(identity + ": missing " + key + " list")
                 continue
             paths.extend(relative(value) for value in values)
         if feature.get("acceptance") not in {"historical", "checked-source", "in-progress"}:

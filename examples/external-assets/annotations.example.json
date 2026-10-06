@@ -1,0 +1,108 @@
+{
+  "format_version": 1,
+  "example_only": true,
+  "payloads_in_git": false,
+  "production_loader_contract": false,
+  "notes": "Fictional records and filenames only. This explains preservation and annotation roles, not an import API. No referenced payload exists in this example. Null hashes and sizes mean unmeasured, never verified.",
+  "roots": {
+    "runtime_root": "Restored runtime root containing ComfyUI and production_tools",
+    "external_root": "Local asset and private-state store selected by the maintainer"
+  },
+  "prompt_preview_binding": {
+    "record_id": "fixture-tag-001",
+    "record_kind": "tag_record",
+    "identity_policy": "Keep the existing record ID, source identity, personal fields and original filenames together.",
+    "preview_base_relative_to": "runtime_root",
+    "preview_base": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/user_data/prompt_selector/",
+    "images": [
+      {
+        "image_id": "fixture-image-001",
+        "source_id": "fixture-web-source-001",
+        "original": "preview/example-only.png",
+        "thumbnail": "preview_thumbnails/example-only.png",
+        "main_preview": true,
+        "annotation": "Primary preview selected for this fictional record.",
+        "bytes": null,
+        "sha256": null
+      },
+      {
+        "image_id": "fixture-image-002",
+        "source_id": "fixture-document-source-001",
+        "original": "preview/example-secondary-only.jpg",
+        "thumbnail": "preview_thumbnails/example-secondary-only.jpg",
+        "main_preview": false,
+        "annotation": "Retained second source image; a single-preview UI need not show both images.",
+        "bytes": null,
+        "sha256": null
+      }
+    ],
+    "documentation_preview": "examples/external-assets/preview.example.svg",
+    "restore_policy": "Restore the original media and bindings as a group. Rebuild thumbnails only through a compatible application after preserving the originals. The SVG is a documentation illustration, not the referenced PNG/JPEG payload."
+  },
+  "source_inputs": [
+    {
+      "source_id": "fixture-web-source-001",
+      "kind": "frozen_web_input",
+      "relative_to": "external_root",
+      "relative_path": "source-inputs/example-batch/web/source.example.html",
+      "public_source_page": "https://example.org/source-page",
+      "source_revision": "fictional-source-revision",
+      "captured_at": null,
+      "sha256": null,
+      "annotation": "A preserved source body is a separate input from the parser code and the public source URL. Never store authenticated or signed URLs."
+    },
+    {
+      "source_id": "fixture-document-source-001",
+      "kind": "original_document_input",
+      "relative_to": "external_root",
+      "relative_path": "source-inputs/example-batch/documents/source.example.docx",
+      "public_source_page": null,
+      "source_revision": "fictional-document-revision",
+      "sha256": null,
+      "annotation": "Keep the original document, extraction result and reviewed record mapping; the parser alone cannot reconstruct the input."
+    }
+  ],
+  "mutable_caches": [
+    {
+      "cache_id": "fixture-gallery-cache",
+      "kind": "sqlite_cache",
+      "relative_to": "runtime_root",
+      "relative_path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/py/shared/data/tags_cache.db",
+      "external_state_category": "mutable_db",
+      "external_state_action": "reference",
+      "annotation": "Illustrates the current cache role only; no database is included. If a copy is required, use a consistent SQLite backup and record WAL drift. Do not copy or replace the live DB/WAL/SHM directly."
+    },
+    {
+      "cache_id": "fixture-plugin-media-cache",
+      "kind": "plugin_download_metadata_and_media",
+      "relative_to": "external_root",
+      "relative_path": "caches/example-plugin/",
+      "external_state_category": "mutable_cache",
+      "external_state_action": "reference",
+      "contains_credentials": "must-be-reviewed-locally",
+      "annotation": "The real plugin cache path and rebuild rules must be registered locally. Review private metadata separately from media; this fictional path does not authorise deletion, regeneration or public upload."
+    }
+  ],
+  "training_pairs": {
+    "relative_to": "external_root",
+    "dataset_base": "datasets/example-character/final_training/",
+    "character_id": "fixture-character-001",
+    "pairs": [
+      {
+        "pair_id": "fixture-training-001",
+        "image": "example-character-001.png",
+        "caption": "example-character-001.txt",
+        "caption_text_example": "fixture_character, fully clothed, standing, front view, plain background",
+        "annotation": {
+          "view": "front",
+          "outfit_id": "fixture-outfit-001",
+          "selection_state": "example-awaiting-review",
+          "reason": "Illustrates a same-stem image/caption pair and review fields; no image was generated, selected or trained."
+        },
+        "image_sha256": null,
+        "caption_sha256": null
+      }
+    ],
+    "restore_policy": "Keep image/caption pairs, identity specifications and selection/rejection provenance together. Substitute reviewed real records before using any training tool. This file is not a training profile."
+  }
+}

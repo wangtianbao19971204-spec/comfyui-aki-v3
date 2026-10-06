@@ -32,7 +32,8 @@ class TechnicalCatalogTests(unittest.TestCase):
         self.write("docs/technical/sample.md", "# Example\n\n## 实现\n[Code](../../scripts/example.py)\n\n## 验证\nOnly fixture.\n\n## 变更记录\n2026-10-05\n")
         self.data = {"schema": 1, "indexes": ["docs/technical/README.md"], "features": [
             {"id": "sample", "document": "docs/technical/sample.md", "implementation": ["scripts/example.py"],
-             "tests": [], "evidence": [], "watch": ["scripts/"], "acceptance": "checked-source"}]}
+             "tests": [], "evidence": [], "examples": ["docs/technical/sample.md"],
+             "watch": ["scripts/"], "acceptance": "checked-source"}]}
         self.save_catalog()
 
     def write(self, name, content):
@@ -63,6 +64,43 @@ class TechnicalCatalogTests(unittest.TestCase):
     def test_missing_implementation_rejected(self):
         (self.root / "scripts/example.py").unlink()
         self.assertFalse(catalog.check(self.root)["pass"])
+
+    def test_missing_examples_cannot_claim_complete_handoff(self):
+        for value in (None, [], "docs/technical/sample.md"):
+            with self.subTest(value=value):
+                self.data["features"][0]["examples"] = value
+                self.save_catalog()
+                self.assertFalse(catalog.check(self.root)["pass"])
+
+    def test_staged_examples_must_be_in_the_prospective_commit(self):
+        self.init()
+        self.write("examples/asset.json", "{}\n")
+        self.data["features"][0]["examples"] = ["examples/asset.json"]
+        self.save_catalog()
+        self.git("add", "--", catalog.CATALOG)
+        self.assertFalse(catalog.check(self.root, staged=True)["pass"])
+        self.git("add", "--", "examples/asset.json")
+        self.assertTrue(catalog.check(self.root, staged=True)["pass"])
+        (self.root / "examples/asset.json").unlink()
+        self.assertTrue(catalog.check(self.root, staged=True)["pass"])
+
+    def test_data_governance_and_examples_require_owned_updates(self):
+        self.init()
+        self.data["features"][0]["watch"].extend([
+            "governance/", "examples/", "snapshot/library/", "snapshot/inventory/"])
+        self.save_catalog()
+        self.git("add", "--", catalog.CATALOG)
+        for name in ("governance/policy.json", "examples/asset.json",
+                     "snapshot/library/part.json", "snapshot/inventory/resources.json"):
+            self.write(name, "{}\n")
+            self.git("add", "--", name)
+        result = catalog.check(self.root, staged=True, enforce_changes=True)
+        self.assertFalse(result["pass"])
+        self.assertIn("sample: source changed without its technical update note", result["errors"])
+        self.write("docs/technical/changes/sample/2026-10-06.md",
+                   "# Change 2026-10-06\nDocumented resource format, validation and remaining limits.\n")
+        self.git("add", "--", "docs/technical/changes/sample/2026-10-06.md")
+        self.assertTrue(catalog.check(self.root, staged=True, enforce_changes=True)["pass"])
 
     def test_duplicate_identity_rejected(self):
         self.data["features"].append(dict(self.data["features"][0]))
