@@ -1,10 +1,14 @@
 # 恢复与迁移
 
+首次克隆、他机 Python/hooks 设置与后续主仓更新见[开始使用](GETTING_STARTED.md)。本页负责已验收 bundle 和运行树恢复；文中的 `G:\` 是原机器示例，其他机器换成自己的全新目标路径。维护快照不能直接作为完整运行树启动。
+
 ## Git bundle 恢复
 
 仅使用随包交付回执确认通过的版本；包名、维护版本号、精确提交、manifest SHA、包 SHA 和隔离还原结果必须属于同一轮。当前交付目标为 `comfyui-v0.2.0-20261005.bundle`，对应 `comfyui-v0.2.0-20261005.delivery.json`；以该回执实际存在且 `pass: true` 为最终交付依据，文档中的目标名本身不是验收证明。后续发行沿用这一命名方式，替换为对应版本的实际文件名。
 
 `comfyui-public-v3-20261005.bundle` 只覆盖 `f1e61294` 历史检查点，不包含后续 Anima 补丁、技术补档、维护命令及支持文件补录。它和旧验证目录保持历史身份，不充当最新版；旧 `comfyui.bundle` 含历史凭证，只能私有归档，不能公开复用。
+
+本页 PowerShell 示例沿用[开始使用第 2 节](GETTING_STARTED.md)已选择并核验的 `$comfyPython` 完整解释器路径；先完成该项检查。收到 bundle 的父目录执行下面的克隆流程，进入仓根后执行维护工具。
 
 ```powershell
 $comfyDelivery = Get-Content -LiteralPath .\comfyui-v0.2.0-20261005.delivery.json -Raw | ConvertFrom-Json
@@ -15,13 +19,16 @@ git clone -c core.longpaths=true -- $comfyBundle .\comfyui
 if ($LASTEXITCODE -ne 0) { throw 'Clone failed; retain the partial directory for inspection' }
 if ((git -C .\comfyui rev-parse HEAD).Trim() -ne $comfyDelivery.commit) { throw 'Restored commit differs from delivery receipt' }
 git -C .\comfyui fsck --full
-cd .\comfyui
-python -X utf8 -B scripts\snapshot.py verify
-python -X utf8 -B scripts\security_guard.py --all-history
+if ($LASTEXITCODE -ne 0) { throw 'Git integrity check failed' }
+Set-Location -LiteralPath .\comfyui
+& $comfyPython -X utf8 -B scripts\snapshot.py verify
+if ($LASTEXITCODE -ne 0) { throw 'Snapshot verification failed' }
+& $comfyPython -X utf8 -B scripts\security_guard.py --all-history
+if ($LASTEXITCODE -ne 0) { throw 'History security check failed' }
 git config --local core.hooksPath .githooks
 ```
 
-克隆产生的 origin 只是本地 bundle 路径，不是在线远端。首次仓库使用专用维护作者标识，不修改用户全局 Git 身份；后续提交可以配置你自己的 repo-local user.name/user.email。
+克隆产生的 origin 只是本地 bundle 路径，不是在线远端。新克隆不继承原仓维护作者身份；提交前按开始使用配置自己的 repo-local user.name/user.email，不修改用户全局 Git 身份。
 
 随包回执与包一样保存在仓外，完整详细证据见其 `evidence_id`。回执必须由实际结束的门禁和还原生成；未完成的 `prepared` 元数据、单独的 tag 或旧还原回执都不能替代。文档、版本说明先冻结并提交，最终 SHA/提交/验收结果写在仓外，避免为了把“本包最终 SHA”塞进本包而出现自引用或打包后再次改源码。
 
@@ -30,7 +37,8 @@ Windows 必须在初次检出前使用上面的 `-c core.longpaths=true`：整�
 ## 只向全新目录物化
 
 ```powershell
-python -X utf8 -B scripts\snapshot.py materialize --dest G:\ComfyUI-local\validation\comfyui-restored-v0.2.0-new
+& $comfyPython -X utf8 -B scripts\snapshot.py materialize --dest G:\ComfyUI-local\validation\comfyui-restored-v0.2.0-new
+if ($LASTEXITCODE -ne 0) { throw 'Materialization failed; retain evidence for inspection' }
 ```
 
 目标目录必须不存在。工具拒绝直接写回 manifest 原运行根、原 ComfyUI 树和 snapshot 内部。它不会启动服务、执行模型或覆盖现有文件。
@@ -57,7 +65,7 @@ python -X utf8 -B scripts\snapshot.py materialize --dest G:\ComfyUI-local\valida
 
 ### 隔离启动实测（2026-10-06）
 
-已按上面的方式完整走通一次：物化到全新目录（8,524 项校验），再用运行区 Python 从物化树启动 25 个生产白名单插件，全部写入限制在该树内。结果 5/5 工作台模块、76 节点、1,939 个注册节点类型、队列 0/0，HTTP 就绪约 180 秒；停机后运行区四个根的文件数、总字节和最新修改时间前后完全一致。证据见[隔离启动收据](../receipts/isolated_boot_20261006.json)，原始日志在验证树的 `validation-logs/`。
+已按上面的方式完整走通一次：物化到全新目录（8,524 项校验），再用运行区 Python 从物化树启动 25 个生产白名单插件，全部写入限制在该树内。结果 5/5 工作台模块、76 节点、1,939 个注册节点类型、队列 0/0，HTTP 就绪约 180 秒；停机后运行区四个根的文件数、总字节和最新修改时间前后完全一致。证据见[隔离启动收据](receipts/isolated_boot_20261006.json)，原始日志在验证树的 `validation-logs/`。
 
 同轮发现、重建新机器时必须先处理的环境行为：
 

@@ -1,0 +1,100 @@
+{
+  "schema": 1,
+  "receipt_id": "pull-audit-20261006",
+  "state": "completed_local_fresh_clone_diagnostics",
+  "pass": true,
+  "checked_at": "2026-10-06T13:59:11.094781+00:00",
+  "review_base_commit": "ea53849640ddd00714283c0c7c456ff2b0d8fd6b",
+  "guide": "docs/GETTING_STARTED.md",
+  "clone": {
+    "source_commit": "ea53849640ddd00714283c0c7c456ff2b0d8fd6b",
+    "clone_commit": "ea53849640ddd00714283c0c7c456ff2b0d8fd6b",
+    "tracked_files_checked": 9319,
+    "worktree_payload_bytes": 1563090831,
+    "worktree_oid_mismatches": [],
+    "reachable_object_sets_equal": true,
+    "clone_stored_object_count": 138619,
+    "clone_unreachable_objects": 0,
+    "alternates_present": false,
+    "original_repo_local_identity_hooks_and_backup_config_inherited": false,
+    "core_longpaths": "true",
+    "pack_bytes": 663952675,
+    "clone_is_validation_only": true,
+    "production_modified": false
+  },
+  "validation": {
+    "strict_fsck": {
+      "pass": true,
+      "seconds": 17.81,
+      "exit_code": 0
+    },
+    "maintenance_status": {
+      "pass": true,
+      "seconds": 0.49,
+      "exit_code": 0
+    },
+    "tracked_technical_catalog": {
+      "pass": true,
+      "seconds": 2.39,
+      "exit_code": 0
+    },
+    "snapshot_verify": {
+      "pass": true,
+      "seconds": 112.87,
+      "exit_code": 0,
+      "entries": 8524,
+      "failures": []
+    },
+    "real_pre_commit_hook": {
+      "pass": true,
+      "seconds": 115.89,
+      "exit_code": 0,
+      "hook": "pre-commit",
+      "commit_created": false,
+      "interpreter_override_is_single_executable": true,
+      "production_modified": false
+    },
+    "powershell_snippet_syntax": {
+      "pass": true,
+      "blocks": 14,
+      "parse_errors": []
+    }
+  },
+  "evidence_hashes": {
+    "fresh-clone-integrity.json": "d292f3ee89ba40bebb172df3a7af46031741f6ff3dd1c233f80d7fdac94a1a8a",
+    "fresh-fast-checks.json": "be8d3a294032ffe2117078f93f312bd9e433a80c71822b09a256fce2637d5658",
+    "snapshot-verify.json": "77d80c8e02e9d5d71875acac7f93f39956bc139a175191610590a6a822458a5a",
+    "hook-check.json": "38c8c600a4c8cb6547d676abd129b7467badab47514e31243ff6c7ad53ba80e6"
+  },
+  "documentation_fixes": [
+    "First clone, short Windows path and initial core.longpaths setting",
+    "Portable Python 3.10+ with sqlite3 and single-executable hook override",
+    "New clone does not inherit repo-local identity, hooks or backup index",
+    "Clean main fetch and fast-forward-only update with local-change and divergence guards",
+    "Offline bundle receipt, digest, old-package and local-origin boundaries",
+    "Materialize snapshot before startup; restore external environment and assets separately",
+    "Current cross-source-root capture/adopt migration limit",
+    "Restore receipt link and interpreter commands corrected",
+    "Quoted backup-index placeholder and unified README/maintenance/restore interpreter commands"
+  ],
+  "post_documentation_commit_validation": {
+    "scope": "Actual local fetch and fast-forward update will be frozen after this documentation commit",
+    "external_receipt_reference": "pull-audit-20261006-01/final-checks.json",
+    "self_referential_commit_hash_embedded": false
+  },
+  "remote_count": 0,
+  "online_clone_or_pull_tested": false,
+  "python_from_existing_host": true,
+  "fresh_machine_dependency_install_tested": false,
+  "runtime_materialization_or_start_performed_this_audit": false,
+  "model_or_lora_weights_included": false,
+  "production_modified": false,
+  "version_tag_bundle_or_push_created": false,
+  "limits": [
+    "Local independent-object Git clone is not an internet or GitHub transfer test.",
+    "Cloned content is maintenance source and checked data exports, not a complete runnable environment.",
+    "Models, preview originals, private configuration and latest mutable application state remain external.",
+    "Different runtime source_root capture/adopt has no automatic migration entry.",
+    "Snapshot verification checks bytes and data chunks; no GPU inference, workflow image quality or cold install was performed."
+  ]
+}

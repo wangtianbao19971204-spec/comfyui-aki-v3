@@ -5,7 +5,11 @@
     "docs/technical/runtime/README.md",
     "docs/technical/library/README.md",
     "docs/technical/training/README.md",
-    "docs/technical/operations/README.md"
+    "docs/technical/operations/README.md",
+    "README.md",
+    "docs/GETTING_STARTED.md",
+    "docs/MAINTENANCE.md",
+    "docs/RESTORE.md"
   ],
   "features": [
     {
@@ -587,7 +591,8 @@
       "evidence": [
         "docs/receipts/source_coverage_20261005.json",
         "docs/receipts/isolated_boot_20261006.json",
-        "docs/receipts/reassurance_20261006.json"
+        "docs/receipts/reassurance_20261006.json",
+        "docs/receipts/pull_audit_20261006.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -613,7 +618,8 @@
       "examples": [
         "governance/workspace-layout.example.json",
         "docs/MAINTENANCE.md",
-        "examples/external-assets/annotations.example.json"
+        "examples/external-assets/annotations.example.json",
+        "docs/GETTING_STARTED.md"
       ]
     },
     {
@@ -633,7 +639,9 @@
         "tests/test_repository.py",
         "tests/test_technical_catalog.py"
       ],
-      "evidence": [],
+      "evidence": [
+        "docs/receipts/pull_audit_20261006.json"
+      ],
       "acceptance": "checked-source",
       "watch": [
         "scripts/release.py",
@@ -647,7 +655,8 @@
         "tests/test_technical_catalog.py"
       ],
       "examples": [
-        "docs/VERSIONING.md"
+        "docs/VERSIONING.md",
+        "docs/GETTING_STARTED.md"
       ]
     },
     {

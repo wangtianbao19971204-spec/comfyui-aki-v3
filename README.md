@@ -2,6 +2,8 @@
 
 ComfyUI 相关源码、工作流/子图、提示词资料检查点和维护工具的**唯一开发主仓**。在本仓修改、验证和提交；运行目录只接收明确范围的部署。仓外资料保管密钥、大资源和最新运行数据。
 
+第一次取得仓库、换机器或后续拉取更新，先看[开始使用](docs/GETTING_STARTED.md)：选择本机 Python、启用 hooks、核对完整性，并区分代码更新与运行环境恢复。
+
 ## 日常只看四个入口
 
 | 要做什么 | 从哪里开始 |
@@ -11,20 +13,20 @@ ComfyUI 相关源码、工作流/子图、提示词资料检查点和维护工�
 | 修改、检查、提交和按范围部署 | [日常维护](docs/MAINTENANCE.md) |
 | 回退、换机器与补齐外部资源 | [恢复方法](docs/RESTORE.md) |
 
-在本仓目录运行；本机 Python 路径如下，其他机器使用自己的 Python 3.10+：
+在本仓目录运行；先按[开始使用](docs/GETTING_STARTED.md)选择并核验本机 Python 3.10+，将完整解释器路径保存在当前终端的 `$comfyPython`：
 
 ```powershell
 # 快速看现在；不扫描整库、不访问在线服务
-& ..\..\python\python.exe -X utf8 -B scripts\maintain.py status
+& $comfyPython -X utf8 -B scripts\maintain.py status
 
 # 只看我们自己的主线，不展开旧组件的全部历史
-& ..\..\python\python.exe -X utf8 -B scripts\maintain.py history
+& $comfyPython -X utf8 -B scripts\maintain.py history
 
 # 精确 git add 本次文件后，检查真正暂存的字节
-& ..\..\python\python.exe -X utf8 -B scripts\maintain.py check-staged
+& $comfyPython -X utf8 -B scripts\maintain.py check-staged
 ```
 
-首次 clone 要按维护页启用 hooks。普通开发不会自动加版本、打标签或部署；正式发布按 [版本规则](docs/VERSIONING.md) 执行。状态命令区分“有本地标签”“有未提交修改”和“运行状态未实测”，不把任一项当成全部完成。
+首次 clone 要按开始使用页启用 hooks；这些本仓设置不会从原机器继承。普通开发不会自动加版本、打标签或部署；正式发布按 [版本规则](docs/VERSIONING.md) 执行。状态命令区分“有本地标签”“有未提交修改”和“运行状态未实测”，不把任一项当成全部完成。
 
 备份状态由本机登记的仓外回执索引提供，登记方法见 [日常维护](docs/MAINTENANCE.md)。快速查询核验回执链及文件存在/大小，不读取私密配置正文、不重算大型有效载荷哈希；历史备份与当前提交/未提交修改的覆盖情况分别显示。
 

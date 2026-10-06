@@ -1,15 +1,17 @@
 # 日常维护流程
 
-以下在 `maintenance/comfyui` 中执行；本机 Python 为 `../../python/python.exe`。另一台机器可以使用 Python 3.10+；在线 capture 另需 psutil。verify/materialize 不要求导入 Torch 或启动 ComfyUI。
+以下在本主仓根目录执行；本机 Python 为 `../../python/python.exe`。另一台机器可以使用 Python 3.10+；在线 capture 另需 psutil。verify/materialize 不要求导入 Torch 或启动 ComfyUI。
+
+首次克隆、解释器选择、hooks 和后续主仓更新，先按[开始使用](GETTING_STARTED.md)执行。本页 PowerShell 命令沿用当前终端已核验的 `$comfyPython` 完整路径；带 `G:\` 的运行/输出目录是原机器示例，换机器使用实际路径。克隆后不直接启动 `snapshot/runtime`，先按[恢复方法](RESTORE.md)物化和补齐环境。
 
 ## 日常最短路径
 
-1. `python -X utf8 -B scripts/maintain.py status`：看当前 Git、未提交改动、最后本地标签、hooks 与已登记的备份回执。它不检查在线服务，不把旧部署收据当当前状态；备份验收记录与当前代码/资料覆盖情况分别显示。
+1. `& $comfyPython -X utf8 -B scripts/maintain.py status`：看当前 Git、未提交改动、最后本地标签、hooks 与已登记的备份回执。它不检查在线服务，不把旧部署收据当当前状态；备份验收记录与当前代码/资料覆盖情况分别显示。
 2. 改对应源码、运行相关测试；同一功能沿用现行技术 MD，只补一条“改什么／为什么／验证与限制”的短记录。不要复制整套交付文档。
-3. 精确 `git add -- <本次文件>` 后运行 `python -X utf8 -B scripts/maintain.py check-staged`，再明确提交。检查针对 **index**，不会把编辑器里未暂存的修复当成已入库；源码修改仍需下面的 seal/专项验证。
+3. 精确 `git add -- <本次文件>` 后运行 `& $comfyPython -X utf8 -B scripts/maintain.py check-staged`，再明确提交。检查针对 **index**，不会把编辑器里未暂存的修复当成已入库；源码修改仍需下面的 seal/专项验证。
 4. 需要部署时按下面流程做精确比较、回滚准备和真实验收；需要正式维护版本时再走 VERSIONING。普通代码修改不顺手刷新整套资料库。
 
-`python -X utf8 -B scripts/maintain.py history` 默认只看最近 10 条 first-parent 主线；完整上游/旧仓历史仍在，不删、不改写。备份与保留规则可运行 `python -X utf8 -B scripts/maintain.py backup-policy` 查看。
+`& $comfyPython -X utf8 -B scripts/maintain.py history` 默认只看最近 10 条 first-parent 主线；完整上游/旧仓历史仍在，不删、不改写。备份与保留规则可运行 `& $comfyPython -X utf8 -B scripts/maintain.py backup-policy` 查看。
 
 提交快检首次需完整扫描暂存区；后续仍逐字节读取并计算 SHA，重新检查所有路径、当前分片顺序和跨片边界，只复用干净、未压缩、未使用审核例外的对象内容扫描。代码、规则、例外、对象或路径变化会使相应缓存失效；损坏回退全扫。`check-staged --fresh` 显式不用缓存。pre-push、正式发布、bundle 和 CI 仍完整扫描历史。缓存不替代测试、seal、快照校验或发布门禁，细节见 [安全说明](SECURITY.md)。
 
@@ -26,10 +28,10 @@
 ```powershell
 git config --local core.hooksPath .githooks
 git config --local core.longpaths true
-& ..\..\python\python.exe -X utf8 -B scripts\project.py status
+& $comfyPython -X utf8 -B scripts\project.py status
 # 在 snapshot/runtime 中完成已授权的代码修改和专项测试，然后：
-& ..\..\python\python.exe -X utf8 -B scripts\project.py seal --note "本次修改说明"
-& ..\..\python\python.exe -X utf8 -B scripts\project.py deploy-plan --runtime G:\ComfyUI-aki-v3
+& $comfyPython -X utf8 -B scripts\project.py seal --note "本次修改说明"
+& $comfyPython -X utf8 -B scripts\project.py deploy-plan --runtime G:\ComfyUI-aki-v3
 ```
 
 `seal` 只重建普通源码清单，不重新认可被任意改写的 JSON/SQL；它保留旧 manifest 于 ignored local/source-seals，并明确标记 `live_deployed=false`、清空当前现场验收字段。旧 evidence 仍是历史凭据。`deploy-plan` 只读，未 seal 的源码会拒绝出计划，删除条目列为需审核候选，不会删除运行文件。
@@ -41,8 +43,8 @@ git config --local core.longpaths true
 关闭其他资料编辑操作，确认无同范围活动锁、队列为空。服务可以继续运行；采集工具不会停止服务，SQLite 通过在线 backup API 读取。
 
 ```powershell
-& ..\..\python\python.exe -X utf8 -B scripts\snapshot.py capture --runtime G:\ComfyUI-aki-v3 --out ..\comfyui-candidate-20261006
-& ..\..\python\python.exe -X utf8 -B scripts\repository.py compare --candidate ..\comfyui-candidate-20261006
+& $comfyPython -X utf8 -B scripts\snapshot.py capture --runtime G:\ComfyUI-aki-v3 --out ..\comfyui-candidate-20261006
+& $comfyPython -X utf8 -B scripts\repository.py compare --candidate ..\comfyui-candidate-20261006
 ```
 
 日期/目录由本次实际日期替换。目标必须全新，禁止覆盖已有快照。source、library、数据库主文件/WAL 或服务身份漂移会失败；失败目录仅作为未完成候选，不可提交为已接受版本。先核对错误，再使用另一个新目录重试。SQLite backup 保证单库一致；各库和 JSON 不是共同事务，仍需安静的采集窗口。
@@ -54,8 +56,8 @@ git config --local core.longpaths true
 先提交或单独保存仓库已有改动。检查新增/删除/变化列表、metadata_* 中的模型/依赖/证据变化和凭证扫描，按风险运行源码测试、隔离 UI 与必要的中性样例推理。只读快照检查不能替代功能验收。
 
 ```powershell
-& ..\..\python\python.exe -X utf8 -B scripts\repository.py adopt --candidate ..\comfyui-candidate-20261006 --purpose accepted-deployment --review-sha256 "compare返回的review_sha256"
-& ..\..\python\python.exe -X utf8 -B scripts\snapshot.py verify
+& $comfyPython -X utf8 -B scripts\repository.py adopt --candidate ..\comfyui-candidate-20261006 --purpose accepted-deployment --review-sha256 "compare返回的review_sha256"
+& $comfyPython -X utf8 -B scripts\snapshot.py verify
 git diff --stat
 git add -- docs CHANGELOG.md
 git add -f -- snapshot
@@ -65,6 +67,8 @@ git commit -m "Update accepted workflow and library snapshot"
 
 adopt 只移动维护仓的快照：旧版本保留到 ignored `local/backups/时间`，不会写回生产。候选必须是本仓旁的 `comfyui-candidate-*` 普通目录。`review_sha256` 绑定新旧 manifest，变化后须重新 review；`--purpose` 必须为已验收部署 `accepted-deployment`，或明确恢复/迁移 `recovery-migration`。源码、数据范围不符时不要 adopt，更不能把旧运行源码覆盖尚未部署的新主仓修改。更新 CHANGELOG 和验收说明，不把旧限制悄悄标为已修复。
 
+当前 adopt 还要求新旧 manifest 的 `source_root` 完全相同，`recovery-migration` 也不豁免。其他机器改用不同运行根后的 capture/adopt 会被拒绝；保留候选另行评审迁移，不通过手改路径放宽门禁。源码编辑/seal 与显式 `deploy-plan --runtime` 的比较仍可在该机唯一主仓进行。
+
 源码内保留了上游 `.gitignore`，所以仅在完整校验/凭证扫描通过之后，对精确的 `snapshot` 路径使用 `git add -f`。不要对运行根或整个维护仓使用强制 add。bundle 工具会检查快照是否全部被 Git 跟踪，防止嵌套忽略规则造成静默遗漏。
 
 ## 4. 生成可移交 Git 文件
@@ -72,7 +76,7 @@ adopt 只移动维护仓的快照：旧版本保留到 ignored `local/backups/�
 需要正式维护版本时，先遵循 [VERSIONING](VERSIONING.md) 完成受审查的 prepare、显式提交与本地 tag，再执行打包。普通开发不自动递增版本；维护版本不替代本体/插件版本。标签、包、部署和实际功能验收分别记录，不能从一个动作推断其他动作完成。
 
 ```powershell
-& ..\..\python\python.exe -X utf8 -B scripts\repository.py bundle --out G:\ComfyUI-local\releases\comfyui-20261006.bundle
+& $comfyPython -X utf8 -B scripts\repository.py bundle --out G:\ComfyUI-local\releases\comfyui-20261006.bundle
 ```
 
 bundle 包含已提交的全部 refs/可达历史；不包含 ignored 文件、未提交内容、外部权重和媒体。工具要求干净工作树、快照完整性和完整历史凭证/资源门禁通过，再核验 fsck、bundle、refs 稳定性和 SHA-256，不接触远端。不能用 `--audit-content-only` 代替公开门禁，也不能绕过 hooks 发布。
@@ -94,10 +98,11 @@ bundle 包含已提交的全部 refs/可达历史；不包含 ignored 文件、�
 真实路径和验收回执只在仓外。对已验收的关键资料备份，在本仓的 Git 本地配置登记索引（不改全局配置、不提交私密路径）：
 
 ```powershell
-git config --local comfyui.backupIndex <仓外回执索引的绝对路径>
-python -X utf8 -B scripts/maintain.py status
+$comfyBackupIndex = '<仓外已验收回执索引的绝对路径>' # 先替换为实际路径
+git config --local comfyui.backupIndex $comfyBackupIndex
+& $comfyPython -X utf8 -B scripts/maintain.py status
 # 临时检查另一份索引，不改变已登记的索引：
-python -X utf8 -B scripts/maintain.py status --backup-index <仓外回执索引的绝对路径> --json
+& $comfyPython -X utf8 -B scripts/maintain.py status --backup-index $comfyBackupIndex --json
 ```
 
 索引沿用手动关键备份的 schema 1：`main_git`、`backup_root`、`final_receipt`、`final_receipt_sha256`、`batch_id` 和已验收状态。解析器核对主仓归属、最终回执 SHA、绑定的阶段回执/清单 SHA、来源提交、数据库完整性记录、跨物理磁盘记录及配套副本回执；所有列入清单的有效载荷只核对存在、大小和普通文件身份。它不调用复制/恢复或在线数据库，不打开配置和数据库正文。
