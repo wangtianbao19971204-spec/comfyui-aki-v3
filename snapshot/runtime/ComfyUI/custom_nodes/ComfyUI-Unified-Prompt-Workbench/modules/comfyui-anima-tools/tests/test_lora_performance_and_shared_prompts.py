@@ -17,6 +17,9 @@ class _RoutesStub:
     def get(self, *_args, **_kwargs):
         return lambda function: function
 
+    def post(self, *_args, **_kwargs):
+        return lambda function: function
+
 
 class _PromptServerStub:
     instance = type("Instance", (), {"routes": _RoutesStub()})()
@@ -88,213 +91,82 @@ class LoraPerformanceAndSharedPromptTests(unittest.TestCase):
         self.assertIn('miss_mode in {"redirect", "direct"}', nodes_source)
         self.assertIn('miss: "redirect"', frontend_source)
 
-    def test_shared_prompt_adapter_filters_classifies_and_deduplicates(self):
-        adapter = load_shared_prompt_adapter()
-        source_data = {
-            "last_modified": "test",
-            "categories": [
-                {
-                    "id": "9e8dc17b-a451-542f-80ec-df510f0657e9",
-                    "name": "Anima/姿势/正常/表情与情绪",
-                    "prompts": [
-                        {
-                            "id": "pose-1",
-                            "alias": "挥手",
-                            "prompt": "waving, smile",
-                            "image": "wave.png",
-                        },
-                        {
-                            "id": "pose-duplicate",
-                            "alias": "重复挥手",
-                            "prompt": " waving , smile ",
-                            "image": "",
-                        },
-                    ],
-                },
-                {
-                    "id": "36f64bfc-0408-50e4-ae5d-673eb9e8506d",
-                    "name": "Anima/背景/正常/室内",
-                    "prompts": [
-                        {"id": "bg-1", "alias": "卧室", "prompt": "bedroom, window"},
-                    ],
-                },
-                {
-                    "id": "b8b0c664-f87b-583d-b296-e4f7cc840cb5",
-                    "name": "Anima/服装/正常/日常与季节/夏装",
-                    "prompts": [
-                        {"id": "clothes-1", "alias": "夏装", "prompt": "summer dress"},
-                    ],
-                },
-                {
-                    "id": "cat-020e87fd",
-                    "name": "Anima/角色/正常/作品角色/测试角色",
-                    "prompts": [
-                        {
-                            "id": "character-1",
-                            "alias": "测试角色",
-                            "prompt": "specific character, silver hair",
-                            "image": "character.png",
-                            "updated_at": "character-v2",
-                        },
-                    ],
-                },
-                {
-                    "id": "new-explicit-category",
-                    "name": "Anima/动作/测试/新增动作",
-                    "prompts": [
-                        {"id": "explicit-1", "alias": "显式新增动作", "prompt": "new explicit pose"},
-                    ],
-                },
-                {
-                    "id": "style-quality-category",
-                    "name": "待归类/Anima复核/画风质量镜头/质量与正向参数",
-                    "prompts": [
-                        {
-                            "id": "style-quality-1",
-                            "alias": "电影质感",
-                            "prompt": "masterpiece, cinematic lighting",
-                        },
-                    ],
-                },
-                {
-                    "id": "new-unmapped-category",
-                    "name": "测试/全新任意分类",
-                    "prompts": [
-                        {"id": "unmapped-1", "alias": "未映射", "prompt": "unmapped prompt"},
-                    ],
-                },
-            ],
-        }
+    def test_reviewed_shared_adapter_preserves_identity_and_source_bytes(self):
+        import importlib.util
+        import sys
+        import types
+        from unittest.mock import patch
 
-        with tempfile.TemporaryDirectory() as tmp:
-            source_path = Path(tmp) / "data.json"
-            source_path.write_text(
-                json.dumps(source_data, ensure_ascii=False),
-                encoding="utf-8",
-            )
-            payloads = adapter["_build_shared_prompt_payloads"](
-                str(source_path),
-                source_path.stat().st_mtime_ns,
-            )
-
-        self.assertEqual(payloads["pose"]["count"], 2)
-        self.assertEqual(payloads["background"]["count"], 1)
-        self.assertEqual(payloads["clothing"]["count"], 1)
-        self.assertEqual(payloads["character"]["count"], 1)
-        self.assertEqual(payloads["style_quality"]["count"], 1)
-        pose_item = next(
-            item for item in payloads["pose"]["items"]
-            if item["id"] == "weilin:pose:pose-1"
-        )
-        self.assertEqual(pose_item["categories"], ["WeiLin / 用户动作分类"])
-        self.assertEqual(
-            pose_item["shared_category_paths"],
-            [{
-                "levels": [
-                    "WeiLin / 用户动作分类",
-                    "正常",
-                    "表情与情绪",
+        helper_dir = PLUGIN_DIR.parent / "WeiLin-Comfyui-Tools-V52-FullPromptSelector" / "prompt_selector"
+        package_name = "isolated_shared_adapter_helpers"
+        package = types.ModuleType(package_name)
+        package.__path__ = [str(helper_dir)]
+        with patch.dict(sys.modules, {package_name: package}):
+            projection = __import__(package_name + ".semantic_projection", fromlist=["binding"])
+            adapter = load_shared_prompt_adapter()
+            source = {"last_modified": "fixture", "categories": [{
+                "id": "source-fixture", "name": "Fixture/source", "prompts": [
+                    {"id": "pose-a", "alias": "Wave", "prompt": "waving, smile", "image": "wave.png", "favorite": True},
+                    {"id": "pose-b", "alias": "Wave variant", "prompt": " waving , smile "},
+                    {"id": "character-a", "alias": "Hero", "prompt": "specific character, silver hair", "updated_at": "v2", "image": "hero.png"},
+                    {"id": "pending-a", "alias": "Unreviewed", "prompt": "pending token"},
+                    {"id": "negative-a", "alias": "Negative", "prompt": "bad anatomy"},
                 ],
-                "parent": "WeiLin / 用户动作分类",
-                "source": "表情与情绪",
-                "source_full": "Anima/姿势/正常/表情与情绪",
-                "source_category_id": "9e8dc17b-a451-542f-80ec-df510f0657e9",
-            }],
-        )
-        self.assertTrue(
-            pose_item["preview"].startswith(
-                "/prompt_selector/preview/wave.png?v="
-            ),
-        )
-        explicit_item = next(
-            item for item in payloads["pose"]["items"]
-            if item["id"] == "weilin:pose:explicit-1"
-        )
-        self.assertEqual(
-            explicit_item["shared_category_paths"][0]["levels"],
-            ["WeiLin / 用户动作分类", "测试", "新增动作"],
-        )
-        self.assertEqual(payloads["pose"]["unmapped_category_count"], 1)
-        self.assertEqual(
-            payloads["pose"]["unmapped_categories"][0]["id"],
-            "new-unmapped-category",
-        )
-        self.assertFalse(any(
-            item["id"] == "weilin:pose:unmapped-1"
-            for item in payloads["pose"]["items"]
-        ))
-        style_quality_item = payloads["style_quality"]["items"][0]
-        self.assertEqual(
-            style_quality_item["shared_category_paths"][0]["levels"],
-            ["WeiLin / 画风质量镜头", "质量与正向参数"],
-        )
-        self.assertEqual(
-            style_quality_item["source_category"],
-            "待归类/Anima复核/画风质量镜头/质量与正向参数",
-        )
-        character_item = payloads["character"]["items"][0]
-        self.assertEqual(character_item["trigger"], "specific character, silver hair")
-        self.assertEqual(
-            character_item["copyright"],
-            "角色/正常/作品角色/测试角色",
-        )
-        self.assertEqual(
-            character_item["preview"],
-            "/prompt_selector/preview/character.png?v=character-v2",
-        )
-        self.assertEqual(
-            adapter["_shared_prompt_source_leaf"]("法典/二级/最末级"),
-            "二级/最末级",
-        )
-        self.assertEqual(
-            adapter["_shared_prompt_source_leaf"]("法典/口交（类口交／颜射）"),
-            "口交（类口交／颜射）",
-        )
-        self.assertEqual(
-            adapter["_shared_prompt_levels_with_source_lineage"](
-                ["WeiLin / 成人互动", "性行为"],
-                "法典/口交（类口交／颜射）",
-                "id",
-            ),
-            [
-                "WeiLin / 成人互动",
-                "性行为",
-                "法典",
-                "口交（类口交／颜射）",
-            ],
-        )
-        self.assertEqual(
-            adapter["_shared_prompt_levels_with_source_lineage"](
-                ["WeiLin / 用户服装分类", "自建服装", "测试组"],
-                "Anima/服装/自建服装/测试组",
-                "prefix",
-            ),
-            ["WeiLin / 用户服装分类", "自建服装", "测试组"],
-        )
-        self.assertEqual(
-            adapter["_shared_prompt_codex_directory_levels"](
-                "所长色色NovelAI个人法典(上)/后入/背后位"
-            ),
-            ["后入", "背后位"],
-        )
-        self.assertEqual(
-            adapter["_shared_prompt_levels_with_source_lineage"](
-                ["WeiLin / 成人互动", "体位", "后入", "背身位"],
-                "所长色色NovelAI个人法典(上)/后入/背后位",
-                "id",
-                "source_directory_without_codex_root",
-            ),
-            ["WeiLin / 后入", "背后位"],
-        )
-        self.assertEqual(
-            adapter["_shared_prompt_levels_with_source_lineage"](
-                ["WeiLin / 成人互动", "性行为", "口交/颜射"],
-                "所长色色NovelAI个人法典(上)/口交（类口交／颜射）",
-                "id",
-                "source_directory_without_codex_root",
-            ),
-            ["WeiLin / 口交（类口交／颜射）"],
-        )
+            }]}
+            category = source["categories"][0]
+            decisions = {}
+            for prompt in category["prompts"]:
+                if prompt["id"] == "pending-a":
+                    continue
+                decisions[prompt["id"]] = {
+                    "binding": projection.binding(category, prompt), "disposition": "reviewed",
+                    "manual_search_eligible": True, "random_pool_eligible": True,
+                    "strict_model_pool_eligible": True, "content_type": "fragment",
+                    "usage": "negative" if prompt["id"] == "negative-a" else "positive",
+                    "primary_class": "identity" if prompt["id"] == "character-a" else "pose_action",
+                    "subcategories": ["作品角色"] if prompt["id"] == "character-a" else ["手势与肢体动作"],
+                    "taxonomy_version": "fixture-v1",
+                }
+            document = {"schema": "S4-semantic-projection-v1", "decisions": decisions}
+            adapter["_load_semantic_projection_runtime"] = lambda _path: (projection, document)
+            before = json.dumps(source, ensure_ascii=False, sort_keys=True)
+            with tempfile.TemporaryDirectory() as directory:
+                path = Path(directory) / "data.json"
+                path.write_text(json.dumps(source, ensure_ascii=False), encoding="utf8")
+                digest = hashlib.sha256(path.read_bytes()).hexdigest()
+                payloads = adapter["_build_shared_prompt_payloads"](str(path), path.stat().st_mtime_ns)
+                self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), digest)
+            self.assertEqual(json.dumps(source, ensure_ascii=False, sort_keys=True), before)
+            poses = payloads["pose"]["items"]
+            self.assertEqual([item["id"] for item in poses], ["weilin:pose:pose-a", "weilin:pose:pose-b"])
+            self.assertEqual([item["tags"] for item in poses], ["waving, smile", " waving , smile "])
+            self.assertTrue(poses[0]["favorite"])
+            self.assertEqual(poses[0]["_semantic"]["subcategory_owners"], {"手势与肢体动作": "pose_action"})
+            self.assertEqual(poses[0]["shared_category_paths"][0]["levels"], ["WeiLin / 动作与姿势", "手势与肢体动作"])
+            self.assertEqual(payloads["pose"]["pending_prompt_ids"], ["pending-a"])
+            self.assertEqual(payloads["pose"]["reviewed_nonfragment_count"], 1)
+            self.assertFalse(any("pending-a" in item["id"] or "negative-a" in item["id"]
+                                 for payload in payloads.values() for item in payload["items"]))
+            character = payloads["character"]["items"][0]
+            self.assertEqual(character["trigger"], "specific character, silver hair")
+            self.assertEqual(character["copyright"], "Fixture/source")
+            self.assertEqual(character["preview"], "/prompt_selector/preview/hero.png?v=v2")
+            self.assertEqual(character["source_category_id"], "source-fixture")
+            filtered = adapter["_build_shared_prompt_payloads"](
+                "fixture", 1, source_data=source, source_sha256="fixture-hash",
+                category_filter='shared-filters:["shared-source:missing-source"]')
+            self.assertTrue(all(payload["count"] == 0 for payload in filtered.values()))
+            category["prompts"][0]["prompt"] = "edited after review"
+            changed = adapter["_build_shared_prompt_payloads"]("fixture", 1, source_data=source)
+            self.assertIn("pose-a", changed["pose"]["pending_prompt_ids"])
+            self.assertEqual(changed["pose"]["count"], 1)
+
+    def test_source_lineage_compatibility_helpers(self):
+        adapter = load_shared_prompt_adapter()
+        self.assertEqual(adapter["_shared_prompt_source_leaf"]("Fixture/二级/最末级"), "二级/最末级")
+        self.assertEqual(adapter["_shared_prompt_levels_with_source_lineage"](
+            ["WeiLin / 用户服装分类", "自建服装", "测试组"], "Anima/服装/自建服装/测试组", "prefix"),
+            ["WeiLin / 用户服装分类", "自建服装", "测试组"])
 
 
 if __name__ == "__main__":

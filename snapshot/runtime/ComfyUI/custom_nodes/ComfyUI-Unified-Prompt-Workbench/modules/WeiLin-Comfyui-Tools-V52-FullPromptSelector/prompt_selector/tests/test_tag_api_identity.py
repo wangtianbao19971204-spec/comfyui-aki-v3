@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -15,7 +16,8 @@ def _load_tag_api():
     module = importlib.util.module_from_spec(spec)
     module.__package__ = 'weilin_pkg.prompt_selector'
     sys.modules['weilin_pkg.prompt_selector.tag_api'] = module
-    spec.loader.exec_module(module)
+    with mock.patch.dict(os.environ, {'UW_SKIP_LIBRARY_WARMUP': '1'}):
+        spec.loader.exec_module(module)
     return module
 
 
@@ -74,6 +76,9 @@ class TagApiIdentityTests(unittest.TestCase):
             revision = None
         taglib.TagConflict = TagConflict
         taglib.TagLibrary = object
+        taglib.STRING_AREA_PREFIX = '__tag_strings_area__:'
+        taglib.STRING_GROUP_UUID = '__tag_strings__'
+        taglib.STRING_LOOSE_UUID = '__tag_strings_loose__'
         sys.modules['weilin_pkg.prompt_selector.tag_library'] = taglib
 
         plan = types.ModuleType('weilin_pkg.tag_import_plan')
@@ -125,11 +130,16 @@ class TagApiIdentityTests(unittest.TestCase):
         cls.tag_api = _load_tag_api()
 
     def setUp(self):
-        relative = Path('benchmark_reports') / '2026-09-11_shared_collections' / 'evidence' / 'tag_link_candidates.json'
-        real = next((parent / relative for parent in Path(__file__).resolve().parents if (parent / relative).is_file()), None)
-        self.assertIsNotNone(real)
-        self.assertTrue(real.is_file(), real)
-        self.real_path = real
+        self.directory = tempfile.TemporaryDirectory(prefix='tag-identity-api-')
+        self.addCleanup(self.directory.cleanup)
+        self.real_path = Path(self.directory.name) / 'candidates.json'
+        self.real_path.write_text(json.dumps({
+            'schema': 'weilin-legacy-tag-link-candidates-v1',
+            'summary': {'concepts': 1},
+            'links': [{'status': 'candidate_not_applied', 'relation': 'multiple_records',
+                       'tag_sources': [{'tag_uuid': 'tag-fixture-a'}, {'tag_uuid': 'tag-fixture-b'}],
+                       'prompt_targets': [{'resource_id': 'resource-fixture-a'}]}],
+        }), encoding='utf8')
         self._restore = None
 
     def tearDown(self):

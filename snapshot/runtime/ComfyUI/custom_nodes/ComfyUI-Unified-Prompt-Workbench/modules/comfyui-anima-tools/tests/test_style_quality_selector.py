@@ -77,6 +77,9 @@ class StyleQualitySelectorTests(unittest.TestCase):
             if isinstance(node, ast.FunctionDef)
             and node.name == "_selector_random_text"
         )
+        eligible = next(node for node in tree.body
+                        if isinstance(node, ast.FunctionDef)
+                        and node.name == "_shared_random_eligible")
         namespace = {
             "get_shared_prompt_payload": lambda _kind: {
                 "items": [{
@@ -86,11 +89,14 @@ class StyleQualitySelectorTests(unittest.TestCase):
                     "tags": "masterpiece, cinematic lighting",
                     "source_category": "待归类/Anima复核/画风质量镜头/质量与正向参数",
                     "preview": "/preview/style-1.png",
+                    "_semantic": {"disposition": "reviewed", "random_pool_eligible": True,
+                                  "strict_model_pool_eligible": True, "usage": "positive",
+                                  "content_type": "fragment"},
                 }],
             },
         }
         exec(
-            compile(ast.Module(body=[function], type_ignores=[]), str(NODES_PATH), "exec"),
+            compile(ast.Module(body=[eligible, function], type_ignores=[]), str(NODES_PATH), "exec"),
             namespace,
         )
 

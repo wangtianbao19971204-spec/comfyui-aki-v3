@@ -490,7 +490,7 @@
         "Node name for S&R": "LoraLoaderModelOnly"
       },
       "widgets_values": [
-        "krea2\\edit\\krea2_identity_edit_v1_2.safetensors",
+        "krea2\\控制与编辑\\Krea2__Krea 2 Identity Edit__v1.2__FP16__cv3139172__f3019297.safetensors",
         1.0
       ]
     },

@@ -1,480 +1,119 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
-import {
-    activateSharedCategoryNavigationFilter,
-    appendSharedCategoryTree,
-    buildSharedCategoryTree,
-    getCharacterItemKey,
-    getSharedCategoryPaths,
-    getSharedCodexDirectoryLevels,
-    hasSharedCategoryFilters,
-    isSharedCategoryFilter,
-    getSharedPromptSyncMessage,
-    getSharedPromptSyncStats,
-    itemMatchesCategoryFilters,
-    loadMergedPromptItems,
-    makeSharedChildFilterKey,
-    makeSharedParentFilterKey,
-    makeSharedPathFilterKey,
-    mergeCharacterPromptItems,
-    mergePromptItems,
-    normalizeSharedCategoryNavigationFilters,
-    pruneSharedCategoryFilters,
-    removeSharedCategoryFilters,
-    refreshMergedPromptItems,
-} from "../js/anima_shared_prompt_data.js";
+import { register } from "node:module";
 
-
-const localItem = {
-    id: "local-1",
-    name: "Wave",
-    tags: "waving, smile",
+register('./browser_extension_loader.mjs', import.meta.url);
+const events = new Map();
+globalThis.window = {addEventListener: (name, handler) => events.set(name, handler)};
+const shared = await import("../js/anima_shared_prompt_data.js");
+let checks = 0;
+const check = (actual, expected, message) => {assert.deepEqual(actual, expected, message); checks++;};
+const taxonomy = {
+    semantic_classes: {pose_action: '动作与姿势', clothing_accessory: '服装与配饰'},
+    filter_pool: {subcategory: {pose_action: {'手势与肢体动作': 2}, clothing_accessory: {'裙装与礼服': 1}},
+                  subcategory_values: {'手势与肢体动作': 'pose_action::手势与肢体动作', '裙装与礼服': 'clothing_accessory::裙装与礼服'}},
 };
-const exactDuplicate = {
-    id: "shared-duplicate",
-    name: "挥手",
-    tags: " waving , smile ",
-    shared: true,
+const decision = (changes = {}) => ({disposition: 'reviewed', manual_search_eligible: true,
+    random_pool_eligible: true, strict_model_pool_eligible: true, usage: 'positive',
+    content_type: 'fragment', primary_class: 'pose_action', theme_ids: ['pose_action'],
+    subcategories: ['手势与肢体动作'], subcategory_owners: {'手势与肢体动作': 'pose_action'},
+    binding: 'fixture-binding-a', ...changes});
+const item = (id, changes = {}) => ({id, name: 'Wave', tags: ' waving , smile ', shared: true,
+    source_category_id: 'source-a', source_category: 'Fixture/source', favorite: true,
+    shared_category_paths: [{levels: ['WeiLin / 动作与姿势', '手势与肢体动作'], parent: 'WeiLin / 动作与姿势',
+                            source: '手势与肢体动作', source_category_id: 'source-a'}],
+    _semantic: decision(), ...changes});
+const local = {id:'local-a', name:'Wave', tags:' waving , smile ', favorite:false};
+const a = item('shared-a');
+const b = item('shared-b');
+check(shared.getSharedCategoryPaths(a), [], 'Categories require the current taxonomy, not stale source paths');
+let requestLog = [];
+let payload = {enabled:true, revision:'fixture-r1', items:[a,b], source_category_count:1,
+               pending_prompt_count:2, quarantined_prompt_count:1, taxonomy_source_matches:false};
+globalThis.fetch = async (url, options) => {
+    requestLog.push({url, options});
+    assert(url === '/prompt_selector/library/index' || url.startsWith('/anima-tools/shared-prompts?'));
+    assert.equal(options.cache, 'no-store');
+    await Promise.resolve();
+    return {ok:true, json:async()=>url === '/prompt_selector/library/index' ? taxonomy : structuredClone(payload)};
 };
-const sameNameDifferentPrompt = {
-    id: "shared-name-collision",
-    name: "Wave",
-    tags: "hand up, looking at viewer",
-    shared: true,
-};
-const uniqueSharedItem = {
-    id: "shared-unique",
-    name: "Running",
-    tags: "running, motion lines",
-    shared: true,
-    categories: ["WeiLin / 成人动作"],
-    shared_category_paths: [{
-        levels: ["WeiLin / 成人动作", "体位", "后入", "背身位"],
-        parent: "WeiLin / 成人动作",
-        source: "背身位",
-        source_full: "测试/后入／背身位",
-    }],
-};
-const sourceDirectorySharedItem = {
-    id: "shared-source-directory",
-    name: "Source directory pose",
-    tags: "source directory pose",
-    shared: true,
-    shared_category_paths: [{
-        levels: ["WeiLin / 成人互动", "体位", "后入", "背身位"],
-        parent: "WeiLin / 成人互动",
-        source: "背身位",
-        source_full: "所长色色NovelAI个人法典(上)/后入/背后位",
-    }],
-};
-
-assert.deepEqual(
-    getSharedCodexDirectoryLevels(
-        "所长色色NovelAI个人法典(上)/后入/背后位",
-    ),
-    ["WeiLin / 后入", "背后位"],
-);
-assert.deepEqual(
-    getSharedCodexDirectoryLevels(
-        "所长色色NovelAI个人法典(上)/口交（类口交／颜射）",
-    ),
-    ["WeiLin / 口交（类口交／颜射）"],
-);
-assert.deepEqual(getSharedCodexDirectoryLevels("默认/角色"), []);
-assert.deepEqual(
-    getSharedCategoryPaths(sourceDirectorySharedItem)[0].levels,
-    ["WeiLin / 后入", "背后位"],
-);
-
-const merged = mergePromptItems(
-    [localItem],
-    [exactDuplicate, sameNameDifferentPrompt, uniqueSharedItem],
-);
-
-assert.deepEqual(
-    merged.map(item => item.id),
-    ["local-1", "shared-name-collision", "shared-unique"],
-);
-assert.equal(merged[0], localItem);
-
-const mergedCharacters = mergeCharacterPromptItems(
-    [{ name: "test hero", copyright: "local", post_count: 10 }],
-    [{
-        name: "Test Hero",
-        name_zh: "test hero",
-        trigger: "test_hero, silver hair",
-        tags: "test_hero, silver hair",
-        preview: "/prompt_selector/preview/hero.png?v=2",
-        shared: true,
-    }],
-);
-assert.equal(mergedCharacters.length, 1);
-assert.equal(mergedCharacters[0].name, "test hero");
-assert.equal(mergedCharacters[0].trigger, "test_hero, silver hair");
-assert.equal(mergedCharacters[0].shared, true);
-
-const sameNameSharedCharacters = mergeCharacterPromptItems([], [
-    {
-        id: "weilin:character:same-a",
-        name: "同名角色",
-        tags: "same_name_variant_a",
-        shared: true,
-    },
-    {
-        id: "weilin:character:same-b",
-        name: "同名角色",
-        tags: "same_name_variant_b",
-        shared: true,
-    },
-]);
-assert.equal(sameNameSharedCharacters.length, 2);
-assert.deepEqual(
-    sameNameSharedCharacters.map(item => item.tags),
-    ["same_name_variant_a", "same_name_variant_b"],
-);
-assert.notEqual(
-    getCharacterItemKey(sameNameSharedCharacters[0]),
-    getCharacterItemKey(sameNameSharedCharacters[1]),
-);
-
-const tree = buildSharedCategoryTree(merged);
-assert.deepEqual(tree, [{
-    name: "WeiLin / 成人动作",
-    label: "成人动作",
-    count: 1,
-    children: [{
-        name: "体位",
-        label: "体位",
-        count: 1,
-        children: [{
-            name: "后入",
-            label: "后入",
-            count: 1,
-            children: [{
-                name: "背身位",
-                label: "背身位",
-                count: 1,
-                children: [],
-            }],
-        }],
-    }],
-}]);
-
-assert.equal(
-    itemMatchesCategoryFilters(
-        uniqueSharedItem,
-        new Set([makeSharedParentFilterKey("WeiLin / 成人动作")]),
-    ),
-    true,
-);
-
-const mixedSourceFilters = new Set([
-    "Dress & Gown",
-    makeSharedPathFilterKey(["WeiLin / 成人动作", "体位"]),
-]);
-assert.equal(hasSharedCategoryFilters(mixedSourceFilters), true);
-assert.equal(
-    isSharedCategoryFilter(
-        makeSharedPathFilterKey(["WeiLin / 成人动作", "体位"]),
-    ),
-    true,
-);
-assert.equal(removeSharedCategoryFilters(mixedSourceFilters), true);
-assert.deepEqual([...mixedSourceFilters], ["Dress & Gown"]);
-
-const navigationFilters = new Set([
-    "Dress & Gown",
-    makeSharedPathFilterKey(["WeiLin / 成人动作", "体位"]),
-    makeSharedPathFilterKey(["WeiLin / 成人动作", "体位", "后入"]),
-]);
-assert.equal(normalizeSharedCategoryNavigationFilters(navigationFilters), true);
-assert.deepEqual(
-    [...navigationFilters],
-    [makeSharedPathFilterKey(["WeiLin / 成人动作", "体位", "后入"])],
-);
-const nextNavigationFilter = makeSharedPathFilterKey([
-    "WeiLin / 成人动作",
-    "体位",
-    "后入",
-    "背身位",
-]);
-assert.equal(
-    activateSharedCategoryNavigationFilter(
-        navigationFilters,
-        nextNavigationFilter,
-    ),
-    true,
-);
-assert.deepEqual([...navigationFilters], [nextNavigationFilter]);
-assert.equal(
-    activateSharedCategoryNavigationFilter(
-        navigationFilters,
-        nextNavigationFilter,
-    ),
-    false,
-);
-const localOnlyNavigationFilters = new Set(["Dress & Gown", "Uniform & Suit"]);
-assert.equal(
-    normalizeSharedCategoryNavigationFilters(localOnlyNavigationFilters),
-    false,
-);
-assert.deepEqual(
-    [...localOnlyNavigationFilters],
-    ["Dress & Gown", "Uniform & Suit"],
-);
-const legacyParentNavigationFilters = new Set([
-    "Dress & Gown",
-    makeSharedParentFilterKey("WeiLin / 成人动作"),
-]);
-assert.equal(
-    normalizeSharedCategoryNavigationFilters(
-        legacyParentNavigationFilters,
-        [uniqueSharedItem],
-    ),
-    true,
-);
-assert.deepEqual(
-    [...legacyParentNavigationFilters],
-    [makeSharedPathFilterKey(["WeiLin / 成人动作"])],
-);
-const legacyChildNavigationFilters = new Set([
-    makeSharedChildFilterKey("WeiLin / 成人动作", "背身位"),
-]);
-assert.equal(
-    normalizeSharedCategoryNavigationFilters(
-        legacyChildNavigationFilters,
-        [uniqueSharedItem],
-    ),
-    true,
-);
-assert.deepEqual(
-    [...legacyChildNavigationFilters],
-    [nextNavigationFilter],
-);
-assert.equal(
-    itemMatchesCategoryFilters(
-        uniqueSharedItem,
-        new Set([makeSharedChildFilterKey("WeiLin / 成人动作", "背身位")]),
-    ),
-    true,
-);
-
-const filtersToPrune = new Set([
-    makeSharedPathFilterKey(["WeiLin / 成人动作", "体位", "后入"]),
-    makeSharedPathFilterKey(["WeiLin / 成人动作", "已删除路径"]),
-]);
-assert.equal(pruneSharedCategoryFilters([uniqueSharedItem], filtersToPrune), true);
-assert.deepEqual(
-    [...filtersToPrune],
-    [makeSharedPathFilterKey(["WeiLin / 成人动作", "体位", "后入"])],
-);
-assert.equal(
-    itemMatchesCategoryFilters(
-        uniqueSharedItem,
-        new Set([makeSharedChildFilterKey("WeiLin / 成人动作", "正身位")]),
-    ),
-    false,
-);
-assert.equal(
-    itemMatchesCategoryFilters(
-        uniqueSharedItem,
-        new Set([makeSharedPathFilterKey(["WeiLin / 成人动作", "体位"])]),
-    ),
-    true,
-);
-assert.equal(
-    itemMatchesCategoryFilters(
-        uniqueSharedItem,
-        new Set([makeSharedPathFilterKey(["WeiLin / 成人动作", "束缚"])]),
-    ),
-    false,
-);
-
-globalThis.localStorage = {
-    values: new Map(),
-    getItem(key) {
-        return this.values.get(key) ?? null;
-    },
-    setItem(key, value) {
-        this.values.set(key, String(value));
-    },
-};
-globalThis.document = {
-    createElement(tag) {
-        return {
-            tag,
-            children: [],
-            dataset: {},
-            attributes: {},
-            style: { cssText: "" },
-            appendChild(child) {
-                this.children.push(child);
-                return child;
-            },
-            setAttribute(name, value) {
-                this.attributes[name] = String(value);
-            },
-        };
-    },
-};
-const sidebar = document.createElement("aside");
-const renderedNavigationFilters = new Set();
-let renderedNavigationChanges = 0;
-appendSharedCategoryTree({
-    sidebar,
-    items: [uniqueSharedItem],
-    selectedFilters: renderedNavigationFilters,
-    rowClass: "test-row",
-    storageKey: "shared-tree-test",
-    onFilterChange() {
-        renderedNavigationChanges += 1;
-    },
-});
-const renderedGroup = sidebar.children[1];
-const renderedRootRow = renderedGroup.children[0];
-const renderedChildren = renderedGroup.children[1];
-assert.match(renderedRootRow.className, /test-row/);
-assert.equal(renderedRootRow.attributes.role, "button");
-assert.equal(renderedRootRow.attributes["aria-pressed"], "false");
-assert.equal(renderedRootRow.children[0].children[0].tag, "button");
-assert.equal(
-    JSON.stringify(sidebar).includes('"tag":"input"'),
-    false,
-);
-assert.match(renderedChildren.style.cssText, /^display:flex;/);
-const renderedNestedGroup = renderedChildren.children[0];
-const renderedNestedChildren = renderedNestedGroup.children[1];
-assert.match(renderedNestedChildren.style.cssText, /^display:none;/);
-renderedRootRow.onclick();
-assert.deepEqual(
-    [...renderedNavigationFilters],
-    [makeSharedPathFilterKey(["WeiLin / 成人动作"])],
-);
-assert.equal(renderedNavigationChanges, 1);
-
-const selectedSidebar = document.createElement("aside");
-appendSharedCategoryTree({
-    sidebar: selectedSidebar,
-    items: [uniqueSharedItem],
-    selectedFilters: renderedNavigationFilters,
-    rowClass: "test-row",
-    storageKey: "shared-tree-test-selected",
-    onFilterChange() {},
-});
-const selectedRootRow = selectedSidebar.children[1].children[0];
-assert.match(selectedRootRow.className, /\bactive\b/);
-assert.equal(selectedRootRow.attributes["aria-pressed"], "true");
-
-const deepSelectedSidebar = document.createElement("aside");
-appendSharedCategoryTree({
-    sidebar: deepSelectedSidebar,
-    items: [uniqueSharedItem],
-    selectedFilters: new Set([nextNavigationFilter]),
-    rowClass: "test-row",
-    storageKey: "shared-tree-test-deep-selected",
-    onFilterChange() {},
-});
-const deepRootGroup = deepSelectedSidebar.children[1];
-const deepLevelOneGroup = deepRootGroup.children[1].children[0];
-const deepLevelTwoGroup = deepLevelOneGroup.children[1].children[0];
-const deepLeafGroup = deepLevelTwoGroup.children[1].children[0];
-assert.match(deepRootGroup.children[1].style.cssText, /^display:flex;/);
-assert.match(deepLevelOneGroup.children[1].style.cssText, /^display:flex;/);
-assert.match(deepLevelTwoGroup.children[1].style.cssText, /^display:flex;/);
-assert.match(deepLeafGroup.children[0].className, /\bactive\b/);
-
-globalThis.window = {};
-const sharedResponses = [
-    {
-        items: [
-            { id: "weilin:pose:a", tags: "pose a", shared: true },
-            { id: "weilin:pose:b", tags: "pose b", shared: true },
-        ],
-        enabled: true,
-        source_category_count: 200,
-        mapped_source_categories: 198,
-        audited_source_categories: 200,
-        unmapped_category_count: 0,
-        pending_prompt_count: 0,
-        quarantined_prompt_count: 472,
-        taxonomy_source_matches: true,
-    },
-    {
-        items: [
-            { id: "weilin:pose:b", tags: "pose b changed", shared: true },
-            { id: "weilin:pose:c", tags: "pose c", shared: true },
-        ],
-        enabled: true,
-        source_category_count: 200,
-        mapped_source_categories: 198,
-        audited_source_categories: 200,
-        unmapped_category_count: 0,
-        pending_prompt_count: 0,
-        quarantined_prompt_count: 472,
-        taxonomy_source_matches: true,
-    },
-];
-globalThis.fetch = async () => ({
-    ok: true,
-    async json() {
-        return sharedResponses.shift();
-    },
-});
-await loadMergedPromptItems("pose", []);
-await refreshMergedPromptItems("pose", []);
-assert.deepEqual(getSharedPromptSyncStats("pose").changes, {
-    added: 1,
-    updated: 1,
-    removed: 1,
-    unchanged: 0,
-    baseline: false,
-});
-assert.match(
-    getSharedPromptSyncMessage("pose", "动作 Tags"),
-    /新增 1 \/ 更新 1 \/ 删除 1.*分类审计 200\/200.*未映射 0.*待复核 0.*安全隔离 472 条/,
-);
-
-const clothingSelectorSource = await readFile(
-    new URL("../js/anima_clothing_selector.js", import.meta.url),
-    "utf8",
-);
-assert.match(clothingSelectorSource, /WeiLin 共享服装 Tags/);
-assert.match(clothingSelectorSource, /activeFilters\.collection === "weilin" && !item\?\.shared/);
-assert.match(clothingSelectorSource, /clearedIncompatibleTraits/);
-assert.match(clothingSelectorSource, /activeFilters\.traits\.clear\(\)/);
-assert.match(clothingSelectorSource, /hasSharedCategoryFilters/);
-assert.match(clothingSelectorSource, /else\s*\{\s*removeSharedCategoryFilters\(activeFilters\.categories\)/);
-assert.match(clothingSelectorSource, /subEl\.innerText = sourceLabel \? `WeiLin · \$\{sourceLabel\}` : "WeiLin"/);
-
-for (const selectorFile of [
-    "anima_pose_selector.js",
-    "anima_background_selector.js",
-    "anima_clothing_selector.js",
-    "anima_character_selector.js",
-]) {
-    const selectorSource = await readFile(
-        new URL(`../js/${selectorFile}`, import.meta.url),
-        "utf8",
-    );
-    assert.match(selectorSource, /同步 WeiLin/);
-    assert.match(selectorSource, /refreshMergedPromptItems/);
-}
-
-for (const [selectorFile, rowClass] of Object.entries({
-    "anima_pose_selector.js": "anima-pose-sidebar-item",
-    "anima_background_selector.js": "anima-background-sidebar-item",
-    "anima_clothing_selector.js": "anima-clothing-sidebar-item",
-    "anima_character_selector.js": "sidebar-item",
-})) {
-    const selectorSource = await readFile(
-        new URL(`../js/${selectorFile}`, import.meta.url),
-        "utf8",
-    );
-    assert.match(
-        selectorSource,
-        new RegExp(`rowClass:\\s*"${rowClass}"`),
-    );
-    assert.match(selectorSource, /normalizeSharedCategoryNavigationFilters/);
-}
-
-console.log("anima_shared_prompt_data tests passed");
+await shared.loadSharedLibraryTaxonomy({revision:'fixture-r1'});
+check(shared.getSharedCategoryPaths(a), [{levels:['动作与姿势','手势与肢体动作'],
+    keys:['shared-theme:pose_action','shared-sub:pose_action::手势与肢体动作'], parent:'动作与姿势',source:'手势与肢体动作'}]);
+check(shared.getSharedTopicSummary(a), ['动作与姿势 · 手势与肢体动作']);
+check(shared.buildSharedCategoryTree([a,a,b,local]), [{key:'shared-theme:pose_action',name:'动作与姿势',label:'动作与姿势',count:2,
+    children:[{key:'shared-sub:pose_action::手势与肢体动作',name:'手势与肢体动作',label:'手势与肢体动作',count:2,children:[]}]}]);
+check(shared.mergePromptItems([local], [a,b,structuredClone(a)]).map(value=>value.id), ['local-a','shared-a','shared-b'], 'Only identical identity/payload repetitions collapse');
+check(shared.mergePromptItems([], [a,{...a,tags:'edited same identity'}]).length, 2, 'Conflicting same-ID payloads survive review');
+check(shared.mergePromptItems([], [a,{...a,source_namespace:'other-source'}]).length, 2, 'Origin namespaces remain distinct');
+check(shared.mergeCharacterPromptItems([{name:'Same',copyright:'local'}], [{...a,name:'Same'}, {...b,name:'Same'}]).length, 3, 'Display-name equality never merges identities');
+check(shared.getCharacterItemKey(a), 'shared:shared-a');
+check(shared.getCharacterItemKey(local), 'local:local-a:');
+check(shared.getCharacterItemKey({...local,isCustom:true}), 'custom:local-a');
+check(shared.getCharacterItemKey(null), '');
+check(shared.isReviewedSharedFragment(a), true);
+for (const invalid of [{disposition:'pending'}, {manual_search_eligible:false}, {usage:'negative'}, {content_type:'template'}])
+    check(shared.isReviewedSharedFragment({...a,_semantic:decision(invalid)}),false);
+check(shared.isReviewedSharedFragment({...a,_semantic:decision({strict_model_pool_eligible:false})}),true);
+check(shared.isReviewedSharedFragment({...a,_semantic:decision({strict_model_pool_eligible:false})},{random:true}),false);
+check(shared.isReviewedSharedFragment(local),true);
+check(shared.getPromptSearchRank(a,'Wave'),0);
+check(shared.getPromptSearchRank(a,'Wa'),1);
+check(shared.getPromptSearchRank(a,'smile'),2);
+check(shared.getPromptSearchRank(a,'Fixture'),3);
+check(shared.getPromptSearchRank(a,'absent'),Infinity);
+check(shared.rankPromptSearchResults([{id:'body',tags:'Wave'},a],'wave').map(value=>value.id),['shared-a','body']);
+const shuffled = shared.createStablePromptShuffle(value=>value.id);
+check(shuffled([a,b]).map(value=>value.id),shuffled([b,a]).map(value=>value.id),'Shuffle priorities survive changed input order');
+const matches = filters => shared.itemMatchesCategoryFilters(a,new Set(filters));
+check(matches(['shared-theme:pose_action']),true);
+check(matches(['shared-theme:clothing_accessory']),false);
+check(matches(['shared-theme:pose_action','shared-source:source-a']),true);
+check(matches(['shared-theme:pose_action','shared-source:source-b']),false,'Source intersects topic');
+check(matches(['shared-sub:pose_action::手势与肢体动作']),true);
+check(matches(['shared-sub:clothing_accessory::手势与肢体动作']),false,'Same label cannot cross semantic ownership');
+check(matches(['shared-sub:pose_action::手势与肢体动作','shared-sub:clothing_accessory::裙装与礼服']),false,'Different-owner filters intersect');
+check(matches([shared.makeSharedParentFilterKey('WeiLin / 动作与姿势')]),true);
+check(matches([shared.makeSharedPathFilterKey(['WeiLin / 动作与姿势','手势与肢体动作'])]),true);
+check(matches([shared.makeSharedChildFilterKey('WeiLin / 动作与姿势','手势与肢体动作')]),true);
+const filters = new Set(['Dress','shared-theme:pose_action','shared-source:source-a']);
+check(shared.hasSharedCategoryFilters(filters),true);
+check(shared.normalizeSharedCategoryNavigationFilters(filters),true);
+check([...filters],['shared-theme:pose_action','shared-source:source-a']);
+check(shared.activateSharedCategoryNavigationFilter(filters,'shared-sub:pose_action::手势与肢体动作'),true);
+check([...filters],['shared-source:source-a','shared-sub:pose_action::手势与肢体动作']);
+check(shared.activateSharedCategoryNavigationFilter(filters,'shared-sub:pose_action::手势与肢体动作'),false);
+check(shared.getSharedCategoryRequestFilter(filters),'shared-filters:["shared-source:source-a","shared-sub:pose_action::手势与肢体动作"]');
+check(shared.pruneSharedCategoryFilters([a],new Set(['shared-theme:absent'])),true);
+filters.add('Dress');
+check(shared.removeSharedCategoryFilters(filters),true);
+check([...filters],['Dress']);
+check(shared.buildSharedSourceOptions([a,a,b,local]),[{id:'source-a',label:'Fixture/source',count:2}]);
+check(shared.getSharedCodexDirectoryLevels('默认/角色'),[]);
+requestLog=[];
+const concurrent = await Promise.all([shared.loadMergedPromptItems('pose',[local]),shared.loadMergedPromptItems('pose',[local])]);
+check(concurrent[0].map(value=>value.id),['shared-a','shared-b'],'Retired local arrays are not current shared authority');
+check(concurrent[1],concurrent[0]);
+check(requestLog.filter(value=>value.url.startsWith('/anima-tools')).length,1,'Concurrent requests share one in-flight read');
+check(shared.getSharedPromptSyncStats('pose').changes,{added:0,updated:0,removed:0,unchanged:2,baseline:true});
+await shared.loadMergedPromptItems('pose',[]);
+check(requestLog.filter(value=>value.url.startsWith('/anima-tools')).length,2,'A later open rechecks revision');
+payload={...payload,revision:'fixture-r2',items:[{...a,tags:'edited body'},item('shared-c')]};
+const refreshed=await shared.refreshMergedPromptItems('pose',[]);
+check(refreshed.map(value=>value.id),['shared-a','shared-c']);
+check(shared.getSharedPromptSyncStats('pose').changes,{added:1,updated:1,removed:1,unchanged:0,baseline:false});
+check(shared.getSharedPromptSyncMessage('pose').includes('新增 1 / 更新 1 / 删除 1'),true);
+check(shared.getSharedPromptSyncMessage('pose').includes('待复核 2'),true);
+check(shared.getSharedPromptSyncMessage('pose').includes('安全隔离 1'),true);
+await shared.validateSharedPromptSelection('pose',refreshed);
+await assert.rejects(()=>shared.validateSharedPromptSelection('pose',[a]),/资料已变更/);checks++;
+payload={...payload,items:[{...refreshed[0],_semantic:decision({binding:'new-binding'})}]};
+await assert.rejects(()=>shared.validateSharedPromptSelection('pose',[refreshed[0]]),/资料已变更/);checks++;
+payload={...payload,items:[a,item('unreviewed',{_semantic:decision({disposition:'pending'})}),item('negative',{_semantic:decision({usage:'negative'})})]};
+check((await shared.loadMergedPromptItems('pose',[])).map(value=>value.id),['shared-a']);
+payload={enabled:false,revision:'unavailable',items:[]};
+await assert.rejects(()=>shared.loadMergedPromptItems('pose',[]),/共享资料库不可用/);checks++;
+payload={enabled:true,revision:'fixture-r3',items:[a]};
+check((await shared.loadMergedPromptItems('pose',[])).map(value=>value.id),['shared-a'],'Failed reads do not poison later recovery');
+events.get('anima-tools-shared-prompts-updated')();
+check(shared.getSharedCategoryPaths(a),[],'Invalidation clears old taxonomy');
+console.log(`PASS: ${checks} current shared prompt checks; stable identity, exact bodies, review eligibility, topic/source intersection, owned subcategories, concurrent reads, revision refresh, stale selection and recovery.`);

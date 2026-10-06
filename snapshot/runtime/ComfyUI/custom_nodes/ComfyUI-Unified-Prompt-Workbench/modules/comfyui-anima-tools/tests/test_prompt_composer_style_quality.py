@@ -16,6 +16,9 @@ def load_composer_class(shared_items=None):
         if isinstance(node, ast.ClassDef)
         and node.name == "AnimaPromptComposer"
     )
+    eligible_node = next(node for node in tree.body
+                         if isinstance(node, ast.FunctionDef)
+                         and node.name == "_shared_random_eligible")
     namespace = {
         "get_shared_prompt_payload": lambda kind: {
             "items": list(shared_items or []),
@@ -23,7 +26,7 @@ def load_composer_class(shared_items=None):
     }
     exec(
         compile(
-            ast.Module(body=[composer_node], type_ignores=[]),
+            ast.Module(body=[eligible_node, composer_node], type_ignores=[]),
             str(NODES_PATH),
             "exec",
         ),
@@ -32,30 +35,40 @@ def load_composer_class(shared_items=None):
     return namespace["AnimaPromptComposer"], namespace
 
 
-def configure_local_data(composer):
+def configure_shared_data(composer, namespace):
     data = {
-        "data.js": [
-            {"id": 1, "name": "Artist A"},
-            {"id": 2, "name": "Artist B"},
+        "artist": [
+            {"id": 1, "name": "Artist A", "tags": "@Artist A"},
+            {"id": 2, "name": "Artist B", "tags": "@Artist B"},
         ],
-        "character_data.js": [
-            {"name": "Hero A", "copyright": "Series"},
-            {"name": "Hero B", "copyright": "Series"},
+        "character": [
+            {"name": "Hero A", "copyright": "Series", "trigger": "hero a trigger"},
+            {"name": "Hero B", "copyright": "Series", "trigger": "hero b trigger"},
         ],
-        "clothing_data.js": [
+        "clothing": [
             {"id": "clothing-a", "name": "Clothing A", "tags": "red dress"},
             {"id": "clothing-b", "name": "Clothing B", "tags": "blue coat"},
         ],
-        "background_data.js": [
+        "background": [
             {"id": "background-a", "name": "Forest", "tags": "forest"},
             {"id": "background-b", "name": "City", "tags": "city"},
         ],
-        "pose_data.js": [
+        "pose": [
             {"id": "pose-a", "name": "Standing", "tags": "standing"},
             {"id": "pose-b", "name": "Sitting", "tags": "sitting"},
         ],
     }
-    composer._load_js_array = lambda filename: data[filename]
+    style_reader = namespace["get_shared_prompt_payload"]
+    data["style_quality"] = style_reader("style_quality")["items"]
+    for items in data.values():
+        for item in items:
+            item["shared"] = True
+            item["_semantic"] = {"disposition": "reviewed", "random_pool_eligible": True,
+                                 "strict_model_pool_eligible": True, "usage": "positive",
+                                 "content_type": "fragment"}
+    namespace["get_shared_prompt_payload"] = lambda kind: {"items": list(data[kind])}
+    composer._load_js_array = lambda _filename: (_ for _ in ()).throw(
+        AssertionError("shared pools must not fall back to retired local arrays"))
     composer._load_json_object = lambda _filename: {
         "hero a||series": {"trigger": "hero a trigger"},
         "hero b||series": {"trigger": "hero b trigger"},
@@ -86,7 +99,7 @@ class PromptComposerStyleQualityTests(unittest.TestCase):
     def build_composer(self):
         composer_class, namespace = load_composer_class(self.style_items)
         composer = composer_class()
-        configure_local_data(composer)
+        configure_shared_data(composer, namespace)
         return composer, namespace
 
     def resolve(self, composer, enable_style_quality=True):
@@ -165,14 +178,34 @@ class PromptComposerStyleQualityTests(unittest.TestCase):
             )
         self.assertEqual(without_style["style_quality"], [])
 
-    def test_disabled_style_quality_does_not_access_shared_database(self):
+    def test_disabled_style_quality_does_not_access_its_shared_pool(self):
         composer, namespace = self.build_composer()
-        namespace["get_shared_prompt_payload"] = lambda _kind: (_ for _ in ()).throw(
-            AssertionError("shared database should not be loaded")
-        )
+        current_reader = namespace["get_shared_prompt_payload"]
+        calls = []
+        def read_pool(kind):
+            self.assertNotEqual(kind, "style_quality", "disabled style pool must not be read")
+            calls.append(kind)
+            return current_reader(kind)
+        namespace["get_shared_prompt_payload"] = read_pool
 
         selected, _text = self.resolve(composer, False)
         self.assertEqual(selected["style_quality"], [])
+        self.assertCountEqual(calls, ["artist", "character", "clothing", "background", "pose"])
+        self.assertTrue(all(selected[kind] for kind in calls))
+
+    def test_random_pool_excludes_unreviewed_or_ineligible_entries(self):
+        composer, namespace = self.build_composer()
+        current_reader = namespace["get_shared_prompt_payload"]
+        def read_pool(kind):
+            items = current_reader(kind)["items"]
+            invalid = dict(items[0], id="forbidden", name="Forbidden", tags="forbidden token")
+            invalid["_semantic"] = dict(items[0]["_semantic"], strict_model_pool_eligible=False)
+            return {"items": [invalid, *items]}
+        namespace["get_shared_prompt_payload"] = read_pool
+        selected, text = self.resolve(composer)
+        self.assertNotIn("forbidden token", text)
+        self.assertTrue(all("forbidden" not in entry["key"].lower()
+                            for kind in composer.SELECTION_SECTIONS for entry in selected[kind]))
 
     def test_workflow_widget_indexes_include_seed_control_widget(self):
         composer, _namespace = self.build_composer()

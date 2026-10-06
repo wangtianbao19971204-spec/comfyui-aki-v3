@@ -12,8 +12,10 @@ const graph = {
     setDirtyCanvas: () => events.push('dirty'),
 };
 const context = vm.createContext({ app: { graph, canvas: {} } });
-vm.runInContext(fs.readFileSync(path.join(root, 'ComfyUI/custom_nodes/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js'), 'utf8')
-    .replace(/^import .*;$/m, '').replaceAll('export ', ''), context);
+vm.runInContext(fs.readFileSync(path.join(root, 'ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_target.js'), 'utf8')
+    .replace(/^import .*;\r?$/gm, '').replaceAll('export ', '') + '\nconst sharedCommitWidget = commitWidget;', context);
+vm.runInContext(fs.readFileSync(path.join(root, 'ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js'), 'utf8')
+    .replace(/^import .*;\r?$/gm, '').replaceAll('export ', ''), context);
 assert.equal(context.widgetSource(sampler, 'seed').node, seed, 'Edit the connected seed source, not the unused sampler seed');
 assert.equal(context.widgetSource(sampler, 'steps').node, sampler);
 assert.equal(context.widgetSource(undefined, 'width'), null);

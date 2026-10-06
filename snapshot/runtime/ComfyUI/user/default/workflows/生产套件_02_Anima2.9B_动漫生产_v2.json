@@ -15830,7 +15830,7 @@
     "qgn_navigation_groups": [
       {
         "id": "qgn_1779591970840_gch3mkx9m",
-        "groupName": "[00] 总控开关",
+        "groupName": "CTRL-00 工具与细化组件总开关",
         "shortcutKey": "1",
         "zoomScale": 100,
         "order": 0

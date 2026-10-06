@@ -3,12 +3,12 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
 
-const source = fs.readFileSync(path.join(__dirname, '../ComfyUI/custom_nodes/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js'), 'utf8')
-    .replace(/^import .*;$/m, '').replaceAll('export function ', 'function ');
+const source = fs.readFileSync(path.join(__dirname, '../ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js'), 'utf8')
+    .replace(/^import .*;\r?$/gm, '').replaceAll('export function ', 'function ');
 const nodes = new Map([[1, {mode: 0}], [2, {mode: 2}], [3, {mode: 4}], [4, {mode: 2}], [5, {mode: 2}]]);
 const settings = {activeBranch: 'a', branches: [
-    {id: 'a', label: 'A', nodeIds: [1, 2, 3], modes: {1: 0, 2: 2, 3: 4}},
-    {id: 'b', label: 'B', nodeIds: [4, 5], modes: {4: 0, 5: 4}},
+    {id: 'a', label: 'A', nodeIds: [1, 2, 3], modes: {1: 0, 2: 2, 3: 4}, stages: [{id:'daily',label:'Daily',groups:[]}]},
+    {id: 'b', label: 'B', nodeIds: [4, 5], modes: {4: 0, 5: 4}, stages: [{id:'daily',label:'Daily',groups:[]}]},
 ]};
 const ds = {scale: 0.1, offset: [900, -1200]};
 const app = {
@@ -20,7 +20,16 @@ const app = {
 };
 const context = vm.createContext({app, document: {querySelector: () => null, getElementById: () => ({hidden: false, getBoundingClientRect: () => ({bottom: 246})})}});
 vm.runInContext(source, context);
-vm.runInContext('activate = {}; status = {}; viewBranch = "b"; activateBranch();', context);
+vm.runInContext(`
+    branchSelect = {};
+    activate = {}; status = {dataset:{}};
+    stageRow = {append(){},replaceChildren(){},querySelectorAll(){return []}};
+    detailSelect = {append(){},replaceChildren(){}};
+    panel = {querySelector(){return null},classList:{toggle(){}}};
+    prev = {}; next = {}; dailyControls = {render(){},show(){}};
+    document.createElement = () => ({dataset:{}});
+    viewBranch = "b"; activateBranch();
+`, context);
 assert.deepEqual([...nodes.values()].map(n => n.mode), [2, 2, 2, 0, 4], 'Switch must restore bypassed state and mute the old branch');
 nodes.get(5).mode = 2;
 vm.runInContext('viewBranch = "a"; activateBranch();', context);

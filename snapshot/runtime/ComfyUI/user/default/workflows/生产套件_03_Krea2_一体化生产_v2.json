@@ -8562,7 +8562,7 @@
     "qgn_navigation_groups": [
       {
         "id": "qgn_1779591970840_gch3mkx9m",
-        "groupName": "[00] 常用控制台 · 开关 / LoRA / @artist / Prompt · 紧凑版",
+        "groupName": "CTRL-00 可选分组总开关",
         "shortcutKey": "1",
         "zoomScale": 100,
         "order": 0

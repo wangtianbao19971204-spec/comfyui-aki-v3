@@ -24,7 +24,9 @@ def selected_workflows(profile, workflows):
         elif profile == "krea":
             selected = name.startswith(("生产套件_03_", "生产套件_99_"))
         elif profile == "lean":
-            selected = name.startswith(("生产扩展_", "生产套件_99_"))
+            # Lean only promises the six independent tools (04--09), not
+            # later production extensions with a wider plugin dependency set.
+            selected = name.startswith(tuple(f"生产扩展_{number:02d}_" for number in range(4, 10))) or name.startswith("生产套件_99_")
         if selected:
             yield workflow
 

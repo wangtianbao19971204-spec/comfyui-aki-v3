@@ -108,7 +108,7 @@ app.registerExtension({
         .filter((node) => compatibleClasses.has(node?.comfyClass) && isWorkflowTargetEnabled(node));
 
       // A UAP branch has one final loader; ambiguous broadcasts must not fan out.
-      if (app.graph?.extra?.uap_workbench && loraLoaderNodes.length !== 1) {
+      if (app.graph?.extra?.uap_workbench && targetNodes.length !== 1) {
         console.warn("LoRA Manager: choose a specific enabled UAP target before sending");
         return;
       }

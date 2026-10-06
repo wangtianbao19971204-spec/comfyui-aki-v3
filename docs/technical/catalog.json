@@ -81,10 +81,12 @@
       "tests": [
         "snapshot/runtime/production_tools/validate_profiles.py",
         "snapshot/runtime/production_tools/validate_lean_profile.py",
-        "snapshot/runtime/production_tools/test_plugin_fusion.cjs"
+        "snapshot/runtime/production_tools/test_plugin_fusion.cjs",
+        "snapshot/runtime/production_tools/test_validate_profiles.py"
       ],
       "evidence": [
-        "docs/receipts/browser_live_deployment_20261006.json"
+        "docs/receipts/browser_live_deployment_20261006.json",
+        "docs/receipts/final_workflow_acceptance_20261007.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -92,7 +94,9 @@
         "snapshot/runtime/production_tools/launch.py",
         "snapshot/runtime/production_tools/profiles.json",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/__init__.py",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules.json"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules.json",
+        "snapshot/runtime/production_tools/validate_profiles.py",
+        "snapshot/runtime/production_tools/test_validate_profiles.py"
       ],
       "examples": [
         "docs/technical/runtime/independent-services.md",
@@ -129,7 +133,8 @@
         "snapshot/evidence/20261005_workflow_product_repair/REPORT.txt",
         "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/browser_acceptance.json",
         "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261003_015012_R1_autonomous/UI_FINAL_ACCEPTANCE.json",
-        "docs/receipts/browser_live_deployment_20261006.json"
+        "docs/receipts/browser_live_deployment_20261006.json",
+        "docs/receipts/final_workflow_acceptance_20261007.json"
       ],
       "acceptance": "historical",
       "watch": [
@@ -156,14 +161,16 @@
         "snapshot/runtime/production_tools/validate_uap_workflow.py",
         "snapshot/runtime/production_tools/analyze_workflow_dependencies.py",
         "docs/technical/archive/benchmark_reports/2026-10-04_full_workflow_review/build_component_catalog.py",
-        "snapshot/runtime/production_tools/layout_uap_workbench.py"
+        "snapshot/runtime/production_tools/layout_uap_workbench.py",
+        "scripts/native_workflow_acceptance.py"
       ],
       "tests": [
         "snapshot/runtime/production_tools/validate_uap_workflow.py",
         "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/test_structure.py",
         "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/test_candidate.cjs",
         "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_native_e2e_acceptance/acceptance.py",
-        "snapshot/runtime/production_tools/test_uap_browser_retirement.py"
+        "snapshot/runtime/production_tools/test_uap_browser_retirement.py",
+        "tests/test_native_workflow_acceptance.py"
       ],
       "evidence": [
         "snapshot/evidence/20261005_workflow_product_repair/FINAL_DELIVERY.json",
@@ -172,7 +179,8 @@
         "docs/technical/archive/civitai_workflow_study/检测器到细化器数据流.json",
         "docs/technical/archive/civitai_workflow_study/逐工作流明细.json",
         "docs/receipts/browser_workflow_retirement_20261006.json",
-        "docs/receipts/browser_live_deployment_20261006.json"
+        "docs/receipts/browser_live_deployment_20261006.json",
+        "docs/receipts/final_workflow_acceptance_20261007.json"
       ],
       "acceptance": "historical",
       "watch": [
@@ -182,7 +190,9 @@
         "snapshot/runtime/production_tools/validate_uap_workflow.py",
         "snapshot/runtime/production_tools/analyze_workflow_dependencies.py",
         "snapshot/runtime/production_tools/layout_uap_workbench.py",
-        "snapshot/runtime/production_tools/test_uap_browser_retirement.py"
+        "snapshot/runtime/production_tools/test_uap_browser_retirement.py",
+        "scripts/native_workflow_acceptance.py",
+        "tests/test_native_workflow_acceptance.py"
       ],
       "examples": [
         "snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json"
@@ -220,7 +230,8 @@
         "docs/receipts/model_sources_20261007.json",
         "docs/receipts/model_source_recount_20261007.json",
         "docs/receipts/model_checkpoint_cleanup_20261007.json",
-        "docs/receipts/model_standardization_20261007.json"
+        "docs/receipts/model_standardization_20261007.json",
+        "docs/receipts/final_workflow_acceptance_20261007.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -422,7 +433,8 @@
         "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/test_canonical_selector_backend.py",
         "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/test_canonical_selector_frontend.mjs",
         "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/test_artist_page_contract_adapted.py",
-        "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/test_snapshot_guards.py"
+        "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/test_snapshot_guards.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/tests/browser_extension_loader.mjs"
       ],
       "evidence": [
         "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/source_snapshot_final/manifest.json",
@@ -430,7 +442,8 @@
         "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/交付说明.txt",
         "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/browser_acceptance.json",
         "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/live_api_acceptance.json",
-        "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/final_live_guard.json"
+        "docs/technical/archive/benchmark_reports/2026-10-02_selector_taxonomy_shared/final_live_guard.json",
+        "docs/receipts/final_workflow_acceptance_20261007.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -465,13 +478,15 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_tag_identity_bridge.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_tag_api_identity.py",
         "docs/technical/archive/benchmark_reports/2026-09-13_tag_import/test_tag_http.py",
-        "docs/technical/archive/benchmark_reports/2026-09-13_tag_import/tag_import_ui.test.mjs"
+        "docs/technical/archive/benchmark_reports/2026-09-13_tag_import/tag_import_ui.test.mjs",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/tests/run_isolated.py"
       ],
       "evidence": [
         "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/stage_validation.json",
         "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/live_acceptance.json",
         "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/current_site_audit.json",
-        "docs/technical/archive/benchmark_reports/2026-10-01_gallery_card_fix/verification.json"
+        "docs/technical/archive/benchmark_reports/2026-10-01_gallery_card_fix/verification.json",
+        "docs/receipts/final_workflow_acceptance_20261007.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -660,7 +675,8 @@
         "docs/receipts/source_coverage_20261005.json",
         "docs/receipts/isolated_boot_20261006.json",
         "docs/receipts/reassurance_20261006.json",
-        "docs/receipts/pull_audit_20261006.json"
+        "docs/receipts/pull_audit_20261006.json",
+        "docs/receipts/final_workflow_acceptance_20261007.json"
       ],
       "acceptance": "checked-source",
       "watch": [

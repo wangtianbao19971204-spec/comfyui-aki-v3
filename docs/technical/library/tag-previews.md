@@ -37,6 +37,8 @@ Gallery 另有 `G/py/shared/data/tags_cache.db`，用于热度词/译文等补�
 
 ## 测试与证据
 
+- Gallery 的两套现行契约通过 `tests/run_isolated.py` 执行：需要已安装 pytest，将 collection 包装与 SQLite fixture 放全新临时目录，并禁用第三方 pytest 自动加载。这样避免 pytest 为收集子目录测试导入生产统一包 `__init__`；不启动 ComfyUI、不访问生产数据库。
+
 - 主仓有 Gallery `tests/test_weilin_tag_bridge.py`、`tests/test_tag_translation_runtime.py`，以及 WeiLin `prompt_selector/tests/test_tag_{identity_bridge,api_identity}.py`；它们验证身份/接口边界，不覆盖全量图片安装。
 - 已归档 [test_tag_http.py](../archive/benchmark_reports/2026-09-13_tag_import/test_tag_http.py)与 [tag_import_ui.test.mjs](../archive/benchmark_reports/2026-09-13_tag_import/tag_import_ui.test.mjs)，包含预览元数据/导入合同；测试依赖的旧 fixture 和服务桩未因此齐备，不应直接指向生产执行。
 - Raven 的 [stage_validation.json](../archive/benchmark_reports/2026-09-28_raven_increment/stage_validation.json)与 [live_acceptance.json](../archive/benchmark_reports/2026-09-28_raven_increment/live_acceptance.json)记录 816 张安装图和 811 个主预览通过。另 5 张是同正文第二来源，单预览 UI 不同时显示。
@@ -44,6 +46,8 @@ Gallery 另有 `G/py/shared/data/tags_cache.db`，用于热度词/译文等补�
 - 已归档 [图库 verification.json](../archive/benchmark_reports/2026-10-01_gallery_card_fix/verification.json)，记录 13 项旧前端测试、40 卡片在两尺寸无重叠/越界及来源链接/键盘焦点通过；这是历史图库 UI 证据，不是当前 Tag 图覆盖率证据。
 
 ## 更新记录
+
+- 2026-10-07：最终回归修复 Gallery 隔离 collection 入口并重跑 15 项身份/分页/翻译契约；WeiLin Tag API 测试补现行字符串桶常量，用临时中性候选而非向父目录回读运行 benchmark。7 项身份契约通过，缺失仓内历史候选的 1 项明确跳过。验证保证候选接口不写源文件/在线 Tag 库；不代表真实图片全量安装或当前图库 UI 已重新验收。
 
 - 2026-10-05：补登记当前服务打开的 Gallery `tags_cache.db`；只核对文件身份与外部归属，不导出正文、不覆盖/清理数据库或重新验收图库 UI。
 

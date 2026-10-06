@@ -1,6 +1,6 @@
 # 本体、插件装配与启动
 
-文档修订：2026-10-07.1。
+文档修订：2026-10-07.2。
 
 ## 职责与实现
 
@@ -16,10 +16,13 @@
 
 [validate_profiles.py](../../../snapshot/runtime/production_tools/validate_profiles.py)、[validate_lean_profile.py](../../../snapshot/runtime/production_tools/validate_lean_profile.py)检查配置；[test_plugin_fusion.cjs](../../../snapshot/runtime/production_tools/test_plugin_fusion.cjs)检查融合。正式启动还应核对真实 PID/启动时间、8188 所有者、队列及 `/unified-workbench/status`；静态代码检查不能替代冷启动。
 
+`lean` 依赖检查只选择独立工具 04–09 和 99 释放流程；新增 10 部位细化需要 Impact-Pack、impact-subpack 与 rgthree，继续由生产配置检查，不能因其文件名前缀相同而扩大轻量配置范围。[5 项隔离回归](../../../snapshot/runtime/production_tools/test_validate_profiles.py)验证这一区别、现行主套件导航目标和编辑模板的来源绑定；不启动服务或提交任务。
+
 旧 `.git` 退休后的静态探测回退已审计，但不据此声称所有插件都完成重启验收。Anima 2.9B LoRA Patch 已完成独立任务的限定部署与对照交接，见 [兼容层档案](../training/anima-compat.md)；其服务身份与 A/B 结果只代表记录时的现场和样本，后续操作仍须重新核对当前状态。
 
 ## 更新记录
 
+- 2026-10-07：全流程复核发现轻量配置误选新增 10 部位细化；依赖校验收窄至承诺的 04–09 工具与 99 释放，保留生产/诊断对 10 的检查。增加隔离回归，不改变插件白名单或启动参数。
 - 2026-10-07：为实际 SAM 权重规范位置同步 6 份本体 blueprint 的加载选择器，保留上游下载名称／URL、图结构、参数与原模型内容；本次只验证路径与加载列表，不重启或执行 GPU 推理，见[标准化收据](../../receipts/model_standardization_20261007.json)。
 - 2026-10-06：经用户明确请求，将网页桥接、UAP 清理与维护保护共 11 文件部署到运行区，保留启动参数重载后端。真实收件、正负方向采用/序列化/撤销、新版 UAP 实页加载与三份执行源码摘要通过；五模块就绪、队列为空、保护范围与数据库逻辑内容保持。Chrome 油猴安装、五站当前网页 GM 发送及生产整页刷新仍为单独边界，见[运行区部署收据](../../receipts/browser_live_deployment_20261006.json)。
 

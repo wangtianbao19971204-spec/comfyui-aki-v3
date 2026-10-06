@@ -6,10 +6,10 @@
 
 ## 启动
 
-- 双击根目录 `启动_ComfyUI_生产.cmd`：加载 24 个生产插件，使用 8188。
-- 双击 `启动_ComfyUI_诊断.cmd`：在生产配置上增加开发诊断，共 25 个插件。
+- 双击根目录 `启动_ComfyUI_生产.cmd`：加载 25 个生产插件，使用 8188。
+- 双击 `启动_ComfyUI_诊断.cmd`：在生产配置上增加开发诊断，共 26 个插件。
 - 双击 `启动_ComfyUI_轻量.cmd`：只加载六条扩展工作流所需的 5 个插件，适合局部精修、抠图、扩图和超分；默认仍使用 8188，请先停止其他后端。
-- 双击 `启动_ComfyUI_Anima.cmd`：仅加载 Anima 01–02 主套件所需的 16 个插件。
+- 双击 `启动_ComfyUI_Anima.cmd`：仅加载 Anima 01–02 主套件所需的 17 个插件。
 - 双击 `启动_ComfyUI_Krea2.cmd`：仅加载 Krea2 03 主套件所需的 16 个插件。
 - 浏览器打开 `http://127.0.0.1:8188`。启动日志位于 `production_tools/logs`。
 - Windows 中文环境已规避 bitsandbytes 的 Linux Gaudi 探测编码异常；若启动日志出现新的异常，应先保留对应日志再切换 profile。
@@ -50,7 +50,7 @@
 
 选择分支用于浏览，点击“启用此分支”切换执行状态；切换保留各分支原有可选与旁路状态。SW / FX 开关只控制所属分支。主生产链、参数和子图保持原样。
 
-2026-09-07 增加集中式常用控制台：正负提示词、尺寸种子、采样参数、LoRA 选择与强度、出图模式、工具/细化开关直接同步原节点；画布的 LoRA 组与总开关也已移到日常区。操作与回退见 `production_tools/UAP统一工作台说明.md`；整理当前文件使用 `arrange_uap_daily_controls.py`，从原始模板重建则先运行 `layout_uap_workbench.py`。最新验收见 `benchmark_reports/2026-09-07_uap_daily_controls/验收说明.md`。原始工作流和优化前备份已保留。
+集中式常用控制台的正负提示词、尺寸种子、采样参数、LoRA 选择与强度、出图模式、工具/细化开关直接同步原节点。现行权威为唯一主 Git 中的完整 UAP v2 与模板；修改、校验和新候选导出从主仓 `docs/technical/runtime/workflows.md` 开始。`layout_uap_workbench.py` 的旧覆盖入口已经封闭，不再用独立旧流重建当前图；历史布局和验收记录仅供追溯。操作说明见 `production_tools/UAP统一工作台说明.md`。
 
 裁剪入口先运行一次取得预览，再拖选需要精修的区域。crop_right / crop_bottom 是边缘内缩量，回贴使用解析后的 left / top 和真实宽高。选区尺寸使用 64 的倍数。窗口重新打开后，裁剪框的前端属性与后端数值保持同步。
 
@@ -62,7 +62,7 @@
 - Krea2 Turbo 编辑适合改色、添加、重绘；强删除使用 Raw 配方并另做验证。本版没有为删除任务切换你的主模型。
 - 扩图已验证中心保留区域像素不变，但接缝、透视和延伸内容仍需逐张检查。
 - BiRefNet lite 已实测可用。RMBG 内的可选 SAM3 实现缺 triton，生产现有原生 SAM3 与该可选实现不同，不以此宣称原生 SAM3 不可用。
-- 在线反推没有发送外部 API 请求；未消耗第三方额度。原有 WD14、JoyCaption、视频和 LLM 扩展未在本轮穷举所有分支或模型。
+- 历史验收未发送外部 API 请求；不据此宣称在线反推已通过。现行图片标签反推为本地 PixAI Tagger，WD14 仅保留禁用回滚档案。JoyCaption、视频和 LLM 扩展未穷举所有分支或模型。
 - 不为旧 LLM / 视频插件降级 Torch。aisuite、torchscale 等旧依赖冲突保留在诊断记录，生产通过插件分组避免混用。
 
 ## 模板与个人副本
@@ -95,14 +95,7 @@
 
 完整记录：`benchmark_reports/2026-09-06_plugin_optimization`，包含原始备份、迁移记录、API、history、输出、显存采样、像素检查、失败案例和发布清单。
 
-恢复前先停止主后端，然后运行：
-
-```powershell
-.\python\python.exe -X utf8 -B .\benchmark_reports\2026-09-06_plugin_optimization\scripts\rollback.py
-.\python\python.exe -X utf8 -B .\benchmark_reports\2026-09-06_plugin_optimization\scripts\rollback.py --apply
-```
-
-第一条仅核验。若发布后又改过文件，自动恢复会停止，避免覆盖新改动。新增文件移入报告的恢复留存目录，不直接删除。
+恢复从唯一主仓的 `docs/RESTORE.md` 与 `docs/MAINTENANCE.md` 开始，先核对当前部署摘要、队列、服务身份和同批回滚材料。历史 benchmark 的 `rollback.py` 含固定路径及旧文件集合，不能直接执行；先比较当前状态，再按明确范围恢复，避免覆盖后来修改和更新的在线资料。旧原件继续保留。
 
 上游依据：[LLLite 节点改名](https://github.com/kohya-ss/ComfyUI-Anima-LLLite)、[Krea2 Identity Edit 权重](https://huggingface.co/conradlocke/krea2-identity-edit)、[HostBuffer 已知问题与维护者说明](https://github.com/Comfy-Org/ComfyUI/issues/15255)。本机结论以报告中的实际回归结果为准。
 

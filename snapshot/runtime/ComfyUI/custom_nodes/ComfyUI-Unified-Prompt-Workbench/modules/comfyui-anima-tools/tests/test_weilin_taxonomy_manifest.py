@@ -35,7 +35,7 @@ ROOT_KIND = {
 }
 
 
-@unittest.skipUnless(SOURCE_PATH.is_file(), "WeiLin Prompt Selector is not installed")
+@unittest.skipUnless(SOURCE_PATH.is_file(), "Historical frozen WeiLin data.json fixture is not included; this is not a live library test")
 class WeiLinTaxonomyManifestTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

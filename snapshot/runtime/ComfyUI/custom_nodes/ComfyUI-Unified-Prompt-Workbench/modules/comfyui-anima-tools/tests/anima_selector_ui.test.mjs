@@ -1,4 +1,7 @@
 import assert from "node:assert/strict";
+import { register } from "node:module";
+
+register('./browser_extension_loader.mjs', import.meta.url);
 
 function createFakeElement(tag) {
     return {
@@ -15,6 +18,9 @@ function createFakeElement(tag) {
         },
         remove() {
             this.removed = true;
+        },
+        querySelector() {
+            return null;
         },
     };
 }

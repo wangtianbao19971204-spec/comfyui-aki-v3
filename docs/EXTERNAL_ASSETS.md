@@ -12,7 +12,7 @@
 
 | 资源 | 放置位置（相对运行根） | 配套要求 |
 |---|---|---|
-| 底模/UNet | `ComfyUI/models/diffusion_models/` | 保留 Anima、Anima-2.9B、krea2 等家族子目录；匹配工作流引用 |
+| 底模/UNet | `ComfyUI/models/diffusion_models/` | 按现行 `current_path` 保留 anima、anima-2.9b、krea2 家族及用途子目录；匹配工作流引用 |
 | 整合 checkpoint | `ComfyUI/models/checkpoints/` | 按具体加载器选择，不能将所有检测模型塞进同一目录 |
 | 文本编码器 / VAE | `ComfyUI/models/text_encoders/`、`ComfyUI/models/vae/` | 必须匹配生成架构，不只凭文件名判断 |
 | LoRA / 控制 / IP-Adapter | `ComfyUI/models/loras/`、`controlnet/`、`ipadapter/` | 保留家族与子目录；图像编码器另在 `clip_vision/` |
@@ -22,7 +22,7 @@
 | 超分 / 本地语言模型 | `ComfyUI/models/upscale_models/`、`ComfyUI/models/LLM/` | 视觉 GGUF 需要同版本兼容的 mmproj；超分与扩散二放是不同资源 |
 | 插件内模型 | 例如 `ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/`、`comfyui-kjnodes/intrinsic_loras/` | 不止 models 总目录；保留 inventory 中的完整嵌套路径 |
 
-权威列表：`snapshot/inventory/models.json`；工作流引用检查：`snapshot/inventory/workflow_models.json`。清单的 `sha256: null` 表示尚未计算，不是已验真。新获取/替换的关键资源应记录确切版本、无鉴权来源页、许可、字节数和实际 SHA-256。不要将签名下载链接、查询参数内令牌或账户信息保存到公开说明。
+现行安装路径以 `snapshot/inventory/model_sources.json` 的 `current_path` 为准，尚未规范改名的资源沿用其 `path`；`models.json` 和 `workflow_models.json` 保留原盘点与历史引用身份。清单的 `sha256: null` 表示尚未计算，不是已验真。新获取/替换的关键资源应记录确切版本、无鉴权来源页、许可、字节数和实际 SHA-256。不要将签名下载链接、查询参数内令牌或账户信息保存到公开说明。
 
 可公开的下载来源另存 [`model_sources.json`](../snapshot/inventory/model_sources.json)，易读入口为[下载来源清单](MODEL_SOURCES.md)。它保留每个资源的稳定来源页、版本／文件 ID、上游原文件名、声明摘要、相对放置路径、配套和备注。来源记录不包含权重或原始插件缓存；声明摘要与本轮实际读取的 `local_sha256` 分开保存。网址并不保证永久可用，自训与未确认来源项仍要独立备份，详细获取／更新步骤见[模型维护](MODELS.md)。
 
@@ -49,5 +49,6 @@
 
 ## 更新记录
 
+- 2026-10-07：最终审核修正家族目录大小写及现行路径入口，区分来源目录的 `current_path` 与旧盘点身份，避免新机按历史名称放错位置。
 - 2026-10-07：补公开下载来源入口，区分网站版本／声明摘要、本机实际内容摘要和自训原件；换机器按精确文件身份补齐配套，保持权重／原缓存仓外边界。
 - 2026-10-06：补齐仓外多图片、缓存、源网页/Word 和训练图/caption 的虚构标注样例；明确示例不替代原件、配套版本、资源指纹或实际恢复验收。

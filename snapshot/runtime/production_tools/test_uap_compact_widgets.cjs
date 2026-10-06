@@ -12,8 +12,8 @@ const sizing = vm.createContext({
     window: { dispatchEvent: event => events.push(event) },
     CustomEvent: class { constructor(type, options) { this.type = type; this.detail = options.detail; } },
 });
-vm.runInContext(read('ComfyUI/custom_nodes/ComfyUI-Lora-Manager/web/comfyui/loras_widget_utils.js')
-    .replace(/^import .*;$/m, '').replaceAll('export ', ''), sizing);
+vm.runInContext(read('ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/web/comfyui/loras_widget_utils.js')
+    .replace(/^import .*;\r?$/gm, '').replaceAll('export ', ''), sizing);
 let empty = true;
 const css = new Map();
 const container = {
@@ -53,7 +53,7 @@ const graph = {
 };
 for (const n of graph._nodes) n.graph = graph;
 const app = { graph, registerExtension(e) { extension = e; } };
-vm.runInNewContext(read('ComfyUI/custom_nodes/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_compact_layout.js')
+vm.runInNewContext(read('ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_compact_layout.js')
     .replace(/^import .*;$/m, ''), {
     app, window: { addEventListener(type, callback) { listener = callback; } },
     requestAnimationFrame(callback) { frame = callback; return 1; },

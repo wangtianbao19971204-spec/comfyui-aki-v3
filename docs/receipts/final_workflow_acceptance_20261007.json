@@ -1,0 +1,506 @@
+{
+  "schema": 1,
+  "receipt_id": "final-workflow-acceptance-20261007-01",
+  "base_commit": "0520ce99e997e892345580847fbae1fd812ff88c",
+  "checked_at": "2026-10-06T19:16:53.966634+00:00",
+  "status": "completed_acceptance_with_open_findings",
+  "pass": false,
+  "meaning": "Acceptance review completed. Structure, reviewed deployment and preservation pass; whole workflow quality and mixed-model stability are not fully accepted.",
+  "workflow": {
+    "current_graphs_checked": 23,
+    "formal_uap_top_level_nodes": 291,
+    "subgraph_nodes": 174,
+    "total_nodes": 465,
+    "subgraphs": 22,
+    "links": 682,
+    "model_and_input_fields_checked": 85,
+    "family_pairing_checks": 24,
+    "retired_web_receivers": 0,
+    "formal_and_template_sha256": "8e11892bd970534e3fe04e6d07e206a1a344ce922a726132b8c7646aa301f3e0",
+    "static_checks_pass": true,
+    "formal_prompts_loras_seeds_parameters_default_switches_preserved": true,
+    "saved_workflow_and_template_files_checked": 39
+  },
+  "repairs": {
+    "deployment_pass": true,
+    "deployed_files": 27,
+    "modified_existing_files": 24,
+    "added_files": 3,
+    "summary": [
+      "Correct LoRA Manager unique-target broadcast variable while retaining disabled and multi-target guards.",
+      "Fix six navigation group references and one frozen editing-template model reference; exactly one scalar per JSON.",
+      "Limit lean profile to its documented tools and make isolated regression fixtures portable."
+    ],
+    "files": [
+      {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_tag_api_identity.py",
+        "before_sha256": "60de634885737be03c00988366732f43bca0a174a97f80efd6bc9a25cce77799",
+        "after_sha256": "d76c66fc6a83443a037b1038d0a197e976d4c0aaf1ad87bc5df86b0e9b3b9981",
+        "previously_existed": true
+      },
+      {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_tag_identity_bridge.py",
+        "before_sha256": "c4a0e72c62409c3b3ff3fb67a935a00b8f831d8fcd857e4866d36f308d7bd425",
+        "after_sha256": "bcc3779ddd6a9b2bb250fae5265d94cbf6420b76f610fe5aa06d4f666c97af15",
+        "previously_existed": true
+      },
+      {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/tests/anima_lora_manifest_matching.test.mjs",
+        "before_sha256": "f3dc034311a061b73e4ba8eb73642730b389ebe1e8caad9ab96c24f5a6d8a985",
+        "after_sha256": "bc7153fd0251454f691b0232184a361bc777fc901f0be08ea466c67ef0ad573f",
+        "previously_existed": true
+      },
+      {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/tests/anima_selector_ui.test.mjs",
+        "before_sha256": "316be69b0d48011c53af3e4775de14cce284affefe20f0dbbf3efe81e6caa44e",
+        "after_sha256": "27f09382608d8fedf465a837a5ef9b8b3dbfd20e89245be1b66b17c2a60b1c34",
+        "previously_existed": true
+      },
+      {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/tests/anima_shared_prompt_data.test.mjs",
+        "before_sha256": "01a221fc38318387d121ed7f004ff8bcf9419a76a1906a6ce2897c11cdb8ba77",
+        "after_sha256": "ee4d1d36c2e4b71c55611eb4b3ec50aaceba55fb6c03b67d9ae1442f53f688d2",
+        "previously_existed": true
+      },
+      {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/tests/test_lora_performance_and_shared_prompts.py",
+        "before_sha256": "31a98dc941aa6acc4991d87aef100adc0fdd86a3f68145ea1f9067e7cdde9d77",
+        "after_sha256": "3e87a133db402896e932830215110a2595f8d3610c2482ee5c2ef93bc47bb88c",
+        "previously_existed": true
+      },
+      {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/tests/test_prompt_composer_style_quality.py",
+        "before_sha256": "dade70ec4fa5c78269272b19294252677e6bfe3a7c74b952fba1e08d1c298031",
+        "after_sha256": "988e39be0b9f6e4488b8274fac5f069fa005d6342776c92d34c6d1330491372e",
+        "previously_existed": true
+      },
+      {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/tests/test_style_quality_selector.py",
+        "before_sha256": "413c3f7b239d894a5c95cb575c6f2161157460519ec3a9e374ace6e9be4a6519",
+        "after_sha256": "6e1f5e642f64d02aff6db9c4899ae4d046ce69a17a52663a6d52fa715afadc5f",
+        "previously_existed": true
+      },
+      {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/tests/test_weilin_taxonomy_manifest.py",
+        "before_sha256": "b7b5af1290dfd019536e8550a39acc3b80fd6d119e80ded4ce8d428f473eab55",
+        "after_sha256": "59779d9f4391d75497afa6deb966e5a6fc0436902845fed6de171de5677b4d39",
+        "previously_existed": true
+      },
+      {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/web/comfyui/lora_loader.js",
+        "before_sha256": "c1282368f8988f9e40258e12e02cb1a959413cd5d86138bc18972ac0a2ab11f9",
+        "after_sha256": "e5b0e2cfc28048c36ac16e05e7fa566f3998de9a2824fec1a9186a8da4a7308c",
+        "previously_existed": true
+      },
+      {
+        "source": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+        "before_sha256": "6afb346b6b159263b57c312e3655a158d5aac74c01063b8251d341b346e6a411",
+        "after_sha256": "e92f675608bf2b511ac31004a035514e0ab87e813db2dec3daa06a1dae79184f",
+        "previously_existed": true
+      },
+      {
+        "source": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+        "before_sha256": "21bbff38bbf3f1dae32217c679e3905e56cacba7032efa6001dbdbc6a008ac0a",
+        "after_sha256": "f6368a1a85f870acb859644ead6447389069dc47a4aefe8e428302c8d8b57cd1",
+        "previously_existed": true
+      },
+      {
+        "source": "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
+        "before_sha256": "de1ecf9aaa040be4a36f54b09ec83dc61d4bf9812cd01138b57fa9f092bc7867",
+        "after_sha256": "bdba0d558eb2ae5a92ac874ffd70cac1502d3a7aad1f4c453da107ac7b41ddc9",
+        "previously_existed": true
+      },
+      {
+        "source": "production_tools/README.md",
+        "before_sha256": "07680fd224b0c1ff717186f4f5f70aa57c49931eb4b604b41a1b1bdcaabb62d5",
+        "after_sha256": "b57ba387253cbe24521cad2f916b716ec6248da51d84979a214a6e7c84c30b96",
+        "previously_existed": true
+      },
+      {
+        "source": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+        "before_sha256": "4c19ab349ad12a4f6feccbc65aea355e18e8312fffae431e1ba83398240e4009",
+        "after_sha256": "46f5bfaf4639cba62c840689cf1ca0158892c97f5135f2acc0168597d3630bdc",
+        "previously_existed": true
+      },
+      {
+        "source": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+        "before_sha256": "f97b2f4f23544ac3a8686bb9c9054d1fd6b424693f6bfc98579d6db99c473120",
+        "after_sha256": "bb43d9815e8a9b3e235976c50f59cc383546c5a8ed115cfabd3ff45cadefcdcc",
+        "previously_existed": true
+      },
+      {
+        "source": "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
+        "before_sha256": "19292c11eb5b0930dea1bf461bbf7c4f54aee9746dbcaa94d871e14eda408f24",
+        "after_sha256": "eeff35df758d86acc84d7dde864fa64bda5ba0545e2eb85e10592e9ac06ed353",
+        "previously_existed": true
+      },
+      {
+        "source": "production_tools/templates/生产扩展_04_Krea2_指令编辑.json",
+        "before_sha256": "a1a4fb719dcd6ff8eb347b3920e3b0416c206aff31aec087238ee7e41a8ce245",
+        "after_sha256": "94d62e492f7ff837288dda0a0e26b9551b7bd026e09608dbcb6eb54ab96b7c63",
+        "previously_existed": true
+      },
+      {
+        "source": "production_tools/test_plugin_fusion.cjs",
+        "before_sha256": "e6856eb061d0c57f295cf295ccb473844e31e4f50de226caf78e804a56dcdbe8",
+        "after_sha256": "41a45e05980bf72418baf4cb2c9b53b2d35e7a3551f5978a915c80aedb3f5a5c",
+        "previously_existed": true
+      },
+      {
+        "source": "production_tools/test_uap_compact_widgets.cjs",
+        "before_sha256": "e8a4dff23db5621ff29d23ac4c5e6382adec18b93201e00d3d90d1e8838f56c2",
+        "after_sha256": "9be843abad69972600d51ae500eb056b3e4ed8e194df7d7e720e043aa30f6a12",
+        "previously_existed": true
+      },
+      {
+        "source": "production_tools/test_uap_daily_controls.cjs",
+        "before_sha256": "e3e0e69d8a51b7e361234ffe06a7531fba52029fc6280565b0bfba745710b5d3",
+        "after_sha256": "353fff5067ffccf0eecb7d77ec47358d876db9aecbdb98947a605793c8f81392",
+        "previously_existed": true
+      },
+      {
+        "source": "production_tools/test_uap_navigation.cjs",
+        "before_sha256": "ada3a129be9014704e962bebca197f296a9c27ad960f88640f8565818c37c109",
+        "after_sha256": "38d9b4155868ab82cf8f89373adc91ddb3a8b8c5e5f5dbf6e058e113ed823e47",
+        "previously_existed": true
+      },
+      {
+        "source": "production_tools/validate_profiles.py",
+        "before_sha256": "4ff5c170afdc460612ba02d6735d52446e1c317ae0faae13334063c502336fc8",
+        "after_sha256": "65c5808b73d8e5d8fdc258317a0c9104546dba81310f61d58998be95eb28d87f",
+        "previously_existed": true
+      },
+      {
+        "source": "production_tools/工作流状态表.md",
+        "before_sha256": "e21d0c21c3d47fc6cbee89855326c3e4b4b063cc848adf0e1dc455ebdad159f7",
+        "after_sha256": "74917bc8e0060dcaf67fb8229dfc5d65f92e3c8ea8a56f7cfe144bfd63c8d099",
+        "previously_existed": true
+      },
+      {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/tests/run_isolated.py",
+        "before_sha256": null,
+        "after_sha256": "68c4e1f935d7e266278bbae6421cd277151914e2d23e224c86cf47884f1b0f3e",
+        "previously_existed": false
+      },
+      {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-anima-tools/tests/browser_extension_loader.mjs",
+        "before_sha256": null,
+        "after_sha256": "863760d7a4b63c3786f9429a6b52c4cec044668f0740d5cf22952cb8277a29e2",
+        "previously_existed": false
+      },
+      {
+        "source": "production_tools/test_validate_profiles.py",
+        "before_sha256": null,
+        "after_sha256": "1d4c3bdc54eb18a696862e8b2a256fd6869ddface67feb5e99e4fab441276a88",
+        "previously_existed": false
+      }
+    ],
+    "rollback_existing_originals_preserved": 24,
+    "added_files_absent_before": 3,
+    "whole_snapshot_live_deployed": false
+  },
+  "regression": {
+    "suite_commands": 19,
+    "all_exit_zero": true,
+    "python": {
+      "run": 580,
+      "passed": 574,
+      "skipped": 6,
+      "failed": 0,
+      "errors": 0
+    },
+    "explicit_javascript_assertions": 194,
+    "other_javascript_suites": 10,
+    "native_runner_separate_tests": 59,
+    "historical_fixture_skips": [
+      {
+        "suite": "anima-unittest",
+        "count": 5,
+        "reason": "Historical frozen WeiLin data.json is external and not included in source checkout; no runtime fallback."
+      },
+      {
+        "suite": "weilin-tag-identity",
+        "count": 1,
+        "reason": "Historical tag candidate payload is external and not included in main Git; neutral temporary candidate used by current API tests."
+      }
+    ],
+    "does_not_certify_ui_or_gpu": true
+  },
+  "gpu": {
+    "submitted_cases": 15,
+    "backend_success_cases": 15,
+    "initial_cases": 12,
+    "initial_effective_output_cases": 9,
+    "initial_black_cases": [
+      "k2_smoke",
+      "k2_full",
+      "ext04"
+    ],
+    "diagnostic_followup_effective_cases": 3,
+    "cases": [
+      {
+        "case": "a1_smoke",
+        "backend_success": true,
+        "runner_result_pass": false,
+        "runner_receipt_sha256": "8dbfa34115aac8c835a57b112d0255830fe8e76a382ecba4e735ebe7f2bc3f30",
+        "effective_output": true,
+        "history_sha256": null
+      },
+      {
+        "case": "a1_full",
+        "backend_success": true,
+        "runner_result_pass": true,
+        "runner_receipt_sha256": "cc021ecb3410f49f7c01a2a09db7dd87024388d5836e58877357341391531c5d",
+        "effective_output": true,
+        "history_sha256": "470e9a2e7bed7c032e8e3099a861125112d04be6a5f871f12f962b509d32ccf3"
+      },
+      {
+        "case": "a29_smoke",
+        "backend_success": true,
+        "runner_result_pass": true,
+        "runner_receipt_sha256": "82c50ad3285ab474d925e56eede01f02f73ea4552cabc363ec53d6a46634c6a3",
+        "effective_output": true,
+        "history_sha256": "9f73e1627ca0624c4666ca54d2974ac0afc7befa44cb0e15b8f828e4cc974f8c"
+      },
+      {
+        "case": "a29_full",
+        "backend_success": true,
+        "runner_result_pass": true,
+        "runner_receipt_sha256": "ac8e86e3e647727c3c322a2e66d91fc266ca5a0e5240190a60cd8cdac541e5ed",
+        "effective_output": true,
+        "history_sha256": "1c6ff8e3b4df384a7e1feeb5bfa97683c4f002105259f11f7a0f3890c06b06cf"
+      },
+      {
+        "case": "k2_smoke",
+        "backend_success": true,
+        "runner_result_pass": true,
+        "runner_receipt_sha256": "490afeff8e231d2367355bbc97244118c88c037d8be78cf318eaa0b8597db8fb",
+        "effective_output": false,
+        "history_sha256": "c3d156d2c15daaf61fb4489ea716be40a8ffbeaad49cff02d69ba4a194176a92"
+      },
+      {
+        "case": "k2_full",
+        "backend_success": true,
+        "runner_result_pass": true,
+        "runner_receipt_sha256": "3497bdef4004a182e74f81d353e3715d8c1d5878c686a1d8f809185ee46a9917",
+        "effective_output": false,
+        "history_sha256": "cf6d52e1c692536c2049911f85abab171e92e1ae893c7dd4d8badc409718abd4"
+      },
+      {
+        "case": "ext04",
+        "backend_success": true,
+        "runner_result_pass": true,
+        "runner_receipt_sha256": "6c07a1d7d39999dd61fda73423d0b144319d397b7285739f040d2c6483922e65",
+        "effective_output": false,
+        "history_sha256": "862c5b03ed9edec0fb99ae3da92e743e3698fc80fe348db3016c6a45e3842e08"
+      },
+      {
+        "case": "ext05",
+        "backend_success": true,
+        "runner_result_pass": true,
+        "runner_receipt_sha256": "2aadca7a9ba783ba991dc1f12e1d83caf512ba29390b4be3658a826b74a08e6d",
+        "effective_output": true,
+        "history_sha256": "4f140e2f1426675eca5d26ae2f6d3821c12fe57e234b26f030c528582cb12efe"
+      },
+      {
+        "case": "ext06",
+        "backend_success": true,
+        "runner_result_pass": true,
+        "runner_receipt_sha256": "3d4b1327db0ed3a1b712ed51d5a44d23946b7b64125af3d96c4245521e50bcb2",
+        "effective_output": true,
+        "history_sha256": "4ed03eed561f19f40bd4e4380666ccb16b5ecd3c9ad6d7a6d1dbc286643cefd4"
+      },
+      {
+        "case": "ext07",
+        "backend_success": true,
+        "runner_result_pass": true,
+        "runner_receipt_sha256": "716dac87f2ca6a12d89ff19ee2128b91162f548aa8eb84baab856404c5a7764e",
+        "effective_output": true,
+        "history_sha256": "2788497ed25679929aec24e0c8269441a1f7e0b82dcb76812ff5b88bdf889d64"
+      },
+      {
+        "case": "ext08",
+        "backend_success": true,
+        "runner_result_pass": true,
+        "runner_receipt_sha256": "635dd229b98b633fc3ff1fb0e8a9e0bb49fb3987626f058fccaf3809807f507a",
+        "effective_output": true,
+        "history_sha256": "9eeb1d845d25e5d09a71f9fd58c966417915fe1d6df7a68ad863dcfe438f4ea6"
+      },
+      {
+        "case": "ext09",
+        "backend_success": true,
+        "runner_result_pass": true,
+        "runner_receipt_sha256": "67765fd5b3d0590367eaa3718b748c2c8e4e42f2e9cb31a6a51628e7d5307c23",
+        "effective_output": true,
+        "history_sha256": "eafe26321eb9d686acc71fd1ed2f2cdbb2e28984a2637d642eeae8afc577db8c"
+      },
+      {
+        "case": "k2_cold_check",
+        "backend_success": true,
+        "runner_result_pass": true,
+        "runner_receipt_sha256": "a43274b0bb5f6cf01ddd80f333b527f5b5957e286086adc0b800edbd9ad16e2e",
+        "effective_output": true,
+        "history_sha256": "558fcd0e71b5032c07812bbdf6610b2ca0c77812bf145b63c4e77e6745ae7c98"
+      },
+      {
+        "case": "ext04_after_k2_cold",
+        "backend_success": true,
+        "runner_result_pass": true,
+        "runner_receipt_sha256": "d5c4559b4a3b20dc29733a1f8f133d4d5fc55704d1230f881977053ea707ae30",
+        "effective_output": true,
+        "history_sha256": "d23d4e29f2299501f63e6915a639c78bc4fcf2d477166306e5b96547a4ba1476"
+      },
+      {
+        "case": "k2_full_after_cold",
+        "backend_success": true,
+        "runner_result_pass": true,
+        "runner_receipt_sha256": "46ab56f7976b14b17080fb6fbb3e30531310dbc4fdb8799068eb527300fa649c",
+        "effective_output": true,
+        "history_sha256": "5d27aacbd1c5e50a27a5f8e5392d53ac348bfd3540ce5b15843650da0e92b998"
+      }
+    ],
+    "cold_reset": {
+      "calls": 1,
+      "unload_models": true,
+      "free_memory": true,
+      "service_restarted": false,
+      "empty_queue_and_exact_service_identity_guarded": true,
+      "same_export_and_closure_preserved": true,
+      "result": "Krea2 smoke, editing and 1.5x full output recovered; exact runtime/cache root cause remains unisolated."
+    },
+    "valid_dimensions": {
+      "anima_original_full": [
+        2016,
+        1152
+      ],
+      "anima29_full": [
+        1152,
+        2016
+      ],
+      "krea2_followup_full": [
+        1152,
+        2016
+      ],
+      "upscale_2x": [
+        1536,
+        2048
+      ],
+      "upscale_4x": [
+        3072,
+        4096
+      ]
+    },
+    "transparent_output_valid": true,
+    "overall_visual_acceptance": false,
+    "quality_findings": [
+      "A1 rear-facing sample has no separate visible face/eye change, so those stages are not effect-certified.",
+      "A29 hand stage also changes the foot region; part isolation is limited.",
+      "Crop outside region is pixel-preserved, but inside-region background changes and slight rectangular blend remain.",
+      "Outpaint preserves the non-feathered original core but has visible side seams and road/shadow discontinuity."
+    ]
+  },
+  "browser": {
+    "fresh_page_checked": true,
+    "executed_source_hashes_matched": 3,
+    "modules_ready": 5,
+    "registered_workbench_nodes": 76,
+    "observed": [
+      "Daily-control seed search and Escape clear",
+      "Cross-source search and Escape input clear",
+      "Nine branch navigation",
+      "Library and model iframe loaded"
+    ],
+    "startup_errors_observed": 3,
+    "sam_editor_legacy_clipspace_import_http": 404,
+    "errors_fully_attributed": false,
+    "physical_ime_certified": false,
+    "chrome_tampermonkey_five_site_live_send_certified": false
+  },
+  "preservation": {
+    "pass": true,
+    "protected_paths": 8547,
+    "unplanned_drift": 0,
+    "sqlite_consistent_backups_checked": 3,
+    "sqlite_integrity_and_logical_content_unchanged": true,
+    "automatic_pose_repository_metadata_refresh_observed_and_preserved": true,
+    "original_pre_acceptance_pose_bytes_available": false,
+    "database_replaced": false,
+    "service_restarted": false,
+    "queue_cleared": false,
+    "deleted_15_evaluation_checkpoints_not_restored": true,
+    "four_training_releases_preserved": true
+  },
+  "git": {
+    "unique_development_repository": true,
+    "baseline_strict_fsck_pass": true,
+    "baseline_dangling_objects_preserved": 18,
+    "baseline_tracked_files": 9351,
+    "baseline_tracked_weights_databases_caches": 0,
+    "baseline_gitlinks": 0,
+    "all_history": {
+      "pass": true,
+      "mode": "all-history",
+      "scanned_objects": 81397,
+      "scanned_blobs": 58812,
+      "scanned_bytes": 7573192164,
+      "cross_part_boundaries": 118,
+      "offline": true,
+      "content_only": false,
+      "finding_count": 0,
+      "compressed_object_count": 14,
+      "reviewed_fixture_count": 116,
+      "cache_used": false,
+      "baseline_head": "0520ce99e997e892345580847fbae1fd812ff88c",
+      "head_after_scan": "0520ce99e997e892345580847fbae1fd812ff88c",
+      "security_exit": 0,
+      "guard_sha256": "bafa129ee7c1ff692e058db31f0673e02b767278d3b8043f2c67c69e874b84e4"
+    },
+    "baseline_all_history_report_sha256": "d5cb21dfb3df113828b53c71596c2e4dfa3d0f0ea58f06d582da64918b26ce6a",
+    "new_bytes_gate": "A separate real staged gate is required for this commit; baseline scan does not cover these new bytes.",
+    "final_commit_and_fresh_clone": "Private closure receipt binds final commit, this public receipt SHA, staged gate and fresh clone results; no self-referential commit ID here.",
+    "cleanup": {
+      "rebuildable_bytecode_files_moved": 6,
+      "bytes": 304482,
+      "recoverable_outside_git": true,
+      "qa_workflow_files_moved_out_of_runtime": 4,
+      "test_browser_tabs_closed": 2,
+      "history_or_archives_deleted": false,
+      "gc_prune_clean_executed": false,
+      "disk_space_release_claimed": false
+    },
+    "push": false,
+    "version_bump": false,
+    "new_tag": false
+  },
+  "limits": [
+    "No new-machine GPU/environment restoration or internet clone was performed.",
+    "Current model checks link to earlier complete hashes; weights were not all rehashed again in this round.",
+    "Regional standard/fast branches, physical IME and five live source-site Tampermonkey sends remain untested.",
+    "One neutral seed per selected path does not certify all styles, LoRAs, occlusion or concurrent mixed-model operation.",
+    "No model downloads or external language-model calls were made. Pose repository metadata refresh did contact its upstream.",
+    "Rule-based secret scanning is not an absolute privacy or redistribution-license guarantee; original private Git must stay private."
+  ],
+  "private_evidence_id": "final-workflow-acceptance-20261007-01",
+  "evidence_sha256": {
+    "deployment.json": "74147b4cdc38f7d208f25a360b70f2bc970e7c5f0bdacfe3fce41dae67c17e1e",
+    "deployment-helper-independent-review.json": "88b055767ad96f30e38bf168d43f17ce32a4d988baf4db35300cf5ce5d1084eb",
+    "workflow-audit/post-deployment/post-deployment-review.json": "28947065116f543d5c3a920be087ad81e0e6803a5a792307404402ab5da3cf92",
+    "regressions/final-summary.json": "1d3d1b23cc273395e3763e23ee0976e93fb4b9c97add7a9e1db3e2c720e82d33",
+    "regressions/native-acceptance-independent-walk-windows.json": "1f063f98fb22e305c6802f04925065789b637c867f38fa0f7a5143803587e83b",
+    "regressions/native-acceptance-saved-history-drift-review.json": "e1645dc7622a6440e6031bc1a491cb04eda01abe883e2453d84535511ef98d5b",
+    "gpu-visual-review.json": "24a642dcbd23fda884e9626f10e9f39876c10a0153a01945d5b0fed66a2697cf",
+    "gpu-visual-review-cold-check.json": "2cc0027a32932a8cf470fb29de2621101d45f1efeb705fcf48671f2475ff67d7",
+    "gpu-visual-review-after-cold.json": "b056e3f54f833163f54e86f80f9fe6777d77ca6b376a5f022baa517c761c8d6b",
+    "workflow-audit/krea-black-diagnostic/final-krea-readonly-diagnostic.json": "1b0ce1ebef30e70e8bf0bb9644ac69761eb0d986d2093b7c81d843ec50c032e1",
+    "gpu/krea2-cold-reset.json": "65017e43ad5ba46079834b3dca32e358a54e58a8a8414368088c1668c6ceece8",
+    "workflow-audit/gpu-history-review-a1/saved-a1-history-offline-final.json": "ca4dd179fa288bb4d22478d9f08f7c036375bbabb7a653d2d03da4ef0c0b35b3",
+    "browser/executed-source-comparison.json": "23b94fa21f2b2fece54989a105d9cf355776f507e19bc7c33efc92fa10ac8601",
+    "browser/startup-errors-independent-review.json": "0e54215127a9cfe4925a68c32ddebbc14d54f2c5937bda3ef88f3e17388cbd8a",
+    "final-preservation-summary.json": "2fc603e46921ba722993ea16a9d91faf7db26b91ed19cad5e20817ed5e7077a0",
+    "database-after.json": "aa8a228c604551d83e74b669ac95b53bebda278e677c103db7edf3e0c5d7e871",
+    "cleanup-bytecode.json": "667f366db193cdd8e0c707b733736e9a91f9813ae42527895dba3ea01e4ff7cf",
+    "cleanup-bytecode-final.json": "22f451cb05fdab2de61eba5acd6b7a77d8a336c3f71283acb3b77983a2c49a7f",
+    "qa-cleanup.json": "a1c16a85f742b2c5e572961898e51ad27e503ce9832c84fa6f3e4b094792d9cc",
+    "git-audit/cleanup-six-file-independent-review-20261007.json": "ad3a84560bb99665014d1acd5768b003db5478447fa8bc00110a0f2e4d7c6b94"
+  }
+}

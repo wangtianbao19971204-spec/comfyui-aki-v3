@@ -207,7 +207,7 @@ assert.match(source, /_base_model_profile:\s*activeBaseModelProfile\.id/);
 assert.match(source, /Download folder · \$\{activeBaseModelProfile\.label\}/);
 
 assert.match(source, /fetchFastestCivitaiSearch\(searchUrl,\s*forceRefresh\)/);
-assert.match(source, /const CIVITAI_SEARCH_CACHE_VERSION = "v7-red-first"/);
+assert.match(source, /const CIVITAI_SEARCH_CACHE_VERSION = "v9-preview-original-fallback"/);
 assert.match(source, /const CIVITAI_PRIMARY_ORIGIN = "https:\/\/civitai\.red"/);
 assert.match(source, /const CIVITAI_FALLBACK_ORIGIN = "https:\/\/civitai\.com"/);
 assert.match(source, /_search_source:\s*source/);
