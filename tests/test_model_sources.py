@@ -76,6 +76,127 @@ class ModelSourceTests(unittest.TestCase):
     def save(self, catalogue):
         (self.repo / sources.CATALOGUE).write_text(json.dumps(catalogue, ensure_ascii=False), encoding='utf8')
 
+    def standardized(self, asset, *, name='规范底模.safetensors'):
+        original_type = asset['path'].split('/')[2]
+        target = f'ComfyUI/models/{original_type}/fixture-family/图像生成/{name}'
+        asset['current_path'] = target
+        asset['standardization'] = {'family_slug': 'fixture-family',
+                                    'family_label': '样例家族', 'category': '图像生成',
+                                    'display_name': '规范底模', 'version': 'v1',
+                                    'precision': 'fp16', 'source_identity': 'cv200__f300',
+                                    'target_path': target,
+                                    'evidence': ['snapshot/inventory/example.json']}
+        return asset
+
+    def test_current_placement_keeps_capture_identity_bytes_and_summary(self):
+        catalogue = self.catalogue()
+        original = copy.deepcopy(catalogue['assets'][0])
+        asset = self.standardized(catalogue['assets'][0])
+        self.assertEqual(self.validate(catalogue), catalogue['summary'])
+        self.assertEqual(asset['path'], original['path'])
+        self.assertEqual(asset['bytes'], original['bytes'])
+        self.assertTrue(asset['captured_in_inventory'])
+        self.assertEqual(sources.current_path(asset), asset['current_path'])
+        self.assertEqual(sources.current_path(catalogue['assets'][1]), catalogue['assets'][1]['path'])
+        for field in ('version', 'precision', 'source_identity'):
+            asset['standardization'][field] = None
+        self.validate(catalogue)
+        for field, value in [('path', 'ComfyUI/models/diffusion_models/changed.safetensors'),
+                             ('bytes', 101), ('captured_in_inventory', False)]:
+            bad = copy.deepcopy(catalogue); bad['assets'][0][field] = value
+            with self.subTest(field=field), self.assertRaises(sources.CatalogueError):
+                self.validate(bad)
+
+    def test_placement_requires_present_asset_and_complete_whitelisted_contract(self):
+        catalogue = self.catalogue(); self.standardized(catalogue['assets'][0])
+        for field in ('current_path', 'standardization'):
+            bad = copy.deepcopy(catalogue); del bad['assets'][0][field]
+            with self.subTest(field=field), self.assertRaisesRegex(sources.CatalogueError, 'incomplete_standardization'):
+                self.validate(bad)
+        bad = copy.deepcopy(catalogue); bad['assets'][0]['observed_present'] = False
+        with self.assertRaisesRegex(sources.CatalogueError, 'missing_asset_has_current_path'):
+            self.validate(bad)
+        for value in (None, {}, {**catalogue['assets'][0]['standardization'], 'unreviewed': 'fixture'}):
+            bad = copy.deepcopy(catalogue); bad['assets'][0]['standardization'] = value
+            with self.subTest(value=value), self.assertRaisesRegex(sources.CatalogueError, 'invalid_standardization_schema'):
+                self.validate(bad)
+        bad = copy.deepcopy(catalogue); bad['assets'][0]['current_path'] = None
+        with self.assertRaises(sources.CatalogueError):
+            self.validate(bad)
+
+    def test_current_paths_cannot_escape_models_change_loader_type_or_use_devices(self):
+        catalogue = self.catalogue(); self.standardized(catalogue['assets'][0])
+        for target in ('../outside/model.safetensors', '/outside/model.safetensors',
+                       'G:/models/model.safetensors',
+                       'ComfyUI/custom_nodes/fixture/fixture-family/图像生成/model.safetensors',
+                       'ComfyUI/models/loras/fixture-family/图像生成/model.safetensors',
+                       'ComfyUI/models/diffusion_models/fixture-family/图像生成/NUL.safetensors',
+                       'ComfyUI/models/diffusion_models/fixture-family/图像生成/．．/model.safetensors'):
+            bad = copy.deepcopy(catalogue)
+            bad['assets'][0]['current_path'] = target
+            bad['assets'][0]['standardization']['target_path'] = target
+            with self.subTest(target=target), self.assertRaises(sources.CatalogueError):
+                self.validate(bad)
+        bad = copy.deepcopy(catalogue)
+        bad['assets'][3]['current_path'] = 'ComfyUI/models/checkpoints/fixture-family/图像生成/model.safetensors'
+        bad['assets'][3]['standardization'] = copy.deepcopy(catalogue['assets'][0]['standardization'])
+        bad['assets'][3]['standardization']['target_path'] = bad['assets'][3]['current_path']
+        with self.assertRaisesRegex(sources.CatalogueError, 'current_path_model_root_mismatch'):
+            self.validate(bad)
+
+    def test_standardization_components_target_and_evidence_cannot_drift(self):
+        catalogue = self.catalogue(); self.standardized(catalogue['assets'][0])
+        for field, value in [('family_slug', 'other-family'), ('category', '角色'),
+                             ('target_path', 'ComfyUI/models/diffusion_models/fixture-family/图像生成/other.safetensors'),
+                             ('family_slug', 'a/b'), ('category', 'NUL'),
+                             ('evidence', ['../private.json']),
+                             ('evidence', ['snapshot/a.json', 'SNAPSHOT/A.json']),
+                             ('version', False), ('precision', []), ('source_identity', {})]:
+            bad = copy.deepcopy(catalogue); bad['assets'][0]['standardization'][field] = value
+            with self.subTest(field=field, value=value), self.assertRaises(sources.CatalogueError):
+                self.validate(bad)
+
+    def test_current_path_collisions_include_unmoved_and_missing_history_case_insensitively(self):
+        catalogue = self.catalogue(); self.standardized(catalogue['assets'][0])
+        duplicate = copy.deepcopy(catalogue['assets'][0])
+        duplicate.update(path='ComfyUI/models/diffusion_models/extra.safetensors', captured_in_inventory=False)
+        # Change ASCII filename case, while leaving the classification contract valid.
+        duplicate['current_path'] = duplicate['current_path'].replace('.safetensors', '.SAFETENSORS')
+        duplicate['standardization']['target_path'] = duplicate['current_path']
+        catalogue['assets'].append(duplicate); catalogue['summary'] = sources.compute_summary(catalogue)
+        with self.assertRaisesRegex(sources.CatalogueError, 'duplicate_current_asset_path'):
+            self.validate(catalogue)
+        for present in (True, False):
+            bad = self.catalogue(); moved = self.standardized(bad['assets'][0])
+            unmoved = copy.deepcopy(bad['assets'][2])
+            unmoved.update(path=moved['current_path'].replace('.safetensors', '.SAFETENSORS'),
+                           captured_in_inventory=False, observed_present=present)
+            bad['assets'].append(unmoved); bad['summary'] = sources.compute_summary(bad)
+            with self.subTest(present=present), self.assertRaisesRegex(sources.CatalogueError, 'duplicate_current_asset_path'):
+                self.validate(bad)
+
+    def test_standardized_render_prefers_current_path_and_keeps_history_and_maintenance(self):
+        catalogue = self.catalogue(); asset = self.standardized(catalogue['assets'][0])
+        self.validate(catalogue)
+        rendered = sources.render_markdown(catalogue)
+        self.assertIn('| ' + sources.cell(asset['current_path']) + ' |', rendered)
+        self.assertIn('捕获历史路径：' + sources.cell(asset['path']), rendered)
+        self.assertIn('生成底模<br>样例家族<br>分类：图像生成', rendered)
+        for text in ('标准名称：规范底模', '标准分类：样例家族 / 图像生成', '规范版本：v1',
+                     '精度：fp16', '来源身份：cv200', '命名证据：snapshot/inventory/example.json',
+                     '维护时使用现行放置路径', '虚构隔离样例'):
+            self.assertIn(text, rendered)
+        self.assertIn('| ' + sources.cell(catalogue['assets'][1]['path']) + ' |', rendered)
+        self.save(catalogue)
+        original = Path.open
+        allowed = {self.repo / sources.CATALOGUE, self.inventory_path,
+                   self.repo / sources.WORKFLOW_SOURCE}
+        def bounded_open(path, *args, **kwargs):
+            self.assertIn(path, allowed, 'Checker tried to follow the current runtime placement')
+            return original(path, *args, **kwargs)
+        with patch.object(Path, 'open', bounded_open):
+            self.assertEqual(sources.check_catalogue(self.repo)[0], catalogue)
+
     def test_valid_catalogue_retains_missing_captured_assets_and_exact_counts(self):
         catalogue = self.catalogue()
         summary = self.validate(catalogue)

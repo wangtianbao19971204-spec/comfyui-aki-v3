@@ -30,7 +30,7 @@
         "Node name for S&R": "UNETLoader"
       },
       "widgets_values": [
-        "Anima\\animayume_v15Base.safetensors",
+        "anima\\图像生成\\Anima__AnimaYume__v1.5 (base)__BF16__cv3300637__f3185665.safetensors",
         "default"
       ],
       "title": "模型选择"

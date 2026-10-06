@@ -4149,7 +4149,7 @@
               }
             },
             "widgets_values": [
-              "sam3.1_multiplex_fp16.safetensors"
+              "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors"
             ]
           },
           {

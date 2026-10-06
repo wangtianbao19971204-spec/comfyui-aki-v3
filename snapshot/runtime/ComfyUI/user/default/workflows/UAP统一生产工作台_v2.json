@@ -2694,11 +2694,11 @@
         "uap_layout_group": "CORE-02A 模型与编码器 · A1 原版"
       },
       "widgets_values": [
-        "Anima\\animayume_v15Base.safetensors",
+        "anima\\图像生成\\Anima__AnimaYume__v1.5 (base)__BF16__cv3300637__f3185665.safetensors",
         "default"
       ],
       "widgets_values_named": {
-        "unet_name": "Anima\\animayume_v15Base.safetensors",
+        "unet_name": "anima\\图像生成\\Anima__AnimaYume__v1.5 (base)__BF16__cv3300637__f3185665.safetensors",
         "weight_dtype": "default"
       },
       "color": "#9A7040",
@@ -8527,11 +8527,11 @@
         "uap_layout_group": "CORE-02A 模型与编码器 · A29 2.9B"
       },
       "widgets_values": [
-        "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+        "anima-2.9b\\图像生成\\Anima-2.9B__Anima-2.9B__v1.0__BF16__cv3224434__f3106672.safetensors",
         "default"
       ],
       "widgets_values_named": {
-        "unet_name": "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+        "unet_name": "anima-2.9b\\图像生成\\Anima-2.9B__Anima-2.9B__v1.0__BF16__cv3224434__f3106672.safetensors",
         "weight_dtype": "default"
       },
       "color": "#9A7040",
@@ -11910,11 +11910,11 @@
         "uap_layout_group": "SW-05K Krea2 Depth ControlNet-LoRA · K2 Krea2"
       },
       "widgets_values": [
-        "Krea2-Control\\depth-control-lora.safetensors",
+        "krea2\\控制与编辑\\Krea2__Krea 2 Depth ControlNet LoRA__v1.0__FP32__cv3097135__f2976752.safetensors",
         1
       ],
       "widgets_values_named": {
-        "lora_name": "Krea2-Control\\depth-control-lora.safetensors",
+        "lora_name": "krea2\\控制与编辑\\Krea2__Krea 2 Depth ControlNet LoRA__v1.0__FP32__cv3097135__f2976752.safetensors",
         "strength": 1
       },
       "color": "#607A3B",
@@ -13063,11 +13063,11 @@
         "uap_layout_group": "CORE-02A 模型与编码器 · K2 Krea2"
       },
       "widgets_values": [
-        "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+        "krea2\\图像生成\\Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__CuteDisaster v2 Turbo UC__BF16__cv3151280__f3034252.safetensors",
         "default"
       ],
       "widgets_values_named": {
-        "unet_name": "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+        "unet_name": "krea2\\图像生成\\Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__CuteDisaster v2 Turbo UC__BF16__cv3151280__f3034252.safetensors",
         "weight_dtype": "default"
       },
       "color": "#9A7040",
@@ -16695,11 +16695,11 @@
         "uap_layout_group": "模型加载 · EXT04"
       },
       "widgets_values": [
-        "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+        "krea2\\图像生成\\Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__CuteDisaster v2 Turbo UC__BF16__cv3151280__f3034252.safetensors",
         "default"
       ],
       "widgets_values_named": {
-        "unet_name": "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+        "unet_name": "krea2\\图像生成\\Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__CuteDisaster v2 Turbo UC__BF16__cv3151280__f3034252.safetensors",
         "weight_dtype": "default"
       }
     },
@@ -17497,11 +17497,11 @@
         "uap_layout_group": "模型加载 · EXT04"
       },
       "widgets_values": [
-        "krea2\\控制与编辑\\krea2_identity_edit_v1_2.safetensors",
+        "krea2\\控制与编辑\\Krea2__Krea 2 Identity Edit__v1.2__FP16__cv3139172__f3019297.safetensors",
         1
       ],
       "widgets_values_named": {
-        "lora_name": "krea2\\控制与编辑\\krea2_identity_edit_v1_2.safetensors",
+        "lora_name": "krea2\\控制与编辑\\Krea2__Krea 2 Identity Edit__v1.2__FP16__cv3139172__f3019297.safetensors",
         "strength_model": 1
       }
     },
@@ -17822,11 +17822,11 @@
         "uap_layout_group": "模型加载 · EXT05"
       },
       "widgets_values": [
-        "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+        "anima-2.9b\\图像生成\\Anima-2.9B__Anima-2.9B__v1.0__BF16__cv3224434__f3106672.safetensors",
         "default"
       ],
       "widgets_values_named": {
-        "unet_name": "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+        "unet_name": "anima-2.9b\\图像生成\\Anima-2.9B__Anima-2.9B__v1.0__BF16__cv3224434__f3106672.safetensors",
         "weight_dtype": "default"
       }
     },
@@ -19561,11 +19561,11 @@
         "uap_layout_group": "模型加载 · EXT07"
       },
       "widgets_values": [
-        "Anima\\animayume_v15Base.safetensors",
+        "anima\\图像生成\\Anima__AnimaYume__v1.5 (base)__BF16__cv3300637__f3185665.safetensors",
         "default"
       ],
       "widgets_values_named": {
-        "unet_name": "Anima\\animayume_v15Base.safetensors",
+        "unet_name": "anima\\图像生成\\Anima__AnimaYume__v1.5 (base)__BF16__cv3300637__f3185665.safetensors",
         "weight_dtype": "default"
       }
     },
@@ -48600,7 +48600,7 @@
         574
       ],
       "installed_optional_assets": [
-        "sam3.1_multiplex_fp16.safetensors",
+        "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors",
         "NSFW_01_女性-半写实_v1.pt",
         "NSFW_03_男性-2D动漫_v2.pt",
         "NSFW_02_女性-动漫_v5.pt",
@@ -49994,71 +49994,71 @@
       "verified_at": "2026-10-05",
       "evidence": "Local safetensors tensor keys and block counts; current known encoder/VAE pairs. Not a LoRA or image-quality certification.",
       "models": {
-        "Anima-2.9B/JANIMAAnima_v1029B_bf16.safetensors": {
+        "anima-2.9b/图像生成/Anima-2.9B__✨ JANIMA - Anima ✨__v1.0 2.9B__BF16__cv3242290__f3146322.safetensors": {
           "family": "anima29",
           "blocks": 40
         },
-        "Anima-2.9B/anima29B_v10_bf16.safetensors": {
+        "anima-2.9b/图像生成/Anima-2.9B__Anima-2.9B__v1.0__BF16__cv3224434__f3106672.safetensors": {
           "family": "anima29",
           "blocks": 40
         },
-        "Anima-2.9B/miaomiaoHarem_29BBETA11.safetensors": {
+        "anima-2.9b/图像生成/Anima-2.9B__MiaoMiao Harem__2.9B_BETA1.1__BF16__cv3360028__f3247723.safetensors": {
           "family": "anima29",
           "blocks": 40
         },
-        "Anima-2.9B/silvermoonmixAnimaEvolved_v2329B_bf16.safetensors": {
+        "anima-2.9b/图像生成/Anima-2.9B__SilvermoonMix-Anima-Evolved [2.9B-2B]__v2.3_2.9B__BF16__cv3335123__f3221551.safetensors": {
           "family": "anima29",
           "blocks": 40
         },
-        "Anima/BSSANIRLANIMASemi_v20.safetensors": {
+        "anima/图像生成/Anima__[BSS] - ANI-RL (ANIMA Semi-Realistic model)__v2.0__BF16__cv3077788__f2956981.safetensors": {
           "family": "anima",
           "blocks": 28
         },
-        "Anima/JANIMA_v10.safetensors": {
+        "anima/图像生成/Anima__✨ JANIMA ✨__v1.0__FP16__cv2967640__f2847103.safetensors": {
           "family": "anima",
           "blocks": 28
         },
-        "Anima/animayume_v15Base.safetensors": {
+        "anima/图像生成/Anima__AnimaYume__v1.5 (base)__BF16__cv3300637__f3185665.safetensors": {
           "family": "anima",
           "blocks": 28
         },
-        "Anima/chosenIrisesMix_v20Anima.safetensors": {
+        "anima/图像生成/Anima__chosen Irises-mix-鸢尾花__v2.0 anima__BF16__cv3253659__f3136718.safetensors": {
           "family": "anima",
           "blocks": 28
         },
-        "Anima/miaomiaoHarem_anima16.safetensors": {
+        "anima/图像生成/Anima__MiaoMiao Harem__Anima_1.6__BF16__cv3248362__f3131298.safetensors": {
           "family": "anima",
           "blocks": 28
         },
-        "Anima/oneObsessionAnima_v40.safetensors": {
+        "anima/图像生成/Anima__One obsession_Anima__v4.0__FP16__cv3301424__f3186469.safetensors": {
           "family": "anima",
           "blocks": 28
         },
-        "krea2/DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors": {
+        "krea2/图像生成/Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__CuteDisaster v2 Turbo UC__BF16__cv3151280__f3034252.safetensors": {
           "family": "krea2",
           "blocks": 28
         },
-        "krea2/DasiwaKrea2TurboRaw_darkdesireV3TurboUC_bf16.safetensors": {
+        "krea2/图像生成/Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__DarkDesire V3 Turbo UC__BF16__cv3362930__f3250905.safetensors": {
           "family": "krea2",
           "blocks": 28
         },
-        "krea2/DasiwaKrea2TurboRaw_darkdesireV3TurboUC_fp8Mixed.safetensors": {
+        "krea2/图像生成/Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__DarkDesire V3 Turbo UC__FP8-Mixed__cv3362930__f3251200.safetensors": {
           "family": "krea2",
           "blocks": 28
         },
-        "krea2/Krea2-Anime__v2.0__BF16__cv3357716.safetensors": {
+        "krea2/图像生成/Krea2__Krea2-Anime__v2.0__BF16__cv3357716__f3246945.safetensors": {
           "family": "krea2",
           "blocks": 28
         },
-        "krea2/Krea2-Anime__v2.0__INT8__cv3357716.safetensors": {
+        "krea2/图像生成/Krea2__Krea2-Anime__v2.0__INT8__cv3357716__f3245462.safetensors": {
           "family": "krea2",
           "blocks": 28
         },
-        "krea2/Krea2-Moody-Mix-premium_int8_convrot.safetensors": {
+        "krea2/图像生成/Krea2__Moody Krea 2 Mix (uncensored) V8SE Goes Ancient —__Premium 臻享版__INT8-ConvRot__cv3261440__f3153405.safetensors": {
           "family": "krea2",
           "blocks": 28
         },
-        "krea2/krea2CatTower_v10TurboINT8Convrot.safetensors": {
+        "krea2/图像生成/Krea2__Krea2 Cat Tower__v1.0 (Turbo INT8 ConvRot)__INT8-ConvRot__cv3163788__f3046237.safetensors": {
           "family": "krea2",
           "blocks": 28
         }

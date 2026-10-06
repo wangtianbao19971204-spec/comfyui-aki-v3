@@ -98,7 +98,7 @@
         "Node name for S&R": "UNETLoader"
       },
       "widgets_values": [
-        "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+        "anima-2.9b\\图像生成\\Anima-2.9B__Anima-2.9B__v1.0__BF16__cv3224434__f3106672.safetensors",
         "default"
       ]
     },

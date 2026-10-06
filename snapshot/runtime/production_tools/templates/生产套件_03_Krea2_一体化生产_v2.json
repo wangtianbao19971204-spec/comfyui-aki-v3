@@ -2493,7 +2493,7 @@
         "label": "加载专用 depth-control-lora.safetensors；不是普通风格 LoRA。"
       },
       "widgets_values": [
-        "Krea2-Control\\depth-control-lora.safetensors",
+        "krea2\\控制与编辑\\Krea2__Krea 2 Depth ControlNet LoRA__v1.0__FP32__cv3097135__f2976752.safetensors",
         1
       ],
       "color": "#607A3B",
@@ -3695,7 +3695,7 @@
         "label": "Krea2 主模型。文件放入 ComfyUI/models/diffusion_models/。"
       },
       "widgets_values": [
-        "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+        "krea2\\图像生成\\Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__CuteDisaster v2 Turbo UC__BF16__cv3151280__f3034252.safetensors",
         "default"
       ],
       "color": "#9A7040",

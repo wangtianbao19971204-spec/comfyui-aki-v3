@@ -1,0 +1,181 @@
+{
+  "schema": 1,
+  "receipt_id": "model-standardization-20261007-02",
+  "base_commit": "d1224434573fea52fae4f1007ca938e72262c23e",
+  "accepted_at": "2026-10-06T18:12:33.073282+00:00",
+  "pass": true,
+  "status": "accepted_applied_model_standardization",
+  "authorization": "User requested standard classification and naming for all current LoRAs and image base models; earlier deletion of evaluation checkpoints remains effective.",
+  "plan_sha256": "0f7e7b3bc8d057ff6fc3fce50e0f8a44a5099b14275cc32ef2d0738b3ed2fb5e",
+  "counts": {
+    "weights": 306,
+    "loras": 286,
+    "image_base_models": 19,
+    "separate_sam_tool": 1,
+    "migrated_companions": 690,
+    "source_reference_files": 41,
+    "private_config_reference_files": 5,
+    "deleted_evaluation_entries_still_absent": 15,
+    "prior_cleanup_targets_still_absent": 51,
+    "selected_local_training_release_identities": 4,
+    "retired_empty_directories_removed": 5,
+    "weight_files_removed": 0
+  },
+  "family_counts": {
+    "krea2": {
+      "loras": 89,
+      "image_bases": 7,
+      "tools": 0
+    },
+    "anima": {
+      "loras": 196,
+      "image_bases": 7,
+      "tools": 0
+    },
+    "anima-2.9b": {
+      "loras": 1,
+      "image_bases": 4,
+      "tools": 0
+    },
+    "sam3.1": {
+      "loras": 0,
+      "image_bases": 0,
+      "tools": 1
+    },
+    "qwen-image-2.1": {
+      "loras": 0,
+      "image_bases": 1,
+      "tools": 0
+    }
+  },
+  "naming": {
+    "loader_root_preserved": true,
+    "directory_rule": "family/purpose",
+    "file_rule": "family__public-name__known-version__precision__source-version-id__source-file-id.extension; absent source identity uses fixed upstream revision or measured SHA",
+    "original_upstream_filename_and_urls_retained": true,
+    "historical_inventory_path_retained": true,
+    "current_path_is_restore_target": true,
+    "precision_variants_kept_separate": true,
+    "platinum_family_corrected_to_anima": true,
+    "anima29_kept_separate": true,
+    "sam_classified_as_tool": true
+  },
+  "runtime_acceptance": {
+    "all_306_full_sha256_unchanged": true,
+    "bytes_and_file_identity_unchanged": true,
+    "all_690_original_companions_found": true,
+    "all_306_standard_display_metadata_verified": true,
+    "all_41_source_and_runtime_hashes_match": true,
+    "all_5_private_configs_match_reviewed_candidates": true,
+    "source_json_changes_only_exact_selector_rewrites": true,
+    "graph_structure_prompts_parameters_and_download_declarations_preserved": true,
+    "windows_family_directory_case_corrected_after_apply": true,
+    "case_correction_used_reviewed_main_repository_function": true,
+    "model_cache_counts": {
+      "loras": {
+        "regular": 283,
+        "excluded": 3
+      },
+      "checkpoints": {
+        "regular": 20,
+        "excluded": 0
+      }
+    },
+    "incremental_exclusion_index_issue_repaired_by_full_local_scan": true,
+    "generated_gguf_display_update_duplicate_cache_repaired_by_full_checkpoint_scan": true,
+    "personal_fields_favorites_trigger_words_and_exclusion_preserved": true,
+    "original_sidecars_other_protected_fields_unchanged": 302,
+    "original_sidecars_only_added_autov3": 3,
+    "autov3_verification": "Two match embedded safetensors header hashes; one matches exact Civitai file AutoV3 whose declared SHA256 equals the fully measured weight SHA256.",
+    "previously_absent_gguf_sidecar_added": 1,
+    "gguf_default_sidecar_sha256_empty_and_status_pending": true,
+    "gguf_measured_full_sha256_is_in_catalogue_and_weight_receipt": true,
+    "new_gguf_display_and_organization_fields_applied_after_registration": true,
+    "weilin_info_protected_semantics_verified": 24,
+    "selected_release_copies_sha256_unchanged": 4,
+    "shared_data_full_json_semantics_unchanged": true,
+    "current_recipe_count": 0,
+    "current_shared_reference_count": 0,
+    "queue_running": 0,
+    "queue_pending": 0,
+    "same_service_process_existed_before_plan_and_after_migration": true
+  },
+  "browser_acceptance": {
+    "fresh_lora_and_checkpoint_manager_pages_observed": true,
+    "normalized_family_purpose_and_display_names_observed": true,
+    "qwen_display_verified": true,
+    "saved_uap_reopened": false,
+    "existing_unsaved_graph_preserved": true
+  },
+  "tests": {
+    "model_source_schema_tests": 26,
+    "model_naming_migration_tests": 47,
+    "test_status": "passed: 26 source schema tests and 47 naming/migration tests; source catalogue/render and portable technical catalogue also passed"
+  },
+  "external_inventory": {
+    "entries": 365,
+    "current_manifest_refreshed": true,
+    "receipt_name": "external-runtime-model-standardization-20261007-01.json",
+    "sha256": "d8c54569026926e9182bb91a103c3e225c2a89566ab34e4c31d899ab1e0786b5",
+    "new_model_or_preview_backup_created": false,
+    "old_manifest_retained_privately": true
+  },
+  "external_evidence": [
+    {
+      "name": "plan.json",
+      "sha256": "0f7e7b3bc8d057ff6fc3fce50e0f8a44a5099b14275cc32ef2d0738b3ed2fb5e"
+    },
+    {
+      "name": "apply.jsonl",
+      "sha256": "db585dcbef7b8d3f422bb0abd0188531333e4af99f4b6db77ce6714c73686de5"
+    },
+    {
+      "name": "post-verification.json",
+      "sha256": "ee39296b1f624c6bd9de6295ead606fa016e2205638337019a544b27de9cd4ff"
+    },
+    {
+      "name": "independent-acceptance.json",
+      "sha256": "65e3166fc8197348483e28219d88a05a2021f227dd419a23932f9fcd6f9446a8"
+    },
+    {
+      "name": "source-reference-acceptance.json",
+      "sha256": "1d2dffdf3da38fec8e7e95fda5332913c6862d61b4847ea800a31933c9f093ac"
+    },
+    {
+      "name": "cache-membership-verification.json",
+      "sha256": "83545828a8529dbc87abc1ba60470b8c35e81c31bd1d3d72618b04c684f1e78c"
+    },
+    {
+      "name": "exclusion-cache-rebuild.json",
+      "sha256": "78119b3c596b7c819545629d68bde1ad6a88056c91afb42338ee173a727a7d9c"
+    },
+    {
+      "name": "retired-empty-directories.json",
+      "sha256": "21a83f6ff543a2305d1eba5096a69e9884437a014f8d0cd8e98437a4d94b4cdc"
+    },
+    {
+      "name": "browser-ui-acceptance.json",
+      "sha256": "191bcad529f0907f8985f3a9604622f0aa1859786eccd600c01e7f7af3bb661b"
+    }
+  ],
+  "rollback": {
+    "old_new_mapping_sidecars_sources_configs_and_sqlite_consistent_backup_retained_privately": true,
+    "weights_kept_on_same_volume_without_payload_copy": true,
+    "prior_deleted_evaluation_weights_not_retained_or_recreated": true,
+    "rollback_not_executed": true,
+    "later_user_data_must_not_be_overwritten": true
+  },
+  "limits": {
+    "gpu_inference_retested": false,
+    "all_workflow_execution_retested": false,
+    "all_browser_interactions_tested": false,
+    "opened_old_graphs_need_reopening_updated_saved_files": true,
+    "downloads": false,
+    "service_restart": false,
+    "queue_clear": false,
+    "database_replacement": false,
+    "git_remote_push": false,
+    "package_version_increment": false,
+    "whole_snapshot_deployed": false
+  }
+}

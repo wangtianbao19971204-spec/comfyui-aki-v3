@@ -8086,7 +8086,7 @@
         "label": "Anima 2.9B preview v1 BF16 完整权重。文件位于 ComfyUI/models/diffusion_models/Anima-2.9B/。"
       },
       "widgets_values": [
-        "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+        "anima-2.9b\\图像生成\\Anima-2.9B__Anima-2.9B__v1.0__BF16__cv3224434__f3106672.safetensors",
         "default"
       ],
       "color": "#9A7040",
@@ -11312,11 +11312,11 @@
         "label": "加载专用 depth-control-lora.safetensors；不是普通风格 LoRA。"
       },
       "widgets_values": [
-        "Krea2-Control\\depth-control-lora.safetensors",
+        "krea2\\控制与编辑\\Krea2__Krea 2 Depth ControlNet LoRA__v1.0__FP32__cv3097135__f2976752.safetensors",
         1
       ],
       "widgets_values_named": {
-        "lora_name": "Krea2-Control\\depth-control-lora.safetensors",
+        "lora_name": "krea2\\控制与编辑\\Krea2__Krea 2 Depth ControlNet LoRA__v1.0__FP32__cv3097135__f2976752.safetensors",
         "strength": 1
       },
       "color": "#607A3B",
@@ -12570,11 +12570,11 @@
         "label": "Krea2 主模型。文件放入 ComfyUI/models/diffusion_models/。"
       },
       "widgets_values": [
-        "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+        "krea2\\图像生成\\Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__CuteDisaster v2 Turbo UC__BF16__cv3151280__f3034252.safetensors",
         "default"
       ],
       "widgets_values_named": {
-        "unet_name": "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+        "unet_name": "krea2\\图像生成\\Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__CuteDisaster v2 Turbo UC__BF16__cv3151280__f3034252.safetensors",
         "weight_dtype": "default"
       },
       "color": "#9A7040",
@@ -16663,7 +16663,7 @@
         "Node name for S&R": "UNETLoader"
       },
       "widgets_values": [
-        "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+        "krea2\\图像生成\\Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__CuteDisaster v2 Turbo UC__BF16__cv3151280__f3034252.safetensors",
         "default"
       ],
       "title": "模型选择"
@@ -17123,7 +17123,7 @@
         "Node name for S&R": "LoraLoaderModelOnly"
       },
       "widgets_values": [
-        "krea2\\控制与编辑\\krea2_identity_edit_v1_2.safetensors",
+        "krea2\\控制与编辑\\Krea2__Krea 2 Identity Edit__v1.2__FP16__cv3139172__f3019297.safetensors",
         1.0
       ]
     },
@@ -17321,7 +17321,7 @@
         "Node name for S&R": "UNETLoader"
       },
       "widgets_values": [
-        "Anima-2.9B\\anima29B_v10_bf16.safetensors",
+        "anima-2.9b\\图像生成\\Anima-2.9B__Anima-2.9B__v1.0__BF16__cv3224434__f3106672.safetensors",
         "default"
       ],
       "title": "模型选择"
@@ -28288,7 +28288,7 @@
               "Node name for S&R": "CheckpointLoaderSimple"
             },
             "widgets_values": [
-              "sam3.1_multiplex_fp16.safetensors"
+              "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors"
             ]
           },
           {
@@ -30181,7 +30181,7 @@
           "ue_links": [],
           "links_added_by_ue": [],
           "sam31_migration": {
-            "model": "sam3.1_multiplex_fp16.safetensors",
+            "model": "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors",
             "roles": [
               "person",
               "hand",
@@ -30403,10 +30403,10 @@
               ]
             },
             "widgets_values": [
-              "sam3.1_multiplex_fp16.safetensors"
+              "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors"
             ],
             "widgets_values_named": {
-              "ckpt_name": "sam3.1_multiplex_fp16.safetensors"
+              "ckpt_name": "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors"
             },
             "color": "#322",
             "bgcolor": "#533"
@@ -32151,7 +32151,7 @@
               "Node name for S&R": "CheckpointLoaderSimple"
             },
             "widgets_values": [
-              "sam3.1_multiplex_fp16.safetensors"
+              "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors"
             ]
           },
           {
@@ -34044,7 +34044,7 @@
           "ue_links": [],
           "links_added_by_ue": [],
           "sam31_migration": {
-            "model": "sam3.1_multiplex_fp16.safetensors",
+            "model": "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors",
             "roles": [
               "person",
               "hand",
@@ -41372,7 +41372,7 @@
               "Node name for S&R": "CheckpointLoaderSimple"
             },
             "widgets_values": [
-              "sam3.1_multiplex_fp16.safetensors"
+              "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors"
             ]
           },
           {
@@ -43265,7 +43265,7 @@
           "ue_links": [],
           "links_added_by_ue": [],
           "sam31_migration": {
-            "model": "sam3.1_multiplex_fp16.safetensors",
+            "model": "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors",
             "roles": [
               "person",
               "hand",
@@ -43477,7 +43477,7 @@
               ]
             },
             "widgets_values": [
-              "sam3.1_multiplex_fp16.safetensors"
+              "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors"
             ],
             "color": "#322",
             "bgcolor": "#533"
@@ -44637,7 +44637,7 @@
               "Node name for S&R": "CheckpointLoaderSimple"
             },
             "widgets_values": [
-              "sam3.1_multiplex_fp16.safetensors"
+              "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors"
             ]
           },
           {
@@ -46530,7 +46530,7 @@
           "ue_links": [],
           "links_added_by_ue": [],
           "sam31_migration": {
-            "model": "sam3.1_multiplex_fp16.safetensors",
+            "model": "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors",
             "roles": [
               "person",
               "hand",
@@ -49364,7 +49364,7 @@
         574
       ],
       "installed_optional_assets": [
-        "sam3.1_multiplex_fp16.safetensors",
+        "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors",
         "NSFW_01_女性-半写实_v1.pt",
         "NSFW_03_男性-2D动漫_v2.pt",
         "NSFW_02_女性-动漫_v5.pt",

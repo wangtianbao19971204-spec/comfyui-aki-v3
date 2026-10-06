@@ -34,6 +34,10 @@ TOP_KEYS = {'schema', 'captured_at', 'inventory_sha256', 'workflow_sha256',
 ASSET_KEYS = {'path', 'bytes', 'kind', 'captured_in_inventory', 'observed_present',
               'local_sha256', 'source_status', 'family', 'sources', 'companions',
               'workflows', 'derivation', 'notes'}
+OPTIONAL_ASSET_KEYS = {'current_path', 'standardization'}
+STANDARDIZATION_KEYS = {'family_slug', 'family_label', 'category', 'display_name',
+                        'version', 'precision', 'source_identity', 'target_path',
+                        'evidence'}
 SOURCE_KEYS = {'page_url', 'download_url', 'provider', 'model_id', 'version_id',
                'file_id', 'filename', 'declared_sha256', 'revision', 'evidence',
                'availability'}
@@ -231,6 +235,49 @@ def compute_summary(catalogue):
                                      for status in STATUSES}}
 
 
+def current_path(asset):
+    """Return the current placement while keeping the capture identity intact."""
+    return asset.get('current_path', asset['path'])
+
+
+def standardization(asset):
+    """Validate the optional placement contract; never inspect runtime files."""
+    has_current = 'current_path' in asset
+    has_standardization = 'standardization' in asset
+    if has_current != has_standardization:
+        raise CatalogueError('incomplete_standardization')
+    if not has_current:
+        return
+    if not asset['observed_present']:
+        raise CatalogueError('missing_asset_has_current_path')
+    target = relative_path(asset['current_path'])
+    captured_parts = asset['path'].split('/')
+    target_parts = target.split('/')
+    # Renaming must remain below the original ComfyUI model type. Plugin
+    # resources, external roots and moves between loader types are not aliases.
+    if (len(captured_parts) < 4 or len(target_parts) < 6 or
+            [part.casefold() for part in captured_parts[:2]] != ['comfyui', 'models'] or
+            [part.casefold() for part in target_parts[:3]] !=
+            [part.casefold() for part in captured_parts[:3]]):
+        raise CatalogueError('current_path_model_root_mismatch')
+    value = asset['standardization']
+    if not isinstance(value, dict) or set(value) != STANDARDIZATION_KEYS:
+        raise CatalogueError('invalid_standardization_schema')
+    for field in ('family_slug', 'category'):
+        component = relative_path(value[field])
+        if '/' in component:
+            raise CatalogueError('invalid_standardization_component')
+    for field in ('family_label', 'display_name'):
+        string(value[field])
+    for field in ('version', 'precision', 'source_identity'):
+        string(value[field], nullable=True)
+    if (relative_path(value['target_path']) != target or
+            target_parts[3] != value['family_slug'] or
+            target_parts[4] != value['category']):
+        raise CatalogueError('standardization_target_mismatch')
+    path_list(value['evidence'])
+
+
 def validate_catalogue(catalogue, inventory, inventory_sha256, workflow_sha256):
     if (not isinstance(catalogue, dict) or set(catalogue) != TOP_KEYS or
             type(catalogue['schema']) is not int or catalogue['schema'] != 1):
@@ -261,9 +308,11 @@ def validate_catalogue(catalogue, inventory, inventory_sha256, workflow_sha256):
     if not isinstance(assets, list) or len(assets) > 10000:
         raise CatalogueError('invalid_asset_collection')
     seen = set()
+    current_seen = set()
     captured_paths = set()
     for asset in assets:
-        if not isinstance(asset, dict) or set(asset) != ASSET_KEYS:
+        if (not isinstance(asset, dict) or not ASSET_KEYS <= set(asset) or
+                set(asset) - ASSET_KEYS - OPTIONAL_ASSET_KEYS):
             raise CatalogueError('invalid_asset_schema')
         path = relative_path(asset['path']); key = path.casefold()
         if key in seen:
@@ -274,6 +323,11 @@ def validate_catalogue(catalogue, inventory, inventory_sha256, workflow_sha256):
         string(asset['kind']); string(asset['family'], nullable=True)
         if type(asset['captured_in_inventory']) is not bool or type(asset['observed_present']) is not bool:
             raise CatalogueError('invalid_presence_flag')
+        standardization(asset)
+        current_key = current_path(asset).casefold()
+        if current_key in current_seen:
+            raise CatalogueError('duplicate_current_asset_path')
+        current_seen.add(current_key)
         if asset['captured_in_inventory'] != (key in original):
             raise CatalogueError('inventory_membership_mismatch')
         if key in original:
@@ -376,7 +430,8 @@ def grouping(asset):
         return '正式 v2 所需'
     if asset['kind'].casefold() == 'lora' or '/loras/' in asset['path'].casefold():
         return 'LoRA'
-    if asset['kind'] in {'diffusion_model', 'text_encoder', 'vae', 'vision_encoder', 'llm'}:
+    if (asset['kind'] == 'checkpoint' and asset['family'] not in {None, 'Other', 'SAM3.1'} or
+            asset['kind'] in {'diffusion_model', 'text_encoder', 'vae', 'vision_encoder', 'llm'}):
         return '底模与配套'
     return '其他模型与插件权重'
 
@@ -414,7 +469,7 @@ def render_markdown(catalogue):
         lines.append('')
     labels = {'version_metadata': '版本元数据定位', 'upstream_mapping': '上游实现对应',
               'local_derivative': '本地衍生', 'unresolved': '来源待核实'}
-    kinds = {'diffusion_model': '生成底模', 'lora': 'LoRA', 'text_encoder': '文本编码器',
+    kinds = {'diffusion_model': '生成底模', 'checkpoint': 'Checkpoint底模／工具', 'lora': 'LoRA', 'text_encoder': '文本编码器',
              'vae': 'VAE', 'detector': '检测器', 'segmentation': '分割模型',
              'upscale': '超分模型', 'vision_encoder': '视觉编码器', 'llm': '语言模型',
              'plugin_weight': '插件权重', 'tagger': '标签模型', 'other': '其他'}
@@ -423,10 +478,24 @@ def render_markdown(catalogue):
         lines.extend([f'## {group}（{len(assets)} 项）', '',
                       '| 放置路径（相对运行根） | 字节 / 本机状态 | 类型 / 家族 | 来源状态与版本 | 摘要 | 配套与维护说明 |',
                       '|---|---|---|---|---|---|'])
-        for asset in sorted(assets, key=lambda item: item['path'].casefold()):
+        for asset in sorted(assets, key=lambda item: current_path(item).casefold()):
             hashes = ['本机：' + (cell(asset['local_sha256']) if asset['local_sha256'] else '未核验')]
             hashes.extend('上游声明：' + cell(source['declared_sha256']) for source in asset['sources'] if source['declared_sha256'])
             hints = []
+            placement = asset.get('standardization')
+            if placement:
+                hints.append('捕获历史路径：' + cell(asset['path']))
+                hints.append('标准名称：' + cell(placement['display_name']))
+                hints.append('标准分类：' + cell(placement['family_label']) + ' / ' + cell(placement['category']))
+                if placement['version']:
+                    hints.append('规范版本：' + cell(placement['version']))
+                if placement['precision']:
+                    hints.append('精度：' + cell(placement['precision']))
+                if placement['source_identity']:
+                    hints.append('来源身份：' + cell(placement['source_identity']))
+                if placement['evidence']:
+                    hints.append('命名证据：' + '；'.join(cell(p) for p in placement['evidence']))
+                hints.append('维护时使用现行放置路径；捕获历史路径仅用于追溯。')
             if asset['companions']:
                 hints.append('配套：' + '；'.join(cell(p) for p in asset['companions']))
             if asset['family']:
@@ -443,9 +512,13 @@ def render_markdown(catalogue):
             hints.extend(cell(note) for note in asset['notes'])
             if asset['workflows']:
                 hints.append('工作流：' + '；'.join(cell(p) for p in asset['workflows']))
+            type_and_family = cell(kinds.get(asset['kind'], asset['kind'])) + '<br>' + cell(
+                placement['family_label'] if placement else asset['family'] or '家族未确认')
+            if placement:
+                type_and_family += '<br>分类：' + cell(placement['category'])
             lines.append('| ' + ' | '.join([
-                cell(asset['path']), f'{asset["bytes"]:,}<br>' + ('观察存在' if asset['observed_present'] else '已不存在；保留捕获记录'),
-                cell(kinds.get(asset['kind'], asset['kind'])) + '<br>' + cell(asset['family'] or '家族未确认'),
+                cell(current_path(asset)), f'{asset["bytes"]:,}<br>' + ('观察存在' if asset['observed_present'] else '已不存在；保留捕获记录'),
+                type_and_family,
                 labels[asset['source_status']] + '<br>' + source_cell(asset),
                 '<br>'.join(hashes), '<br>'.join(hints) or '见机器目录']) + ' |')
         lines.append('')

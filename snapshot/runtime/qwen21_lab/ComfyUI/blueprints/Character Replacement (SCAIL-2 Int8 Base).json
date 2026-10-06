@@ -258,7 +258,7 @@
         "clip_vision_h.safetensors",
         "girl, handkerchief",
         "human",
-        "sam3.1_multiplex_fp16.safetensors",
+        "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors",
         1
       ],
       "widgets_values_named": {
@@ -281,7 +281,7 @@
         "clip_name_1": "clip_vision_h.safetensors",
         "text_1": "girl, handkerchief",
         "text_2": "human",
-        "ckpt_name": "sam3.1_multiplex_fp16.safetensors",
+        "ckpt_name": "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors",
         "noise_seed": 1
       },
       "title": "Character Replacement (SCAIL-2 Int8 Base)"
@@ -2434,10 +2434,10 @@
               "tabXOffset": 10
             },
             "widgets_values": [
-              "sam3.1_multiplex_fp16.safetensors"
+              "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors"
             ],
             "widgets_values_named": {
-              "ckpt_name": "sam3.1_multiplex_fp16.safetensors"
+              "ckpt_name": "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors"
             }
           },
           {

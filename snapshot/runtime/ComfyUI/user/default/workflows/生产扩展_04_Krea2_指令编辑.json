@@ -30,7 +30,7 @@
         "Node name for S&R": "UNETLoader"
       },
       "widgets_values": [
-        "krea2\\DasiwaKrea2TurboRaw_cutedisasterV2Turbo.safetensors",
+        "krea2\\图像生成\\Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__CuteDisaster v2 Turbo UC__BF16__cv3151280__f3034252.safetensors",
         "default"
       ],
       "title": "模型选择"
@@ -490,7 +490,7 @@
         "Node name for S&R": "LoraLoaderModelOnly"
       },
       "widgets_values": [
-        "krea2\\控制与编辑\\krea2_identity_edit_v1_2.safetensors",
+        "krea2\\控制与编辑\\Krea2__Krea 2 Identity Edit__v1.2__FP16__cv3139172__f3019297.safetensors",
         1.0
       ]
     },

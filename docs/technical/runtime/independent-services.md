@@ -1,6 +1,6 @@
 # 独立实验实例与本地辅助工具
 
-文档修订：2026-10-06.1。本文补上此前只在项目地图里一句话带过的部分：独立 Qwen 实验实例、`tools/` 辅助脚本和运行根启动入口。它们都不是生产 8188 服务的一部分。
+文档修订：2026-10-07.1。本文补上此前只在项目地图里一句话带过的部分：独立 Qwen 实验实例、`tools/` 辅助脚本和运行根启动入口。它们都不是生产 8188 服务的一部分。
 
 ## 职责与边界
 
@@ -17,7 +17,7 @@
 
 [README.txt](../../../snapshot/runtime/qwen21_lab/README.txt) 是现场说明，[boot.py](../../../snapshot/runtime/qwen21_lab/boot.py) 启动服务，[control.py](../../../snapshot/runtime/qwen21_lab/control.py) 提供 `start`/`stop`/`status`/`unload` 四个动作；`start.ps1`、`stop.ps1`、`unload.ps1` 只是入口封装。`control.py` 用保存的 PID 加创建时间核对进程身份，不匹配就拒绝停止，避免误杀其他 Python 进程。
 
-它的 ComfyUI 是**独立的一份源码**（约 1,221 个文件），放在 `qwen21_lab/ComfyUI/`，不是生产树的链接。权重没有搬动：主模型、编码器和 VAE 仍放在原 `ComfyUI/models` 目录，独立实例只读取。`workflows_api/` 保存该实例实际使用的 API 图形。
+它的 ComfyUI 是**独立的一份源码**（约 1,221 个文件），放在 `qwen21_lab/ComfyUI/`，不是生产树的链接。主模型、编码器和 VAE 共用 `ComfyUI/models` 目录，独立实例只读取；生成底模改名后按现行 `current_path` 更新引用，编码器和 VAE 仍遵循原配套契约。`workflows_api/` 保存该实例实际使用的 API 图形。
 
 现场记录的三条工作流（人物去背景、双手蒙版、外套蒙版）在 `README.txt` 中列明。同一份记录也写清了限制：只测过一张完全着装样图，直接要求“只提取外套”会返回整个人物，所以它是**指令式蒙版候选，不是已验证的 YOLO+SAM 替代**——没有类别置信度，也没有独立实例列表。本轮证据在 `benchmark_reports/2026-10-04_qwen21_instruct_deployment/`（`model_manifest.json`、`models_verified.json`、`runs/`、`segmentation_comparison.png`、`FINAL_DELIVERY.json`）。BF16 单次约 25–27 秒、峰值显存约 30 GiB，验证后已请求卸载模型。
 
@@ -52,4 +52,5 @@
 
 ## 更新记录
 
+- 2026-10-07：独立 Qwen 保存／API 工作流的 GGUF 加载名，以及该本体 blueprint 的 SAM 选择器随现行模型位置同步；实验服务不重启、不生图，见[标准化收据](../../receipts/model_standardization_20261007.json)。独立环境与 GPU 效果仍需其原专项验收。
 - 2026-10-06：新建本页，把独立 Qwen 实验实例、`tools/` 辅助脚本、运行根启动入口和一次性排查脚本纳入分层技术档案；同时明确机器路径属于本机记录、由 `workspace_audit.py` 统计而不输出正文。未启动任何服务、未改白名单、未改生产参数。

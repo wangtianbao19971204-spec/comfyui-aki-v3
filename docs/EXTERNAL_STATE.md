@@ -15,6 +15,8 @@
 
 本轮在线数据库、模型和预览仍保持原位置，使用 `reference`。小型配置可机械备份到 `private-config/`，但不是应用自动同步的第二份权威；应用修改后需重新登记/备份。
 
+2026-10-07 模型分类命名已在运行区实施，具体权重位置改按来源目录的 `current_path` 恢复；上述保持原位置是建仓时的历史基线。分类后的仓外组合清单已重新 inventory 为 `external-runtime-model-standardization-20261007-01.json`，365 项登记并切换本机 current，旧清单保留。此刷新只记录现行边界，不复制模型或预览，也不覆盖在线数据库；实际摘要与命名验收见[标准化收据](receipts/model_standardization_20261007.json)。
+
 当前补齐支持资源的计划为仓外 `plans/external-runtime-plan-v5.json`，最新清单入口为 `manifests/external-runtime-current.json`。v5 在先前 353 项基础上加入 11 份分词/检测/几何资源和 1 份 Gallery 缓存库，共 365 项；旧清单保留为带时间点的证据，不自动升级为当前清单。每次主仓 manifest 或现场配置变化后均须重新 inventory，不能因为文件名带 current 就跳过指纹验证。
 
 这些新增资源的可移植相对路径、角色和用途存于 [支持文件契约](../governance/runtime-support.json)；真实数据库指纹仍只存仓外。新增项全为 reference，不生成权重副本或数据库备份。

@@ -1,5 +1,7 @@
 # 网页提示词 → 统一工作台
 
+文档修订：2026-10-07.1。
+
 ## 唯一来源与使用方式
 
 新版 [aki_tags_bridge.user.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/aki_tags_bridge.user.js) 来自用户从实际油猴脚本提供的 v2.8 原件，保留原名称和 `aki-tags-bridge` namespace；脚本版本单独升为 2.9，不递增维护包版本。原件保存在仓外私有档案，摘要登记在[本次收据](../../receipts/browser_bridge_20261006.json)。仓内旧 Danbooru v0.5 脚本保留兼容历史，不是五站脚本的更新来源。
@@ -69,6 +71,7 @@ $bridgeFixtureRoot = Join-Path $env:TEMP ('comfy-browser-bridge-' + [guid]::NewG
 
 ## 更新记录
 
+- 2026-10-07：旧兼容工作流 JSON 的已存在模型引用随全量规范命名更新；油猴脚本、接收接口与提示词行为不变。来源下载声明仍使用上游名称，实际加载选择器使用现行路径；变更范围见[标准化收据](../../receipts/model_standardization_20261007.json)。
 - 2026-10-06：经用户明确请求，将网页桥接、UAP 清理与维护保护共 11 文件部署到运行区，保留启动参数重载后端。真实收件、正负方向采用/序列化/撤销、新版 UAP 实页加载与三份执行源码摘要通过；五模块就绪、队列为空、保护范围与数据库逻辑内容保持。Chrome 油猴安装、五站当前网页 GM 发送及生产整页刷新仍为单独边界，见[运行区部署收据](../../receipts/browser_live_deployment_20261006.json)。
 
 - 2026-10-06：随工作流追加请求清理正式 v2 与权威模板旧接收路径；加入工作台接收与旧图兼容的使用边界，结构验收见工作流说明及专项收据。

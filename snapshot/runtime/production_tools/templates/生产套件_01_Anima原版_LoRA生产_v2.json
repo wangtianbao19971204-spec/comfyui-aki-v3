@@ -2348,7 +2348,7 @@
         "label": "Anima 主模型。文件放入 ComfyUI/models/diffusion_models/。"
       },
       "widgets_values": [
-        "Anima\\animayume_v15Base.safetensors",
+        "anima\\图像生成\\Anima__AnimaYume__v1.5 (base)__BF16__cv3300637__f3185665.safetensors",
         "default"
       ],
       "color": "#9A7040",
@@ -9558,7 +9558,7 @@
               "Node name for S&R": "CheckpointLoaderSimple"
             },
             "widgets_values": [
-              "sam3.1_multiplex_fp16.safetensors"
+              "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors"
             ]
           },
           {
@@ -11451,7 +11451,7 @@
           "ue_links": [],
           "links_added_by_ue": [],
           "sam31_migration": {
-            "model": "sam3.1_multiplex_fp16.safetensors",
+            "model": "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors",
             "roles": [
               "person",
               "hand",
@@ -11673,7 +11673,7 @@
               ]
             },
             "widgets_values": [
-              "sam3.1_multiplex_fp16.safetensors"
+              "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors"
             ],
             "color": "#322",
             "bgcolor": "#533"
@@ -13344,7 +13344,7 @@
               "Node name for S&R": "CheckpointLoaderSimple"
             },
             "widgets_values": [
-              "sam3.1_multiplex_fp16.safetensors"
+              "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors"
             ]
           },
           {
@@ -15237,7 +15237,7 @@
           "ue_links": [],
           "links_added_by_ue": [],
           "sam31_migration": {
-            "model": "sam3.1_multiplex_fp16.safetensors",
+            "model": "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors",
             "roles": [
               "person",
               "hand",
@@ -19031,7 +19031,7 @@
         574
       ],
       "installed_optional_assets": [
-        "sam3.1_multiplex_fp16.safetensors",
+        "sam3.1/目标检测与分割/SAM3.1__sam3.1_multiplex_fp16.safetensors__3.1__FP16__cv3263116__f3146587.safetensors",
         "NSFW_01_女性-半写实_v1.pt",
         "NSFW_03_男性-2D动漫_v2.pt",
         "NSFW_02_女性-动漫_v5.pt",

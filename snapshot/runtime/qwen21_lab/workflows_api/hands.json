@@ -2,7 +2,7 @@
   "1": {
     "class_type": "UnetLoaderGGUFAdvanced",
     "inputs": {
-      "unet_name": "qwen-image-2.1-UC-BF16.gguf",
+      "unet_name": "qwen-image-2.1/图像生成/Qwen-Image-2.1__qwen-image-2.1-UC-BF16__BF16__rev240ef1d68f77.gguf",
       "dequant_dtype": "bfloat16",
       "patch_dtype": "bfloat16",
       "patch_on_device": false

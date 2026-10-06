@@ -3,7 +3,8 @@
   "notes": [
     "Field annotation only, not a complete catalogue or installer input. No weights or private cache are included.",
     "Replace nullable size/hash fields with measured values when registering a real asset; the source SHA is never a measured local SHA.",
-    "The public PixAI page illustrates a directory source. Restore every matching companion from the same reviewed revision."
+    "The public PixAI page illustrates a directory source. Restore every matching companion from the same reviewed revision.",
+    "The standardized LoRA below is fictional: current_path is the installed target, path is retained capture identity, and sources[].filename is the original download name. No model, version, revision or payload in that record exists."
   ],
   "asset_template": {
     "path": "ComfyUI/models/taggers/pixai-tagger-v1.0/model.safetensors",
@@ -42,6 +43,56 @@
     "workflows": [],
     "derivation": null,
     "notes": ["Record the full public revision and reviewed source hash separately; do not assume that a model filename proves its identity."]
+  },
+  "standardized_lora_template": {
+    "path": "ComfyUI/models/loras/旧分类/example_character_bf16.safetensors",
+    "current_path": "ComfyUI/models/loras/anima/角色与人物/Anima__Example Character__v1__BF16__rev0123456789ab.safetensors",
+    "standardization": {
+      "family_slug": "anima",
+      "family_label": "Anima",
+      "category": "角色与人物",
+      "display_name": "Example Character",
+      "version": "v1",
+      "precision": "BF16",
+      "source_identity": "example:fixture-model@0123456789abcdef0123456789abcdef01234567",
+      "target_path": "ComfyUI/models/loras/anima/角色与人物/Anima__Example Character__v1__BF16__rev0123456789ab.safetensors",
+      "evidence": ["examples/external-assets/model-source.example.json"]
+    },
+    "bytes": null,
+    "kind": "lora",
+    "captured_in_inventory": false,
+    "observed_present": false,
+    "local_sha256": null,
+    "source_status": "upstream_mapping",
+    "family": "Anima",
+    "sources": [
+      {
+        "provider": "example",
+        "page_url": "https://example.org/fixture-model",
+        "download_url": null,
+        "model_id": null,
+        "version_id": null,
+        "file_id": null,
+        "filename": "example_character_bf16.safetensors",
+        "declared_sha256": null,
+        "revision": "0123456789abcdef0123456789abcdef01234567",
+        "evidence": [
+          {
+            "kind": "fictional_field_annotation",
+            "reference": "examples/external-assets/model-source.example.json"
+          }
+        ],
+        "availability": "fictional_example_no_online_or_local_verification"
+      }
+    ],
+    "companions": [],
+    "workflows": [],
+    "derivation": null,
+    "notes": [
+      "Shape annotation only. Do not insert this fictional item into the real catalogue or use it as an installer input: it is not a present verified asset.",
+      "For a real migration, keep path and captured inventory identity, measure the complete weight hash, set observed_present to the measured state, and register current_path and all nine standardization fields together.",
+      "Download by the reviewed upstream filename and exact identity, then install using current_path. Preserve the source filename when the local name changes."
+    ]
   },
   "local_training_annotation": {
     "source_status": "local_derivative",

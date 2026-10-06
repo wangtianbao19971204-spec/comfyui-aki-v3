@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-06T15:24:23.019467+00:00",
+  "created_at": "2026-10-06T17:52:29.820891+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -937,15 +937,15 @@
     {
       "source": "ComfyUI/blueprints/Character Replacement (SCAIL-2 Base).json",
       "path": "runtime/ComfyUI/blueprints/Character Replacement (SCAIL-2 Base).json",
-      "sha256": "2edac0f9639bc38462688da090ece4c07982fad445db391f8f68b00498bfbc2f",
-      "bytes": 107920,
+      "sha256": "d1a6dd315be870fca48ac5e0e8ac40412720fabee61e669ff64d6f1092e36c9b",
+      "bytes": 108002,
       "kind": "file"
     },
     {
       "source": "ComfyUI/blueprints/Character Replacement (SCAIL-2 Extend).json",
       "path": "runtime/ComfyUI/blueprints/Character Replacement (SCAIL-2 Extend).json",
-      "sha256": "f996897100732181011047059145d5b60538dfe8d419b0e5f7b1142509008c68",
-      "bytes": 114792,
+      "sha256": "c674451e2e2119ab51ed04c8f749b69347ddd0a36476f0ba11ca821b9cb1f35c",
+      "bytes": 114874,
       "kind": "file"
     },
     {
@@ -1203,8 +1203,8 @@
     {
       "source": "ComfyUI/blueprints/Image Segmentation (SAM3).json",
       "path": "runtime/ComfyUI/blueprints/Image Segmentation (SAM3).json",
-      "sha256": "ae4293931473adba6c31e91eb899d0d4402fe1f6b379cdef2c525aa5dc24d4da",
-      "bytes": 17905,
+      "sha256": "08381e1bce748a74d18f9b02074b097ddd78877d1bc9bda01c3b90495d460615",
+      "bytes": 17986,
       "kind": "file"
     },
     {
@@ -1483,22 +1483,22 @@
     {
       "source": "ComfyUI/blueprints/Video Inpaint (VOID).json",
       "path": "runtime/ComfyUI/blueprints/Video Inpaint (VOID).json",
-      "sha256": "4cbbf14a9b2b6ad5edd4d89b0a032188bd9e7c191ab719e07dcb80cc94255ff0",
-      "bytes": 112980,
+      "sha256": "7f4309ccbb457af2dc2a1f0e92a02da9d512ae246a2c8b678e7eff4b46e78669",
+      "bytes": 113062,
       "kind": "file"
     },
     {
       "source": "ComfyUI/blueprints/Video Inpainting (Wan2.1 VACE).json",
       "path": "runtime/ComfyUI/blueprints/Video Inpainting (Wan2.1 VACE).json",
-      "sha256": "d62d163c0fbd8a980b6f69ec1876cdae7fb5eaa2ce82c5aabd7f60b0957551bd",
-      "bytes": 109322,
+      "sha256": "3e0bf4de5e9861f7d93728d6579cffb1d2ab6318928e389f7ba589243b34ca58",
+      "bytes": 109404,
       "kind": "file"
     },
     {
       "source": "ComfyUI/blueprints/Video Segmentation (SAM3).json",
       "path": "runtime/ComfyUI/blueprints/Video Segmentation (SAM3).json",
-      "sha256": "6c10c343e23f6352e0a4aad2e128e1176d61e61ae3949be59b22fae2130512ea",
-      "bytes": 20772,
+      "sha256": "46f0ef574bd3588620544eccb307b0c334aa8ec27f6ba9ed32b95db439bb5b6d",
+      "bytes": 20853,
       "kind": "file"
     },
     {
@@ -5984,8 +5984,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/latest_danbooru_browser_import_v05.json",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/latest_danbooru_browser_import_v05.json",
-      "sha256": "d36b53e62656bbc6ced8fb37e0a726d2aeb142dfcd89a22bbf3d001be81165bc",
-      "bytes": 14145,
+      "sha256": "ef348bd074833b29c76bc46ea2a4475dbdd16135d14c5262bbfbaa23c9bb4445",
+      "bytes": 13905,
       "kind": "file"
     },
     {
@@ -44421,50 +44421,50 @@
     {
       "source": "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
       "path": "runtime/ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
-      "sha256": "f2f6185ea0bb05055b561878883d3bf454f4a82d243d7cdebed035f660c69f98",
-      "bytes": 481196,
+      "sha256": "bf9c097101e0de76fd751a0a21181ceda1b48629545368902e83486a76a6df19",
+      "bytes": 464274,
       "kind": "file"
     },
     {
       "source": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
       "path": "runtime/ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
-      "sha256": "c81c33831f87fbb8080830ec31033b14694fab683d2113af354e4f49dae42fbe",
-      "bytes": 482139,
+      "sha256": "7b0beeee3a3dbfbc76bc815b0f1375563105b8540ce430c285931aeeb118cc64",
+      "bytes": 465340,
       "kind": "file"
     },
     {
       "source": "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
       "path": "runtime/ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
-      "sha256": "8ea54d6252dd5c86abefb346045c7c4eea7cf12f136048854925566a9adc083e",
-      "bytes": 480163,
+      "sha256": "db431c0e0735db75fe58c95e3420c935d52723b374feb6e89cece20e1fbcd782",
+      "bytes": 463211,
       "kind": "file"
     },
     {
       "source": "ComfyUI/user/default/workflows/Krea2_图生图_改图_v1.json",
       "path": "runtime/ComfyUI/user/default/workflows/Krea2_图生图_改图_v1.json",
-      "sha256": "cc5a70dad41b555f229f5260d957b9985c100627ee0bb826ce2fa946f65c0ce1",
-      "bytes": 129206,
+      "sha256": "d4879863b7bbf70e8db5c81ae0491910f44221d7841d1b0a57c765df3e405fe8",
+      "bytes": 203711,
       "kind": "file"
     },
     {
       "source": "ComfyUI/user/default/workflows/Krea2_工作流.json",
       "path": "runtime/ComfyUI/user/default/workflows/Krea2_工作流.json",
-      "sha256": "7a3e36728192eea4e31308cbb377bdee6c9b9b69216dd6a9648511de3a0dd071",
-      "bytes": 128438,
+      "sha256": "d56593dbc53496f32007969ee708e824f6d1c3e3c5c673ccc8dd01e1bd48bcce",
+      "bytes": 202465,
       "kind": "file"
     },
     {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
-      "sha256": "dd0c040a857e580c390e60754179631ecbdc418d88cb0e22e56893226c8317ad",
-      "bytes": 1374133,
+      "sha256": "1b55ac06c1ccfa9eee4dce00dd7718067e93a110117d48dc89112848ff8757f7",
+      "bytes": 1325993,
       "kind": "file"
     },
     {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-      "sha256": "96e76b3638c0dacfd1eef1727ba9b6ce9b8157c98cb166d3986737a7b40ac766",
-      "bytes": 1435659,
+      "sha256": "8e11892bd970534e3fe04e6d07e206a1a344ce922a726132b8c7646aa301f3e0",
+      "bytes": 1387576,
       "kind": "file"
     },
     {
@@ -44477,15 +44477,15 @@
     {
       "source": "ComfyUI/user/default/workflows/实验模板_04_SAM31_提示词候选_仅蒙版.json",
       "path": "runtime/ComfyUI/user/default/workflows/实验模板_04_SAM31_提示词候选_仅蒙版.json",
-      "sha256": "2f7f7ddae3ee57346c614e75b586557acfb41fc9208224d8f6e763d2507d3204",
-      "bytes": 27624,
+      "sha256": "4a7368e8f72b91e7132c4613188d03180f46be7775dac671e66bd9802573fbd5",
+      "bytes": 26204,
       "kind": "file"
     },
     {
       "source": "ComfyUI/user/default/workflows/检测模板_01_SAM31_五部位_仅蒙版.json",
       "path": "runtime/ComfyUI/user/default/workflows/检测模板_01_SAM31_五部位_仅蒙版.json",
-      "sha256": "3a3eac8400b343f293e352eb6a4da0f2401dc37062865eaf84770e866372b589",
-      "bytes": 27466,
+      "sha256": "895bb51b37dae36034a828561da60b03fe72d574fd6a7adf8684debc349ee932",
+      "bytes": 26046,
       "kind": "file"
     },
     {
@@ -44526,22 +44526,22 @@
     {
       "source": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
-      "sha256": "c61aa6027787d9330ba3bf60c8dd4160517bc24e111eddf7a0dc07ed53c1e1b6",
-      "bytes": 577088,
+      "sha256": "6afb346b6b159263b57c312e3655a158d5aac74c01063b8251d341b346e6a411",
+      "bytes": 557930,
       "kind": "file"
     },
     {
       "source": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
-      "sha256": "1bb59364b9d93a2c68e7f219f434127c273921d33d5a736957e58e13b77ae916",
-      "bytes": 437037,
+      "sha256": "21bbff38bbf3f1dae32217c679e3905e56cacba7032efa6001dbdbc6a008ac0a",
+      "bytes": 421461,
       "kind": "file"
     },
     {
       "source": "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
-      "sha256": "75b26aaebe76bad25b1615256709d216e87f8b34a27b183a17cab6679c7cbc03",
-      "bytes": 250875,
+      "sha256": "de1ecf9aaa040be4a36f54b09ec83dc61d4bf9812cd01138b57fa9f092bc7867",
+      "bytes": 242510,
       "kind": "file"
     },
     {
@@ -44554,15 +44554,15 @@
     {
       "source": "ComfyUI/user/default/workflows/生产扩展_04_Krea2_指令编辑.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产扩展_04_Krea2_指令编辑.json",
-      "sha256": "42b8be0861f018322ec9be0ce69d6f509a0fc5fa60ddf7e0203abb0a0eb9f8a6",
-      "bytes": 14755,
+      "sha256": "94d62e492f7ff837288dda0a0e26b9551b7bd026e09608dbcb6eb54ab96b7c63",
+      "bytes": 14025,
       "kind": "file"
     },
     {
       "source": "ComfyUI/user/default/workflows/生产扩展_05_Anima2.9_裁剪精修回贴.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产扩展_05_Anima2.9_裁剪精修回贴.json",
-      "sha256": "b93e47d4f626f7cd9ad9c895363f88edc8a325e17263fa7dccf61ee6a0d6f814",
-      "bytes": 18173,
+      "sha256": "98dd515382ca711177730b0e5c1f468a2f5a62dabbcfe266c8e2947c307ade02",
+      "bytes": 17184,
       "kind": "file"
     },
     {
@@ -44575,8 +44575,8 @@
     {
       "source": "ComfyUI/user/default/workflows/生产扩展_07_Anima原版_左右扩图.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产扩展_07_Anima原版_左右扩图.json",
-      "sha256": "51aedd909f1110170deb9e9ccee3ed135547e364d8a25227987612db9766fe00",
-      "bytes": 15218,
+      "sha256": "0fa1efe26029ed56216f71a24fa9828316c9145d2f06db9fb734a80e92eee2fe",
+      "bytes": 14396,
       "kind": "file"
     },
     {
@@ -44596,8 +44596,8 @@
     {
       "source": "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
-      "sha256": "81eec738c4ad5098b5ce87b81be9c1a58158cb49b7be9521d5c0d22cd0812efa",
-      "bytes": 229339,
+      "sha256": "af6292aeda10c1c448cb7060dfe11637292897e5808d63745b5e1988514967c4",
+      "bytes": 220653,
       "kind": "file"
     },
     {
@@ -50756,36 +50756,36 @@
     {
       "source": "production_tools/templates/UAP统一生产工作台_v1.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v1.json",
-      "sha256": "74979c50937789e62226200e1a8586b28340b591aa65a830eaaf6bba4f0e1d59",
-      "bytes": 1374122,
+      "sha256": "e235d3335e7aec81aa44a49eb371f73edb7f5c929291fc0d9570b8e1b6e80618",
+      "bytes": 1325946,
       "kind": "file"
     },
     {
       "source": "production_tools/templates/UAP统一生产工作台_v2.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v2.json",
-      "sha256": "96e76b3638c0dacfd1eef1727ba9b6ce9b8157c98cb166d3986737a7b40ac766",
-      "bytes": 1435659,
+      "sha256": "8e11892bd970534e3fe04e6d07e206a1a344ce922a726132b8c7646aa301f3e0",
+      "bytes": 1387576,
       "kind": "file"
     },
     {
       "source": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
       "path": "runtime/production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
-      "sha256": "e1e00e4107a3483978424beeda30e26723d55bd8fe8229be477bac00d0a48c2c",
-      "bytes": 523231,
+      "sha256": "4c19ab349ad12a4f6feccbc65aea355e18e8312fffae431e1ba83398240e4009",
+      "bytes": 504622,
       "kind": "file"
     },
     {
       "source": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
       "path": "runtime/production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
-      "sha256": "d865044756a6c20a86ed05a6a178ee2485837a6d4537a2932da2c6ed27ec2446",
-      "bytes": 434068,
+      "sha256": "f97b2f4f23544ac3a8686bb9c9054d1fd6b424693f6bfc98579d6db99c473120",
+      "bytes": 418466,
       "kind": "file"
     },
     {
       "source": "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
       "path": "runtime/production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
-      "sha256": "05a153c492509223ca475145fcfe16d1e93a24aa815e56f04630e3c70626dfc8",
-      "bytes": 205223,
+      "sha256": "19292c11eb5b0930dea1bf461bbf7c4f54aee9746dbcaa94d871e14eda408f24",
+      "bytes": 197152,
       "kind": "file"
     },
     {
@@ -50798,15 +50798,15 @@
     {
       "source": "production_tools/templates/生产扩展_04_Krea2_指令编辑.json",
       "path": "runtime/production_tools/templates/生产扩展_04_Krea2_指令编辑.json",
-      "sha256": "9f48682b4dd96132664276d7e889a7171539f82b4fc9a00712185d50f4032a84",
-      "bytes": 14744,
+      "sha256": "a1a4fb719dcd6ff8eb347b3920e3b0416c206aff31aec087238ee7e41a8ce245",
+      "bytes": 13978,
       "kind": "file"
     },
     {
       "source": "production_tools/templates/生产扩展_05_Anima2.9_裁剪精修回贴.json",
       "path": "runtime/production_tools/templates/生产扩展_05_Anima2.9_裁剪精修回贴.json",
-      "sha256": "b93e47d4f626f7cd9ad9c895363f88edc8a325e17263fa7dccf61ee6a0d6f814",
-      "bytes": 18173,
+      "sha256": "98dd515382ca711177730b0e5c1f468a2f5a62dabbcfe266c8e2947c307ade02",
+      "bytes": 17184,
       "kind": "file"
     },
     {
@@ -50819,8 +50819,8 @@
     {
       "source": "production_tools/templates/生产扩展_07_Anima原版_左右扩图.json",
       "path": "runtime/production_tools/templates/生产扩展_07_Anima原版_左右扩图.json",
-      "sha256": "51aedd909f1110170deb9e9ccee3ed135547e364d8a25227987612db9766fe00",
-      "bytes": 15218,
+      "sha256": "0fa1efe26029ed56216f71a24fa9828316c9145d2f06db9fb734a80e92eee2fe",
+      "bytes": 14396,
       "kind": "file"
     },
     {
@@ -51988,22 +51988,22 @@
     {
       "source": "qwen21_lab/ComfyUI/blueprints/Character Replacement (SCAIL-2 Base).json",
       "path": "runtime/qwen21_lab/ComfyUI/blueprints/Character Replacement (SCAIL-2 Base).json",
-      "sha256": "c017a64b68c4459ccc60b1286a52d9f71ef081235e5de8431afbe9e5ea6e3f25",
-      "bytes": 107905,
+      "sha256": "3ae2a2eef34498417862c11667363f807c1c5779fae00a1060aeb2c2a7993f11",
+      "bytes": 107987,
       "kind": "file"
     },
     {
       "source": "qwen21_lab/ComfyUI/blueprints/Character Replacement (SCAIL-2 Extend).json",
       "path": "runtime/qwen21_lab/ComfyUI/blueprints/Character Replacement (SCAIL-2 Extend).json",
-      "sha256": "87e2546c08f36b07b8aa76633154db963a565b54174ffc56a80f3ebbd9f236b3",
-      "bytes": 114777,
+      "sha256": "3ba4a3b66e91db079f6ca204ee99311ada0407e611c1d50c309e8b73ac37a842",
+      "bytes": 114859,
       "kind": "file"
     },
     {
       "source": "qwen21_lab/ComfyUI/blueprints/Character Replacement (SCAIL-2 Int8 Base).json",
       "path": "runtime/qwen21_lab/ComfyUI/blueprints/Character Replacement (SCAIL-2 Int8 Base).json",
-      "sha256": "50fd27c85a9074240a7c17adffc632ce3e7451b418b0830f4b21209bf82b27da",
-      "bytes": 112691,
+      "sha256": "3f9bfbcb7dd2d362f764aad30421eda6471c362131ada6df45f462aceef51c6a",
+      "bytes": 113016,
       "kind": "file"
     },
     {
@@ -52331,8 +52331,8 @@
     {
       "source": "qwen21_lab/ComfyUI/blueprints/Image Segmentation (SAM3).json",
       "path": "runtime/qwen21_lab/ComfyUI/blueprints/Image Segmentation (SAM3).json",
-      "sha256": "62b8c05c773b519a6b1f954150e8cbd296c1dffd50eebe52760928b51252de22",
-      "bytes": 17883,
+      "sha256": "b5713981087a13131b8c1389377691d89144421a2e22ff90b9694f1ec041354a",
+      "bytes": 17964,
       "kind": "file"
     },
     {
@@ -52723,22 +52723,22 @@
     {
       "source": "qwen21_lab/ComfyUI/blueprints/Video Inpaint (VOID).json",
       "path": "runtime/qwen21_lab/ComfyUI/blueprints/Video Inpaint (VOID).json",
-      "sha256": "5e7bc138afa311609f0f6483e0902a9a32369106874c7057b762bdf46c5e3b5f",
-      "bytes": 112966,
+      "sha256": "3f927abd5ed4c82c13b94125e1995dbbac000c7d52053117392461b55b5cd61c",
+      "bytes": 113047,
       "kind": "file"
     },
     {
       "source": "qwen21_lab/ComfyUI/blueprints/Video Inpainting (Wan2.1 VACE).json",
       "path": "runtime/qwen21_lab/ComfyUI/blueprints/Video Inpainting (Wan2.1 VACE).json",
-      "sha256": "ef123949a81747712004c19fabde8bc16c385c9091e9e0b481e3daadec50965f",
-      "bytes": 110044,
+      "sha256": "31d0a9b8fbf27c96bae57656ee769723e0cc9e8d308ba405a983612e62d44029",
+      "bytes": 110125,
       "kind": "file"
     },
     {
       "source": "qwen21_lab/ComfyUI/blueprints/Video Segmentation (SAM3).json",
       "path": "runtime/qwen21_lab/ComfyUI/blueprints/Video Segmentation (SAM3).json",
-      "sha256": "3cfdc9c719798d998fc17628cf2007a0860990becd0ae1805ff88f5d9af71f52",
-      "bytes": 20750,
+      "sha256": "493f7f231366281e8b9f14d422ab8407fcb18d5a063e0cde665519835e33a8bc",
+      "bytes": 20831,
       "kind": "file"
     },
     {
@@ -59534,22 +59534,22 @@
     {
       "source": "qwen21_lab/workflows_api/background.json",
       "path": "runtime/qwen21_lab/workflows_api/background.json",
-      "sha256": "4e7530470bc48944356d8bfa5d85afe661a45bbfe6783ed9f183307c1cd94058",
-      "bytes": 2752,
+      "sha256": "59ad5a3ba6b61c3769c1b545db0247d32a50ce2b73378599c5971811a42269d3",
+      "bytes": 2677,
       "kind": "file"
     },
     {
       "source": "qwen21_lab/workflows_api/coat_mask.json",
       "path": "runtime/qwen21_lab/workflows_api/coat_mask.json",
-      "sha256": "c96b5eea3d063e74e8b24e5d320ab52813748738de2b340c948ba804509389de",
-      "bytes": 2873,
+      "sha256": "de61d634d083aac661a97989faec94d9cbd77159c389615b9b1718e7087c2eda",
+      "bytes": 2798,
       "kind": "file"
     },
     {
       "source": "qwen21_lab/workflows_api/hands.json",
       "path": "runtime/qwen21_lab/workflows_api/hands.json",
-      "sha256": "73661640a300da622f28ea175b74a7a86da7b8202202cf08188c6dd5d73134f8",
-      "bytes": 2799,
+      "sha256": "413f8677f2a8bb2f5d9d171b3b5928dbf2490a2bbffd9ad2522b41b2f0363dbb",
+      "bytes": 2724,
       "kind": "file"
     },
     {
@@ -60490,8 +60490,8 @@
     },
     {
       "path": "inventory/model_sources.json",
-      "sha256": "2720c81406359f53adc7390382aa6e57b58947afaae8a6cc8facd73ac76d2040",
-      "bytes": 733138
+      "sha256": "ed833ba86b0c37bd0398533f6f95a6051ca684f85a946f4de1e5c48c4a86833e",
+      "bytes": 1185331
     }
   ],
   "production_plugins": [
@@ -60543,23 +60543,69 @@
       "workflow_page_loaded": true,
       "gpu_generation_submitted": false,
       "whole_snapshot_live_deployed": false
+    },
+    {
+      "scope": "Only the 41 model-reference source JSON files enumerated in model standardization receipt; model and private-config moves are separately evidenced",
+      "receipt": "docs/receipts/model_standardization_20261007.json",
+      "confirmed_at": "2026-10-06T18:11:46.494262+00:00",
+      "base_commit": "d1224434573fea52fae4f1007ca938e72262c23e",
+      "source_and_live_hashes_matched": 41,
+      "model_weights_renamed": 306,
+      "companion_files_migrated": 690,
+      "private_configs_updated": 5,
+      "full_weight_sha256_matches": 306,
+      "gpu_generation_submitted": false,
+      "whole_snapshot_live_deployed": false
     }
   ],
   "development_revision": {
-    "note": "Retire old browser receiver paths in formal and canonical UAP v2; preserve PixAI interfaces and user values; no deployment",
-    "previous_manifest_sha256": "b003f659e3df18ed94ad49cbdc82a711f072e86ce99061c0555c80d0e4617c9a",
+    "note": "Standard model paths staged in the sole main Git; runtime model migration not yet applied",
+    "previous_manifest_sha256": "41e195efe4d2fa3b45f9e004b0cd46d4fe44a16b190a23fac1092b87205b566b",
     "source_changes": {
-      "added": [
-        "production_tools/test_uap_browser_retirement.py"
-      ],
+      "added": [],
       "removed": [],
       "changed": [
+        "ComfyUI/blueprints/Character Replacement (SCAIL-2 Base).json",
+        "ComfyUI/blueprints/Character Replacement (SCAIL-2 Extend).json",
+        "ComfyUI/blueprints/Image Segmentation (SAM3).json",
+        "ComfyUI/blueprints/Video Inpaint (VOID).json",
+        "ComfyUI/blueprints/Video Inpainting (Wan2.1 VACE).json",
+        "ComfyUI/blueprints/Video Segmentation (SAM3).json",
+        "ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/latest_danbooru_browser_import_v05.json",
+        "ComfyUI/user/default/workflows/Anima_推荐版_官方2.9B_BF16_发布页骨架版_细化可选_K2预览外显_无LoRA.json",
+        "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选.json",
+        "ComfyUI/user/default/workflows/Anima_推荐版_细化可选_手动候选_K2预览外显_无LoRA.json",
+        "ComfyUI/user/default/workflows/Krea2_图生图_改图_v1.json",
+        "ComfyUI/user/default/workflows/Krea2_工作流.json",
+        "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
         "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-        "production_tools/UAP统一工作台说明.md",
-        "production_tools/layout_uap_workbench.py",
-        "production_tools/merge_unified_workflow.py",
+        "ComfyUI/user/default/workflows/实验模板_04_SAM31_提示词候选_仅蒙版.json",
+        "ComfyUI/user/default/workflows/检测模板_01_SAM31_五部位_仅蒙版.json",
+        "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+        "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+        "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
+        "ComfyUI/user/default/workflows/生产扩展_04_Krea2_指令编辑.json",
+        "ComfyUI/user/default/workflows/生产扩展_05_Anima2.9_裁剪精修回贴.json",
+        "ComfyUI/user/default/workflows/生产扩展_07_Anima原版_左右扩图.json",
+        "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
+        "production_tools/templates/UAP统一生产工作台_v1.json",
         "production_tools/templates/UAP统一生产工作台_v2.json",
-        "production_tools/validate_uap_workflow.py"
+        "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+        "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+        "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
+        "production_tools/templates/生产扩展_04_Krea2_指令编辑.json",
+        "production_tools/templates/生产扩展_05_Anima2.9_裁剪精修回贴.json",
+        "production_tools/templates/生产扩展_07_Anima原版_左右扩图.json",
+        "qwen21_lab/ComfyUI/blueprints/Character Replacement (SCAIL-2 Base).json",
+        "qwen21_lab/ComfyUI/blueprints/Character Replacement (SCAIL-2 Extend).json",
+        "qwen21_lab/ComfyUI/blueprints/Character Replacement (SCAIL-2 Int8 Base).json",
+        "qwen21_lab/ComfyUI/blueprints/Image Segmentation (SAM3).json",
+        "qwen21_lab/ComfyUI/blueprints/Video Inpaint (VOID).json",
+        "qwen21_lab/ComfyUI/blueprints/Video Inpainting (Wan2.1 VACE).json",
+        "qwen21_lab/ComfyUI/blueprints/Video Segmentation (SAM3).json",
+        "qwen21_lab/workflows_api/background.json",
+        "qwen21_lab/workflows_api/coat_mask.json",
+        "qwen21_lab/workflows_api/hands.json"
       ]
     },
     "live_deployed": false,
