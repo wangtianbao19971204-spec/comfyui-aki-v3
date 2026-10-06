@@ -1,0 +1,160 @@
+{
+  "schema": 1,
+  "date": "2026-10-06",
+  "receipt_id": "browser-bridge-20261006-01",
+  "base_commit": "a11a8b20c1a39f6459c48da95494608da988d799",
+  "status": "reviewed-source-not-deployed",
+  "original": {
+    "origin": "user-provided actual Tampermonkey v2.8 source",
+    "version": "2.8",
+    "sha256": "2b7d386876630d40a7a8634cb3c443e7aaa63e7569a1e8e3eb9bb7b1294f3703",
+    "bytes": 68974,
+    "rollback_preserved_outside_git": true
+  },
+  "new_userscript": {
+    "version": "2.9",
+    "bytes": 24464,
+    "reduction_percent": 64.5,
+    "identity_preserved": true,
+    "site_families": [
+      "Danbooru",
+      "Civitai and civitai.red",
+      "PixAI",
+      "yande.re",
+      "Gelbooru"
+    ]
+  },
+  "tests": {
+    "userscript_checks": 33,
+    "backend_tests": 31,
+    "pending_checks": 66,
+    "receiver_checks": 30,
+    "total": 160,
+    "all_pass": true,
+    "logs_retained_outside_git": true
+  },
+  "browser_acceptance": {
+    "live_local_http": true,
+    "actual_handler_module": true,
+    "actual_frontend_modules": true,
+    "isolated_graph_and_widgets": true,
+    "comfyui_promptserver_stub": true,
+    "production_comfyui": false,
+    "received_positive_and_negative": true,
+    "receive_did_not_write_target": true,
+    "explicit_positive_and_negative_adoption": true,
+    "serialized_widget_values_matched": true,
+    "undo": true,
+    "reload_preserved_edits_and_original": true,
+    "screenshot_sha256": "3cc94b1ed4c3cb13e034b4c37f17529ed52d2b252ab12a88a6d997db02c52859",
+    "dom_receipt_sha256": "40eb40772b45663cd9902bad2554e09c6a4b7f8c6bb042ccbd292ea61606133e"
+  },
+  "source_files": [
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/aki_tags_bridge.user.js",
+      "sha256": "3e818bd747943c2232cb987ee0342b8cb550ca9660393f93037ea4d001f86820",
+      "bytes": 24464
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/danbooru_browser_import.py",
+      "sha256": "4c687e28fc73b33746b7508f38f22ba821cd6061bef403680d03c276cd92c03f",
+      "bytes": 29772
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/browser_import.js",
+      "sha256": "0fab4eb17eb33fac547f6faa45f48d25c0bed2f5438ce73f80903df1ff7fd8e3",
+      "bytes": 8895
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/pending_prompts.js",
+      "sha256": "c401043ec7b05de3411720dbfa52c0bba8329c1d1bc7ceb57b2e7e39de2c0722",
+      "bytes": 27158
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
+      "sha256": "3a70878c77a4c49f214b57275461b65bc0de13a22425b9ce47bab045f0e5896d",
+      "bytes": 56777
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/tests/test_userscript.cjs",
+      "sha256": "2afad99a0af878f7152343ccbf3641d3a42c0cab280e642dc51e85683c7d0750",
+      "bytes": 36188
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/tests/test_workbench_bridge.py",
+      "sha256": "57cddc92b3f4ece34ff301436338a20938e4ff377ecf1adf9c779e748d465acd",
+      "bytes": 39101
+    },
+    {
+      "path": "snapshot/runtime/production_tools/test_browser_pending.cjs",
+      "sha256": "bf5b38d3f6f181048332f380faedfdbeb97fb7acfa33208e541b4055afaed136",
+      "bytes": 17405
+    },
+    {
+      "path": "snapshot/runtime/production_tools/test_browser_receiver.cjs",
+      "sha256": "2258c38a37b87d3e78733c7bb9a048cd9d41c451803cdd6276e3ed1086464568",
+      "bytes": 16329
+    },
+    {
+      "path": "snapshot/runtime/production_tools/test_browser_bridge_server.py",
+      "sha256": "d7233af3ed088fd925aa74de5ec6c019d2331dfeddedda865b94429cea938a99",
+      "bytes": 3352
+    },
+    {
+      "path": "snapshot/runtime/production_tools/browser_bridge_fixture.html",
+      "sha256": "73e1ea9b3d3f673be3da65dbbe85886deac0c59c2fecf4b531efc3f484e2672e",
+      "bytes": 5102
+    }
+  ],
+  "boundaries": [
+    "No production deployment or restart",
+    "New script not installed in the user Chrome profile",
+    "Current external website DOM and GM transport have not been live-accepted",
+    "Browser control extension store rejected download",
+    "No generation, model download, database replacement, or workflow parameter changes",
+    "No version bump, tag, remote, or push"
+  ],
+  "production_guard": {
+    "pass": true,
+    "checked_at": "2026-10-06T14:44:22.229775+00:00",
+    "protected_paths": 8535,
+    "drift_count": 0,
+    "service_identity_unchanged": true,
+    "queue_at_check": {
+      "running": 0,
+      "pending": 0
+    },
+    "five_modules_ready": true,
+    "before_receipt_sha256": "04c2e1fa056c096c63fca474de34b0bf6207b0eaea0068f5dfa7d7cdc139bc50",
+    "after_receipt_sha256": "b0cae02e6e309cca2ba3b6036a8e350e3c5b1c79d9fb0bd7c795f9ae0f7e4302",
+    "production_modified": false
+  },
+  "git_checks": {
+    "snapshot_seal_pass": true,
+    "live_deployed": false,
+    "source_manifest_receipt_hashes_match": 11,
+    "technical_catalog_staged_pass": true,
+    "features": 18,
+    "referenced_files": 734,
+    "affected_features": [
+      "runtime-browser-import",
+      "runtime-workbench"
+    ],
+    "staged_credential_guard_pass": true,
+    "finding_count": 0,
+    "diff_check_pass": true,
+    "diff_check_preserves_crlf": true,
+    "full_history_scope": "Separate post-commit scan; final report retained outside Git",
+    "ordinary_local_commit_only": true
+  },
+  "deployment_preparation": {
+    "prepared": true,
+    "applied": false,
+    "files": 5,
+    "existing_files_backed_up": 3,
+    "rollback_hashes_match": true,
+    "requires_explicit_deployment_authorization": true,
+    "browser_installation_separate": true,
+    "plan_sha256": "b7fea6580fad533b0b007c9a087e74e07c55cbdde6c9218f22fa3f239ebaa52d"
+  }
+}

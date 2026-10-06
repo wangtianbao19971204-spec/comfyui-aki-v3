@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8">
+<title>网页提示词接入 · 隔离验收</title>
+<style>
+body{font:15px/1.5 system-ui,sans-serif;background:#f6f5fc;color:#252333;max-width:1000px;margin:24px auto;padding:0 20px}
+button,select,input,textarea{font:inherit}button,select{padding:7px 12px;margin:4px;border:1px solid #bab5d0;border-radius:8px;background:white}button{cursor:pointer}
+textarea{display:block;width:94%;min-height:65px;margin:8px 0;padding:10px;border:1px solid #bbb6ce;border-radius:8px}.uw-pending-item{border:1px solid #bbb6ce;padding:12px;border-radius:12px;margin:10px 0;background:white}
+.uw-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#ebe8f5;padding:12px;border-radius:8px}small{display:block}input[type=number]{width:70px}#status{padding:10px;background:#e7e3fa;border-radius:8px}
+</style>
+<h1>网页提示词接入 · 隔离验收</h1>
+<p>使用当前源码和真实本地收件接口；示例提示词、工作流和状态均为隔离数据。</p>
+<button id="send">发送隔离示例</button><button id="recover">重新检查暂存</button>
+<label>当前目标方向 <select id="direction"><option value="positive">正向</option><option value="negative">负向</option></select></label>
+<p id="status" role="status">正在连接隔离接口…</p>
+<label>正向目标 <textarea id="positive-target">fixture positive base</textarea></label>
+<label>负向目标 <textarea id="negative-target">fixture negative base</textarea></label>
+<h2>实际控件序列化</h2><pre id="serialized"></pre>
+<h2>工作台待采用 <span id="count">0</span></h2><div id="pending"></div>
+<script type="module">
+import {createPendingPrompts} from '/web/pending_prompts.js';
+import {createWidgetInserter} from '/web/prompt_target.js';
+import {createBrowserImportReceiver} from '/web/browser_import.js';
+const api=new EventTarget(),status=document.getElementById('status'),host=document.getElementById('pending');
+const report=text=>{status.textContent=text;};
+const element=(tag,text,parent,props={})=>{const node=Object.assign(document.createElement(tag),props);if(text!=null)node.textContent=text;parent?.append(node);return node;};
+const button=(text,key,handler,parent)=>{const node=element('button',text,parent);node.dataset.uw=key;node.onclick=handler;return node;};
+const graph={id:'isolated-fixture-graph',extra:{uap_workbench:{activeBranch:'fixture',branches:[{id:'fixture',nodeIds:[1,2]}]}},beforeChange(){},afterChange(){serialize();},setDirtyCanvas(){},getNodeById(id){return nodes.find(node=>node.id===id);}};
+const app={graph,canvas:{}},nodes=['positive','negative'].map((direction,index)=>{const inputEl=document.getElementById(direction+'-target');const widget={name:direction+'_prompt',value:inputEl.value,inputEl};const node={id:index+1,mode:0,inputs:[],widgets:[widget],graph};inputEl.oninput=()=>{widget.value=inputEl.value;serialize();};return node;});
+function serialize(){document.getElementById('serialized').textContent=JSON.stringify({nodes:nodes.map(node=>({id:node.id,mode:node.mode,widgets_values:node.widgets.map(widget=>widget.value)})),activeBranch:graph.extra.uap_workbench.activeBranch},null,2);}
+let pending;
+const insertionOptions=()=>{const direction=document.getElementById('direction').value,node=nodes[direction==='positive'?0:1];return {onInsert:createWidgetInserter(app,{node,widget:node.widgets[0]},{commaSeparated:true}),targetLabel:'隔离 '+direction+' 控件',targetDirection:direction};};
+pending=createPendingPrompts({element,button,insertionOptions,report,onCount:count=>{document.getElementById('count').textContent=String(count);}});
+const owner={addPending:resource=>pending.add(resource),showPending:()=>pending.render(host)};
+const receiver=createBrowserImportReceiver({api,openWorkbench:async()=>owner,report});
+document.getElementById('direction').onchange=()=>pending.refreshTarget();
+document.getElementById('recover').onclick=()=>receiver.backfill();
+document.getElementById('send').onclick=async()=>{
+    const response=await fetch('/unified-workbench/browser-import',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({positive:'(fixture blue sky:1.2), standing\n完整原文',negative:'fixture blur, duplicate',source_url:'https://danbooru.donmai.us/posts/123',title:'虚构网页样例',post_id:'123',image_url:''})});
+    const data=await response.json();if(!response.ok)report('隔离发送失败：'+data.error);else report('服务已保存；等待工作台接收。');
+};
+const socket=new WebSocket(location.origin.replace('http','ws')+'/fixture-ws');
+socket.onmessage=event=>{const message=JSON.parse(event.data);api.dispatchEvent(new CustomEvent(message.type,{detail:message.data}));};
+socket.onopen=()=>api.dispatchEvent(new Event('reconnected'));
+socket.onerror=()=>report('隔离连接失败');
+pending.render(host);serialize();
+await receiver.ready;report('隔离工作台已准备好。');
+addEventListener('pagehide',()=>{receiver.dispose();socket.close();},{once:true});
+</script></html>

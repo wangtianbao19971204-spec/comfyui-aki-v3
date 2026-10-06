@@ -13,6 +13,39 @@
   ],
   "features": [
     {
+      "id": "runtime-browser-import",
+      "document": "docs/technical/runtime/browser-import.md",
+      "implementation": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/aki_tags_bridge.user.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/danbooru_browser_import.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/browser_import.js",
+        "database/browser-import/schema.sql"
+      ],
+      "tests": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/tests/test_userscript.cjs",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/tests/test_workbench_bridge.py",
+        "snapshot/runtime/production_tools/test_browser_pending.cjs",
+        "snapshot/runtime/production_tools/test_browser_receiver.cjs",
+        "snapshot/runtime/production_tools/test_browser_bridge_server.py"
+      ],
+      "evidence": ["docs/receipts/browser_bridge_20261006.json"],
+      "acceptance": "checked-source",
+      "watch": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/browser_import.js",
+        "snapshot/runtime/production_tools/test_browser_pending.cjs",
+        "snapshot/runtime/production_tools/test_browser_receiver.cjs",
+        "snapshot/runtime/production_tools/test_browser_bridge_server.py",
+        "snapshot/runtime/production_tools/browser_bridge_fixture.html",
+        "database/browser-import/",
+        "examples/browser-import/"
+      ],
+      "examples": [
+        "examples/browser-import/payloads.example.json",
+        "snapshot/runtime/production_tools/browser_bridge_fixture.html"
+      ]
+    },
+    {
       "id": "runtime-core",
       "document": "docs/technical/runtime/core.md",
       "implementation": [

@@ -4,6 +4,7 @@
 |---|---|
 | 本体、插件装配与启动配置 | [core.md](core.md) |
 | 工作台、主题、图标与交互 | [workbench.md](workbench.md) |
+| 五站网页提示词 → 工作台待采用 | [browser-import.md](browser-import.md) |
 | UAP、子图、部位细化、二放与独立工具 | [workflows.md](workflows.md) |
 | 模型/LoRA 管理及资源契约 | [models.md](models.md) |
 | PixAI 图像反推标签 | [pixai.md](pixai.md) |

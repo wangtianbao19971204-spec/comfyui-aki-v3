@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "synthetic": true,
+  "description": "虚构作品地址和正文，只演示本机网页桥接格式；不表示这些作品存在，不携带原图、认证、网络缓存、模型或运行参数。",
+  "endpoint": "http://127.0.0.1:8188/unified-workbench/browser-import",
+  "examples": [
+    {"site": "Danbooru", "payload": {"positive": "fictional_artist, fictional_character, blue_sky", "negative": "", "source_url": "https://danbooru.donmai.us/posts/123", "title": "虚构分类标签", "post_id": "123", "image_url": ""}, "annotation": "artist/copyright/character/general合并；meta不进入正文；图片仅可选引用"},
+    {"site": "Civitai", "payload": {"positive": "(fictional blue sky:1.2), a character standing by a window", "negative": "blur, duplicate", "source_url": "https://civitai.com/images/123", "title": "虚构生成提示词", "post_id": "123", "image_url": ""}, "annotation": "生成提示词和权重保持原文，正负方向分离；civitai.red为同族来源"},
+    {"site": "PixAI", "payload": {"positive": "A fictional character in soft evening light.\nKeep this line as supplied.", "negative": "blur", "source_url": "https://pixai.art/artwork/123", "title": "虚构自然语言", "post_id": "123", "image_url": ""}, "annotation": "只用当前作品精确ID的详情；语言前缀归一，正文不拆词"},
+    {"site": "yande.re", "payload": {"positive": "fictional_artist, fictional_character, blue_sky", "negative": "", "source_url": "https://yande.re/post/show/123", "title": "虚构分类标签", "post_id": "123", "image_url": ""}, "annotation": "保留作品定位路径，排除导航和meta标签"},
+    {"site": "Gelbooru", "payload": {"positive": "fictional_artist, fictional_character, blue_sky", "negative": "", "source_url": "https://gelbooru.com/index.php?page=post&s=view&id=123", "title": "虚构分类标签", "post_id": "123", "image_url": ""}, "annotation": "仅保留作品定位必须的page/s/id，去掉其他查询项与片段"}
+  ]
+}

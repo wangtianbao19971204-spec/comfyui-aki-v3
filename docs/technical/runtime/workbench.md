@@ -22,6 +22,8 @@
 
 ## 更新记录
 
+- 2026-10-06：新增独立网页临时来源及页面接收器，正负稿保留原文、编辑和既有目标复核/撤销；服务暂存与领取确认另见 [网页桥接](browser-import.md)。本次候选不等于线上已安装/部署，验证边界以该功能收据为准。
+
 - 2026-10-05：补入 [主题交互测试](../archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/test_candidate.cjs)与 [浏览器回执](../archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/browser_acceptance.json)；[M9 测量实现](../archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/browser_measurement.js)、[生命周期采集](../archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/lifecycle_collector.js)及 [历史浏览器验收](../archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261003_015012_R1_autonomous/UI_FINAL_ACCEPTANCE.json)用于接手。未携带的基线、fixture、浏览器轨迹仍依赖仓外原件，不把本轮归档叫作重新 UI/物理 IME 验收。
 
 - 2026-10-05：保留彩色动漫主题、轻量图标和布局；登记常用参数、任务状态、弹窗及结果交互的真实实现与验收边界。

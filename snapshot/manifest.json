@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-05T07:52:30.127343+00:00",
+  "created_at": "2026-10-06T14:49:07.487938+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -5961,10 +5961,17 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/aki_tags_bridge.user.js",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/aki_tags_bridge.user.js",
+      "sha256": "3e818bd747943c2232cb987ee0342b8cb550ca9660393f93037ea4d001f86820",
+      "bytes": 24464,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/danbooru_browser_import.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/danbooru_browser_import.py",
-      "sha256": "923fb47c144887e973aad9b168c6c5d7811990d2703e4558ec4be1474176a38f",
-      "bytes": 5139,
+      "sha256": "4c687e28fc73b33746b7508f38f22ba821cd6061bef403680d03c276cd92c03f",
+      "bytes": 29772,
       "kind": "file"
     },
     {
@@ -5979,6 +5986,20 @@
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/latest_danbooru_browser_import_v05.json",
       "sha256": "d36b53e62656bbc6ced8fb37e0a726d2aeb142dfcd89a22bbf3d001be81165bc",
       "bytes": 14145,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/tests/test_userscript.cjs",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/tests/test_userscript.cjs",
+      "sha256": "2afad99a0af878f7152343ccbf3641d3a42c0cab280e642dc51e85683c7d0750",
+      "bytes": 36188,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/tests/test_workbench_bridge.py",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/tests/test_workbench_bridge.py",
+      "sha256": "57cddc92b3f4ece34ff301436338a20938e4ff377ecf1adf9c779e748d465acd",
+      "bytes": 39101,
       "kind": "file"
     },
     {
@@ -22915,6 +22936,13 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/browser_import.js",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/browser_import.js",
+      "sha256": "0fab4eb17eb33fac547f6faa45f48d25c0bed2f5438ce73f80903df1ff7fd8e3",
+      "bytes": 8895,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/canvas_theme.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/canvas_theme.js",
       "sha256": "5d7d56c1772a09434769071767c6795261d69e2b7d456f8d044a2b158e16eb2f",
@@ -22959,8 +22987,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/pending_prompts.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/pending_prompts.js",
-      "sha256": "997705203ac780111155751b983b1938682bf0c9487fb6684d5faabfa83fa0fa",
-      "bytes": 20736,
+      "sha256": "c401043ec7b05de3411720dbfa52c0bba8329c1d1bc7ceb57b2e7e39de2c0722",
+      "bytes": 27158,
       "kind": "file"
     },
     {
@@ -23106,8 +23134,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
-      "sha256": "a0aa27555e772cb85ec2423a99ac7150249d35f2946c4dc894561608dc5dabb6",
-      "bytes": 56660,
+      "sha256": "3a70878c77a4c49f214b57275461b65bc0de13a22425b9ce47bab045f0e5896d",
+      "bytes": 56777,
       "kind": "file"
     },
     {
@@ -50677,6 +50705,13 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/browser_bridge_fixture.html",
+      "path": "runtime/production_tools/browser_bridge_fixture.html",
+      "sha256": "73e1ea9b3d3f673be3da65dbbe85886deac0c59c2fecf4b531efc3f484e2672e",
+      "bytes": 5102,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/launch.py",
       "path": "runtime/production_tools/launch.py",
       "sha256": "487b7d819dad15321f9c2fbaa831ab4c404114111ad9fb44d9e665f8754990f8",
@@ -50800,6 +50835,27 @@
       "path": "runtime/production_tools/templates/生产扩展_09_超分_四倍素材.json",
       "sha256": "af48d8a11187611b85f77a8f67c8b42a8f25993488c1bb6fae5fe8992d2b5862",
       "bytes": 5382,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/test_browser_bridge_server.py",
+      "path": "runtime/production_tools/test_browser_bridge_server.py",
+      "sha256": "d7233af3ed088fd925aa74de5ec6c019d2331dfeddedda865b94429cea938a99",
+      "bytes": 3352,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/test_browser_pending.cjs",
+      "path": "runtime/production_tools/test_browser_pending.cjs",
+      "sha256": "bf5b38d3f6f181048332f380faedfdbeb97fb7acfa33208e541b4055afaed136",
+      "bytes": 17405,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/test_browser_receiver.cjs",
+      "path": "runtime/production_tools/test_browser_receiver.cjs",
+      "sha256": "2258c38a37b87d3e78733c7bb9a048cd9d41c451803cdd6276e3ed1086464568",
+      "bytes": 16329,
       "kind": "file"
     },
     {
@@ -60467,38 +60523,25 @@
     }
   ],
   "development_revision": {
-    "note": "Capture 25 reviewed support dependencies, licenses and build files already present at runtime; capture only, no production deployment or workflow changes",
-    "previous_manifest_sha256": "c52867f73b37bfc288817ce592b7d07db7993ecf699ba9506fef36572f0a310c",
+    "note": "Five-site Tampermonkey bridge and guarded workbench inbox; isolated acceptance only, not deployed",
+    "previous_manifest_sha256": "cae3538f6c38a29ba797a39c460e1680497e16d514f156fa9ff94a59504cb5f5",
     "source_changes": {
       "added": [
-        "ComfyUI/custom_nodes/ComfyUI-GGUF/tools/lcpp.patch",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/vue-widgets/vite.config.mts",
-        "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_1",
-        "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_2",
-        "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_3",
-        "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_4",
-        "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_5",
-        "ComfyUI/custom_nodes/comfyui-easy-use/py/modules/dit/pixArt/LICENSE-Pixart",
-        "ComfyUI/custom_nodes/rgthree-comfy/rgthree_config.json.default",
-        "ComfyUI/custom_nodes/rgthree-comfy/src_web/lib/tree-sitter-python.wasm",
-        "ComfyUI/custom_nodes/rgthree-comfy/src_web/lib/tree-sitter.wasm",
-        "ComfyUI/custom_nodes/rgthree-comfy/web/lib/tree-sitter-python.wasm",
-        "ComfyUI/custom_nodes/rgthree-comfy/web/lib/tree-sitter.wasm",
-        "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/LICENSE-MHR",
-        "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/LICENSE-MIT",
-        "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/LICENSE-SAM",
-        "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/NOTICE-MHR",
-        "ComfyUI/custom_nodes/vnccs-utils/vnccs_sam3d/licenses/THIRD_PARTY_NOTICES",
-        "anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/dev/COMMIT_ID",
-        "anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/portable/UPDATER_VERSION",
-        "anima_lora_forge/vendor/sd-trainer/SD-Trainer/scripts/stable/COMMIT_ID",
-        "anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/qwen3_06b/config.json",
-        "anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/t5_old/config.json",
-        "qwen21_lab/ComfyUI/custom_nodes/ComfyUI-GGUF/tools/lcpp.patch",
-        "tools/llama.cpp/LICENSE-LLVM-OpenMP"
+        "ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/aki_tags_bridge.user.js",
+        "ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/tests/test_userscript.cjs",
+        "ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/tests/test_workbench_bridge.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/browser_import.js",
+        "production_tools/browser_bridge_fixture.html",
+        "production_tools/test_browser_bridge_server.py",
+        "production_tools/test_browser_pending.cjs",
+        "production_tools/test_browser_receiver.cjs"
       ],
       "removed": [],
-      "changed": []
+      "changed": [
+        "ComfyUI/custom_nodes/ComfyUI-Danbooru-Browser-Import/danbooru_browser_import.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/pending_prompts.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js"
+      ]
     },
     "live_deployed": false,
     "removed_sources": [

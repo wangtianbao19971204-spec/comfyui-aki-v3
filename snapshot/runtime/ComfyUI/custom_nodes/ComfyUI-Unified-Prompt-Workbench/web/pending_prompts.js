@@ -1,15 +1,84 @@
 import {mountInsertionActions} from './prompt_target.js';
 import {readModelPrompt} from './prompt_resource.js';
 const animaKinds=new Set(['character','clothing','pose','background','artist','style_quality']);
+const browserLimits={positive:65536,negative:16384};
+const browserUuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function browserIdentity(resource){
+    if(typeof resource.id!=='string'||!browserUuid.test(resource.id))throw new Error('网页提示词缺少有效的接收 UUID。');
+    let url;
+    try{url=new URL(resource.source_url);}catch{throw new Error('网页提示词来源地址无效。');}
+    const host=url.hostname;
+    const publicPostQuery=host==='gelbooru.com'&&url.pathname==='/index.php'&&/^\?page=post&s=view&id=[0-9]+$/.test(url.search);
+    let decodedPath;
+    try{decodedPath=decodeURIComponent(url.pathname);}catch{throw new Error('网页提示词来源地址无效。');}
+    if(typeof resource.source_url!=='string'||resource.source_url.length>2048||url.protocol!=='https:'||url.username||url.password||(url.search&&!publicPostQuery)||url.hash||url.port||url.href!==resource.source_url||url.pathname.startsWith('//')||
+        /[\s\\\u0000-\u001f\u007f]/.test(decodedPath)||decodedPath.split('/').some(part=>part==='.'||part==='..')||
+        /[\s\\\u0000-\u001f\u007f]/.test(resource.source_url)||!host.includes('.')||/^[\d.]+$|[:\[\]]/.test(host)||/(?:^|\.)(?:localhost|local|internal|lan|home|test|invalid|onion)$/.test(host)){
+        throw new Error('网页提示词来源须为公开 HTTPS 地址，不能包含认证或额外查询信息。');
+    }
+    return {id:resource.id.toLowerCase(),source_url:resource.source_url};
+}
+
+function browserText(text,usage,allowEmpty=false){
+    if(!Object.hasOwn(browserLimits,usage))throw new Error('网页提示词必须明确正向或负向。');
+    if(typeof text!=='string'||(!allowEmpty&&!text.trim()))throw new Error('网页提示词正文不能为空。');
+    if(Array.from(text).length>browserLimits[usage])throw new Error('网页提示词正文超过当前方向的长度上限。');
+    return text;
+}
+
+function browserItem(resource,restored=false){
+    const identity=browserIdentity(resource),usage=resource.usage;
+    if(restored&&typeof resource.sourceText!=='string')throw new Error('网页提示词草稿缺少原始正文。');
+    const sourceText=browserText(resource.sourceText??resource.text,usage);
+    const text=browserText(restored?resource.text:resource.text??sourceText,usage,restored);
+    if(!restored&&text!==sourceText)throw new Error('新接收的网页提示词必须与原始正文一致。');
+    if(resource.sectionKey!=null&&resource.sectionKey!==usage)throw new Error('网页提示词分段与正负向不一致。');
+    if(restored&&(!Number.isFinite(resource.weight)||resource.weight<0||resource.weight>3))throw new Error('网页提示词草稿权重无效。');
+    const item={provider:'browser',...identity,usage,sectionKey:usage,sourceText,text,title:typeof resource.title==='string'?resource.title:'网页临时提示词',
+        weight:restored?resource.weight:1,enabled:restored?resource.enabled!==false:true,modified:restored&&(resource.modified===true||text!==sourceText)};
+    // The received identity, direction and original body never become editable draft state.
+    for(const key of ['provider','id','source_url','usage','sectionKey','sourceText'])Object.defineProperty(item,key,{writable:false,configurable:false});
+    return item;
+}
+
+function browserParts(resource){
+    browserIdentity(resource);
+    if(resource.usage!=null&&!Object.hasOwn(browserLimits,resource.usage))throw new Error('网页提示词必须明确正向或负向。');
+    if(resource.sections==null)return [browserItem(resource)];
+    if(typeof resource.sections!=='object'||Array.isArray(resource.sections)||Object.keys(resource.sections).some(key=>!Object.hasOwn(browserLimits,key)))throw new Error('网页提示词分段必须明确正向或负向。');
+    const parts=[];
+    for(const usage of ['positive','negative']){
+        const text=resource.sections[usage];
+        if(text==null)continue;
+        if(typeof text!=='string')throw new Error('网页提示词分段正文无效。');
+        browserText(text,usage,true);
+        if(!text.trim())continue;
+        parts.push(browserItem({...resource,sections:null,text,sourceText:text,sectionKey:usage,usage,title:(resource.title||'网页临时提示词')+(usage==='positive'?' · 正向':' · 负向')}));
+    }
+    if(!parts.length)throw new Error('网页提示词正文不能为空。');
+    return parts;
+}
+
+export function validateBrowserPendingResource(resource){return browserParts(resource);}
 
 export function createPendingPrompts({element,button,insertionOptions,report,onCount,openSource,draft=[]}) {
     const items=draft;
     let host=null,controls=null,actions=null,targetNote=null,fullPreview=null,scope='all',generation=0,previewVersion=0,previewWriter=null,previewDirection='',previewBefore=null;
-    const providers=['library','tag','loras','embeddings','gallery','anima'];
+    const providers=['library','tag','loras','embeddings','gallery','anima','browser'];
     if(!items.length)try{const saved=JSON.parse(sessionStorage.getItem('uw-pending-draft')||'[]');if(Array.isArray(saved))items.push(...saved.filter(item=>providers.includes(item.provider)&&item.id));}catch{}
+    const browserSeen=new Set();
+    for(let index=0;index<items.length;index++)if(items[index].provider==='browser'){
+        try{const item=browserItem(items[index],true),key=item.id+':'+item.usage;if(browserSeen.has(key)){items.splice(index--,1);continue;}browserSeen.add(key);items[index]=item;}
+        catch{items.splice(index--,1);report('无效的网页待用草稿未载入，请重新发送原网页提示词。');}
+    }
     const persist=()=>{generation++;onCount(items.length);try{sessionStorage.setItem('uw-pending-draft',JSON.stringify(items));}catch{report('浏览器无法保存会话草稿；当前页面内的内容仍然保留。');}};
     onCount(items.length);
     async function read(item,sharedReads,selected) {
+        if(item.provider==='browser'){
+            browserIdentity(item);browserText(item.text,item.usage);browserText(item.sourceText,item.usage);
+            return {text:item.sourceText,usage:item.usage};
+        }
         if(item.provider==='anima'){
             if(!animaKinds.has(item.kind)||!item.sourceId)throw new Error('选择器待用项缺少稳定来源，请移除后重新加入。');
             if(!sharedReads.has(item.kind))sharedReads.set(item.kind,(async()=>{
@@ -51,6 +120,16 @@ export function createPendingPrompts({element,button,insertionOptions,report,onC
     }).join(', ');}
     const add=resource=>{
         if(!providers.includes(resource.provider)||!resource.id)throw new Error('缺少资源的稳定身份。');
+        if(resource.provider==='browser'){
+            const parts=browserParts(resource),newItems=[];
+            for(const part of parts){
+                const existing=items.find(item=>item.provider==='browser'&&item.id===part.id&&item.sectionKey===part.sectionKey);
+                if(existing){if(existing.sourceText!==part.sourceText||existing.source_url!==part.source_url)throw new Error('网页接收 UUID 已存在，但原文或来源不同，请重新发送。');}
+                else newItems.push(part);
+            }
+            if(!newItems.length){persist();report('这条网页提示词已在待用列表，临时编辑仍保留。');return;}
+            items.push(...newItems);persist();report(`已加入待用列表，共 ${items.length} 条。`);if(host?.isConnected)render(host);return;
+        }
         if(resource.provider==='anima'&&(!animaKinds.has(resource.kind)||!resource.sourceId||resource.id!==`${resource.kind}:${resource.sourceId}`||!resource.sourceBinding))throw new Error('选择器资料缺少稳定来源。');
         if(resource.sections){for(const direction of ['positive','negative'])if(resource.sections[direction]?.trim())add({...resource,sections:null,text:resource.sections[direction],sectionKey:direction,usage:direction,title:resource.title+(direction==='positive'?' · 正向':' · 负向')});return;}
         const existing=items.find(item=>item.provider===resource.provider&&item.id===resource.id&&item.sectionKey===resource.sectionKey);
@@ -109,10 +188,10 @@ export function createPendingPrompts({element,button,insertionOptions,report,onC
         if(version!==generation)throw new Error('待用内容或方向已变化，请核对预览后重新应用。');
         latest.forEach((value,i)=>{
             const item=selected[i];
-            if(!item.modified && value.text!==item.text){item.text=value.text;changed=true;}
-            if(item.sourceText!=null&&value.text!==item.sourceText){item.sourceText=value.text;changed=true;}
+            if(item.provider!=='browser'&&!item.modified && value.text!==item.text){item.text=value.text;changed=true;}
+            if(item.provider!=='browser'&&item.sourceText!=null&&value.text!==item.sourceText){item.sourceText=value.text;changed=true;}
             if(item.provider==='anima'&&value.binding!==item.sourceBinding){item.sourceBinding=value.binding;changed=true;}
-            if(!item.split&&item.usage!=='target'&&value.usage!==item.usage){item.usage=value.usage;changed=true;}
+            if(item.provider!=='browser'&&!item.split&&item.usage!=='target'&&value.usage!==item.usage){item.usage=value.usage;changed=true;}
         });
         if(changed){persist();render(host);throw new Error('原资料已更新，请核对预览；手动拆分和临时编辑的内容保留，再次应用前请检查。');}
         if(selected.some(item=>item.usage!=='target'&&item.usage!==direction))throw new Error('待用资料的正负向与目标不同，请选择对应方向分开应用；混合正文需要先拆分。');
@@ -174,10 +253,13 @@ export function createPendingPrompts({element,button,insertionOptions,report,onC
             const row=element('section',null,list,{className:'uw-pending-item'});
             row.dataset.uwDisabled=String(item.enabled===false);
             const bar=element('div',null,row,{className:'uw-toolbar'});element('strong',item.title || item.id,bar);
-            const sourceLabels={library:'共享资料',tag:'基础 Tag',loras:'LoRA',embeddings:'Embedding',gallery:'图库',anima:'Anima 选择器'};
+            const sourceLabels={library:'共享资料',tag:'基础 Tag',loras:'LoRA',embeddings:'Embedding',gallery:'图库',anima:'Anima 选择器',browser:'网页临时提示词'};
             if(item.provider==='anima')sourceLabels.anima+=' · '+({character:'角色',clothing:'服装',pose:'姿势',background:'背景',artist:'画师',style_quality:'画风质量'}[item.kind]||item.kind);
             const source=element('small','来源：'+(sourceLabels[item.provider]||item.provider)+(item.modified?' · 本次已编辑':''),row);source.title=item.id;
-            if(openSource)button('查看来源','pending-source',()=>openSource(item),bar);
+            if(item.provider==='browser'){
+                element('small',item.source_url,row);
+                const original=element('details',null,row);element('summary','接收到的原始正文',original);element('pre',item.sourceText,original);
+            }else if(openSource)button('查看来源','pending-source',()=>openSource(item),bar);
             const enabled=element('input',null,element('label','本次启用',bar),{type:'checkbox'});enabled.checked=item.enabled!==false;enabled.setAttribute('aria-label',(item.title||item.id)+' · 本次启用');
             enabled.onchange=()=>{item.enabled=enabled.checked;row.dataset.uwDisabled=String(!enabled.checked);persist();updatePreview();};
             const move=delta=>{const other=index+delta;if(other<0||other>=items.length)return;[items[index],items[other]]=[items[other],items[index]];persist();render(host,{item,action:delta<0?'pending-up':'pending-down'});};

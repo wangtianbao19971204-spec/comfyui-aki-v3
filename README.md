@@ -38,7 +38,7 @@ ComfyUI 相关源码、工作流/子图、提示词资料检查点和维护工�
 
 详细归属见 [工作区](docs/WORKSPACE.md) 和 [外部状态](docs/EXTERNAL_STATE.md)。用户模型、预览与缓存只有清单/格式及标注样例；上游源码自带的界面图片和示例媒体另有许可边界。clone 本仓不等于装好了完整运行环境；现有功能限制见 [已知问题](docs/KNOWN_ISSUES.md)。
 
-17 项功能均在 [技术目录](docs/technical/catalog.json) 登记独立说明、示例入口和日期式维护记录；提交门禁检查这些文件实际存在于待提交内容。再次核验唯一 Git、现行实例组合与公开边界的结果见 [2026-10-06 复核](docs/receipts/reassurance_20261006.json)。
+18 项功能均在 [技术目录](docs/technical/catalog.json) 登记独立说明、示例入口和日期式维护记录；提交门禁检查这些文件实际存在于待提交内容。五站网页提示词桥接的安装/更新与验收边界见 [网页接入工作台](docs/technical/runtime/browser-import.md)。再次核验唯一 Git、现行实例组合与公开边界的结果见 [2026-10-06 复核](docs/receipts/reassurance_20261006.json)。
 
 ## 历史需要时再看
 

@@ -5,6 +5,7 @@ import {installResourceActions, listPromptTargets, sourceForTarget} from './reso
 import {getReferenceCollections, openReferenceCollections} from './shared_collections.js';
 import {mountWorkspace} from './workspace.js';
 import {createPendingPrompts} from './pending_prompts.js';
+import {installBrowserImportReceiver} from './browser_import.js';
 import {mountResourceResults} from './resource_results.js';
 import {openNativeSettings} from './native_settings.js';
 import {installUiTheme, mountThemeToggle} from './ui_theme.js';
@@ -499,4 +500,5 @@ app.registerExtension({name:'UnifiedPromptWorkbench',afterConfigureGraph(){
     window.unifiedQueuePrompts=async resources=>{const owner=current?.root.isConnected?current:await openWorkbench();return owner.addPendingMany(resources);};
     if(!document.getElementById('uw-experience-style'))element('link',null,document.head,{id:'uw-experience-style',rel:'stylesheet',href:'/extensions/ComfyUI-Unified-Prompt-Workbench/workbench.css?v=20260928-gallery'});
     const entry=element('button','统一工作台',document.body,{id:'unified-workbench-entry',type:'button'});entry.title='工作区、资料库、模型与图库';entry.onclick=()=>openWorkbench();
+    installBrowserImportReceiver({openWorkbench});
 }});
