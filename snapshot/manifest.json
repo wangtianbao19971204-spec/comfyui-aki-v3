@@ -60487,6 +60487,11 @@
       "path": "evidence/20261005_workflow_product_repair/REPORT.txt",
       "sha256": "dbb3cc307e6f3cdc54524260aa6e447ea1d83fe2444911ec5e33ca464390824e",
       "bytes": 8797
+    },
+    {
+      "path": "inventory/model_sources.json",
+      "sha256": "30c2a570fd6a0d9d0433696ff45189655c587a42566801bd899953f98e0f2750",
+      "bytes": 723256
     }
   ],
   "production_plugins": [

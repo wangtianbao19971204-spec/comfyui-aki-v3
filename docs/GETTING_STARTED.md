@@ -57,6 +57,8 @@ git config --local user.email '<你的提交邮箱>'
 if ($LASTEXITCODE -ne 0) { throw 'Status check failed' }
 & $comfyPython -X utf8 -B scripts\technical_catalog.py check --require-tracked
 if ($LASTEXITCODE -ne 0) { throw 'Feature catalogue check failed' }
+& $comfyPython -X utf8 -B scripts\model_sources.py check
+if ($LASTEXITCODE -ne 0) { throw 'Model source catalogue check failed' }
 # 读取快照内容并核对哈希，比前两项耗时更长：
 & $comfyPython -X utf8 -B scripts\snapshot.py verify
 if ($LASTEXITCODE -ne 0) { throw 'Snapshot verification failed' }
@@ -65,6 +67,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Snapshot verification failed' }
 新机器显示“备份未登记”或“运行状态未实测”是正常边界，不表示克隆损坏。检查失败时保留输出和当前提交，核对检出是否完整，不用 `seal` 重新认可损坏字节。公开或打包还须通过[全历史安全与许可检查](SECURITY.md)。
 
 不要直接运行 `snapshot/runtime/ComfyUI/main.py` 或快照中的启动脚本：库资料仍在 `snapshot/library/` 分片，模型与本机配置也未随克隆提供。先按[恢复方法](RESTORE.md)物化到全新运行目录，再补齐资源、依赖和配置，用独立端口及隔离数据验收。正式运行目录只接收明确范围的部署。
+
+模型与 LoRA 的补齐入口是[下载来源清单](MODEL_SOURCES.md)，优先查看正式 UAP v2 所需资源，再按自己的工作分支补齐其他资源。记录包含本地相对路径、来源版本和原文件名；网站改名或一个版本提供多种精度时，按文件 ID／声明摘要选择，不能只下载同名最新版本。自训、来源待补和目录配套的处理见[模型维护](MODELS.md)。
 
 ## 4. 后续取得主仓更新
 

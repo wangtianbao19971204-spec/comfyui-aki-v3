@@ -199,25 +199,36 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules.json",
         "snapshot/inventory/models.json",
         "snapshot/inventory/workflow_models.json",
-        "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/run_benchmark.py"
+        "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/scripts/run_benchmark.py",
+        "scripts/model_sources.py",
+        "snapshot/inventory/model_sources.json"
       ],
       "tests": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/test_checkpoint_loaders.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/nodes/test_lora_loader.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/nodes/test_lora_validation.py",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/utils/test_civitai_utils.py"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/utils/test_civitai_utils.py",
+        "tests/test_model_sources.py"
       ],
       "evidence": [
         "docs/technical/archive/benchmark_reports/MODEL_COMPARISON_RUNBOOK.md",
-        "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/report/三模型详细对比报告.md"
+        "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/report/三模型详细对比报告.md",
+        "docs/receipts/model_sources_20261007.json"
       ],
       "acceptance": "checked-source",
       "watch": [
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/",
+        "scripts/model_sources.py",
+        "tests/test_model_sources.py",
+        "snapshot/inventory/model_sources.json",
+        "examples/external-assets/model-source.example.json"
       ],
       "examples": [
         "examples/external-assets/asset-record.example.json",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/settings.json.example"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/settings.json.example",
+        "examples/external-assets/model-source.example.json",
+        "docs/MODELS.md",
+        "docs/MODEL_SOURCES.md"
       ]
     },
     {

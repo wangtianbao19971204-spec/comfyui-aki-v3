@@ -1,0 +1,174 @@
+{
+  "schema": 1,
+  "receipt_id": "model-sources-20261007-01",
+  "checked_at": "2026-10-06T16:32:42.781047+00:00",
+  "pass": true,
+  "status": "accepted_source_provenance_only",
+  "base_commit": "5ce0530e393585a40f5debdca9c249d794e310fd",
+  "scope": "Portable model/LoRA provenance, dependency placement, maintenance examples and documentation only",
+  "catalogue": {
+    "path": "snapshot/inventory/model_sources.json",
+    "sha256": "30c2a570fd6a0d9d0433696ff45189655c587a42566801bd899953f98e0f2750",
+    "bytes": 723256,
+    "summary": {
+      "asset_count": 395,
+      "inventory_asset_count": 384,
+      "observed_present_count": 395,
+      "observed_missing_count": 0,
+      "workflow_asset_count": 23,
+      "missing_workflow_reference_count": 0,
+      "source_status_counts": {
+        "version_metadata": 302,
+        "upstream_mapping": 73,
+        "local_derivative": 19,
+        "unresolved": 1
+      }
+    }
+  },
+  "rendered_document": {
+    "path": "docs/MODEL_SOURCES.md",
+    "sha256": "fc6314eb9cafaeaedb97068f57243b259bda78614b9aaf98cf63aec5d6acacdf"
+  },
+  "bindings": {
+    "original_inventory_sha256": "d526702803eb2be7ae500563c0e416ee10d89fc0243b0483d8008a63932820ab",
+    "formal_workflow_sha256": "96e76b3638c0dacfd1eef1727ba9b6ce9b8157c98cb166d3986737a7b40ac766",
+    "previous_manifest_sha256": "fd46bdc99e6fc8abcaa4ebc089de75bada7673e4dbd9cbd669e547d38f2410b2",
+    "current_manifest_sha256": "d2ead4af94c20cd83c86eefaf6e5aa978eb705188f02e7812b8fa582fbcace71",
+    "manifest_existing_content_logically_unchanged": true
+  },
+  "source_evidence": {
+    "external_receipt_id": "model-sources-20261007-01",
+    "audits": [
+      {
+        "filename": "routing_external_sources_audit_v3.json",
+        "sha256": "d65af0f2beaab12f56bfb305bc369f6af6ea51f5fc94e1e7d4f154ccdb5d3230"
+      },
+      {
+        "filename": "auxiliary-source-audit.json",
+        "sha256": "20c57f3f26b0c0feecd5c3fcb6a0d5dd6f796d37b900f94b84ea5d269d54972f"
+      },
+      {
+        "filename": "missing-auxiliary-audit.json",
+        "sha256": "6ff03d7a8259a5ed82028e85d7840af793135c9b906c0a6d4ef7e7a11b4c5207"
+      },
+      {
+        "filename": "detector-hash-source-audit.json",
+        "sha256": "cc7f4cacb62d72ba7bdf7dd263179c14f6e7810869f2e59726a3f1295fd8e32b"
+      },
+      {
+        "filename": "supplementary-hf-metadata.json",
+        "sha256": "abe55d1969b1ebfc917e4b1ee0a19a5df7c78ec1a5d0de754039ceabbe646d22"
+      },
+      {
+        "filename": "targeted-local-hashes.json",
+        "sha256": "2efd024cab244b47daef3881f6fc260df8bec9b10be7ffcaf167dd47a33c7e3a"
+      },
+      {
+        "filename": "targeted-gguf-hashes.json",
+        "sha256": "c4b751c1d3bcbea13d7f5d8f3c7ff17c3d0c0da521e9861d9081464b7838d56b"
+      },
+      {
+        "filename": "final-readonly-guard.json",
+        "sha256": "2f905f85caea2656b705e2d166a0d92909d576578bf12082f6bd844107be6270"
+      },
+      {
+        "filename": "independent-source-review.json",
+        "sha256": "abbf008d0d2192f1e5a5f8f205cf439ceee73a9763b970a9c51c5db99fc96d61"
+      },
+      {
+        "filename": "routing-cache-consistent-recheck.json",
+        "sha256": "7323e990e9a1175c37189d90de1f974b08af8d0c6ee8aaf7cacb9d6d9ad6df0a"
+      }
+    ],
+    "raw_credentials_or_cache_published": false,
+    "civitai_current_availability": "not_verified; anonymous metadata probe returned ConnectTimeout",
+    "network_scope": "anonymous public metadata only; no model payload request"
+  },
+  "content_hash_verification": {
+    "local_full_sha256_count": 15,
+    "local_files_read_bytes": 54571964786,
+    "all_15_match_at_least_one_upstream_declared_sha256": true,
+    "remaining_model_content_hashes_recomputed": false
+  },
+  "checks": {
+    "unit_tests": {
+      "pass": true,
+      "count": 20,
+      "log_sha256": "29ad32c9d6e33fc4c42fa0885753a121cecf139583536b611dd2e68441b080b4"
+    },
+    "offline_catalogue_and_render": {
+      "pass": true
+    },
+    "model_size_mtime_guard": {
+      "pass": true,
+      "paths": 395,
+      "drifts": 0
+    },
+    "snapshot": {
+      "pass": true,
+      "entries": 8533,
+      "failures": 0
+    },
+    "technical_catalogue": {
+      "pass": true,
+      "features": 18,
+      "referenced_files": 744
+    },
+    "staged_credentials": {
+      "pass": true,
+      "finding_count": 0,
+      "scope": "staged content/name gate; final index checked again by the real commit hook",
+      "earlier_synthetic_test_url_false_positive_fixed": true,
+      "scanner_rules_or_exceptions_changed": false
+    },
+    "independent_static_review": {
+      "pass": true,
+      "hf_resolve_links": 56,
+      "upstream_metadata_records": 85,
+      "identity_or_size_conflicts": 0,
+      "sha256": "abbf008d0d2192f1e5a5f8f205cf439ceee73a9763b970a9c51c5db99fc96d61"
+    },
+    "consistent_model_cache_recheck": {
+      "pass": true,
+      "method": "read-only SQLite source backup API; read the new external consistent copy; all connections closed",
+      "checkpoint_count": 19,
+      "lora_count": 283,
+      "comparable_civitai_id_and_declared_hash_matches": 298,
+      "conflicts": 0,
+      "local_training_not_applicable": 4
+    }
+  },
+  "runtime_modified": false,
+  "workflows_modified": false,
+  "weights_downloaded": false,
+  "weights_replaced": false,
+  "database_replaced": false,
+  "service_restarted": false,
+  "remote_push": false,
+  "version_or_tag_changed": false,
+  "limitations": [
+    "Source location and metadata presence are distinct from actual download, license permission and GPU acceptance.",
+    "Civitai pages/files were extracted from saved public metadata; current download availability was not confirmed.",
+    "19 local trained LoRAs require exact completed weights outside Git.",
+    "Four historical intrinsic conversions are absent from the current upstream tree; preserve existing weights.",
+    "Legacy t5_old/spiece.model has a family reference only; exact installed-file provenance remains unresolved.",
+    "Official SAM3D Body source requires license/account acceptance; a mapped public package is not a licensing bypass or permission grant.",
+    "Only 15 selected local weights were fully hashed; other declared hashes are not current local content verification.",
+    "Formal UAP v2 references were statically matched, including optional branches; no workflow or GPU execution.",
+    "SQLite query-only/backup reads changed an existing SHM mtime and created WAL/SHM for an extra cache; database bodies were unchanged. These auxiliary effects were preserved and documented, not claimed as zero filesystem changes."
+  ],
+  "rollback": "Revert this source/docs commit only; retain the current runtime, weights, latest databases and private metadata.",
+  "implementation_sha256": {
+    "scripts/model_sources.py": "72e104fffc9d1052f26efb2c971596ea7ef50b09771702a94ebb2a7391f4fa73",
+    "tests/test_model_sources.py": "b51ded5d508bd20cff3ad2397b40e0d3f5e79a0e535c698abc1adcacaf6ef56a"
+  },
+  "cache_read_auxiliary_effects": {
+    "model_cache_database_and_wal_bytes_unchanged": true,
+    "model_cache_shm_bytes_unchanged_mtime_changed": true,
+    "extra_model_update_backup_not_used_as_source": true,
+    "extra_model_update_read_only_connection_created_wal_shm": true,
+    "extra_model_update_database_bytes_unchanged": true,
+    "new_auxiliary_files_preserved": true,
+    "private_copies_retained_outside_git": true
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "example_only": true,
+  "notes": [
+    "Field annotation only, not a complete catalogue or installer input. No weights or private cache are included.",
+    "Replace nullable size/hash fields with measured values when registering a real asset; the source SHA is never a measured local SHA.",
+    "The public PixAI page illustrates a directory source. Restore every matching companion from the same reviewed revision."
+  ],
+  "asset_template": {
+    "path": "ComfyUI/models/taggers/pixai-tagger-v1.0/model.safetensors",
+    "bytes": null,
+    "kind": "tagger",
+    "captured_in_inventory": false,
+    "observed_present": false,
+    "local_sha256": null,
+    "source_status": "upstream_mapping",
+    "family": null,
+    "sources": [
+      {
+        "provider": "huggingface",
+        "page_url": "https://huggingface.co/pixai-labs/pixai-tagger-v1.0",
+        "download_url": null,
+        "model_id": null,
+        "version_id": null,
+        "file_id": null,
+        "filename": "model.safetensors",
+        "declared_sha256": null,
+        "revision": null,
+        "evidence": [
+          {
+            "kind": "example_public_document_reference",
+            "reference": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-PixAI-Tagger/README.md"
+          }
+        ],
+        "availability": "example_no_online_or_local_verification"
+      }
+    ],
+    "companions": [
+      "ComfyUI/models/taggers/pixai-tagger-v1.0/config.json",
+      "ComfyUI/models/taggers/pixai-tagger-v1.0/preprocessor_config.json",
+      "ComfyUI/models/taggers/pixai-tagger-v1.0/tagger_pipeline.py"
+    ],
+    "workflows": [],
+    "derivation": null,
+    "notes": ["Record the full public revision and reviewed source hash separately; do not assume that a model filename proves its identity."]
+  },
+  "local_training_annotation": {
+    "source_status": "local_derivative",
+    "sources": [],
+    "derivation": {
+      "kind": "local_training",
+      "parent_path": null,
+      "recipe_reference": null,
+      "original_weight_required": true,
+      "reproducibility": "weights_backup_required"
+    },
+    "notes": ["Back up the exact trained weight outside Git. Parent model URLs and training-tool source do not recreate the completed checkpoint."]
+  }
+}
