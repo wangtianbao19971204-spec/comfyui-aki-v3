@@ -8,7 +8,8 @@
     "Civitai 记录来自已存的公开元数据，站点匿名请求本轮连接超时；不宣称它们当前可下载。",
     "上游声明摘要与实际本机 SHA 分开；只有 local_sha256 非空项本轮读取过全部内容。",
     "工作流引用是静态字符串匹配；正式 UAP v2 按当前原文件重查，其他工作流关系沿用捕获时记录，模式开关及 GPU 未验收。",
-    "来源页／下载入口不包含鉴权值、原始缓存或签名链接。网站版本、版权许可和资源可用性需下载时复核。"
+    "来源页／下载入口不包含鉴权值、原始缓存或签名链接。网站版本、版权许可和资源可用性需下载时复核。",
+    "2026-10-07 计数复核：19 个本地训练权重路径实际为 4 个成品使用版本、15 个评估检查点，内容去重后为 17 份；对应 2 个角色、6 个已匹配训练 session，不是 19 个独立成品。详见 docs/receipts/model_source_recount_20261007.json。"
   ],
   "assets": [
     {
@@ -10033,7 +10034,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "aef260a4f99b06c612f17101442be2e80d2b749c33be6eacc731545f922aeca1",
       "source_status": "local_derivative",
       "family": "Anima 2.9B v1.0 BF16",
       "sources": [],
@@ -10042,12 +10043,17 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：已选出的成品使用版本；训练步数 300。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell_morning_star_anima29/20260824_2131_anima29_morning_star_cal400/weights/alicia_bell_morning_star_anima29_r32-step00000300.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。",
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。",
         "模型家族来自保存的版本元数据：Anima 2.9B v1.0 BF16；加载前按原发布说明和当前底模核对。"
       ]
     },
@@ -10057,7 +10063,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "e62f86968ab6e75eb60c2da03c4ff8ff22f3c0504722c54f5eca662354301920",
       "source_status": "local_derivative",
       "family": "Anima Base v1.0",
       "sources": [],
@@ -10066,13 +10072,19 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：已选出的成品使用版本；训练步数 150。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_refine_175_v1/weights/alicia_bell_morning_star_anima_r32_refine-step00000150.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。",
-        "模型家族来自保存的版本元数据：Anima Base v1.0；加载前按原发布说明和当前底模核对。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。",
+        "模型家族来自保存的版本元数据：Anima Base v1.0；加载前按原发布说明和当前底模核对。",
+        "相同内容的另一个已保留位置：ComfyUI/models/loras/anima/自训评估/alicia_bell_morning_star_eval/step0150.safetensors；两个位置均保留，不计作两个不同内容。"
       ]
     },
     {
@@ -10081,7 +10093,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "fd34bac14788c44da8e69f2f730578053078508e13f0806395f28e6aa81522bd",
       "source_status": "local_derivative",
       "family": "Anima Base v1.0",
       "sources": [],
@@ -10090,13 +10102,19 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：已选出的成品使用版本；训练步数 300。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell_ordinary/alicia_bell_ordinary_400_v4/weights/alicia_bell_ordinary_anima_r32-step00000300.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。",
-        "模型家族来自保存的版本元数据：Anima Base v1.0；加载前按原发布说明和当前底模核对。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。",
+        "模型家族来自保存的版本元数据：Anima Base v1.0；加载前按原发布说明和当前底模核对。",
+        "相同内容的另一个已保留位置：ComfyUI/models/loras/anima/自训评估/alicia_bell_ordinary_eval/step0300.safetensors；两个位置均保留，不计作两个不同内容。"
       ]
     },
     {
@@ -10105,7 +10123,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "3b3679bfc88d4a4187f4318093917c8ab7c1c37f6b9cc2cf6535faa0eb803834",
       "source_status": "local_derivative",
       "family": null,
       "sources": [],
@@ -10114,12 +10132,17 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：已选出的成品使用版本；训练步数 400。",
+          "本机训练输出：anima_lora_forge/runs/rosasha/rosasha_calibration_400_v1/weights/rosasha_anima_r32_calibration-step00000400.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
       ]
     },
     {
@@ -10128,7 +10151,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "8e983a94dab7656e4e4b30fbe85536205d14d39ba1dca24a14b1dd7435147ea1",
       "source_status": "local_derivative",
       "family": null,
       "sources": [],
@@ -10137,12 +10160,17 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：训练过程的评估检查点；不是单独成品；训练步数 100。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell/alicia_bell_calibration_400_v1/weights/alicia_bell_anima_r32_calibration-step00000100.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
       ]
     },
     {
@@ -10151,7 +10179,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "71b336cb4c4e112affc2114cf74851342c81956bb2238f6b91a7460fda9d1a8a",
       "source_status": "local_derivative",
       "family": null,
       "sources": [],
@@ -10160,12 +10188,17 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：训练过程的评估检查点；不是单独成品；训练步数 200。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell/alicia_bell_calibration_400_v1/weights/alicia_bell_anima_r32_calibration-step00000200.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
       ]
     },
     {
@@ -10174,7 +10207,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "466637abd2cbb35872a5bbef02ed71d1b9fece313dd275042053eac4c3db8124",
       "source_status": "local_derivative",
       "family": null,
       "sources": [],
@@ -10183,12 +10216,17 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：训练过程的评估检查点；不是单独成品；训练步数 300。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell/alicia_bell_calibration_400_v1/weights/alicia_bell_anima_r32_calibration-step00000300.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
       ]
     },
     {
@@ -10197,7 +10235,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "e8e2e733d1bed3e50caf03db120cca283768efe8f3bf0ddef21a618913b9403b",
       "source_status": "local_derivative",
       "family": null,
       "sources": [],
@@ -10206,12 +10244,17 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：训练过程的评估检查点；不是单独成品；训练步数 400。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell/alicia_bell_calibration_400_v1/weights/alicia_bell_anima_r32_calibration-step00000400.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
       ]
     },
     {
@@ -10220,7 +10263,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "0be6f5247b69dbafde9e7abaa989ec0a513385e2d2423ba52c27b2f050127a63",
       "source_status": "local_derivative",
       "family": null,
       "sources": [],
@@ -10229,12 +10272,17 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：训练过程的评估检查点；不是单独成品；训练步数 100。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_400_v2/weights/alicia_bell_morning_star_anima_r32-step00000100.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
       ]
     },
     {
@@ -10243,7 +10291,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "9bfefc07089af170c61df8dcee3c66790088e9b5585a648be6bb53130767aac1",
       "source_status": "local_derivative",
       "family": null,
       "sources": [],
@@ -10252,12 +10300,17 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：训练过程的评估检查点；不是单独成品；训练步数 125。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_refine_175_v1/weights/alicia_bell_morning_star_anima_r32_refine-step00000125.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
       ]
     },
     {
@@ -10266,7 +10319,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "e62f86968ab6e75eb60c2da03c4ff8ff22f3c0504722c54f5eca662354301920",
       "source_status": "local_derivative",
       "family": null,
       "sources": [],
@@ -10275,12 +10328,18 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：训练过程的评估检查点；不是单独成品；训练步数 150。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_refine_175_v1/weights/alicia_bell_morning_star_anima_r32_refine-step00000150.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。",
+        "相同内容的另一个已保留位置：ComfyUI/models/loras/anima/自训角色/alicia_bell_morning_star_anima_r32_v1.safetensors；两个位置均保留，不计作两个不同内容。"
       ]
     },
     {
@@ -10289,7 +10348,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "5ef8c4e76baad4c5d6772ccaab77f8bc37891e38aa8f58ba619502f1d474fab7",
       "source_status": "local_derivative",
       "family": null,
       "sources": [],
@@ -10298,12 +10357,17 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：训练过程的评估检查点；不是单独成品；训练步数 175。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_refine_175_v1/weights/alicia_bell_morning_star_anima_r32_refine-step00000175.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
       ]
     },
     {
@@ -10312,7 +10376,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "c9d179f8b27516934681869579f6a802dabdf63b90350985f9c1466325b04716",
       "source_status": "local_derivative",
       "family": null,
       "sources": [],
@@ -10321,12 +10385,17 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：训练过程的评估检查点；不是单独成品；训练步数 200。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_400_v2/weights/alicia_bell_morning_star_anima_r32-step00000200.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
       ]
     },
     {
@@ -10335,7 +10404,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "4977857a2ae0e5c8c7b962854d014d0bbf00014a831ad89884eb97713ab57411",
       "source_status": "local_derivative",
       "family": null,
       "sources": [],
@@ -10344,12 +10413,17 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：训练过程的评估检查点；不是单独成品；训练步数 300。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_400_v2/weights/alicia_bell_morning_star_anima_r32-step00000300.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
       ]
     },
     {
@@ -10358,7 +10432,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "3f984b3e2f216f311c958f15accda3ad9df5c540f62bf17fdc4e02cd6acef273",
       "source_status": "local_derivative",
       "family": null,
       "sources": [],
@@ -10367,12 +10441,17 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：训练过程的评估检查点；不是单独成品；训练步数 400。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell_morning_star/alicia_bell_morning_star_400_v2/weights/alicia_bell_morning_star_anima_r32-step00000400.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
       ]
     },
     {
@@ -10381,7 +10460,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "d6480d10393c63b0f15920d595c302849ab60f137e467d7462d818e804657453",
       "source_status": "local_derivative",
       "family": null,
       "sources": [],
@@ -10390,12 +10469,17 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：训练过程的评估检查点；不是单独成品；训练步数 100。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell_ordinary/alicia_bell_ordinary_400_v4/weights/alicia_bell_ordinary_anima_r32-step00000100.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
       ]
     },
     {
@@ -10404,7 +10488,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "37923c45bef3c5e8af3921e3cfca570dfa3434929f84822b3e56c2887270854c",
       "source_status": "local_derivative",
       "family": null,
       "sources": [],
@@ -10413,12 +10497,17 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：训练过程的评估检查点；不是单独成品；训练步数 200。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell_ordinary/alicia_bell_ordinary_400_v4/weights/alicia_bell_ordinary_anima_r32-step00000200.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
       ]
     },
     {
@@ -10427,7 +10516,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "fd34bac14788c44da8e69f2f730578053078508e13f0806395f28e6aa81522bd",
       "source_status": "local_derivative",
       "family": null,
       "sources": [],
@@ -10436,12 +10525,18 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：训练过程的评估检查点；不是单独成品；训练步数 300。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell_ordinary/alicia_bell_ordinary_400_v4/weights/alicia_bell_ordinary_anima_r32-step00000300.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。",
+        "相同内容的另一个已保留位置：ComfyUI/models/loras/anima/自训角色/alicia_bell_ordinary_anima_r32_v1.safetensors；两个位置均保留，不计作两个不同内容。"
       ]
     },
     {
@@ -10450,7 +10545,7 @@
       "kind": "lora",
       "captured_in_inventory": true,
       "observed_present": true,
-      "local_sha256": null,
+      "local_sha256": "aa6a803e3037184336ef987c2ad29cf5138f91e8faec2d7f340df40d481c4973",
       "source_status": "local_derivative",
       "family": null,
       "sources": [],
@@ -10459,12 +10554,17 @@
       "derivation": {
         "kind": "local_training",
         "parent_path": null,
-        "recipe_reference": null,
+        "recipe_reference": "docs/receipts/model_source_recount_20261007.json",
         "original_weight_required": true,
-        "reproducibility": "weights_backup_required"
+        "reproducibility": "weights_backup_required",
+        "notes": [
+          "文件身份：训练过程的评估检查点；不是单独成品；训练步数 400。",
+          "本机训练输出：anima_lora_forge/runs/alicia_bell_ordinary/alicia_bell_ordinary_400_v4/weights/alicia_bell_ordinary_anima_r32-step00000400.safetensors；本轮完整 SHA-256 与现有文件一致。",
+          "来源依据为实际训练输出内容、训练头与发布记录，不按目录名称推断。"
+        ]
       },
       "notes": [
-        "本机自训角色或训练评估 checkpoint，未发现可公开下载的同一成品。换机必须另备份此权重及需要继续训练的项目／caption／配置；主仓训练器源码不能重建这份成品。"
+        "未登记公开成品下载网址；本机训练来源已按同摘要输出确认。换机保存此项原件，训练／发布记录见本次计数复核。"
       ]
     },
     {

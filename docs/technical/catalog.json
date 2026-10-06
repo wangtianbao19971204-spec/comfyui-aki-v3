@@ -213,7 +213,8 @@
       "evidence": [
         "docs/technical/archive/benchmark_reports/MODEL_COMPARISON_RUNBOOK.md",
         "docs/technical/archive/benchmark_reports/2026-08-24_anima_anima29_krea2/report/三模型详细对比报告.md",
-        "docs/receipts/model_sources_20261007.json"
+        "docs/receipts/model_sources_20261007.json",
+        "docs/receipts/model_source_recount_20261007.json"
       ],
       "acceptance": "checked-source",
       "watch": [
