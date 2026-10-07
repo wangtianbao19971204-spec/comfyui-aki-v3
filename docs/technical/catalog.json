@@ -122,6 +122,8 @@
       "id": "runtime-workbench",
       "document": "docs/technical/runtime/workbench.md",
       "implementation": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/studio.css",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_theme.js",
@@ -137,6 +139,8 @@
       ],
       "tests": [
         "snapshot/runtime/production_tools/test_uap_navigation.cjs",
+        "snapshot/runtime/production_tools/test_uap_dimensions.cjs",
+        "snapshot/runtime/production_tools/test_uap_dimensions_browser.cjs",
         "snapshot/runtime/production_tools/test_uap_daily_controls.cjs",
         "snapshot/runtime/production_tools/test_uap_compact_widgets.cjs",
         "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/test_candidate.cjs",
@@ -145,6 +149,7 @@
       ],
       "evidence": [
         "snapshot/evidence/20261005_workbench_anime_polish/REPORT.txt",
+        "docs/receipts/workbench_dimensions_20261007.json",
         "snapshot/evidence/20261005_workflow_product_repair/REPORT.txt",
         "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/browser_acceptance.json",
         "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261003_015012_R1_autonomous/UI_FINAL_ACCEPTANCE.json",
@@ -154,6 +159,9 @@
       "acceptance": "historical",
       "watch": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
+        "snapshot/runtime/production_tools/test_uap_dimensions.cjs",
+        "snapshot/runtime/production_tools/test_uap_dimensions_browser.cjs",
         "snapshot/runtime/production_tools/layout_uap_workbench.py",
         "snapshot/runtime/production_tools/tighten_uap_widgets.py",
         "snapshot/runtime/production_tools/arrange_uap_daily_controls.py",

@@ -1,6 +1,6 @@
 # 工作台 UI、主题与交互
 
-文档修订：2026-10-05.1。
+文档修订：2026-10-07.1。
 
 ## 代码入口
 
@@ -14,13 +14,25 @@
 
 提示词优化依赖 prompt-assistant 的配置/请求/取消服务；其没有在用画布节点不代表可移除。模型配套和任务目标校验还由 [工作流档案](workflows.md)说明。
 
+## 宽高与常用尺寸
+
+“尺寸 · 种子 · 采样”中，宽度与高度之间的 **⇄** 按钮互换两值；各自旁边的“常用”下拉提供 `512、640、768、832、896、960、1024、1152、1216、1280、1344、1536、2048` 像素。数字框仍可手动输入，打开页面保持当前尺寸。顶部方图／竖图／横图预设继续可用。
+
+唯一实现是 [uap_daily_controls.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js)，布局在 [studio.css](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/studio.css)。选择项按来源及目标控件当前范围、`step2` 实际步长筛选；互换／成对预设先核对两维，再通过现有共享写入回调及嵌套事务一次提交。失效、重接、跨分支或兼作其他参数的共享来源拒绝写入，需检查原节点并刷新。原生回调失败会尝试恢复原数值；第三方回调的任意额外副作用不在这项恢复保证内。
+
+变更只涉及界面，批量、种子、提示词、模型与分支默认值均保持。大尺寸仍需按模型及显存选择；下拉选项不是 GPU 可运行保证。
+
 ## 验证与限制
 
 基础回归：[test_uap_navigation.cjs](../../../snapshot/runtime/production_tools/test_uap_navigation.cjs)、[test_uap_daily_controls.cjs](../../../snapshot/runtime/production_tools/test_uap_daily_controls.cjs)、[test_uap_compact_widgets.cjs](../../../snapshot/runtime/production_tools/test_uap_compact_widgets.cjs)。历史 [动漫 UI 交付](../../../snapshot/evidence/20261005_workbench_anime_polish/REPORT.txt)与 [工作流交互交付](../../../snapshot/evidence/20261005_workflow_product_repair/REPORT.txt)分别记录具体覆盖。
 
 修改后用全新页面核对实际 served 文件和磁盘 SHA，检查主题、窄屏、键盘、焦点与提示词保持性。模拟 composition/事件不是物理 IME；浏览器拦截入队不等于 GPU 推理，历史测试数量不是今天自动通过的证明。
 
+尺寸回归：`node snapshot/runtime/production_tools/test_uap_dimensions.cjs`。隔离实页：安装 Playwright 并具备 Chrome 后运行 `node snapshot/runtime/production_tools/test_uap_dimensions_browser.cjs`；可用 `UAP_TEST_BROWSER_CHANNEL` 指定已安装的其他浏览器通道，`UAP_DIMENSIONS_EVIDENCE` 指定截图输出目录。页面使用真实候选 JS/CSS，其他服务和图变化跟踪为隔离替身，不连接正式 ComfyUI，也不生图；一次撤销边界按前端嵌套事务语义检查，尚不等于生产页面原生撤销或 GPU 验收。
+
 ## 更新记录
+
+- 2026-10-07：新增居中的宽高互换与两维常用尺寸下拉，保留手输和初始值；成对预验、来源身份保护及失败恢复避免半组改值。18 组尺寸行为回归与三主题／三屏宽隔离实页通过，原导航与常用控件回归通过。候选已封存，运行区未部署，见[尺寸控件收据](../../receipts/workbench_dimensions_20261007.json)。
 
 - 2026-10-07：最终隔离回归修复测试中退休插件目录与单条 import 假设，统一读取主仓 modules；导航 fixture 补现行阶段/控件契约，常用控制台调用真实共享写入 helper。融合测试保留 LoRA 零 CLIP/锁、异步提示词与过期目标校验，并覆盖 UAP 零/多目标拒绝、唯一目标成功、普通广播及禁用目标保持。测试修复不部署界面或修改正式工作流，来源网页、物理 IME 与 GPU 仍须独立验收。
 

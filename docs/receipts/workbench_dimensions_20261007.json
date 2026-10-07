@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "feature": "runtime-workbench",
+  "date": "2026-10-07",
+  "status": "validated-candidate",
+  "live_deployed": false,
+  "changes": ["width-height swap", "independent common dimension choosers", "manual input retained"],
+  "common_pixels": [512, 640, 768, 832, 896, 960, 1024, 1152, 1216, 1280, 1344, 1536, 2048],
+  "tests": {
+    "dimension_behavior": {"pass": true, "cases": 18},
+    "isolated_browser": {
+      "pass": true,
+      "served_candidate_hashes_match": true,
+      "themes": ["light", "dark", "color"],
+      "viewport_widths": [1440, 720, 390],
+      "checks": ["initial 1344x768 retained", "swap and restore", "one nested transaction undo boundary", "native select adoption", "manual input", "invalid input rejected", "keyboard focus and activation", "no horizontal overflow", "dynamic constraints", "inactive branch refused", "other parameters unchanged"]
+    }
+  },
+  "scope": [
+    "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
+    "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/studio.css"
+  ],
+  "limitations": ["Isolated graph/change tracking and unrelated services are fixtures", "Production deployment and native undo remain unverified", "No generation, GPU capacity or physical IME test", "Arbitrary third-party callback side effects cannot be fully restored"]
+}

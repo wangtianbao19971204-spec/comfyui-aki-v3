@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-07T08:21:28.926329+00:00",
+  "created_at": "2026-10-07T12:15:03.239468+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -11815,8 +11815,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
-      "sha256": "77d8d5723f87d9cd56b6b26c96d0aeb786b9e200b314cbbbf9e340519419aa40",
-      "bytes": 59086,
+      "sha256": "5653e69cb66ac1e2a5f4813bdc84a592ce4166895a27bc3b98226fc0bcd806e3",
+      "bytes": 66998,
       "kind": "file"
     },
     {
@@ -23337,8 +23337,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/studio.css",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/studio.css",
-      "sha256": "f73dc4599d4c77c29b49f654bb0e8dbc7967aed23e60202e0bffbcf6fe89e6c1",
-      "bytes": 45609,
+      "sha256": "48d47a239fe5d035eb47a2c1b53929f877b1854a1ab883613ba4b3d99b0a73d6",
+      "bytes": 46402,
       "kind": "file"
     },
     {
@@ -57292,6 +57292,20 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/test_uap_dimensions.cjs",
+      "path": "runtime/production_tools/test_uap_dimensions.cjs",
+      "sha256": "184e529a46743a780a829e024c1275bb23e64d588a5ed2e74b80ef42aede74a3",
+      "bytes": 16904,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/test_uap_dimensions_browser.cjs",
+      "path": "runtime/production_tools/test_uap_dimensions_browser.cjs",
+      "sha256": "f28b0fb5b66d73d57b5bc1c9495abf7af3af4cf6d491b901444ef13c663aae2f",
+      "bytes": 10019,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/test_uap_navigation.cjs",
       "path": "runtime/production_tools/test_uap_navigation.cjs",
       "sha256": "38d9b4155868ab82cf8f89373adc91ddb3a8b8c5e5f5dbf6e058e113ed823e47",
@@ -67223,37 +67237,15 @@
     }
   ],
   "development_revision": {
-    "note": "补齐经审查架构与训练示例、插件配套和提示词助手文字检查点；未部署运行区",
-    "previous_manifest_sha256": "5058dbb24b302f59a050f6790b4f9ba308376b8cb4ad1911634a6f163e4cda54",
+    "note": "工作台宽高互换与独立常用尺寸下拉；18组行为和9种隔离页面布局通过，未部署运行区",
+    "previous_manifest_sha256": "9b04a159640976130deb95221bc9e2488e081c0920fd875e633f0856d6cffae3",
     "source_changes": {
-      "added": [
-        "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/qwen/config.json",
-        "ComfyUI/models/configs/anything_v3.yaml",
-        "ComfyUI/models/configs/v1-inference.yaml",
-        "ComfyUI/models/configs/v1-inference_clip_skip_2.yaml",
-        "ComfyUI/models/configs/v1-inference_clip_skip_2_fp16.yaml",
-        "ComfyUI/models/configs/v1-inference_fp16.yaml",
-        "ComfyUI/models/configs/v1-inpainting-inference.yaml",
-        "ComfyUI/models/configs/v2-inference-v.yaml",
-        "ComfyUI/models/configs/v2-inference-v_fp32.yaml",
-        "ComfyUI/models/configs/v2-inference.yaml",
-        "ComfyUI/models/configs/v2-inference_fp32.yaml",
-        "ComfyUI/models/configs/v2-inpainting-inference.yaml",
-        "anima_lora_forge/vendor/sd-trainer/SD-Trainer/config/sample_prompts.txt",
-        "qwen21_lab/ComfyUI/models/configs/anything_v3.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v1-inference.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v1-inference_clip_skip_2.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v1-inference_clip_skip_2_fp16.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v1-inference_fp16.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v1-inpainting-inference.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v2-inference-v.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v2-inference-v_fp32.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v2-inference.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v2-inference_fp32.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v2-inpainting-inference.yaml"
-      ],
+      "added": [],
       "removed": [],
-      "changed": []
+      "changed": [
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
+        "production_tools/test_uap_dimensions.cjs"
+      ]
     },
     "live_deployed": false,
     "removed_sources": [
