@@ -2,8 +2,8 @@
   "schema": 1,
   "feature": "runtime-workbench",
   "date": "2026-10-07",
-  "status": "validated-candidate",
-  "live_deployed": false,
+  "status": "deployed-served-files-validated",
+  "live_deployed": true,
   "changes": ["width-height swap", "independent common dimension choosers", "manual input retained"],
   "common_pixels": [512, 640, 768, 832, 896, 960, 1024, 1152, 1216, 1280, 1344, 1536, 2048],
   "tests": {
@@ -20,5 +20,21 @@
     "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
     "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/studio.css"
   ],
-  "limitations": ["Isolated graph/change tracking and unrelated services are fixtures", "Production deployment and native undo remain unverified", "No generation, GPU capacity or physical IME test", "Arbitrary third-party callback side effects cannot be fully restored"]
+  "deployment": {
+    "user_authorized": true,
+    "source_commit": "447ad6d5804900969bf1362681c571a0096603d7",
+    "served_files_match_candidate": true,
+    "service_identity_unchanged": true,
+    "ready_modules": 5,
+    "queue": {"running": 0, "pending": 0},
+    "protected_paths": 9484,
+    "unplanned_drift_after_source_deployment": 0,
+    "sqlite_consistent_backups": 4,
+    "rollback_receipt_id": "workbench-size-controls-20261007-01",
+    "backup_read_side_effect": "Read-only SQLite backup created one empty WAL; main database hash and repeated consistent backup bytes were identical. Both guard baselines retained.",
+    "restart": false,
+    "database_replaced": false,
+    "generation_submitted": false
+  },
+  "limitations": ["Isolated graph/change tracking and unrelated services are fixtures", "Production native undo remains unverified", "No generation, GPU capacity or physical IME test", "Arbitrary third-party callback side effects cannot be fully restored"]
 }
