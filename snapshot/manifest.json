@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-07T08:21:28.926329+00:00",
+  "created_at": "2026-10-07T14:07:09.612132+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -17212,8 +17212,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/py/services/metadata_sync_service.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/py/services/metadata_sync_service.py",
-      "sha256": "944f02520d3aaf5a3b843e6ad9e57974b13eb84eebd0deaa1e28a4669eeb1b52",
-      "bytes": 26979,
+      "sha256": "427b19372dfc95fed1828329661283beef6997477a6f4d090161815397c425d5",
+      "bytes": 30759,
       "kind": "file"
     },
     {
@@ -17373,8 +17373,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/py/services/preview_asset_service.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/py/services/preview_asset_service.py",
-      "sha256": "c8a8d8a25d59507eeb0a7b7183695a160201ce9bf9788b87e99c57bb68bc36cf",
-      "bytes": 8452,
+      "sha256": "0cc8319c8e48cb048cb2c212f84f0d5c5cacf73f0efefe101879c42630e287ec",
+      "bytes": 15549,
       "kind": "file"
     },
     {
@@ -17506,8 +17506,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/py/services/use_cases/bulk_metadata_refresh_use_case.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/py/services/use_cases/bulk_metadata_refresh_use_case.py",
-      "sha256": "587bec578d066620ad4d1e6c0ca77a3295ed07d19dd7fb1feb644cd54a0cbbc7",
-      "bytes": 11892,
+      "sha256": "9837a138b4da4228ffc4fdbc7cc333576e7ebf4880096016fce8e5c51dba53e8",
+      "bytes": 12988,
       "kind": "file"
     },
     {
@@ -18521,8 +18521,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/static/js/api/baseModelApi.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/static/js/api/baseModelApi.js",
-      "sha256": "624ca5278c1d632b1afadd1bd74079b0bc724697b001859816bf294178288608",
-      "bytes": 102372,
+      "sha256": "ecffe5478801cff239a2b247d4a220c47a266ca805b2aa0edc765e3c7d759a35",
+      "bytes": 103241,
       "kind": "file"
     },
     {
@@ -19919,6 +19919,13 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/frontend/api/baseModelApi.preview.test.js",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/frontend/api/baseModelApi.preview.test.js",
+      "sha256": "9d5177261b7401634d654d886cfa978122dbb4140ab5294fe2ee898af9c1fad9",
+      "bytes": 6967,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/frontend/api/baseModelApi.refresh.test.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/frontend/api/baseModelApi.refresh.test.js",
       "sha256": "5eceacf625ea90ab9db5296aec8d678d343700ba4875ebebf18a96de27131c33",
@@ -21104,8 +21111,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/routes/test_base_model_routes_smoke.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/routes/test_base_model_routes_smoke.py",
-      "sha256": "704a634700f971f3943a14318fe9297d67f5fcc85dc7c3216d43514c1de32a47",
-      "bytes": 30730,
+      "sha256": "52600e6cdb46cef79bbc571563363bba0121936fabdc72e1a9520088aa18b6f5",
+      "bytes": 34623,
       "kind": "file"
     },
     {
@@ -21664,8 +21671,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/services/test_metadata_sync_service.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/services/test_metadata_sync_service.py",
-      "sha256": "5a6d08e85adfa1193449149a60361e4fc13fe1b74b21b989d220c3fb4f422c2a",
-      "bytes": 30452,
+      "sha256": "a2ef4766c23ab56d7a14622cfaec22efbe94566400bc52d6ebcde977800fa769",
+      "bytes": 41791,
       "kind": "file"
     },
     {
@@ -21825,8 +21832,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/services/test_preview_asset_service.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/services/test_preview_asset_service.py",
-      "sha256": "b725c04842f921ad57b60a630db0343b2ba87d344c8f1150dee319d4269f7274",
-      "bytes": 7720,
+      "sha256": "80b30c196774c0abefddbc5d14ca12d463b90c84842afb8f34db876a8a6e96d6",
+      "bytes": 21490,
       "kind": "file"
     },
     {
@@ -21930,8 +21937,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/services/test_route_support_services.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/services/test_route_support_services.py",
-      "sha256": "a54c2bb116d579c78ad72aaa0adafa16ca10d553c4969378c5165ea4fa1d4bc4",
-      "bytes": 9435,
+      "sha256": "45143f033d6cd862619408905334cc61e2eb6ca5e5e1ba79c5243bc0af759444",
+      "bytes": 9594,
       "kind": "file"
     },
     {
@@ -22021,8 +22028,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/services/use_cases/test_bulk_metadata_refresh_use_case.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/services/use_cases/test_bulk_metadata_refresh_use_case.py",
-      "sha256": "8889519b51c2bacf8ac16bcc8deb01b610bc8fa4b8ba40ec6a48969acf9dd0d5",
-      "bytes": 13320,
+      "sha256": "d8da6831688043609885e33ce4960944a23d0ec387fa420a4108971152d6340c",
+      "bytes": 20446,
       "kind": "file"
     },
     {
@@ -22329,8 +22336,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/vitest.config.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/vitest.config.js",
-      "sha256": "141a0ac3cd3cf30fa6af8ac644fe66478ba6c5d0a99c117febdc8af31ef6d108",
-      "bytes": 473,
+      "sha256": "e80c8881fdc8a76e230a1df59710e2aec082e610a895773b44e3e2d40fb4f4bc",
+      "bytes": 659,
       "kind": "file"
     },
     {
@@ -67223,37 +67230,25 @@
     }
   ],
   "development_revision": {
-    "note": "补齐经审查架构与训练示例、插件配套和提示词助手文字检查点；未部署运行区",
-    "previous_manifest_sha256": "5058dbb24b302f59a050f6790b4f9ba308376b8cb4ad1911634a6f163e4cda54",
+    "note": "修复已关联 LoRA 缺失预览获取、上传保存和卡片更新；隔离验收通过，尚未部署",
+    "previous_manifest_sha256": "f497c0f78feddfcbf358ff0c7b91e0d471c3a358bb7b2db04cf4dfb0677046cf",
     "source_changes": {
       "added": [
-        "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/qwen/config.json",
-        "ComfyUI/models/configs/anything_v3.yaml",
-        "ComfyUI/models/configs/v1-inference.yaml",
-        "ComfyUI/models/configs/v1-inference_clip_skip_2.yaml",
-        "ComfyUI/models/configs/v1-inference_clip_skip_2_fp16.yaml",
-        "ComfyUI/models/configs/v1-inference_fp16.yaml",
-        "ComfyUI/models/configs/v1-inpainting-inference.yaml",
-        "ComfyUI/models/configs/v2-inference-v.yaml",
-        "ComfyUI/models/configs/v2-inference-v_fp32.yaml",
-        "ComfyUI/models/configs/v2-inference.yaml",
-        "ComfyUI/models/configs/v2-inference_fp32.yaml",
-        "ComfyUI/models/configs/v2-inpainting-inference.yaml",
-        "anima_lora_forge/vendor/sd-trainer/SD-Trainer/config/sample_prompts.txt",
-        "qwen21_lab/ComfyUI/models/configs/anything_v3.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v1-inference.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v1-inference_clip_skip_2.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v1-inference_clip_skip_2_fp16.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v1-inference_fp16.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v1-inpainting-inference.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v2-inference-v.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v2-inference-v_fp32.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v2-inference.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v2-inference_fp32.yaml",
-        "qwen21_lab/ComfyUI/models/configs/v2-inpainting-inference.yaml"
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/frontend/api/baseModelApi.preview.test.js"
       ],
       "removed": [],
-      "changed": []
+      "changed": [
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/py/services/metadata_sync_service.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/py/services/preview_asset_service.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/py/services/use_cases/bulk_metadata_refresh_use_case.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/static/js/api/baseModelApi.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/routes/test_base_model_routes_smoke.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/services/test_metadata_sync_service.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/services/test_preview_asset_service.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/services/test_route_support_services.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/services/use_cases/test_bulk_metadata_refresh_use_case.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/vitest.config.js"
+      ]
     },
     "live_deployed": false,
     "removed_sources": [

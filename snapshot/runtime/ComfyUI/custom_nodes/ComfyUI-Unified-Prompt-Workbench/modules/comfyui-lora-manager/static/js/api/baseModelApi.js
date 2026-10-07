@@ -169,6 +169,8 @@ export class BaseModelApiClient {
 
     async loadMoreWithVirtualScroll(resetPage = false, updateFolders = false) {
         const pageState = this.getPageState();
+        const scroller = state.virtualScroller;
+        const pageType = state.currentPageType;
 
         try {
             // Use grid-scoped loading instead of full-page overlay
@@ -183,7 +185,12 @@ export class BaseModelApiClient {
 
             const result = await this.fetchModelsPage(pageState.currentPage, pageState.pageSize);
 
-            state.virtualScroller.refreshWithData(
+            // Ignore an old page's response after navigation or a list rebuild.
+            if (state.currentPageType !== pageType || state.virtualScroller !== scroller) {
+                return result;
+            }
+
+            scroller.refreshWithData(
                 result.items,
                 result.totalItems,
                 result.hasMore
@@ -216,9 +223,11 @@ export class BaseModelApiClient {
             // Wait for the next rAF so refreshWithData's scheduleRender has
             // completed rendering new cards before hiding the grid loading overlay.
             // This eliminates the ~6.7ms blank-frame gap that caused the flicker.
-            if (state.virtualScroller?.hideGridLoading) {
+            if (scroller?.hideGridLoading) {
                 requestAnimationFrame(() => {
-                    state.virtualScroller.hideGridLoading();
+                    if (state.currentPageType === pageType && state.virtualScroller === scroller) {
+                        scroller.hideGridLoading();
+                    }
                 });
             }
         }
@@ -407,34 +416,58 @@ export class BaseModelApiClient {
                 body: formData
             });
 
-            if (!response.ok) {
-                throw new Error('Upload failed');
-            }
-
-            const data = await response.json();
-            const pageState = this.getPageState();
-
-            const timestamp = Date.now();
-            if (pageState.previewVersions) {
-                pageState.previewVersions.set(filePath, timestamp);
-
-                const storageKey = `${this.modelType}_preview_versions`;
-                saveMapToStorage(storageKey, pageState.previewVersions);
-            }
-
-            const updateData = {
-                preview_url: data.preview_url,
-                preview_nsfw_level: data.preview_nsfw_level
-            };
-
-            state.virtualScroller.updateSingleItem(filePath, updateData);
+            const data = await this.readPreviewResponse(response);
+            await this.updatePreviewCard(filePath, data);
             showToast('toast.api.previewUpdated', {}, 'success');
+            return data;
         } catch (error) {
             console.error('Error uploading preview:', error);
-            showToast('toast.api.previewUploadFailed', {}, 'error');
+            this.showPreviewFailure(error);
+            return false;
         } finally {
             state.loadingManager.hide();
         }
+    }
+
+    async readPreviewResponse(response) {
+        const contentType = response.headers?.get('Content-Type') || '';
+        let data;
+        let detail = '';
+        if (contentType.includes('application/json') || response.ok) {
+            data = await response.json();
+            detail = typeof data?.error === 'string' ? data.error : '';
+        } else if (contentType.startsWith('text/plain')) {
+            detail = (await response.text()).trim().slice(0, 400);
+        }
+        if (!response.ok || data?.success === false) {
+            throw new Error(detail || `HTTP ${response.status}`);
+        }
+        if (!data?.preview_url) {
+            throw new Error('The server did not return a saved preview');
+        }
+        return data;
+    }
+
+    async updatePreviewCard(filePath, data) {
+        const pageState = this.getPageState();
+        if (pageState.previewVersions) {
+            pageState.previewVersions.set(filePath, Date.now());
+            saveMapToStorage(`${this.modelType}_preview_versions`, pageState.previewVersions);
+        }
+        // The user may change pages while the file picker or upload is open.
+        if (state.currentPageType !== this.modelType) return;
+        const updated = state.virtualScroller?.updateSingleItem(filePath, {
+            preview_url: data.preview_url,
+            preview_nsfw_level: data.preview_nsfw_level
+        });
+        if (state.virtualScroller && updated === false) {
+            await this.loadMoreWithVirtualScroll(true, false);
+        }
+    }
+
+    showPreviewFailure(error) {
+        const title = translate('toast.api.previewUploadFailed', {}, 'Failed to upload preview image');
+        showToast(`${title}: ${error.message}`, {}, 'error');
     }
 
     /**
@@ -457,31 +490,14 @@ export class BaseModelApiClient {
                 })
             });
 
-            if (!response.ok) {
-                throw new Error('Failed to set preview from URL');
-            }
-
-            const data = await response.json();
-            const pageState = this.getPageState();
-
-            const timestamp = Date.now();
-            if (pageState.previewVersions) {
-                pageState.previewVersions.set(filePath, timestamp);
-
-                const storageKey = `${this.modelType}_preview_versions`;
-                saveMapToStorage(storageKey, pageState.previewVersions);
-            }
-
-            const updateData = {
-                preview_url: data.preview_url,
-                preview_nsfw_level: data.preview_nsfw_level
-            };
-
-            state.virtualScroller.updateSingleItem(filePath, updateData);
+            const data = await this.readPreviewResponse(response);
+            await this.updatePreviewCard(filePath, data);
             showToast('toast.api.previewUpdated', {}, 'success');
+            return data;
         } catch (error) {
             console.error('Error setting preview from URL:', error);
-            showToast('toast.api.previewUploadFailed', {}, 'error');
+            this.showPreviewFailure(error);
+            return false;
         } finally {
             state.loadingManager.hide();
         }

@@ -1,6 +1,12 @@
 import { defineConfig } from 'vitest/config';
+import { fileURLToPath } from 'node:url';
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '/extensions/ComfyUI-Unified-Prompt-Workbench': fileURLToPath(new URL('../../web', import.meta.url))
+    }
+  },
   test: {
     environment: 'jsdom',
     globals: true,
