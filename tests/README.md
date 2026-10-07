@@ -1,15 +1,20 @@
 # 维护测试入口
 
-本目录验证主仓维护工具。先按[开始使用](../docs/GETTING_STARTED.md)选择 `$comfyPython`，在主仓根目录执行：
+本目录验证主仓维护工具。先按[开始使用](../docs/GETTING_STARTED.md)选择基础解释器 `$comfyPython`，在主仓根目录创建独立测试环境：
 
 ```powershell
-# 新的维护测试环境先安装 PNG 样例所需的 Pillow：
-& $comfyPython -m pip install -r .github/requirements.txt
-& $comfyPython -X utf8 -B -m unittest discover -s tests -v
-& $comfyPython -X utf8 -B -m unittest discover -s tests -p test_snapshot.py -v
+$comfyTestEnv = '..\comfyui-maintenance-tests' # 换成自己的全新目录
+if (Test-Path -LiteralPath $comfyTestEnv) { throw '测试环境目录已存在，请使用新目录' }
+& $comfyPython -m venv $comfyTestEnv
+if ($LASTEXITCODE -ne 0) { throw '测试环境创建失败' }
+$comfyTestPython = (Resolve-Path -LiteralPath (Join-Path $comfyTestEnv 'Scripts\python.exe')).Path
+& $comfyTestPython -m pip install -r .github/requirements.txt
+if ($LASTEXITCODE -ne 0) { throw '维护测试依赖安装失败' }
+& $comfyTestPython -X utf8 -B -m unittest discover -s tests -v
+if ($LASTEXITCODE -ne 0) { throw '维护测试未通过，请保留输出检查' }
 ```
 
-最后一条只运行一个模块；按变更选相关测试，完整提交／上传门禁见[日常维护](../docs/MAINTENANCE.md)。
+依赖仅安装到这个虚拟环境，不修改基础／生产解释器。后续继续使用该环境的 `Scripts\python.exe`，无需重新创建。只运行某个模块时可执行 `& $comfyTestPython -X utf8 -B -m unittest discover -s tests -p test_snapshot.py -v`；按变更选相关测试，完整提交／上传门禁见[日常维护](../docs/MAINTENANCE.md)。
 
 ## 维护状态
 
