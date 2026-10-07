@@ -162,13 +162,102 @@ class SourceSupportTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             importer.apply_plan(modified, modified['review_sha256'], self.repo)
 
+
+    def test_unregistered_model_architecture_and_sample_support_survive_import(self):
+        paths = snapshot.EXACT_SOURCE_SUPPORT_FILES
+        originals = {}
+        for relative in paths:
+            data = b'model:\n  params: {}\n' if relative.endswith('.yaml') else b'public sample prompt\n'
+            self.source(relative, data)
+            originals[relative] = data
+        self.source('production_tools/profiles.json', b'{"production": []}')
+        selected, omitted, _ = snapshot.selected_sources(self.runtime, self.repo / 'absent.json')
+        self.assertTrue(paths <= selected.keys())
+        self.assertEqual(omitted, [])
+        review = importer.plan(self.runtime, self.repo)
+        self.assertEqual({row['source'] for row in review['records']
+                          if row['status'] == 'new_source'}, paths)
+        result = importer.apply_plan(review, review['review_sha256'], self.repo)
+        self.assertEqual(result['files'], 23)
+        entries = project.source_entries(self.repo)
+        self.assertEqual({entry['source'] for entry in entries}, paths)
+        for relative, data in originals.items():
+            self.assertEqual((self.runtime / relative).read_bytes(), data)
+            self.assertEqual((self.repo / 'snapshot' / importer.payload_relative(relative)).read_bytes(), data)
+
+    def test_model_support_does_not_discover_neighbors_or_arbitrary_text(self):
+        neighbors = (
+            'ComfyUI/models/configs/unreviewed.yaml',
+            'qwen21_lab/ComfyUI/models/configs/unreviewed.yaml',
+            'ComfyUI/models/configs/v1-inference.yaml.safetensors',
+            TRAINER + '/config/private_prompts.txt',
+            TRAINER + '/config/subdir/sample_prompts.txt',
+        )
+        for relative in neighbors:
+            self.source(relative, b'unreviewed fixture\n')
+            self.assertIsNotNone(importer.rejection(relative))
+        self.source('production_tools/profiles.json', b'{"production": []}')
+        selected, _, _ = snapshot.selected_sources(self.runtime, self.repo / 'absent.json')
+        self.assertFalse(set(neighbors) & selected.keys())
+        self.assertEqual(importer.plan(self.runtime, self.repo)['new_files'], 0)
+
+    def test_support_rejection_does_not_normalize_aliases_into_permission(self):
+        relative = 'ComfyUI/models/configs/v1-inference.yaml'
+        for alias in (relative.upper(), relative.replace('/configs/', '/configs//'),
+                      relative.replace('/configs/', '/configs/./'),
+                      relative.replace('/configs/', '/configs/../configs/'),
+                      relative.replace('/', '\\'), '../' + relative,
+                      TRAINER + '/config/SAMPLE_PROMPTS.TXT'):
+            with self.subTest(alias=alias):
+                self.assertIsNotNone(importer.rejection(alias))
+
+    def test_model_support_discovery_rejects_filesystem_case_alias(self):
+        self.source('ComfyUI/models/configs/V1-INFERENCE.YAML', b'model: {}\n')
+        self.source('production_tools/profiles.json', b'{"production": []}')
+        with self.assertRaises(ValueError):
+            snapshot.selected_sources(self.runtime, self.repo / 'absent.json')
+        with self.assertRaises(ValueError):
+            importer.plan(self.runtime, self.repo)
+        self.assertFalse((self.repo / 'snapshot').exists())
+
+    def test_model_support_discovery_rejects_hardlinks(self):
+        outside = self.source('elsewhere/public.txt')
+        link = self.runtime / 'qwen21_lab/ComfyUI/models/configs/v1-inference.yaml'
+        link.parent.mkdir(parents=True)
+        try:
+            link.hardlink_to(outside)
+        except OSError:
+            self.skipTest('Hardlink creation unavailable')
+        self.source('production_tools/profiles.json', b'{"production": []}')
+        with self.assertRaises(ValueError):
+            snapshot.selected_sources(self.runtime, self.repo / 'absent.json')
+        with self.assertRaises(ValueError):
+            importer.plan(self.runtime, self.repo)
+        self.assertFalse((self.repo / 'snapshot').exists())
+
+    def test_model_support_still_quarantines_credentials(self):
+        synthetic = ('sk-' + 'R8' * 20).encode()
+        for relative in ('ComfyUI/models/configs/v1-inference.yaml',
+                         'qwen21_lab/ComfyUI/models/configs/v2-inference.yaml',
+                         TRAINER + '/config/sample_prompts.txt'):
+            self.source(relative, b'public prefix ' + synthetic)
+        review = importer.plan(self.runtime, self.repo)
+        self.assertEqual(review['new_files'], 0)
+        self.assertEqual(len(review['records']), 3)
+        self.assertTrue(all(row['status'] == 'security_quarantine' for row in review['records']))
+        self.assertNotIn(synthetic.decode(), json.dumps(review))
+        self.assertEqual(importer.apply_plan(review, review['review_sha256'], self.repo)['files'], 0)
+
     def test_registered_support_contract_is_complete_and_keeps_assets_external(self):
         repo = Path(__file__).resolve().parents[1]
         spec = json.loads((repo / 'governance/runtime-support.json').read_text(encoding='utf-8'))
         manifest = json.loads((repo / 'snapshot/manifest.json').read_text(encoding='utf-8'))
         sources = {entry['source']: entry for entry in manifest['files']}
-        self.assertEqual(len(spec['public_sources']), 25)
-        self.assertEqual(len(set(spec['public_sources'])), 25)
+        public_sources = set(spec['public_sources'])
+        self.assertEqual(len(spec['public_sources']), 49)
+        self.assertEqual(len(public_sources), len(spec['public_sources']))
+        self.assertTrue(snapshot.EXACT_SOURCE_SUPPORT_FILES <= public_sources)
+        self.assertIn('ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/qwen/config.json', public_sources)
         for relative in spec['public_sources']:
             with self.subTest(relative=relative):
                 self.assertIsNone(importer.rejection(relative))

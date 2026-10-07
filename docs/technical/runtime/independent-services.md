@@ -52,5 +52,7 @@
 
 ## 更新记录
 
+- 2026-10-07：补独立 Qwen 本体的 11 份 `models/configs/*.yaml` 架构原件，精确路径捕获和导入，不收模型权重或目录邻居。新增文件与生产本体配套一并作字节保真和安全边界检查；见[内容补齐复核](../changes/operations-source-of-truth/2026-10-07-completeness-recheck.md)。未启动独立实例、安装环境或提交 GPU 任务。
+
 - 2026-10-07：独立 Qwen 保存／API 工作流的 GGUF 加载名，以及该本体 blueprint 的 SAM 选择器随现行模型位置同步；实验服务不重启、不生图，见[标准化收据](../../receipts/model_standardization_20261007.json)。独立环境与 GPU 效果仍需其原专项验收。
 - 2026-10-06：新建本页，把独立 Qwen 实验实例、`tools/` 辅助脚本、运行根启动入口和一次性排查脚本纳入分层技术档案；同时明确机器路径属于本机记录、由 `workspace_audit.py` 统计而不输出正文。未启动任何服务、未改白名单、未改生产参数。

@@ -12,7 +12,8 @@ import os
 from pathlib import Path
 import re
 
-from snapshot import (REPO, REVIEWED_SUPPORT_FILES, digest, is_link, now, payload_relative,
+from snapshot import (REPO, REVIEWED_SUPPORT_FILES, EXACT_SOURCE_SUPPORT_FILES, exact_support_source,
+                      digest, is_link, now, payload_relative,
                       portable_parts, private_config, safe_path, source_license_name, reviewed_plugin_sources)
 from security_guard import StreamScanner, blocked_path
 import security_guard
@@ -109,6 +110,12 @@ def safe_unlinked(root, relative):
 def selected_roots(runtime):
     """Explicit owner trees; no before/backup/runs/character-data broad imports."""
     roots = []
+    # Never recurse over production models or trainer configuration data.
+    # The shared exact paths are discoverable before any manifest registration.
+    for relative in sorted(EXACT_SOURCE_SUPPORT_FILES):
+        file = exact_support_source(runtime, relative)
+        if file is not None:
+            roots.append((file, False))
     for prefix, children in FORGE_TREES.items():
         base = runtime / prefix
         if not base.is_dir():
@@ -182,13 +189,17 @@ def paths(runtime):
 
 
 def rejection(relative):
+    try:
+        portable_parts(relative)
+    except ValueError:
+        return 'unsafe_portable_relative_path'
     path = Path(relative)
     if private_config(relative) or blocked_path('snapshot/' + payload_relative(relative)) or path.name in PRIVATE_FILES:
         return 'private_configuration_or_external_payload'
     lower = path.name.casefold()
     if any(marker in lower for marker in ('.backup', '.before-', '.before_', '.bak', '.disabled')):
         return 'historical_backup_file'
-    if relative in REVIEWED_SUPPORT_FILES or relative in reviewed_plugin_sources() or source_license_name(path.name):
+    if relative in EXACT_SOURCE_SUPPORT_FILES or relative in REVIEWED_SUPPORT_FILES or relative in reviewed_plugin_sources() or source_license_name(path.name):
         return None
     if path.suffix.lower() == '.json':
         if relative in PUBLIC_JSON_PATHS or path.name in PUBLIC_JSON_NAMES or relative.startswith(PUBLIC_JSON_PREFIXES):

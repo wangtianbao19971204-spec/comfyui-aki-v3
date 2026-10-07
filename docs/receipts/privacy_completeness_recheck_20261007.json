@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "stage": "LOCAL_CANDIDATE_IMPORTED_AND_VALIDATED_BEFORE_PUSH",
+  "date": "2026-10-07",
+  "github_repository_private_at_baseline": true,
+  "baseline_git": {
+    "commit": "3eb4b99ecd431fb25c24177cdbbea23d1d488734",
+    "tracked_files": 10283,
+    "tracked_bytes": 1742553388,
+    "online_and_local_main_files_identical": true,
+    "remote_objects_outside_local_scan": 0,
+    "extra_local_objects_are_legacy_tag_only": true
+  },
+  "baseline_history": {
+    "pass": true,
+    "mode": "all-history",
+    "scanned_objects": 82159,
+    "scanned_blobs": 59563,
+    "scanned_bytes": 7663488070,
+    "cross_part_boundaries": 120
+  },
+  "baseline_history_findings": 0,
+  "new_public_content": {
+    "source_support_files": 24,
+    "source_support_bytes": 48323,
+    "prompt_documents": 5,
+    "prompt_bytes": 214283,
+    "historical_archive_files": 12,
+    "historical_archive_bytes": 1752716,
+    "total_original_items": 41,
+    "total_original_bytes": 2015322
+  },
+  "local_validation": {
+    "maintenance_tests": 584,
+    "maintenance_tests_pass": true,
+    "snapshot_pass": true,
+    "snapshot_entries": 9470,
+    "snapshot_manifest_sha256": "f497c0f78feddfcbf358ff0c7b91e0d471c3a358bb7b2db04cf4dfb0677046cf",
+    "existing_payload_descriptors_unchanged": true,
+    "existing_text_documents_match_live": 10,
+    "consistent_sql_backups_match_logical_checkpoints": 4,
+    "new_materialized_files_match_originals": 29,
+    "historical_archive_identity_pass": true,
+    "database_contract_pass": true,
+    "technical_catalogue_pass": true,
+    "model_source_catalogue_pass": true,
+    "independent_prompt_document_review_pass": true,
+    "runtime_guard_protected_paths": 9453,
+    "runtime_guard_unplanned_drift": 0
+  },
+  "public_content_boundaries": [
+    "Real prompt text, favorites, notes and history are user authorized.",
+    "Credentials and actual authentication configuration stay outside Git.",
+    "Upstream author names/emails and machine maintenance paths remain; zero credential rules does not mean zero personal information.",
+    "Images/previews, model weights, installed environments, live DB/WAL and original private archives stay external with examples and placement/source instructions."
+  ],
+  "upload_and_ci": "Actual pre-push all-history gate, exact branch upload/PR and online CI are separately bound in private receipts; this pre-upload receipt does not claim those actions completed.",
+  "production_modified": false,
+  "service_restarted": false,
+  "live_database_replaced": false,
+  "new_version_or_tag_created": false,
+  "external_boundary": {
+    "plan_version": "v7",
+    "entries": 398,
+    "parent_model_reference_split_into_subdirectories": 35,
+    "exact_public_architecture_files_no_longer_external": 11,
+    "old_current_preserved": true,
+    "gate_for_overlapping_public_hierarchy_unchanged": true
+  }
+}

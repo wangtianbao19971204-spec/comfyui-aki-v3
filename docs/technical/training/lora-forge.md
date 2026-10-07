@@ -10,6 +10,8 @@
 
 ## 训练与评估契约
 
+训练器的 [sample_prompts.txt](../../../snapshot/runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/config/sample_prompts.txt) 是旧 CLI 引用的公共采样示例；现行 Forge 仍在每次准备时生成自己的采样提示词。GUI 的 `assets/config.json` 是可变本机状态，另提供[空状态示例](../../../examples/plugin-settings/README.md)，不复制现场原件。
+
 内层 trainer 源码外的 Windows 配套也已补齐：10 个启动/更新 BAT 和 [整合包说明](../../../snapshot/runtime/anima_lora_forge/vendor/sd-trainer/README.txt)，精确文件与哈希见 [11 文件补源登记](../../../governance/trainer-portable-source-import.json)。[便携启动入口](../../../snapshot/runtime/anima_lora_forge/vendor/sd-trainer/run_gui_portable.bat)及更新脚本只备份其现有实现；不自动运行、下载或原地更新。以后第三方源码更新仍先经唯一主 Git 审查，不能从运行安装包绕过主仓维护。
 
 先检查触发词、图文配对、形态/服装分布和精确重复，再做冒烟/校准。模型架构、训练对象、rank/alpha、学习率、步数、timestep/flow shift、面积桶、精度与 caption 策略都进入 profile 快照。
@@ -41,6 +43,8 @@
 [test_core.py](../../../snapshot/runtime/anima_lora_forge/tests/test_core.py)验证可复用工具逻辑；真实训练需独立 GPU 日志、模型/数据哈希与逐图评估。训练监控端口、进程及 Loss 是运行时事实，不写成永远有效的版本状态。
 
 ## 更新记录
+
+- 2026-10-07：补旧 CLI 引用的公共 `config/sample_prompts.txt`，另以空状态示例说明可变 GUI 配置；不导入本机 `assets/config.json`，不改变现行 Forge 采样提示词或启动训练。原字节与精确路径门禁纳入[完整性复核](../changes/operations-source-of-truth/2026-10-07-completeness-recheck.md)。
 
 - 2026-10-07：两个现存 Anima 2.9B profile 的 `models.dit` 相对路径随底模规范位置更新；原训练 release／resume 副本路径、数据集、参数和历史输出保留，未提交训练任务。运行 profile 原件与具体变更留在仓外迁移证据，公开范围见[标准化收据](../../receipts/model_standardization_20261007.json)。
 - 2026-10-05：补入默认 Anima 训练路径需要的 Qwen3/T5 架构 `config.json` 和 3 份 trainer 版本标记；这两份配置是模型架构说明，不是 API 凭证，使用精确路径例外并保留内容扫描。T5 `spiece.model` 继续仓外登记，恢复到 [支持文件契约](../../../governance/runtime-support.json)中的原相对路径后才能使用对应默认 tokenizer；本轮不训练、不下载、不运行更新器。

@@ -88,7 +88,10 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_5",
         "snapshot/runtime/qwen21_lab/ComfyUI/custom_nodes/ComfyUI-GGUF/tools/lcpp.patch",
         "snapshot/runtime/tools/llama.cpp/LICENSE-LLVM-OpenMP",
-        "governance/plugin-support-20261007.json"
+        "governance/plugin-support-20261007.json",
+        "snapshot/runtime/ComfyUI/models/configs/v1-inference.yaml",
+        "snapshot/runtime/qwen21_lab/ComfyUI/models/configs/v1-inference.yaml",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/qwen/config.json"
       ],
       "tests": [
         "snapshot/runtime/production_tools/validate_profiles.py",
@@ -592,7 +595,8 @@
         "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/Update-SD-Trainer.bat",
         "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/update/update_dependencies.bat",
         "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/update/update_from_release.bat",
-        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/update/update_sd_trainer.bat"
+        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/update/update_sd_trainer.bat",
+        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/config/sample_prompts.txt"
       ],
       "tests": [
         "snapshot/runtime/anima_lora_forge/tests/test_core.py"
@@ -619,7 +623,8 @@
         "snapshot/runtime/anima_lora_forge/"
       ],
       "examples": [
-        "snapshot/runtime/anima_lora_forge/templates/new_character.profile.json"
+        "snapshot/runtime/anima_lora_forge/templates/new_character.profile.json",
+        "examples/plugin-settings/sd-trainer-state.example.json"
       ]
     },
     {
@@ -688,7 +693,8 @@
         "tests/test_security_names.py",
         "tests/test_training_trigger_reviews.py",
         "tests/test_library_sql.py",
-        "tests/test_plugin_support.py"
+        "tests/test_plugin_support.py",
+        "tests/test_prompt_assistant_exports.py"
       ],
       "evidence": [
         "docs/receipts/source_coverage_20261005.json",
@@ -696,7 +702,8 @@
         "docs/receipts/reassurance_20261006.json",
         "docs/receipts/pull_audit_20261006.json",
         "docs/receipts/final_workflow_acceptance_20261007.json",
-        "docs/receipts/github_content_reconciliation_20261007.json"
+        "docs/receipts/github_content_reconciliation_20261007.json",
+        "docs/receipts/privacy_completeness_recheck_20261007.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -726,7 +733,9 @@
         "examples/private-state/README.md",
         "examples/private-state/external-plan.example.json",
         "examples/private-state/instance-record.example.json",
-        "docs/GETTING_STARTED.md"
+        "docs/GETTING_STARTED.md",
+        "examples/plugin-settings/README.md",
+        "examples/plugin-settings/sd-trainer-state.example.json"
       ]
     },
     {

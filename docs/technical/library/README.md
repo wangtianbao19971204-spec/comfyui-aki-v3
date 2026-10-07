@@ -1,6 +1,6 @@
 # 资料库技术档案
 
-版本：2026-10-05.2。范围是网页/Word 导入、Tag 预览绑定、归属与语义引擎、共享选择器及其数据库接口，不包含 LoRA Patch。
+版本：2026-10-07.1。范围是网页/Word 导入、Tag 预览绑定、归属与语义引擎、共享选择器及其数据库接口，并记录提示词助手文字检查点，不包含 LoRA Patch。
 
 本目录是技术索引，不是第二份源码。可维护实现以主仓 `snapshot/runtime/` 为准；一次性历史工具即使补入 Git，也不能直接作为新的生产发布命令。
 
@@ -26,8 +26,10 @@
 | Gallery 独立词典／翻译／别名历史 | `snapshot/library/sql/gallery_tags_cache.db/` | 一致备份的规范 SQL 检查点；FTS5 索引可重建，正文与历史须完整保留 |
 | 随机提示词模板 | `snapshot/library/random_templates/` | 两份经审查 JSON 原字节；新模板须审查登记，未登记时捕获失败提示 |
 | 旧独立选择器正文／编辑日志 | `snapshot/library/legacy_selector/` | 保留独立旧资料及历史检查点，不自动合并／启用为现行共享库 |
+| 提示词助手规则、预设、标签及选用状态 | `snapshot/library/prompt_assistant/{rules,tags,config}/` | 五份可选原字节 chunks；保留 ID、正文、编码和换行，缺失规则不重建，不回流成 runtime 源码 |
 | 输入补全 | WeiLin `autocomplete_api.py`；Custom Scripts `autocompleter.js` | 两条补全入口不是同一数据库；文字补全不等于 Tag 图片补齐 |
-| 真实预览、源网页、Word、缓存与鉴权 | 运行目录/仓外状态 | 媒体不进 Git；API key、Cookie、登录配置不进说明、fixture 或历史 |
+| 真实预览、源网页、Word与缓存 | 运行目录/仓外状态 | 图片本体和外部输入另存；位置登记不是资源备份 |
+| API key、Cookie与鉴权配置 | 仓外私密配置 | 不进说明、fixture 或 Git 历史；与因体积外置的媒体、模型和环境分别管理 |
 
 路径缩写：各页 `W/` 表示 `snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/`，`A/` 表示同层 `comfyui-anima-tools/`，`G/` 表示同层 `ComfyUI-Danbooru-Gallery-V50-GalleryOnly/`，`C/` 表示同层 `ComfyUI-Custom-Scripts/`。
 
@@ -41,4 +43,5 @@
 
 ## 更新记录
 
+- 2026-10-07：补入提示词助手五份文字资料，共 214,283 字节；仅按固定路径导出原字节 chunks，鉴权 `config/config.json` 排除，缺失资料不生成。本地还原与资料检查结果、上传边界及外置层见[完整性复核](../changes/operations-source-of-truth/2026-10-07-completeness-recheck.md)。
 - 2026-10-05：建立四份功能档案和数据库分层入口；随后完成 203 份显式技术文件归档及哈希核对，补齐可点击入口，保留外部输入、许可与重演限制。

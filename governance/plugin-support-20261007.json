@@ -901,7 +901,8 @@
     "ComfyUI/custom_nodes/vnccs/workflows/old_workflows/VN_Step4_CharSpriteCreatorV4.1.json",
     "ComfyUI/custom_nodes/vnccs/workflows/old_workflows/VN_Step5_LoraDataSetGeneratorV1.json",
     "ComfyUI/custom_nodes/vnccs/workflows/old_workflows/VN_Step5_LoraDataSetGeneratorV4.1.json",
-    "ComfyUI/custom_nodes/websocket_image_save.py"
+    "ComfyUI/custom_nodes/websocket_image_save.py",
+    "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/qwen/config.json"
   ],
   "files": [
     {

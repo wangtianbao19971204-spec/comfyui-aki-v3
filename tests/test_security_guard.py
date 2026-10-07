@@ -91,6 +91,19 @@ class SecurityGuardTests(unittest.TestCase):
         self.assertFalse(guard.blocked_path('src/authorization.py'))
         self.assertFalse(guard.blocked_path('comfy/text_encoders/t5_pile_tokenizer/added_tokens.json'))
 
+
+    def test_reviewed_architecture_path_does_not_bypass_staged_content_scan(self):
+        for source in ('ComfyUI/models/configs/v1-inference.yaml',
+                       'qwen21_lab/ComfyUI/models/configs/v2-inference.yaml'):
+            self.write('snapshot/runtime/' + source, b'model: {}\n' + self.credential())
+        self.git('add', 'snapshot')
+        report = guard.run(self.repo, staged=True)
+        rules = {item['rule'] for item in report['findings']}
+        self.assertFalse(report['pass'])
+        self.assertIn('openai_style_key', rules)
+        self.assertNotIn('external_runtime_asset_payload', rules)
+        self.assertNotIn(self.credential().decode(), json.dumps(report))
+
     def test_short_placeholder_and_real_assignment(self):
         self.assertFalse(guard.patterns(b'api_key = "your-api-key"'))
         candidate = b'api_key = "' + b'B94WnbS8FJY75FsVD73B3vR9' + b'"'
@@ -253,6 +266,27 @@ class SecurityGuardTests(unittest.TestCase):
         self.assertTrue(guard.run_pre_push(self.repo, '(delete) ' + '0' * 40 + f' refs/heads/old {oid}')['pass'])
         with self.assertRaises(ValueError):
             guard.run_pre_push(self.repo, 'malformed push record')
+
+
+class ArchitectureSupportPathTests(unittest.TestCase):
+    def test_exact_architecture_paths_preserve_neighbor_and_alias_rejection(self):
+        for prefix in ('snapshot/runtime/ComfyUI', 'snapshot/runtime/qwen21_lab/ComfyUI'):
+            approved = prefix + '/models/configs/v1-inference.yaml'
+            self.assertFalse(guard.blocked_path(approved))
+            denied = (
+                prefix + '/models/configs/unreviewed.yaml',
+                prefix + '/models/configs/v1-inference.yaml.safetensors',
+                prefix + '/models/configs/subdir/v1-inference.yaml',
+                approved.upper(), './' + approved, '/' + approved,
+                approved.replace('/models/', '/models//'),
+                approved.replace('/configs/', '/configs/./'),
+                approved.replace('/configs/', '/configs/../configs/'),
+                approved.replace('/', '\\'),
+            )
+            for path in denied:
+                with self.subTest(path=path):
+                    self.assertIn('external_runtime_asset_payload', guard.blocked_path(path))
+
 
 
 if __name__ == '__main__':
