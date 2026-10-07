@@ -54,6 +54,11 @@ class MetadataProviderProtocol(Protocol):
     ) -> Optional[Dict[str, Any]]:
         ...
 
+    async def get_model_version_info(
+        self, version_id: str
+    ) -> tuple[Optional[Dict[str, Any]], Optional[str]]:
+        ...
+
 
 class MetadataSyncService:
     """High level orchestration for metadata synchronisation flows."""
@@ -103,9 +108,10 @@ class MetadataSyncService:
     ) -> tuple[bool, Optional[str]]:
         """Fill a linked model's missing preview without refreshing its metadata.
 
-        Cached image candidates avoid a metadata request. A hash lookup is used
-        only when those candidates are absent; remote names, tags, trigger words
-        and other fields are deliberately not merged into the local record.
+        Cached image candidates avoid a metadata request. Otherwise a linked
+        version is queried directly and its identity checked. Hash lookup is
+        reserved for records without a version ID; remote personal fields are
+        deliberately not merged into the local record.
         """
 
         def image_candidates(metadata: Dict[str, Any]) -> list[Dict[str, Any]]:
@@ -126,11 +132,40 @@ class MetadataSyncService:
                 if not await update_cache_func(file_path, file_path, local_metadata):
                     return False, "Failed to update model cache for existing preview"
                 return True, None
-            images = image_candidates(local_metadata.get("civitai") or {})
+            linked = local_metadata.get("civitai") or {}
+            images = image_candidates(linked)
             if not images:
-                if not isinstance(sha256, str) or re.fullmatch(r"[0-9a-fA-F]{64}", sha256) is None:
-                    return False, "A complete SHA256 is required to find preview images"
-                remote_metadata, error = await self.fetch_metadata_by_sha(sha256)
+                lookup_sha256 = sha256 or local_metadata.get("sha256", "")
+                version_id = linked.get("id")
+                if version_id:
+                    # get_model_version_info returns the provider error as well
+                    # as metadata, keeping offline and rate-limit failures from
+                    # being reported as a confirmed model deletion.
+                    if isinstance(version_id, bool) or re.fullmatch(r"[1-9][0-9]*", str(version_id)) is None:
+                        return False, "Invalid linked model version ID"
+                    provider = await self._get_default_provider()
+                    remote_metadata, error = await provider.get_model_version_info(str(version_id))
+                    if remote_metadata:
+                        if str(remote_metadata.get("id")) != str(version_id):
+                            return False, "Preview metadata does not match the linked version"
+                        model_id = linked.get("modelId") or (linked.get("model") or {}).get("id")
+                        if model_id and str(remote_metadata.get("modelId")) != str(model_id):
+                            return False, "Preview metadata does not match the linked model"
+                        if isinstance(lookup_sha256, str) and re.fullmatch(r"[0-9a-fA-F]{64}", lookup_sha256):
+                            files = remote_metadata.get("files")
+                            files = files if isinstance(files, list) else []
+                            matching_file = any(
+                                isinstance(item, dict)
+                                and isinstance(item.get("hashes"), dict)
+                                and str(item["hashes"].get("SHA256", "")).lower() == lookup_sha256.lower()
+                                for item in files
+                            )
+                            if not matching_file:
+                                return False, "Linked version has no file matching this model's SHA256"
+                else:
+                    if not isinstance(lookup_sha256, str) or re.fullmatch(r"[0-9a-fA-F]{64}", lookup_sha256) is None:
+                        return False, "A complete SHA256 is required to find preview images"
+                    remote_metadata, error = await self.fetch_metadata_by_sha(lookup_sha256)
                 if not remote_metadata:
                     return False, error or "No metadata found for preview images"
                 images = image_candidates(remote_metadata)

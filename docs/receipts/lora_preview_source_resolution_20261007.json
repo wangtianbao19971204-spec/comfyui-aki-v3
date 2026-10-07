@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "date": "2026-10-07",
+  "feature": "runtime-models",
+  "scope": "Linked LoRA preview source lookup and official Civitai API",
+  "production_report_before_this_fix": {"scanned": 292, "updated": 0, "failed": 9, "skipped": 283},
+  "confirmed_observations": [
+    "Nine imported files, local sidecars and upstream declarations have matching complete SHA256 values and source identities.",
+    "Nine official version endpoints return HTTP 200 with matching version, model and registered file identities, and 62 image candidates in total.",
+    "The GYARI official version and hash queries resolve the same registered file; the configured mirror fails to connect for both queries.",
+    "The bulk preview path previously fell back to hash lookup despite having a linked version ID; the provider fallback can turn non-rate-limit failures into Model not found."
+  ],
+  "changes": [
+    "Use the official Civitai API and preserve existing downloader authentication, rate-limit and offline handling.",
+    "Query a linked version directly, require matching version and model IDs, and match the remote file against a complete local SHA when available.",
+    "Use only remote image candidates; preserve local names, trigger words, notes, favourites and other personal fields.",
+    "Keep hash lookup for records without a version ID and keep explicit version lookup failures without another hash retry.",
+    "Do not permanently cache version responses without usable preview URLs; keep the existing bounded LRU for responses with images."
+  ],
+  "tests": {"backend_related": {"passed": 165, "files": 6}, "maintenance": {"passed": 584, "subtests_passed": 562}, "official_metadata": {"passed": 9, "anonymous": true, "credentials_sent": false, "media_downloads": 0}},
+  "isolated_live_preview": {
+    "completed": true, "passed": 9,
+    "actual_components": ["CivitaiClient", "MetadataSyncService", "PreviewAssetService", "MetadataManager", "Pillow", "video decoder"],
+    "test_doubles": ["isolated settings", "anonymous bounded transport", "in-memory scanner cache", "model weight placeholders"],
+    "real_official_metadata_and_media_requested": true,
+    "credentials_sent": false,
+    "personal_fields_preserved": true,
+    "sidecar_and_cache_consistent": true,
+    "production_sidecars_unchanged": true,
+    "private_evidence": "receipt:lora-preview-source-resolution-20261007-01"
+  },
+  "boundaries_at_commit": {"production_deployed": false, "service_restarted": false, "production_preview_written": false, "workflow_changed": false, "weights_uploaded": false, "media_uploaded": false, "private_config_uploaded": false},
+  "deployment_scope": ["py/services/civitai_client.py", "py/services/metadata_sync_service.py"],
+  "rollback": "Restore only these two source files and the matching service; never replace current databases with old backups."
+}

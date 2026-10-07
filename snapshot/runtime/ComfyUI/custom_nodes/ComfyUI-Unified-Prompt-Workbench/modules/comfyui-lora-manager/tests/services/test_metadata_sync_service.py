@@ -35,6 +35,7 @@ def build_service(
     provider = default_provider or SimpleNamespace(
         get_model_by_hash=AsyncMock(),
         get_model_version=AsyncMock(),
+        get_model_version_info=AsyncMock(return_value=(None, "No provider could retrieve the data")),
     )
     if default_provider is None:
         provider.get_model_by_hash.return_value = (None, None)
@@ -113,6 +114,7 @@ async def test_fetch_missing_preview_uses_saved_candidates_and_preserves_metadat
 async def test_fetch_missing_preview_hash_fallback_only_uses_remote_images(tmp_path):
     helpers = build_service()
     model = preview_model(tmp_path)
+    model["civitai"].pop("id")
     original = deepcopy(model)
     remote = {"id": 999, "model": {"name": "Remote name"}, "baseModel": "Other", "trainedWords": ["remote trigger"], "tags": ["remote tag"], "images": [{"url": "https://example.test/remote.png", "nsfwLevel": 1}]}
     helpers.default_provider.get_model_by_hash.return_value = (remote, None)
@@ -126,6 +128,120 @@ async def test_fetch_missing_preview_hash_fallback_only_uses_remote_images(tmp_p
     helpers.default_provider.get_model_by_hash.assert_awaited_once_with("a" * 64)
     assert helpers.preview_service.ensure_preview_for_metadata.await_args.args[2] == remote["images"]
     assert model == {**original, "preview_url": str(preview), "preview_nsfw_level": 1}
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("sha256", ["a" * 64, "A" * 64, ""])
+async def test_fetch_missing_preview_queries_exact_linked_version_and_preserves_fields(tmp_path, sha256):
+    helpers = build_service()
+    model = preview_model(tmp_path)
+    model["civitai"]["modelId"] = 456
+    original = deepcopy(model)
+    remote = {
+        "id": 123, "modelId": 456, "name": "Remote version name",
+        "model": {"name": "Remote model name"}, "trainedWords": ["remote trigger"],
+        "images": [{"url": "https://example.test/linked.png", "nsfwLevel": 1}],
+        "files": [{"hashes": {"SHA256": "a" * 64}}],
+    }
+    helpers.default_provider.get_model_version_info.return_value = (remote, None)
+    preview = successful_preview_write(helpers, tmp_path)
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256=sha256, file_path=model["file_path"], model_data=model,
+        update_cache_func=AsyncMock(return_value=True),
+    )
+
+    assert ok is True and error is None
+    helpers.default_provider.get_model_version_info.assert_awaited_once_with("123")
+    helpers.default_provider.get_model_by_hash.assert_not_awaited()
+    assert helpers.preview_service.ensure_preview_for_metadata.await_args.args[2] == remote["images"]
+    assert model == {**original, "preview_url": str(preview), "preview_nsfw_level": 1}
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("change,expected", [
+    ({"id": 999}, "Preview metadata does not match the linked version"),
+    ({"modelId": 999}, "Preview metadata does not match the linked model"),
+    ({"files": [{"hashes": {"SHA256": "b" * 64}}]}, "Linked version has no file matching this model's SHA256"),
+    ({"files": None}, "Linked version has no file matching this model's SHA256"),
+    ({"files": 1}, "Linked version has no file matching this model's SHA256"),
+    ({"images": []}, "No preview images available"),
+])
+async def test_fetch_missing_preview_rejects_wrong_linked_identity_without_writes(tmp_path, change, expected):
+    helpers = build_service()
+    model = preview_model(tmp_path)
+    model["civitai"]["modelId"] = 456
+    original = deepcopy(model)
+    remote = {
+        "id": 123, "modelId": 456,
+        "images": [{"url": "https://example.test/wrong.png"}],
+        "files": [{"hashes": {"SHA256": "a" * 64}}], **change,
+    }
+    helpers.default_provider.get_model_version_info.return_value = (remote, None)
+    update_cache = AsyncMock()
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256=model["sha256"], file_path=model["file_path"], model_data=model,
+        update_cache_func=update_cache,
+    )
+
+    assert ok is False and error == expected
+    assert model == original
+    helpers.default_provider.get_model_by_hash.assert_not_awaited()
+    helpers.preview_service.ensure_preview_for_metadata.assert_not_awaited()
+    helpers.metadata_manager.save_metadata.assert_not_awaited()
+    update_cache.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_fetch_missing_preview_checks_saved_hash_when_caller_hash_is_empty(tmp_path):
+    helpers = build_service()
+    model = preview_model(tmp_path)
+    helpers.default_provider.get_model_version_info.return_value = ({
+        "id": 123, "images": [{"url": "https://example.test/wrong.png"}],
+        "files": [{"hashes": {"SHA256": "b" * 64}}],
+    }, None)
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256="", file_path=model["file_path"], model_data=model, update_cache_func=AsyncMock(),
+    )
+
+    assert ok is False and error == "Linked version has no file matching this model's SHA256"
+    helpers.preview_service.ensure_preview_for_metadata.assert_not_awaited()
+    helpers.metadata_manager.save_metadata.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("provider_error", ["Rate limited", OFFLINE_FRIENDLY_MESSAGE, "HTTP 401: authentication required"])
+async def test_fetch_missing_preview_keeps_linked_provider_error_without_hash_retry(tmp_path, provider_error):
+    helpers = build_service()
+    model = preview_model(tmp_path)
+    helpers.default_provider.get_model_version_info.return_value = (None, provider_error)
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256=model["sha256"], file_path=model["file_path"], model_data=model,
+        update_cache_func=AsyncMock(),
+    )
+
+    assert ok is False and error == provider_error
+    helpers.default_provider.get_model_by_hash.assert_not_awaited()
+    helpers.metadata_manager.save_metadata.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("version_id", [True, "bad", -1, "1.0"])
+async def test_fetch_missing_preview_rejects_invalid_linked_version_before_network(tmp_path, version_id):
+    helpers = build_service()
+    model = preview_model(tmp_path)
+    model["civitai"]["id"] = version_id
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256=model["sha256"], file_path=model["file_path"], model_data=model,
+        update_cache_func=AsyncMock(),
+    )
+
+    assert ok is False and error == "Invalid linked model version ID"
+    helpers.default_provider_factory.assert_not_awaited()
 
 
 @pytest.mark.asyncio
@@ -156,6 +272,8 @@ async def test_fetch_missing_preview_keeps_existing_local_image(tmp_path, cache_
 async def test_fetch_missing_preview_rejects_incomplete_hash_without_candidates(tmp_path, sha256):
     helpers = build_service()
     model = preview_model(tmp_path)
+    model["civitai"].pop("id")
+    model["sha256"] = sha256
 
     ok, error = await helpers.service.fetch_missing_preview(
         sha256=sha256, file_path=model["file_path"], model_data=model, update_cache_func=AsyncMock(return_value=True)
@@ -175,6 +293,7 @@ async def test_fetch_missing_preview_reports_missing_remote_images(tmp_path, rem
     helpers = build_service()
     helpers.default_provider.get_model_by_hash.return_value = (remote, error_message)
     model = preview_model(tmp_path)
+    model["civitai"].pop("id")
 
     ok, error = await helpers.service.fetch_missing_preview(
         sha256=model["sha256"], file_path=model["file_path"], model_data=model, update_cache_func=AsyncMock(return_value=True)
