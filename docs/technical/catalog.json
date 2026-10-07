@@ -712,6 +712,9 @@
         "governance/workspace-layout.example.json",
         "docs/MAINTENANCE.md",
         "examples/external-assets/annotations.example.json",
+        "examples/private-state/README.md",
+        "examples/private-state/external-plan.example.json",
+        "examples/private-state/instance-record.example.json",
         "docs/GETTING_STARTED.md"
       ]
     },

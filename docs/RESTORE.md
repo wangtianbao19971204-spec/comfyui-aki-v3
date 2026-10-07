@@ -57,7 +57,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Materialization failed; retain evidence for in
 1. 按 environment.json 准备 Python、ComfyUI 前端分发包、Torch/CUDA 和插件依赖。该文件是已装版本清单，不是经过新机器冷装验收的锁文件，不要无审核整批安装或降级。
 2. 按[模型下载来源清单](MODEL_SOURCES.md)取得确切版本、精度和上游原文件名的网上模型／LoRA，或从自己的原备份恢复；相对路径均相对物化后的运行根。安装到 `current_path`，没有该字段才使用 `path`，保留规范本地名及家族／用途子目录；旧捕获路径只是历史身份。分类与改名规则见[分类命名](MODEL_NAMING.md)。config/tokenizer/processor 等配套按同版本完整恢复。自训成品与来源待补项必须另存原件，网址失效时也要保留备份；用户已明确删除的 15 个评估条目不恢复或迁移，历史清单中仍有其文字身份不表示需要补装。具体核验及更新方法见[模型维护](MODELS.md)。
 3. 另行恢复 preview 与 preview_thumbnails，保持同名和相对路径，核对 library_media 清单。清单不是图片副本。
-4. 根据仓外 `external-runtime` 清单安全补齐机器/认证配置，初版 `excluded_private_configs` 不是完整的后续清单。API key 不写进 Git；远端 LLM 启动器配置放在仓外 `private-config/remote-llm/config.json`。详见 EXTERNAL_STATE.md。
+4. 根据仓外 `external-runtime` 清单安全补齐机器/认证配置，初版 `excluded_private_configs` 不是完整的后续清单。拉取者按[私有状态示例](../examples/private-state/README.md)在自己的仓外根建立计划和实例记录；示例只含占位值，不能覆盖正式库或成为另一套源码。API key 不写进 Git；远端 LLM 启动器配置放在仓外 `private-config/remote-llm/config.json`。详见 EXTERNAL_STATE.md。
 5. 已补迁的插件、两套 Forge、Qwen Lab 与训练依赖源码以 manifest 和 PROJECT_MAP 为准；它们的模型、数据集、输出、依赖二进制及历史媒体仍需单独迁移。旧私有 Git、源网页原件和回滚材料仅供审查/恢复，不重新启用为开发来源。
 6. 静态检查工作流节点/模型引用和 profile；修复缺失必须保留工作流原意，不自动启用旁路分支或换底模。
 7. 用独立端口、隔离数据做启动/浏览器/中性样例验收；明确通过范围后再决定正式切换，不能直接覆盖正在运行的 8188。
@@ -79,4 +79,4 @@ if ($LASTEXITCODE -ne 0) { throw 'Materialization failed; retain evidence for in
 
 ## 不是完整灾备镜像
 
-本 bundle 可还原管理范围内的代码、保存工作流、提示词 JSON 和三库逻辑数据。模型、预览、认证、Python/CUDA 运行环境与旧历史媒资需要独立备份。建议把这些外部资源与 bundle 一起离线存放，并分别记录校验值；不要把“Git 可克隆”误认为“全部数据已异地备份”。
+Git + 仓外私有状态共同组成工作流实际使用的完整实例。Git 可还原管理范围内的代码、保存工作流、提示词 JSON 与其检查点数据库逻辑数据；具体覆盖依所取得提交的 manifest，旧 bundle 不自动包含后续 Gallery/插件补齐。模型、预览、认证、Python/CUDA 运行环境、最新运行数据与旧历史媒资需要独立备份。建议把这些外部资源与 Git 交付一起离线存放，分别记录校验值并填写实例记录；不要把“Git 可克隆”误认为“全部数据已异地备份”。

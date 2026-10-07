@@ -21,7 +21,7 @@
 
 目的地固定为 [comfyui-aki-v3](https://github.com/wangtianbao19971204-spec/comfyui-aki-v3)，当前私有。唯一开发来源仍是本地主仓；GitHub 保存受审查分支、PR 和用户接受的主线。
 
-1. 首次上传：当前远端尚为空仓，需先让用户核对上传内容、体积、资料/许可边界，再单独建立已审查的 `main` 基线及必要历史标签。空仓没有可用的 PR base，不能将日常授权解释为首次基线上传已获批准。本次流程登记没有上传任何文件。
+1. 首次上传：先核对内容、体积、资料/许可边界，再单独建立已审查的 `main` 基线及必要维护标签。2026-10-07 用户查看补齐后的上传预览后要求本地与线上一致，本次初始化使用已有 `main=bf6ac443cd8c7d1a87a5e12bb67142baf3dfeeb7`；补齐和实例组合说明上传 `fix/github-content-coverage-20261007`，以 PR 等待用户允许合并。精确推送 main、该分支和四个维护标签：`comfyui-v0.1.0`、`comfyui-v0.2.0`、`maintenance-v1-20261005`、`maintenance-public-v2-20261005`。不把功能分支直接初始化为 main，不镜像本机 legacy refs 或私有档案。上传是否成功以实际远端 refs 和仓外回执为准。
 2. 后续开发：先保留已有改动，在干净 `main` 按[后续更新](GETTING_STARTED.md)执行 `fetch`/`merge --ff-only`；再用 `git switch -c <本次工作分支>` 创建分支。通常使用 `fix/`、`feature/`、`docs/`，版本准备使用 `release/`。不在运行区、插件旧目录或另一份本机 clone 开发。
 3. 本地通过：运行与变更相关的测试、必要隔离 UI/工作流验收；源码按需 seal，资料/模型引用按专项说明核对。精确暂存并执行 `maintain.py check-staged`，提交应绑定实际测试范围与收据。失败或必要项目未覆盖时先修复，不把 CI 或结构检查当作 GPU/物理 IME 验收。
 4. 上传分支：用户已持续授权通过本地验收与完整上传门禁后的日常分支推送和 PR 创建，无需每次再询问上传许可。核对 origin 是上述目的地，确认提交和工作树状态，使用 `git push -u origin <本次工作分支>`；保留 pre-push 的全历史门禁，不使用 `--mirror`、`--all`、`--force` 或跳过 hooks，也不直推日常改动到 `main`。有新修改时重做受影响验收。
@@ -29,6 +29,26 @@
 6. 合并后：在干净本地 `main` 再 `fetch`/`merge --ff-only origin/main`，核对合并结果并保留必要分支/历史。合并不自动加维护版本、打标签、公开仓库或部署运行区；生产切换仍需明确范围、保护与现场验收。
 
 本地 hooks 现有功能是技术说明、完整性与凭证门禁，**不是远端主线保护**。首次建立远端 `main` 后，另核 GitHub 权限/套餐并配置、验证要求 PR 与必要 CI 的保护规则；尚未实际配置前不能宣称服务器已防直推。私有仓的 protected branches/rulesets 通常需要 Pro/Team 等支持套餐。使用用户同一账号创建的 PR 不能由作者批准自己的 review，单人流程不设置会阻塞自己的“必须 1 个 approving review”；由用户实际决定 Merge。官方：[分支保护](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)、[PR review](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/reviewing-proposed-changes-in-a-pull-request)。
+
+### 两端一致性的核验
+
+一致性检查比较同名分支，不要求尚未批准的工作分支与 main 内容相同。远端 URL 必须是上述无凭据地址；不要把 PAT 写在 origin 或脚本中。在干净主仓、上传完成后执行：
+
+```powershell
+$comfyPublishedBranch = 'fix/github-content-coverage-20261007' # 后续换成本次已上传分支
+$comfyOriginUrl = git remote get-url origin
+if ($LASTEXITCODE -ne 0 -or $comfyOriginUrl -ne 'https://github.com/wangtianbao19971204-spec/comfyui-aki-v3.git') { throw 'Unexpected origin' }
+git fetch origin
+if ($LASTEXITCODE -ne 0) { throw 'Fetch failed' }
+foreach ($comfyRefBranch in @('main', $comfyPublishedBranch)) {
+    $comfyLocalCommit = git rev-parse "refs/heads/$comfyRefBranch"
+    if ($LASTEXITCODE -ne 0) { throw 'Missing local branch' }
+    $comfyRemoteCommit = git rev-parse "refs/remotes/origin/$comfyRefBranch"
+    if ($LASTEXITCODE -ne 0 -or $comfyLocalCommit -ne $comfyRemoteCommit) { throw 'Local and remote branch differ' }
+}
+```
+
+首次多个 refs 使用原子推送；失败时保留失败回执并重新查远端，不静默改成部分上传、不强推。标签需同时核对 tag 对象号与 peeled commit。验收只覆盖明确上传的维护 refs，历史标签仍本地保存；GitHub 内容不含仓外原件。PR 状态、CI、是否合并和实际运行部署另行核实。完整实例的记录模板见[私有状态示例](../examples/private-state/README.md)。
 
 ## 1. 只在主仓开发
 

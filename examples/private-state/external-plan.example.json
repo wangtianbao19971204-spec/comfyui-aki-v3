@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "roots": {
+    "runtime": "C:/replace-with-your-runtime-root",
+    "external": "C:/replace-with-your-external-root"
+  },
+  "entries": [
+    {
+      "id": "example-remote-llm-config",
+      "root": "external",
+      "source": "private-config/remote-llm/config.json",
+      "target": "private-config/remote-llm/config.json",
+      "category": "private_config",
+      "action": "copy"
+    },
+    {
+      "id": "example-current-gallery-db",
+      "root": "runtime",
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/py/shared/data/tags_cache.db",
+      "target": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/py/shared/data/tags_cache.db",
+      "category": "mutable_db",
+      "action": "sqlite_backup"
+    },
+    {
+      "id": "example-plugin-cache-reference",
+      "root": "external",
+      "source": "caches/example-plugin",
+      "target": "caches/example-plugin",
+      "category": "mutable_cache",
+      "action": "reference"
+    },
+    {
+      "id": "example-model-directory-reference",
+      "root": "runtime",
+      "source": "ComfyUI/models/diffusion_models/anima/example-model-bundle",
+      "target": "ComfyUI/models/diffusion_models/anima/example-model-bundle",
+      "category": "external_asset",
+      "action": "reference"
+    }
+  ]
+}
