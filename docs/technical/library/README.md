@@ -23,6 +23,9 @@
 | Tag、翻译热度、历史三库 | `snapshot/library/sql/`；[结构契约](../../../database/contract.json) | 一致 SQLite backup 后导出；在线 DB/WAL 不直接覆盖 |
 | 可读结构、索引、触发器、fixture | [database/](../../../database/)；[数据库说明](../../DATABASE.md) | 当前是 v1 基线，不是通用在线迁移器 |
 | Gallery 联邦词库 | Gallery `py/shared/db/weilin_tag_bridge.py` | 只读查询 WeiLin 身份，不把整库复制进 Gallery 缓存 |
+| Gallery 独立词典／翻译／别名历史 | `snapshot/library/sql/gallery_tags_cache.db/` | 一致备份的规范 SQL 检查点；FTS5 索引可重建，正文与历史须完整保留 |
+| 随机提示词模板 | `snapshot/library/random_templates/` | 两份经审查 JSON 原字节；新模板须审查登记，未登记时捕获失败提示 |
+| 旧独立选择器正文／编辑日志 | `snapshot/library/legacy_selector/` | 保留独立旧资料及历史检查点，不自动合并／启用为现行共享库 |
 | 输入补全 | WeiLin `autocomplete_api.py`；Custom Scripts `autocompleter.js` | 两条补全入口不是同一数据库；文字补全不等于 Tag 图片补齐 |
 | 真实预览、源网页、Word、缓存与鉴权 | 运行目录/仓外状态 | 媒体不进 Git；API key、Cookie、登录配置不进说明、fixture 或历史 |
 

@@ -1,42 +1,57 @@
-# 项目地图与归属
+# 项目地图与源码归属
 
-本机运行根目录：`G:\ComfyUI-aki-v3`。维护仓：`G:\ComfyUI-aki-v3\maintenance\comfyui`。Windows 路径不区分大小写，不能在同一父目录再建一个与现有 `ComfyUI` 同名的 `comfyui`，所以维护仓单独放在 maintenance 下。
+ComfyUI 相关修改的唯一开发入口是 `maintenance/comfyui/`，本机为 `G:\ComfyUI-aki-v3\maintenance\comfyui`。本体、插件、工作流、资料与维护工具都从主仓对应文件开发和提交。
 
-表中“实际源路径”是最初捕获/最终部署的运行位置；今后开发权威位置为主仓 `snapshot/runtime/<相对路径>`，不是继续编辑那两个运行 Git。真实库分片在 `snapshot/library`；数据库结构、索引、触发器与迁移在 `database`。旧 Git 全图在当前仓历史中以归档合并保留，映射见 `docs/history`，不形成另一套活动工作分支。
+## 仓内结构
 
-| 范围 | 实际源路径（相对运行根） | 本仓库管理方式 |
-|---|---|---|
-| ComfyUI 本体 | `ComfyUI/` | 源码快照、上游 URL/提交、依赖版本；不复制嵌套 .git |
-| 权威整合插件 | `ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/` | 统一包与 5 个 modules 的当前源码，不仅依赖各自旧 Git 跟踪名单 |
-| 前端 UI | 统一包 `web/` | 主题、图标、工作台、资料检索、目标写入、运行控制 |
-| 常用控制台 | 统一包 `modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/` | 导航、区域定位、控件与子图原参数映射 |
-| 正式 UAP | `ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json` | 完整原文件，包含所有内嵌子图/连线/模式，不另拆一套失联子流程 |
-| 权威 UAP 模板 | `production_tools/templates/UAP统一生产工作台_v2.json` | 与正式文件分别保留、分别核对哈希 |
-| 其他个人流与历史流 | `ComfyUI/user/default/workflows/*.json` | 全部保留；不把历史流默认为当前构建源或已通过验收 |
-| 冻结模板 | `production_tools/templates/` | 原样保存，允许与个人副本不同，不强行同步覆盖 |
-| 启动与白名单 | `production_tools/profiles.json`、`launch.py`、根目录启动 CMD | 配置与脚本版本化；当前 live 服务身份另查，不能从旧文档的插件数量推断 |
-| 权威共享资料 | 统一包 WeiLin 模块 `user_data/prompt_selector/` | 6 个当前主文件分片；data、默认资料、语义投影、关联、同步日志、归属说明 |
-| Tag / 历史数据库 | 同一 WeiLin 模块 `user_data/userdatas_zh_CN_*.db` | backup API → SQL 分片；分组、词条、个人字段、修订、历史均保留 |
-| 预览原图与缩略图 | `prompt_selector/preview`、`preview_thumbnails` | 外部媒体清单，不进 Git；不能视作可随意删除的缓存 |
-| 模型 | `ComfyUI/models` 及生产插件内权重 | 路径/大小/mtime 清单及工作流引用关系；权重本体留在外部 |
-| 网页/法典导入 | `benchmark_reports/source_update_flow` | 当前门禁脚本与说明；审查后的网页抓取、Word解析、图片补全等历史实现另入 `docs/technical/archive`，原数据仍外部 |
-| 角色数据集维护 | `character_lora_forge/` | 当前维护源码；角色项目、图片、审核输出和私密配置外置引用 |
-| Anima 训练维护 | `anima_lora_forge/` | Forge 源码与实际存在的 SD-Trainer/SD-Scripts 本地源码；不恢复现场已删除的上游文件、不携带权重与环境 |
-| 独立 Qwen 实验服务 | `qwen21_lab/` | 当前维护入口及实际使用的独立源码；不是生产 8188 服务，也不代表已通过冷启动验收 |
-| 根辅助工具 | `scripts/`、`tools/`、`remote_llm_guard/` | 公开可维护代码；远端鉴权从仓外 JSON 读取，二进制服务环境/模型不入库 |
-| 其他安装插件 | `ComfyUI/custom_nodes/` | 受审查源码补迁；被捕获不等于启用，不变更 production 白名单 |
-| 验收与已知问题 | 当前 part_refinement_pipeline STATE 指向的收据 | 当前 UI、工作流与推理证据分开保存，不互相替代 |
+| 目录 | 管理内容 |
+|---|---|
+| [snapshot/runtime/](../snapshot/runtime/) | 本体、插件、工作流及维护／训练工具的受审查源码 |
+| [snapshot/library/](../snapshot/library/) | 真实提示词正文、Tag、个人字段和历史的文本／SQL 检查点 |
+| [snapshot/inventory/](../snapshot/inventory/)、[manifest.json](../snapshot/manifest.json) | 外部资源引用、来源与受管理文件身份；引用不等于资源备份 |
+| [database/](../database/) | 数据库契约、结构、迁移与格式样例 |
+| [scripts/](../scripts/)、[.githooks/](../.githooks/) | 主仓维护、校验、发布与提交检查 |
+| [tests/](../tests/)、[examples/](../examples/) | 隔离回归与公开格式／标注示例 |
+| [governance/](../governance/)、[docs/](README.md) | 归属登记、版本约定、技术说明与验收收据 |
 
-## 当前流程边界
+## 源码与正式流程入口
 
-UAP 保留九个工作分支：Anima 原版、Anima 2.9B、Krea2 生产，Krea2 编辑、裁剪精修、透明抠图、左右扩图、二倍和四倍超分工具。
+下表路径相对运行根；其唯一维护副本为 `snapshot/runtime/<相对路径>`。`WB` 表示 `ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/`。
 
-两套 Anima 的细化次序：手 → 脚 → 原有区域标准/快速互斥支路 → 脸 → 眼 → 可选 1.5× 二放。工作台只显示/编辑原节点和子图，不额外生成一套隐形采样参数。细化与二放默认关闭；头发、四肢、人体、服装、独立皮肤细化不新增。独立 08/09 超分工具不是主流程自动续段。
+| 范围 | 路径或入口 |
+|---|---|
+| 本体与安装插件 | `ComfyUI/`、`ComfyUI/custom_nodes/`；见[装配与启动](technical/runtime/core.md) |
+| 工作台与五模块 | `WB/web/`、`WB/modules/`、[modules.json](../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules.json) |
+| 正式 UAP | [ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json](../snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json) |
+| 权威模板 | [production_tools/templates/UAP统一生产工作台_v2.json](../snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json) |
+| 个人／历史工作流与冻结模板 | `ComfyUI/user/default/workflows/`、`production_tools/templates/`；分别保留，不自动互相覆盖 |
+| 启动与白名单 | `production_tools/profiles.json`、`production_tools/launch.py`、运行根启动 CMD |
+| 网页桥接、PixAI 与资料导入 | [网页接入](technical/runtime/browser-import.md)、[PixAI](technical/runtime/pixai.md)、`benchmark_reports/source_update_flow/` |
+| 数据集与训练 | `character_lora_forge/`、`anima_lora_forge/`；见[训练工具](technical/training/README.md) |
+| 独立服务与辅助工具 | `qwen21_lab/`、`scripts/`、`tools/`、`remote_llm_guard/`；见[独立服务](technical/runtime/independent-services.md) |
 
-工作台五模块：WeiLin 共享资料、Anima 选择器、Gallery/UAP、LoRA Manager、custom-scripts 补全。外层旧同名目录是兼容入口或历史副本；实际归属以统一包 `modules.json` 和当前服务注册为准。
+五模块为 WeiLin 共享资料、Anima 选择器、Gallery/UAP、LoRA Manager、Custom Scripts；装配以 `WB/modules.json` 为准。外层旧同名目录的兼容／历史身份不形成第二套开发权威；源码收录也不等于生产启用。
 
-## 捕获范围不是全部磁盘镜像
+UAP 九分支为 Anima 原版、Anima 2.9B、Krea2 生产、Krea2 编辑、裁剪精修、透明抠图、左右扩图、独立二倍与四倍超分。内嵌子图、细化次序、二放和验收边界见[工作流说明](technical/runtime/workflows.md)。
 
-首版只捕获 production 插件；工作区整理补入其他已安装插件和独立维护项目的受审查源码，但**没有启用这些插件或改变生产配置**。代码归属不等于运行白名单。Python 前端分发包、CUDA、下载模型、LoRA Manager 的大型 Civitai 缓存、图库缓存、源网页原件、训练项目和历史 benchmark 媒体仍为外部资源。迁移前根据实际用途补齐，不可声称仅 clone 即可完全复现整台机器。
+## 真实资料与 Git 检查点
 
-运行旧 Git 退休后的记录见 `governance/retired-git.json`，新历史映射见 `docs/history/`。真实目录与归档布局见 [WORKSPACE.md](WORKSPACE.md)。实际活动来源由主仓受审查文件清单确定，不能把仓外旧 benchmark 副本当成同名组件的新权威。
+`W` 表示 `WB/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/`；`G` 表示 `WB/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/`。
+
+| 运行资料来源 | Git 中的对应内容 |
+|---|---|
+| `W/user_data/prompt_selector/` | [snapshot/library/json/](../snapshot/library/json/)：data、default、semantic_projection、shared_pairs、shared_sync_log 和 STORE_OWNER 六份主文件 |
+| `W/user_data/userdatas_zh_CN_*.db` | [snapshot/library/sql/](../snapshot/library/sql/)：Tag、翻译／热度与历史三库的一致 SQL 导出 |
+| `G/py/shared/data/tags_cache.db` | [gallery_tags_cache.db/](../snapshot/library/sql/gallery_tags_cache.db/)：独立词典、翻译、别名与导入历史，不能按文件名视为可丢弃缓存 |
+| `W/random_tag/` | [random_templates/](../snapshot/library/random_templates/)：经审查的随机提示词模板 |
+| `ComfyUI/custom_nodes/nsfwprompt/` 的登记资料 | [legacy_selector/](../snapshot/library/legacy_selector/)：旧独立选择器正文与编辑历史 |
+
+详细实现与资料身份见[资料库档案](technical/library/README.md)和[数据库契约](DATABASE.md)。Git 分片是实际内容检查点；应用最新资料可能更新，旧检查点不得覆盖在线库。图片与缩略图另按外部资源保存。
+
+## 运行区与仓外私有资料
+
+运行区 `G:\ComfyUI-aki-v3` 是部署目标。完整实例由已部署的主仓文件，以及私密配置、模型／LoRA、媒体、依赖环境和最新运行数据共同组成；分支、主线与部署范围分别登记。
+
+仓外根 `G:\ComfyUI-local` 保管私密配置、机器清单、旧 Git 原件、备份与回滚材料。模型与图片可以仍在原运行路径，以仓外引用登记；路径引用不是备份，clone 不等于完成还原或冷启动。
+
+边界和操作见[工作区](WORKSPACE.md)、[仓外状态](EXTERNAL_STATE.md)、[资源与示例](EXTERNAL_ASSETS.md)。历史追溯见[旧 Git](history/README.md)和[技术原件](technical/archive/README.md)；按功能查找[技术总索引](technical/README.md)，当前限制查[已知问题](KNOWN_ISSUES.md)。

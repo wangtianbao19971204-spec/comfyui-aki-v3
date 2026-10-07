@@ -9,7 +9,18 @@
     "README.md",
     "docs/GETTING_STARTED.md",
     "docs/MAINTENANCE.md",
-    "docs/RESTORE.md"
+    "docs/RESTORE.md",
+    "docs/README.md",
+    "docs/PROJECT_MAP.md",
+    "docs/SNAPSHOT.md",
+    "docs/DOCUMENTATION.md",
+    "scripts/README.md",
+    "tests/README.md",
+    "examples/README.md",
+    "governance/README.md",
+    ".githooks/README.md",
+    ".github/README.md",
+    "database/README.md"
   ],
   "features": [
     {
@@ -76,7 +87,8 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_4",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_5",
         "snapshot/runtime/qwen21_lab/ComfyUI/custom_nodes/ComfyUI-GGUF/tools/lcpp.patch",
-        "snapshot/runtime/tools/llama.cpp/LICENSE-LLVM-OpenMP"
+        "snapshot/runtime/tools/llama.cpp/LICENSE-LLVM-OpenMP",
+        "governance/plugin-support-20261007.json"
       ],
       "tests": [
         "snapshot/runtime/production_tools/validate_profiles.py",
@@ -487,7 +499,8 @@
         "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/live_acceptance.json",
         "docs/technical/archive/benchmark_reports/2026-09-28_raven_increment/current_site_audit.json",
         "docs/technical/archive/benchmark_reports/2026-10-01_gallery_card_fix/verification.json",
-        "docs/receipts/final_workflow_acceptance_20261007.json"
+        "docs/receipts/final_workflow_acceptance_20261007.json",
+        "docs/receipts/github_content_reconciliation_20261007.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -502,7 +515,8 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/resource_results.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_resource.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Custom-Scripts/web/js/autocompleter.js",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Custom-Scripts/web/js/common/autocomplete.js"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Custom-Scripts/web/js/common/autocomplete.js",
+        "snapshot/library/sql/gallery_tags_cache.db/"
       ],
       "examples": [
         "examples/external-assets/annotations.example.json",
@@ -651,7 +665,9 @@
         "scripts/technical_archive.py",
         "scripts/security_guard.py",
         "governance/technical-archive.json",
-        "governance/training-trigger-reviews.json"
+        "governance/training-trigger-reviews.json",
+        "scripts/library_sql.py",
+        "governance/plugin-support-20261007.json"
       ],
       "tests": [
         "tests/test_maintain.py",
@@ -670,14 +686,17 @@
         "tests/test_technical_archive.py",
         "tests/test_security_guard.py",
         "tests/test_security_names.py",
-        "tests/test_training_trigger_reviews.py"
+        "tests/test_training_trigger_reviews.py",
+        "tests/test_library_sql.py",
+        "tests/test_plugin_support.py"
       ],
       "evidence": [
         "docs/receipts/source_coverage_20261005.json",
         "docs/receipts/isolated_boot_20261006.json",
         "docs/receipts/reassurance_20261006.json",
         "docs/receipts/pull_audit_20261006.json",
-        "docs/receipts/final_workflow_acceptance_20261007.json"
+        "docs/receipts/final_workflow_acceptance_20261007.json",
+        "docs/receipts/github_content_reconciliation_20261007.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -704,6 +723,9 @@
         "governance/workspace-layout.example.json",
         "docs/MAINTENANCE.md",
         "examples/external-assets/annotations.example.json",
+        "examples/private-state/README.md",
+        "examples/private-state/external-plan.example.json",
+        "examples/private-state/instance-record.example.json",
         "docs/GETTING_STARTED.md"
       ]
     },

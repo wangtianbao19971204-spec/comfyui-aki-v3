@@ -1,8 +1,13 @@
-"""Local-only, read-only runtime capture; never deploys into the live installation."""
+"""捕获、验证和离线还原主仓管理的源码与资料。
+
+capture 只读运行区并写入新候选；materialize 只向新目录还原，不部署或启动服务。
+详见 docs/SNAPSHOT.md 与 docs/RESTORE.md。
+"""
 from __future__ import annotations
 
 import argparse
 import contextlib
+import functools
 import hashlib
 import importlib.metadata
 import json
@@ -18,11 +23,17 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 from security_guard import blocked_path
+from library_sql import ITERDUMP, GALLERY_FTS5, FORMATS, iter_sql, table_counts, restore_sql, summary as sql_summary
 
 REPO = Path(__file__).resolve().parents[1]
 WB = 'ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench'
 LIBRARY = WB + '/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/user_data'
 LIBRARY_DATABASES = ('userdatas_zh_CN_danbooru.db', 'userdatas_zh_CN_history.db', 'userdatas_zh_CN_tags.db')
+GALLERY_DATABASE = WB + '/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/py/shared/data/tags_cache.db'
+RANDOM_TEMPLATES = tuple(WB + '/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/random_tag/' + name
+                         for name in ('20260606_203538.json', '20260606_205040.json'))
+LEGACY_SELECTOR_FILES = ('ComfyUI/custom_nodes/nsfwprompt/PromptSelector_user_logic_history_extra_sorted.json',
+                         'ComfyUI/custom_nodes/nsfwprompt/promptselector_edit_log.jsonl')
 WEIGHTS = {'.safetensors', '.ckpt', '.pt', '.pth', '.onnx', '.gguf', '.bin', '.engine'}
 TEXT = {'.py', '.pyi', '.mako', '.js', '.mjs', '.cjs', '.ts', '.tsx', '.mts', '.cts', '.patch', '.vue', '.svelte', '.css', '.scss', '.sass', '.less', '.html', '.json', '.jsonl', '.yaml', '.yml', '.toml', '.ini', '.cfg', '.md', '.rst', '.txt', '.csv', '.tsv', '.sql', '.xml', '.sh', '.ps1', '.psm1', '.bat', '.cmd', '.example', '.lock', '.map', '.in', '.c', '.cc', '.cpp', '.h', '.hpp', '.cu', '.cuh', '.glsl', '.frag', '.vert'}
 ASSETS = {'.png', '.jpg', '.jpeg', '.webp', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.otf', '.mp3', '.webmanifest', '.gz'}
@@ -72,7 +83,29 @@ def supported_source_payload(relative):
     path = Path(relative)
     return (path.suffix.lower() in TEXT | ASSETS or path.name in SOURCE_SPECIAL_NAMES
             or source_license_name(path.name) or relative in REVIEWED_SUPPORT_FILES
-            or relative in TOKENIZER_SOURCE_FILES)
+            or relative in TOKENIZER_SOURCE_FILES or relative in reviewed_plugin_sources())
+
+
+def reviewed_plugin_sources():
+    """Exact audited support paths; never approve whole cache/config directories."""
+    contract = REPO / 'governance/plugin-support-20261007.json'
+    if not contract.is_file():
+        return frozenset()
+    stat = contract.stat()
+    return _reviewed_plugin_sources(contract, stat.st_mtime_ns, stat.st_size)
+
+
+@functools.lru_cache(maxsize=4)
+def _reviewed_plugin_sources(contract, modified, size):
+    spec = json.loads(contract.read_text(encoding='utf-8'))
+    paths = spec['public_sources']
+    for relative in paths:
+        portable_parts(relative)
+        if not relative.startswith('ComfyUI/custom_nodes/'):
+            raise ValueError('Reviewed plugin source is outside its owner tree')
+    if len(paths) != len(set(paths)):
+        raise ValueError('Duplicate reviewed plugin sources')
+    return frozenset(paths)
 
 # Reviewed synthetic URL/redaction fixtures. Any edit requires another review.
 REVIEWED_SECURITY_FIXTURES = {
@@ -103,11 +136,23 @@ def database_state(file):
 
 
 def is_link(path):
-    return path.is_symlink() or (hasattr(path, 'is_junction') and path.is_junction())
+    return (path.is_symlink() or (hasattr(path, 'is_junction') and path.is_junction())
+            or (path.exists() and bool(getattr(path.lstat(), 'st_file_attributes', 0) & 0x400)))
+
+
+def unlinked_source(root, relative):
+    """Check the original spelling before resolve can erase linked ancestors."""
+    path = root
+    for part in portable_parts(relative):
+        path = path / part
+        if is_link(path):
+            raise ValueError('Linked runtime source is not captured: ' + relative)
+    return safe_path(root, relative)
 
 
 def private_config(relative):
-    return relative in PRIVATE_PATHS or (relative not in PUBLIC_CONFIG_PATHS and bool(PRIVATE_NAME.fullmatch(Path(relative).name)))
+    return relative in PRIVATE_PATHS or (relative not in PUBLIC_CONFIG_PATHS and relative not in reviewed_plugin_sources()
+                                        and bool(PRIVATE_NAME.fullmatch(Path(relative).name)))
 
 
 def payload_relative(source):
@@ -118,7 +163,7 @@ def payload_relative(source):
 def save(file, data):
     file = Path(file)
     file.parent.mkdir(parents=True, exist_ok=True)
-    file.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    file.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
 
 
 def safe_path(root, relative):
@@ -181,6 +226,9 @@ def manifest_path_failures(manifest):
         source_ok = claim(entry.get('source'), sources, source_parents, owner, scope='source')
         path_ok = claim(entry.get('path'), payloads, payload_parents, owner, directory=kind != 'file')
         if kind == 'sqlite_sql':
+            sql_format = entry.get('sql_format', ITERDUMP)
+            if not isinstance(sql_format, str) or sql_format not in FORMATS or (sql_format == GALLERY_FTS5 and entry.get('source') != GALLERY_DATABASE):
+                failures.append({'path': '<' + owner + '>', 'reason': 'unreviewed_sql_format'})
             if source_ok:
                 claim(entry['source'] + '.restore.sql', sources, source_parents, owner + '-sql-sidecar', scope='source')
             if not isinstance(entry.get('tables'), dict) or any(not isinstance(table, str) or not isinstance(count, int) or count < 0 for table, count in entry.get('tables', {}).items()):
@@ -263,6 +311,8 @@ def selected_sources(root, registered_manifest=None):
     omitted = []
     def offer(file):
         rel = file.relative_to(root).as_posix()
+        if rel in LEGACY_SELECTOR_FILES:
+            return  # Reviewed mutable text has one owner: reversible library exports.
         name = file.name.lower()
         if private_config(rel) or blocked_path('snapshot/runtime/' + rel):
             omitted.append({'path': rel, 'reason': 'private_or_machine_config'}); return
@@ -286,6 +336,13 @@ def selected_sources(root, registered_manifest=None):
         if not plugin.is_dir():
             raise FileNotFoundError(plugin)
         for file in walk(plugin):
+            offer(file)
+    # Previously omitted shipped support for installed non-production plugins
+    # and the top-level websocket node uses exact reviewed paths, not a blanket
+    # import of every plugin cache or private configuration.
+    for relative in sorted(reviewed_plugin_sources()):
+        file = unlinked_source(root, relative)
+        if file.is_file():
             offer(file)
     # Small runtime-owned selector dictionaries may live outside user_data.
     for folder in ['production_tools', 'benchmark_reports/source_update_flow']:
@@ -312,8 +369,8 @@ def selected_sources(root, registered_manifest=None):
         for entry in registered['files']:
             if entry['kind'] != 'file':
                 continue
-            file = safe_path(root, entry['source'])
-            if file.is_file() and not is_link(root / entry['source']):
+            file = unlinked_source(root, entry['source'])
+            if file.is_file():
                 offer(file)
     return selected, omitted, plugins
 
@@ -378,22 +435,31 @@ def capture(root, out, offline=False):
         entries.append({'source': rel, 'path': target.relative_to(out).as_posix(), 'sha256': before, 'bytes': target.stat().st_size, 'kind': 'file'})
     print('Capturing authoritative library bytes in reversible chunks...', flush=True)
     library = root / LIBRARY
-    for name in ['data.json', 'default.json', 'semantic_projection.json', 'shared_pairs.json', 'shared_sync_log.json', 'STORE_OWNER.txt']:
-        source = library / 'prompt_selector' / name
+    text_exports = [(library / 'prompt_selector' / name, 'library/json/' + name)
+                    for name in ['data.json', 'default.json', 'semantic_projection.json', 'shared_pairs.json', 'shared_sync_log.json', 'STORE_OWNER.txt']]
+    text_exports.extend((root / relative, 'library/random_templates/' + Path(relative).name) for relative in RANDOM_TEMPLATES)
+    text_exports.extend((root / relative, 'library/legacy_selector/' + Path(relative).name) for relative in LEGACY_SELECTOR_FILES)
+    unreviewed_templates = {file.relative_to(root).as_posix() for file in (library.parent / 'random_tag').glob('*.json')} - set(RANDOM_TEMPLATES)
+    if unreviewed_templates:
+        raise ValueError('Review new random templates before capture: ' + ', '.join(sorted(unreviewed_templates)))
+    for source, payload_path in text_exports:
+        source = unlinked_source(root, source.relative_to(root).as_posix())
         if not source.exists():
             raise FileNotFoundError(source)
         before = digest(source)
-        destination = out / 'library/json' / name
+        destination = out / payload_path
         parts = split_file(source, destination)
         if digest(source) != before:
-            raise RuntimeError('Library changed during capture: ' + name)
+            raise RuntimeError('Library changed during capture: ' + source.name)
         entries.append({'source': source.relative_to(root).as_posix(), 'path': destination.relative_to(out).as_posix(), 'kind': 'chunks', 'sha256': before, 'bytes': source.stat().st_size, 'parts': parts})
     print('Online-consistent SQLite backups and SQL exports...', flush=True)
     for source in sorted(library.glob('*.db')):
         if source.name not in LIBRARY_DATABASES:
             omitted.append({'path': source.relative_to(root).as_posix(), 'reason': 'database_not_in_reviewed_contract'})
-    for name in LIBRARY_DATABASES:
-        source = library / name
+    database_exports = [(library / name, 'library/sql/' + name, ITERDUMP) for name in LIBRARY_DATABASES]
+    database_exports.append((root / GALLERY_DATABASE, 'library/sql/gallery_tags_cache.db', GALLERY_FTS5))
+    for source, payload_path, sql_format in database_exports:
+        source = unlinked_source(root, source.relative_to(root).as_posix())
         if not source.is_file():
             raise FileNotFoundError(source)
         before = database_state(source)
@@ -407,16 +473,16 @@ def capture(root, out, offline=False):
                     raise RuntimeError('SQLite integrity check failed: ' + source.name)
                 dump = Path(temp) / 'dump.sql'
                 with dump.open('w', encoding='utf-8', newline='\n') as stream:
-                    for line in target.iterdump():
+                    for line in iter_sql(target, sql_format, allow_stale_fts=sql_format == GALLERY_FTS5):
                         stream.write(line + '\n')
-                tables = {}
-                for (table,) in target.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'"):
-                    tables[table] = target.execute('SELECT count(*) FROM "' + table.replace('"', '""') + '"').fetchone()[0]
+                tables = table_counts(target, sql_format, allow_stale_fts=sql_format == GALLERY_FTS5)
+                fts_state = ({key: value for key, value in sql_summary(target, sql_format, allow_stale_fts=True).items()
+                              if key.startswith('fts_')} if sql_format == GALLERY_FTS5 else {})
             finally:
                 target.close(); src.close()
-            destination = out / 'library/sql' / source.name
+            destination = out / payload_path
             parts = split_file(dump, destination)
-            entries.append({'source': source.relative_to(root).as_posix(), 'path': destination.relative_to(out).as_posix(), 'kind': 'sqlite_sql', **before, 'sql_sha256': digest(dump), 'sql_bytes': dump.stat().st_size, 'tables': tables, 'parts': parts})
+            entries.append({'source': source.relative_to(root).as_posix(), 'path': destination.relative_to(out).as_posix(), 'kind': 'sqlite_sql', 'sql_format': sql_format, **fts_state, **before, 'sql_sha256': digest(dump), 'sql_bytes': dump.stat().st_size, 'tables': tables, 'parts': parts})
         if database_state(source) != before:
             raise RuntimeError('Database main/WAL changed during capture; retry a quiet interval')
     print('Recording models and external library media (no weight/media copying)...', flush=True)
@@ -488,7 +554,7 @@ def capture(root, out, offline=False):
         if not matches:
             raise RuntimeError('Runtime source drifted: ' + entry['source'])
     metadata = [{'path': file.relative_to(out).as_posix(), 'sha256': digest(file), 'bytes': file.stat().st_size} for folder in [inventory, evidence] for file in walk(folder, set())]
-    save(out / 'manifest.json', {'schema':1,'created_at':now(),'source_root':str(root),'files':entries,'metadata_files':metadata,'production_plugins':plugins,'runtime_before':runtime_before,'runtime_after':runtime_after,'scope':'Core + production plugin sources + workflows + full authoritative prompt JSON and three logical SQL databases; external weights/media are inventories, not payloads'})
+    save(out / 'manifest.json', {'schema':1,'created_at':now(),'source_root':str(root),'files':entries,'metadata_files':metadata,'production_plugins':plugins,'runtime_before':runtime_before,'runtime_after':runtime_after,'scope':'Core + production and registered installed plugin sources/support + workflows + six authoritative prompt files + two reviewed random templates + three WeiLin logical SQL databases and Gallery FTS5 dictionary/history; external weights/user media are inventories, not payloads'})
     result = verify(out)
     save(out / 'verification.json', result)
     if not result['pass']:
@@ -581,21 +647,18 @@ def materialize(snapshot, destination):
                 with target.open('xb'):
                     pass
                 with contextlib.closing(sqlite3.connect(target)) as conn, joined.open(encoding='utf-8', newline='') as sql:
-                    statement=''
-                    for line in sql:
-                        statement+=line
-                        if sqlite3.complete_statement(statement):
-                            conn.execute(statement);statement=''
-                    if statement.strip():
-                        raise RuntimeError('Incomplete SQL dump')
-                    if conn.execute('PRAGMA integrity_check').fetchone()[0] != 'ok':
-                        raise RuntimeError('Restored SQLite integrity check failed')
-                    rows={table:conn.execute('SELECT count(*) FROM "'+table.replace('"','""')+'"').fetchone()[0] for table in entry['tables']}
-                    if rows!=entry['tables']:
+                    if entry.get('sql_format', ITERDUMP) == GALLERY_FTS5:
+                        restored = restore_sql(conn, sql, GALLERY_FTS5)
+                        if restored['tables'] != entry['tables'] or restored['sql_sha256'] != entry['sql_sha256']:
+                            raise RuntimeError('Restored Gallery logical content mismatch')
+                        checks.append({'path': entry['source'], 'logical_sql_match': True, 'sql_format': GALLERY_FTS5,
+                                       'rows': restored['tables'], 'fts_integrity_match': True})
+                        continue
+                    restored = restore_sql(conn, sql, ITERDUMP)
+                    rows = restored['tables']
+                    if rows != entry['tables']:
                         raise RuntimeError('Database row count mismatch')
-                    restored_hash=hashlib.sha256()
-                    for line in conn.iterdump():restored_hash.update((line+'\n').encode('utf-8'))
-                    if restored_hash.hexdigest()!=entry['sql_sha256']:
+                    if restored['sql_sha256'] != entry['sql_sha256']:
                         raise RuntimeError('Restored logical SQL content mismatch')
                 checks.append({'path':entry['source'],'logical_sql_match':True,'rows':rows});continue
         if digest(target)!=entry['sha256']:

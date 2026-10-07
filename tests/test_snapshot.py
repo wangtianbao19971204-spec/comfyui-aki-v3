@@ -111,6 +111,17 @@ class SnapshotTests(unittest.TestCase):
             (payload/'sql'/parts[0]['path']).write_bytes(b'broken')
             self.assertFalse(snapshot.verify(payload)['pass'])
 
+    def test_gallery_format_is_bound_to_reviewed_source(self):
+        entry = {'source': snapshot.GALLERY_DATABASE, 'path': 'library/sql/gallery',
+                 'kind': 'sqlite_sql', 'sql_format': snapshot.GALLERY_FTS5,
+                 'sql_sha256': hashlib.sha256(b'fixture').hexdigest(), 'tables': {}, 'parts': []}
+        self.assertEqual(snapshot.manifest_path_failures({'files': [entry]}), [])
+        for fmt, source in (([], snapshot.GALLERY_DATABASE), ('unknown', snapshot.GALLERY_DATABASE),
+                            (snapshot.GALLERY_FTS5, 'ComfyUI/user/other.db')):
+            with self.subTest(fmt=fmt, source=source):
+                failures = snapshot.manifest_path_failures({'files': [{**entry, 'sql_format': fmt, 'source': source}]})
+                self.assertIn('unreviewed_sql_format', {row['reason'] for row in failures})
+
     def test_duplicate_sources_are_rejected_before_restore_directory_creation(self):
         for duplicate in ['ComfyUI/main.py', 'comfyui/MAIN.PY']:
             with self.subTest(duplicate=duplicate), tempfile.TemporaryDirectory() as temp:

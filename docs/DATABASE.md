@@ -35,6 +35,14 @@ python -B -m unittest discover -s tests -p test_database_contract.py -v
 
 ## 后续修改入口
 
+### Gallery 辅助词典检查点
+
+主三库的 v1 DDL／迁移契约仍只覆盖上述三库。Gallery 的 `tags_cache.db` 另以 `gallery_fts5_v1` 规范 SQL 存在 `snapshot/library/sql/gallery_tags_cache.db/`，由 `scripts/library_sql.py` 和 `tests/test_library_sql.py` 验证；不能声称三库的 contract 工具已经验证第四库。
+
+该库保留热词、译文、官方别名、同步元信息和两类导入／修订历史。普通 `iterdump` 对它的虚拟表 schema 无法直接还原，因此新格式保留全部业务数据与行身份、结构、索引、触发器、自增计数，并从内容表重建派生 FTS5 shadow 存储。恢复检查完整规范 SQL SHA、逻辑表行数、数据库完整性和 FTS 一致性；不要求派生索引分段、虚表 DDL 空白或数据库页布局相同。未知虚拟表／分词器/schema 拒绝，库二进制与在线 WAL/SHM 不入 Git。现场库仍是最新可变数据，SQL 仅作时间点检查点。
+
+本次源一致备份的普通 `integrity_check` 通过，但 FTS5 外部内容一致性检查失败；因此显式登记 `fts_source_consistent: false` 和 `rebuild_from_preserved_content` 策略。保留业务全文及私有原始备份，恢复库的 FTS 一致性通过；不能声称所有陈旧索引查询与重建结果相同。这次不修复在线索引。新格式需要 SQLite 3.37+ 和 FTS5 支持。
+
 新增表、索引、查询、资料格式、缓存或数据库服务相关源码都在此主仓库修改；新增业务功能需要需求明确后再实现。保持 `database/migrations/` 不可变的有序迁移记录，并按其中 README 增加适用版本、测试和恢复门禁。当前仅实现 v1 基线检查/初始化，不存在通用生产升级器。
 
 资料变更继续保留原 ID、正文、收藏/备注和来源绑定，不按相似名称自动合并。资料内容修改后，需要重新导出/核验 snapshot 数据；结构变化还必须更新契约与专项测试，不能靠修改哈希掩盖未验收变更。

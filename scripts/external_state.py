@@ -1,7 +1,7 @@
-"""Offline metadata contract for private state kept outside the public checkout.
+"""登记与验证仓外私有状态，按计划创建全新的私密 overlay。
 
-No credentials are parsed into a report. Materialization creates a new overlay;
-it never edits production, overlays existing code, or copies model/media trees.
+报告不解析或输出凭据原值；资源 reference 只登记，不复制模型或图片，也不写回生产。
+格式与组合步骤见 docs/EXTERNAL_STATE.md、examples/private-state/README.md。
 """
 from __future__ import annotations
 

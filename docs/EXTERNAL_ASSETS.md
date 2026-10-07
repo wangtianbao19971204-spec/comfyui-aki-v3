@@ -26,7 +26,7 @@
 
 可公开的下载来源另存 [`model_sources.json`](../snapshot/inventory/model_sources.json)，易读入口为[下载来源清单](MODEL_SOURCES.md)。它保留每个资源的稳定来源页、版本／文件 ID、上游原文件名、声明摘要、相对放置路径、配套和备注。来源记录不包含权重或原始插件缓存；声明摘要与本轮实际读取的 `local_sha256` 分开保存。网址并不保证永久可用，自训与未确认来源项仍要独立备份，详细获取／更新步骤见[模型维护](MODELS.md)。
 
-特殊格式的补充放置契约见 [runtime-support.json](../governance/runtime-support.json)：T5/ChatGLM 的 `.model` 分词文件、DensePose `.torchscript`、MediaPipe `.task`，以及 MANO/网格的 `.pkl`、`.npy`、`.npz`。它们没有伪装成源码上传；恢复时保留完整相对目录并核对配套版本。`.pkl` 等只作文件指纹登记，不为清点而反序列化。MANO 等资源仍受自己的许可限制，不随 GitHub 仓库自动分发。
+特殊格式的补充放置契约见 [runtime-support.json](../governance/runtime-support.json)：其 `external_resources` 精确列出仍外置的 T5 分词文件、DensePose `.torchscript`、MediaPipe `.task` 及 MANO/网格配套；恢复时保留完整相对目录并核对配套版本。经许可/凭证审查的插件随附分词词汇（包括 easy-use 的 ChatGLM 配套）已按 [plugin-support-20261007.json](../governance/plugin-support-20261007.json)进入 Git，不要仅凭 `.model` 或文件名把它再次判为缺失外部权重。神经模型权重和许可敏感配套仍外置；`.pkl` 等不为清点而反序列化，MANO 的登记不构成再分发授权。
 
 目录型模型需要**同一版本的完整目录**，包括存在的 config、tokenizer、vocab/merges、processor/preprocessor、标签映射、分片 index 与全部权重 shard。自定义模型代码需人工审查并记录来源，不因文件小就自动可信；不从其他版本拼凑。除加载器明确支持单文件形式外，不能只保留 `model.safetensors`。`extra_model_paths` 或目录链接引用的外盘路径由使用者本地配置，不把本机用户名/私有绝对目录写成公共默认值。
 
@@ -48,6 +48,8 @@
 本页只定义放置规范与示例，不会自动下载、迁移、启用任何模型或运行工作流。
 
 ## 更新记录
+
+- 2026-10-07：明确 Git 与私有状态共同组成完整实例；补齐分词词汇的 Git/外置分类和现行模型位置入口，连接[私有状态组合示例](../examples/private-state/README.md)，避免拉取者按旧 inventory 路径重复恢复或覆盖正式数据。
 
 - 2026-10-07：最终审核修正家族目录大小写及现行路径入口，区分来源目录的 `current_path` 与旧盘点身份，避免新机按历史名称放错位置。
 - 2026-10-07：补公开下载来源入口，区分网站版本／声明摘要、本机实际内容摘要和自训原件；换机器按精确文件身份补齐配套，保持权重／原缓存仓外边界。

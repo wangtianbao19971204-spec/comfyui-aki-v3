@@ -4,16 +4,16 @@
 
 ## 1. 取得主仓
 
-当前未配置在线远端，也没有已发布的 GitHub 地址。取得真实、已审查的主仓 URL 后，在父目录执行；占位值必须先替换，目标目录必须全新：
+主仓地址为 [comfyui-aki-v3](https://github.com/wangtianbao19971204-spec/comfyui-aki-v3)，当前私有，访问者需获仓库权限。默认取得用户已接受的 `main`；尚待合并的补齐分支与 `main` 分别核对，不将分支内容冒充已接受主线。在父目录执行，目标目录必须全新：
 
 ```powershell
-$comfyRepositoryUrl = '<实际已审查的主仓URL>'
+$comfyRepositoryUrl = 'https://github.com/wangtianbao19971204-spec/comfyui-aki-v3.git'
 git clone -c core.longpaths=true -- $comfyRepositoryUrl .\comfyui
 if ($LASTEXITCODE -ne 0) { throw 'Clone failed; retain the partial directory for inspection' }
 Set-Location -LiteralPath .\comfyui
 ```
 
-2026-10-06 的完整克隆实测约 633 MiB Git 对象包，加上 1.46 GiB 检出文件；建议先留至少 3 GiB 空间，物化运行树与外部模型/图片另算。大小来自源码、资料分片和保留历史，未包含用户模型或 LoRA 权重；后续大小随内容增长。
+2026-10-07 内容补齐后的候选传输包约 675.51 MB，分支检出文件约 1.74 GB（10,270 文件，本轮示例/说明修订前测量）；建议克隆先留至少 4 GB 空间，物化运行树与外部模型/图片另算。大小来自源码、资料分片和保留历史，未包含用户模型或 LoRA 权重；不同分支、Git 压缩和后续新增内容会使实际大小不同。
 
 Windows 长路径选项须在第一次检出前传给 clone。别人的机器可以把这份克隆作为该机唯一开发来源；同一台机器的主仓仍只有一个。仅用于本机验收的副本放到仓外 validation，不在其中开发；下面采用独立对象复制：
 
@@ -52,6 +52,8 @@ git config --local user.email '<你的提交邮箱>'
 
 ## 3. 检查仓库，再恢复运行环境
 
+下面的只读仓库检查不需要 Pillow。要运行完整维护测试，在独立的维护测试环境先执行 `& $comfyPython -m pip install -r .github/requirements.txt`；清单仅为隔离图片样例安装 Pillow。测试命令见[测试入口](../tests/README.md)，不要求装 Torch、下载模型或启动服务。
+
 ```powershell
 & $comfyPython -X utf8 -B scripts\maintain.py status
 if ($LASTEXITCODE -ne 0) { throw 'Status check failed' }
@@ -64,7 +66,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Model source catalogue check failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Snapshot verification failed' }
 ```
 
-新机器显示“备份未登记”或“运行状态未实测”是正常边界，不表示克隆损坏。检查失败时保留输出和当前提交，核对检出是否完整，不用 `seal` 重新认可损坏字节。公开或打包还须通过[全历史安全与许可检查](SECURITY.md)。
+新机器显示“备份未登记”或“运行状态未实测”是正常边界，不表示克隆损坏。检查失败时保留输出和当前提交，核对检出是否完整，不用 `seal` 重新认可损坏字节。公开或打包还须通过[全历史安全与许可检查](SECURITY.md)。完整实例还需按[私有状态示例](../examples/private-state/README.md)建立该机仓外配置、资源与最新数据，示例和原件不能混同。
 
 不要直接运行 `snapshot/runtime/ComfyUI/main.py` 或快照中的启动脚本：库资料仍在 `snapshot/library/` 分片，模型与本机配置也未随克隆提供。先按[恢复方法](RESTORE.md)物化到全新运行目录，再补齐资源、依赖和配置，用独立端口及隔离数据验收。正式运行目录只接收明确范围的部署。
 
@@ -90,6 +92,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Branches diverged or update failed; review bot
 
 完成后重跑第 3 节检查。分叉时保留两边提交并单独评审，不强制覆盖。主仓更新不自动部署；插件上游更新也先导入主仓评审，不在运行插件目录另行 clone/pull。
 
+继续开发前从已同步的 `main` 新建本地工作分支，按[日常维护](MAINTENANCE.md)测试、上传该分支并创建 PR。用户允许合并后才更新主线；不直接推送日常改动到 `main`，也不自动合并。
+
 ## 5. 换机器与常见问题
 
 | 遇到的问题 | 下一步 |
@@ -104,5 +108,10 @@ if ($LASTEXITCODE -ne 0) { throw 'Branches diverged or update failed; review bot
 
 ## 更新记录
 
+- 2026-10-07：实际 GitHub CI 暴露隔离图片测试缺少 Pillow；增加明确的最小测试依赖及新环境安装步骤。只读主仓检查的环境要求保持原样；完整 CI 复验与合并结果存仓外收据。
+
+- 2026-10-07：在用户核对内容后按同名分支提交核验本地/线上一致；补实例组合和私有状态示例入口，刷新候选克隆空间估算。首次 main 基线与待合并分支分别交付，上传/PR/实际网络克隆的最终结果另存仓外收据，不自动合并或部署。
+
+- 2026-10-07：登记已创建的 GitHub 私有空仓与实际 URL；明确先初始化基线、后续分支开发/测试/PR/用户合并和合并后主线同步的步骤。此次不代表已上传、远端保护已生效或他机联网克隆已经验收。
 - 2026-10-07：换机补齐入口区分上游下载原名、历史捕获路径与现行 `current_path`，链接统一家族／用途分类与规范命名说明。
 - 2026-10-06：补首次克隆、Python/hooks、快慢检查与后续更新步骤；区分主仓和验证副本，说明新包回执、仓外资源及跨运行根 capture/adopt 的现行限制。未配置远端、下载模型、安装依赖或启动服务。

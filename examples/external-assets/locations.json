@@ -25,6 +25,6 @@
     {"path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/user_data/prompt_selector/preview/", "role": "Original prompt-library previews; preserve filenames and record bindings"},
     {"path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/user_data/prompt_selector/preview_thumbnails/", "role": "Prompt-library thumbnail media; preserve or regenerate through the matching application version"}
   ],
-  "authoritative_inventory": "snapshot/inventory/models.json",
-  "additional_locations": "Every exact path in the model/media inventories remains authoritative, including plugin source/data weights not generalized here. External extra_model_paths targets need a separate local mapping."
+  "authoritative_inventory": "snapshot/inventory/model_sources.json",
+  "additional_locations": "For current model placement use snapshot/inventory/model_sources.json: current_path when present, otherwise path, including plugin-owned weights outside the generalized directories above. snapshot/inventory/models.json and snapshot/inventory/workflow_models.json preserve historical capture identities and must not override normalized current paths. Preserve media filenames and actual record bindings from snapshot/inventory/library_media.jsonl. Configure external disk locations and extra_model_paths mappings locally."
 }

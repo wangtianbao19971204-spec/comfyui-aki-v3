@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "date": "2026-10-07",
+  "phase": "accepted_local_branch_not_uploaded",
+  "primary_library": {
+    "six_text_files_hash_match": true,
+    "three_sql_full_restore_logical_match": true,
+    "bytes": 1010467781,
+    "data_prompt_ids": 324891,
+    "tag_rows": 298812
+  },
+  "additions": {
+    "plugin_files": 900,
+    "plugin_bytes": 154834239,
+    "gallery_sql_bytes": 20134434,
+    "random_templates": 2,
+    "random_template_bytes": 1602,
+    "legacy_selector_files": 2,
+    "legacy_selector_bytes": 443501,
+    "legacy_unique_texts": 58,
+    "legacy_edit_history_rows": 10
+  },
+  "gallery": {
+    "sql_format": "gallery_fts5_v1",
+    "hot_tags": 69321,
+    "aliases": 15263,
+    "translation_history": 522,
+    "translation_imports": 11,
+    "alias_imports": 1,
+    "source_fts_consistent": false,
+    "restore_policy": "rebuild_from_preserved_content",
+    "canonical_restore_match": true,
+    "restored_fts_consistent": true,
+    "original_backup_and_raw_sql_retained_privately": true,
+    "old_fts_query_equivalence_claimed": false
+  },
+  "production_modified": false,
+  "uploaded": false,
+  "merged": false,
+  "evidence_id": "github-content-reconciliation-20261007-01",
+  "exclusions": "User images, model weights, environments, credential/private configs, cache and license-sensitive resources stay outside Git. Source-shipped support/fixtures are separately reviewed.",
+  "validation": {
+    "maintenance_tests": 568,
+    "maintenance_test_failures": 0,
+    "snapshot_materialization_checks": 9441,
+    "snapshot_materialization_pass": true,
+    "snapshot_manifest_sha256": "e5a076128a18d6ea346003f46541b565bf4cbf5b5d0fd48a45f0f36cc9e9d1b0",
+    "primary_existing_library_entries_unchanged": true,
+    "database_contract_pass": true,
+    "runtime_protected_paths": 8547,
+    "runtime_unplanned_drift": 0,
+    "runtime_service_identity_unchanged": true,
+    "history_upload_gate": "Final post-commit scan receipt kept outside Git; mandatory before upload"
+  }
+}

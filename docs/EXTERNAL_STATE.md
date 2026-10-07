@@ -17,13 +17,19 @@
 
 2026-10-07 模型分类命名已在运行区实施，具体权重位置改按来源目录的 `current_path` 恢复；上述保持原位置是建仓时的历史基线。分类后的仓外组合清单已重新 inventory 为 `external-runtime-model-standardization-20261007-01.json`，365 项登记并切换本机 current，旧清单保留。此刷新只记录现行边界，不复制模型或预览，也不覆盖在线数据库；实际摘要与命名验收见[标准化收据](receipts/model_standardization_20261007.json)。
 
-当前补齐支持资源的计划为仓外 `plans/external-runtime-plan-v5.json`，最新清单入口为 `manifests/external-runtime-current.json`。v5 在先前 353 项基础上加入 11 份分词/检测/几何资源和 1 份 Gallery 缓存库，共 365 项；旧清单保留为带时间点的证据，不自动升级为当前清单。每次主仓 manifest 或现场配置变化后均须重新 inventory，不能因为文件名带 current 就跳过指纹验证。
+最新清单入口为仓外 `manifests/external-runtime-current.json`；本轮计划为 `plans/external-runtime-plan-v6.json`，本轮清单为 `external-runtime-content-reconciliation-20261007-01.json`，364 项。它绑定当前公共 manifest 与当时的外部指纹；每次主仓 manifest 或现场配置变化后均须重新 inventory，不能因为文件名带 current 就跳过指纹验证。历史 v5 在先前 353 项基础上加入 11 份分词/检测/几何资源和 1 份 Gallery 缓存库，共 365 项；保留其时间点身份。
 
 这些新增资源的可移植相对路径、角色和用途存于 [支持文件契约](../governance/runtime-support.json)；真实数据库指纹仍只存仓外。新增项全为 reference，不生成权重副本或数据库备份。
 
-2026-10-06 再次核验时，旧 current 清单有一份配置与三库 WAL 指纹变化，已保留旧清单并重新 inventory。最新时间点清单为仓外 `manifests/external-runtime-recheck-20261006-01.json`，current 已切到该清单；18 份 copy 小配置另外物化到新的私密备份目录，347 份 reference 仍只登记位置。本次没有创建数据库备份或复制模型/图片，不能称完整实例已经备份或移机还原。后续再次漂移仍须重新登记；摘要见 [复核收据](receipts/reassurance_20261006.json)。
+2026-10-07 上传内容复核后，easy-use 随附 ChatGLM 分词词汇已转为受审查 Git 支持文件；Gallery 辅助词典另外增加一致备份的全量 SQL 检查点，最新在线状态仍由 `mutable_db` 记录。v5 和上述“没有数据库备份”描述属于补齐前历史，不适用于本次 Gallery 的私有一致备份。变更 manifest 后须生成新仓外计划／清单，不能把旧 current 的指纹仍称当前。补齐范围见 [内容复核](receipts/github_content_reconciliation_20261007.json)。
+
+本次已实际生成仓外 v6 计划和 `external-runtime-content-reconciliation-20261007-01.json`，364 项登记，current 已切换并在本轮私有收据保留切换前原件。减少一项只因分词词汇由外部资源转为 Git 支持文件，没有删除资源；其余 reference 仍非备份，未复制模型或用户图片。
+
+2026-10-06 历史核验时，旧 current 清单有一份配置与三库 WAL 指纹变化，已保留旧清单并重新 inventory。当时清单为仓外 `manifests/external-runtime-recheck-20261006-01.json`；18 份 copy 小配置另外物化到新的私密备份目录，347 份 reference 仍只登记位置。该轮没有创建数据库备份或复制模型/图片，不能称完整实例已经备份或移机还原；它已由后续 current 取代。后续再次漂移仍须重新登记；摘要见 [复核收据](receipts/reassurance_20261006.json)。
 
 ## 使用与边界
+
+完整的[公开组合示例](../examples/private-state/README.md)包含工具实际接受的 plan 格式和实例记录格式。将示例复制到自己的仓外 `plans/` 后，替换绝对根路径、选择实际存在的文件并运行 inventory；不要把真实配置、机器清单或输出再提交回 Git。示例不能代替自己的模型、图片或最新数据库。既有配置占位见[远端 LLM 配置](../snapshot/runtime/remote_llm_guard/remote-llm.config.example.json)，模型来源和图片绑定见[资源示例](../examples/external-assets/README.md)。
 
 计划 JSON 为 `schema: 1`，包含 `roots`（仓外绝对本机根映射）与 `entries`。每项只允许 `id`、`root`、`source`、`target`、`category`、`action`，其中 source/target 必须为规范的 `/` 相对路径。不得包含密钥值。示意 entry：
 
