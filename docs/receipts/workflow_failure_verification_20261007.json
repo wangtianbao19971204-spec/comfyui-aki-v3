@@ -1,0 +1,340 @@
+{
+  "schema": 1,
+  "receipt_id": "workflow-failure-verification-20261007-01",
+  "base_commit": "ae695aaf9f13a53723bbad7a1923081e3af3948a",
+  "checked_at": "2026-10-07T01:07:15.317279+00:00",
+  "status": "completed_verification_with_open_findings",
+  "verification_completed": true,
+  "pass": false,
+  "whole_workflow_quality_pass": false,
+  "meaning": "Failure verification completed; several findings remain unresolved or outside positive-hit coverage.",
+  "execution": {
+    "backend_successful_cases": 24,
+    "specified_output_images": 73,
+    "includes_empty_mask_images": true,
+    "not_all_images_are_quality_passes": true,
+    "native_ui_api_exports": true,
+    "preserved_export_closure_and_history_evidence": true,
+    "formal_source_or_workflow_change": false,
+    "formal_prompts_loras_models_seeds_parameters_default_switches_change": false
+  },
+  "krea2": {
+    "status": "black_failure_not_reproduced_root_cause_unknown",
+    "matrix_sequence": [
+      "A1_full",
+      "A29_full",
+      "K2_smoke"
+    ],
+    "arms": [
+      {
+        "before_k2": "retain_preceding_state",
+        "peak_device_used_mib": 31589,
+        "minimum_sampled_device_free_mib": 599
+      },
+      {
+        "before_k2": "unload_models_only",
+        "peak_device_used_mib": 31558,
+        "minimum_sampled_device_free_mib": 630
+      },
+      {
+        "before_k2": "unload_models_and_reset_execution_cache",
+        "peak_device_used_mib": 31553,
+        "minimum_sampled_device_free_mib": 635
+      }
+    ],
+    "all_three_k2_35_node_closures_equal_original_failed_smoke": true,
+    "all_three_k2_encoding_sampling_decode_fresh": true,
+    "all_three_k2_rgb_pixels_identical": true,
+    "original_sequence_replay": [
+      "A1_smoke",
+      "A1_full",
+      "A29_smoke",
+      "A29_full",
+      "K2_smoke",
+      "K2_full",
+      "K2_edit04"
+    ],
+    "all_seven_replay_outputs_effective": true,
+    "first_six_full_closures_exactly_equal_historical": true,
+    "edit04_fidelity": "Generation nodes, edges and parameters equal; SaveImage1242 prefix differs between full_fixed replay and historical smoke_fixed export.",
+    "k2_full_cache_scope": "Reused freshly successful base sampler; upscale executed fresh.",
+    "replay_k2_smoke_minimum_sampled_device_free_mib": 458,
+    "recorded_explicit_oom_or_cuda_failure": false,
+    "historical_invalid_cast_warnings": 2,
+    "zero_models_unloaded_messages_are_info": true,
+    "historical_black_images_and_failures_retained": true,
+    "root_cause_certified": false,
+    "unloading_proven_to_resolve_root_cause": false,
+    "limitations": [
+      "All arms began from a joint cleanup, and the unmeasured historical allocator state was not reconstructed.",
+      "Current /free cannot express cache-only; false/true still jointly unloads and resets. HTTP200 is not completion.",
+      "NVML measures the full device and sampled values can miss shorter peaks. cudaMallocAsync Torch reserved is not device capacity.",
+      "Finite controlled runs do not certify indefinite mixed-model stability."
+    ]
+  },
+  "other_findings": [
+    {
+      "id": "a29-hand-foot",
+      "status": "cause_localized_unfixed",
+      "finding": "Original hand-detector YOLO bbox mask already includes the image-left bare foot region; SAM includes it; old foot changes lie inside mask plus feather support. Detection class/confidence was not separately preserved.",
+      "foot_region_in_hand_bbox_mask_xyxy_exclusive": [
+        252,
+        1189,
+        384,
+        1284
+      ],
+      "foot_bbox_white_pixels": 12540,
+      "foot_sam_white_pixels": 7630,
+      "old_foot_pixels_changed_gt1": 4140
+    },
+    {
+      "id": "a1-face-eye",
+      "status": "isolated_positive_example_pass",
+      "finding": "Original A1 face then eye chain on A29 frontal base makes actual local changes while body and background remain unchanged.",
+      "face_changed_pixels_gt1_relative_to_input": 14111,
+      "eye_incremental_changed_pixels_gt1_relative_to_face_output": 929,
+      "face_changed_bbox_xyxy_exclusive": [
+        318,
+        104,
+        469,
+        267
+      ],
+      "eye_incremental_bbox_xyxy_exclusive": [
+        346,
+        149,
+        440,
+        181
+      ],
+      "limitation": "No A1 frontal base full-generation rerun or cross-input quality certification; eye reference mask is pre-face spatial comparison only."
+    },
+    {
+      "id": "ext05-crop",
+      "status": "window_and_composite_pass_quality_not_certified",
+      "changed_pixels": 240772,
+      "window_xyxy": [
+        128,
+        128,
+        640,
+        640
+      ],
+      "outside_window_changed_pixels": 0,
+      "finding": "QA positive prompt was corrected to match the adult input; local texture and edge drift remain."
+    },
+    {
+      "id": "ext07-outpaint",
+      "status": "seam_quality_failed",
+      "preserved_nonfeather_core_pixels": 720896,
+      "composite_reconstruction_max_channel_error": 1,
+      "finding": "Vertical seam and road/shadow discontinuity remain and already appear in VAE decoded image before final composite.",
+      "limitation": "Sampling, VAE and LLLite causes have not been independently separated."
+    },
+    {
+      "id": "region-standard-fast",
+      "status": "real_no_hit_passthrough_pass_positive_hit_untested",
+      "cases": 4,
+      "all_selected_16_child_nodes_uncached": true,
+      "all_four_output_masks_empty": true,
+      "all_four_final_rgb_images_identical_to_input": true,
+      "limitation": "No positive-hit repaint or positive-hit quality acceptance."
+    },
+    {
+      "id": "impact-sam-editor",
+      "status": "failed_unfixed",
+      "finding": "Old extensions/core/clipspace.js dependency is still 404; no equivalent public ClipspaceDialog export was found."
+    },
+    {
+      "id": "native-manual-mask-editor",
+      "status": "open_load_cancel_pass_save_untested",
+      "loaded_reference_dimensions": [
+        768,
+        1024
+      ],
+      "formal_reference_changed": false,
+      "limitation": "Brush save round trip untested; native manual editing does not fix automatic SAM."
+    },
+    {
+      "id": "subdirectory-media-ui",
+      "status": "ui_missing_media_condition_unfixed_backend_path_valid_during_execution",
+      "finding": "QA subdirectory path is absent from root-level LoadImage combo and meets the source options.includes missing-media condition; actual file and backend validation passed before archival.",
+      "limitation": "No stale-cache diagnosis or exact browser-toast causal attribution; archived QA paths now resolve through external mapping."
+    }
+  ],
+  "preservation": {
+    "formal_uap_and_template_all_four_files_unchanged": true,
+    "formal_workflow_sha256": "8e11892bd970534e3fe04e6d07e206a1a344ce922a726132b8c7646aa301f3e0",
+    "consistent_databases_checked": 3,
+    "database_integrity_all_ok": true,
+    "database_logical_content_same_as_previous_final_acceptance": true,
+    "current_round_raw_main_wal_identity_unchanged": true,
+    "database_baseline_scope": "Previous final acceptance consistent logical backup to this round end; this round has a raw main/WAL before guard but no separate before consistent backup.",
+    "finished_self_trained_versions": 4,
+    "finished_runtime_and_release_locations_preserved": 8,
+    "deleted_evaluation_versions": 15,
+    "deleted_evaluation_locations_still_absent": 30,
+    "large_weights_rehashed_this_round": false,
+    "weight_check_scope": "Exact current paths, existence and size; historical hash metadata is not a new weight-content verification.",
+    "reviewer_online_database_replace_or_git_write": false,
+    "git_clean_in_independent_prepublication_observation": true,
+    "subsequent_publication_commit_owned_and_finally_verified_by": "root",
+    "runtime_protected_paths": 8547,
+    "final_guard_pass_with_one_exact_observed_metadata_change": true,
+    "raw_guard_pass": false,
+    "raw_guard_finding": "Automatic online Pose repository metadata refresh; preserved and separately hash-bound.",
+    "unplanned_final_drift_count": 0,
+    "service_identity_unchanged": true,
+    "queue": {
+      "running": 0,
+      "pending": 0
+    },
+    "ready_modules": 5,
+    "native_formal_ui_export_preserved_for_independent_review": true,
+    "does_not_claim_browser_serialization_zero_drift": true,
+    "formal_ui_original_user_parameters_and_named_connectivity_preserved": true,
+    "formal_ui_raw_serialization_changes_classified_in_private_reviews": true
+  },
+  "cleanup": {
+    "reversible_exact_qa_files_archived": 80,
+    "output_images": 73,
+    "input_copies": 1,
+    "native_api_download_copies": 5,
+    "formal_ui_export": 1,
+    "old_black_images_rechecked_unchanged": 3,
+    "original_evidence_paths_resolve_through_external_archive_mapping": true,
+    "history_retired_git_and_rollback_removed": false
+  },
+  "actions": {
+    "restart": false,
+    "queue_clear": false,
+    "model_download": false,
+    "online_database_replace": false,
+    "source_deployment": false,
+    "protected_free_and_joint_cache_reset_for_qa": true,
+    "gpu_submission_for_authorized_isolated_qa": true,
+    "git_push": false,
+    "version_increment": false,
+    "tag": false
+  },
+  "evidence": [
+    {
+      "receipt_id": "memory-causal-review",
+      "sha256": "6f1049ec5b0a4386de771077389154f8d7397badcf4f08d4ec6ef02cd8ad3b5c",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "memory-causal-matrix-review",
+      "sha256": "cac4279c36aa278d0d290b6b3a5bafd8e4bda2cbf879fb5c310e2025e6b06202",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "original-sequence-completion-independent-review",
+      "sha256": "f3ceddd322491e574a9be4edda82e6ec6e83d1168e0741c4ff7eb72b7ac2b5b8",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "detection-visual-review",
+      "sha256": "65ecf5129a6860e29b2f6ac832fee30b99c9331f0c8f02f12b2adad79d714505",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "face-eye-positive-visual-review",
+      "sha256": "d80795bc9396f10e61be0b51c23dd7629b09800230325ece3997b0e517fee0b4",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "spatial-corrected-visual-review",
+      "sha256": "c7c522ee91f31049fecc72cd1227773ccba6370bd025762e484d9fd7671f7d51",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "region-native-export-review",
+      "sha256": "0481b0db806f07468e2baeec4a298a9281fa528cca61617eef5a82ba88e46a8f",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "region-native-export-fast-review",
+      "sha256": "1d6286f2ce7341c1eaf943f4158b972e55507d6c69dedaef3a8ffc6e1e5cbe26",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "region-runtime-review",
+      "sha256": "31f13d518937d879924c65cbc2274d30b680cec7b7f29dc5e95c298583954d54",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "manual-mask-editor-live-review",
+      "sha256": "a57f04f62749a9965fd785db9e18603aca8fcfd443cee6660f7e298c48b26ad0",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "detection-missing-media-ui-contract",
+      "sha256": "5d7d81462e64c43a081da0f646442d06c41f2fd227a72107f219bdc0838b7939",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "final-preservation-review",
+      "sha256": "cca996da091b36f0c70290b4d9ec19de5589ac3f8e2401cede4e8dce9aad96e9",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "formal-ui-cleanup-review",
+      "sha256": "b9e01fb104e37586dd681be07c9649cb2cd948fa8fe9a940bf9c24d8cf4410a2",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "after-guard-raw",
+      "sha256": "c846b08dd0203e7c5064fe8ea78ce7724cd065db4380e6b5f9213ab63a1c994e",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "approved-observed-state-change",
+      "sha256": "43f9838797732a5f4e1325f752a6d2f01d800b1cb8beeff9735b8c60452fe744",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "after-guard-final",
+      "sha256": "fabb7595f1d35efc44296613bc002492ab5d256d76e584236e3c49e3eeb03965",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "qa-archive-receipt",
+      "sha256": "8ca3a111e53b909c3f6ff35bfa8a2dfecd64fe750560cce9b5671f2cd0279ea8",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "old-black-post-archive-preservation",
+      "sha256": "645a8cc5318c2490ac365319e7d6bddb190574f2efb5d263258643427cabf3cf",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "browser-cleanup",
+      "sha256": "413e172ecda17624fec58ce58aaf041cab05ec21cf0accc2dcd2a796bd6f0843",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    },
+    {
+      "receipt_id": "formal-ui-port-migration-supplement",
+      "sha256": "008149d485c75c8532b699bf79e3adddfec2907a30ac93b8f71d684ca35029fd",
+      "storage": "external-private-evidence",
+      "payload_in_git": false
+    }
+  ],
+  "public_payload_boundary": "Only reviewed conclusions and evidence IDs/hashes; no images, weights, database binaries, credentials or private configuration payloads."
+}

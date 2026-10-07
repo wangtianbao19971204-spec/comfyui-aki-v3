@@ -180,7 +180,8 @@
         "docs/technical/archive/civitai_workflow_study/逐工作流明细.json",
         "docs/receipts/browser_workflow_retirement_20261006.json",
         "docs/receipts/browser_live_deployment_20261006.json",
-        "docs/receipts/final_workflow_acceptance_20261007.json"
+        "docs/receipts/final_workflow_acceptance_20261007.json",
+        "docs/receipts/workflow_failure_verification_20261007.json"
       ],
       "acceptance": "historical",
       "watch": [
