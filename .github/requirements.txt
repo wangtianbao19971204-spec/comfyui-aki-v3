@@ -1,0 +1,2 @@
+# Maintenance test image fixtures; runtime dependencies are managed separately.
+Pillow==11.3.0

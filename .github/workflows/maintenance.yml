@@ -17,6 +17,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install maintenance test dependencies
+        run: python -m pip install -r .github/requirements.txt
       - name: Maintenance unit tests
         run: python -X utf8 -B -m unittest discover -s tests -v
       - name: Snapshot integrity

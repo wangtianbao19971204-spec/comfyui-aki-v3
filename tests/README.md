@@ -3,11 +3,13 @@
 本目录验证主仓维护工具。先按[开始使用](../docs/GETTING_STARTED.md)选择 `$comfyPython`，在主仓根目录执行：
 
 ```powershell
+# 新的维护测试环境先安装 PNG 样例所需的 Pillow：
+& $comfyPython -m pip install -r .github/requirements.txt
 & $comfyPython -X utf8 -B -m unittest discover -s tests -v
 & $comfyPython -X utf8 -B -m unittest discover -s tests -p test_snapshot.py -v
 ```
 
-第二条只运行一个模块；按变更选相关测试，完整提交／上传门禁见[日常维护](../docs/MAINTENANCE.md)。
+最后一条只运行一个模块；按变更选相关测试，完整提交／上传门禁见[日常维护](../docs/MAINTENANCE.md)。
 
 ## 维护状态
 

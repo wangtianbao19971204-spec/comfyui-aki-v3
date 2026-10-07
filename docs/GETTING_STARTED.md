@@ -52,6 +52,8 @@ git config --local user.email '<你的提交邮箱>'
 
 ## 3. 检查仓库，再恢复运行环境
 
+下面的只读仓库检查不需要 Pillow。要运行完整维护测试，在独立的维护测试环境先执行 `& $comfyPython -m pip install -r .github/requirements.txt`；清单仅为隔离图片样例安装 Pillow。测试命令见[测试入口](../tests/README.md)，不要求装 Torch、下载模型或启动服务。
+
 ```powershell
 & $comfyPython -X utf8 -B scripts\maintain.py status
 if ($LASTEXITCODE -ne 0) { throw 'Status check failed' }
@@ -105,6 +107,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Branches diverged or update failed; review bot
 另一台机器可在自己的主仓修改源码、`seal` 并用显式 `deploy-plan --runtime <实际运行根>` 比较；不同运行根的现场 capture/adopt 目前没有自动迁移入口。离线物化、源码维护、线上部署与完整环境迁移分别验收，详见[工作区边界](WORKSPACE.md)。
 
 ## 更新记录
+
+- 2026-10-07：实际 GitHub CI 暴露隔离图片测试缺少 Pillow；增加明确的最小测试依赖及新环境安装步骤。只读主仓检查的环境要求保持原样；完整 CI 复验与合并结果存仓外收据。
 
 - 2026-10-07：在用户核对内容后按同名分支提交核验本地/线上一致；补实例组合和私有状态示例入口，刷新候选克隆空间估算。首次 main 基线与待合并分支分别交付，上传/PR/实际网络克隆的最终结果另存仓外收据，不自动合并或部署。
 
