@@ -37,6 +37,67 @@ export function commitWidget(node, widget, value) {
     return sharedCommitWidget(app, node, widget, value);
 }
 
+const commonDimensions = [512, 640, 768, 832, 896, 960, 1024, 1152, 1216, 1280, 1344, 1536, 2048];
+export function dimensionValueAllowed(value, widgets) {
+    return Number.isSafeInteger(value) && value > 0 && widgets.filter(Boolean).every(widget => {
+        const {min, max, step2} = widget.options || {};
+        // step is LiteGraph's legacy display scale; step2 is the actual pixel step.
+        const step = Number.isFinite(step2) && step2 > 0 ? step2 : 1;
+        return (!Number.isFinite(min) || value >= min) && (!Number.isFinite(max) || value <= max) &&
+            Number.isInteger((value - (Number.isFinite(min) ? min : 0)) / step);
+    });
+}
+export function dimensionChoices(widgets) {
+    return commonDimensions.filter(value => dimensionValueAllowed(value, widgets));
+}
+export function dimensionSources(size) {
+    if (!size || app.graph?.getNodeById(size.id) !== size || (size.mode != null && size.mode !== 0)) return null;
+    const sources = ['width', 'height'].map(name => widgetSource(size, name));
+    const branch = app.graph.extra?.uap_workbench?.branches?.find(item => item.id === app.graph.extra.uap_workbench.activeBranch);
+    if (app.graph.extra?.uap_workbench && (!branch || !branch.nodeIds.some(id => String(id) === String(size.id)))) return null;
+    if (sources.some((source, index) => !source || app.graph.getNodeById(source.node.id) !== source.node ||
+        !source.node.widgets?.includes(source.widget) || typeof source.widget.value !== 'number' ||
+        (branch && !branch.nodeIds.some(id => String(id) === String(source.node.id))) ||
+        (branch && app.graph.extra.uap_workbench.branches.some(item => item !== branch && item.nodeIds?.some(id => String(id) === String(source.node.id)))) ||
+        (source.node.mode != null && source.node.mode !== 0) || source.node.inputs?.some(input =>
+            (input.widget?.name || input.name) === source.widget.name && input.link != null) ||
+        (source.node !== size && Object.values(app.graph.links || {}).some(link => link && link.origin_id === source.node.id &&
+            (link.target_id !== size.id || (size.inputs?.[link.target_slot]?.widget?.name || size.inputs?.[link.target_slot]?.name) !== ['width', 'height'][index]))))) return null;
+    return sources[0].widget === sources[1].widget ? null : sources;
+}
+function sameDimensionSources(size, expected) {
+    const current = dimensionSources(size);
+    return current && expected && current.every((source, index) => source.node === expected[index].node && source.widget === expected[index].widget);
+}
+export function commitDimensions(size, width, height, expected = dimensionSources(size)) {
+    const valuesAllowed = () => [width, height].every((value, index) =>
+        dimensionValueAllowed(value, [expected[index].widget, size.widgets?.find(widget => widget.name === ['width', 'height'][index])]));
+    if (!sameDimensionSources(size, expected) || !valuesAllowed()) return false;
+    if (expected.every((source, index) => source.widget.value === [width, height][index])) return true;
+    const graph = app.graph;
+    const before = expected.map(source => source.widget.value);
+    // ComfyUI's change tracker groups nested changes into one undo entry.
+    graph.beforeChange?.();
+    try {
+        expected.forEach((source, index) => {
+            if (!sameDimensionSources(size, expected) || !valuesAllowed() || commitWidget(source.node, source.widget, [width, height][index]) === false) throw new Error('Dimension source changed');
+        });
+        if (!sameDimensionSources(size, expected) || !valuesAllowed() || expected.some((source, index) => source.widget.value !== [width, height][index])) throw new Error('Dimension callback changed the requested pair');
+    } catch {
+        // Restore the pair if a native callback fails. Arbitrary third-party side effects
+        // remain the callback owner's responsibility; keep one undo boundary either way.
+        expected.forEach((source, index) => {
+            try {if (commitWidget(source.node, source.widget, before[index]) === false) source.widget.value = before[index];}
+            catch {source.widget.value = before[index];}
+        });
+        return false;
+    } finally {
+        graph.afterChange?.();
+        graph.setDirtyCanvas?.(true, true);
+    }
+    return true;
+}
+
 export function resolveLocalLoraName(input, files, format = "legacy") {
     const stem = value => value.replace(/\\/g, "/").replace(/\.[^.\/]+$/, "");
     const basename = value => stem(value).split("/").at(-1);
@@ -242,7 +303,7 @@ export function createDailyControls(jump) {
         if (node) el("button", "原节点 ↗", heading, { className: "jump", type: "button", onclick: () => openNode(node) });
         return box;
     }
-    function bindField(parent, node, name, label, wide = false) {
+    function bindField(parent, node, name, label, wide = false, validate = () => true) {
         const source = widgetSource(node, name);
         const modelField=/^(unet_name|ckpt_name|clip_name|vae_name|model_name|lora_name)$/.test(name);
         if (!source) {
@@ -250,7 +311,7 @@ export function createDailyControls(jump) {
             return;
         }
         const { widget } = source;
-        const row = el("label", "", parent, { className: `field${wide ? " wide" : ""}` });
+        const row = el(/^(width|height)$/.test(name) ? 'div' : 'label', "", parent, { className: `field${wide ? " wide" : ""}` });
         el("span", label, row);
         const values = typeof widget.options?.values === "function" ? widget.options.values() : widget.options?.values;
         const control = el(Array.isArray(values)||modelField ? "select" : "input", "", row);
@@ -288,6 +349,7 @@ export function createDailyControls(jump) {
         };
         syncModel();
         const apply = () => {
+            if (!validate()) return false;
             const value = control.type === "number" ? Number(control.value) : control.value;
             if(modelField&&modelOptionIssue(name,value,currentBranch,app.graph.extra?.uap_model_contracts))return false;
             if (control.type === "number" && (control.value === "" || !control.checkValidity() || !Number.isFinite(value))) return false;
@@ -551,7 +613,60 @@ export function createDailyControls(jump) {
         params.dataset.deskArea='parameters';
         params.classList.add("desk-parameters");
         const grid = el("div", "", params, { className: "fields" });
-        for (const [node, name, label, wide] of [[size,"width","宽度"],[size,"height","高度"],[size,"batch_size","批量"],[seed || sampler,"seed","种子",true],[seed || sampler,"control_after_generate","种子模式"],[sampler,"steps","步数"],[sampler,"cfg","CFG"],[sampler,"sampler_name","采样器",true],[sampler,"scheduler","调度器"],[sampler,"denoise","降噪"]]) bindField(grid,node,name,label,wide);
+        const dimensions = dimensionSources(size);
+        let setDimensions;
+        if (size) {
+            const pair = el('div', '', grid, {className: 'desk-size-pair'});
+            const status = el('small', '', pair, {className: 'desk-size-status', hidden: true});
+            status.setAttribute('role', 'status');
+            const current = () => isCurrent() && app.graph.extra?.uap_workbench?.activeBranch === branch.id && sameDimensionSources(size, dimensions);
+            setDimensions = (width, height) => {
+                const changed = current() && commitDimensions(size, width, height, dimensions);
+                status.textContent = changed ? '' : '尺寸来源或可用范围已变化，请刷新控制台后重试。';
+                status.hidden = !!changed;
+                sync.forEach(fn => fn());
+            };
+            for (const [index, name, label] of [[0, 'width', '宽度'], [1, 'height', '高度']]) {
+                if (index === 1) {
+                    const swap = el('button', '⇄', pair, {type: 'button', className: 'desk-size-swap', title: '互换宽度与高度', onclick: () => {
+                        if (dimensions) setDimensions(dimensions[1].widget.value, dimensions[0].widget.value);
+                    }});
+                    swap.setAttribute('aria-label', '互换宽度与高度');
+                    sync.push(() => {swap.disabled = !current();});
+                }
+                const source = widgetSource(size, name);
+                const widgets = [source?.widget, size.widgets?.find(widget => widget.name === name)];
+                const control = bindField(pair, size, name, label, false, () => current() && dimensionValueAllowed(Number(control.value), widgets));
+                if (!control) {const row = el('label', '', pair, {className: 'field'});el('span', label, row);el('small', '由连线控制，请从原节点调整。', row);continue;}
+                if (control.type !== 'number') continue;
+                const heading = control.parentElement.querySelector('span');
+                heading.classList.add('desk-size-label');
+                const list = el('select', '', heading, {className: 'desk-size-choices', title: `${label}常用尺寸（像素）`});
+                list.setAttribute('aria-label', `${label}常用尺寸`);
+                list.onchange = () => {
+                    if (list.value && current()) {control.value = list.value;control.onchange();}
+                    list.value = '';
+                };
+                control.title = '可手动输入，或选择常用尺寸（像素）';
+                const refreshChoices = () => {
+                    control.disabled = list.disabled = !current();
+                    const options = dimensionChoices(widgets);
+                    if (list.dataset.values !== options.join(',')) {
+                        list.replaceChildren();el('option', '常用', list, {value: ''});
+                        options.forEach(value => el('option', `${value} px`, list, {value: String(value)}));
+                        list.dataset.values = options.join(',');
+                    }
+                    const bounds = source.widget.options || {};
+                    control.min = Number.isFinite(bounds.min) ? String(bounds.min) : '';
+                    control.max = Number.isFinite(bounds.max) ? String(bounds.max) : '';
+                    control.step = Number.isFinite(bounds.step2) && bounds.step2 > 0 ? String(bounds.step2) : '1';
+                };
+                refreshChoices();sync.push(refreshChoices);
+            }
+            // Keep the status below both inputs without interrupting their keyboard order.
+            pair.append(status);
+        }
+        for (const [node, name, label, wide] of [[size,"batch_size","批量"],[seed || sampler,"seed","种子",true],[seed || sampler,"control_after_generate","种子模式"],[sampler,"steps","步数"],[sampler,"cfg","CFG"],[sampler,"sampler_name","采样器",true],[sampler,"scheduler","调度器"],[sampler,"denoise","降噪"]]) bindField(grid,node,name,label,wide);
         if (sampler && !widgetSource(sampler, "denoise")) {
             for (const node of nodes.filter(n => n.type === "PrimitiveFloat" && /denoise/i.test(n.title))) {
                 const label = /文生图/.test(node.title) ? "文生降噪" : /遮罩/.test(node.title) ? "遮罩降噪" : "图生降噪";
@@ -560,7 +675,7 @@ export function createDailyControls(jump) {
         }
         if (size) {
             const presets = el("div", "", params.querySelector("h3"), { className: "presets" });
-            [["方图",1024,1024],["竖图",832,1216],["横图",1216,832]].forEach(([label,w,h]) => el("button",label,presets,{type:"button",title:`${w} × ${h}`,onclick:()=>{for(const [name,value] of [["width",w],["height",h]]){const source=widgetSource(size,name);if(source)commitWidget(source.node,source.widget,value);}sync.forEach(fn=>fn());}}));
+            [["方图",1024,1024],["竖图",832,1216],["横图",1216,832]].forEach(([label,w,h]) => el("button",label,presets,{type:"button",title:`${w} × ${h}`,onclick:()=>setDimensions(w,h)}));
         }
         if(!grid.children.length)params.remove();
         if(!positiveTextArea&&!negativeTextArea)textBox.remove();
