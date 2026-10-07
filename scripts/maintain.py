@@ -1,4 +1,7 @@
-"""Small daily entry point. No commit, deploy, backup, deletion or network calls."""
+"""日常维护入口：查看仓库状态、主线历史、暂存检查和备份规则。
+
+只读 Git 与本地回执，不自动提交、部署或执行备份。详细步骤见 docs/MAINTENANCE.md。
+"""
 from __future__ import annotations
 
 import argparse

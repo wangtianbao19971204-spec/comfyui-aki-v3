@@ -9,7 +9,18 @@
     "README.md",
     "docs/GETTING_STARTED.md",
     "docs/MAINTENANCE.md",
-    "docs/RESTORE.md"
+    "docs/RESTORE.md",
+    "docs/README.md",
+    "docs/PROJECT_MAP.md",
+    "docs/SNAPSHOT.md",
+    "docs/DOCUMENTATION.md",
+    "scripts/README.md",
+    "tests/README.md",
+    "examples/README.md",
+    "governance/README.md",
+    ".githooks/README.md",
+    ".github/README.md",
+    "database/README.md"
   ],
   "features": [
     {

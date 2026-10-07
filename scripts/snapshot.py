@@ -1,4 +1,8 @@
-"""Local-only, read-only runtime capture; never deploys into the live installation."""
+"""捕获、验证和离线还原主仓管理的源码与资料。
+
+capture 只读运行区并写入新候选；materialize 只向新目录还原，不部署或启动服务。
+详见 docs/SNAPSHOT.md 与 docs/RESTORE.md。
+"""
 from __future__ import annotations
 
 import argparse

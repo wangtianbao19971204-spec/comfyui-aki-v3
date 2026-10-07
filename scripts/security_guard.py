@@ -1,7 +1,7 @@
-"""Offline Git-object credential and payload gate. Never prints matched values.
+"""离线检查暂存区与可达 Git 历史中的凭据、路径和禁入载荷。
 
-Scan the staged index before commit, and every reachable blob before publication.
-Git history and gzip payloads are read without checkout or network access.
+提交检查真实 index，上传检查完整历史；只报告规则与安全标识，不输出命中原值。
+不检出或联网，支持的压缩载荷也参加检查。详细边界见 docs/SECURITY.md。
 """
 from __future__ import annotations
 

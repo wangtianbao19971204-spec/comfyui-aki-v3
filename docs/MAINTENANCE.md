@@ -28,6 +28,8 @@
 5. 创建 PR：目标为 `main`，说明具体问题、变化、实际测试、未测限制及需要的回滚/部署范围；报告并附上 PR 链接。GitHub 的 `Maintenance integrity` CI 通过后仍由用户决定合并；助手不自行合并、不启用自动合并。默认由用户在 GitHub 手动合并；用户另行明确指定某个 PR 的合并操作时，按该次授权处理。
 6. 合并后：在干净本地 `main` 再 `fetch`/`merge --ff-only origin/main`，核对合并结果并保留必要分支/历史。合并不自动加维护版本、打标签、公开仓库或部署运行区；生产切换仍需明确范围、保护与现场验收。
 
+2026-10-07 用户明确委托助手合并本轮 [PR #1](https://github.com/wangtianbao19971204-spec/comfyui-aki-v3/pull/1)并统一主线；本轮按该次授权执行。后续 PR 仍沿用上述用户允许合并流程。
+
 本地 hooks 现有功能是技术说明、完整性与凭证门禁，**不是远端主线保护**。首次建立远端 `main` 后，另核 GitHub 权限/套餐并配置、验证要求 PR 与必要 CI 的保护规则；尚未实际配置前不能宣称服务器已防直推。私有仓的 protected branches/rulesets 通常需要 Pro/Team 等支持套餐。使用用户同一账号创建的 PR 不能由作者批准自己的 review，单人流程不设置会阻塞自己的“必须 1 个 approving review”；由用户实际决定 Merge。官方：[分支保护](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)、[PR review](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/reviewing-proposed-changes-in-a-pull-request)。
 
 ### 两端一致性的核验

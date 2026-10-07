@@ -1,4 +1,7 @@
-"""Develop in this Git checkout; make explicit, non-deployed source revisions."""
+"""维护主仓源码清单，并比较它与指定运行目录的差异。
+
+seal 更新源码清单并标记未部署；deploy-plan 只读。使用方法见 docs/MAINTENANCE.md。
+"""
 from __future__ import annotations
 
 import argparse

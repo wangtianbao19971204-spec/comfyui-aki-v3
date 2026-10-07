@@ -1,4 +1,7 @@
-"""Validate the portable feature handoff index; never touch deployed files."""
+"""核对功能目录、说明链接与实现、测试、示例的对应关系。
+
+检查工作树或真实暂存区，不写入部署文件。规则见 docs/technical/README.md。
+"""
 from __future__ import annotations
 
 import argparse

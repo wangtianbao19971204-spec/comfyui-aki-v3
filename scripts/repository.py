@@ -1,4 +1,7 @@
-"""Maintain this local Git snapshot without touching the live runtime."""
+"""比较并接纳受审快照，创建可移交的离线 Git 包。
+
+只按明确子命令写入主仓或新输出目录，不修改运行区。步骤见 docs/MAINTENANCE.md。
+"""
 import argparse
 import hashlib
 import json
