@@ -247,7 +247,8 @@
         "docs/receipts/model_source_recount_20261007.json",
         "docs/receipts/model_checkpoint_cleanup_20261007.json",
         "docs/receipts/model_standardization_20261007.json",
-        "docs/receipts/final_workflow_acceptance_20261007.json"
+        "docs/receipts/final_workflow_acceptance_20261007.json",
+        "docs/receipts/lora_download_import_20261007.json"
       ],
       "acceptance": "checked-source",
       "watch": [
