@@ -6,7 +6,7 @@
 
 ## 1. 取得主仓
 
-主仓地址为 [comfyui-aki-v3](https://github.com/wangtianbao19971204-spec/comfyui-aki-v3)，当前私有，访问者需获仓库权限。首次访问时按 Git 的提示登录有权限的 GitHub 账号；出现 `Repository not found`／404 时先核对账号与权限，不把令牌写进 URL。默认拉取用户已接受的 `main`，开发分支另行选择。在准备保存项目的父目录执行，目标目录必须全新：
+主仓地址为 [comfyui-aki-v3](https://github.com/wangtianbao19971204-spec/comfyui-aki-v3)，当前公开，可匿名拉取，无需先登录 GitHub。出现 `Repository not found`／404 时先核对仓库地址与网络，不把令牌写进 URL；提交和推送仍需相应权限。默认拉取用户已接受的 `main`，开发分支另行选择。在准备保存项目的父目录执行，目标目录必须全新：
 
 ```powershell
 $comfyRepositoryUrl = 'https://github.com/wangtianbao19971204-spec/comfyui-aki-v3.git'
@@ -15,7 +15,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Clone failed; retain the partial directory for
 Set-Location -LiteralPath .\comfyui
 ```
 
-2026-10-07 已合并主线的独立网络克隆验收覆盖 10,283 个跟踪文件、1,742,547,424 字节（约 1.74 GB）；此前候选传输包约 675.51 MB，实际下载量受 Git 压缩和历史影响。建议克隆先留至少 4 GB 空间，还原运行树与外部模型／图片另算。Git 中没有模型或 LoRA 权重，后续新增内容也会改变体积。
+2026-10-07 完整性补齐后的主线 `d12056a6`，独立网络克隆验收覆盖 10,329 个跟踪文件、1,744,501,837 字节（约 1.74 GB）；后续文档更新会改变数量和体积。此前候选传输包约 675.51 MB，实际下载量受 Git 压缩和历史影响。建议克隆先留至少 4 GB 空间，还原运行树与外部模型／图片另算。Git 中没有模型或 LoRA 权重，范围见[公开访问记录](technical/changes/operations-source-of-truth/2026-10-07-public-access.md)。
 
 Windows 长路径选项须在第一次检出前传给 clone。别人的机器可以把这份克隆作为该机唯一开发来源；同一台机器的主仓仍只有一个。仅用于本机验收的副本放到仓外 validation，不在其中开发；下面采用独立对象复制：
 
@@ -111,6 +111,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Branches diverged or update failed; review bot
 另一台机器可在自己的主仓修改源码、`seal` 并用显式 `deploy-plan --runtime <实际运行根>` 比较；不同运行根的现场 capture/adopt 目前没有自动迁移入口。离线物化、源码维护、线上部署与完整环境迁移分别验收，详见[工作区边界](WORKSPACE.md)。
 
 ## 更新记录
+
+- 2026-10-07：GitHub 仓库已按用户明确指令公开，匿名 API 已确认；首次拉取移除私有仓权限和登录要求，更新补齐后主线的实际克隆范围。仅更新当前访问指引，私密配置和外部资源仍独立准备；见[公开访问记录](technical/changes/operations-source-of-truth/2026-10-07-public-access.md)。
 
 - 2026-10-07：按首次读者路径补项目用途入口、私有仓认证与明确 `main` 拉取，刷新已合并主线的网络克隆体积；区分取得 Git、文件完整、恢复运行目录及补齐外部资源，并明确维护测试须新建独立环境。仅更新指引，不执行资源安装或生产部署。
 

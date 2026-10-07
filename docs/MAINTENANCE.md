@@ -19,7 +19,7 @@
 
 ## GitHub 分支与用户合并流程
 
-目的地固定为 [comfyui-aki-v3](https://github.com/wangtianbao19971204-spec/comfyui-aki-v3)，当前私有。唯一开发来源仍是本地主仓；GitHub 保存受审查分支、PR 和用户接受的主线。
+目的地固定为 [comfyui-aki-v3](https://github.com/wangtianbao19971204-spec/comfyui-aki-v3)，当前公开，可匿名拉取；推送仍需相应权限。唯一开发来源仍是本地主仓；GitHub 保存受审查分支、PR 和用户接受的主线。2026-10-07 的公开操作依据本轮用户明确指令，授权声明与实际可见性见[公开访问记录](technical/changes/operations-source-of-truth/2026-10-07-public-access.md)。
 
 1. 首次上传：先核对内容、体积、资料/许可边界，再单独建立已审查的 `main` 基线及必要维护标签。2026-10-07 用户查看补齐后的上传预览后要求本地与线上一致，本次初始化使用已有 `main=bf6ac443cd8c7d1a87a5e12bb67142baf3dfeeb7`；补齐和实例组合说明上传 `fix/github-content-coverage-20261007`，以 PR 等待用户允许合并。精确推送 main、该分支和四个维护标签：`comfyui-v0.1.0`、`comfyui-v0.2.0`、`maintenance-v1-20261005`、`maintenance-public-v2-20261005`。不把功能分支直接初始化为 main，不镜像本机 legacy refs 或私有档案。上传是否成功以实际远端 refs 和仓外回执为准。
 2. 后续开发：先保留已有改动，在干净 `main` 按[后续更新](GETTING_STARTED.md)执行 `fetch`/`merge --ff-only`；再用 `git switch -c <本次工作分支>` 创建分支。通常使用 `fix/`、`feature/`、`docs/`，版本准备使用 `release/`。不在运行区、插件旧目录或另一份本机 clone 开发。
@@ -30,7 +30,7 @@
 
 2026-10-07 用户明确委托助手合并本轮 [PR #1](https://github.com/wangtianbao19971204-spec/comfyui-aki-v3/pull/1)并统一主线；本轮按该次授权执行。后续 PR 仍沿用上述用户允许合并流程。
 
-本地 hooks 现有功能是技术说明、完整性与凭证门禁，**不是远端主线保护**。首次建立远端 `main` 后，另核 GitHub 权限/套餐并配置、验证要求 PR 与必要 CI 的保护规则；尚未实际配置前不能宣称服务器已防直推。私有仓的 protected branches/rulesets 通常需要 Pro/Team 等支持套餐。使用用户同一账号创建的 PR 不能由作者批准自己的 review，单人流程不设置会阻塞自己的“必须 1 个 approving review”；由用户实际决定 Merge。官方：[分支保护](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)、[PR review](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/reviewing-proposed-changes-in-a-pull-request)。
+本地 hooks 现有功能是技术说明、完整性与凭证门禁，**不是远端主线保护**。另核 GitHub 当前可见性、权限/套餐并配置、验证要求 PR 与必要 CI 的保护规则；尚未实际配置前不能宣称服务器已防直推。使用用户同一账号创建的 PR 不能由作者批准自己的 review，单人流程不设置会阻塞自己的“必须 1 个 approving review”；由用户实际决定 Merge。官方：[分支保护](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)、[PR review](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/reviewing-proposed-changes-in-a-pull-request)。
 
 ### 两端一致性的核验
 
