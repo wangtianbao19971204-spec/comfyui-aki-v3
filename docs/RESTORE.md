@@ -1,49 +1,19 @@
 # 恢复与迁移
 
-首次克隆、他机 Python/hooks 设置与后续主仓更新见[开始使用](GETTING_STARTED.md)。本页负责已验收 bundle 和运行树恢复；文中的 `G:\` 是原机器示例，其他机器换成自己的全新目标路径。维护快照不能直接作为完整运行树启动。
+本页把已经取得的主仓还原成运行目录。先按[开始使用](GETTING_STARTED.md)拉取 GitHub 的 `main` 并检查文件，再按下面的步骤还原和补齐资源；收到离线包时，另看本页的 [Git bundle 恢复](#git-bundle-恢复)。
 
-## Git bundle 恢复
-
-仅使用随包交付回执确认通过的版本；包名、维护版本号、精确提交、manifest SHA、包 SHA 和隔离还原结果必须属于同一轮。当前交付目标为 `comfyui-v0.2.0-20261005.bundle`，对应 `comfyui-v0.2.0-20261005.delivery.json`；以该回执实际存在且 `pass: true` 为最终交付依据，文档中的目标名本身不是验收证明。后续发行沿用这一命名方式，替换为对应版本的实际文件名。
-
-`comfyui-public-v3-20261005.bundle` 只覆盖 `f1e61294` 历史检查点，不包含后续 Anima 补丁、技术补档、维护命令及支持文件补录。它和旧验证目录保持历史身份，不充当最新版；旧 `comfyui.bundle` 含历史凭证，只能私有归档，不能公开复用。
-
-本页 PowerShell 示例沿用[开始使用第 2 节](GETTING_STARTED.md)已选择并核验的 `$comfyPython` 完整解释器路径；先完成该项检查。收到 bundle 的父目录执行下面的克隆流程，进入仓根后执行维护工具。
-
-```powershell
-$comfyDelivery = Get-Content -LiteralPath .\comfyui-v0.2.0-20261005.delivery.json -Raw | ConvertFrom-Json
-if ($comfyDelivery.pass -ne $true) { throw 'Delivery is not accepted' }
-$comfyBundle = Join-Path (Get-Location) $comfyDelivery.bundle.filename
-if ((Get-FileHash -LiteralPath $comfyBundle -Algorithm SHA256).Hash.ToLowerInvariant() -ne $comfyDelivery.bundle.sha256) { throw 'Bundle SHA256 mismatch' }
-git clone -c core.longpaths=true -- $comfyBundle .\comfyui
-if ($LASTEXITCODE -ne 0) { throw 'Clone failed; retain the partial directory for inspection' }
-if ((git -C .\comfyui rev-parse HEAD).Trim() -ne $comfyDelivery.commit) { throw 'Restored commit differs from delivery receipt' }
-git -C .\comfyui fsck --full
-if ($LASTEXITCODE -ne 0) { throw 'Git integrity check failed' }
-Set-Location -LiteralPath .\comfyui
-& $comfyPython -X utf8 -B scripts\snapshot.py verify
-if ($LASTEXITCODE -ne 0) { throw 'Snapshot verification failed' }
-& $comfyPython -X utf8 -B scripts\security_guard.py --all-history
-if ($LASTEXITCODE -ne 0) { throw 'History security check failed' }
-git config --local core.hooksPath .githooks
-```
-
-克隆产生的 origin 只是本地 bundle 路径，不是在线远端。新克隆不继承原仓维护作者身份；提交前按开始使用配置自己的 repo-local user.name/user.email，不修改用户全局 Git 身份。
-
-随包回执与包一样保存在仓外，完整详细证据见其 `evidence_id`。回执必须由实际结束的门禁和还原生成；未完成的 `prepared` 元数据、单独的 tag 或旧还原回执都不能替代。文档、版本说明先冻结并提交，最终 SHA/提交/验收结果写在仓外，避免为了把“本包最终 SHA”塞进本包而出现自引用或打包后再次改源码。
-
-Windows 必须在初次检出前使用上面的 `-c core.longpaths=true`：整合插件目录较深，较长的父目录可能触发 `Filename too long`。该选项只设置新克隆仓库，不修改全局 Git 或系统注册表。已有仓库可用 `git config --local core.longpaths true`；失败的半成品克隆不要当作验收通过，也不要直接向生产恢复缺失文件。
+以下命令在克隆后的仓库根目录执行，沿用开始使用中已核验的 `$comfyPython` 完整解释器路径。运行目标必须是全新目录，例如仓库旁的 `..\comfyui-runtime`；含 `G:\` 的其他路径是原机器示例，换机器使用自己的路径。
 
 ## 只向全新目录物化
 
 ```powershell
-& $comfyPython -X utf8 -B scripts\snapshot.py materialize --dest G:\ComfyUI-local\validation\comfyui-restored-v0.2.0-new
+& $comfyPython -X utf8 -B scripts\snapshot.py materialize --dest '..\comfyui-runtime'
 if ($LASTEXITCODE -ne 0) { throw 'Materialization failed; retain evidence for inspection' }
 ```
 
 目标目录必须不存在。工具拒绝直接写回 manifest 原运行根、原 ComfyUI 树和 snapshot 内部。它不会启动服务、执行模型或覆盖现有文件。
 
-每轮使用全新目录，不重用上例中已经存在的目标。验收须从本轮 bundle 的新 clone 中执行，并核对还原回执的 manifest SHA 与随包回执一致；主仓本地文件校验通过不等于交付包已经可还原。
+每轮使用全新目录，不重用上例中已经存在的目标。从已校验的 GitHub 克隆或离线 bundle 克隆执行还原，保留实际提交与 `RESTORE_RECEIPT.json`；使用离线包时，还须核对还原回执的 manifest SHA 与随包回执一致。取得主仓和还原文件都不代表外部资源、运行依赖和启动验收已完成。
 
 - 普通源码/工作流：逐文件 SHA-256 一致。
 - 上游 `.gitattributes` 在 Git 内以 `.gitattributes.upstream` 保存原字节，物化时恢复原名称，避免嵌套换行规则改写快照。原 `.gitignore` 保留。
@@ -76,6 +46,40 @@ if ($LASTEXITCODE -ne 0) { throw 'Materialization failed; retain evidence for in
 - 其余 `pip install` 调用点（controlnet_aux、easy-use、Comfyroll、RMBG 提示文字）在节点执行或模型加载时才触发，或已被注释。
 
 已知缺口：`triton` 缺失（Windows 无官方轮子）使 RMBG 的 `SAM3Segment` 未注册，但 `vnccs-utils` 的 SAM3 节点正常，且当前 UAP 工作流只引用 RMBG/BiRefNet；Comfyroll 有 3 个节点在 `INPUT_TYPES` 阶段报错。冷缓存导入较慢（prompt-assistant 83 秒、统一包 129 秒，之后约 247 秒预热缓存）。这只是“能启动并注册节点”，不等于出图质量、GPU 推理或某个具体工作流通过。
+
+## Git bundle 恢复
+
+以下仅供收到离线交付包的使用者；从 GitHub 拉取主仓后，可直接使用上面的还原步骤。
+
+仅使用随包交付回执确认通过的版本；包名、维护版本号、精确提交、manifest SHA、包 SHA 和隔离还原结果必须属于同一轮。当前交付目标为 `comfyui-v0.2.0-20261005.bundle`，对应 `comfyui-v0.2.0-20261005.delivery.json`；以该回执实际存在且 `pass: true` 为最终交付依据，文档中的目标名本身不是验收证明。后续发行沿用这一命名方式，替换为对应版本的实际文件名。
+
+`comfyui-public-v3-20261005.bundle` 只覆盖 `f1e61294` 历史检查点，不包含后续 Anima 补丁、技术补档、维护命令及支持文件补录。它和旧验证目录保持历史身份，不充当最新版；旧 `comfyui.bundle` 含历史凭证，只能私有归档，不能公开复用。
+
+本页 PowerShell 示例沿用[开始使用第 2 节](GETTING_STARTED.md)已选择并核验的 `$comfyPython` 完整解释器路径；先完成该项检查。收到 bundle 的父目录执行下面的克隆流程，进入仓根后执行维护工具。
+
+```powershell
+$comfyDelivery = Get-Content -LiteralPath .\comfyui-v0.2.0-20261005.delivery.json -Raw | ConvertFrom-Json
+if ($comfyDelivery.pass -ne $true) { throw 'Delivery is not accepted' }
+$comfyBundle = Join-Path (Get-Location) $comfyDelivery.bundle.filename
+if ((Get-FileHash -LiteralPath $comfyBundle -Algorithm SHA256).Hash.ToLowerInvariant() -ne $comfyDelivery.bundle.sha256) { throw 'Bundle SHA256 mismatch' }
+git clone -c core.longpaths=true -- $comfyBundle .\comfyui
+if ($LASTEXITCODE -ne 0) { throw 'Clone failed; retain the partial directory for inspection' }
+if ((git -C .\comfyui rev-parse HEAD).Trim() -ne $comfyDelivery.commit) { throw 'Restored commit differs from delivery receipt' }
+git -C .\comfyui fsck --full
+if ($LASTEXITCODE -ne 0) { throw 'Git integrity check failed' }
+Set-Location -LiteralPath .\comfyui
+& $comfyPython -X utf8 -B scripts\snapshot.py verify
+if ($LASTEXITCODE -ne 0) { throw 'Snapshot verification failed' }
+& $comfyPython -X utf8 -B scripts\security_guard.py --all-history
+if ($LASTEXITCODE -ne 0) { throw 'History security check failed' }
+git config --local core.hooksPath .githooks
+```
+
+克隆产生的 origin 只是本地 bundle 路径，不是在线远端。新克隆不继承原仓维护作者身份；提交前按开始使用配置自己的 repo-local user.name/user.email，不修改用户全局 Git 身份。
+
+随包回执与包一样保存在仓外，完整详细证据见其 `evidence_id`。回执必须由实际结束的门禁和还原生成；未完成的 `prepared` 元数据、单独的 tag 或旧还原回执都不能替代。文档、版本说明先冻结并提交，最终 SHA/提交/验收结果写在仓外，避免为了把“本包最终 SHA”塞进本包而出现自引用或打包后再次改源码。
+
+Windows 必须在初次检出前使用上面的 `-c core.longpaths=true`：整合插件目录较深，较长的父目录可能触发 `Filename too long`。该选项只设置新克隆仓库，不修改全局 Git 或系统注册表。已有仓库可用 `git config --local core.longpaths true`；失败的半成品克隆不要当作验收通过，也不要直接向生产恢复缺失文件。
 
 ## 不是完整灾备镜像
 
