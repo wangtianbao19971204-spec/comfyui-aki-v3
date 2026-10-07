@@ -16,17 +16,17 @@
 
 ## 第一次怎么拉取
 
-准备 **Git for Windows** 和带 `sqlite3` 的 **Python 3.10+（建议 3.11 及以上）**。仓库当前私有，先取得访问权限，首次访问时按 Git 的提示登录有权限的 GitHub 账号。
+准备 **Git for Windows** 和带 `sqlite3` 的 **Python 3.10+（建议 3.11 及以上）**。仓库当前公开，可匿名拉取，无需先登录 GitHub；提交和推送仍需相应权限。
 
 在准备保存项目的父目录打开 PowerShell，路径尽量短，例如 `C:\c`。下面会新建 `comfyui` 目录，该目录须尚不存在：
 
 ```powershell
 git clone -c core.longpaths=true --branch main -- https://github.com/wangtianbao19971204-spec/comfyui-aki-v3.git .\comfyui
-if ($LASTEXITCODE -ne 0) { throw '拉取失败，请检查网络与仓库权限，并保留错误输出' }
+if ($LASTEXITCODE -ne 0) { throw '拉取失败，请检查网络与仓库地址，并保留错误输出' }
 Set-Location -LiteralPath .\comfyui
 ```
 
-首次拉取建议预留至少 **4 GB** 仓库空间；已有网络克隆验收的检出文件约 **1.74 GB**，模型、图片和运行依赖的空间另算。出现 `Repository not found`／404 时，先检查账号权限；不要把令牌写进下载地址。
+首次拉取建议预留至少 **4 GB** 仓库空间；已有网络克隆验收的检出文件约 **1.74 GB**，模型、图片和运行依赖的空间另算。出现 `Repository not found`／404 时，先检查仓库地址和网络；不要把令牌写进下载地址。
 
 拉取后，在仓库根目录选择本机 Python 并检查文件是否完整：
 
