@@ -38,7 +38,28 @@ KNOWN_PRIVATE_ENDS = (
     '/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/py/character_feature_swap/llm_settings.json',
     '/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/py/multi_character_editor/settings/editor_settings.json',
 )
-RUNTIME_PAYLOAD_PREFIXES = tuple('snapshot/runtime/comfyui/' + name + '/' for name in ('input', 'output', 'temp', 'models'))
+RUNTIME_PAYLOAD_PREFIXES = (tuple('snapshot/runtime/comfyui/' + name + '/'
+                                  for name in ('input', 'output', 'temp', 'models'))
+                            + ('snapshot/runtime/qwen21_lab/comfyui/models/',))
+# Exact upstream architecture text, not a model-directory or content exemption.
+MODEL_ARCHITECTURE_NAMES = (
+    'anything_v3.yaml', 'v1-inference.yaml', 'v1-inference_clip_skip_2.yaml',
+    'v1-inference_clip_skip_2_fp16.yaml', 'v1-inference_fp16.yaml',
+    'v1-inpainting-inference.yaml', 'v2-inference-v.yaml',
+    'v2-inference-v_fp32.yaml', 'v2-inference.yaml', 'v2-inference_fp32.yaml',
+    'v2-inpainting-inference.yaml',
+)
+MODEL_ARCHITECTURE_SOURCES = frozenset(
+    prefix + '/models/configs/' + name
+    for prefix in ('ComfyUI', 'qwen21_lab/ComfyUI')
+    for name in MODEL_ARCHITECTURE_NAMES
+)
+MODEL_ARCHITECTURE_PAYLOAD_PATHS = frozenset(
+    'snapshot/runtime/' + source for source in MODEL_ARCHITECTURE_SOURCES
+)
+EXACT_SOURCE_SUPPORT_FILES = MODEL_ARCHITECTURE_SOURCES | {
+    'anima_lora_forge/vendor/sd-trainer/SD-Trainer/config/sample_prompts.txt',
+}
 UNSUPPORTED_ARCHIVE_SUFFIXES = ('.bz2', '.bzip2', '.xz', '.zst', '.zstd', '.7z', '.rar', '.tar', '.lz4', '.lzma', '.z', '.tbz', '.tbz2', '.txz')
 
 # These exact bytes were manually reviewed as deliberately synthetic SSRF tests.
@@ -570,7 +591,10 @@ def blocked_path(path):
     p = PurePosixPath(path)
     lower = path.lower()
     rules = []
-    if lower.startswith(RUNTIME_PAYLOAD_PREFIXES):
+    # Normalize only to detect forbidden payload aliases; permission always
+    # requires the original, exact canonical spelling.
+    payload_lower = PurePosixPath(path.replace('\\', '/')).as_posix().lstrip('/').lower()
+    if payload_lower.startswith(RUNTIME_PAYLOAD_PREFIXES) and path not in MODEL_ARCHITECTURE_PAYLOAD_PATHS:
         rules.append('external_runtime_asset_payload')
     if '/user_data/prompt_selector/preview/' in lower or '/user_data/prompt_selector/preview_thumbnails/' in lower:
         rules.append('external_library_preview_payload')

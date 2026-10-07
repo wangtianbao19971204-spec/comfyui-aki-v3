@@ -22,7 +22,7 @@ import tempfile
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
-from security_guard import blocked_path
+from security_guard import EXACT_SOURCE_SUPPORT_FILES, blocked_path
 from library_sql import ITERDUMP, GALLERY_FTS5, FORMATS, iter_sql, table_counts, restore_sql, summary as sql_summary
 
 REPO = Path(__file__).resolve().parents[1]
@@ -34,6 +34,17 @@ RANDOM_TEMPLATES = tuple(WB + '/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelec
                          for name in ('20260606_203538.json', '20260606_205040.json'))
 LEGACY_SELECTOR_FILES = ('ComfyUI/custom_nodes/nsfwprompt/PromptSelector_user_logic_history_extra_sorted.json',
                          'ComfyUI/custom_nodes/nsfwprompt/promptselector_edit_log.jsonl')
+# Exact reviewed mutable prompt-assistant documents; authentication neighbors
+# and other user directories are never included by directory-wide discovery.
+PROMPT_ASSISTANT_ROOT = 'ComfyUI/user/default/prompt-assistant'
+PROMPT_ASSISTANT_TEXT_FILES = (
+    'rules/system_prompts.json', 'rules/kontext_presets.json',
+    'tags/默认标签.csv', 'config/active_prompts.json', 'config/tags_user.json',
+)
+PROMPT_ASSISTANT_SOURCE_KEYS = frozenset(
+    (PROMPT_ASSISTANT_ROOT + '/' + relative).casefold()
+    for relative in PROMPT_ASSISTANT_TEXT_FILES
+)
 WEIGHTS = {'.safetensors', '.ckpt', '.pt', '.pth', '.onnx', '.gguf', '.bin', '.engine'}
 TEXT = {'.py', '.pyi', '.mako', '.js', '.mjs', '.cjs', '.ts', '.tsx', '.mts', '.cts', '.patch', '.vue', '.svelte', '.css', '.scss', '.sass', '.less', '.html', '.json', '.jsonl', '.yaml', '.yml', '.toml', '.ini', '.cfg', '.md', '.rst', '.txt', '.csv', '.tsv', '.sql', '.xml', '.sh', '.ps1', '.psm1', '.bat', '.cmd', '.example', '.lock', '.map', '.in', '.c', '.cc', '.cpp', '.h', '.hpp', '.cu', '.cuh', '.glsl', '.frag', '.vert'}
 ASSETS = {'.png', '.jpg', '.jpeg', '.webp', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.otf', '.mp3', '.webmanifest', '.gz'}
@@ -83,7 +94,8 @@ def supported_source_payload(relative):
     path = Path(relative)
     return (path.suffix.lower() in TEXT | ASSETS or path.name in SOURCE_SPECIAL_NAMES
             or source_license_name(path.name) or relative in REVIEWED_SUPPORT_FILES
-            or relative in TOKENIZER_SOURCE_FILES or relative in reviewed_plugin_sources())
+            or relative in TOKENIZER_SOURCE_FILES or relative in EXACT_SOURCE_SUPPORT_FILES
+            or relative in reviewed_plugin_sources())
 
 
 def reviewed_plugin_sources():
@@ -147,6 +159,29 @@ def unlinked_source(root, relative):
         path = path / part
         if is_link(path):
             raise ValueError('Linked runtime source is not captured: ' + relative)
+    return safe_path(root, relative)
+
+
+def exact_support_source(root, relative):
+    """Discover reviewed support without accepting filesystem spelling aliases."""
+    if relative not in EXACT_SOURCE_SUPPORT_FILES:
+        raise ValueError('Unreviewed exact support source')
+    path = root
+    for part in portable_parts(relative):
+        if not path.is_dir():
+            return None
+        names = {entry.name for entry in path.iterdir()}
+        if part not in names:
+            if any(name.casefold() == part.casefold() for name in names):
+                raise ValueError('Aliased reviewed support source: ' + relative)
+            return None
+        path = path / part
+        if is_link(path):
+            raise ValueError('Linked reviewed support source: ' + relative)
+    if not path.is_file():
+        return None
+    if path.stat().st_nlink != 1:
+        raise ValueError('Hard-linked reviewed support source: ' + relative)
     return safe_path(root, relative)
 
 
@@ -306,12 +341,25 @@ def health():
     return {'queue': {'running': 0, 'pending': 0}, 'listeners': [{'pid': pid, 'created': psutil.Process(pid).create_time()} for pid in listeners], 'modules': status['modules']}
 
 
+def prompt_assistant_text_exports(root):
+    """Return only present reviewed documents; never recreate deleted rules."""
+    exports = []
+    for relative in PROMPT_ASSISTANT_TEXT_FILES:
+        source = unlinked_source(root, PROMPT_ASSISTANT_ROOT + '/' + relative)
+        if not source.exists():
+            continue
+        if not source.is_file() or source.stat().st_nlink != 1:
+            raise ValueError('Prompt-assistant document must be an unlinked regular file: ' + relative)
+        exports.append((source, 'library/prompt_assistant/' + relative))
+    return exports
+
+
 def selected_sources(root, registered_manifest=None):
     selected = {}
     omitted = []
     def offer(file):
         rel = file.relative_to(root).as_posix()
-        if rel in LEGACY_SELECTOR_FILES:
+        if rel in LEGACY_SELECTOR_FILES or rel.casefold() in PROMPT_ASSISTANT_SOURCE_KEYS:
             return  # Reviewed mutable text has one owner: reversible library exports.
         name = file.name.lower()
         if private_config(rel) or blocked_path('snapshot/runtime/' + rel):
@@ -336,6 +384,12 @@ def selected_sources(root, registered_manifest=None):
         if not plugin.is_dir():
             raise FileNotFoundError(plugin)
         for file in walk(plugin):
+            offer(file)
+    # Architecture files live inside otherwise external model directories.
+    # Discover only exact reviewed support even before a manifest registers it.
+    for relative in sorted(EXACT_SOURCE_SUPPORT_FILES):
+        file = exact_support_source(root, relative)
+        if file is not None:
             offer(file)
     # Previously omitted shipped support for installed non-production plugins
     # and the top-level websocket node uses exact reviewed paths, not a blanket
@@ -439,6 +493,7 @@ def capture(root, out, offline=False):
                     for name in ['data.json', 'default.json', 'semantic_projection.json', 'shared_pairs.json', 'shared_sync_log.json', 'STORE_OWNER.txt']]
     text_exports.extend((root / relative, 'library/random_templates/' + Path(relative).name) for relative in RANDOM_TEMPLATES)
     text_exports.extend((root / relative, 'library/legacy_selector/' + Path(relative).name) for relative in LEGACY_SELECTOR_FILES)
+    text_exports.extend(prompt_assistant_text_exports(root))
     unreviewed_templates = {file.relative_to(root).as_posix() for file in (library.parent / 'random_tag').glob('*.json')} - set(RANDOM_TEMPLATES)
     if unreviewed_templates:
         raise ValueError('Review new random templates before capture: ' + ', '.join(sorted(unreviewed_templates)))

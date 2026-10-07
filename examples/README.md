@@ -10,6 +10,7 @@
 | 网页提示词 | [browser-import/payloads.example.json](browser-import/payloads.example.json) | 理解五站桥接的数据格式 |
 | 模型与图片 | [external-assets/README.md](external-assets/README.md) | 来源、现行路径、图片绑定和标注样例 |
 | 私有状态 | [private-state/README.md](private-state/README.md) | 外部计划、实例登记和恢复边界 |
+| 插件状态 | [plugin-settings/README.md](plugin-settings/README.md) | 训练器 GUI 的公开空状态格式 |
 
 ## 编辑边界
 

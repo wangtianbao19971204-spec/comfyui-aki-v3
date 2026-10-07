@@ -2,6 +2,8 @@
 
 `snapshot/` 保存主仓实际管理的内容。运行源码、真实资料、资源登记和历史验收分别存放，按 [manifest.json](../snapshot/manifest.json) 核对身份与哈希。
 
+这是 Git 的源码与文字检查点，不是整机镜像。运行区图库、模型／LoRA、Python/CUDA、最新在线 DB/WAL、鉴权及历史档案按[外置组合](../examples/private-state/README.md)另行准备；模型和环境外置主要受资源体积与安装需求约束，不能一概叫隐私。
+
 ## 四个子目录
 
 | 目录 | 保存什么 | 怎么读和维护 |
@@ -28,6 +30,8 @@
 
 同名旧插件和历史脚本的存在不代表当前启用。找唯一实现时沿[机器目录](technical/catalog.json)的 `implementation` 与 `watch` 定位。
 
+本轮补入 22 份模型架构 YAML、289 字节训练器采样示例和一份 WanVideo 的 Qwen 架构配置；权重仍外置。[补齐说明](technical/changes/operations-source-of-truth/2026-10-07-completeness-recheck.md)记录范围，不代表已收录权重或已部署生产。
+
 ## library：真实资料与分片
 
 | 路径 | 内容 |
@@ -36,6 +40,7 @@
 | `sql/` | 三个主库及 Gallery 辅助词库的完整逻辑 SQL 检查点 |
 | `random_templates/` | 经审查的随机提示词模板 |
 | `legacy_selector/` | 旧独立选择器正文和编辑历史，保留独立身份 |
+| `prompt_assistant/` | 固定五份规则／预设／标签／选用状态的原字节 chunks，共 214,283 字节；不包含鉴权 `config/config.json`，缺失不重建 |
 
 这些资料是实际内容，不是虚构示例。不要手工拼改 `.part`，也不要把旧检查点直接覆盖在线库。Gallery 的恢复另有明确 FTS5 重建规则；详见[资料库技术入口](technical/library/README.md)和[恢复指南](RESTORE.md)。
 

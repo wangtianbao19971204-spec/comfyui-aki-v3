@@ -3,6 +3,78 @@
   "role": "historical_reference_not_deployable",
   "files": [
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/.agents/skills/lora-manager-runtime-context/SKILL.md",
+      "path": "docs/technical/archive/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/.agents/skills/lora-manager-runtime-context/SKILL.md",
+      "sha256": "60ba43956a5f2271e11f4129bfaee6df11d6a7155a4ebe8be8b2f3e6c917247a",
+      "role": "documentation"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/.agents/skills/lora-manager-runtime-context/agents/openai.yaml",
+      "path": "docs/technical/archive/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/.agents/skills/lora-manager-runtime-context/agents/openai.yaml",
+      "sha256": "b0eb0dbd74f81003ea9b5d7addacd2d8b79a92495c5a078c7a494bbb01b28125",
+      "role": "configuration"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/.agents/skills/lora-manager-runtime-context/scripts/inspect_runtime_context.py",
+      "path": "docs/technical/archive/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/.agents/skills/lora-manager-runtime-context/scripts/inspect_runtime_context.py",
+      "sha256": "95bc224975f5a7778e0da0cb641058c926f71c44fce4b5059d0d1b7b8f1e4e74",
+      "role": "implementation"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/.specs/metadata.schema.json",
+      "path": "docs/technical/archive/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/.specs/metadata.schema.json",
+      "sha256": "86c8aa6ea1c6eb9a14364cb3f411448137f73a334c0272131a3c5f0a5eb107e3",
+      "role": "standard"
+    },
+    {
+      "source": "ComfyUI/user/anima_tools/LORA_CATEGORY_SWITCH_FIX_DELIVERY_20260730.md",
+      "path": "docs/technical/archive/ComfyUI/user/anima_tools/LORA_CATEGORY_SWITCH_FIX_DELIVERY_20260730.md",
+      "sha256": "632f3eb03c7c130e01f1654ffd566269a0d25ac4a77f4dc1c779674b54b17ec6",
+      "role": "documentation"
+    },
+    {
+      "source": "ComfyUI/user/anima_tools/LORA_KREA_CHARACTER_PURITY_DELIVERY_20260730.md",
+      "path": "docs/technical/archive/ComfyUI/user/anima_tools/LORA_KREA_CHARACTER_PURITY_DELIVERY_20260730.md",
+      "sha256": "2d715d6129f86412c017ea5e1d4aa09bf4fc650ec4759d498e2c721b4c5badcd",
+      "role": "documentation"
+    },
+    {
+      "source": "ComfyUI/user/anima_tools/WEILIN_CATEGORY_NAVIGATION_DELIVERY_20260730.md",
+      "path": "docs/technical/archive/ComfyUI/user/anima_tools/WEILIN_CATEGORY_NAVIGATION_DELIVERY_20260730.md",
+      "sha256": "6c6fb1cd27dcf618685481e05fe36cfc222c0d8717165787b67b08c331345002",
+      "role": "documentation"
+    },
+    {
+      "source": "ComfyUI/user/anima_tools/WEILIN_DEEP_TAXONOMY_DELIVERY_20260730.md",
+      "path": "docs/technical/archive/ComfyUI/user/anima_tools/WEILIN_DEEP_TAXONOMY_DELIVERY_20260730.md",
+      "sha256": "0cc42b741c6b1cb6f279765ae9d1e878d0f398542a07c4bbe1bc43d712b992b1",
+      "role": "documentation"
+    },
+    {
+      "source": "ComfyUI/user/anima_tools/WEILIN_FULL_RECLASS_DELIVERY_20260730.md",
+      "path": "docs/technical/archive/ComfyUI/user/anima_tools/WEILIN_FULL_RECLASS_DELIVERY_20260730.md",
+      "sha256": "d2f54b6dd74567f8f6e65dded17327d85b9ec57db01089cee7de5cd0b113a671",
+      "role": "documentation"
+    },
+    {
+      "source": "ComfyUI/user/anima_tools/WEILIN_SOURCE_DIRECTORY_TAXONOMY_DELIVERY_20260730.md",
+      "path": "docs/technical/archive/ComfyUI/user/anima_tools/WEILIN_SOURCE_DIRECTORY_TAXONOMY_DELIVERY_20260730.md",
+      "sha256": "2d66a73ef03493d8c8f60540135a7a04203733155bd27be4d46f5e8d8dace71c",
+      "role": "documentation"
+    },
+    {
+      "source": "ComfyUI/user/default/workflows/_codex_qa/UAP_repair_inference.json",
+      "path": "docs/technical/archive/ComfyUI/user/default/workflows/_codex_qa/UAP_repair_inference.json",
+      "sha256": "af0fe4e06298089df289ee1c1ec5580d931b17863475f400117504feab2a9f24",
+      "role": "test"
+    },
+    {
+      "source": "ComfyUI/user/default/workflows/_codex_qa/UAP_repair_neutral.json",
+      "path": "docs/technical/archive/ComfyUI/user/default/workflows/_codex_qa/UAP_repair_neutral.json",
+      "sha256": "950f19fc802b2d17d075cd72e692e3c782a83a8a692e6eab0b8beceb7f00d086",
+      "role": "test"
+    },
+    {
       "source": "anima_lora_forge/profiles/alicia_bell_calibration_400.json",
       "path": "docs/technical/archive/anima_lora_forge/profiles/alicia_bell_calibration_400.json",
       "sha256": "a07a29a23cffff2f73348a047d95018502f90fe45df5d3101d4f6e0f0752ccc1",

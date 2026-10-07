@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "purpose": "Reviewed source and external support boundaries; updated by installed-plugin and library reconciliation on 2026-10-07.",
+  "purpose": "Reviewed source and external support boundaries; includes exact architecture YAML, trainer sample and installed plugin support reconciled on 2026-10-07.",
   "public_sources": [
     "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/vue-widgets/vite.config.mts",
     "ComfyUI/custom_nodes/rgthree-comfy/rgthree_config.json.default",
@@ -26,7 +26,31 @@
     "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_4",
     "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/Ovi/bigvgan/incl_licenses/LICENSE_5",
     "qwen21_lab/ComfyUI/custom_nodes/ComfyUI-GGUF/tools/lcpp.patch",
-    "tools/llama.cpp/LICENSE-LLVM-OpenMP"
+    "tools/llama.cpp/LICENSE-LLVM-OpenMP",
+    "ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/qwen/config.json",
+    "ComfyUI/models/configs/anything_v3.yaml",
+    "ComfyUI/models/configs/v1-inference.yaml",
+    "ComfyUI/models/configs/v1-inference_clip_skip_2.yaml",
+    "ComfyUI/models/configs/v1-inference_clip_skip_2_fp16.yaml",
+    "ComfyUI/models/configs/v1-inference_fp16.yaml",
+    "ComfyUI/models/configs/v1-inpainting-inference.yaml",
+    "ComfyUI/models/configs/v2-inference-v.yaml",
+    "ComfyUI/models/configs/v2-inference-v_fp32.yaml",
+    "ComfyUI/models/configs/v2-inference.yaml",
+    "ComfyUI/models/configs/v2-inference_fp32.yaml",
+    "ComfyUI/models/configs/v2-inpainting-inference.yaml",
+    "anima_lora_forge/vendor/sd-trainer/SD-Trainer/config/sample_prompts.txt",
+    "qwen21_lab/ComfyUI/models/configs/anything_v3.yaml",
+    "qwen21_lab/ComfyUI/models/configs/v1-inference.yaml",
+    "qwen21_lab/ComfyUI/models/configs/v1-inference_clip_skip_2.yaml",
+    "qwen21_lab/ComfyUI/models/configs/v1-inference_clip_skip_2_fp16.yaml",
+    "qwen21_lab/ComfyUI/models/configs/v1-inference_fp16.yaml",
+    "qwen21_lab/ComfyUI/models/configs/v1-inpainting-inference.yaml",
+    "qwen21_lab/ComfyUI/models/configs/v2-inference-v.yaml",
+    "qwen21_lab/ComfyUI/models/configs/v2-inference-v_fp32.yaml",
+    "qwen21_lab/ComfyUI/models/configs/v2-inference.yaml",
+    "qwen21_lab/ComfyUI/models/configs/v2-inference_fp32.yaml",
+    "qwen21_lab/ComfyUI/models/configs/v2-inpainting-inference.yaml"
   ],
   "external_resources": [
     {

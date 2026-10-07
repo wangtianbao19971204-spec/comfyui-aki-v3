@@ -34,6 +34,8 @@ ComfyUI 相关修改的唯一开发入口是 `maintenance/comfyui/`，本机为 
 
 UAP 九分支为 Anima 原版、Anima 2.9B、Krea2 生产、Krea2 编辑、裁剪精修、透明抠图、左右扩图、独立二倍与四倍超分。内嵌子图、细化次序、二放和验收边界见[工作流说明](technical/runtime/workflows.md)。
 
+本轮另补入 22 份模型架构 YAML、训练器采样示例和一份 WanVideo 的 Qwen 架构配置，按精确路径维护；它们不含权重。12 份旧技术／QA 原件保留在历史归档，范围及实际验收见[完整性复核](technical/changes/operations-source-of-truth/2026-10-07-completeness-recheck.md)。
+
 ## 真实资料与 Git 检查点
 
 `W` 表示 `WB/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/`；`G` 表示 `WB/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/`。
@@ -45,12 +47,15 @@ UAP 九分支为 Anima 原版、Anima 2.9B、Krea2 生产、Krea2 编辑、裁�
 | `G/py/shared/data/tags_cache.db` | [gallery_tags_cache.db/](../snapshot/library/sql/gallery_tags_cache.db/)：独立词典、翻译、别名与导入历史，不能按文件名视为可丢弃缓存 |
 | `W/random_tag/` | [random_templates/](../snapshot/library/random_templates/)：经审查的随机提示词模板 |
 | `ComfyUI/custom_nodes/nsfwprompt/` 的登记资料 | [legacy_selector/](../snapshot/library/legacy_selector/)：旧独立选择器正文与编辑历史 |
+| `ComfyUI/user/default/prompt-assistant/` 的五份明确资料 | `snapshot/library/prompt_assistant/{rules,tags,config}/` 原字节分片；[范围及状态](technical/changes/operations-source-of-truth/2026-10-07-completeness-recheck.md)，不收鉴权配置，缺失不重建 |
 
 详细实现与资料身份见[资料库档案](technical/library/README.md)和[数据库契约](DATABASE.md)。Git 分片是实际内容检查点；应用最新资料可能更新，旧检查点不得覆盖在线库。图片与缩略图另按外部资源保存。
 
 ## 运行区与仓外私有资料
 
 运行区 `G:\ComfyUI-aki-v3` 是部署目标。完整实例由已部署的主仓文件，以及私密配置、模型／LoRA、媒体、依赖环境和最新运行数据共同组成；分支、主线与部署范围分别登记。
+
+Git clone 取得源码与文字检查点；图库、模型／LoRA、Python/CUDA、最新 DB/WAL 和历史档案仍按外置层准备。外置层不统称隐私；鉴权及敏感历史单独保护，模型和环境主要受资源体积与安装需求约束。
 
 仓外根 `G:\ComfyUI-local` 保管私密配置、机器清单、旧 Git 原件、备份与回滚材料。模型与图片可以仍在原运行路径，以仓外引用登记；路径引用不是备份，clone 不等于完成还原或冷启动。
 
