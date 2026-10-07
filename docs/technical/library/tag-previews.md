@@ -29,7 +29,7 @@ Custom Scripts 的 `C/web/js/autocompleter.js`、`common/autocomplete.js` 使用
 
 ## 数据与私密边界
 
-Gallery 另有 `G/py/shared/data/tags_cache.db`，用于热度词/译文等补全缓存；它不是 WeiLin 的三库 SQL 检查点，也不是预览图片。已加入仓外 v5 计划的 `mutable_db` + `reference` 项。保留现场库；将来复制须用 SQLite backup API 并检查 WAL，不删除后盲目重建，也不从 Git 的旧库导出覆盖它。放置路径见 [支持文件契约](../../../governance/runtime-support.json)。
+Gallery 另有 `G/py/shared/data/tags_cache.db`，保存热词、译文、官方别名及翻译／别名导入历史，具有主三库之外的独立资料。2026-10-07 补齐其一致备份的规范 SQL 检查点，位于 `snapshot/library/sql/gallery_tags_cache.db/`；不是预览图片，也不能因文件名有 cache 就删除重建。全文索引按受审查 FTS5 schema 从保留的正文重建，SQL 还原核对全部逻辑内容和索引一致性。最新现场状态仍由仓外清单的 `mutable_db` 引用记录；Git 检查点不能覆盖更新的在线库。详见 [数据库边界](../../DATABASE.md)和 [支持文件契约](../../../governance/runtime-support.json)。
 
 真实图位于 WeiLin `user_data/prompt_selector/preview/`，缩略图在 `preview_thumbnails/`。Git 保留正文、绑定信息、模型/媒体位置清单及一个中性格式样例，不含全量图片 payload；见 [外部资源](../../EXTERNAL_ASSETS.md)。
 
@@ -46,6 +46,8 @@ Gallery 另有 `G/py/shared/data/tags_cache.db`，用于热度词/译文等补�
 - 已归档 [图库 verification.json](../archive/benchmark_reports/2026-10-01_gallery_card_fix/verification.json)，记录 13 项旧前端测试、40 卡片在两尺寸无重叠/越界及来源链接/键盘焦点通过；这是历史图库 UI 证据，不是当前 Tag 图覆盖率证据。
 
 ## 更新记录
+
+- 2026-10-07：补入 Gallery 独立词库全量 SQL 检查点；核对热词、译文、别名和导入历史，使用专门格式解决普通 SQLite dump 的 FTS5 还原失败。隔离还原验证业务行、原行身份、逻辑 SQL SHA 和英文／中文检索结果，保留在线库及原始备份。真实图片保持仓外；不改图库 UI、不做下载或生产部署。
 
 - 2026-10-07：最终回归修复 Gallery 隔离 collection 入口并重跑 15 项身份/分页/翻译契约；WeiLin Tag API 测试补现行字符串桶常量，用临时中性候选而非向父目录回读运行 benchmark。7 项身份契约通过，缺失仓内历史候选的 1 项明确跳过。验证保证候选接口不写源文件/在线 Tag 库；不代表真实图片全量安装或当前图库 UI 已重新验收。
 

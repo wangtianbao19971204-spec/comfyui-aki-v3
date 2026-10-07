@@ -13,7 +13,7 @@ from pathlib import Path
 import re
 
 from snapshot import (REPO, REVIEWED_SUPPORT_FILES, digest, is_link, now, payload_relative,
-                      portable_parts, private_config, safe_path, source_license_name)
+                      portable_parts, private_config, safe_path, source_license_name, reviewed_plugin_sources)
 from security_guard import StreamScanner, blocked_path
 import security_guard
 
@@ -136,6 +136,8 @@ def selected_roots(runtime):
             roots.append((file, False))
     plugins = runtime / 'ComfyUI/custom_nodes'
     if plugins.is_dir():
+        roots.extend((runtime / relative, False) for relative in sorted(reviewed_plugin_sources())
+                     if (runtime / relative).is_file() and Path(relative).parent.as_posix() == 'ComfyUI/custom_nodes')
         for plugin in plugins.iterdir():
             if plugin.is_dir() and not plugin.name.startswith('.') and '.disabled' not in plugin.name.casefold() and 'backup' not in plugin.name.casefold() and plugin.name != '__pycache__':
                 roots.append((plugin, True))
@@ -186,7 +188,7 @@ def rejection(relative):
     lower = path.name.casefold()
     if any(marker in lower for marker in ('.backup', '.before-', '.before_', '.bak', '.disabled')):
         return 'historical_backup_file'
-    if relative in REVIEWED_SUPPORT_FILES or source_license_name(path.name):
+    if relative in REVIEWED_SUPPORT_FILES or relative in reviewed_plugin_sources() or source_license_name(path.name):
         return None
     if path.suffix.lower() == '.json':
         if relative in PUBLIC_JSON_PATHS or path.name in PUBLIC_JSON_NAMES or relative.startswith(PUBLIC_JSON_PREFIXES):

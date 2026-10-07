@@ -17,6 +17,8 @@
 | 启动与白名单 | `production_tools/profiles.json`、`launch.py`、根目录启动 CMD | 配置与脚本版本化；当前 live 服务身份另查，不能从旧文档的插件数量推断 |
 | 权威共享资料 | 统一包 WeiLin 模块 `user_data/prompt_selector/` | 6 个当前主文件分片；data、默认资料、语义投影、关联、同步日志、归属说明 |
 | Tag / 历史数据库 | 同一 WeiLin 模块 `user_data/userdatas_zh_CN_*.db` | backup API → SQL 分片；分组、词条、个人字段、修订、历史均保留 |
+| Gallery 独立辅助词库 | Gallery `py/shared/data/tags_cache.db` | 一致备份 → 显式 FTS5 规范 SQL；热词、翻译、别名与导入历史保存，派生索引隔离重建 |
+| 随机模板与旧独立选择器资料 | WeiLin `random_tag/`、`custom_nodes/nsfwprompt/` 的明确文件 | `snapshot/library/random_templates/`、`legacy_selector/` 原字节检查点；旧资料不合并或激活为主库 |
 | 预览原图与缩略图 | `prompt_selector/preview`、`preview_thumbnails` | 外部媒体清单，不进 Git；不能视作可随意删除的缓存 |
 | 模型 | `ComfyUI/models` 及生产插件内权重 | 路径/大小/mtime 清单及工作流引用关系；权重本体留在外部 |
 | 网页/法典导入 | `benchmark_reports/source_update_flow` | 当前门禁脚本与说明；审查后的网页抓取、Word解析、图片补全等历史实现另入 `docs/technical/archive`，原数据仍外部 |
@@ -40,3 +42,5 @@ UAP 保留九个工作分支：Anima 原版、Anima 2.9B、Krea2 生产，Krea2 
 首版只捕获 production 插件；工作区整理补入其他已安装插件和独立维护项目的受审查源码，但**没有启用这些插件或改变生产配置**。代码归属不等于运行白名单。Python 前端分发包、CUDA、下载模型、LoRA Manager 的大型 Civitai 缓存、图库缓存、源网页原件、训练项目和历史 benchmark 媒体仍为外部资源。迁移前根据实际用途补齐，不可声称仅 clone 即可完全复现整台机器。
 
 运行旧 Git 退休后的记录见 `governance/retired-git.json`，新历史映射见 `docs/history/`。真实目录与归档布局见 [WORKSPACE.md](WORKSPACE.md)。实际活动来源由主仓受审查文件清单确定，不能把仓外旧 benchmark 副本当成同名组件的新权威。
+
+2026-10-07 完整运行区对照补入 900 份此前被类型、非生产插件选单或顶层目录过滤漏掉的源码／词表／分词器／系统提示词／受许可几何配套。后续捕获和导入按 [精确支持登记](../governance/plugin-support-20261007.json)保留；未启用插件或改生产白名单。用户图片、神经模型权重、环境、鉴权与用户缓存继续外置；文件名含 cache 的 Gallery 词典并非可盲目删除的缓存。

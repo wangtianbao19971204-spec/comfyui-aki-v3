@@ -175,9 +175,13 @@ class SourceSupportTests(unittest.TestCase):
                 entry = sources[relative]
                 self.assertEqual(entry['kind'], 'file')
                 self.assertEqual(snapshot.digest(repo / 'snapshot' / entry['path']), entry['sha256'])
-        self.assertEqual(len(spec['external_resources']), 12)
+        self.assertEqual(len(spec['external_resources']), 11)
         for entry in spec['external_resources']:
-            self.assertNotIn(entry['source'], sources)
+            if entry['category'] == 'mutable_db':
+                self.assertEqual(sources[entry['source']]['kind'], 'sqlite_sql')
+                self.assertEqual(sources[entry['source']]['sql_format'], 'gallery_fts5_v1')
+            else:
+                self.assertNotIn(entry['source'], sources)
             self.assertIsNotNone(importer.rejection(entry['source']))
             self.assertFalse((repo / 'snapshot/runtime' / entry['source']).exists())
 

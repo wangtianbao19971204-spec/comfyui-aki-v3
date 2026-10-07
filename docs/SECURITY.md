@@ -9,7 +9,7 @@
 - 模型大权重、Python/虚拟环境、node_modules、缓存、生成图、预览媒体、训练数据和整套历史备份。
 - 机器私有 settings/providers/config 文件，具体排除路径在 `snapshot/inventory/excluded_private_configs.json`。
 
-扫描只输出类型、路径、对象 ID 和摘要，不输出凭证值。WeiLin 的个人 `init.json` 整份排除，迁移时安全补齐；caption 插件 `models_cache.json` 即使当前只有模型名，也从当前版本移除并禁止再次捕获。库导出只接受已审查三库，不自动导出新增 auth/provider/cache 数据库。分词器、模型架构和界面语言配置按明确路径保留，仍参加扫描。
+扫描只输出类型、路径、对象 ID 和摘要，不输出凭证值。WeiLin 的个人 `init.json` 整份排除，迁移时安全补齐；caption 插件 `models_cache.json` 即使当前只有模型名，也从当前版本移除并禁止再次捕获。库导出只接受已审查三库和明确登记的 Gallery 辅助词典，不自动导出新增 auth/provider/cache 数据库。Gallery 的词典、译文与导入历史经逐字段和全载荷审查后作 SQL 检查点，不豁免其他缓存。分词器、模型架构和界面语言配置按明确路径保留，仍参加扫描。
 
 ## 自动门禁与例外
 

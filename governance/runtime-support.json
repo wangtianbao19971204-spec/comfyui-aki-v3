@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "purpose": "Required support files discovered by the 2026-10-05 coverage audit; paths are relative to the runtime root.",
+  "purpose": "Reviewed source and external support boundaries; updated by installed-plugin and library reconciliation on 2026-10-07.",
   "public_sources": [
     "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/vue-widgets/vite.config.mts",
     "ComfyUI/custom_nodes/rgthree-comfy/rgthree_config.json.default",
@@ -33,11 +33,6 @@
       "source": "anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/t5_old/spiece.model",
       "category": "external_asset",
       "purpose": "Bundled T5 tokenizer vocabulary used by the default training tokenizer path."
-    },
-    {
-      "source": "ComfyUI/custom_nodes/comfyui-easy-use/py/modules/kolors/chatglm/tokenizer/tokenizer.model",
-      "category": "external_asset",
-      "purpose": "Kolors/ChatGLM tokenizer; restore alongside its matching configuration."
     },
     {
       "source": "ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/LayerNorm/DensePose-TorchScript-with-hint-image/densepose_r50_fpn_dl.torchscript",
@@ -87,9 +82,11 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/py/shared/data/tags_cache.db",
       "category": "mutable_db",
-      "purpose": "Live Gallery autocomplete/translation cache, distinct from the three WeiLin databases. Keep current state; use SQLite backup API for any future copy."
+      "purpose": "Live Gallery dictionary, translations, aliases and import history; current state remains external. Reviewed logical checkpoint is in Git; never replace newer live state with it.",
+      "public_checkpoint": "snapshot/library/sql/gallery_tags_cache.db"
     }
   ],
   "restore_rule": "Public files come from the current manifest. External resources stay outside Git at the same relative runtime paths and must be supplied before using their dependent features. A reference is not a backup or permission to redistribute.",
-  "scope_limit": "This contract covers the reviewed support-file omissions, not all dependencies of every installed or disabled plugin."
+  "scope_limit": "This contract covers the reviewed support-file omissions, not all dependencies of every installed or disabled plugin.",
+  "additional_public_support_contract": "governance/plugin-support-20261007.json"
 }

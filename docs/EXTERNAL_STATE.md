@@ -21,6 +21,10 @@
 
 这些新增资源的可移植相对路径、角色和用途存于 [支持文件契约](../governance/runtime-support.json)；真实数据库指纹仍只存仓外。新增项全为 reference，不生成权重副本或数据库备份。
 
+2026-10-07 上传内容复核后，easy-use 随附 ChatGLM 分词词汇已转为受审查 Git 支持文件；Gallery 辅助词典另外增加一致备份的全量 SQL 检查点，最新在线状态仍由 `mutable_db` 记录。v5 和上述“没有数据库备份”描述属于补齐前历史，不适用于本次 Gallery 的私有一致备份。变更 manifest 后须生成新仓外计划／清单，不能把旧 current 的指纹仍称当前。补齐范围见 [内容复核](receipts/github_content_reconciliation_20261007.json)。
+
+本次已实际生成仓外 v6 计划和 `external-runtime-content-reconciliation-20261007-01.json`，364 项登记，current 已切换并在本轮私有收据保留切换前原件。减少一项只因分词词汇由外部资源转为 Git 支持文件，没有删除资源；其余 reference 仍非备份，未复制模型或用户图片。
+
 2026-10-06 再次核验时，旧 current 清单有一份配置与三库 WAL 指纹变化，已保留旧清单并重新 inventory。最新时间点清单为仓外 `manifests/external-runtime-recheck-20261006-01.json`，current 已切到该清单；18 份 copy 小配置另外物化到新的私密备份目录，347 份 reference 仍只登记位置。本次没有创建数据库备份或复制模型/图片，不能称完整实例已经备份或移机还原。后续再次漂移仍须重新登记；摘要见 [复核收据](receipts/reassurance_20261006.json)。
 
 ## 使用与边界

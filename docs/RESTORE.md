@@ -49,6 +49,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Materialization failed; retain evidence for in
 - 上游 `.gitattributes` 在 Git 内以 `.gitattributes.upstream` 保存原字节，物化时恢复原名称，避免嵌套换行规则改写快照。原 `.gitignore` 保留。
 - 大型 JSON：按清单合并 .part，恢复原始编码/换行/字节并核对整文件 SHA。
 - SQLite：从已校验 SQL 分片新建数据库，核对 integrity_check、全部表行数和完整逻辑 SQL 哈希。数据库二进制页布局可不同，不宣称 .db 字节相同。
+- Gallery 辅助词库：使用显式 `gallery_fts5_v1` SQL 格式保留全部业务内容、原行身份及历史，并从正文重建受审查 FTS5 索引、核对索引完整性；不能用普通 dump 或旧三库恢复逻辑代替。两份随机模板同样恢复到原相对路径。插件随附词表、分词器、系统提示词及受许可支持的几何数据从主 Git 物化；未捕获的模型、鉴权、用户字体和许可敏感资料另按外部清单补齐。
 - 生成 `RESTORE_RECEIPT.json`。临时合并的 `.restore.sql` 保留在物化目录供检查；它不是线上数据库。
 
 ## 物化后还需要什么

@@ -48,6 +48,8 @@ ComfyUI 相关源码、工作流/子图、提示词资料检查点和维护工�
 
 18 项功能均在 [技术目录](docs/technical/catalog.json) 登记独立说明、示例入口和日期式维护记录；提交门禁检查这些文件实际存在于待提交内容。五站网页提示词桥接的安装/更新与验收边界见 [网页接入工作台](docs/technical/runtime/browser-import.md)。再次核验唯一 Git、现行实例组合与公开边界的结果见 [2026-10-06 复核](docs/receipts/reassurance_20261006.json)。
 
+首次上传内容复核补齐了 900 份遗漏插件源码／支持文件、Gallery 独立词典 SQL、两份随机模板及旧选择器正文／编辑历史检查点。核心六份资料文件与三库原本完整；运行 DB 的页面体积、SQL 导出大小与 Git 压缩传输大小不同。精确保留范围、现行全文索引不一致及隔离重建边界见 [2026-10-07 内容复核](docs/receipts/github_content_reconciliation_20261007.json)；补齐保存在本地功能分支，首次上传与合并仍等用户核对。
+
 ## 历史需要时再看
 
 [旧 Git 迁移](docs/history/README.md)和 [445 份技术原件](docs/technical/archive/README.md)保留追溯，不是另一套开发入口。日常更新对应功能的现行说明及短记录，不为每次小改动复制一套文档；历史脚本不可直接重跑。
