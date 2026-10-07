@@ -4,6 +4,8 @@ ComfyUI 相关源码、工作流/子图、提示词资料检查点和维护工�
 
 第一次取得仓库、换机器或后续拉取更新，先看[开始使用](docs/GETTING_STARTED.md)：选择本机 Python、启用 hooks、核对完整性，并区分代码更新与运行环境恢复。
 
+今后采用**本地分支开发 → 本地测试/验收通过 → 上传 GitHub 分支并创建 PR → 用户允许合并**的流程。通过门禁后可直接上传日常分支；助手不自行合并或启用自动合并，`main` 由已获用户批准的 PR 更新。步骤和首次空仓基线边界见[日常维护](docs/MAINTENANCE.md)。
+
 换机器补模型与 LoRA，从[下载来源清单](docs/MODEL_SOURCES.md)逐项查看网址、版本、上游原文件名与现行 `current_path`；按[分类命名规则](docs/MODEL_NAMING.md)放入加载器目录内的家族／用途子目录。[模型维护](docs/MODELS.md)说明怎样核验及以后补记录。网上资源按确切版本重新获取并使用规范本地名，自训资源另备份原权重。
 
 2026-10-07 的[最终全流程验收](docs/receipts/final_workflow_acceptance_20261007.json)区分结构／回归、真实运行和画质：本轮修复已按 27 文件部署，仍保留 Krea2 运行状态、扩图接缝及旧 SAM 编辑 UI 等限制，不能将取得仓库视作全项画质通过。
@@ -52,4 +54,4 @@ ComfyUI 相关源码、工作流/子图、提示词资料检查点和维护工�
 
 [技术覆盖复核](docs/ACCEPTANCE_TECHNICAL.md)保留建仓时的历史基线；后续支持文件补齐见[源码覆盖验收](docs/receipts/source_coverage_20261005.json)。当前代码、最后本地版本和未提交改动以 `maintain.py status` 为准。交付包是否覆盖该版本、是否通过隔离还原，须核对[恢复方法](docs/RESTORE.md)说明的随包交付回执，不能由标签或旧包推断。
 
-正式分发必须通过[安全与许可检查](docs/SECURITY.md)，不能公开复制本机 `.git`、运行根或私密档案。本仓尚未配置在线远端或上传 GitHub。
+正式分发必须通过[安全与许可检查](docs/SECURITY.md)，不能公开复制本机 `.git`、运行根或私密档案。已创建 [GitHub 私有仓](https://github.com/wangtianbao19971204-spec/comfyui-aki-v3)；2026-10-07 当前阶段为空仓，尚未首次上传，本地也尚未配置在线远端。流程约定不等于远端保护已经生效。

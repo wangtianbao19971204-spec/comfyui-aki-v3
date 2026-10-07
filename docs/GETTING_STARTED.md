@@ -4,10 +4,10 @@
 
 ## 1. 取得主仓
 
-当前未配置在线远端，也没有已发布的 GitHub 地址。取得真实、已审查的主仓 URL 后，在父目录执行；占位值必须先替换，目标目录必须全新：
+主仓地址为 [comfyui-aki-v3](https://github.com/wangtianbao19971204-spec/comfyui-aki-v3)，当前私有，访问者需获仓库权限。2026-10-07 已创建空仓，首次内容上传仍待范围审核；须确认远端已建立 `main` 基线后再按下面步骤取得可用源码。在父目录执行，目标目录必须全新：
 
 ```powershell
-$comfyRepositoryUrl = '<实际已审查的主仓URL>'
+$comfyRepositoryUrl = 'https://github.com/wangtianbao19971204-spec/comfyui-aki-v3.git'
 git clone -c core.longpaths=true -- $comfyRepositoryUrl .\comfyui
 if ($LASTEXITCODE -ne 0) { throw 'Clone failed; retain the partial directory for inspection' }
 Set-Location -LiteralPath .\comfyui
@@ -90,6 +90,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Branches diverged or update failed; review bot
 
 完成后重跑第 3 节检查。分叉时保留两边提交并单独评审，不强制覆盖。主仓更新不自动部署；插件上游更新也先导入主仓评审，不在运行插件目录另行 clone/pull。
 
+继续开发前从已同步的 `main` 新建本地工作分支，按[日常维护](MAINTENANCE.md)测试、上传该分支并创建 PR。用户允许合并后才更新主线；不直接推送日常改动到 `main`，也不自动合并。
+
 ## 5. 换机器与常见问题
 
 | 遇到的问题 | 下一步 |
@@ -104,5 +106,6 @@ if ($LASTEXITCODE -ne 0) { throw 'Branches diverged or update failed; review bot
 
 ## 更新记录
 
+- 2026-10-07：登记已创建的 GitHub 私有空仓与实际 URL；明确先初始化基线、后续分支开发/测试/PR/用户合并和合并后主线同步的步骤。此次不代表已上传、远端保护已生效或他机联网克隆已经验收。
 - 2026-10-07：换机补齐入口区分上游下载原名、历史捕获路径与现行 `current_path`，链接统一家族／用途分类与规范命名说明。
 - 2026-10-06：补首次克隆、Python/hooks、快慢检查与后续更新步骤；区分主仓和验证副本，说明新包回执、仓外资源及跨运行根 capture/adopt 的现行限制。未配置远端、下载模型、安装依赖或启动服务。

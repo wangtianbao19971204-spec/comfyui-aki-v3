@@ -1,5 +1,7 @@
 import copy
+from contextlib import redirect_stderr
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
@@ -38,6 +40,8 @@ class ReleaseTests(unittest.TestCase):
         self.write('CHANGELOG.md', b'# Fixture changelog\n')
         self.commit('fixture source')
         self.base = self.head()
+        self.release_branch = 'release/fixture'
+        self.git('switch', '-c', self.release_branch)
         self.receipt = self.root / 'rollback.json'
         self.receipt.write_bytes(b'{"fixture_only":true,"not_a_live_backup":true}\n')
         self.notes = {'schema': 1, 'summary': 'Isolated maintenance fixture', 'components': ['fixture'],
@@ -71,7 +75,8 @@ class ReleaseTests(unittest.TestCase):
         self.review_sha = release.sha(self.note_path.read_bytes())
 
     def prepare(self, **overrides):
-        options = dict(repo=self.repo, expected_head=self.base, expected_version='0.0.0', increment='patch',
+        options = dict(repo=self.repo, expected_branch=self.release_branch, expected_head=self.base,
+                       expected_version='0.0.0', increment='patch',
                        notes_path=self.note_path, review_sha256=self.review_sha, rollback_receipt=self.receipt)
         options.update(overrides)
         return release.prepare(**options)
@@ -79,6 +84,8 @@ class ReleaseTests(unittest.TestCase):
     def ready(self):
         self.prepare()
         self.commit('prepare release metadata')
+        self.git('switch', 'main')
+        self.git('merge', '--no-ff', '-m', 'fixture user-approved PR merge', self.release_branch)
         return self.head()
 
     def tag(self, **overrides):
@@ -107,8 +114,10 @@ class ReleaseTests(unittest.TestCase):
         with patch.object(release, 'full_gates', side_effect=AssertionError('prepare must not scan all history')):
             result = self.prepare(increment='major')
         self.assertEqual(result['version'], '1.0.0')
+        self.assertEqual(result['preparation_branch'], self.release_branch)
         self.assertFalse(result['committed']); self.assertFalse(result['tag_created'])
         self.assertEqual(self.head(), self.base); self.assert_no_tags()
+        self.assertEqual(self.git('rev-parse', 'main'), self.base)
         metadata, _ = release.read_version(self.repo)
         self.assertEqual(metadata['prepared']['base_commit'], self.base)
         record = json.loads((self.repo / metadata['prepared']['notes_path']).read_bytes())
@@ -123,6 +132,51 @@ class ReleaseTests(unittest.TestCase):
                 self.prepare(**options)
         self.assertEqual(release.read_version(self.repo)[0], BASELINE)
         self.assert_no_tags()
+
+    def test_prepare_requires_explicit_release_branch_argument(self):
+        options = dict(repo=self.repo, expected_head=self.base, expected_version='0.0.0', increment='patch',
+                       notes_path=self.note_path, review_sha256=self.review_sha, rollback_receipt=self.receipt)
+        with self.assertRaises(TypeError):
+            release.prepare(**options)
+        self.assertEqual(release.read_version(self.repo)[0], BASELINE)
+        self.assertEqual(self.git('status', '--porcelain'), '')
+
+    def test_prepare_cli_requires_explicit_release_branch_argument(self):
+        args = ['release.py', 'prepare', '--expected-head', self.base, '--expected-version', '0.0.0',
+                '--bump', 'patch', '--notes', str(self.note_path), '--review-sha256', self.review_sha,
+                '--rollback-receipt', str(self.receipt)]
+        with patch.object(sys, 'argv', args), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as caught:
+            release.main()
+        self.assertEqual(caught.exception.code, 2)
+        self.assertEqual(release.read_version(self.repo)[0], BASELINE)
+
+    def test_prepare_rejects_main_and_invalid_expected_branch(self):
+        for branch in [None, '', 'main', 'feature/release', 'refs/heads/release/fixture',
+                       'release/', 'release/a..b', 'release/a b', 'release/x.lock', 'release/x\n']:
+            with self.subTest(branch=branch), self.assertRaises(ValueError):
+                self.prepare(expected_branch=branch)
+        self.assertEqual(release.read_version(self.repo)[0], BASELINE)
+        self.assertEqual(self.git('status', '--porcelain'), '')
+
+    def test_prepare_rejects_main_checkout_even_with_release_branch_argument(self):
+        self.git('switch', 'main')
+        with self.assertRaises(RuntimeError):
+            self.prepare()
+        self.assertEqual(release.read_version(self.repo)[0], BASELINE)
+        self.assert_no_tags()
+
+    def test_prepare_rejects_wrong_release_branch_checkout(self):
+        self.git('switch', '-c', 'release/other')
+        with self.assertRaises(RuntimeError):
+            self.prepare()
+        self.assertEqual(release.read_version(self.repo)[0], BASELINE)
+        self.assert_no_tags()
+
+    def test_prepare_rejects_detached_head(self):
+        self.git('switch', '--detach', self.base)
+        with self.assertRaises(RuntimeError):
+            self.prepare()
+        self.assertEqual(release.read_version(self.repo)[0], BASELINE)
 
     def test_prepare_rejects_untracked_or_staged_changes(self):
         self.write('unreviewed.txt', b'unreviewed')
@@ -169,6 +223,30 @@ class ReleaseTests(unittest.TestCase):
         self.assertTrue((self.repo / 'parallel.txt').exists())
         self.assertFalse((self.repo / 'docs/releases/comfyui-v0.0.1.json').exists())
 
+    def test_prepare_rejects_branch_drift_without_ref_oid_changes(self):
+        self.git('branch', 'release/other')
+        before_refs = release.refs(self.repo)
+        def drift(repo):
+            self.git('switch', 'release/other')
+            return {'pass': True}
+        with patch.object(release, 'technical_check', side_effect=drift), self.assertRaises(RuntimeError):
+            self.prepare()
+        self.assertEqual(release.refs(self.repo), before_refs)
+        self.assertEqual(release.read_version(self.repo)[0], BASELINE)
+        self.assertFalse((self.repo / 'docs/releases/comfyui-v0.0.1.json').exists())
+
+    def test_prepare_rejects_head_drift_during_catalogue_gate(self):
+        def drift(repo):
+            self.write('parallel.txt', b'concurrent source')
+            self.commit('concurrent fixture commit')
+            return {'pass': True}
+        with patch.object(release, 'technical_check', side_effect=drift), self.assertRaises(RuntimeError):
+            self.prepare()
+        self.assertNotEqual(self.head(), self.base)
+        self.assertEqual(release.read_version(self.repo)[0], BASELINE)
+        self.assertEqual((self.repo / 'parallel.txt').read_bytes(), b'concurrent source')
+        self.assertFalse((self.repo / 'docs/releases/comfyui-v0.0.1.json').exists())
+
     def test_prepare_requires_catalogue_pass(self):
         with patch.object(release, 'technical_check', side_effect=RuntimeError('catalogue failed')), self.assertRaises(RuntimeError):
             self.prepare()
@@ -183,8 +261,18 @@ class ReleaseTests(unittest.TestCase):
 
     def test_tag_rejects_uncommitted_preparation(self):
         self.prepare()
+        self.git('switch', 'main')
         with self.assertRaises(RuntimeError):
             self.tag()
+        self.assert_no_tags()
+
+    def test_tag_rejects_clean_release_branch_before_user_merge(self):
+        self.prepare()
+        self.commit('fixture release metadata awaits user merge')
+        with patch.object(release, 'full_gates', side_effect=AssertionError('branch refusal must precede gates')):
+            with self.assertRaises(RuntimeError):
+                self.tag()
+        self.assertEqual(self.git('rev-parse', 'main'), self.base)
         self.assert_no_tags()
 
     def test_tag_rejects_wrong_expected_head_or_version(self):
@@ -248,6 +336,18 @@ class ReleaseTests(unittest.TestCase):
             self.tag()
         self.assert_no_tags()
 
+    def test_tag_rejects_branch_drift_during_gates(self):
+        self.ready()
+        self.git('branch', 'release/same-merged-head')
+        before_refs = release.refs(self.repo)
+        def drift(repo):
+            self.git('switch', 'release/same-merged-head')
+            return {'pass': True}
+        with patch.object(release, 'full_gates', side_effect=drift), self.assertRaises(RuntimeError):
+            self.tag()
+        self.assertEqual(release.refs(self.repo), before_refs)
+        self.assert_no_tags()
+
     def test_atomic_tag_creation_rejects_last_moment_head_change(self):
         self.ready()
         original = release.git
@@ -261,8 +361,9 @@ class ReleaseTests(unittest.TestCase):
 
     def test_next_prepare_requires_previous_explicit_release_tag(self):
         self.ready()
+        self.git('switch', '-c', 'release/next')
         with self.assertRaises(RuntimeError):
-            self.prepare(expected_head=self.head(), expected_version='0.0.1')
+            self.prepare(expected_branch='release/next', expected_head=self.head(), expected_version='0.0.1')
 
     def test_environment_ignores_inherited_git_redirection(self):
         before = self.head()
@@ -294,6 +395,21 @@ class ReleaseTests(unittest.TestCase):
         self.assertEqual(release.read_version(self.repo)[0], BASELINE)
         self.assertEqual((self.repo / 'parallel.txt').read_bytes(), b'other editor data')
         self.assertFalse((self.repo / 'docs/releases/comfyui-v0.0.1.json').exists())
+
+    def test_prepare_rejects_postwrite_branch_drift_without_ref_oid_changes(self):
+        self.git('branch', 'release/other')
+        before_refs = release.refs(self.repo)
+        replace = release.replace_file
+        def drift(path, raw):
+            replace(path, raw)
+            if json.loads(raw)['state'] == 'prepared':
+                self.git('switch', 'release/other')
+        with patch.object(release, 'replace_file', side_effect=drift), self.assertRaises(RuntimeError):
+            self.prepare()
+        self.assertEqual(release.refs(self.repo), before_refs)
+        self.assertEqual(release.read_version(self.repo)[0], BASELINE)
+        self.assertFalse((self.repo / 'docs/releases/comfyui-v0.0.1.json').exists())
+        self.assertEqual(self.git('status', '--porcelain'), '')
 
     def test_prepare_does_not_undo_concurrent_commit_after_writes(self):
         replace = release.replace_file
@@ -331,7 +447,9 @@ class ReleaseTests(unittest.TestCase):
         self.ready(); self.tag()
         self.notes['rollback']['target_commit'] = self.head()
         self.save_notes()
-        result = self.prepare(expected_head=self.head(), expected_version='0.0.1', increment='minor')
+        self.git('switch', '-c', 'release/next')
+        result = self.prepare(expected_branch='release/next', expected_head=self.head(),
+                              expected_version='0.0.1', increment='minor')
         self.assertEqual(result['version'], '0.1.0')
         self.assertEqual(self.git('tag', '--list'), 'comfyui-v0.0.1')
 

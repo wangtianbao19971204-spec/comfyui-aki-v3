@@ -7,15 +7,28 @@
 ## 日常最短路径
 
 1. `& $comfyPython -X utf8 -B scripts/maintain.py status`：看当前 Git、未提交改动、最后本地标签、hooks 与已登记的备份回执。它不检查在线服务，不把旧部署收据当当前状态；备份验收记录与当前代码/资料覆盖情况分别显示。
-2. 改对应源码、运行相关测试；同一功能沿用现行技术 MD，只补一条“改什么／为什么／验证与限制”的短记录。不要复制整套交付文档。
+2. 从已同步的 `main` 创建本地工作分支，改对应源码、运行相关测试；同一功能沿用现行技术 MD，只补一条“改什么／为什么／验证与限制”的短记录。不要复制整套交付文档。
 3. 精确 `git add -- <本次文件>` 后运行 `& $comfyPython -X utf8 -B scripts/maintain.py check-staged`，再明确提交。检查针对 **index**，不会把编辑器里未暂存的修复当成已入库；源码修改仍需下面的 seal/专项验证。
-4. 需要部署时按下面流程做精确比较、回滚准备和真实验收；需要正式维护版本时再走 VERSIONING。普通代码修改不顺手刷新整套资料库。
+4. 相关本地验收和上传门禁通过后，推送本次分支并创建 PR，附变更、测试和限制；用户允许合并后再同步本地 `main`。需要部署时按下面流程做精确比较、回滚准备和真实验收；需要正式维护版本时再走 VERSIONING。普通代码修改不顺手刷新整套资料库。
 
 `& $comfyPython -X utf8 -B scripts/maintain.py history` 默认只看最近 10 条 first-parent 主线；完整上游/旧仓历史仍在，不删、不改写。备份与保留规则可运行 `& $comfyPython -X utf8 -B scripts/maintain.py backup-policy` 查看。
 
 提交快检首次需完整扫描暂存区；后续仍逐字节读取并计算 SHA，重新检查所有路径、当前分片顺序和跨片边界，只复用干净、未压缩、未使用审核例外的对象内容扫描。代码、规则、例外、对象或路径变化会使相应缓存失效；损坏回退全扫。`check-staged --fresh` 显式不用缓存。pre-push、正式发布、bundle 和 CI 仍完整扫描历史。缓存不替代测试、seal、快照校验或发布门禁，细节见 [安全说明](SECURITY.md)。
 
-多个任务并行时优先使用同一主 Git 的临时独立工作树，最后协调合入 `main`；它们不是第二个权威仓。共用的运行服务、数据、manifest 和最终合入窗口仍需协调。当前任务不要擅自收走别人的暂存内容。
+多个任务并行时优先使用同一主 Git 的临时独立工作树，各自上传分支并创建 PR，最终由用户允许合入 `main`；它们不是第二个权威仓。共用的运行服务、数据、manifest 和最终合入窗口仍需协调。当前任务不要擅自收走别人的暂存内容。
+
+## GitHub 分支与用户合并流程
+
+目的地固定为 [comfyui-aki-v3](https://github.com/wangtianbao19971204-spec/comfyui-aki-v3)，当前私有。唯一开发来源仍是本地主仓；GitHub 保存受审查分支、PR 和用户接受的主线。
+
+1. 首次上传：当前远端尚为空仓，需先让用户核对上传内容、体积、资料/许可边界，再单独建立已审查的 `main` 基线及必要历史标签。空仓没有可用的 PR base，不能将日常授权解释为首次基线上传已获批准。本次流程登记没有上传任何文件。
+2. 后续开发：先保留已有改动，在干净 `main` 按[后续更新](GETTING_STARTED.md)执行 `fetch`/`merge --ff-only`；再用 `git switch -c <本次工作分支>` 创建分支。通常使用 `fix/`、`feature/`、`docs/`，版本准备使用 `release/`。不在运行区、插件旧目录或另一份本机 clone 开发。
+3. 本地通过：运行与变更相关的测试、必要隔离 UI/工作流验收；源码按需 seal，资料/模型引用按专项说明核对。精确暂存并执行 `maintain.py check-staged`，提交应绑定实际测试范围与收据。失败或必要项目未覆盖时先修复，不把 CI 或结构检查当作 GPU/物理 IME 验收。
+4. 上传分支：用户已持续授权通过本地验收与完整上传门禁后的日常分支推送和 PR 创建，无需每次再询问上传许可。核对 origin 是上述目的地，确认提交和工作树状态，使用 `git push -u origin <本次工作分支>`；保留 pre-push 的全历史门禁，不使用 `--mirror`、`--all`、`--force` 或跳过 hooks，也不直推日常改动到 `main`。有新修改时重做受影响验收。
+5. 创建 PR：目标为 `main`，说明具体问题、变化、实际测试、未测限制及需要的回滚/部署范围；报告并附上 PR 链接。GitHub 的 `Maintenance integrity` CI 通过后仍由用户决定合并；助手不自行合并、不启用自动合并。默认由用户在 GitHub 手动合并；用户另行明确指定某个 PR 的合并操作时，按该次授权处理。
+6. 合并后：在干净本地 `main` 再 `fetch`/`merge --ff-only origin/main`，核对合并结果并保留必要分支/历史。合并不自动加维护版本、打标签、公开仓库或部署运行区；生产切换仍需明确范围、保护与现场验收。
+
+本地 hooks 现有功能是技术说明、完整性与凭证门禁，**不是远端主线保护**。首次建立远端 `main` 后，另核 GitHub 权限/套餐并配置、验证要求 PR 与必要 CI 的保护规则；尚未实际配置前不能宣称服务器已防直推。私有仓的 protected branches/rulesets 通常需要 Pro/Team 等支持套餐。使用用户同一账号创建的 PR 不能由作者批准自己的 review，单人流程不设置会阻塞自己的“必须 1 个 approving review”；由用户实际决定 Merge。官方：[分支保护](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)、[PR review](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/reviewing-proposed-changes-in-a-pull-request)。
 
 ## 1. 只在主仓开发
 
@@ -81,7 +94,7 @@ adopt 只移动维护仓的快照：旧版本保留到 ignored `local/backups/�
 
 bundle 包含已提交的全部 refs/可达历史；不包含 ignored 文件、未提交内容、外部权重和媒体。工具要求干净工作树、快照完整性和完整历史凭证/资源门禁通过，再核验 fsck、bundle、refs 稳定性和 SHA-256，不接触远端。不能用 `--audit-content-only` 代替公开门禁，也不能绕过 hooks 发布。
 
-每次在新目录 clone bundle（Windows 用 `git clone -c core.longpaths=true`），再做 snapshot verify、全历史凭证检查与所需离线还原。公开时仅推经过核验的主仓 refs；禁止整目录打包本机 `.git`、local、private-archives、旧克隆/还原目录或首版旧 bundle。GitHub 目的地仍须用户明确指定。
+每次在新目录 clone bundle（Windows 用 `git clone -c core.longpaths=true`），再做 snapshot verify、全历史凭证检查与所需离线还原。公开时仅推经过核验的主仓 refs；禁止整目录打包本机 `.git`、local、private-archives、旧克隆/还原目录或首版旧 bundle。日常上传遵循本页 GitHub 分支/PR 流程，首次初始化和公开许可仍须分别核对。
 
 ## 5. 回退
 

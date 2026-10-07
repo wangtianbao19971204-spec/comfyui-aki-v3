@@ -6,7 +6,7 @@
 
 ## 自动递增的边界
 
-普通开发只维护 Unreleased 变更和对应技术档案，不在每次保存、seal、提交或测试后自动加版本。完成同一逻辑变更、相关测试和文档后，先明确提交源码，再显式准备发布：
+普通开发只维护 Unreleased 变更和对应技术档案，不在每次保存、seal、提交或测试后自动加版本。完成同一逻辑变更、相关测试和文档后，先按[分支/PR 流程](MAINTENANCE.md)由用户接受源码，再从同步后的干净 `main` 建立显式 `release/` 分支准备发布：
 
 | 指定类型 | 自动计算 | 适用范围 |
 |---|---|---|
@@ -41,20 +41,24 @@
 
 ## 2. 显式 prepare，不自动提交
 
-先确认没有同范围活动修改者；命令要求 `main`、精确预期 HEAD、精确当前版本，以及无已暂存/未暂存/未跟踪修改的工作树。`technical_catalog.py check` 必须通过。
+先确认没有同范围活动修改者；在已同步并通过相关验收的源码提交上创建 `release/<本次版本或名称>` 分支。命令要求显式预期分支、精确预期 HEAD、精确当前版本，以及无已暂存/未暂存/未跟踪修改的工作树。`--expected-branch` 必须是当前实际检出的合法 `release/` 分支，不能是 `main`，也不隐式猜测分支。`technical_catalog.py check` 必须通过。
 
 ```powershell
 python -X utf8 -B scripts/release.py status
-python -X utf8 -B scripts/release.py prepare --expected-head <当前40位HEAD> --expected-version 0.0.0 --bump major --notes <仓外已审说明.json> --review-sha256 <说明文件SHA256> --rollback-receipt <仓外回滚材料回执.json>
+# 先将下面的分支名、版本与所有占位值替换为实际已审查值：
+git switch -c release/comfyui-vX.Y.Z
+python -X utf8 -B scripts/release.py prepare --expected-branch release/comfyui-vX.Y.Z --expected-head <当前40位HEAD> --expected-version <当前X.Y.Z> --bump <patch或minor或major> --notes <仓外已审说明.json> --review-sha256 <说明文件SHA256> --rollback-receipt <仓外回滚材料回执.json>
 ```
 
-prepare 自动计算下一版本，只写 `governance/version.json` 与新的 `docs/releases/comfyui-vX.Y.Z.json`，不改 CHANGELOG 或源码。它要求声明和回执摘要准确，拒绝秘密、链接输入、覆盖旧记录和并行漂移；旧版本说明不可覆盖。其专用锁仅协调遵守该协议的发布者，不能阻止其他应用编辑文件；发现外部变化会失败，不会吞并其他人的内容。
+prepare 自动计算下一版本，只写 `governance/version.json` 与新的 `docs/releases/comfyui-vX.Y.Z.json`，不改 CHANGELOG 或源码。它绑定显式 release 分支和源码 HEAD，返回实际 `preparation_branch`；要求声明和回执摘要准确，拒绝秘密、链接输入、覆盖旧记录、分支/HEAD 切换和并行漂移；旧版本说明不可覆盖。其专用锁仅协调遵守该协议的发布者，不能阻止其他应用编辑文件；发现外部变化会失败，不会吞并其他人的内容。
 
-prepare 不运行昂贵的全历史扫描，**不表示发布验收通过**。人工复核生成说明、技术档案和 Unreleased 后，明确更新 CHANGELOG、暂存精确文件并提交。prepare 之后若又改源码，不能直接给旧准备结果打标签，必须重新审查准备流程。
+prepare 不运行昂贵的全历史扫描，**不表示发布验收通过**。人工复核生成说明、技术档案和 Unreleased 后，在同一 release 分支更新 CHANGELOG、暂存精确文件并提交；完成本地验收及上传门禁，推送分支并创建目标为 `main` 的 PR，由用户允许合并。prepare 之后若又改源码，不能直接给旧准备结果打标签，必须重新审查准备流程。
 
 说明记录 `base_commit`（待发布源码提交），不把尚不存在的“自身提交 SHA”写进自身内容。最终发布提交由随后生成的 annotated tag 与仓外交付收据绑定，避免自引用哈希循环。
 
 ## 3. 独立显式 tag
+
+用户合并版本 PR 后，按[后续更新](GETTING_STARTED.md)将干净本地 `main` fast-forward 到远端结果，再显式执行 tag。PR 应保留 prepare 所绑定的源码提交作为主线祖先；若同时改变源码、合并后主线产生别的功能差异或源码祖先关系失效，旧准备结果拒绝发行，重新准备/审查。工具不调用 GitHub API 判断批准记录，用户授权由工作流程保证，不能把 tag 成功当作已经取得合并授权。
 
 ```powershell
 python -X utf8 -B scripts/release.py tag --expected-head <已提交发布说明后的40位HEAD> --expected-version <X.Y.Z>
@@ -68,7 +72,7 @@ python -X utf8 -B scripts/release.py tag --expected-head <已提交发布说明�
 
 ## 4. 包、部署与回退分别记录
 
-标签不等于包、GitHub 发布或生产部署。之后仍需 `repository.py bundle` 的完整门禁、冻结包 SHA、fresh clone 的 snapshot/fsck/对象检查和需要的隔离物化验收；实际上传和生产切换另行授权。每份正式回执应绑定版本、精确提交/tag、manifest、说明摘要、包摘要、实际验收、外部资源限制和回滚材料 ID。
+标签不等于包、GitHub 发布或生产部署。之后仍需 `repository.py bundle` 的完整门禁、冻结包 SHA、fresh clone 的 snapshot/fsck/对象检查和需要的隔离物化验收；日常分支上传按持续授权执行，正式标签/发行、公开和生产切换须各自明确授权。每份正式回执应绑定版本、精确提交/tag、manifest、说明摘要、包摘要、实际验收、外部资源限制和回滚材料 ID。
 
 若复用刚完成的完整正文扫描，必须证明两份克隆的 refs 语义/包头 refs、全部可达对象 OID/type/size、全部存储对象恰好可达、文件树、manifest、扫描器和例外 registry 完全一致，并在最终 clone 新跑名称门禁、snapshot verify、strict fsck。任一差异不得复用；必须重新全量扫描或拒绝不一致包。回执明确“复用扫描”，不得称为第二次正文扫描；中止的重复扫描不得计作 PASS。
 

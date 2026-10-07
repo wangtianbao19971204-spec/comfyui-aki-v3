@@ -1,7 +1,8 @@
 """Explicit maintenance-package release preparation and local annotated tags.
 
 No commit, push, deployment, rollback execution, or upstream version changes.
-Preparation is not publication. Tagging always uses the complete history gate.
+Preparation requires an explicitly named release branch and is not publication.
+Tagging on the accepted main branch always uses the complete history gate.
 """
 from __future__ import annotations
 
@@ -144,16 +145,31 @@ def read_version(repo):
     return validate_version(json.loads(raw)), raw
 
 
-def assert_clean(repo, expected_head):
+def release_branch(repo, expected_branch):
+    if (not isinstance(expected_branch, str) or not expected_branch.startswith('release/')
+            or expected_branch == 'release/'
+            or git(repo, 'check-ref-format', '--branch', expected_branch, allowed=(0, 128)).returncode):
+        raise ValueError('An explicit valid release/<name> preparation branch is required')
+    return expected_branch
+
+
+def assert_checkout(repo, expected_head, expected_branch):
     if not isinstance(expected_head, str) or not OID.fullmatch(expected_head):
-        raise ValueError('An exact expected main HEAD is required')
+        raise ValueError('An exact expected HEAD is required')
     top = Path(git(repo, 'rev-parse', '--show-toplevel').stdout.decode().strip()).resolve()
     if top != Path(repo).resolve():
         raise ValueError('Release command must target the repository root')
     branch = git(repo, 'symbolic-ref', '-q', 'HEAD').stdout.decode().strip()
     actual = git(repo, 'rev-parse', 'HEAD').stdout.decode().strip()
-    if branch != 'refs/heads/main' or actual != expected_head:
-        raise RuntimeError('Expected main HEAD changed or checkout is not on main')
+    branch_ref = 'refs/heads/' + expected_branch
+    if branch != branch_ref or actual != expected_head:
+        raise RuntimeError('Expected branch or HEAD changed')
+    if git(repo, 'rev-parse', '--verify', branch_ref).stdout.decode().strip() != expected_head:
+        raise RuntimeError('Expected branch ref changed')
+
+
+def assert_clean(repo, expected_head, expected_branch='main'):
+    assert_checkout(repo, expected_head, expected_branch)
     if git(repo, 'status', '--porcelain', '--untracked-files=all').stdout:
         raise RuntimeError('Release requires a clean tracked and untracked worktree')
 
@@ -233,10 +249,11 @@ def review_notes(repo, path, expected_sha, rollback_receipt, expected_head):
     return notes
 
 
-def prepare(*, expected_head, expected_version, increment, notes_path, review_sha256, rollback_receipt, repo=REPO):
+def prepare(*, expected_branch, expected_head, expected_version, increment, notes_path, review_sha256, rollback_receipt, repo=REPO):
     repo = Path(repo).resolve()
+    expected_branch = release_branch(repo, expected_branch)
     with release_lock(repo):
-        assert_clean(repo, expected_head)
+        assert_clean(repo, expected_head, expected_branch)
         current, original = read_version(repo)
         if current['version'] != expected_version:
             raise RuntimeError('Expected maintenance version changed')
@@ -272,7 +289,7 @@ def prepare(*, expected_head, expected_version, increment, notes_path, review_sh
                   'snapshot_manifest_sha256': sha(manifest_raw), 'review_sha256': review_sha256,
                   'rollback_receipt_sha256': notes['rollback']['receipt_sha256']}}
         validate_version(result)
-        assert_clean(repo, expected_head)
+        assert_clean(repo, expected_head, expected_branch)
         if (refs(repo) != before_refs or read_plain(repo / VERSION_PATH) != original
                 or read_plain(repo / 'snapshot/manifest.json', 32 * 1024 * 1024) != manifest_raw
                 or sha(read_plain(notes_path, 128 * 1024)) != review_sha256
@@ -282,12 +299,15 @@ def prepare(*, expected_head, expected_version, increment, notes_path, review_sh
         created = False
         next_raw = encoded(result)
         try:
+            assert_checkout(repo, expected_head, expected_branch)
             with destination.open('xb') as handle:
                 handle.write(record_raw)
             created = True
+            assert_checkout(repo, expected_head, expected_branch)
             if read_plain(repo / VERSION_PATH) != original or refs(repo) != before_refs:
                 raise RuntimeError('Version or refs changed immediately before preparation write')
             replace_file(repo / VERSION_PATH, next_raw)
+            assert_checkout(repo, expected_head, expected_branch)
             dirty_paths = {line[3:] for line in git(repo, 'status', '--porcelain', '--untracked-files=all').stdout.decode().splitlines()}
             if (refs(repo) != before_refs or not dirty_paths <= {VERSION_PATH, relative}
                     or read_plain(repo / VERSION_PATH) != next_raw
@@ -302,10 +322,11 @@ def prepare(*, expected_head, expected_version, increment, notes_path, review_sh
             if created and destination.read_bytes() == record_raw:
                 destination.unlink()
             raise
-        return {'prepared': True, 'version': upcoming, 'base_commit': expected_head, 'notes_path': relative,
+        return {'prepared': True, 'version': upcoming, 'preparation_branch': expected_branch,
+                'base_commit': expected_head, 'notes_path': relative,
                 'notes_sha256': sha(record_raw), 'committed': False, 'tag_created': False,
                 'full_history_gate_run': False, 'production_modified': False,
-                'next_step': 'Review and explicitly commit the release metadata and changelog, then invoke tag with the new expected HEAD.'}
+                'next_step': 'Review and commit the release metadata and changelog on this branch, submit a PR, and wait for user-approved merging. Then update clean main and invoke tag with its exact expected HEAD.'}
 
 
 def full_gates(repo):
@@ -397,6 +418,7 @@ def main():
     commands = parser.add_subparsers(dest='command', required=True)
     commands.add_parser('status')
     prepare_parser = commands.add_parser('prepare')
+    prepare_parser.add_argument('--expected-branch', required=True, help='Explicit release/<name> branch; main is refused')
     prepare_parser.add_argument('--expected-head', required=True)
     prepare_parser.add_argument('--expected-version', required=True)
     prepare_parser.add_argument('--bump', choices=['patch', 'minor', 'major'], required=True)
@@ -412,7 +434,8 @@ def main():
             current, _ = read_version(REPO)
             result = {'metadata': current, 'production_modified': False}
         elif args.command == 'prepare':
-            result = prepare(expected_head=args.expected_head, expected_version=args.expected_version,
+            result = prepare(expected_branch=args.expected_branch, expected_head=args.expected_head,
+                             expected_version=args.expected_version,
                              increment=args.bump, notes_path=args.notes, review_sha256=args.review_sha256,
                              rollback_receipt=args.rollback_receipt)
         else:
