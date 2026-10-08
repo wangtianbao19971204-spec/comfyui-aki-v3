@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "date": "2026-10-07",
+  "feature": "runtime-models",
+  "scope": "LoRA missing preview fetch and manual preview binding",
+  "confirmed_fetch_cause": "Bulk fetch excluded every model with a Civitai version ID, including linked models without local previews.",
+  "original_manual_failure_reproduced": false,
+  "additional_confirmed_defects": [
+    "Frontend discarded backend error details and ignored a failed card update.",
+    "Preview persistence ignored metadata/cache false returns and removed old images before completion.",
+    "The image optimizer could return corrupt original bytes instead of raising an error."
+  ],
+  "tests": {
+    "backend_related": {"passed": 111, "files": 5},
+    "frontend_related": {"passed": 40, "files": 6},
+    "maintenance": {"passed": 584},
+    "baseline_upload_diagnostic": {"passed": 18, "chinese_names": 9, "path_separator_variants": 2}
+  },
+  "isolated_browser": {
+    "actual_components": ["BaseModelApiClient", "upload route handler", "PreviewAssetService", "Pillow", "MetadataManager"],
+    "test_doubles": ["page state", "card renderer", "scanner cache"],
+    "valid_upload": {"passed": true, "card_updated": true, "image_loaded": true, "preview_size": [480, 320]},
+    "invalid_upload": {"passed": true, "error_visible": true, "previous_image_hash_unchanged": true, "sidecar_hash_unchanged": true},
+    "model_bytes_unchanged": true,
+    "personal_fields_preserved": true,
+    "cache_and_sidecar_consistent": true,
+    "private_evidence": "receipt:lora-preview-binding-20261007-01"
+  },
+  "boundaries": {
+    "production_preview_written": false,
+    "production_deployed": false,
+    "service_restarted": false,
+    "external_preview_fetch_exercised": false,
+    "live_persistent_cache_exercised": false,
+    "weights_uploaded": false,
+    "media_uploaded": false,
+    "workflow_changed": false
+  },
+  "deployment_scope": [
+    "py/services/metadata_sync_service.py",
+    "py/services/preview_asset_service.py",
+    "py/services/use_cases/bulk_metadata_refresh_use_case.py",
+    "static/js/api/baseModelApi.js"
+  ],
+  "deployment_requirement": "Explicit production deployment authorization, fresh queue/service checks, source rollback copies, consistent database backups, then service restart and management-page refresh."
+}

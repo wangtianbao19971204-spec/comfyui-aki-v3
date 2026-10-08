@@ -1,4 +1,6 @@
 from types import SimpleNamespace
+from copy import deepcopy
+from pathlib import Path
 from typing import Any, Dict
 from unittest.mock import AsyncMock
 
@@ -33,6 +35,7 @@ def build_service(
     provider = default_provider or SimpleNamespace(
         get_model_by_hash=AsyncMock(),
         get_model_version=AsyncMock(),
+        get_model_version_info=AsyncMock(return_value=(None, "No provider could retrieve the data")),
     )
     if default_provider is None:
         provider.get_model_by_hash.return_value = (None, None)
@@ -56,6 +59,366 @@ def build_service(
         default_provider_factory=default_provider_factory,
         provider_selector=provider_selector,
     )
+
+
+def preview_model(tmp_path, *, images=None, preview_url=""):
+    model_path = tmp_path / "规范 LoRA 名称.safetensors"
+    model_path.write_bytes(b"isolated placeholder")
+    return {
+        "file_path": str(model_path).replace("\\", "/"), "model_name": "【Anima｜画风】规范名称",
+        "sha256": "a" * 64, "preview_url": preview_url,
+        "base_model": "Anima", "favorite": True, "notes": "private notes preserved",
+        "tags": ["maintained-tag"], "custom": {"nested": ["preserve"]},
+        "civitai": {"id": 123, "trainedWords": ["maintained trigger"], "images": images or []},
+    }
+
+
+def successful_preview_write(helpers, tmp_path):
+    preview = tmp_path / "preview.png"
+
+    async def write_preview(metadata_path, data, images):
+        preview.write_bytes(b"isolated preview")
+        data["preview_url"] = str(preview)
+        data["preview_nsfw_level"] = 1
+
+    helpers.preview_service.ensure_preview_for_metadata.side_effect = write_preview
+    helpers.metadata_manager.save_metadata.return_value = True
+    return preview
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("stale_preview", [False, True])
+async def test_fetch_missing_preview_uses_saved_candidates_and_preserves_metadata(tmp_path, stale_preview):
+    helpers = build_service()
+    images = [{"url": "https://example.test/saved.png", "nsfwLevel": 1}]
+    model = preview_model(tmp_path, images=images, preview_url=str(tmp_path / "missing.png") if stale_preview else "")
+    original = deepcopy(model)
+    preview = successful_preview_write(helpers, tmp_path)
+    update_cache = AsyncMock(return_value=True)
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256="", file_path=model["file_path"], model_data=model, update_cache_func=update_cache
+    )
+
+    assert ok is True and error is None
+    assert model == {**original, "preview_url": str(preview), "preview_nsfw_level": 1}
+    helpers.default_provider_factory.assert_not_awaited()
+    helpers.preview_service.ensure_preview_for_metadata.assert_awaited_once()
+    assert helpers.preview_service.ensure_preview_for_metadata.await_args.args[2] == images
+    saved = helpers.metadata_manager.save_metadata.await_args.args[1]
+    assert saved == model
+    update_cache.assert_awaited_once_with(model["file_path"], model["file_path"], saved)
+
+
+@pytest.mark.asyncio
+async def test_fetch_missing_preview_hash_fallback_only_uses_remote_images(tmp_path):
+    helpers = build_service()
+    model = preview_model(tmp_path)
+    model["civitai"].pop("id")
+    original = deepcopy(model)
+    remote = {"id": 999, "model": {"name": "Remote name"}, "baseModel": "Other", "trainedWords": ["remote trigger"], "tags": ["remote tag"], "images": [{"url": "https://example.test/remote.png", "nsfwLevel": 1}]}
+    helpers.default_provider.get_model_by_hash.return_value = (remote, None)
+    preview = successful_preview_write(helpers, tmp_path)
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256=model["sha256"], file_path=model["file_path"], model_data=model, update_cache_func=AsyncMock(return_value=True)
+    )
+
+    assert ok is True and error is None
+    helpers.default_provider.get_model_by_hash.assert_awaited_once_with("a" * 64)
+    assert helpers.preview_service.ensure_preview_for_metadata.await_args.args[2] == remote["images"]
+    assert model == {**original, "preview_url": str(preview), "preview_nsfw_level": 1}
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("sha256", ["a" * 64, "A" * 64, ""])
+async def test_fetch_missing_preview_queries_exact_linked_version_and_preserves_fields(tmp_path, sha256):
+    helpers = build_service()
+    model = preview_model(tmp_path)
+    model["civitai"]["modelId"] = 456
+    original = deepcopy(model)
+    remote = {
+        "id": 123, "modelId": 456, "name": "Remote version name",
+        "model": {"name": "Remote model name"}, "trainedWords": ["remote trigger"],
+        "images": [{"url": "https://example.test/linked.png", "nsfwLevel": 1}],
+        "files": [{"hashes": {"SHA256": "a" * 64}}],
+    }
+    helpers.default_provider.get_model_version_info.return_value = (remote, None)
+    preview = successful_preview_write(helpers, tmp_path)
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256=sha256, file_path=model["file_path"], model_data=model,
+        update_cache_func=AsyncMock(return_value=True),
+    )
+
+    assert ok is True and error is None
+    helpers.default_provider.get_model_version_info.assert_awaited_once_with("123")
+    helpers.default_provider.get_model_by_hash.assert_not_awaited()
+    assert helpers.preview_service.ensure_preview_for_metadata.await_args.args[2] == remote["images"]
+    assert model == {**original, "preview_url": str(preview), "preview_nsfw_level": 1}
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("change,expected", [
+    ({"id": 999}, "Preview metadata does not match the linked version"),
+    ({"modelId": 999}, "Preview metadata does not match the linked model"),
+    ({"files": [{"hashes": {"SHA256": "b" * 64}}]}, "Linked version has no file matching this model's SHA256"),
+    ({"files": None}, "Linked version has no file matching this model's SHA256"),
+    ({"files": 1}, "Linked version has no file matching this model's SHA256"),
+    ({"images": []}, "No preview images available"),
+])
+async def test_fetch_missing_preview_rejects_wrong_linked_identity_without_writes(tmp_path, change, expected):
+    helpers = build_service()
+    model = preview_model(tmp_path)
+    model["civitai"]["modelId"] = 456
+    original = deepcopy(model)
+    remote = {
+        "id": 123, "modelId": 456,
+        "images": [{"url": "https://example.test/wrong.png"}],
+        "files": [{"hashes": {"SHA256": "a" * 64}}], **change,
+    }
+    helpers.default_provider.get_model_version_info.return_value = (remote, None)
+    update_cache = AsyncMock()
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256=model["sha256"], file_path=model["file_path"], model_data=model,
+        update_cache_func=update_cache,
+    )
+
+    assert ok is False and error == expected
+    assert model == original
+    helpers.default_provider.get_model_by_hash.assert_not_awaited()
+    helpers.preview_service.ensure_preview_for_metadata.assert_not_awaited()
+    helpers.metadata_manager.save_metadata.assert_not_awaited()
+    update_cache.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_fetch_missing_preview_checks_saved_hash_when_caller_hash_is_empty(tmp_path):
+    helpers = build_service()
+    model = preview_model(tmp_path)
+    helpers.default_provider.get_model_version_info.return_value = ({
+        "id": 123, "images": [{"url": "https://example.test/wrong.png"}],
+        "files": [{"hashes": {"SHA256": "b" * 64}}],
+    }, None)
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256="", file_path=model["file_path"], model_data=model, update_cache_func=AsyncMock(),
+    )
+
+    assert ok is False and error == "Linked version has no file matching this model's SHA256"
+    helpers.preview_service.ensure_preview_for_metadata.assert_not_awaited()
+    helpers.metadata_manager.save_metadata.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("provider_error", ["Rate limited", OFFLINE_FRIENDLY_MESSAGE, "HTTP 401: authentication required"])
+async def test_fetch_missing_preview_keeps_linked_provider_error_without_hash_retry(tmp_path, provider_error):
+    helpers = build_service()
+    model = preview_model(tmp_path)
+    helpers.default_provider.get_model_version_info.return_value = (None, provider_error)
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256=model["sha256"], file_path=model["file_path"], model_data=model,
+        update_cache_func=AsyncMock(),
+    )
+
+    assert ok is False and error == provider_error
+    helpers.default_provider.get_model_by_hash.assert_not_awaited()
+    helpers.metadata_manager.save_metadata.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("version_id", [True, "bad", -1, "1.0"])
+async def test_fetch_missing_preview_rejects_invalid_linked_version_before_network(tmp_path, version_id):
+    helpers = build_service()
+    model = preview_model(tmp_path)
+    model["civitai"]["id"] = version_id
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256=model["sha256"], file_path=model["file_path"], model_data=model,
+        update_cache_func=AsyncMock(),
+    )
+
+    assert ok is False and error == "Invalid linked model version ID"
+    helpers.default_provider_factory.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("cache_ok", [True, False])
+async def test_fetch_missing_preview_keeps_existing_local_image(tmp_path, cache_ok):
+    helpers = build_service()
+    preview = tmp_path / "existing.png"
+    preview.write_bytes(b"existing")
+    model = preview_model(tmp_path, preview_url=str(preview))
+    original = deepcopy(model)
+    update_cache = AsyncMock(return_value=cache_ok)
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256=model["sha256"], file_path=model["file_path"], model_data=model, update_cache_func=update_cache
+    )
+
+    assert ok is cache_ok
+    assert error == (None if cache_ok else "Failed to update model cache for existing preview")
+    assert model == original and preview.read_bytes() == b"existing"
+    helpers.default_provider_factory.assert_not_awaited()
+    helpers.preview_service.ensure_preview_for_metadata.assert_not_awaited()
+    helpers.metadata_manager.save_metadata.assert_not_awaited()
+    update_cache.assert_awaited_once_with(model["file_path"], model["file_path"], original)
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("sha256", ["", "partial-hash", "g" * 64])
+async def test_fetch_missing_preview_rejects_incomplete_hash_without_candidates(tmp_path, sha256):
+    helpers = build_service()
+    model = preview_model(tmp_path)
+    model["civitai"].pop("id")
+    model["sha256"] = sha256
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256=sha256, file_path=model["file_path"], model_data=model, update_cache_func=AsyncMock(return_value=True)
+    )
+
+    assert ok is False and "complete SHA256" in error
+    helpers.default_provider_factory.assert_not_awaited()
+    helpers.metadata_manager.save_metadata.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("remote,error_message,expected", [
+    (None, "Model not found", "Model not found"),
+    ({"id": 1, "images": []}, None, "No preview images available"),
+])
+async def test_fetch_missing_preview_reports_missing_remote_images(tmp_path, remote, error_message, expected):
+    helpers = build_service()
+    helpers.default_provider.get_model_by_hash.return_value = (remote, error_message)
+    model = preview_model(tmp_path)
+    model["civitai"].pop("id")
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256=model["sha256"], file_path=model["file_path"], model_data=model, update_cache_func=AsyncMock(return_value=True)
+    )
+
+    assert ok is False and error == expected
+    helpers.preview_service.ensure_preview_for_metadata.assert_not_awaited()
+    helpers.metadata_manager.save_metadata.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("set_missing_url", [False, True])
+async def test_fetch_missing_preview_requires_file_to_land(tmp_path, set_missing_url):
+    helpers = build_service()
+    model = preview_model(tmp_path, images=[{"url": "https://example.test/preview.png"}])
+    original = deepcopy(model)
+    if set_missing_url:
+        helpers.preview_service.ensure_preview_for_metadata.side_effect = lambda path, data, images: data.update(preview_url=str(tmp_path / "never-created.png"))
+    update_cache = AsyncMock(return_value=True)
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256=model["sha256"], file_path=model["file_path"], model_data=model, update_cache_func=update_cache
+    )
+
+    assert ok is False and error == "Preview download did not create a local file"
+    assert model == original
+    helpers.metadata_manager.save_metadata.assert_not_awaited()
+    update_cache.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("save_ok,cache_ok,expected", [
+    (False, True, "Failed to save preview metadata"),
+    (True, False, "Preview saved but model cache update failed"),
+])
+async def test_fetch_missing_preview_reports_save_and_cache_failures(tmp_path, save_ok, cache_ok, expected):
+    helpers = build_service()
+    model = preview_model(tmp_path, images=[{"url": "https://example.test/preview.png"}])
+    original = deepcopy(model)
+    successful_preview_write(helpers, tmp_path)
+    helpers.metadata_manager.save_metadata.return_value = save_ok
+    update_cache = AsyncMock(return_value=cache_ok)
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256=model["sha256"], file_path=model["file_path"], model_data=model, update_cache_func=update_cache
+    )
+
+    assert ok is False and error == expected
+    assert model == original
+    if save_ok:
+        update_cache.assert_awaited_once()
+    else:
+        update_cache.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_fetch_missing_preview_recovers_cache_failure_without_redownload(tmp_path):
+    helpers = build_service()
+    model = preview_model(tmp_path, images=[{"url": "https://example.test/preview.png"}])
+    original = deepcopy(model)
+    preview = successful_preview_write(helpers, tmp_path)
+    update_cache = AsyncMock(side_effect=[False, True])
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256=model["sha256"], file_path=model["file_path"], model_data=model, update_cache_func=update_cache
+    )
+
+    assert ok is False and error == "Preview saved but model cache update failed"
+    assert model == original
+    sidecar_model = deepcopy(helpers.metadata_manager.save_metadata.await_args.args[1])
+    assert sidecar_model["preview_url"] == str(preview)
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256=sidecar_model["sha256"], file_path=sidecar_model["file_path"], model_data=sidecar_model, update_cache_func=update_cache
+    )
+
+    assert ok is True and error is None
+    assert update_cache.await_count == 2
+    helpers.preview_service.ensure_preview_for_metadata.assert_awaited_once()
+    helpers.metadata_manager.save_metadata.assert_awaited_once()
+    helpers.default_provider_factory.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_fetch_missing_preview_uses_existing_selection_and_anonymous_download_contract(tmp_path, monkeypatch):
+    import io
+    import json
+    from PIL import Image
+    from py.services import preview_asset_service
+    from py.services.preview_asset_service import PreviewAssetService
+    from py.utils.exif_utils import ExifUtils
+    from py.utils.metadata_manager import MetadataManager
+
+    helpers = build_service()
+    images = [
+        {"url": "https://example.test/mature.png", "nsfwLevel": 16, "type": "image"},
+        {"url": "https://example.test/safe.png", "nsfwLevel": 1, "type": "image"},
+    ]
+    model = preview_model(tmp_path, images=images)
+    original = deepcopy(model)
+    image_buffer = io.BytesIO()
+    Image.new("RGB", (80, 48), (20, 40, 60)).save(image_buffer, format="PNG")
+    downloader = SimpleNamespace(download_to_memory=AsyncMock(return_value=(True, image_buffer.getvalue(), {})))
+    helpers.service._metadata_manager = MetadataManager
+    helpers.service._preview_service = PreviewAssetService(
+        metadata_manager=MetadataManager, downloader_factory=AsyncMock(return_value=downloader), exif_utils=ExifUtils
+    )
+    monkeypatch.setattr(preview_asset_service, "get_settings_manager", lambda: DummySettings({"blur_mature_content": True, "mature_blur_level": "R"}))
+
+    ok, error = await helpers.service.fetch_missing_preview(
+        sha256=model["sha256"], file_path=model["file_path"], model_data=model, update_cache_func=AsyncMock(return_value=True)
+    )
+
+    assert ok is True and error is None
+    downloader.download_to_memory.assert_awaited_once_with("https://example.test/safe.png", use_auth=False)
+    preview = Path(model["preview_url"])
+    with Image.open(preview) as image:
+        image.load()
+        assert image.format == "WEBP"
+    assert model["preview_nsfw_level"] == 1
+    saved = json.loads(Path(model["file_path"]).with_suffix(".metadata.json").read_text(encoding="utf-8"))
+    for key in original:
+        if key != "preview_url":
+            assert saved[key] == original[key]
+    helpers.default_provider_factory.assert_not_awaited()
 
 
 @pytest.mark.asyncio

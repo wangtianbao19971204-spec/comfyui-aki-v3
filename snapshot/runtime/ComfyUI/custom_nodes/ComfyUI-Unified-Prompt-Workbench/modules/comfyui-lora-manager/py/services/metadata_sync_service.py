@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
+from copy import deepcopy
 from datetime import datetime
 from typing import Any, Awaitable, Callable, Dict, Iterable, Optional, Protocol
 
@@ -52,6 +54,11 @@ class MetadataProviderProtocol(Protocol):
     ) -> Optional[Dict[str, Any]]:
         ...
 
+    async def get_model_version_info(
+        self, version_id: str
+    ) -> tuple[Optional[Dict[str, Any]], Optional[str]]:
+        ...
+
 
 class MetadataSyncService:
     """High level orchestration for metadata synchronisation flows."""
@@ -83,6 +90,110 @@ class MetadataSyncService:
         except Exception as exc:  # pragma: no cover - defensive logging
             logger.error("Error loading metadata from %s: %s", metadata_path, exc)
             return {}
+
+    @staticmethod
+    def has_local_preview(model_data: Dict[str, Any]) -> bool:
+        """An existing local preview must survive the bulk fetch action."""
+
+        preview_path = model_data.get("preview_url")
+        return isinstance(preview_path, str) and bool(preview_path) and os.path.isfile(preview_path)
+
+    async def fetch_missing_preview(
+        self,
+        *,
+        sha256: str,
+        file_path: str,
+        model_data: Dict[str, Any],
+        update_cache_func: Callable[[str, str, Dict[str, Any]], Awaitable[bool]],
+    ) -> tuple[bool, Optional[str]]:
+        """Fill a linked model's missing preview without refreshing its metadata.
+
+        Cached image candidates avoid a metadata request. Otherwise a linked
+        version is queried directly and its identity checked. Hash lookup is
+        reserved for records without a version ID; remote personal fields are
+        deliberately not merged into the local record.
+        """
+
+        def image_candidates(metadata: Dict[str, Any]) -> list[Dict[str, Any]]:
+            images = metadata.get("images")
+            if not isinstance(images, list):
+                return []
+            return [
+                image for image in images
+                if isinstance(image, dict) and isinstance(image.get("url"), str) and image["url"]
+            ]
+
+        try:
+            local_metadata = deepcopy(model_data)
+            local_metadata.pop("folder", None)
+            if self.has_local_preview(local_metadata):
+                # The sidecar may be newer than the cache, including after a
+                # failed cache update. Reconcile it without another download.
+                if not await update_cache_func(file_path, file_path, local_metadata):
+                    return False, "Failed to update model cache for existing preview"
+                return True, None
+            linked = local_metadata.get("civitai") or {}
+            images = image_candidates(linked)
+            if not images:
+                lookup_sha256 = sha256 or local_metadata.get("sha256", "")
+                version_id = linked.get("id")
+                if version_id:
+                    # get_model_version_info returns the provider error as well
+                    # as metadata, keeping offline and rate-limit failures from
+                    # being reported as a confirmed model deletion.
+                    if isinstance(version_id, bool) or re.fullmatch(r"[1-9][0-9]*", str(version_id)) is None:
+                        return False, "Invalid linked model version ID"
+                    provider = await self._get_default_provider()
+                    remote_metadata, error = await provider.get_model_version_info(str(version_id))
+                    if remote_metadata:
+                        if str(remote_metadata.get("id")) != str(version_id):
+                            return False, "Preview metadata does not match the linked version"
+                        model_id = linked.get("modelId") or (linked.get("model") or {}).get("id")
+                        if model_id and str(remote_metadata.get("modelId")) != str(model_id):
+                            return False, "Preview metadata does not match the linked model"
+                        if isinstance(lookup_sha256, str) and re.fullmatch(r"[0-9a-fA-F]{64}", lookup_sha256):
+                            files = remote_metadata.get("files")
+                            files = files if isinstance(files, list) else []
+                            matching_file = any(
+                                isinstance(item, dict)
+                                and isinstance(item.get("hashes"), dict)
+                                and str(item["hashes"].get("SHA256", "")).lower() == lookup_sha256.lower()
+                                for item in files
+                            )
+                            if not matching_file:
+                                return False, "Linked version has no file matching this model's SHA256"
+                else:
+                    if not isinstance(lookup_sha256, str) or re.fullmatch(r"[0-9a-fA-F]{64}", lookup_sha256) is None:
+                        return False, "A complete SHA256 is required to find preview images"
+                    remote_metadata, error = await self.fetch_metadata_by_sha(lookup_sha256)
+                if not remote_metadata:
+                    return False, error or "No metadata found for preview images"
+                images = image_candidates(remote_metadata)
+            if not images:
+                return False, "No preview images available"
+
+            metadata_path = os.path.splitext(file_path)[0] + ".metadata.json"
+            await self._preview_service.ensure_preview_for_metadata(
+                metadata_path, local_metadata, images
+            )
+            if not self.has_local_preview(local_metadata):
+                return False, "Preview download did not create a local file"
+            if not await self._metadata_manager.save_metadata(file_path, local_metadata):
+                return False, "Failed to save preview metadata"
+            if not await update_cache_func(file_path, file_path, local_metadata):
+                return False, "Preview saved but model cache update failed"
+
+            model_data["preview_url"] = local_metadata["preview_url"]
+            model_data["preview_nsfw_level"] = local_metadata.get("preview_nsfw_level", 0)
+            return True, None
+        except RateLimitError as exc:
+            provider_label = exc.provider or "metadata provider"
+            return False, f"Rate limited by {provider_label}"
+        except Exception as exc:
+            if is_expected_offline_error(str(exc)):
+                return False, OFFLINE_FRIENDLY_MESSAGE
+            logger.error("Error fetching missing preview: %s", exc, exc_info=True)
+            return False, f"Error fetching preview: {exc}"
 
     async def mark_not_found_on_civitai(
         self, metadata_path: str, local_metadata: Dict[str, Any]

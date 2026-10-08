@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import time
+from copy import deepcopy
 from typing import Any, Dict, List, Optional, Protocol, Sequence
 
 from ..metadata_sync_service import MetadataSyncService
@@ -51,7 +52,10 @@ class BulkMetadataRefreshUseCase:
             for model in cache.raw_data
             if not model.get("skip_metadata_refresh", False)
             and not self._is_in_skip_path(model.get("folder", ""), skip_paths)
-            and (not model.get("civitai") or not model["civitai"].get("id"))
+            and (
+                not model.get("civitai") or not model["civitai"].get("id")
+                or not MetadataSyncService.has_local_preview(model)
+            )
             # Skip models linked to an external model site (Hugging Face /
             # ModelScope / TensorArt) — they are not on CivitAI / CivArchive.
             # Users can still refresh them individually via the right-click
@@ -113,13 +117,14 @@ class BulkMetadataRefreshUseCase:
                 return {"success": False, "message": "Operation cancelled", "processed": processed, "updated": success, "total": total_models, "failures": failures, "failure_count": len(failures), "skipped_count": skipped_count, "elapsed_seconds": int(time.monotonic() - start_time)}
             try:
                 original_name = model.get("model_name")
+                preview_only = bool((model.get("civitai") or {}).get("id"))
 
                 # Handle lazy hash calculation for models with pending hash status
                 sha256 = model.get("sha256", "")
                 hash_status = model.get("hash_status", "completed")
                 file_path = model.get("file_path")
 
-                if not sha256 and hash_status == "pending" and file_path:
+                if not preview_only and not sha256 and hash_status == "pending" and file_path:
                     self._logger.info(f"Calculating pending hash for {file_path}")
                     # Check if scanner has calculate_hash_for_model method (CheckpointScanner)
                     calculate_hash_method = getattr(self._service.scanner, "calculate_hash_for_model", None)
@@ -143,30 +148,44 @@ class BulkMetadataRefreshUseCase:
                         continue
 
                 # Skip models without valid hash
-                if not model.get("sha256"):
+                if not preview_only and not model.get("sha256"):
                     self._logger.warning(f"Skipping model without hash: {file_path}")
                     skipped_count += 1
                     processed += 1
                     handled_count += 1
                     continue
 
+                if preview_only:
+                    # Do not mutate the raw cache before its update succeeds:
+                    # a failed update must remain eligible for the next retry.
+                    model = deepcopy(model)
                 await MetadataManager.hydrate_model_data(model)
 
                 # hydrate_model_data replaces model with .metadata.json content,
                 # which may lack sha256. Restore from cache and persist the fix.
-                if not model.get("sha256"):
+                if not preview_only and not model.get("sha256"):
                     model["sha256"] = sha256
                     model["hash_status"] = model.get("hash_status", hash_status)
                     data_to_save = model.copy()
                     data_to_save.pop("folder", None)
                     await MetadataManager.save_metadata(file_path, data_to_save)
 
-                result, error_msg = await self._metadata_sync.fetch_and_update_model(
-                    sha256=model["sha256"],
-                    file_path=model["file_path"],
-                    model_data=model,
-                    update_cache_func=self._service.scanner.update_single_model_cache,
-                )
+                if preview_only:
+                    # Linked models only need their missing preview repaired.
+                    # A full refresh would replace their maintained display name.
+                    result, error_msg = await self._metadata_sync.fetch_missing_preview(
+                        sha256=model.get("sha256") or sha256,
+                        file_path=model["file_path"],
+                        model_data=model,
+                        update_cache_func=self._service.scanner.update_single_model_cache,
+                    )
+                else:
+                    result, error_msg = await self._metadata_sync.fetch_and_update_model(
+                        sha256=model["sha256"],
+                        file_path=model["file_path"],
+                        model_data=model,
+                        update_cache_func=self._service.scanner.update_single_model_cache,
+                    )
 
                 if not result and error_msg and "Rate limited" in error_msg:
                     consecutive_rate_limits += 1

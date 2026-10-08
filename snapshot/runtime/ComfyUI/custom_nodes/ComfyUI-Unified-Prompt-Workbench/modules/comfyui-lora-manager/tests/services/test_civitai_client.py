@@ -8,6 +8,7 @@ from py.services.civitai_client import CivitaiClient
 from py.services.connectivity_guard import OFFLINE_COOLDOWN_ERROR, OFFLINE_FRIENDLY_MESSAGE
 from py.services.errors import RateLimitError, ResourceNotFoundError
 from py.services.model_metadata_provider import ModelMetadataProviderManager
+from py.utils.civitai_utils import extract_civitai_image_id
 
 
 class DummyDownloader:
@@ -65,10 +66,10 @@ async def test_download_file_uses_downloader(tmp_path, downloader):
     assert downloader.download_calls[0]["use_auth"] is True
 
 
-async def test_client_defaults_to_red_api_host(downloader):
+async def test_client_defaults_to_official_api_host(downloader):
     client = await CivitaiClient.get_instance()
 
-    assert client.base_url == "https://civitai.red/api/v1"
+    assert client.base_url == "https://civitai.com/api/v1"
 
 
 async def test_get_model_by_hash_enriches_metadata(monkeypatch, downloader):
@@ -84,6 +85,8 @@ async def test_get_model_by_hash_enriches_metadata(monkeypatch, downloader):
     model_payload = {"description": "desc", "tags": ["tag"], "creator": {"username": "user"}}
 
     async def fake_make_request(method, url, use_auth=True, **kwargs):
+        assert url.startswith("https://civitai.com/api/v1/")
+        assert use_auth is True
         if url.endswith("by-hash/hash"):
             return True, version_payload.copy()
         if url.endswith("/models/123"):
@@ -294,6 +297,8 @@ async def test_get_model_versions_bulk_handles_errors(monkeypatch, downloader):
 
 async def test_get_model_version_by_version_id(monkeypatch, downloader):
     async def fake_make_request(method, url, use_auth=True, **kwargs):
+        assert url.startswith("https://civitai.com/api/v1/")
+        assert use_auth is True
         if url.endswith("/model-versions/7"):
             return True, {
                 "modelId": 321,
@@ -495,7 +500,8 @@ async def test_get_model_version_info_handles_not_found(monkeypatch, downloader)
 
 
 async def test_get_model_version_info_success(monkeypatch, downloader):
-    expected = {"id": 55, "images": [{"meta": {"comfy": {"foo": "bar"}, "other": "keep"}}]}
+    expected = {"id": 55, "images": [{"url": "https://example.invalid/preview.png",
+        "meta": {"comfy": {"foo": "bar"}, "other": "keep"}}]}
 
     async def fake_make_request(method, url, use_auth=True, **kwargs):
         return True, expected
@@ -511,6 +517,53 @@ async def test_get_model_version_info_success(monkeypatch, downloader):
     assert result is not None
     assert "comfy" not in result["images"][0]["meta"]
     assert result["images"][0]["meta"]["other"] == "keep"
+
+
+@pytest.mark.parametrize("image_fields", [{}, {"images": []}, {"images": None}, {"images": [{"meta": {}}]}])
+async def test_get_model_version_info_retries_missing_images_then_caches_new_images(downloader, image_fields):
+    empty = {"id": 55, "name": "Version", **image_fields}
+    available = {"id": 55, "images": [{"url": "https://example.invalid/new-preview.png"}]}
+    downloader.make_request = AsyncMock(side_effect=[(True, copy.deepcopy(empty)), (True, copy.deepcopy(available))])
+    client = await CivitaiClient.get_instance()
+
+    assert await client.get_model_version_info("55") == (empty, None)
+    assert "55" not in client._version_info_cache
+    assert await client.get_model_version_info("55") == (available, None)
+    assert await client.get_model_version_info("55") == (available, None)
+
+    assert downloader.make_request.await_count == 2
+    for request in downloader.make_request.await_args_list:
+        assert request.args == ("GET", "https://civitai.com/api/v1/model-versions/55")
+        assert request.kwargs == {"use_auth": True}
+
+
+@pytest.mark.parametrize("image_fields", [{}, {"images": []}])
+async def test_get_model_version_info_discards_previous_missing_image_cache(downloader, image_fields):
+    client = await CivitaiClient.get_instance()
+    client._version_info_cache["55"] = ({"id": 55, **image_fields}, None)
+    available = {"id": 55, "images": [{"url": "https://example.invalid/new-preview.png"}]}
+    downloader.make_request = AsyncMock(return_value=(True, available))
+
+    assert await client.get_model_version_info("55") == (available, None)
+    assert await client.get_model_version_info("55") == (available, None)
+    downloader.make_request.assert_awaited_once_with("GET", "https://civitai.com/api/v1/model-versions/55", use_auth=True)
+
+
+async def test_get_model_version_info_keeps_available_image_cache_bounded_and_recent(downloader):
+    client = await CivitaiClient.get_instance()
+    client._MAX_CACHE_ENTRIES = 2
+
+    async def make_request(method, url, **kwargs):
+        version_id = int(url.rsplit("/", 1)[1])
+        return True, {"id": version_id, "images": [{"url": f"https://example.invalid/{version_id}.png"}]}
+
+    downloader.make_request = AsyncMock(side_effect=make_request)
+    for version_id in ("55", "56", "55", "57"):
+        result, error = await client.get_model_version_info(version_id)
+        assert result["id"] == int(version_id) and error is None
+
+    assert downloader.make_request.await_count == 3
+    assert list(client._version_info_cache) == ["55", "57"]
 
 
 async def test_get_image_info_returns_matching_item(monkeypatch, downloader):
@@ -559,7 +612,7 @@ async def test_get_image_info_handles_missing(monkeypatch, downloader):
     assert result is None
 
 
-async def test_get_image_info_prefers_red_host_for_red_source(monkeypatch, downloader):
+async def test_get_image_info_uses_official_api_for_red_source(monkeypatch, downloader):
     requested_urls = []
 
     async def fake_make_request(method, url, use_auth=True, **kwargs):
@@ -576,14 +629,15 @@ async def test_get_image_info_prefers_red_host_for_red_source(monkeypatch, downl
 
     assert result == {"id": 124950237, "name": "target"}
     assert requested_urls == [
-        "https://civitai.red/api/v1/images?imageId=124950237&nsfw=X&withMeta=true"
+        "https://civitai.com/api/v1/images?imageId=124950237&nsfw=X&withMeta=true"
     ]
 
 
-async def test_get_image_info_uses_red_host_even_for_red_source(monkeypatch, downloader):
+async def test_extract_red_image_id_requests_canonical_official_api(monkeypatch, downloader):
     requested_urls = []
 
     async def fake_make_request(method, url, use_auth=True, **kwargs):
+        assert use_auth is True
         requested_urls.append(url)
         return True, {"items": [{"id": 124950237, "name": "target"}]}
 
@@ -591,13 +645,14 @@ async def test_get_image_info_uses_red_host_even_for_red_source(monkeypatch, dow
 
     client = await CivitaiClient.get_instance()
 
-    result = await client.get_image_info(
-        "124950237", source_url="https://civitai.red/images/124950237"
-    )
+    source_url = "https://civitai.red/images/124950237"
+    image_id = extract_civitai_image_id(source_url)
+    assert image_id == "124950237"
+    result = await client.get_image_info(image_id, source_url=source_url)
 
     assert result == {"id": 124950237, "name": "target"}
     assert requested_urls == [
-        "https://civitai.red/api/v1/images?imageId=124950237&nsfw=X&withMeta=true",
+        "https://civitai.com/api/v1/images?imageId=124950237&nsfw=X&withMeta=true",
     ]
 
 
@@ -618,7 +673,7 @@ async def test_get_image_info_does_not_fall_back_after_request_failure(monkeypat
 
     assert result is None
     assert requested_urls == [
-        "https://civitai.red/api/v1/images?imageId=124950237&nsfw=X&withMeta=true",
+        "https://civitai.com/api/v1/images?imageId=124950237&nsfw=X&withMeta=true",
     ]
 
 
@@ -662,7 +717,7 @@ async def test_get_user_models_requests_first_page_with_stable_params(downloader
 
     call = request_calls[0]
     assert call["method"] == "GET"
-    assert call["url"] == "https://civitai.red/api/v1/models"
+    assert call["url"] == "https://civitai.com/api/v1/models"
     params = call["kwargs"]["params"]
     assert params["username"] == "pixel"
     assert params["nsfw"] == "true"
@@ -730,7 +785,7 @@ async def test_get_creator_model_count_matches_exact_username(downloader):
     count = await client.get_creator_model_count("pixel")
 
     assert count == 2140
-    assert request_calls[0]["url"] == "https://civitai.red/api/v1/creators"
+    assert request_calls[0]["url"] == "https://civitai.com/api/v1/creators"
     assert request_calls[0]["kwargs"]["params"] == {"query": "pixel", "limit": 10}
 
 

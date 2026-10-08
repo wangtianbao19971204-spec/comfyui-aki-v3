@@ -57,9 +57,10 @@ class CivitaiClient:
             return
         self._initialized = True
 
-        self.base_url = "https://civitai.red/api/v1"
+        self.base_url = "https://civitai.com/api/v1"
         # In-memory cache to avoid redundant get_model_version_info calls
-        # within the same import/scan flow. Only successful results are cached.
+        # within the same import/scan flow. Only successful results with preview
+        # candidates are cached; missing images must be retried on a later fetch.
         # Uses OrderedDict with LRU eviction at MAX_CACHE_ENTRIES to prevent
         # unbounded growth in long-running server processes.
         self._version_info_cache: OrderedDict[
@@ -632,6 +633,14 @@ class CivitaiClient:
         for field, value in license_payload.items():
             model_info[field] = value
 
+    @staticmethod
+    def _has_version_preview_images(metadata: Dict[str, Any]) -> bool:
+        images = metadata.get("images")
+        return isinstance(images, list) and any(
+            isinstance(image, dict) and isinstance(image.get("url"), str) and bool(image["url"])
+            for image in images
+        )
+
     async def get_model_version_info(
         self, version_id: str
     ) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
@@ -649,9 +658,13 @@ class CivitaiClient:
         # import/scan flow (e.g. _resolve_base_model_from_checkpoint
         # followed by _resolve_and_populate_checkpoint with the same id).
         if version_id in self._version_info_cache:
-            logger.debug("Cache hit for model version info: %s", version_id)
-            self._version_info_cache.move_to_end(version_id)  # LRU bump
-            return self._version_info_cache[version_id]
+            cached = self._version_info_cache[version_id]
+            if cached[0] is not None and self._has_version_preview_images(cached[0]):
+                logger.debug("Cache hit for model version info: %s", version_id)
+                self._version_info_cache.move_to_end(version_id)  # LRU bump
+                return cached
+            # Also discard incomplete entries populated before this safeguard.
+            self._version_info_cache.pop(version_id)
 
         try:
             url = f"{self.base_url}/model-versions/{version_id}"
@@ -662,11 +675,12 @@ class CivitaiClient:
             if success and isinstance(result, dict):
                 logger.debug("Successfully fetched model version info for: %s", version_id)
                 self._remove_comfy_metadata(result)
-                self._version_info_cache[version_id] = (result, None)
-                self._version_info_cache.move_to_end(version_id)
-                # Evict oldest entry when over capacity
-                if len(self._version_info_cache) > self._MAX_CACHE_ENTRIES:
-                    self._version_info_cache.popitem(last=False)
+                if self._has_version_preview_images(result):
+                    self._version_info_cache[version_id] = (result, None)
+                    self._version_info_cache.move_to_end(version_id)
+                    # Evict oldest entry when over capacity
+                    if len(self._version_info_cache) > self._MAX_CACHE_ENTRIES:
+                        self._version_info_cache.popitem(last=False)
                 return result, None
 
             # Handle specific error cases
@@ -695,7 +709,7 @@ class CivitaiClient:
         Args:
             image_id: The Civitai image ID
             source_url: Original image page URL. Accepted for caller compatibility;
-                API requests always target ``civitai.red``.
+                API requests always target the official ``civitai.com`` API.
 
         Returns:
             Optional[Dict]: The image data or None if not found
@@ -716,7 +730,7 @@ class CivitaiClient:
                     )
                     return None
                 logger.error(
-                    "Failed to fetch image info for ID %s from civitai.red: %s",
+                    "Failed to fetch image info for ID %s from civitai.com: %s",
                     image_id,
                     result,
                 )
@@ -728,7 +742,7 @@ class CivitaiClient:
                 for item in items:
                     if isinstance(item, dict) and item.get("id") == requested_id:
                         logger.debug(
-                            "Successfully fetched image info for ID %s from civitai.red",
+                            "Successfully fetched image info for ID %s from civitai.com",
                             image_id,
                         )
                         return item
@@ -740,7 +754,7 @@ class CivitaiClient:
                 ]
 
                 logger.warning(
-                    "CivitAI API returned no matching image for requested ID %s from civitai.red. Returned %d item(s) with IDs: %s. This may indicate the image was deleted, hidden, or there is a database lag.",
+                    "CivitAI API returned no matching image for requested ID %s from civitai.com. Returned %d item(s) with IDs: %s. This may indicate the image was deleted, hidden, or there is a database lag.",
                     image_id,
                     len(items),
                     returned_ids,
