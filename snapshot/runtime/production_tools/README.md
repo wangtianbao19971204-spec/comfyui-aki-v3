@@ -14,7 +14,7 @@
 - 浏览器打开 `http://127.0.0.1:8188`。启动日志位于 `production_tools/logs`。
 - Windows 中文环境已规避 bitsandbytes 的 Linux Gaudi 探测编码异常；若启动日志出现新的异常，应先保留对应日志再切换 profile。
 - `停止_ComfyUI_生产.cmd` 只停止本工具启动且队列为空的后端，核对进程身份后才停止。
-- 原始启动器仍可使用；生产白名单只在新入口启动时生效。
+- 原绘世的图形界面适配正在隔离验收；候选入口保留原界面并应用生产白名单，正式运行入口尚未替换。范围与部署状态见[绘世适配说明](../../../docs/technical/runtime/huishi-launcher.md)。
 
 2026-10-03 日常生产入口现保留当前在线服务的显存参数：`--memory-mode original --preview-method auto --cuda-malloc --reserve-vram 4`，只切换插件白名单。下述 no-pin 连续切换记录为历史兼容性证据；需要时仍可手动使用 `--memory-mode no-pin`。关闭动态显存加载的备选方案在本机触发原生访问异常，未采用。兼容配置经过 Krea2、Anima 2.9B、双 LLLite、指令编辑和再次 Krea2 的连续切换验证。该有限回归不能保证无限时长运行无故障；异常后先停止继续排队，再释放显存或重启后端。
 

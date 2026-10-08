@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-07T15:14:39.576185+00:00",
+  "created_at": "2026-10-08T18:01:52.240542+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -49748,8 +49748,8 @@
     {
       "source": "ComfyUI/main.py",
       "path": "runtime/ComfyUI/main.py",
-      "sha256": "871f85659908d475ca919b70e6033d150e9a2dc95ca74255df02b952a1b7467a",
-      "bytes": 24934,
+      "sha256": "df2003716f4911be4d0a6f626c08c534d47d70ed28353db005bc61f6faa63500",
+      "bytes": 26381,
       "kind": "file"
     },
     {
@@ -57077,8 +57077,8 @@
     {
       "source": "production_tools/README.md",
       "path": "runtime/production_tools/README.md",
-      "sha256": "b57ba387253cbe24521cad2f916b716ec6248da51d84979a214a6e7c84c30b96",
-      "bytes": 12358,
+      "sha256": "ec296050f21afb2885c7e7a6183da6eac3c176188a56e6c064ad998c1aca234c",
+      "bytes": 12516,
       "kind": "file"
     },
     {
@@ -57121,6 +57121,132 @@
       "path": "runtime/production_tools/browser_bridge_fixture.html",
       "sha256": "73e1ea9b3d3f673be3da65dbbe85886deac0c59c2fecf4b531efc3f484e2672e",
       "bytes": 5102,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/AdapterTests.cs",
+      "path": "runtime/production_tools/huishi_adapter/AdapterTests.cs",
+      "sha256": "410d9596321c4ff64e320ccc63530ebcb3ade78823c807a5ffaf2abc2c958114",
+      "bytes": 7613,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/ArchiveGuardProbe.cs",
+      "path": "runtime/production_tools/huishi_adapter/ArchiveGuardProbe.cs",
+      "sha256": "3871da003149df7ce247c6286c85ceee1c16b47d8c84f08d44e0cece64b9ac85",
+      "bytes": 10666,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/Entry.cs",
+      "path": "runtime/production_tools/huishi_adapter/Entry.cs",
+      "sha256": "1044167719422fb4cb58557bbf739050ea5983bfd9f80b8f6eaa6b70ad8266bc",
+      "bytes": 7424,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/NativeGuards.cs",
+      "path": "runtime/production_tools/huishi_adapter/NativeGuards.cs",
+      "sha256": "7138efdfb62c75e8b9a2c3c584be89b8719e06fbba538fc645356b7e48247f65",
+      "bytes": 18472,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/NativeGuardsTests.cs",
+      "path": "runtime/production_tools/huishi_adapter/NativeGuardsTests.cs",
+      "sha256": "426c041486bcae99a851d250059c40e21f70fa55d6d55849544ebde47da86215",
+      "bytes": 11936,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/ProbeRunner.cs",
+      "path": "runtime/production_tools/huishi_adapter/ProbeRunner.cs",
+      "sha256": "e65caaeab6d25630c756cf754fde7c0b9d94186233392272516941f14ff15e79",
+      "bytes": 3466,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/ProcessPolicy.cs",
+      "path": "runtime/production_tools/huishi_adapter/ProcessPolicy.cs",
+      "sha256": "2db38af71f48fc5acdcad79f51fca26e157916a172417e33cd62df9a585b522a",
+      "bytes": 12931,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/ProcessPolicyTests.cs",
+      "path": "runtime/production_tools/huishi_adapter/ProcessPolicyTests.cs",
+      "sha256": "2f5a2b23bf735c4a1e11f42b3ccdade1bd849150fe3bfff0e82e55003ea493b0",
+      "bytes": 14989,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/README.md",
+      "path": "runtime/production_tools/huishi_adapter/README.md",
+      "sha256": "0a040c0f8f4128b04cbcbbda25af166e9737947485c7b9f1d1fd0b779b0be7f1",
+      "bytes": 1421,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/StartupHook.cs",
+      "path": "runtime/production_tools/huishi_adapter/StartupHook.cs",
+      "sha256": "7b0613e6dca75963e2b0525989b4144b69097aa8a3dabd5d263c6e6ac8da777f",
+      "bytes": 44864,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/build_archive_guard_probe.ps1",
+      "path": "runtime/production_tools/huishi_adapter/build_archive_guard_probe.ps1",
+      "sha256": "946dd8d05102bd3514d7187fcb29e5a992594089ea58a9ac467296193e52fa08",
+      "bytes": 2199,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/build_entry.ps1",
+      "path": "runtime/production_tools/huishi_adapter/build_entry.ps1",
+      "sha256": "215d074626185483533c06d18d66fc2af636b8ee2fe5e135ad795ad5adebd4a9",
+      "bytes": 2203,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/build_hook.ps1",
+      "path": "runtime/production_tools/huishi_adapter/build_hook.ps1",
+      "sha256": "618216554ec4b3e5d49d0cd74217b07d2e83562dd6fae9dc33dd56c665eb4cc7",
+      "bytes": 6186,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/build_native_tests.ps1",
+      "path": "runtime/production_tools/huishi_adapter/build_native_tests.ps1",
+      "sha256": "41a1d0ff9430aa87a03bd230d1cb68d9050c93b18c5f329e491647c211f9a714",
+      "bytes": 2855,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/build_process_policy_tests.ps1",
+      "path": "runtime/production_tools/huishi_adapter/build_process_policy_tests.ps1",
+      "sha256": "a5dd21c9a67e1210548f78a1a8202638a62aecb0415793e6f81da4acd07e6499",
+      "bytes": 2529,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/prepare.py",
+      "path": "runtime/production_tools/huishi_adapter/prepare.py",
+      "sha256": "5d351cfbb853e16d83616c3f981472d9e273f492d7fa059dd2b8e0c3599a0890",
+      "bytes": 15799,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/run_archive_guard_probe.ps1",
+      "path": "runtime/production_tools/huishi_adapter/run_archive_guard_probe.ps1",
+      "sha256": "44dc4f5f82eee8153f5b88fdfdfadf447b7586256f70b2ebdbf31b104d6c1a17",
+      "bytes": 3560,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/huishi_adapter/runtime_start.py",
+      "path": "runtime/production_tools/huishi_adapter/runtime_start.py",
+      "sha256": "97f6e1cc7beee3a18abcf9735ac97fc302d8a8fd3df333a34a2b7c7980d105f6",
+      "bytes": 6922,
       "kind": "file"
     },
     {
@@ -67230,16 +67356,33 @@
     }
   ],
   "development_revision": {
-    "note": "Fix linked LoRA preview source lookup and use official Civitai API",
-    "previous_manifest_sha256": "6c63c44e9b9dcfff116f84480e2567bdf734b28eefe10a2577283daec2b01246",
+    "note": "绘世原 GUI 与唯一主仓适配；隔离启停验收通过，未部署",
+    "previous_manifest_sha256": "e9594259e03e416b4a1cae3a9a3418893ff36dd3498e6e38f949efbbf6e98f6c",
     "source_changes": {
-      "added": [],
+      "added": [
+        "production_tools/huishi_adapter/AdapterTests.cs",
+        "production_tools/huishi_adapter/ArchiveGuardProbe.cs",
+        "production_tools/huishi_adapter/Entry.cs",
+        "production_tools/huishi_adapter/NativeGuards.cs",
+        "production_tools/huishi_adapter/NativeGuardsTests.cs",
+        "production_tools/huishi_adapter/ProbeRunner.cs",
+        "production_tools/huishi_adapter/ProcessPolicy.cs",
+        "production_tools/huishi_adapter/ProcessPolicyTests.cs",
+        "production_tools/huishi_adapter/README.md",
+        "production_tools/huishi_adapter/StartupHook.cs",
+        "production_tools/huishi_adapter/build_archive_guard_probe.ps1",
+        "production_tools/huishi_adapter/build_entry.ps1",
+        "production_tools/huishi_adapter/build_hook.ps1",
+        "production_tools/huishi_adapter/build_native_tests.ps1",
+        "production_tools/huishi_adapter/build_process_policy_tests.ps1",
+        "production_tools/huishi_adapter/prepare.py",
+        "production_tools/huishi_adapter/run_archive_guard_probe.ps1",
+        "production_tools/huishi_adapter/runtime_start.py"
+      ],
       "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/py/services/civitai_client.py",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/py/services/metadata_sync_service.py",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/services/test_civitai_client.py",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/services/test_metadata_sync_service.py"
+        "ComfyUI/main.py",
+        "production_tools/README.md"
       ]
     },
     "live_deployed": false,

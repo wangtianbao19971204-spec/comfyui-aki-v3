@@ -819,6 +819,40 @@
       "examples": [
         "snapshot/runtime/remote_llm_guard/remote-llm.config.example.json"
       ]
+    },
+    {
+      "id": "runtime-huishi-launcher",
+      "document": "docs/technical/runtime/huishi-launcher.md",
+      "implementation": [
+        "snapshot/runtime/production_tools/huishi_adapter/Entry.cs",
+        "snapshot/runtime/production_tools/huishi_adapter/StartupHook.cs",
+        "snapshot/runtime/production_tools/huishi_adapter/NativeGuards.cs",
+        "snapshot/runtime/production_tools/huishi_adapter/ProcessPolicy.cs",
+        "snapshot/runtime/production_tools/huishi_adapter/runtime_start.py",
+        "snapshot/runtime/production_tools/huishi_adapter/prepare.py",
+        "snapshot/runtime/production_tools/huishi_adapter/build_hook.ps1",
+        "snapshot/runtime/production_tools/huishi_adapter/build_entry.ps1"
+      ],
+      "tests": [
+        "tests/test_huishi_runtime.py",
+        "tests/test_huishi_delivery.py",
+        "snapshot/runtime/production_tools/huishi_adapter/AdapterTests.cs",
+        "snapshot/runtime/production_tools/huishi_adapter/NativeGuardsTests.cs",
+        "snapshot/runtime/production_tools/huishi_adapter/ProcessPolicyTests.cs"
+      ],
+      "evidence": [
+        "docs/receipts/huishi_launcher_20261009.json"
+      ],
+      "acceptance": "checked-source",
+      "watch": [
+        "snapshot/runtime/production_tools/huishi_adapter/",
+        "tests/test_huishi_runtime.py",
+        "tests/test_huishi_delivery.py",
+        "examples/huishi-adapter/"
+      ],
+      "examples": [
+        "examples/huishi-adapter/README.md"
+      ]
     }
   ]
 }

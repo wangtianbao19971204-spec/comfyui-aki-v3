@@ -16,6 +16,11 @@ SPEC.loader.exec_module(snapshot)
 
 
 class SnapshotTests(unittest.TestCase):
+    def test_csharp_source_is_supported_but_compiled_payload_is_not(self):
+        self.assertTrue(snapshot.supported_source_payload('production_tools/huishi_adapter/StartupHook.cs'))
+        self.assertFalse(snapshot.supported_source_payload('production_tools/huishi_adapter/bin/StartupHook.dll'))
+        self.assertFalse(snapshot.supported_source_payload('production_tools/huishi_adapter/bin/Entry.exe'))
+
     def test_path_traversal_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
             for relative in ['../elsewhere', '/absolute', '.', r'ComfyUI\main.py', 'C:/absolute', 'C:relative',

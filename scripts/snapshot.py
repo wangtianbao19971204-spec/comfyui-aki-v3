@@ -46,7 +46,7 @@ PROMPT_ASSISTANT_SOURCE_KEYS = frozenset(
     for relative in PROMPT_ASSISTANT_TEXT_FILES
 )
 WEIGHTS = {'.safetensors', '.ckpt', '.pt', '.pth', '.onnx', '.gguf', '.bin', '.engine'}
-TEXT = {'.py', '.pyi', '.mako', '.js', '.mjs', '.cjs', '.ts', '.tsx', '.mts', '.cts', '.patch', '.vue', '.svelte', '.css', '.scss', '.sass', '.less', '.html', '.json', '.jsonl', '.yaml', '.yml', '.toml', '.ini', '.cfg', '.md', '.rst', '.txt', '.csv', '.tsv', '.sql', '.xml', '.sh', '.ps1', '.psm1', '.bat', '.cmd', '.example', '.lock', '.map', '.in', '.c', '.cc', '.cpp', '.h', '.hpp', '.cu', '.cuh', '.glsl', '.frag', '.vert'}
+TEXT = {'.cs', '.py', '.pyi', '.mako', '.js', '.mjs', '.cjs', '.ts', '.tsx', '.mts', '.cts', '.patch', '.vue', '.svelte', '.css', '.scss', '.sass', '.less', '.html', '.json', '.jsonl', '.yaml', '.yml', '.toml', '.ini', '.cfg', '.md', '.rst', '.txt', '.csv', '.tsv', '.sql', '.xml', '.sh', '.ps1', '.psm1', '.bat', '.cmd', '.example', '.lock', '.map', '.in', '.c', '.cc', '.cpp', '.h', '.hpp', '.cu', '.cuh', '.glsl', '.frag', '.vert'}
 ASSETS = {'.png', '.jpg', '.jpeg', '.webp', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.otf', '.mp3', '.webmanifest', '.gz'}
 SKIP_DIRS = {'.git', '.hg', '.svn', '__pycache__', 'node_modules', '.cache', '.pytest_cache', '.hypothesis', '.agents', '.benchmarks', '.omo', '.specs', '.venv', 'venv', 'logs', 'temp', 'output', 'input', 'preview', 'preview_thumbnails', 'user_data', 'lora_userdatas', 'loras_userdatas', 'translate_userdatas', 'prompt_selector_data_backups', 'random_tag'}
 PRIVATE_NAME = re.compile(r'^(?:\.env(?:\..*)?|(?:.*[_-])?(?:credentials|secrets|cookies|accounts|auth|tokens|providers|settings)(?:\.(?:json|yaml|yml|ini|toml))|config\.(?:json|yaml|yml|ini))$', re.I)
