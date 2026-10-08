@@ -2,6 +2,7 @@ import asyncio
 import json
 import os
 import sys
+from io import BytesIO
 from pathlib import Path
 
 import types
@@ -14,6 +15,7 @@ sys.modules.setdefault("folder_paths", folder_paths_stub)  # pyright: ignore[rep
 import pytest
 from aiohttp import FormData, web
 from aiohttp.test_utils import TestClient, TestServer
+from PIL import Image
 
 from py.config import config
 from py.routes.base_model_routes import BaseModelRoutes
@@ -27,6 +29,12 @@ from py.services.use_cases import FilenameTemplateUseCase
 from py.services.websocket_manager import ws_manager
 from py.utils.exif_utils import ExifUtils
 from py.utils.metadata_manager import MetadataManager
+
+
+def encoded_preview_bytes(format="PNG"):
+    output = BytesIO()
+    Image.new("RGB", (4, 4), color="blue").save(output, format=format)
+    return output.getvalue()
 
 
 class DummyRoutes(BaseModelRoutes):
@@ -334,7 +342,7 @@ def test_replace_preview_writes_file_and_updates_cache(
 
     form = FormData()
     form.add_field(
-        "preview_file", b"binary-data", filename="preview.png", content_type="image/png"
+        "preview_file", encoded_preview_bytes(), filename="preview.png", content_type="image/png"
     )
     form.add_field("model_path", str(model_path))
     form.add_field("nsfw_level", "2")
@@ -367,6 +375,81 @@ def test_replace_preview_writes_file_and_updates_cache(
     asyncio.run(scenario())
 
 
+@pytest.mark.parametrize("failure", ["metadata", "cache"])
+def test_replace_preview_failure_returns_http_error_and_preserves_previous_assets(
+    mock_service, mock_scanner, monkeypatch: pytest.MonkeyPatch, tmp_path: Path, failure,
+):
+    from unittest.mock import AsyncMock
+
+    model = tmp_path / "preview-model.safetensors"
+    model.write_bytes(b"original model")
+    previous = tmp_path / "preview-model.webp"
+    previous.write_bytes(b"original preview")
+    metadata = tmp_path / "preview-model.metadata.json"
+    original = json.dumps({"file_path": str(model), "preview_url": str(previous),
+        "preview_nsfw_level": 2, "notes": "private field remains"}).encode()
+    metadata.write_bytes(original)
+    mock_scanner._cache.raw_data = [{"file_path": str(model), "preview_url": str(previous), "preview_nsfw_level": 2}]
+    monkeypatch.setattr(ExifUtils, "optimize_image", staticmethod(lambda image_data, **_: (image_data, ".webp")))
+    if failure == "metadata":
+        monkeypatch.setattr(MetadataManager, "save_metadata", AsyncMock(return_value=False))
+    else:
+        monkeypatch.setattr(mock_scanner, "update_preview_in_cache", AsyncMock(side_effect=[False, True]))
+    form = FormData()
+    form.add_field("preview_file", encoded_preview_bytes(), filename="new.png", content_type="image/png")
+    form.add_field("model_path", str(model))
+
+    async def scenario():
+        client = await create_test_client(mock_service)
+        try:
+            response = await client.post("/api/lm/test-models/replace-preview", data=form)
+            assert response.status == 500
+            assert "Failed to" in await response.text()
+        finally:
+            await client.close()
+
+    asyncio.run(scenario())
+    assert previous.read_bytes() == b"original preview"
+    assert metadata.read_bytes() == original
+    assert model.read_bytes() == b"original model"
+    assert not list(tmp_path.glob(".lm-preview-*"))
+
+
+@pytest.mark.parametrize("content_type,filename", [("image/png", "invalid.png"), ("image/gif", "invalid.gif")])
+def test_replace_invalid_preview_image_with_real_exif_preserves_previous_assets(
+    mock_service, mock_scanner, tmp_path: Path, content_type, filename,
+):
+    model = tmp_path / "preview-model.safetensors"
+    model.write_bytes(b"original model")
+    previous = tmp_path / "preview-model.webp"
+    previous.write_bytes(encoded_preview_bytes("WEBP"))
+    old_preview = previous.read_bytes()
+    metadata = tmp_path / "preview-model.metadata.json"
+    original = json.dumps({"file_path": str(model), "preview_url": str(previous),
+        "preview_nsfw_level": 2, "notes": "private field remains"}).encode()
+    metadata.write_bytes(original)
+    old_cache = {"file_path": str(model), "preview_url": str(previous), "preview_nsfw_level": 2}
+    mock_scanner._cache.raw_data = [dict(old_cache)]
+    form = FormData()
+    form.add_field("preview_file", b"invalid image fixture", filename=filename, content_type=content_type)
+    form.add_field("model_path", str(model))
+
+    async def scenario():
+        client = await create_test_client(mock_service)
+        try:
+            response = await client.post("/api/lm/test-models/replace-preview", data=form)
+            assert response.status == 500
+            assert "Invalid preview image" in await response.text()
+        finally:
+            await client.close()
+
+    asyncio.run(scenario())
+    assert previous.read_bytes() == old_preview and metadata.read_bytes() == original
+    assert model.read_bytes() == b"original model"
+    assert mock_scanner._cache.raw_data == [old_cache] and not mock_scanner.preview_updates
+    assert not list(tmp_path.glob(".lm-preview-*"))
+
+
 def test_set_preview_from_url_downloads_and_updates_cache(
     mock_service,
     mock_scanner,
@@ -397,7 +480,7 @@ def test_set_preview_from_url_downloads_and_updates_cache(
                 async def download_to_memory(
                     self, url, use_auth=False, return_headers=True
                 ):
-                    return True, b"fake-image-data", {"Content-Type": "image/jpeg"}
+                    return True, encoded_preview_bytes("JPEG"), {"Content-Type": "image/jpeg"}
 
             async def fake_get_downloader():
                 return FakeDownloader()

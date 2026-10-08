@@ -46,6 +46,7 @@ def mock_metadata_sync():
     """Create a mock metadata sync service."""
     sync = MagicMock()
     sync.fetch_and_update_model = AsyncMock(return_value=(True, None))
+    sync.fetch_missing_preview = AsyncMock(return_value=(True, None))
     return sync
 
 
@@ -402,3 +403,136 @@ async def test_model_without_hash_skipped(use_case, mock_service, mock_metadata_
 
     assert result["processed"] == 1
     assert result["updated"] == 0
+
+
+@pytest.mark.asyncio
+@patch.object(metadata_manager.MetadataManager, "hydrate_model_data")
+async def test_linked_missing_previews_use_preview_only_path(
+    mock_hydrate, use_case, mock_service, mock_metadata_sync, tmp_path
+):
+    existing_preview = tmp_path / "existing.png"
+    existing_preview.write_bytes(b"existing preview")
+    models = [
+        {"file_path": str(tmp_path / "unlinked.safetensors"), "model_name": "Unlinked", "sha256": "old_hash", "civitai": {}},
+        {"file_path": str(tmp_path / "missing.safetensors"), "model_name": "规范名称", "sha256": "a" * 64, "civitai": {"id": 11}, "preview_url": ""},
+        {"file_path": str(tmp_path / "stale.safetensors"), "model_name": "Stale", "sha256": "b" * 64, "civitai": {"id": 12}, "preview_url": str(tmp_path / "missing.png")},
+        {"file_path": str(tmp_path / "existing.safetensors"), "model_name": "Existing", "sha256": "c" * 64, "civitai": {"id": 13}, "preview_url": str(existing_preview)},
+    ]
+    mock_service.scanner.get_cached_data.return_value = SimpleNamespace(
+        raw_data=models, resort=AsyncMock()
+    )
+
+    result = await use_case.execute()
+
+    assert mock_metadata_sync.fetch_and_update_model.await_count == 1
+    assert mock_metadata_sync.fetch_and_update_model.await_args.kwargs["file_path"] == models[0]["file_path"]
+    assert [call.kwargs["file_path"] for call in mock_metadata_sync.fetch_missing_preview.await_args_list] == [models[1]["file_path"], models[2]["file_path"]]
+    assert result["processed"] == 3
+    assert result["updated"] == 3
+    assert result["skipped_count"] == 1
+    assert models[1]["model_name"] == "规范名称"
+    assert existing_preview.read_bytes() == b"existing preview"
+
+
+@pytest.mark.asyncio
+@patch.object(metadata_manager.MetadataManager, "hydrate_model_data")
+async def test_failed_preview_fill_is_not_counted_as_updated(
+    mock_hydrate, use_case, mock_service, mock_metadata_sync, tmp_path
+):
+    model = {"file_path": str(tmp_path / "linked.safetensors"), "model_name": "Linked", "sha256": "a" * 64, "civitai": {"id": 1}, "preview_url": ""}
+    mock_service.scanner.get_cached_data.return_value = SimpleNamespace(raw_data=[model], resort=AsyncMock())
+    mock_metadata_sync.fetch_missing_preview.return_value = (False, "Preview download did not create a local file")
+
+    result = await use_case.execute()
+
+    assert result["updated"] == 0
+    assert result["processed"] == 1
+    assert result["failure_count"] == 1
+    assert result["failures"] == [{"name": "Linked", "error": "Preview download did not create a local file"}]
+    mock_metadata_sync.fetch_and_update_model.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@patch.object(metadata_manager.MetadataManager, "hydrate_model_data")
+@pytest.mark.parametrize("protected_fields,settings", [
+    ({"skip_metadata_refresh": True}, {}),
+    ({"folder": "skip/sub"}, {"metadata_refresh_skip_paths": ["skip"]}),
+    ({"source_url": "https://huggingface.co/example/model"}, {}),
+    ({"from_civitai": False, "civitai_deleted": True}, {}),
+    ({"from_civitai": False, "civitai_deleted": True, "db_checked": True}, {"enable_metadata_archive_db": True}),
+])
+async def test_linked_missing_previews_keep_skip_protections(
+    mock_hydrate, protected_fields, settings, use_case, mock_service, mock_metadata_sync, tmp_path
+):
+    model = {"file_path": str(tmp_path / "protected.safetensors"), "sha256": "a" * 64, "civitai": {"id": 1}, "preview_url": "", **protected_fields}
+    mock_service.scanner.get_cached_data.return_value = SimpleNamespace(raw_data=[model], resort=AsyncMock())
+    use_case._settings.get.side_effect = lambda key, default=None: settings.get(key, default)
+
+    result = await use_case.execute()
+
+    assert result["processed"] == 0
+    assert result["skipped_count"] == 1
+    mock_metadata_sync.fetch_missing_preview.assert_not_awaited()
+    mock_metadata_sync.fetch_and_update_model.assert_not_awaited()
+    mock_hydrate.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@patch.object(metadata_manager.MetadataManager, "hydrate_model_data")
+async def test_newer_sidecar_preview_is_sent_for_cache_reconciliation(
+    mock_hydrate, use_case, mock_service, mock_metadata_sync, tmp_path
+):
+    preview = tmp_path / "newer.png"
+    preview.write_bytes(b"existing")
+    model = {"file_path": str(tmp_path / "linked.safetensors"), "sha256": "a" * 64, "civitai": {"id": 1}, "preview_url": ""}
+    mock_hydrate.side_effect = lambda data: data.update(preview_url=str(preview))
+    mock_service.scanner.get_cached_data.return_value = SimpleNamespace(raw_data=[model], resort=AsyncMock())
+
+    result = await use_case.execute()
+
+    assert result["updated"] == 1
+    assert result["skipped_count"] == 0
+    mock_metadata_sync.fetch_missing_preview.assert_awaited_once()
+    assert mock_metadata_sync.fetch_missing_preview.await_args.kwargs["model_data"]["preview_url"] == str(preview)
+    mock_metadata_sync.fetch_and_update_model.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@patch.object(metadata_manager.MetadataManager, "hydrate_model_data")
+async def test_failed_cache_reconciliation_remains_eligible_for_retry(
+    mock_hydrate, use_case, mock_service, mock_metadata_sync, tmp_path
+):
+    preview = tmp_path / "sidecar.png"
+    preview.write_bytes(b"existing")
+    model = {"file_path": str(tmp_path / "linked.safetensors"), "sha256": "a" * 64, "civitai": {"id": 1}, "preview_url": ""}
+    mock_hydrate.side_effect = lambda data: data.update(preview_url=str(preview))
+    mock_service.scanner.get_cached_data.return_value = SimpleNamespace(raw_data=[model], resort=AsyncMock())
+    mock_metadata_sync.fetch_missing_preview.side_effect = [
+        (False, "Failed to update model cache for existing preview"), (True, None)
+    ]
+
+    first = await use_case.execute()
+    assert first["updated"] == 0 and first["failure_count"] == 1
+    assert model["preview_url"] == ""
+    second = await use_case.execute()
+
+    assert second["updated"] == 1 and second["failure_count"] == 0
+    assert mock_metadata_sync.fetch_missing_preview.await_count == 2
+    assert all(call.kwargs["model_data"] is not model for call in mock_metadata_sync.fetch_missing_preview.await_args_list)
+    assert preview.read_bytes() == b"existing"
+
+
+@pytest.mark.asyncio
+@patch.object(metadata_manager.MetadataManager, "hydrate_model_data")
+async def test_linked_image_candidates_do_not_require_hash_calculation(
+    mock_hydrate, use_case, mock_service, mock_metadata_sync, tmp_path
+):
+    model = {"file_path": str(tmp_path / "linked.safetensors"), "sha256": "", "hash_status": "pending", "civitai": {"id": 1, "images": [{"url": "https://example.test/preview.png"}]}, "preview_url": ""}
+    mock_service.scanner.get_cached_data.return_value = SimpleNamespace(raw_data=[model], resort=AsyncMock())
+
+    result = await use_case.execute()
+
+    assert result["updated"] == 1
+    mock_service.scanner.calculate_hash_for_model.assert_not_awaited()
+    mock_metadata_sync.fetch_missing_preview.assert_awaited_once()
+    assert mock_metadata_sync.fetch_missing_preview.await_args.kwargs["sha256"] == ""

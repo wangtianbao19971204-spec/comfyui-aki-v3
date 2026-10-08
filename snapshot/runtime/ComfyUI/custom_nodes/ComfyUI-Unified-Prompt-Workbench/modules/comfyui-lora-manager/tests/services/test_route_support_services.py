@@ -1,10 +1,12 @@
 import asyncio
 import json
 import os
+from io import BytesIO
 from pathlib import Path
 from typing import Any, Dict, List
 
 import pytest
+from PIL import Image
 
 from py.services.download_coordinator import DownloadCoordinator
 from py.services.downloader import DownloadProgress
@@ -157,11 +159,13 @@ def test_preview_asset_service_replace_preview(tmp_path: Path) -> None:
 
     model_path = str(tmp_path / "sample.safetensors")
     Path(model_path).write_bytes(b"model")
+    image_buffer = BytesIO()
+    Image.new("RGB", (4, 4), color="blue").save(image_buffer, format="PNG")
 
     result = asyncio.run(
         service.replace_preview(
             model_path=model_path,
-            preview_data=b"image-bytes",
+            preview_data=image_buffer.getvalue(),
             content_type="image/png",
             original_filename="preview.png",
             nsfw_level=2,

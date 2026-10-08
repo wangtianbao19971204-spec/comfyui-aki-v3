@@ -2,6 +2,8 @@
 
 现行安装位置以 [来源目录](../snapshot/inventory/model_sources.json) 的 `current_path` 为准；没有此字段的资源仍使用 `path`。`path` 保留首次捕获身份，旧 inventory、训练发布记录与历史收据不重写。已删除的 15 个评估条目不参与命名或迁移。
 
+2026-10-08 当前有 **306 个用户 LoRA**：Anima 208、Anima 2.9B 2、Krea2 96。本轮 12 个下载中新增 11 个，ABP_ART 同摘要重复件保留现有版本；权重、预览、来源和离线缓存已登记，在线界面未测试，下载原件暂留。见[本轮导入记录](receipts/lora_download_import_20261008.json)。下面的 2026-10-07 表格保留当时全量整理的基线。
+
 2026-10-07 首轮完成 306 个权重的分类与改名，迁移 690 件配套并同步已有引用，见[标准化收据](receipts/model_standardization_20261007.json)。随后又导入 9 个下载的 LoRA，现有 **295 个用户 LoRA、19 个图像底模和 1 个 SAM 工具**；新增来源、摘要及实际导入结果见[导入收据](receipts/lora_download_import_20261007.json)。
 
 | 家族 | 用户 LoRA | 图像底模 | 工具 |
@@ -78,6 +80,8 @@ LoRA Manager 的常规与排除缓存须同时核验：本轮 286 个用户 LoRA
 完成后更新来源目录、MD、manifest 的对应 metadata 项、当前工作流摘要与技术记录；核对 loader 列表、全部文件和内容摘要，以及 4 个自训 release 副本。刷新已打开的工作台／工作流页面使其使用新下拉项；已经打开但未保存的旧图不会被磁盘迁移自动改写，需重新打开相应更新后的保存文件。
 
 ## 更新记录
+
+- 2026-10-08：沿用同一命名规则导入 11 项并跳过 1 个重复下载；新增项保留完整公开原名、确切版本／文件 ID、SHA、AutoV3 与 API 触发词。Reflet Outfit 的 API 触发词为空，另标明作者说明中的 `reflet outfit`，不冒充 API 值。预览、离线缓存和本机加载器枚举通过；未启动服务或做 GPU 推理，原件保留，见[收据](receipts/lora_download_import_20261008.json)。
 
 - 2026-10-07：新增 9 个网上下载 LoRA：4 个画风、3 个角色权重、2 个效果；8 个 Anima、1 个发布者提供的 2.9B remap。现行 LoRA 总数 295（292 常规、3 排除）；来源页、版本／文件 ID、原名、完整 SHA 和触发词已登记。原权重／侧车／个人记录及正式图保持，未做 GPU 推理；GYARI 的原作者用途限制随来源保留，见[导入收据](receipts/lora_download_import_20261007.json)。
 - 2026-10-07：实际完成 286 LoRA／19 图像底模／1 SAM 的规范分类与改名，连同 690 配套迁移；41 个主仓引用文件与 5 个运行配置同步。修正 Platinum 的 Anima 家族归属，独立区分 2.9B、自训成品和 SAM 工具；保留上游下载身份、原 inventory、4 个成品和个人字段。常规／排除缓存及摘要核验的实际范围见[标准化收据](receipts/model_standardization_20261007.json)，未重新执行 GPU 任务。
