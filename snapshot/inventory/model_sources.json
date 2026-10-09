@@ -24017,18 +24017,177 @@
           "docs/receipts/lora_download_import_20261008.json"
         ]
       }
+    },
+    {
+      "path": "ComfyUI/models/loras/anima-v1-broparo.safetensors",
+      "bytes": 23040984,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "029e094610d2b352180deaa476f5864c47151c50c0a2ed62e55c21980278b086",
+      "source_status": "version_metadata",
+      "family": "anima",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2987713?modelVersionId=3387478",
+          "download_url": "https://civitai.com/api/download/models/3387478",
+          "model_id": 2987713,
+          "version_id": 3387478,
+          "file_id": 3276404,
+          "filename": "anima-v1-broparo.safetensors",
+          "declared_sha256": "029e094610d2b352180deaa476f5864c47151c50c0a2ed62e55c21980278b086",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/technical/runtime/lora-quick-import.md"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/anima/服装与配饰/Anima__[Anima] ブロパ制服 - Bronze Parrot uniform__v1.0__BF16__cv3387478__f3276404.metadata.json"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "Downloaded file verified by full SHA-256 against the exact public version; weights stay outside Git."
+      ],
+      "current_path": "ComfyUI/models/loras/anima/服装与配饰/Anima__[Anima] ブロパ制服 - Bronze Parrot uniform__v1.0__BF16__cv3387478__f3276404.safetensors",
+      "standardization": {
+        "family_slug": "anima",
+        "family_label": "Anima",
+        "category": "服装与配饰",
+        "display_name": "[Anima] ブロパ制服 / Bronze Parrot uniform",
+        "version": "v1.0",
+        "precision": "BF16",
+        "source_identity": "civitai:model=2987713,version=3387478,file=3276404",
+        "target_path": "ComfyUI/models/loras/anima/服装与配饰/Anima__[Anima] ブロパ制服 - Bronze Parrot uniform__v1.0__BF16__cv3387478__f3276404.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "ComfyUI/models/loras/anima-v1-broparo.metadata.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/jima_anima_tlora_v1-000009.safetensors",
+      "bytes": 198546096,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "090d2b8c21879074232339cf86139026dd6c90b6b912ed691a35d84bfe104c7a",
+      "source_status": "version_metadata",
+      "family": "anima",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2991211?modelVersionId=3391934",
+          "download_url": "https://civitai.com/api/download/models/3391934",
+          "model_id": 2991211,
+          "version_id": 3391934,
+          "file_id": 3281447,
+          "filename": "jima_anima_tlora_v1-000009.safetensors",
+          "declared_sha256": "090d2b8c21879074232339cf86139026dd6c90b6b912ed691a35d84bfe104c7a",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/technical/runtime/lora-quick-import.md"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/anima/画风与画师/Anima__[Anima Tlora] Artist Style - JIMA__v1.0__FP16__cv3391934__f3281447.metadata.json"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "Downloaded file verified by full SHA-256 against the exact public version; weights stay outside Git."
+      ],
+      "current_path": "ComfyUI/models/loras/anima/画风与画师/Anima__[Anima Tlora] Artist Style - JIMA__v1.0__FP16__cv3391934__f3281447.safetensors",
+      "standardization": {
+        "family_slug": "anima",
+        "family_label": "Anima",
+        "category": "画风与画师",
+        "display_name": "[Anima Tlora] Artist Style : JIMA",
+        "version": "v1.0",
+        "precision": "FP16",
+        "source_identity": "civitai:model=2991211,version=3391934,file=3281447",
+        "target_path": "ComfyUI/models/loras/anima/画风与画师/Anima__[Anima Tlora] Artist Style - JIMA__v1.0__FP16__cv3391934__f3281447.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "ComfyUI/models/loras/jima_anima_tlora_v1-000009.metadata.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/starshadowmagician_style_krea2_uma_v1_krea2_3335939_epoch_10.safetensors",
+      "bytes": 228588968,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "48f382c704cd7c870698cf8df7e5e30bdf0258c6616e3964910f4f3eede54f1e",
+      "source_status": "version_metadata",
+      "family": "krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2858119?modelVersionId=3345271",
+          "download_url": "https://civitai.com/api/download/models/3345271",
+          "model_id": 2858119,
+          "version_id": 3345271,
+          "file_id": 3232195,
+          "filename": "starshadowmagician_style_krea2_uma_v1_krea2_3335939_epoch_10.safetensors",
+          "declared_sha256": "48f382c704cd7c870698cf8df7e5e30bdf0258c6616e3964910f4f3eede54f1e",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/technical/runtime/lora-quick-import.md"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__画风 starshadowmagician(影法师) style 【anima】__krea2__BF16__cv3345271__f3232195.metadata.json"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "Downloaded file verified by full SHA-256 against the exact public version; weights stay outside Git."
+      ],
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__画风 starshadowmagician(影法师) style 【anima】__krea2__BF16__cv3345271__f3232195.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "画风与画师",
+        "display_name": "画风 starshadowmagician(影法师) style 【anima】",
+        "version": "krea2",
+        "precision": "BF16",
+        "source_identity": "civitai:model=2858119,version=3345271,file=3232195",
+        "target_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__画风 starshadowmagician(影法师) style 【anima】__krea2__BF16__cv3345271__f3232195.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "ComfyUI/models/loras/starshadowmagician_style_krea2_uma_v1_krea2_3335939_epoch_10.metadata.json"
+        ]
+      }
     }
   ],
   "missing_workflow_references": [],
   "summary": {
-    "asset_count": 415,
+    "asset_count": 418,
     "inventory_asset_count": 384,
-    "observed_present_count": 400,
+    "observed_present_count": 403,
     "observed_missing_count": 15,
     "workflow_asset_count": 23,
     "missing_workflow_reference_count": 0,
     "source_status_counts": {
-      "version_metadata": 322,
+      "version_metadata": 325,
       "upstream_mapping": 73,
       "local_derivative": 19,
       "unresolved": 1
