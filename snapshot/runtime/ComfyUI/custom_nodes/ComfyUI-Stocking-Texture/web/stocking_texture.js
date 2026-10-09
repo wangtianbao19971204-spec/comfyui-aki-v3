@@ -7,7 +7,8 @@ const WIDGET_LABELS = {
   guides_json: ["引导数据 JSON", "由引导编辑器保存；也可连接引导编辑节点的 STRING 输出。已有坐标与参考尺寸绑定。"],
   style: ["纹理样式", "细线、针织、斜单线、加濑风或试验油光。"],
   density: ["织纹密度 (%)", "密度越高纹理越细；过密区域会自动减弱以抑制摩尔纹。"],
-  strength: ["纹理强度 (%)", "关闭自动强度后使用此值；亮点由各亮点参数单独控制。"],
+  strength: ["纹理强度 (%)", "手动调节会关闭自动强度；亮点由各亮点参数单独控制。"],
+  dark_adapt: ["暗部织纹适配", "增强细线、针织和斜单线在暗色布料上的可见度，保留抗摩尔纹；关闭可对照原版。纯黑仍保持黑色。"],
   auto_strength: ["自动纹理强度", "根据部位颜色调整强度，减少浅色丝袜上的过强纹理。"],
   tilt: ["斜线角度 (°)", "只影响斜单线样式，左右方向由部位名称与位置决定。"],
   sparkle_bright: ["按亮部加亮点 (%)", "根据图像的明亮区域分布亮点，不需要深度模型。"],
@@ -562,7 +563,7 @@ app.registerExtension({
   async beforeRegisterNodeDef(nodeType, nodeData) {
     if (["StockingTextureGuides", "StockingTextureRender"].includes(nodeData.name)) {
       for (const [name, [label, tooltip]] of Object.entries(WIDGET_LABELS)) {
-        const spec = nodeData.input?.required?.[name];
+        const spec = nodeData.input?.required?.[name] ?? nodeData.input?.optional?.[name];
         if (spec) spec[1] = { ...spec[1], tooltip, label };
       }
     }
@@ -573,6 +574,18 @@ app.registerExtension({
         for (const widget of this.widgets ?? []) {
           const labels = WIDGET_LABELS[widget.name];
           if (labels) { widget.label = labels[0]; widget.tooltip = labels[1]; }
+        }
+        const strength = this.widgets?.find((w) => w.name === "strength");
+        if (strength) {
+          const callback = strength.callback;
+          const node = this;
+          strength.callback = function () {
+            const auto = node.widgets?.find((w) => w.name === "auto_strength");
+            if (auto) auto.value = false;
+            const value = callback?.apply(this, arguments);
+            node.setDirtyCanvas?.(true, true);
+            return value;
+          };
         }
         return result;
       };

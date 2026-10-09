@@ -192,3 +192,25 @@ test("view routes encode names and render labels preserve input field identity",
   assert.equal(data.input.required.density[1].default, 100);
   assert.match(data.input.required.density[1].tooltip, /摩尔纹/);
 });
+
+test("manual strength disables auto like upstream while loading values preserves it", async () => {
+  const { extension } = await extensionHarness();
+  let calls = 0;
+  class Render {
+    onNodeCreated() {
+      this.widgets = [{ name: "strength", value: 100, callback(value) { calls++; return value; } },
+        { name: "auto_strength", value: true }, { name: "dark_adapt", value: true }];
+    }
+  }
+  const data = { name: "StockingTextureRender", input: { optional: { dark_adapt: ["BOOLEAN", { default: true }] } } };
+  await extension.beforeRegisterNodeDef(Render, data);
+  const node = new Render(); node.onNodeCreated();
+  assert.equal(node.widgets[1].value, true);
+  node.widgets[0].value = 60; // workflow deserialization is not a slider gesture
+  assert.equal(node.widgets[1].value, true);
+  assert.equal(node.widgets[0].callback(160), 160);
+  assert.equal(node.widgets[1].value, false);
+  assert.equal(calls, 1);
+  assert.equal(node.widgets[2].label, "暗部织纹适配");
+  assert.match(data.input.optional.dark_adapt[1].tooltip, /抗摩尔纹/);
+});

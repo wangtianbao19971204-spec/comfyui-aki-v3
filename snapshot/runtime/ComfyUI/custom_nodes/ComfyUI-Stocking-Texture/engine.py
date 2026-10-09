@@ -126,7 +126,10 @@ def solve_geometry(rgb8, data, base_mask, color_exclude, disparity, auto_walls):
     scale = math.sqrt(w * h / (1280 * 1920))
     ridges = walls.ridges(disparity, scale) if auto_walls and disparity is not None else None
     solved = labels.copy()
-    v, across = np.zeros((h, w), np.float32), np.zeros((h, w), np.float32)
+    # Document stores solved fields as float32, then assembles float64 full-image
+    # coordinates. Preserve both steps: phase arithmetic can otherwise round a
+    # few bright pixels differently from the original export.
+    v, across = np.zeros((h, w), np.float64), np.zeros((h, w), np.float64)
     cut = np.zeros((h, w), bool)
     messages = []
     for index, region in enumerate(data["regions"], 1):
@@ -161,16 +164,17 @@ def solve_geometry(rgb8, data, base_mask, color_exclude, disparity, auto_walls):
         if (mc & ~valid).any():
             messages.append(f'{region["name"]}：未引导的分离区域保持原图')
         for dst, field in ((v, fields[0]), (across, fields[3])):
-            dst[sl][mc & valid] = field[mc & valid]
+            dst[sl][mc & valid] = field[mc & valid].astype(np.float32)
         if info.get("cut") is not None:
             cut[sl] |= info["cut"] & mc
     return dict(labels=solved, all_labels=labels, v=v, across=across, stock=stock,
                 alpha=alpha, input_alpha=input_alpha, cut=cut, messages=messages)
 
 
-def render_texture(rgb, data, geometry, disparity, params, seed):
+def render_texture(rgb, data, geometry, disparity, params, seed, dark_adapt=True):
     """Return float RGB result/layer, compositing alpha, diagnostic RGB, and actual metrics."""
     from .vendor import knit, look
+    from .rendering import render_scene
 
     class SeededScene(look.Scene):
         def randoms(self, style):
@@ -186,7 +190,7 @@ def render_texture(rgb, data, geometry, disparity, params, seed):
     scene = SeededScene(rgb8, g["labels"], g["v"], g["across"], g["stock"], g["alpha"],
                         [r["name"] for r in data["regions"]],
                         disparity=(lambda: disparity) if disparity is not None else None, cut=g["cut"])
-    out8, metrics = scene.render(params)
+    out8, metrics = render_scene(scene, params, dark_adapt)
     delta = (out8[..., ::-1].astype(np.float32) - rgb8.astype(np.float32)) / 255
     active = (g["labels"] > 0) & g["stock"] & (g["alpha"] > 0)
     delta *= (active * g["input_alpha"])[..., None]
@@ -204,7 +208,19 @@ def render_texture(rgb, data, geometry, disparity, params, seed):
     diagnostic[excluded & (g["all_labels"] > 0)] = (0.12, 0.4, 1)
     diagnostic[(g["all_labels"] > 0) & (g["labels"] == 0)] = (1, 0.8, 0.08)
     diagnostic[faded & active] = (1, 0.12, 0.1)
+    # Count rounded 8-bit changes, not just nonzero floats (SaveImage truncation may differ).
+    quantized = np.round(result * 255).astype(np.uint8)
+    changed8 = np.any(quantized != rgb8, axis=2)
+    messages = list(g["messages"])
+    if active.any() and not changed8.any():
+        messages.append("有效区域已求解，但 8 位成品没有可见变化；检查纯黑像素、强度、密度和亮点设置")
+    if params["strength_auto"] and params["strength"] != metrics["effective_strength"]:
+        messages.append(f'自动强度实际为 {metrics["effective_strength"]:g}%；手动值未采用，调节强度时请关闭自动')
     metrics.update(changed_pixels=int(np.any(diff != 0, axis=2).sum()),
+                   changed_pixels_8bit=int(changed8.sum()),
+                   max_delta_8bit=float(np.abs(diff).max() * 255),
+                   active_pixels=int(active.sum()), excluded_pixels=int((excluded & (g["all_labels"] > 0)).sum()),
+                   faded_pixels=int((faded & active).sum()),
                    selected_pixels=int((g["all_labels"] > 0).sum()),
-                   solved_pixels=int((g["labels"] > 0).sum()), messages=g["messages"], seed=int(seed))
+                   solved_pixels=int((g["labels"] > 0).sum()), messages=messages, seed=int(seed))
     return result, layer, layer_alpha, diagnostic.astype(np.float32), metrics

@@ -101,14 +101,15 @@ class StockingTextureRender:
             "strength": ("FLOAT", {"default": 100, "min": 0, "max": 250, "step": 1}),
             "auto_strength": ("BOOLEAN", {"default": True}),
             "tilt": ("FLOAT", {"default": 32, "min": 0, "max": 75, "step": 1}),
-            "sparkle_bright": ("FLOAT", {"default": 0, "min": 0, "max": 300, "step": 1}),
+            "sparkle_bright": ("FLOAT", {"default": 100, "min": 0, "max": 300, "step": 1}),
             "sparkle_even": ("FLOAT", {"default": 0, "min": 0, "max": 300, "step": 1}),
             "sparkle_depth": ("FLOAT", {"default": 0, "min": 0, "max": 300, "step": 1}),
             "color_exclude": ("BOOLEAN", {"default": True}),
             "auto_walls": ("BOOLEAN", {"default": False}),
             "depth_mode": (["近处较亮", "近处较暗"],),
             "seed": ("INT", {"default": 20261005, "min": 0, "max": 0xffffffffffffffff})},
-            "optional": {"mask": ("MASK",), "depth": ("IMAGE",)}}
+            "optional": {"mask": ("MASK",), "depth": ("IMAGE",),
+                         "dark_adapt": ("BOOLEAN", {"default": True})}}
 
     RETURN_TYPES = ("IMAGE", "IMAGE", "MASK", "IMAGE", "STRING")
     RETURN_NAMES = ("成品", "透明纹理图层", "图层透明度", "问题标记", "处理说明")
@@ -122,9 +123,9 @@ class StockingTextureRender:
         self._lock = threading.Lock()
 
     def render(self, image, guides_json=EMPTY_GUIDES, style="细线", density=100, strength=100,
-               auto_strength=True, tilt=32, sparkle_bright=0, sparkle_even=0, sparkle_depth=0,
+               auto_strength=True, tilt=32, sparkle_bright=100, sparkle_even=0, sparkle_depth=0,
                color_exclude=True, auto_walls=False, depth_mode="近处较亮", seed=20261005,
-               mask=None, depth=None):
+               mask=None, depth=None, dark_adapt=True):
         a = image_array(image)
         b, h, w = a.shape[:3]
         data = parse_guides(guides_json, w, h)
@@ -164,7 +165,7 @@ class StockingTextureRender:
                 geometry = solve_geometry(rgb8, data, base, color_exclude, disp, auto_walls)
                 with self._lock:
                     self._cache_key, self._geometry = key, geometry  # one bounded cache per node
-            result, layer, alpha, check, report = render_texture(rgb, data, geometry, disp, params, seed)
+            result, layer, alpha, check, report = render_texture(rgb, data, geometry, disp, params, seed, dark_adapt)
             if a.shape[-1] == 4:
                 result = np.concatenate((result, a[i, ..., 3:]), axis=2)
                 report["messages"] = [*report["messages"], "透明纹理图层用于 RGB 底图复合；透明底图复合后须恢复原图 alpha"]

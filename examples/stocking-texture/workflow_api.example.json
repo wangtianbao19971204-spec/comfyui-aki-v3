@@ -35,13 +35,14 @@
       "strength": 100,
       "auto_strength": true,
       "tilt": 32,
-      "sparkle_bright": 0,
+      "sparkle_bright": 100,
       "sparkle_even": 0,
       "sparkle_depth": 0,
       "color_exclude": true,
       "auto_walls": false,
       "depth_mode": "近处较亮",
-      "seed": 20261005
+      "seed": 20261005,
+      "dark_adapt": true
     }
   },
   "4": {

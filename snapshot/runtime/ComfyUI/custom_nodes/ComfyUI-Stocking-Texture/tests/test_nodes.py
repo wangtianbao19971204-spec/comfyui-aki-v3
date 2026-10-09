@@ -42,7 +42,7 @@ class TextureContracts(unittest.TestCase):
 
     def run_render(self, node=None, **kwargs):
         settings = dict(image=self.image, guides_json=self.text, mask=self.mask,
-                        color_exclude=False, auto_strength=False)
+                        color_exclude=False, auto_strength=False, sparkle_bright=0)
         settings.update(kwargs)
         return (node or NODES.StockingTextureRender()).render(**settings)
 
@@ -63,7 +63,7 @@ class TextureContracts(unittest.TestCase):
     def test_empty_mask_no_guides_and_zero_strength_are_exact_passthrough(self):
         for kwargs in ({"mask": self.mask * 0}, {"guides_json": ENGINE.EMPTY_GUIDES}, {"strength": 0}):
             settings = dict(image=self.image, guides_json=self.text, mask=self.mask,
-                            color_exclude=False, auto_strength=False)
+                            color_exclude=False, auto_strength=False, sparkle_bright=0)
             settings.update(kwargs)
             out = NODES.StockingTextureRender().render(**settings)[0]
             self.assertTrue(torch.equal(out, self.image))
@@ -186,6 +186,85 @@ class TextureContracts(unittest.TestCase):
         upstream = json.loads((ROOT / "UPSTREAM.json").read_text(encoding="utf-8"))
         for item in upstream["files"]:
             self.assertEqual(hashlib.sha256((ROOT / "vendor" / item["file"]).read_bytes()).hexdigest(), item["sha256"])
+
+    def test_near_black_weave_survives_8bit_without_sparkles(self):
+        image = torch.full_like(self.image, 19 / 255)
+        for style in ENGINE.STYLES[:3]:
+            with self.subTest(style=style):
+                before = self.run_render(image=image, style=style, dark_adapt=False, auto_strength=True)
+                after = self.run_render(image=image, style=style, dark_adapt=True, auto_strength=True)
+                a, b = [json.loads(x[-1])["images"][0] for x in (before, after)]
+                self.assertEqual(a["changed_pixels_8bit"], 0)
+                self.assertGreater(b["changed_pixels_8bit"], b["active_pixels"] * 0.1)
+                self.assertLessEqual(b["max_delta_8bit"], 4.01)
+                self.assertTrue(torch.equal(after[0][self.mask == 0], image[self.mask == 0]))
+                layer, alpha = after[1:3]
+                torch.testing.assert_close(image * (1 - alpha[..., None]) + layer[..., :3] * alpha[..., None],
+                                           after[0], rtol=0, atol=1e-7)
+
+    def test_shadow_adaptation_preserves_lit_colors_and_nonweave_styles(self):
+        for color in ((100, 110, 120), (223, 216, 226), (0, 0, 0)):
+            image = torch.tensor(color, dtype=torch.float32).div(255).expand_as(self.image).clone()
+            for style in ENGINE.STYLES:
+                a = self.run_render(image=image, style=style, dark_adapt=False, sparkle_bright=100)[0]
+                b = self.run_render(image=image, style=style, dark_adapt=True, sparkle_bright=100)[0]
+                self.assertTrue(torch.equal(a, b), (color, style))
+        for style in ENGINE.STYLES[3:]:
+            self.assertTrue(torch.equal(self.run_render(style=style, dark_adapt=False)[0],
+                                        self.run_render(style=style, dark_adapt=True)[0]))
+
+    def test_compatibility_mode_matches_upstream_scene_on_active_pixels(self):
+        from stocking_plugin_tests.vendor import look
+        image = torch.round(self.image * 255) / 255
+        rgb8 = np.round(image[0].numpy() * 255).astype(np.uint8)
+        data = ENGINE.parse_guides(self.text, 128, 160)
+        g = ENGINE.solve_geometry(rgb8, data, self.mask[0].numpy(), False, None, False)
+        scene = look.Scene(rgb8, g["labels"], g["v"], g["across"], g["stock"], g["alpha"], ["左腿"], cut=g["cut"])
+        active = (g["labels"] > 0) & g["stock"] & (g["alpha"] > 0)
+        for style in ENGINE.STYLES:
+            for bright in (0, 100):
+                q = dict(style=ENGINE.STYLE_IDS[style], strength_auto=False, sparkle_link=False,
+                         sparkle_bright=bright, sparkle_depth=0)
+                original = scene.render(q)[0][..., ::-1]
+                adapted = self.run_render(image=image, style=style, dark_adapt=False,
+                                          sparkle_bright=bright, seed=look.SEED)[0][0].numpy()
+                np.testing.assert_array_equal(np.round(adapted * 255).astype(np.uint8)[active], original[active])
+
+    def test_manual_strength_report_and_invisible_output_warning(self):
+        image = torch.full_like(self.image, 19 / 255)
+        out = self.run_render(image=image, dark_adapt=False, strength=250, auto_strength=True)
+        report = json.loads(out[-1])["images"][0]
+        self.assertEqual(report["effective_strength"], 100)
+        self.assertEqual(report["changed_pixels_8bit"], 0)
+        self.assertTrue(any("手动值未采用" in x for x in report["messages"]))
+        self.assertTrue(any("没有可见变化" in x for x in report["messages"]))
+        manual = self.run_render(image=image, strength=250)
+        self.assertEqual(json.loads(manual[-1])["images"][0]["effective_strength"], 250)
+
+    def test_shadow_adaptation_keeps_frequency_suppression(self):
+        from stocking_plugin_tests.vendor import look
+        from stocking_plugin_tests.rendering import render_scene
+        yy, xx = np.mgrid[:160, :128].astype(np.float32)
+        rgb8 = np.full((160, 128, 3), 19, np.uint8)
+        reg = np.ones((160, 128), np.int8)
+        for freq in (1.0, 1.6):
+            scene = look.Scene(rgb8, reg, yy * freq, xx, reg > 0, reg.astype(np.float32), ["左腿"])
+            for style in ("knit", "loops", "lines"):
+                out, _ = render_scene(scene, dict(style=style, tilt=0, sparkle_link=False,
+                                                  sparkle_bright=0, sparkle_depth=0), True)
+                changed = np.any(out[20:-20, 20:-20] != 19, axis=2).sum()
+                self.assertGreater(changed, 0) if freq == 1.0 else self.assertEqual(changed, 0)
+
+    def test_new_defaults_and_explicit_saved_sparkle_off(self):
+        spec = NODES.StockingTextureRender.INPUT_TYPES()
+        self.assertEqual(spec["required"]["sparkle_bright"][1]["default"], 100)
+        self.assertEqual(spec["required"]["sparkle_depth"][1]["default"], 0)
+        self.assertTrue(spec["optional"]["dark_adapt"][1]["default"])
+        default = NODES.StockingTextureRender().render(self.image, self.text, mask=self.mask)[0]
+        explicit = NODES.StockingTextureRender().render(self.image, self.text, mask=self.mask, sparkle_bright=100)[0]
+        off = NODES.StockingTextureRender().render(self.image, self.text, mask=self.mask, sparkle_bright=0)[0]
+        self.assertTrue(torch.equal(default, explicit))
+        self.assertFalse(torch.equal(off, default))
 
 
 if __name__ == "__main__":

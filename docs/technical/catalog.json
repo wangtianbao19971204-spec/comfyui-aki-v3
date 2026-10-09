@@ -871,7 +871,8 @@
       "implementation": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/__init__.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/nodes.py",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/engine.py",
+          "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/engine.py",
+          "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/rendering.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_texture.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/editor_model.js",
@@ -880,9 +881,11 @@
       "tests": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_editor.cjs",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/isolated_acceptance.py"
+          "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/isolated_acceptance.py",
+          "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/compare_upstream.py",
+          "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/image_acceptance.py"
       ],
-      "evidence": ["docs/receipts/stocking_texture_20261009.json"],
+        "evidence": ["docs/receipts/stocking_texture_20261009.json", "docs/receipts/stocking_texture_fix_20261010.json"],
       "acceptance": "checked-source",
       "watch": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/",
