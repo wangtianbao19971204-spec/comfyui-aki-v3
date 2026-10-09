@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-08T18:01:52.240542+00:00",
+  "created_at": "2026-10-09T00:48:26.696495+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -57077,8 +57077,8 @@
     {
       "source": "production_tools/README.md",
       "path": "runtime/production_tools/README.md",
-      "sha256": "ec296050f21afb2885c7e7a6183da6eac3c176188a56e6c064ad998c1aca234c",
-      "bytes": 12516,
+      "sha256": "7258a7c6a58562041bea0f6c8d11392925ba1cd908c99122a3630f2be0febea7",
+      "bytes": 12643,
       "kind": "file"
     },
     {
@@ -57182,8 +57182,8 @@
     {
       "source": "production_tools/huishi_adapter/README.md",
       "path": "runtime/production_tools/huishi_adapter/README.md",
-      "sha256": "0a040c0f8f4128b04cbcbbda25af166e9737947485c7b9f1d1fd0b779b0be7f1",
-      "bytes": 1421,
+      "sha256": "d5891f5747169d8df211561e803e69bb9425a0d2bed237ef4f0cbd144916ad2d",
+      "bytes": 1463,
       "kind": "file"
     },
     {
@@ -67353,36 +67353,33 @@
       "gpu_backend_success_cases": 15,
       "whole_workflow_visual_acceptance": false,
       "whole_snapshot_live_deployed": false
+    },
+    {
+      "scope": "Only the seven original-GUI launcher targets enumerated in the live receipt; includes two Git source files and five generated, vendor-copy or local targets.",
+      "receipt": "docs/receipts/huishi_live_deployment_20261009.json",
+      "confirmed_at": "2026-10-09T00:47:52.535230+00:00",
+      "source_commit": "7238d98f535856968d3d1911abbe3575302dd072",
+      "candidate_and_live_targets_matched": 7,
+      "source_and_live_hashes_matched": 2,
+      "generated_or_local_targets": 5,
+      "original_gui_production_start_accepted": true,
+      "workflow_page_loaded": true,
+      "ready_workbench_modules": 5,
+      "database_main_hashes_preserved": 5,
+      "gpu_generation_submitted": false,
+      "production_stop_or_restart_tested": false,
+      "whole_snapshot_live_deployed": false
     }
   ],
   "development_revision": {
-    "note": "绘世原 GUI 与唯一主仓适配；隔离启停验收通过，未部署",
-    "previous_manifest_sha256": "e9594259e03e416b4a1cae3a9a3418893ff36dd3498e6e38f949efbbf6e98f6c",
+    "note": "绘世7文件部署及现有环境实际启动验收；同步目录自述状态",
+    "previous_manifest_sha256": "ec94908407812c8d447363f75d3e6d0a5ce5d66df26f3f7a055293c083ae40ea",
     "source_changes": {
-      "added": [
-        "production_tools/huishi_adapter/AdapterTests.cs",
-        "production_tools/huishi_adapter/ArchiveGuardProbe.cs",
-        "production_tools/huishi_adapter/Entry.cs",
-        "production_tools/huishi_adapter/NativeGuards.cs",
-        "production_tools/huishi_adapter/NativeGuardsTests.cs",
-        "production_tools/huishi_adapter/ProbeRunner.cs",
-        "production_tools/huishi_adapter/ProcessPolicy.cs",
-        "production_tools/huishi_adapter/ProcessPolicyTests.cs",
-        "production_tools/huishi_adapter/README.md",
-        "production_tools/huishi_adapter/StartupHook.cs",
-        "production_tools/huishi_adapter/build_archive_guard_probe.ps1",
-        "production_tools/huishi_adapter/build_entry.ps1",
-        "production_tools/huishi_adapter/build_hook.ps1",
-        "production_tools/huishi_adapter/build_native_tests.ps1",
-        "production_tools/huishi_adapter/build_process_policy_tests.ps1",
-        "production_tools/huishi_adapter/prepare.py",
-        "production_tools/huishi_adapter/run_archive_guard_probe.ps1",
-        "production_tools/huishi_adapter/runtime_start.py"
-      ],
+      "added": [],
       "removed": [],
       "changed": [
-        "ComfyUI/main.py",
-        "production_tools/README.md"
+        "production_tools/README.md",
+        "production_tools/huishi_adapter/README.md"
       ]
     },
     "live_deployed": false,

@@ -841,7 +841,8 @@
         "snapshot/runtime/production_tools/huishi_adapter/ProcessPolicyTests.cs"
       ],
       "evidence": [
-        "docs/receipts/huishi_launcher_20261009.json"
+        "docs/receipts/huishi_launcher_20261009.json",
+        "docs/receipts/huishi_live_deployment_20261009.json"
       ],
       "acceptance": "checked-source",
       "watch": [

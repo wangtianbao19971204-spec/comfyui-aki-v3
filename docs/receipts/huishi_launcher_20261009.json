@@ -4,6 +4,8 @@
   "receipt_id": "huishi-launcher-20261009",
   "base_commit": "5f1c1eec950beafb219eac620903b55983ae4866",
   "status": "isolated-acceptance-passed-not-deployed",
+  "record_scope": "Frozen results of isolated acceptance and candidate preparation before the authorized deployment",
+  "later_live_deployment_receipt": "docs/receipts/huishi_live_deployment_20261009.json",
   "original_vendor_bytes_unchanged": true,
   "core_baseline": "cc0fc21fea7a6a82f568362b15b7fbd713b419c1",
   "tests": {
