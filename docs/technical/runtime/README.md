@@ -3,6 +3,7 @@
 | 功能 | 技术档案 |
 |---|---|
 | 本体、插件装配与启动配置 | [core.md](core.md) |
+| 原绘世图形界面、版本读取与管理范围 | [huishi-launcher.md](huishi-launcher.md) |
 | 工作台、主题、图标与交互 | [workbench.md](workbench.md) |
 | 五站网页提示词 → 工作台待采用 | [browser-import.md](browser-import.md) |
 | UAP、子图、部位细化、二放与独立工具 | [workflows.md](workflows.md) |

@@ -1,0 +1,136 @@
+{
+  "schema": 1,
+  "date": "2026-10-09",
+  "receipt_id": "huishi-live-deployment-20261009",
+  "status": "seven-targets-deployed-original-gui-production-start-accepted",
+  "source_commit": "7238d98f535856968d3d1911abbe3575302dd072",
+  "deployment_utc": "2026-10-09T00:39:41.612053+00:00",
+  "accepted_observation_utc": "2026-10-09T00:47:52.535230+00:00",
+  "deployment_request": "现在部署并验证启动",
+  "isolated_acceptance_receipt": "docs/receipts/huishi_launcher_20261009.json",
+  "private_packet_receipt_sha256": "80d75490ad12bd85087ac5b0181ef77e8378772b4116748acd2f7b64023669b3",
+  "private_deployment_receipt_sha256": "65ce248e7ce7cbd726231e2bba3d3986ead0e56009060cfa4aa24dbff8e91208",
+  "private_live_observation_sha256": "1053b20fcb04a148547d20efa34a6eaeaf59d47f3183824690ea457d87565b90",
+  "deployed": true,
+  "runtime_written": true,
+  "whole_snapshot_live_deployed": false,
+  "exact_targets": [
+    {
+      "target": "绘世启动器.exe",
+      "sha256": "71ec665b15c8e65203db4822e14d1cfd4bb925558889ab936c71746a713ef459",
+      "matches_candidate": true
+    },
+    {
+      "target": "绘世启动器原版.exe",
+      "sha256": "8652f7a83144b8faa18a5b5d0c75444e4da2004933b645a9636e9b4ae914229e",
+      "matches_candidate": true
+    },
+    {
+      "target": "ComfyUI/main.py",
+      "sha256": "df2003716f4911be4d0a6f626c08c534d47d70ed28353db005bc61f6faa63500",
+      "matches_candidate": true
+    },
+    {
+      "target": "production_tools/huishi_adapter/runtime_start.py",
+      "sha256": "97f6e1cc7beee3a18abcf9735ac97fc302d8a8fd3df333a34a2b7c7980d105f6",
+      "matches_candidate": true
+    },
+    {
+      "target": "production_tools/huishi_adapter/bin/Huishi.SingleGit.StartupHook.dll",
+      "sha256": "0736945af86034d9db3d194653ae1e2d56c8a25f3a061da4cf1bc07a0b80c14c",
+      "matches_candidate": true
+    },
+    {
+      "target": "production_tools/huishi_adapter/bin/0Harmony.dll",
+      "sha256": "dd0de0d99750e92731f5c36639f48d75fe0b52ec9dcb21a659c7910215e2b3a5",
+      "matches_candidate": true
+    },
+    {
+      "target": "production_tools/huishi_adapter/entry.local.json",
+      "sha256": "0ca479da5477050860c7006915359ef5b69ef115aed570c5ef694922a83cc991",
+      "matches_candidate": true
+    }
+  ],
+  "git_source_files_matched": [
+    "snapshot/runtime/ComfyUI/main.py",
+    "snapshot/runtime/production_tools/huishi_adapter/runtime_start.py"
+  ],
+  "generated_or_local_targets": 5,
+  "original_vendor_pins_matched": 4,
+  "original_vendor_bytes_unchanged": true,
+  "second_runtime_git_created": false,
+  "rollback_preserved": true,
+  "database_protection": {
+    "consistent_backups": 5,
+    "backup_integrity": "ok",
+    "predeploy_backup_receipt_sha256": "9fa2bb36cb0c5af3fc956ec2120bfc83a386aa1916eaad8216397e40f33400c6",
+    "main_databases_match_predeploy_after_start": 5,
+    "wal_with_effective_frames": 0,
+    "online_database_replaced": false,
+    "online_database_opened_by_observer": false
+  },
+  "original_gui": {
+    "version": "2.9.2 Build 419",
+    "home_page_observed": true,
+    "displayed_core_baseline": "cc0fc21fea7a6a82f568362b15b7fbd713b419c1",
+    "production_child_started": true,
+    "backend_parent_is_original_gui": true,
+    "explicit_start_button_click_observed_by_agent": false,
+    "start_action_note": "Backend was already starting when the launched original GUI was first observed; parent identity and live endpoints confirm the GUI launch chain",
+    "pid": 3328,
+    "create_time": 1791506420.1203966,
+    "service_state_observed": "运行中"
+  },
+  "production": {
+    "pid": 9336,
+    "parent_pid": 3328,
+    "create_time": 1791506430.0177453,
+    "listen": "127.0.0.1:8188",
+    "dotnet_hook_absent_in_python": true,
+    "production_profile_matches": true,
+    "whitelisted_plugins": 25,
+    "retained_gui_options": [
+      "--preview-method auto",
+      "--cuda-malloc",
+      "--reserve-vram 4",
+      "--auto-launch"
+    ],
+    "ready_workbench_modules": 5,
+    "workbench_nodes": 76,
+    "node_types": 1942,
+    "queue_running": 0,
+    "queue_pending": 0,
+    "http_200_endpoints": [
+      "/system_stats",
+      "/queue",
+      "/unified-workbench/status",
+      "/object_info",
+      "/extensions",
+      "/"
+    ],
+    "uap_workflow_page_loaded": true,
+    "daily_workbench_rendered": true,
+    "page_idle_observed": true,
+    "existing_router_retained": true,
+    "service_left_running": true
+  },
+  "frontend_existing_errors": {
+    "graph_access_before_initialization": 1,
+    "unexpanded_vite_preload_errors": 2,
+    "known_issue_reference": "docs/KNOWN_ISSUES.md",
+    "zero_error_claim": false
+  },
+  "gpu_generation_submitted": false,
+  "dependency_install_invoked_by_agent": false,
+  "model_download_invoked_by_agent": false,
+  "production_stop_or_restart_tested": false,
+  "limits": [
+    "Uses the existing machine Python and CUDA environment; a new-machine setup was not tested",
+    "Original stop button has isolated probe acceptance only; production stop/restart was not performed",
+    "GPU generation, real dependency maintenance and every management tool were not tested",
+    "Existing frontend initialization and Vite preload errors remain; rendering acceptance is not zero-error acceptance",
+    "API interception is not a process sandbox; the pinned vendor call chain remains required",
+    "Repository README status updates are documentation changes, outside the seven runtime deployment targets"
+  ],
+  "private_raw_evidence_retained": true
+}

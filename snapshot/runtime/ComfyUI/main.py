@@ -1,3 +1,30 @@
+import os
+
+if __name__ == "__main__" and "AKI_HUISHI_PROFILE" in os.environ:
+    # Only the controlled original-GUI child uses this boundary. Ordinary
+    # ComfyUI launches do not load the adapter or inspect production profiles.
+    import importlib.util as _aki_importlib
+    import pathlib as _aki_pathlib
+    import sys as _aki_sys
+
+    try:
+        _aki_root = _aki_pathlib.Path(__file__).resolve().parent.parent
+        _aki_spec = _aki_importlib.spec_from_file_location(
+            "aki_huishi_runtime_start",
+            _aki_root / "production_tools/huishi_adapter/runtime_start.py",
+        )
+        _aki_runtime = _aki_importlib.module_from_spec(_aki_spec)
+        _aki_spec.loader.exec_module(_aki_runtime)
+        _aki_runtime.apply_gui_profile(_aki_root, _aki_sys.argv, os.environ)
+    except Exception as _aki_error:
+        if "_aki_runtime" in globals() and type(_aki_error) is getattr(_aki_runtime, "StartupPolicyError", None):
+            _aki_message = str(_aki_error)  # Adapter-defined, reviewed policy messages only.
+        else:
+            # Unexpected import/filesystem errors can contain private paths or
+            # original values. Report the category without exception arguments.
+            _aki_message = "适配文件或运行环境异常，请核对同批部署与回滚收据（" + type(_aki_error).__name__ + "）。"
+        raise SystemExit("绘世受控启动检查失败：" + _aki_message) from None
+
 import comfy.options
 comfy.options.enable_args_parsing()
 

@@ -1,0 +1,193 @@
+{
+  "schema": 1,
+  "date": "2026-10-09",
+  "receipt_id": "huishi-launcher-20261009",
+  "base_commit": "5f1c1eec950beafb219eac620903b55983ae4866",
+  "status": "isolated-acceptance-passed-not-deployed",
+  "record_scope": "Frozen results of isolated acceptance and candidate preparation before the authorized deployment",
+  "later_live_deployment_receipt": "docs/receipts/huishi_live_deployment_20261009.json",
+  "original_vendor_bytes_unchanged": true,
+  "core_baseline": "cc0fc21fea7a6a82f568362b15b7fbd713b419c1",
+  "tests": {
+    "maintenance_suite_before_final_browser_flag_change": 617,
+    "affected_python_after_final_browser_flag_change": 50,
+    "final_hook_adapter": 23,
+    "process_policy": 77,
+    "native_signature": 24,
+    "passed": true
+  },
+  "isolated_original_gui": {
+    "home_page": true,
+    "real_version": true,
+    "advanced_options": true,
+    "environment_maintenance_page": true,
+    "tools_page": true,
+    "original_start_button": true,
+    "original_log_panel": true,
+    "real_python_marker_consumed": true,
+    "dotnet_hook_absent_in_python": true,
+    "gui_browser_choice_preserved": true,
+    "production_plugins": 25,
+    "original_stop_button": true,
+    "child_absent_after_stop": true,
+    "returned_to_not_running": true,
+    "service_started": false,
+    "gpu_started": false,
+    "real_packages_installed": false,
+    "lifecycle_receipt_sha256": "d3e58b592829c877720f3a13de592bee632bbfd9877fe0c84969985c168f222f"
+  },
+  "real_7z_callback": {
+    "normal_text_extracted": true,
+    "source_write_refused": true,
+    "refused_file_absent": true,
+    "receipt_sha256": "d605fc8ff13dae1e207e6e0f066f0b82158598cb9da2c3b39fae04e9f3523f28"
+  },
+  "hook_sha256": "0736945af86034d9db3d194653ae1e2d56c8a25f3a061da4cf1bc07a0b80c14c",
+  "exact_candidate_targets": [
+    "绘世启动器.exe",
+    "绘世启动器原版.exe",
+    "ComfyUI/main.py",
+    "production_tools/huishi_adapter/runtime_start.py",
+    "production_tools/huishi_adapter/bin/Huishi.SingleGit.StartupHook.dll",
+    "production_tools/huishi_adapter/bin/0Harmony.dll",
+    "production_tools/huishi_adapter/entry.local.json"
+  ],
+  "deployed": false,
+  "runtime_written": false,
+  "second_runtime_git_created": false,
+  "private_raw_evidence_retained": true,
+  "limits": [
+    "API interception is not a process sandbox",
+    "Production cold start, GPU generation and all management tools are not accepted by these probes",
+    "GUI dependency install/uninstall and direct source updates are deferred to maintenance",
+    "Automatic dependency guard depends on the pinned vendor launch call chain",
+    "Ordinary startup without the wrapper marker intentionally retains existing behavior",
+    "Real archive callback acceptance covers the tested 7z single-file cases"
+  ],
+  "source_files": [
+    {
+      "path": "scripts/snapshot.py",
+      "sha256": "3d7f6d1a1984d737fa60d861dc140f04da72fca044de3a907008834d93200b60",
+      "bytes": 43566
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/main.py",
+      "sha256": "df2003716f4911be4d0a6f626c08c534d47d70ed28353db005bc61f6faa63500",
+      "bytes": 26381
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/AdapterTests.cs",
+      "sha256": "410d9596321c4ff64e320ccc63530ebcb3ade78823c807a5ffaf2abc2c958114",
+      "bytes": 7613
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/ArchiveGuardProbe.cs",
+      "sha256": "3871da003149df7ce247c6286c85ceee1c16b47d8c84f08d44e0cece64b9ac85",
+      "bytes": 10666
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/build_archive_guard_probe.ps1",
+      "sha256": "946dd8d05102bd3514d7187fcb29e5a992594089ea58a9ac467296193e52fa08",
+      "bytes": 2199
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/build_entry.ps1",
+      "sha256": "215d074626185483533c06d18d66fc2af636b8ee2fe5e135ad795ad5adebd4a9",
+      "bytes": 2203
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/build_hook.ps1",
+      "sha256": "618216554ec4b3e5d49d0cd74217b07d2e83562dd6fae9dc33dd56c665eb4cc7",
+      "bytes": 6186
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/build_native_tests.ps1",
+      "sha256": "41a1d0ff9430aa87a03bd230d1cb68d9050c93b18c5f329e491647c211f9a714",
+      "bytes": 2855
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/build_process_policy_tests.ps1",
+      "sha256": "a5dd21c9a67e1210548f78a1a8202638a62aecb0415793e6f81da4acd07e6499",
+      "bytes": 2529
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/Entry.cs",
+      "sha256": "1044167719422fb4cb58557bbf739050ea5983bfd9f80b8f6eaa6b70ad8266bc",
+      "bytes": 7424
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/NativeGuards.cs",
+      "sha256": "7138efdfb62c75e8b9a2c3c584be89b8719e06fbba538fc645356b7e48247f65",
+      "bytes": 18472
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/NativeGuardsTests.cs",
+      "sha256": "426c041486bcae99a851d250059c40e21f70fa55d6d55849544ebde47da86215",
+      "bytes": 11936
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/prepare.py",
+      "sha256": "5d351cfbb853e16d83616c3f981472d9e273f492d7fa059dd2b8e0c3599a0890",
+      "bytes": 15799
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/ProbeRunner.cs",
+      "sha256": "e65caaeab6d25630c756cf754fde7c0b9d94186233392272516941f14ff15e79",
+      "bytes": 3466
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/ProcessPolicy.cs",
+      "sha256": "2db38af71f48fc5acdcad79f51fca26e157916a172417e33cd62df9a585b522a",
+      "bytes": 12931
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/ProcessPolicyTests.cs",
+      "sha256": "2f5a2b23bf735c4a1e11f42b3ccdade1bd849150fe3bfff0e82e55003ea493b0",
+      "bytes": 14989
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/README.md",
+      "sha256": "0a040c0f8f4128b04cbcbbda25af166e9737947485c7b9f1d1fd0b779b0be7f1",
+      "bytes": 1421
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/run_archive_guard_probe.ps1",
+      "sha256": "44dc4f5f82eee8153f5b88fdfdfadf447b7586256f70b2ebdbf31b104d6c1a17",
+      "bytes": 3560
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/runtime_start.py",
+      "sha256": "97f6e1cc7beee3a18abcf9735ac97fc302d8a8fd3df333a34a2b7c7980d105f6",
+      "bytes": 6922
+    },
+    {
+      "path": "snapshot/runtime/production_tools/huishi_adapter/StartupHook.cs",
+      "sha256": "7b0613e6dca75963e2b0525989b4144b69097aa8a3dabd5d263c6e6ac8da777f",
+      "bytes": 44864
+    },
+    {
+      "path": "tests/test_huishi_delivery.py",
+      "sha256": "25f57b5019a253f737dc91094562304c69b5e03a5a496617eae94c12fc0bacac",
+      "bytes": 12945
+    },
+    {
+      "path": "tests/test_huishi_runtime.py",
+      "sha256": "0886095294b4e7a03a899c2195028cce60929b50d964a7b99404fe550d28e0b0",
+      "bytes": 16145
+    },
+    {
+      "path": "tests/test_snapshot.py",
+      "sha256": "05055c2eec32e908a14c584b80861bbd3c53c50b21e8983ab423180c032a2180",
+      "bytes": 14478
+    }
+  ],
+  "private_delivery_packet": {
+    "prepared": true,
+    "deployed": false,
+    "packet_receipt_sha256": "80d75490ad12bd85087ac5b0181ef77e8378772b4116748acd2f7b64023669b3",
+    "targets": 7,
+    "candidate_bytes": 4735914,
+    "rollback_bytes": 2101294,
+    "runtime_written": false
+  }
+}
