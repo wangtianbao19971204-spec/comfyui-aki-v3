@@ -2,16 +2,18 @@
 
 现行安装位置以 [来源目录](../snapshot/inventory/model_sources.json) 的 `current_path` 为准；没有此字段的资源仍使用 `path`。`path` 保留首次捕获身份，旧 inventory、训练发布记录与历史收据不重写。已删除的 15 个评估条目不参与命名或迁移。
 
-2026-10-07 已在运行区完成 306 个权重的分类与改名，并迁移 690 件配套，同步 41 个主仓引用文件和 5 个运行区配置。计数如下；完整摘要、引用保持性、服务／队列和缓存核验结果以[标准化收据](receipts/model_standardization_20261007.json)为准。
+2026-10-08 当前有 **306 个用户 LoRA**：Anima 208、Anima 2.9B 2、Krea2 96。本轮 12 个下载中新增 11 个，ABP_ART 同摘要重复件保留现有版本；权重、预览、来源和离线缓存已登记，在线界面未测试，下载原件暂留。见[本轮导入记录](receipts/lora_download_import_20261008.json)。下面的 2026-10-07 表格保留当时全量整理的基线。
+
+2026-10-07 首轮完成 306 个权重的分类与改名，迁移 690 件配套并同步已有引用，见[标准化收据](receipts/model_standardization_20261007.json)。随后又导入 9 个下载的 LoRA，现有 **295 个用户 LoRA、19 个图像底模和 1 个 SAM 工具**；新增来源、摘要及实际导入结果见[导入收据](receipts/lora_download_import_20261007.json)。
 
 | 家族 | 用户 LoRA | 图像底模 | 工具 |
 |---|---:|---:|---:|
-| Anima | 196 | 7 | 0 |
-| Anima 2.9B | 1 | 4 | 0 |
+| Anima | 204 | 7 | 0 |
+| Anima 2.9B | 2 | 4 | 0 |
 | Krea2 | 89 | 7 | 0 |
 | Qwen Image 2.1 | 0 | 1 | 0 |
 | SAM3.1 | 0 | 0 | 1 |
-| 合计 | 286 | 19 | 1 |
+| 合计 | 295 | 19 | 1 |
 
 ## 分类
 
@@ -55,6 +57,8 @@ LoRA Manager 的常规与排除缓存须同时核验：本轮 286 个用户 LoRA
 
 下载时仍按来源目录的确切上游文件选择，再放到 `current_path`；不要把规范名当成网站上的下载文件名。权重、预览和真实 sidecar 留在 Git 外。完整权重摘要用于确认取得同一文件，不能用 sidecar 的声明代替。
 
+新下载的文件也使用同一规则：先核对完整 SHA 和公开版本／文件 ID，再按家族、用途命名，保留上游原名及触发词。新资产设 `captured_in_inventory: false`；真实导入并核验后才登记存在。为新文件建立兼容 LoRA Manager 的侧车后，仅登记这些项；已有收藏、备注和排除状态须保持。加载器在 Windows 返回的反斜线只在路径比较时规范化，不改工作流参数。
+
 [命名规则](../scripts/model_naming_rules.py)只生成白名单分类信息；[迁移工具](../scripts/standardize_models.py)使用已部署 LoRA Manager 的本地接口维护共享身份、预览和 recipe，并精确更新保存工作流的路径。额外 sidecar 与旧 WeiLin 本地图片引用也要迁移。下载声明中的原文件名／URL、训练历史和原 inventory 保留。运行区私有训练 profile 与独立 Qwen API 工作流只更新现存模型路径，原件保存在仓外。
 
 在主仓用已经核验的 Python 依次执行（示例目录必须换成新的仓外位置）：
@@ -77,4 +81,7 @@ LoRA Manager 的常规与排除缓存须同时核验：本轮 286 个用户 LoRA
 
 ## 更新记录
 
+- 2026-10-08：沿用同一命名规则导入 11 项并跳过 1 个重复下载；新增项保留完整公开原名、确切版本／文件 ID、SHA、AutoV3 与 API 触发词。Reflet Outfit 的 API 触发词为空，另标明作者说明中的 `reflet outfit`，不冒充 API 值。预览、离线缓存和本机加载器枚举通过；未启动服务或做 GPU 推理，原件保留，见[收据](receipts/lora_download_import_20261008.json)。
+
+- 2026-10-07：新增 9 个网上下载 LoRA：4 个画风、3 个角色权重、2 个效果；8 个 Anima、1 个发布者提供的 2.9B remap。现行 LoRA 总数 295（292 常规、3 排除）；来源页、版本／文件 ID、原名、完整 SHA 和触发词已登记。原权重／侧车／个人记录及正式图保持，未做 GPU 推理；GYARI 的原作者用途限制随来源保留，见[导入收据](receipts/lora_download_import_20261007.json)。
 - 2026-10-07：实际完成 286 LoRA／19 图像底模／1 SAM 的规范分类与改名，连同 690 配套迁移；41 个主仓引用文件与 5 个运行配置同步。修正 Platinum 的 Anima 家族归属，独立区分 2.9B、自训成品和 SAM 工具；保留上游下载身份、原 inventory、4 个成品和个人字段。常规／排除缓存及摘要核验的实际范围见[标准化收据](receipts/model_standardization_20261007.json)，未重新执行 GPU 任务。

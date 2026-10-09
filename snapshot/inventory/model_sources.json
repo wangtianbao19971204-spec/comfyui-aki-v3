@@ -11,7 +11,9 @@
     "来源页／下载入口不包含鉴权值、原始缓存或签名链接。网站版本、版权许可和资源可用性需下载时复核。",
     "2026-10-07 计数复核：19 个本地训练权重路径实际为 4 个成品使用版本、15 个评估检查点，内容去重后为 17 份；对应 2 个角色、6 个已匹配训练 session，不是 19 个独立成品。详见 docs/receipts/model_source_recount_20261007.json。",
     "2026-10-07 按用户明确要求已删除 15 个评估项的运行／训练文件、侧车和别名，51 个目标路径全部缺失，未保留评估权重备份；4 个成品完整 SHA 保持。15 项只保留历史文字身份，不恢复或迁移。",
-    "2026-10-07：286 LoRA、19 生成底模及 1 SAM 工具按家族／用途规范命名；实际源文件名称与精度独立保留，目录大小写与加载器枚举严格一致。权重仍在仓外，旧 inventory 和已删评估条目不重写。"
+    "2026-10-07：286 LoRA、19 生成底模及 1 SAM 工具按家族／用途规范命名；实际源文件名称与精度独立保留，目录大小写与加载器枚举严格一致。权重仍在仓外，旧 inventory 和已删评估条目不重写。",
+    "2026-10-07：另导入 9 个公开来源 LoRA（8 Anima、1 Anima 2.9B），原捕获清单保持；新增 captured_in_inventory=false，当前合计 295 用户 LoRA。导入与公开来源核验见 docs/receipts/lora_download_import_20261007.json。",
+    "2026-10-08：检查12个新下载，11项新增（7 Krea2、4 Anima），ABP_ART同摘要重复未重复导入。当前306用户LoRA；服务关闭时完成离线登记与加载器枚举，在线UI未测试。见 docs/receipts/lora_download_import_20261008.json。"
   ],
   "assets": [
     {
@@ -22900,18 +22902,1133 @@
         "此旧训练器词表只有代码所用 T5 家族参考；尚未确认网上文件与本机原件同一身份，须另备份原件。",
         "尚无可靠下载来源；已保留位置和可用指纹。换机请迁移原件，待按实际来源证据补网址，不能猜链接或改工作流默认选择。"
       ]
+    },
+    {
+      "path": "ComfyUI/models/loras/yunsang_v1_typeb.safetensors",
+      "bytes": 200845848,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "c55f844dd14d5d35e70159e836c925e87841d8d1c0d36f28f6566de0c18ec1b6",
+      "source_status": "version_metadata",
+      "family": "anima",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2950001?modelVersionId=3356956",
+          "download_url": "https://civitai.com/api/download/models/3356956",
+          "model_id": 2950001,
+          "version_id": 3356956,
+          "file_id": 3244521,
+          "filename": "yunsang_v1_typeb.safetensors",
+          "declared_sha256": "c55f844dd14d5d35e70159e836c925e87841d8d1c0d36f28f6566de0c18ec1b6",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261007.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/anima/画风与画师/Anima__YUNSANG-STYLE__v1.0-typeB__BF16__cv3356956__f3244521.metadata.json"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-07：下载目录文件完整本机 SHA-256 与匿名 Civitai 版本文件声明一致；未下载或执行 GPU 推理。",
+        "触发词（公开版本元数据）：[\"@yunsangstyle\"]",
+        "2026-10-07：已按规范分类导入运行模型目录，完整 SHA、来源身份、AutoV3、工作台管理缓存与加载器枚举通过；真实侧车和权重均不随 Git 分发。"
+      ],
+      "current_path": "ComfyUI/models/loras/anima/画风与画师/Anima__YUNSANG-STYLE__v1.0-typeB__BF16__cv3356956__f3244521.safetensors",
+      "standardization": {
+        "family_slug": "anima",
+        "family_label": "Anima",
+        "category": "画风与画师",
+        "display_name": "YUNSANG-STYLE",
+        "version": "v1.0-typeB",
+        "precision": "BF16",
+        "source_identity": "civitai:model=2950001,version=3356956,file=3244521",
+        "target_path": "ComfyUI/models/loras/anima/画风与画师/Anima__YUNSANG-STYLE__v1.0-typeB__BF16__cv3356956__f3244521.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261007.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/E4BFA1E6B593v3.uu3r.safetensors",
+      "bytes": 46030528,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "4ce50754ee8471da74f13d97fbb2112c330fbc14dc7e5892bea10b89c016096a",
+      "source_status": "version_metadata",
+      "family": "anima",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2655398?modelVersionId=3308052",
+          "download_url": "https://civitai.com/api/download/models/3308052",
+          "model_id": 2655398,
+          "version_id": 3308052,
+          "file_id": 3193270,
+          "filename": "信浓v3.safetensors",
+          "declared_sha256": "4ce50754ee8471da74f13d97fbb2112c330fbc14dc7e5892bea10b89c016096a",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261007.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/anima/角色与人物/Anima__Shinano-信濃-信浓 [7 outfits] (Azur Lane-アズールレーン-碧蓝航线)__v3.0__FP16__cv3308052__f3193270.metadata.json"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-07：下载目录文件完整本机 SHA-256 与匿名 Civitai 版本文件声明一致；未下载或执行 GPU 推理。",
+        "触发词（公开版本元数据）：[]",
+        "版本 trainedWords 为空；模型公开说明与训练头一致给出基础触发词 shinanooooo，七套服装词见来源页。",
+        "2026-10-07：已按规范分类导入运行模型目录，完整 SHA、来源身份、AutoV3、工作台管理缓存与加载器枚举通过；真实侧车和权重均不随 Git 分发。"
+      ],
+      "current_path": "ComfyUI/models/loras/anima/角色与人物/Anima__Shinano-信濃-信浓 [7 outfits] (Azur Lane-アズールレーン-碧蓝航线)__v3.0__FP16__cv3308052__f3193270.safetensors",
+      "standardization": {
+        "family_slug": "anima",
+        "family_label": "Anima",
+        "category": "角色与人物",
+        "display_name": "Shinano\\信濃\\信浓 [7 outfits] (Azur Lane\\アズールレーン\\碧蓝航线)",
+        "version": "v3.0",
+        "precision": "FP16",
+        "source_identity": "civitai:model=2655398,version=3308052,file=3193270",
+        "target_path": "ComfyUI/models/loras/anima/角色与人物/Anima__Shinano-信濃-信浓 [7 outfits] (Azur Lane-アズールレーン-碧蓝航线)__v3.0__FP16__cv3308052__f3193270.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261007.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/condom_left_inside_anima_v1.safetensors",
+      "bytes": 45987984,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "8a74a73a7838a790f125d1fd413581fd22886cc9674f268c79c64691397ef7d0",
+      "source_status": "version_metadata",
+      "family": "anima",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2988171?modelVersionId=3388058",
+          "download_url": "https://civitai.com/api/download/models/3388058",
+          "model_id": 2988171,
+          "version_id": 3388058,
+          "file_id": 3277069,
+          "filename": "condom_left_inside_anima_v1.safetensors",
+          "declared_sha256": "8a74a73a7838a790f125d1fd413581fd22886cc9674f268c79c64691397ef7d0",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261007.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/anima/概念与效果/Anima__(ANIMA) Condom Left Inside - ゴム残し__v1.0__FP16__cv3388058__f3277069.metadata.json"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-07：下载目录文件完整本机 SHA-256 与匿名 Civitai 版本文件声明一致；未下载或执行 GPU 推理。",
+        "触发词（公开版本元数据）：[\"condom left inside,\"]",
+        "2026-10-07：已按规范分类导入运行模型目录，完整 SHA、来源身份、AutoV3、工作台管理缓存与加载器枚举通过；真实侧车和权重均不随 Git 分发。"
+      ],
+      "current_path": "ComfyUI/models/loras/anima/概念与效果/Anima__(ANIMA) Condom Left Inside - ゴム残し__v1.0__FP16__cv3388058__f3277069.safetensors",
+      "standardization": {
+        "family_slug": "anima",
+        "family_label": "Anima",
+        "category": "概念与效果",
+        "display_name": "(ANIMA) Condom Left Inside / ゴム残し",
+        "version": "v1.0",
+        "precision": "FP16",
+        "source_identity": "civitai:model=2988171,version=3388058,file=3277069",
+        "target_path": "ComfyUI/models/loras/anima/概念与效果/Anima__(ANIMA) Condom Left Inside - ゴム残し__v1.0__FP16__cv3388058__f3277069.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261007.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/hsin_anima_v3_29b.safetensors",
+      "bytes": 138661544,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "c2d0fa3032ae2f83467dda0a26699e61e1e86b72de4c50c4ac644d3536bdd775",
+      "source_status": "version_metadata",
+      "family": "anima-2.9b",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2864523?modelVersionId=3363876",
+          "download_url": "https://civitai.com/api/download/models/3363876",
+          "model_id": 2864523,
+          "version_id": 3363876,
+          "file_id": 3251714,
+          "filename": "hsin_anima_v3_29b.safetensors",
+          "declared_sha256": "c2d0fa3032ae2f83467dda0a26699e61e1e86b72de4c50c4ac644d3536bdd775",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261007.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/anima-2.9b/角色与人物/Anima-2.9B__Hsin 心, 2 Outfits — Wuthering Waves 鳴潮 [Anima+Illu__v3.0 Remapped Anima 2.9B__FP16__cv3363876__f3251714.metadata.json"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-07：下载目录文件完整本机 SHA-256 与匿名 Civitai 版本文件声明一致；未下载或执行 GPU 推理。",
+        "触发词（公开版本元数据）：[\"hsinwuwa, baseout\", \"hsinwuwa, moonout\"]",
+        "发布者将原版 Anima LoRA 映射到 40 层 Anima-2.9B；不是原生重训。header：28_to_40、fill_inserted=none；28 个权重 block 分散于 0 至 39，未填充插入层。发布者建议强度 0.5–0.7，仅作来源备注，不改工作流参数。",
+        "2026-10-07：已按规范分类导入运行模型目录，完整 SHA、来源身份、AutoV3、工作台管理缓存与加载器枚举通过；真实侧车和权重均不随 Git 分发。"
+      ],
+      "current_path": "ComfyUI/models/loras/anima-2.9b/角色与人物/Anima-2.9B__Hsin 心, 2 Outfits — Wuthering Waves 鳴潮 [Anima+Illu__v3.0 Remapped Anima 2.9B__FP16__cv3363876__f3251714.safetensors",
+      "standardization": {
+        "family_slug": "anima-2.9b",
+        "family_label": "Anima-2.9B",
+        "category": "角色与人物",
+        "display_name": "Hsin 心, 2 Outfits — Wuthering Waves 鳴潮 [Anima+Illustrious+Krea2]",
+        "version": "v3.0 Remapped Anima 2.9B",
+        "precision": "FP16",
+        "source_identity": "civitai:model=2864523,version=3363876,file=3251714",
+        "target_path": "ComfyUI/models/loras/anima-2.9b/角色与人物/Anima-2.9B__Hsin 心, 2 Outfits — Wuthering Waves 鳴潮 [Anima+Illu__v3.0 Remapped Anima 2.9B__FP16__cv3363876__f3251714.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261007.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/hsin_anima_v3.safetensors",
+      "bytes": 138661664,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "6817626b1996491957121e75d326b567ea8716bd10706281722d2c37c9aeb68d",
+      "source_status": "version_metadata",
+      "family": "anima",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2864523?modelVersionId=3363874",
+          "download_url": "https://civitai.com/api/download/models/3363874",
+          "model_id": 2864523,
+          "version_id": 3363874,
+          "file_id": 3251712,
+          "filename": "hsin_anima_v3.safetensors",
+          "declared_sha256": "6817626b1996491957121e75d326b567ea8716bd10706281722d2c37c9aeb68d",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261007.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/anima/角色与人物/Anima__Hsin 心, 2 Outfits — Wuthering Waves 鳴潮 [Anima+Illu__v3.0 Anima__FP16__cv3363874__f3251712.metadata.json"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-07：下载目录文件完整本机 SHA-256 与匿名 Civitai 版本文件声明一致；未下载或执行 GPU 推理。",
+        "触发词（公开版本元数据）：[\"hsinwuwa, baseout\", \"hsinwuwa, moonout\"]",
+        "2026-10-07：已按规范分类导入运行模型目录，完整 SHA、来源身份、AutoV3、工作台管理缓存与加载器枚举通过；真实侧车和权重均不随 Git 分发。"
+      ],
+      "current_path": "ComfyUI/models/loras/anima/角色与人物/Anima__Hsin 心, 2 Outfits — Wuthering Waves 鳴潮 [Anima+Illu__v3.0 Anima__FP16__cv3363874__f3251712.safetensors",
+      "standardization": {
+        "family_slug": "anima",
+        "family_label": "Anima",
+        "category": "角色与人物",
+        "display_name": "Hsin 心, 2 Outfits — Wuthering Waves 鳴潮 [Anima+Illustrious+Krea2]",
+        "version": "v3.0 Anima",
+        "precision": "FP16",
+        "source_identity": "civitai:model=2864523,version=3363874,file=3251712",
+        "target_path": "ComfyUI/models/loras/anima/角色与人物/Anima__Hsin 心, 2 Outfits — Wuthering Waves 鳴潮 [Anima+Illu__v3.0 Anima__FP16__cv3363874__f3251712.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261007.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/gyari.safetensors",
+      "bytes": 91896160,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "07d987c10fb78a72f8cbc86d5febab7b866677fbd1d1f74c9dd7ca28f8e99330",
+      "source_status": "version_metadata",
+      "family": "anima",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2984027?modelVersionId=3383008",
+          "download_url": "https://civitai.com/api/download/models/3383008",
+          "model_id": 2984027,
+          "version_id": 3383008,
+          "file_id": 3271704,
+          "filename": "gyari.safetensors",
+          "declared_sha256": "07d987c10fb78a72f8cbc86d5febab7b866677fbd1d1f74c9dd7ca28f8e99330",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261007.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/anima/画风与画师/Anima__GYARI style__anima v1.0__BF16__cv3383008__f3271704.metadata.json"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-07：下载目录文件完整本机 SHA-256 与匿名 Civitai 版本文件声明一致；未下载或执行 GPU 推理。",
+        "触发词（公开版本元数据）：[]",
+        "来源模型说明附用途限制原文：ローカルや、CIVITAI以外での利用はしないで下さい。仅记录原作者说明，不把下载或改名视为新授权。",
+        "2026-10-07：已按规范分类导入运行模型目录，完整 SHA、来源身份、AutoV3、工作台管理缓存与加载器枚举通过；真实侧车和权重均不随 Git 分发。"
+      ],
+      "current_path": "ComfyUI/models/loras/anima/画风与画师/Anima__GYARI style__anima v1.0__BF16__cv3383008__f3271704.safetensors",
+      "standardization": {
+        "family_slug": "anima",
+        "family_label": "Anima",
+        "category": "画风与画师",
+        "display_name": "GYARI style",
+        "version": "anima v1.0",
+        "precision": "BF16",
+        "source_identity": "civitai:model=2984027,version=3383008,file=3271704",
+        "target_path": "ComfyUI/models/loras/anima/画风与画师/Anima__GYARI style__anima v1.0__BF16__cv3383008__f3271704.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261007.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/V1.safetensors",
+      "bytes": 138663712,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "93f3dc2f66b3ab6f7f9b299b54da27af40b286aa8770438b8da4b653d7824131",
+      "source_status": "version_metadata",
+      "family": "anima",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2774613?modelVersionId=3124245",
+          "download_url": "https://civitai.com/api/download/models/3124245",
+          "model_id": 2774613,
+          "version_id": 3124245,
+          "file_id": 3005033,
+          "filename": "V1.safetensors",
+          "declared_sha256": "93f3dc2f66b3ab6f7f9b299b54da27af40b286aa8770438b8da4b653d7824131",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261007.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/anima/概念与效果/Anima__Empty Eyes (Anima)__V1__BF16__cv3124245__f3005033.metadata.json"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-07：下载目录文件完整本机 SHA-256 与匿名 Civitai 版本文件声明一致；未下载或执行 GPU 推理。",
+        "触发词（公开版本元数据）：[\"empty eyes\"]",
+        "2026-10-07：已按规范分类导入运行模型目录，完整 SHA、来源身份、AutoV3、工作台管理缓存与加载器枚举通过；真实侧车和权重均不随 Git 分发。"
+      ],
+      "current_path": "ComfyUI/models/loras/anima/概念与效果/Anima__Empty Eyes (Anima)__V1__BF16__cv3124245__f3005033.safetensors",
+      "standardization": {
+        "family_slug": "anima",
+        "family_label": "Anima",
+        "category": "概念与效果",
+        "display_name": "Empty Eyes (Anima)",
+        "version": "V1",
+        "precision": "BF16",
+        "source_identity": "civitai:model=2774613,version=3124245,file=3005033",
+        "target_path": "ComfyUI/models/loras/anima/概念与效果/Anima__Empty Eyes (Anima)__V1__BF16__cv3124245__f3005033.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261007.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/iumu.safetensors",
+      "bytes": 183633568,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "33fd1d09ed6ad5af94e851863ca28a1730be5b86b7a9505dbcb433bbdf2847ad",
+      "source_status": "version_metadata",
+      "family": "anima",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/1696948?modelVersionId=3366711",
+          "download_url": "https://civitai.com/api/download/models/3366711",
+          "model_id": 1696948,
+          "version_id": 3366711,
+          "file_id": 3254679,
+          "filename": "iumu.safetensors",
+          "declared_sha256": "33fd1d09ed6ad5af94e851863ca28a1730be5b86b7a9505dbcb433bbdf2847ad",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261007.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/anima/画风与画师/Anima__Iumu__1.0-anima__BF16__cv3366711__f3254679.metadata.json"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-07：下载目录文件完整本机 SHA-256 与匿名 Civitai 版本文件声明一致；未下载或执行 GPU 推理。",
+        "触发词（公开版本元数据）：[\"@iumu\"]",
+        "2026-10-07：已按规范分类导入运行模型目录，完整 SHA、来源身份、AutoV3、工作台管理缓存与加载器枚举通过；真实侧车和权重均不随 Git 分发。"
+      ],
+      "current_path": "ComfyUI/models/loras/anima/画风与画师/Anima__Iumu__1.0-anima__BF16__cv3366711__f3254679.safetensors",
+      "standardization": {
+        "family_slug": "anima",
+        "family_label": "Anima",
+        "category": "画风与画师",
+        "display_name": "Iumu",
+        "version": "1.0-anima",
+        "precision": "BF16",
+        "source_identity": "civitai:model=1696948,version=3366711,file=3254679",
+        "target_path": "ComfyUI/models/loras/anima/画风与画师/Anima__Iumu__1.0-anima__BF16__cv3366711__f3254679.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261007.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/animaE794BBE9A38E.nFJI.safetensors",
+      "bytes": 91880064,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "b7ed28b49e845a0c2faecb5f243d33bfc7e3fbbe4f6114e311a60522e271abf9",
+      "source_status": "version_metadata",
+      "family": "anima",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2900200?modelVersionId=3341485",
+          "download_url": "https://civitai.com/api/download/models/3341485",
+          "model_id": 2900200,
+          "version_id": 3341485,
+          "file_id": 3228185,
+          "filename": "Anima-画风-nai5V2.safetensors",
+          "declared_sha256": "b7ed28b49e845a0c2faecb5f243d33bfc7e3fbbe4f6114e311a60522e271abf9",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261007.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/anima/画风与画师/Anima__Anima-style-nai5(其一)__base-V2.0__BF16__cv3341485__f3228185.metadata.json"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-07：下载目录文件完整本机 SHA-256 与匿名 Civitai 版本文件声明一致；未下载或执行 GPU 推理。",
+        "触发词（公开版本元数据）：[\"@neoanime\"]",
+        "2026-10-07：已按规范分类导入运行模型目录，完整 SHA、来源身份、AutoV3、工作台管理缓存与加载器枚举通过；真实侧车和权重均不随 Git 分发。"
+      ],
+      "current_path": "ComfyUI/models/loras/anima/画风与画师/Anima__Anima-style-nai5(其一)__base-V2.0__BF16__cv3341485__f3228185.safetensors",
+      "standardization": {
+        "family_slug": "anima",
+        "family_label": "Anima",
+        "category": "画风与画师",
+        "display_name": "Anima-style-nai5（其一）",
+        "version": "base-V2.0",
+        "precision": "BF16",
+        "source_identity": "civitai:model=2900200,version=3341485,file=3228185",
+        "target_path": "ComfyUI/models/loras/anima/画风与画师/Anima__Anima-style-nai5(其一)__base-V2.0__BF16__cv3341485__f3228185.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261007.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/1001_c1-st6000.safetensors",
+      "bytes": 234680584,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "4d5cdf6de8fb145312faee0864b2c81f217adc111d7be94db81d4dd3ec588c55",
+      "source_status": "version_metadata",
+      "family": "krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2977433?modelVersionId=3374767",
+          "download_url": "https://civitai.com/api/download/models/3374767",
+          "model_id": 2977433,
+          "version_id": 3374767,
+          "file_id": 3263006,
+          "filename": "1001_c1-st6000.safetensors",
+          "declared_sha256": "4d5cdf6de8fb145312faee0864b2c81f217adc111d7be94db81d4dd3ec588c55",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261008.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__Hybrid anime-1001__v1.0__FP16__cv3374767__f3263006.metadata.json",
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__Hybrid anime-1001__v1.0__FP16__cv3374767__f3263006.preview.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-08：本机完整 SHA-256、AutoV3 与确切 Civitai 文件一致；权重及预览留在 Git 外。",
+        "触发词（公开版本元数据）：[]",
+        "2026-10-08：离线导入、11项静图预览、持久缓存读回与本机加载器枚举通过；运行服务未启动，未验收在线列表或 GPU 推理。"
+      ],
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Hybrid anime-1001__v1.0__FP16__cv3374767__f3263006.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "画风与画师",
+        "display_name": "Hybrid anime-1001",
+        "version": "v1.0",
+        "precision": "FP16",
+        "source_identity": "civitai:model=2977433,version=3374767,file=3263006",
+        "target_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Hybrid anime-1001__v1.0__FP16__cv3374767__f3263006.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261008.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/After_Sex_anima.safetensors",
+      "bytes": 138663763,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "3c3b528d9f5fe43fb7de413be4d8b069566886e0a856a9d09ad206e11dc7b146",
+      "source_status": "version_metadata",
+      "family": "anima",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/1679775?modelVersionId=3378331",
+          "download_url": "https://civitai.com/api/download/models/3378331",
+          "model_id": 1679775,
+          "version_id": 3378331,
+          "file_id": 3266753,
+          "filename": "After_Sex_anima.safetensors",
+          "declared_sha256": "3c3b528d9f5fe43fb7de413be4d8b069566886e0a856a9d09ad206e11dc7b146",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261008.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/anima/概念与效果/Anima__After Sex - Defeat Female__Anima-v1__BF16__cv3378331__f3266753.metadata.json",
+        "ComfyUI/models/loras/anima/概念与效果/Anima__After Sex - Defeat Female__Anima-v1__BF16__cv3378331__f3266753.preview.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-08：本机完整 SHA-256、AutoV3 与确切 Civitai 文件一致；权重及预览留在 Git 外。",
+        "触发词（公开版本元数据）：[\"aftersex\"]",
+        "2026-10-08：离线导入、11项静图预览、持久缓存读回与本机加载器枚举通过；运行服务未启动，未验收在线列表或 GPU 推理。"
+      ],
+      "current_path": "ComfyUI/models/loras/anima/概念与效果/Anima__After Sex - Defeat Female__Anima-v1__BF16__cv3378331__f3266753.safetensors",
+      "standardization": {
+        "family_slug": "anima",
+        "family_label": "Anima",
+        "category": "概念与效果",
+        "display_name": "After Sex | Defeat Female",
+        "version": "Anima-v1",
+        "precision": "BF16",
+        "source_identity": "civitai:model=1679775,version=3378331,file=3266753",
+        "target_path": "ComfyUI/models/loras/anima/概念与效果/Anima__After Sex - Defeat Female__Anima-v1__BF16__cv3378331__f3266753.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261008.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/【KREA2混合风格】琉璃虹光·明媚清透插画风.safetensors",
+      "bytes": 234674208,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "401d2ccbeed5453933cf5eca99306bf78b99681011d4b16a843f8ae9120ceb07",
+      "source_status": "version_metadata",
+      "family": "krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2974498?modelVersionId=3371079",
+          "download_url": "https://civitai.com/api/download/models/3371079",
+          "model_id": 2974498,
+          "version_id": 3371079,
+          "file_id": 3259221,
+          "filename": "【KREA2混合风格】琉璃虹光·明媚清透插画风.safetensors",
+          "declared_sha256": "401d2ccbeed5453933cf5eca99306bf78b99681011d4b16a843f8ae9120ceb07",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261008.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__【KREA2 Hybrid Style】Crystalline Iridescence · Brig__v1.0__FP16__cv3371079__f3259221.metadata.json",
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__【KREA2 Hybrid Style】Crystalline Iridescence · Brig__v1.0__FP16__cv3371079__f3259221.preview.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-08：本机完整 SHA-256、AutoV3 与确切 Civitai 文件一致；权重及预览留在 Git 外。",
+        "触发词（公开版本元数据）：[]",
+        "2026-10-08：离线导入、11项静图预览、持久缓存读回与本机加载器枚举通过；运行服务未启动，未验收在线列表或 GPU 推理。"
+      ],
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__【KREA2 Hybrid Style】Crystalline Iridescence · Brig__v1.0__FP16__cv3371079__f3259221.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "画风与画师",
+        "display_name": "【KREA2 Hybrid Style】Crystalline Iridescence · Bright & Clear Illustration Style【KREA2混合风格】琉璃虹光·明媚清透插画风",
+        "version": "v1.0",
+        "precision": "FP16",
+        "source_identity": "civitai:model=2974498,version=3371079,file=3259221",
+        "target_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__【KREA2 Hybrid Style】Crystalline Iridescence · Brig__v1.0__FP16__cv3371079__f3259221.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261008.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/ham_melon_(iloha_24).safetensors",
+      "bytes": 234680552,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "9900497c82c59dcc3b5c746aff5b4c3362409d21d41f5f89ea9b49e6023de840",
+      "source_status": "version_metadata",
+      "family": "krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2958314?modelVersionId=3351214",
+          "download_url": "https://civitai.com/api/download/models/3351214",
+          "model_id": 2958314,
+          "version_id": 3351214,
+          "file_id": 3238407,
+          "filename": "ham_melon_(iloha_24).safetensors",
+          "declared_sha256": "9900497c82c59dcc3b5c746aff5b4c3362409d21d41f5f89ea9b49e6023de840",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261008.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__画风 style-ham_melon_(iloha_24) krea2__v1.0__FP16__cv3351214__f3238407.metadata.json",
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__画风 style-ham_melon_(iloha_24) krea2__v1.0__FP16__cv3351214__f3238407.preview.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-08：本机完整 SHA-256、AutoV3 与确切 Civitai 文件一致；权重及预览留在 Git 外。",
+        "触发词（公开版本元数据）：[]",
+        "2026-10-08：离线导入、11项静图预览、持久缓存读回与本机加载器枚举通过；运行服务未启动，未验收在线列表或 GPU 推理。"
+      ],
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__画风 style-ham_melon_(iloha_24) krea2__v1.0__FP16__cv3351214__f3238407.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "画风与画师",
+        "display_name": "画风 style：ham_melon_(iloha_24) krea2",
+        "version": "v1.0",
+        "precision": "FP16",
+        "source_identity": "civitai:model=2958314,version=3351214,file=3238407",
+        "target_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__画风 style-ham_melon_(iloha_24) krea2__v1.0__FP16__cv3351214__f3238407.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261008.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/Krea2_AASML8_000008000.safetensors",
+      "bytes": 228587720,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "f8fbd4b7423d15281c2a119a533e4d3fe75801cfd8cb096e1c847d784e4edcd5",
+      "source_status": "version_metadata",
+      "family": "krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2961633?modelVersionId=3355262",
+          "download_url": "https://civitai.com/api/download/models/3355262",
+          "model_id": 2961633,
+          "version_id": 3355262,
+          "file_id": 3242704,
+          "filename": "Krea2_AASML8_000008000.safetensors",
+          "declared_sha256": "f8fbd4b7423d15281c2a119a533e4d3fe75801cfd8cb096e1c847d784e4edcd5",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261008.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__ArtistStyleMixLora 8 混合画风8__v1.0 Krea2__BF16__cv3355262__f3242704.metadata.json",
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__ArtistStyleMixLora 8 混合画风8__v1.0 Krea2__BF16__cv3355262__f3242704.preview.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-08：本机完整 SHA-256、AutoV3 与确切 Civitai 文件一致；权重及预览留在 Git 外。",
+        "触发词（公开版本元数据）：[\"AASML8\"]",
+        "2026-10-08：离线导入、11项静图预览、持久缓存读回与本机加载器枚举通过；运行服务未启动，未验收在线列表或 GPU 推理。"
+      ],
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__ArtistStyleMixLora 8 混合画风8__v1.0 Krea2__BF16__cv3355262__f3242704.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "画风与画师",
+        "display_name": "ArtistStyleMixLora 8 混合画风8",
+        "version": "v1.0 Krea2",
+        "precision": "BF16",
+        "source_identity": "civitai:model=2961633,version=3355262,file=3242704",
+        "target_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__ArtistStyleMixLora 8 混合画风8__v1.0 Krea2__BF16__cv3355262__f3242704.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261008.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/nkss_style_c1-st6000.safetensors",
+      "bytes": 117374872,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "7719a9c7e7bc3208bb7182ae8cd8623e025d332995216101bf052f6c5f9e6f7d",
+      "source_status": "version_metadata",
+      "family": "krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2753734?modelVersionId=3178678",
+          "download_url": "https://civitai.com/api/download/models/3178678",
+          "model_id": 2753734,
+          "version_id": 3178678,
+          "file_id": 3059222,
+          "filename": "nkss_style_c1-st6000.safetensors",
+          "declared_sha256": "7719a9c7e7bc3208bb7182ae8cd8623e025d332995216101bf052f6c5f9e6f7d",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261008.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__nkss style__krea2__BF16__cv3178678__f3059222.metadata.json",
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__nkss style__krea2__BF16__cv3178678__f3059222.preview.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-08：本机完整 SHA-256、AutoV3 与确切 Civitai 文件一致；权重及预览留在 Git 外。",
+        "触发词（公开版本元数据）：[]",
+        "2026-10-08：离线导入、11项静图预览、持久缓存读回与本机加载器枚举通过；运行服务未启动，未验收在线列表或 GPU 推理。"
+      ],
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__nkss style__krea2__BF16__cv3178678__f3059222.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "画风与画师",
+        "display_name": "nkss style",
+        "version": "krea2",
+        "precision": "BF16",
+        "source_identity": "civitai:model=2753734,version=3178678,file=3059222",
+        "target_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__nkss style__krea2__BF16__cv3178678__f3059222.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261008.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/Por-k2_c1-st6000.safetensors",
+      "bytes": 234680560,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "cd4de7c29368ab538a9a2f0f7366c250e5767bb7bc8b7080e41d853866342998",
+      "source_status": "version_metadata",
+      "family": "krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2989377?modelVersionId=3389608",
+          "download_url": "https://civitai.com/api/download/models/3389608",
+          "model_id": 2989377,
+          "version_id": 3389608,
+          "file_id": 3278855,
+          "filename": "Por-k2_c1-st6000.safetensors",
+          "declared_sha256": "cd4de7c29368ab538a9a2f0f7366c250e5767bb7bc8b7080e41d853866342998",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261008.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__Por ポル Style Krea2__v1.0__FP16__cv3389608__f3278855.metadata.json",
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__Por ポル Style Krea2__v1.0__FP16__cv3389608__f3278855.preview.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-08：本机完整 SHA-256、AutoV3 与确切 Civitai 文件一致；权重及预览留在 Git 外。",
+        "触发词（公开版本元数据）：[]",
+        "2026-10-08：离线导入、11项静图预览、持久缓存读回与本机加载器枚举通过；运行服务未启动，未验收在线列表或 GPU 推理。"
+      ],
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Por ポル Style Krea2__v1.0__FP16__cv3389608__f3278855.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "画风与画师",
+        "display_name": "Por ポル Style Krea2",
+        "version": "v1.0",
+        "precision": "FP16",
+        "source_identity": "civitai:model=2989377,version=3389608,file=3278855",
+        "target_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Por ポル Style Krea2__v1.0__FP16__cv3389608__f3278855.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261008.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/Reflet Outfit.safetensors",
+      "bytes": 45985984,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "ddc617dd15ee9a49a9e7a31d384c55b4dacb5707c4d0a4d53a6b04f1f43bc892",
+      "source_status": "version_metadata",
+      "family": "anima",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2974960?modelVersionId=3371653",
+          "download_url": "https://civitai.com/api/download/models/3371653",
+          "model_id": 2974960,
+          "version_id": 3371653,
+          "file_id": 3259791,
+          "filename": "Reflet Outfit.safetensors",
+          "declared_sha256": "ddc617dd15ee9a49a9e7a31d384c55b4dacb5707c4d0a4d53a6b04f1f43bc892",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261008.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/anima/服装与配饰/Anima__Monster Hunter - Reflet Outfit__v1.0__BF16__cv3371653__f3259791.metadata.json",
+        "ComfyUI/models/loras/anima/服装与配饰/Anima__Monster Hunter - Reflet Outfit__v1.0__BF16__cv3371653__f3259791.preview.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-08：本机完整 SHA-256、AutoV3 与确切 Civitai 文件一致；权重及预览留在 Git 外。",
+        "公开作者说明触发词：reflet outfit；API trainedWords 为空，二者分别保留。",
+        "触发词（公开版本元数据）：[]",
+        "2026-10-08：离线导入、11项静图预览、持久缓存读回与本机加载器枚举通过；运行服务未启动，未验收在线列表或 GPU 推理。"
+      ],
+      "current_path": "ComfyUI/models/loras/anima/服装与配饰/Anima__Monster Hunter - Reflet Outfit__v1.0__BF16__cv3371653__f3259791.safetensors",
+      "standardization": {
+        "family_slug": "anima",
+        "family_label": "Anima",
+        "category": "服装与配饰",
+        "display_name": "Monster Hunter : Reflet Outfit",
+        "version": "v1.0",
+        "precision": "BF16",
+        "source_identity": "civitai:model=2974960,version=3371653,file=3259791",
+        "target_path": "ComfyUI/models/loras/anima/服装与配饰/Anima__Monster Hunter - Reflet Outfit__v1.0__BF16__cv3371653__f3259791.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261008.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/Rui_Komatsuzaki_Style_Krea2_krea2_3312237_epoch_20.safetensors",
+      "bytes": 228588968,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "b94ccfc3d6187d90863ee797f94baf6914ee7e920e74ab33d5d38e1c0e2d5dee",
+      "source_status": "version_metadata",
+      "family": "krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2969854?modelVersionId=3367396",
+          "download_url": "https://civitai.com/api/download/models/3367396",
+          "model_id": 2969854,
+          "version_id": 3367396,
+          "file_id": 3255404,
+          "filename": "Rui_Komatsuzaki_Style_Krea2_krea2_3312237_epoch_20.safetensors",
+          "declared_sha256": "b94ccfc3d6187d90863ee797f94baf6914ee7e920e74ab33d5d38e1c0e2d5dee",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261008.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__Rui Komatsuzaki Style V2+ [Danganronpa Style]__Krea v2.0__BF16__cv3367396__f3255404.metadata.json",
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__Rui Komatsuzaki Style V2+ [Danganronpa Style]__Krea v2.0__BF16__cv3367396__f3255404.preview.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-08：本机完整 SHA-256、AutoV3 与确切 Civitai 文件一致；权重及预览留在 Git 外。",
+        "触发词（公开版本元数据）：[\"komatsuzaki_rui_(style) , In the Rui Komatsuzaki art style.\", \"komatsuzaki_rui_(style) , In the Rui Komatsuzaki art style. In Danganronpa sprite style.\", \"komatsuzaki_rui_(style) , In the Rui Komatsuzaki art style. danganronpa_(series), Cel-shaded anime illustration rendered in Danganronpa sprite style.\", \"komatsuzaki_rui_(style) , In the Rui Komatsuzaki art style. In the Rain Code style. Official anime game illustration.\", \"komatsuzaki_rui_(style) , In the Rui Komatsuzaki art style. In the Tribe Nine style.\", \"komatsuzaki_rui_(style) , akudama_drive , In the Rui Komatsuzaki art style. In the Akudama Drive sprite style.\", \"komatsuzaki_rui_(style) , In the Rui Komatsuzaki art style. In the Hundred Line style.\", \"komatsuzaki_rui_(style) , In the Rui Komatsuzaki art style. This is an anime screencap from Danganronpa 2.5. Anime screenshot rendered in the crisp cel-shaded style of Danganronpa 3 and Super Danganronpa 2.5.\", \"komatsuzaki_rui_(style) , In the Rui Komatsuzaki art style. This is an anime screencap from Danganronpa 3.\", \"komatsuzaki_rui_(style) , danganronpa_1_(anime), In the Rui Komatsuzaki art style. This is an anime screencap from Danganronpa The Animation.\", \"komatsuzaki_rui_(style) , danganronpa_2x2, danganronpa_2x2_(style), danganronpa_(series) , In the Rui Komatsuzaki art style. Using one-point perspective and flat 2D cutout style.\"]",
+        "2026-10-08：离线导入、11项静图预览、持久缓存读回与本机加载器枚举通过；运行服务未启动，未验收在线列表或 GPU 推理。"
+      ],
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Rui Komatsuzaki Style V2+ [Danganronpa Style]__Krea v2.0__BF16__cv3367396__f3255404.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "画风与画师",
+        "display_name": "Rui Komatsuzaki Style V2+ [Danganronpa Style]",
+        "version": "Krea v2.0",
+        "precision": "BF16",
+        "source_identity": "civitai:model=2969854,version=3367396,file=3255404",
+        "target_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Rui Komatsuzaki Style V2+ [Danganronpa Style]__Krea v2.0__BF16__cv3367396__f3255404.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261008.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/scr4pbook_anima.safetensors",
+      "bytes": 60337944,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "84936d887e57b94bf29f5639f5bf6a6589a9fdfb06103be4eedcdc309bb7641e",
+      "source_status": "version_metadata",
+      "family": "anima",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2986089?modelVersionId=3385482",
+          "download_url": "https://civitai.com/api/download/models/3385482",
+          "model_id": 2986089,
+          "version_id": 3385482,
+          "file_id": 3274438,
+          "filename": "scr4pbook_anima.safetensors",
+          "declared_sha256": "84936d887e57b94bf29f5639f5bf6a6589a9fdfb06103be4eedcdc309bb7641e",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261008.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/anima/概念与效果/Anima__【CONCEPT】Scrapbook Aesthetic__v1.0__BF16__cv3385482__f3274438.metadata.json",
+        "ComfyUI/models/loras/anima/概念与效果/Anima__【CONCEPT】Scrapbook Aesthetic__v1.0__BF16__cv3385482__f3274438.preview.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-08：本机完整 SHA-256、AutoV3 与确切 Civitai 文件一致；权重及预览留在 Git 外。",
+        "触发词（公开版本元数据）：[\"scr4pbook, washi tape, sticker, white outline, white border\"]",
+        "2026-10-08：离线导入、11项静图预览、持久缓存读回与本机加载器枚举通过；运行服务未启动，未验收在线列表或 GPU 推理。"
+      ],
+      "current_path": "ComfyUI/models/loras/anima/概念与效果/Anima__【CONCEPT】Scrapbook Aesthetic__v1.0__BF16__cv3385482__f3274438.safetensors",
+      "standardization": {
+        "family_slug": "anima",
+        "family_label": "Anima",
+        "category": "概念与效果",
+        "display_name": "【CONCEPT】Scrapbook Aesthetic",
+        "version": "v1.0",
+        "precision": "BF16",
+        "source_identity": "civitai:model=2986089,version=3385482,file=3274438",
+        "target_path": "ComfyUI/models/loras/anima/概念与效果/Anima__【CONCEPT】Scrapbook Aesthetic__v1.0__BF16__cv3385482__f3274438.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261008.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/WebCutoutSwimsuitAnima.safetensors",
+      "bytes": 33202472,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "b054ec160f283f5ec82179364b49b1fd7763eb71fe41add21e9d0804b39e6e8a",
+      "source_status": "version_metadata",
+      "family": "anima",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/455193?modelVersionId=3391426",
+          "download_url": "https://civitai.com/api/download/models/3391426",
+          "model_id": 455193,
+          "version_id": 3391426,
+          "file_id": 3280895,
+          "filename": "WebCutoutSwimsuitAnima.safetensors",
+          "declared_sha256": "b054ec160f283f5ec82179364b49b1fd7763eb71fe41add21e9d0804b39e6e8a",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/receipts/lora_download_import_20261008.json"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/anima/服装与配饰/Anima__Web Cutout Swimsuit__anima__BF16__cv3391426__f3280895.metadata.json",
+        "ComfyUI/models/loras/anima/服装与配饰/Anima__Web Cutout Swimsuit__anima__BF16__cv3391426__f3280895.preview.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "2026-10-08：本机完整 SHA-256、AutoV3 与确切 Civitai 文件一致；权重及预览留在 Git 外。",
+        "触发词（公开版本元数据）：[\"web cutout swimsuit, mesh, black one-piece swimsuit\"]",
+        "2026-10-08：离线导入、11项静图预览、持久缓存读回与本机加载器枚举通过；运行服务未启动，未验收在线列表或 GPU 推理。"
+      ],
+      "current_path": "ComfyUI/models/loras/anima/服装与配饰/Anima__Web Cutout Swimsuit__anima__BF16__cv3391426__f3280895.safetensors",
+      "standardization": {
+        "family_slug": "anima",
+        "family_label": "Anima",
+        "category": "服装与配饰",
+        "display_name": "Web Cutout Swimsuit",
+        "version": "anima",
+        "precision": "BF16",
+        "source_identity": "civitai:model=455193,version=3391426,file=3280895",
+        "target_path": "ComfyUI/models/loras/anima/服装与配饰/Anima__Web Cutout Swimsuit__anima__BF16__cv3391426__f3280895.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "docs/receipts/lora_download_import_20261008.json"
+        ]
+      }
     }
   ],
   "missing_workflow_references": [],
   "summary": {
-    "asset_count": 395,
+    "asset_count": 415,
     "inventory_asset_count": 384,
-    "observed_present_count": 380,
+    "observed_present_count": 400,
     "observed_missing_count": 15,
     "workflow_asset_count": 23,
     "missing_workflow_reference_count": 0,
     "source_status_counts": {
-      "version_metadata": 302,
+      "version_metadata": 322,
       "upstream_mapping": 73,
       "local_derivative": 19,
       "unresolved": 1

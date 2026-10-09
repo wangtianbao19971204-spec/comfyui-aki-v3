@@ -1,0 +1,389 @@
+{
+  "schema": 1,
+  "receipt_id": "lora-download-import-20261008-01",
+  "pass": true,
+  "completed_at": "2026-10-08T05:06:57.239274+00:00",
+  "status": "accepted_offline_import_cache_and_loader_enumeration",
+  "counts": {
+    "downloaded_checked": 12,
+    "new_loras": 11,
+    "duplicate_skipped": 1,
+    "new_bytes": 1791457627,
+    "current_user_loras": 306,
+    "regular_cache": 303,
+    "excluded_cache": 3,
+    "new_style": 7,
+    "new_clothing": 2,
+    "new_concept": 2
+  },
+  "current_lora_family_counts": {
+    "krea2": 96,
+    "anima": 208,
+    "anima-2.9b": 2
+  },
+  "catalogue_before_sha256": "7bf104bb5c643b71a995d48706a7cf6eda82a17162b06b65f4e49c446a6a3389",
+  "catalogue_after_sha256": "c8fa7b6681af5aefa3095d6c3fa5149445a20019472f4b2e1b0e49b37e5c201f",
+  "private_completion_receipt_sha256": "a9fbd061ac2adc7b920ce95dab38cdf6e70eccf6c9e57a762ce41396e25f01db",
+  "assets": [
+    {
+      "download_original_name": "1001_c1-st6000.safetensors",
+      "upstream_filename": "1001_c1-st6000.safetensors",
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Hybrid anime-1001__v1.0__FP16__cv3374767__f3263006.safetensors",
+      "public_title": "Hybrid anime-1001",
+      "version": "v1.0",
+      "family": "krea2",
+      "category": "画风与画师",
+      "precision": "FP16",
+      "bytes": 234680584,
+      "local_sha256": "4d5cdf6de8fb145312faee0864b2c81f217adc111d7be94db81d4dd3ec588c55",
+      "autov3": "92EC11A53144",
+      "model_id": 2977433,
+      "version_id": 3374767,
+      "file_id": 3263006,
+      "page_url": "https://civitai.com/models/2977433?modelVersionId=3374767",
+      "download_url": "https://civitai.com/api/download/models/3374767",
+      "trained_words": [],
+      "author_description_trigger_hint": null,
+      "static_preview_prepared": true,
+      "preview_dimensions": [
+        1184,
+        1776
+      ],
+      "source_metadata_matched": true,
+      "upstream_download_endpoint_tested": false
+    },
+    {
+      "download_original_name": "After_Sex_anima.safetensors",
+      "upstream_filename": "After_Sex_anima.safetensors",
+      "current_path": "ComfyUI/models/loras/anima/概念与效果/Anima__After Sex - Defeat Female__Anima-v1__BF16__cv3378331__f3266753.safetensors",
+      "public_title": "After Sex | Defeat Female",
+      "version": "Anima-v1",
+      "family": "anima",
+      "category": "概念与效果",
+      "precision": "BF16",
+      "bytes": 138663763,
+      "local_sha256": "3c3b528d9f5fe43fb7de413be4d8b069566886e0a856a9d09ad206e11dc7b146",
+      "autov3": "707C78651A8C",
+      "model_id": 1679775,
+      "version_id": 3378331,
+      "file_id": 3266753,
+      "page_url": "https://civitai.com/models/1679775?modelVersionId=3378331",
+      "download_url": "https://civitai.com/api/download/models/3378331",
+      "trained_words": [
+        "aftersex"
+      ],
+      "author_description_trigger_hint": null,
+      "static_preview_prepared": true,
+      "preview_dimensions": [
+        1280,
+        1856
+      ],
+      "source_metadata_matched": true,
+      "upstream_download_endpoint_tested": false
+    },
+    {
+      "download_original_name": "E38090KREA2E6B7B7E59088E9A38EE6A0BCE38091E79089E7.IYhE.safetensors",
+      "upstream_filename": "【KREA2混合风格】琉璃虹光·明媚清透插画风.safetensors",
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__【KREA2 Hybrid Style】Crystalline Iridescence · Brig__v1.0__FP16__cv3371079__f3259221.safetensors",
+      "public_title": "【KREA2 Hybrid Style】Crystalline Iridescence · Bright & Clear Illustration Style【KREA2混合风格】琉璃虹光·明媚清透插画风",
+      "version": "v1.0",
+      "family": "krea2",
+      "category": "画风与画师",
+      "precision": "FP16",
+      "bytes": 234674208,
+      "local_sha256": "401d2ccbeed5453933cf5eca99306bf78b99681011d4b16a843f8ae9120ceb07",
+      "autov3": "B96F6DFCA04A",
+      "model_id": 2974498,
+      "version_id": 3371079,
+      "file_id": 3259221,
+      "page_url": "https://civitai.com/models/2974498?modelVersionId=3371079",
+      "download_url": "https://civitai.com/api/download/models/3371079",
+      "trained_words": [],
+      "author_description_trigger_hint": null,
+      "static_preview_prepared": true,
+      "preview_dimensions": [
+        1248,
+        1664
+      ],
+      "source_metadata_matched": true,
+      "upstream_download_endpoint_tested": false
+    },
+    {
+      "download_original_name": "ham_melon_(iloha_24).safetensors",
+      "upstream_filename": "ham_melon_(iloha_24).safetensors",
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__画风 style-ham_melon_(iloha_24) krea2__v1.0__FP16__cv3351214__f3238407.safetensors",
+      "public_title": "画风 style：ham_melon_(iloha_24) krea2",
+      "version": "v1.0",
+      "family": "krea2",
+      "category": "画风与画师",
+      "precision": "FP16",
+      "bytes": 234680552,
+      "local_sha256": "9900497c82c59dcc3b5c746aff5b4c3362409d21d41f5f89ea9b49e6023de840",
+      "autov3": "4DD0DB056A05",
+      "model_id": 2958314,
+      "version_id": 3351214,
+      "file_id": 3238407,
+      "page_url": "https://civitai.com/models/2958314?modelVersionId=3351214",
+      "download_url": "https://civitai.com/api/download/models/3351214",
+      "trained_words": [],
+      "author_description_trigger_hint": null,
+      "static_preview_prepared": true,
+      "preview_dimensions": [
+        1616,
+        2304
+      ],
+      "source_metadata_matched": true,
+      "upstream_download_endpoint_tested": false
+    },
+    {
+      "download_original_name": "Krea2_AASML8_000008000.safetensors",
+      "upstream_filename": "Krea2_AASML8_000008000.safetensors",
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__ArtistStyleMixLora 8 混合画风8__v1.0 Krea2__BF16__cv3355262__f3242704.safetensors",
+      "public_title": "ArtistStyleMixLora 8 混合画风8",
+      "version": "v1.0 Krea2",
+      "family": "krea2",
+      "category": "画风与画师",
+      "precision": "BF16",
+      "bytes": 228587720,
+      "local_sha256": "f8fbd4b7423d15281c2a119a533e4d3fe75801cfd8cb096e1c847d784e4edcd5",
+      "autov3": "94CE688D90F6",
+      "model_id": 2961633,
+      "version_id": 3355262,
+      "file_id": 3242704,
+      "page_url": "https://civitai.com/models/2961633?modelVersionId=3355262",
+      "download_url": "https://civitai.com/api/download/models/3355262",
+      "trained_words": [
+        "AASML8"
+      ],
+      "author_description_trigger_hint": null,
+      "static_preview_prepared": true,
+      "preview_dimensions": [
+        1280,
+        1920
+      ],
+      "source_metadata_matched": true,
+      "upstream_download_endpoint_tested": false
+    },
+    {
+      "download_original_name": "nkss_style_c1-st6000.safetensors",
+      "upstream_filename": "nkss_style_c1-st6000.safetensors",
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__nkss style__krea2__BF16__cv3178678__f3059222.safetensors",
+      "public_title": "nkss style",
+      "version": "krea2",
+      "family": "krea2",
+      "category": "画风与画师",
+      "precision": "BF16",
+      "bytes": 117374872,
+      "local_sha256": "7719a9c7e7bc3208bb7182ae8cd8623e025d332995216101bf052f6c5f9e6f7d",
+      "autov3": "3AFF9D60487B",
+      "model_id": 2753734,
+      "version_id": 3178678,
+      "file_id": 3059222,
+      "page_url": "https://civitai.com/models/2753734?modelVersionId=3178678",
+      "download_url": "https://civitai.com/api/download/models/3178678",
+      "trained_words": [],
+      "author_description_trigger_hint": null,
+      "static_preview_prepared": true,
+      "preview_dimensions": [
+        1024,
+        1536
+      ],
+      "source_metadata_matched": true,
+      "upstream_download_endpoint_tested": false
+    },
+    {
+      "download_original_name": "Por-k2_c1-st6000.safetensors",
+      "upstream_filename": "Por-k2_c1-st6000.safetensors",
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Por ポル Style Krea2__v1.0__FP16__cv3389608__f3278855.safetensors",
+      "public_title": "Por ポル Style Krea2",
+      "version": "v1.0",
+      "family": "krea2",
+      "category": "画风与画师",
+      "precision": "FP16",
+      "bytes": 234680560,
+      "local_sha256": "cd4de7c29368ab538a9a2f0f7366c250e5767bb7bc8b7080e41d853866342998",
+      "autov3": "2AFF510EF43B",
+      "model_id": 2989377,
+      "version_id": 3389608,
+      "file_id": 3278855,
+      "page_url": "https://civitai.com/models/2989377?modelVersionId=3389608",
+      "download_url": "https://civitai.com/api/download/models/3389608",
+      "trained_words": [],
+      "author_description_trigger_hint": null,
+      "static_preview_prepared": true,
+      "preview_dimensions": [
+        1280,
+        1832
+      ],
+      "source_metadata_matched": true,
+      "upstream_download_endpoint_tested": false
+    },
+    {
+      "download_original_name": "Reflet Outfit.safetensors",
+      "upstream_filename": "Reflet Outfit.safetensors",
+      "current_path": "ComfyUI/models/loras/anima/服装与配饰/Anima__Monster Hunter - Reflet Outfit__v1.0__BF16__cv3371653__f3259791.safetensors",
+      "public_title": "Monster Hunter : Reflet Outfit",
+      "version": "v1.0",
+      "family": "anima",
+      "category": "服装与配饰",
+      "precision": "BF16",
+      "bytes": 45985984,
+      "local_sha256": "ddc617dd15ee9a49a9e7a31d384c55b4dacb5707c4d0a4d53a6b04f1f43bc892",
+      "autov3": "6D5E4DAC4665",
+      "model_id": 2974960,
+      "version_id": 3371653,
+      "file_id": 3259791,
+      "page_url": "https://civitai.com/models/2974960?modelVersionId=3371653",
+      "download_url": "https://civitai.com/api/download/models/3371653",
+      "trained_words": [],
+      "author_description_trigger_hint": "reflet outfit",
+      "static_preview_prepared": true,
+      "preview_dimensions": [
+        1240,
+        2072
+      ],
+      "source_metadata_matched": true,
+      "upstream_download_endpoint_tested": false
+    },
+    {
+      "download_original_name": "Rui_Komatsuzaki_Style_Krea2_krea2_3312237_epoch_20.safetensors",
+      "upstream_filename": "Rui_Komatsuzaki_Style_Krea2_krea2_3312237_epoch_20.safetensors",
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Rui Komatsuzaki Style V2+ [Danganronpa Style]__Krea v2.0__BF16__cv3367396__f3255404.safetensors",
+      "public_title": "Rui Komatsuzaki Style V2+ [Danganronpa Style]",
+      "version": "Krea v2.0",
+      "family": "krea2",
+      "category": "画风与画师",
+      "precision": "BF16",
+      "bytes": 228588968,
+      "local_sha256": "b94ccfc3d6187d90863ee797f94baf6914ee7e920e74ab33d5d38e1c0e2d5dee",
+      "autov3": "3F707BF8F0DC",
+      "model_id": 2969854,
+      "version_id": 3367396,
+      "file_id": 3255404,
+      "page_url": "https://civitai.com/models/2969854?modelVersionId=3367396",
+      "download_url": "https://civitai.com/api/download/models/3367396",
+      "trained_words": [
+        "komatsuzaki_rui_(style) , In the Rui Komatsuzaki art style.",
+        "komatsuzaki_rui_(style) , In the Rui Komatsuzaki art style. In Danganronpa sprite style.",
+        "komatsuzaki_rui_(style) , In the Rui Komatsuzaki art style. danganronpa_(series), Cel-shaded anime illustration rendered in Danganronpa sprite style.",
+        "komatsuzaki_rui_(style) , In the Rui Komatsuzaki art style. In the Rain Code style. Official anime game illustration.",
+        "komatsuzaki_rui_(style) , In the Rui Komatsuzaki art style. In the Tribe Nine style.",
+        "komatsuzaki_rui_(style) , akudama_drive , In the Rui Komatsuzaki art style. In the Akudama Drive sprite style.",
+        "komatsuzaki_rui_(style) , In the Rui Komatsuzaki art style. In the Hundred Line style.",
+        "komatsuzaki_rui_(style) , In the Rui Komatsuzaki art style. This is an anime screencap from Danganronpa 2.5. Anime screenshot rendered in the crisp cel-shaded style of Danganronpa 3 and Super Danganronpa 2.5.",
+        "komatsuzaki_rui_(style) , In the Rui Komatsuzaki art style. This is an anime screencap from Danganronpa 3.",
+        "komatsuzaki_rui_(style) , danganronpa_1_(anime), In the Rui Komatsuzaki art style. This is an anime screencap from Danganronpa The Animation.",
+        "komatsuzaki_rui_(style) , danganronpa_2x2, danganronpa_2x2_(style), danganronpa_(series) , In the Rui Komatsuzaki art style. Using one-point perspective and flat 2D cutout style."
+      ],
+      "author_description_trigger_hint": null,
+      "static_preview_prepared": true,
+      "preview_dimensions": [
+        896,
+        1152
+      ],
+      "source_metadata_matched": true,
+      "upstream_download_endpoint_tested": false
+    },
+    {
+      "download_original_name": "scr4pbook_anima.safetensors",
+      "upstream_filename": "scr4pbook_anima.safetensors",
+      "current_path": "ComfyUI/models/loras/anima/概念与效果/Anima__【CONCEPT】Scrapbook Aesthetic__v1.0__BF16__cv3385482__f3274438.safetensors",
+      "public_title": "【CONCEPT】Scrapbook Aesthetic",
+      "version": "v1.0",
+      "family": "anima",
+      "category": "概念与效果",
+      "precision": "BF16",
+      "bytes": 60337944,
+      "local_sha256": "84936d887e57b94bf29f5639f5bf6a6589a9fdfb06103be4eedcdc309bb7641e",
+      "autov3": "7C7EA13277FD",
+      "model_id": 2986089,
+      "version_id": 3385482,
+      "file_id": 3274438,
+      "page_url": "https://civitai.com/models/2986089?modelVersionId=3385482",
+      "download_url": "https://civitai.com/api/download/models/3385482",
+      "trained_words": [
+        "scr4pbook, washi tape, sticker, white outline, white border"
+      ],
+      "author_description_trigger_hint": null,
+      "static_preview_prepared": true,
+      "preview_dimensions": [
+        1088,
+        1472
+      ],
+      "source_metadata_matched": true,
+      "upstream_download_endpoint_tested": false
+    },
+    {
+      "download_original_name": "WebCutoutSwimsuitAnima.safetensors",
+      "upstream_filename": "WebCutoutSwimsuitAnima.safetensors",
+      "current_path": "ComfyUI/models/loras/anima/服装与配饰/Anima__Web Cutout Swimsuit__anima__BF16__cv3391426__f3280895.safetensors",
+      "public_title": "Web Cutout Swimsuit",
+      "version": "anima",
+      "family": "anima",
+      "category": "服装与配饰",
+      "precision": "BF16",
+      "bytes": 33202472,
+      "local_sha256": "b054ec160f283f5ec82179364b49b1fd7763eb71fe41add21e9d0804b39e6e8a",
+      "autov3": "7CBD28A42AE6",
+      "model_id": 455193,
+      "version_id": 3391426,
+      "file_id": 3280895,
+      "page_url": "https://civitai.com/models/455193?modelVersionId=3391426",
+      "download_url": "https://civitai.com/api/download/models/3391426",
+      "trained_words": [
+        "web cutout swimsuit, mesh, black one-piece swimsuit"
+      ],
+      "author_description_trigger_hint": null,
+      "static_preview_prepared": true,
+      "preview_dimensions": [
+        896,
+        1152
+      ],
+      "source_metadata_matched": true,
+      "upstream_download_endpoint_tested": false
+    }
+  ],
+  "duplicates_skipped": [
+    {
+      "original_name": "ABP_ART_style_c1-st6000.safetensors",
+      "sha256": "2146190d5852f9b3adb7b71fa6aa1e9abdf8a4a1475493624609982d2a02a4e3",
+      "existing_paths": [
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__[Krea2]ABP_ART style__v1.0__FP16__cv3360257__f3247933.safetensors"
+      ],
+      "source_retained": true
+    }
+  ],
+  "verification": {
+    "full_sha256_autov3_and_public_file_ids_verified": true,
+    "static_previews_decoded": 11,
+    "existing_295_loras_sidecars_and_media_preserved": true,
+    "four_finished_trained_weight_hashes_preserved": true,
+    "protected_runtime_files_preserved": 9451,
+    "only_new_cache_records_added_using_plugin_method": true,
+    "sqlite_backup_and_isolated_readback_verified": true,
+    "old_logical_table_rows_and_schema_preserved": true,
+    "offline_loader_enumerated_new_weights": true,
+    "source_originals_retained": true,
+    "online_ui_or_api_tested": false,
+    "service_started_or_restarted": false,
+    "gpu_inference_tested": false,
+    "whole_library_cache_rebuild": false
+  },
+  "tests": [
+    {
+      "suite": "test_model_sources",
+      "passed": 26
+    },
+    {
+      "suite": "test_standardize_models",
+      "passed": 47
+    }
+  ],
+  "limitations": [
+    "ComfyUI was stopped; production manager-page rendering and HTTP list endpoints were not exercised.",
+    "No GPU inference, prompt/default-strength changes or source weight downloads.",
+    "New download originals were retained pending online confirmation; the ABP_ART duplicate was retained and not overwritten.",
+    "Weights, real sidecars, previews and SQLite backups remain outside Git."
+  ],
+  "rollback": "Use exact current_path/original-name/SHA journal; reverse only these new files and cache rows, preserve later personal edits, and never replace a newer whole database."
+}
