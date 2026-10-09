@@ -60,3 +60,5 @@ LM Civitai 前后端兼容、插件版本和下载队列是独立边界，不能
 - 2026-10-05：补入 LoRA Manager [vite.config.mts](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/vue-widgets/vite.config.mts)，保留现有 Vue 构建的 app/api、settings 模块外置修正；只复制已用原件，不重建或替换在线 bundle。特殊后缀纳入收录回归，模型/分词资源另按 [支持文件契约](../../../governance/runtime-support.json)登记仓外路径。
 
 - 2026-10-05：登记统一管理实现、模型清单与仓外资源边界；将维护包版本与插件/模型版本分开。
+
+- 2026-10-09：增加[新下载快速整理](lora-quick-import.md)，只处理本批新增，复用现行命名与单卡片登记；本批 3 新增、12 重复原件保持，当前 309 用户 LoRA。完整摘要、来源、在线卡片／加载器和旧缓存身份／个人字段保持均已验证；插件持久化将 6 项空触发词从空列表编码为 NULL，内容仍为空。不重启，不测试 GPU；三项补图报告下载器离线，未取到预览。见[收据](../../receipts/lora_quick_import_20261009.json)。

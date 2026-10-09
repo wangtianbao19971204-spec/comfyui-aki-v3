@@ -41,3 +41,5 @@
 - `extract_remote_llm.py`：把远端鉴权从可公开源码分离到私有配置；[远端调用](../docs/technical/operations/remote-llm.md)。
 - 配置、模型和预览原件在仓外；[格式示例](../examples/private-state/README.md)是占位样例，引用清单不是资源备份。
 - 恢复外部 overlay 不自动覆盖在线库；生产部署需明确范围、回滚和现场验收。
+
+新下载 LoRA：[一行整理说明](../docs/technical/runtime/lora-quick-import.md)，`Import-DownloadedLoras.ps1 -Apply` 仅移动新增并登记工作台。

@@ -85,3 +85,5 @@ LoRA Manager 的常规与排除缓存须同时核验：本轮 286 个用户 LoRA
 
 - 2026-10-07：新增 9 个网上下载 LoRA：4 个画风、3 个角色权重、2 个效果；8 个 Anima、1 个发布者提供的 2.9B remap。现行 LoRA 总数 295（292 常规、3 排除）；来源页、版本／文件 ID、原名、完整 SHA 和触发词已登记。原权重／侧车／个人记录及正式图保持，未做 GPU 推理；GYARI 的原作者用途限制随来源保留，见[导入收据](receipts/lora_download_import_20261007.json)。
 - 2026-10-07：实际完成 286 LoRA／19 图像底模／1 SAM 的规范分类与改名，连同 690 配套迁移；41 个主仓引用文件与 5 个运行配置同步。修正 Platinum 的 Anima 家族归属，独立区分 2.9B、自训成品和 SAM 工具；保留上游下载身份、原 inventory、4 个成品和个人字段。常规／排除缓存及摘要核验的实际范围见[标准化收据](receipts/model_standardization_20261007.json)，未重新执行 GPU 任务。
+
+- 2026-10-09：新增下载使用[一行快速整理入口](technical/runtime/lora-quick-import.md)，避免全库迁移；本批 3 个新权重分类为 Anima 服装／画风和 Krea2 画风，确切来源及完整摘要均登记。
