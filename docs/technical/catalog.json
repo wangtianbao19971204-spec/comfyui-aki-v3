@@ -871,23 +871,40 @@
       "implementation": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/__init__.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/nodes.py",
-          "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/engine.py",
-          "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/rendering.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/engine.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/rendering.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_texture.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/editor_model.js",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_texture.css"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_texture.css",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_api.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_assets.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_models.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_nodes.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_studio.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/MODEL_SOURCES.json"
       ],
       "tests": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_editor.cjs",
-          "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/isolated_acceptance.py",
-          "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/compare_upstream.py",
-          "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/image_acceptance.py",
-          "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/parity_matrix.py",
-          "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/api_parity.py"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/isolated_acceptance.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/compare_upstream.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/image_acceptance.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/parity_matrix.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/api_parity.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/model_acceptance.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio_editor.cjs",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/studio_compare.py"
       ],
-        "evidence": ["docs/receipts/stocking_texture_20261009.json", "docs/receipts/stocking_texture_fix_20261010.json", "docs/receipts/stocking_texture_parity_20261010.json"],
+      "evidence": [
+        "docs/receipts/stocking_texture_20261009.json",
+        "docs/receipts/stocking_texture_fix_20261010.json",
+        "docs/receipts/stocking_texture_parity_20261010.json",
+        "docs/receipts/stocking_texture_studio_20261010.json"
+      ],
       "acceptance": "checked-source",
       "watch": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/",
@@ -896,7 +913,8 @@
       "examples": [
         "examples/stocking-texture/README.md",
         "examples/stocking-texture/guides.example.json",
-        "examples/stocking-texture/workflow_api.example.json"
+        "examples/stocking-texture/workflow_api.example.json",
+        "examples/stocking-texture/studio.workflow.json"
       ]
     }
   ]

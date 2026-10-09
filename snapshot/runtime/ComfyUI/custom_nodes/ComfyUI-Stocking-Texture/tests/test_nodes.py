@@ -189,7 +189,7 @@ class TextureContracts(unittest.TestCase):
 
     def test_near_black_weave_survives_8bit_without_sparkles(self):
         image = torch.full_like(self.image, 19 / 255)
-        for style in ENGINE.STYLES[:3]:
+        for style in ("细线", "针织", "斜单线"):
             with self.subTest(style=style):
                 before = self.run_render(image=image, style=style, dark_adapt=False, auto_strength=True)
                 after = self.run_render(image=image, style=style, dark_adapt=True, auto_strength=True)
@@ -209,7 +209,7 @@ class TextureContracts(unittest.TestCase):
                 a = self.run_render(image=image, style=style, dark_adapt=False, sparkle_bright=100)[0]
                 b = self.run_render(image=image, style=style, dark_adapt=True, sparkle_bright=100)[0]
                 self.assertTrue(torch.equal(a, b), (color, style))
-        for style in ENGINE.STYLES[3:]:
+        for style in ("加濑风", "油光（试验）", "线圈"):
             self.assertTrue(torch.equal(self.run_render(style=style, dark_adapt=False)[0],
                                         self.run_render(style=style, dark_adapt=True)[0]))
 

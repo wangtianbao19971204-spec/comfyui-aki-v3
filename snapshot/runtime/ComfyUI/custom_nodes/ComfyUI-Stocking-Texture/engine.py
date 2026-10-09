@@ -11,8 +11,8 @@ import cv2
 import numpy as np
 
 EMPTY_GUIDES = '{"schema":1,"width":0,"height":0,"regions":[],"dividers":[]}'
-STYLES = ("细线", "针织", "斜单线", "加濑风", "油光（试验）")
-STYLE_IDS = dict(zip(STYLES, ("knit", "loops", "lines", "grain", "oily")))
+STYLES = ("细线", "针织", "线圈", "斜单线", "加濑风", "油光（试验）")
+STYLE_IDS = dict(zip(STYLES, ("knit", "loops", "coil", "lines", "grain", "oily")))
 MAX_POINTS = 50000
 
 

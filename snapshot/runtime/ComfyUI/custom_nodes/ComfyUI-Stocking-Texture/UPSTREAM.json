@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/silvermoong/stocking-texture-tool",
-  "commit": "ad4cc92de86021f20bedcf9de5b27ec0ae574184",
+  "commit": "6c0c620d1bfa6a2c2691cb2313e928d9c7244ee5",
   "license": "MIT",
   "files": [
     {
@@ -13,11 +13,11 @@
     },
     {
       "file": "knit.py",
-      "sha256": "b73f3116e6a5098891769318c6584d5ffe62f093f452a3697da6e43913ea5f62"
+      "sha256": "ea6b23ef47e0618000c97220409c1956d175f00cbbed063ede89dc1d9c825de5"
     },
     {
       "file": "look.py",
-      "sha256": "d2544f686e04ccb02b33c6b87894e4fc207047fef919b3b706f0178c8f5b53ba"
+      "sha256": "0d607cf36c61780f00b0ebf05640b2287bcea59957435498b138eeb9bbd647d1"
     },
     {
       "file": "oily.py",
@@ -25,7 +25,7 @@
     },
     {
       "file": "tiles.py",
-      "sha256": "b325a2d3426e2ba6309c817fef8ee7f4af575e649e2177450d86b26f4e6c8575"
+      "sha256": "85e42e86a031c27506a74a1db3679f3f009af35ba10c1d7d89fbe47898cd4dc2"
     },
     {
       "file": "trace.py",
@@ -34,6 +34,54 @@
     {
       "file": "walls.py",
       "sha256": "1add5ddd582af05cdfff1c3a9b43b8cabd1fe265c8adb5a415df1a02b0914993"
+    },
+    {
+      "file": "document.py",
+      "sha256": "a2063cfa2889716dc9709a8743693e5c66f80375881fdb3e8b1e1e0e87ddd534"
+    },
+    {
+      "file": "split.py",
+      "sha256": "08525de55928ac825a3b6efa5402ca88d9eca1d22352b5ab8138838a9aabf15d"
+    },
+    {
+      "file": "symmetry.py",
+      "sha256": "cfc8fcadc2955720b1bf9a25a2e00d4be72ad3e4ef928efcadab8d79392cc01a"
+    },
+    {
+      "file": "psd_io.py",
+      "sha256": "c9f3036878d0421810fe9f93ff48152c62b5a27381eddbd7c18f22445bbdc098"
+    },
+    {
+      "file": "export.py",
+      "sha256": "0d7cec002d579ed64c1711af95d1a6cd1de1414cb78885bebfe652cee88624b3"
+    },
+    {
+      "file": "static/app.js",
+      "sha256": "536a7dc029cfe350c348ab90071abff29648fe4c5a5ddb43e796abb41073ff75"
+    },
+    {
+      "file": "static/look.js",
+      "sha256": "8e2979e0e0010c2b32de0415724268f41f6285f00cd74f4a70d3ff5aae5cd150"
+    },
+    {
+      "file": "static/i18n.js",
+      "sha256": "99aa505b4af24bc70febcf1c69d499e0726aa27ef99a6f4f0099f277f0e7ec55"
+    },
+    {
+      "file": "static/index.html",
+      "sha256": "4e655e080cef78c481d428a4e370c8c464e82a8cfec95afc9b5f028efcd40ce4"
+    },
+    {
+      "file": "static/style.css",
+      "sha256": "36b439ff022b70355beef058871dcba64094b3a8261ec9d5f61366ecffddda10"
+    },
+    {
+      "file": "static/i18n/en.json",
+      "sha256": "07cdab8701e12ee78d138f456e8c1a96d1eabd98d75fad64b0a2ee4565c813ad"
     }
-  ]
+  ],
+  "local_adapters": [
+    "vendor/i18n.py"
+  ],
+  "integration": "Original document and static UI are adapted through plugin-owned ComfyUI routes; original desktop server, settings and download services are not started."
 }

@@ -2,11 +2,21 @@
 
 文档修订：2026-10-10。
 
-## 职责与来源
+## 完整编辑器扩展（2026-10-10）
+
+新增 `StockingTextureStudio`（丝袜纹理 · 完整编辑器），保留原有引导／渲染节点和工作流。固定上游更新至 `6c0c620d1bfa6a2c2691cb2313e928d9c7244ee5`，新“线圈”也加入原渲染节点。完整编辑器复用该提交的 Document、PSD 与静态界面，独立文档实例通过 ComfyUI 的同源 `/stocking_texture/studio` 路由接入，不启动原桌面服务器或安装器。
+
+唯一适配实现为插件内 `studio.py`、`studio_api.py`、`studio_assets.py`、`studio_store.py`、`studio_models.py`、`studio_nodes.py` 和 `web/stocking_studio.js`。原版代码和静态资产逐文件 SHA 保存于 `UPSTREAM.json`。本地 i18n 适配改为请求作用域，PSD 同时识别中英文层名。新增范围涵盖线圈、预设保存／覆盖／删除／撤销载入、SAM 小中大、画笔／橡皮、拆分／合并／贴线、镜像、擦除自动墙、PSD 合成图及引导往返／手绘亮点层、内置深度、实时整体／分屏／100%／200%／问题图及求解横纹、双语和草稿恢复。
+
+工作流保存 schema 2 注释与压缩位蒙版，原图和深度为 `input/stocking_studio/assets` 下 SHA256 命名的不可变素材；预设、草稿和导出在当前 ComfyUI 用户的 `stocking_texture` 目录。导出通过浏览器下载，不能传入任意服务器文件路径。编辑自动存草稿，只有“应用到节点”修改工作流；文档、预设和像素资料均不进入 Git。最多 4 个同时打开的编辑器、每图最多 2400 万像素／32 部位。完整编辑器单图处理，原节点继续支持批量／软 MASK。
+
+SAM 使用现有 ViT-B；深度固定为官方 Depth Anything V2 Small HF 的 `5426e4f0f36572d16453bbda7a8389317b1bef99`。在 CPU 按需推理，请求结束释放模型，不在导入时加载模型或联网。模型路径通过 ComfyUI 的 `sams`、`stocking_texture` 模型目录解析，代码不会自动下载。40 项 Python 合同和 17 项前端回归通过；三张真实图（白丝弯腿、黑丝交叉腿、近黑站姿）的实际 SAM 三档候选与独立原版完全相同，深度最大误差为 0。完整编辑器启用实际深度、关闭暗部适配时，三图 × 六样式整图／裁剪／缩略及裁剪问题图共 18 例逐像素相同。旧两节点六样式另跑 117 例真实输入和 912 例颜色／姿势控制。隔离实页已实测点选、笔刷／橡皮撤销、求解、线圈、预设保存／载入／撤销载入、100%／200%／问题预览、应用确认、工作流保存重载执行和 PSD 下载重开。本轮已完成限定生产部署与实页验收，见[完整编辑器收据](../../receipts/stocking_texture_studio_20261010.json)：33 个插件路径与 3 个深度文件写入，51 个插件文件哈希一致，原启动器重启后 5 模块／76 节点就绪。生产页完成 4 次执行；应用后的 3 份成品与实时预览逐像素一致，实际变化 104798 像素。正常工作流列表重新打开通过。部署前保留 5 份一致数据库副本，重启后的逻辑内容一致；既有工作流未覆盖，WAL 运行变化保留。隔离进程已清理。
+
+## 原有两节点的职责与来源
 
 在成图上求解受用户引导的织物坐标并叠加纹理，与底模无关。唯一实现为 [插件目录](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/)，[nodes.py](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/nodes.py) 负责节点／张量与临时预览，[engine.py](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/engine.py) 负责 JSON、区域、同步求解和渲染，[前端](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_texture.js) 负责各节点独立的模态编辑器。
 
-上游固定提交 `ad4cc92de86021f20bedcf9de5b27ec0ae574184`，八个 `vendor/*.py` 原样保存，来源及哈希见 [UPSTREAM.json](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json)。`vendor/i18n.py` 是本地无状态格式化适配，非上游原件。保留 MIT 版权／许可，不携带作者示例图、模型或安装器。
+初版上游提交为 `ad4cc92de86021f20bedcf9de5b27ec0ae574184`，当时八个 `vendor/*.py` 原样保存；本轮来源升级见上节，来源及哈希见 [UPSTREAM.json](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json)。`vendor/i18n.py` 是本地无状态格式化适配，非上游原件。保留 MIT 版权／许可，不携带作者示例图、模型或安装器。
 
 ## 节点与数据契约
 
@@ -23,17 +33,17 @@ IMAGE 为 `[B,H,W,3/4]`、MASK 为 `[B,H,W]`，float 0–1。外接 MASK 与 dep
 
 ## 算法与资源边界
 
-同步调用上游 `guide_fields.solve_region`，保留遮挡填补、部位重叠、手动隔开线与可选深度自动隔开线。颜色排除沿用上游 Lab 稳健统计。使用 `look.Scene` 与 `knit/tiles/oily` 渲染五样式，按节点 seed 生成局部随机场；不用上游固定全局 seed，也不创建 Document 后台线程。
+同步调用上游 `guide_fields.solve_region`，保留遮挡填补、部位重叠、手动隔开线与可选深度自动隔开线。颜色排除沿用上游 Lab 稳健统计。使用 `look.Scene` 与 `knit/tiles/oily` 渲染六样式，按节点 seed 生成局部随机场；不用上游固定全局 seed，也不创建 Document 后台线程。
 
 保持输入原始 float RGB，仅叠加原算法 uint8 结果的增量，并将增量限制在有效覆盖内，避免整张图量化或让亮点越过零 MASK。外接软 MASK 统一作用于最终增量，织纹和亮点都渐弱，不进入上游亮点 alpha>0.5 的二值门限。图层颜色和 alpha 从最终 float 增量计算。隔开线移除全部走向采样时，该部位透传并给调整说明。每个渲染节点最多缓存一份求解结果，变更图像、引导、蒙版、深度或颜色／墙设置失效；改密度、强度和 seed 不必重做坐标求解。batch 逐图执行。
 
-基础仅需现有 NumPy、SciPy、OpenCV、Pillow、contourpy 与 ComfyUI Torch。无自动安装、联网、模型下载或额外监听端口。可选 depth 是相对近度，近亮原样、近暗转 1-x；不隐含任意模型的原始度量深度契约。按深度亮点／自动墙缺 depth 时明确报错。SAM 点选、PSD I/O、原桌面 autosave、擦除自动墙和像素笔刷留为后续独立范围。
+基础仅需现有 NumPy、SciPy、OpenCV、Pillow、contourpy 与 ComfyUI Torch。无自动安装、联网、模型下载或额外监听端口。可选 depth 是相对近度，近亮原样、近暗转 1-x；不隐含任意模型的原始度量深度契约。按深度亮点／自动墙缺 depth 时明确报错。这些原有节点不含 SAM、PSD 与像素笔刷；需要这些功能时使用本轮完整编辑器。
 
 引导节点仅将原图首帧与外接蒙版预览写入 ComfyUI temp 的 UUID 文件，交给 ComfyUI 临时资源生命周期；不写生产图库、资料库、用户配置或 input。PNG 不嵌入引导，workflow JSON／API prompt 保留引导。节点执行不修改 UAP、白名单或已有工作流；生产白名单的授权启用另见部署记录。
 
 ## 测试与隔离验收
 
-[CPU 合同测试](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py) 覆盖五样式、区域外逐像素保持、透明图层复合、空输入透传、确定性／缓存、RGBA／批量、软 MASK、多区归属、深度方向、隔开线、编辑预览和非法输入，以及上游原件哈希。
+[CPU 合同测试](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py) 覆盖六样式、区域外逐像素保持、透明图层复合、空输入透传、确定性／缓存、RGBA／批量、软 MASK、多区归属、深度方向、隔开线、编辑预览和非法输入，以及上游原件哈希。
 
 [前端回归](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_editor.cjs) 覆盖引导模型、保存与节点生命周期。使用方法及完整 API 例见[样例导航](../../../examples/stocking-texture/README.md)。在主仓运行：
 
@@ -58,6 +68,8 @@ node snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_e
 
 ## 更新记录
 
+- 2026-10-10（完整编辑器）：新增六样式原版界面与独立文档、SAM／深度离线推理、PSD、预设和像素编辑。适配浏览器文件下载与 ComfyUI 工作流；流式 JSON 有界读取、会话数量串行检查、预览绑定输入哈希、父节点确认后才更新草稿基线。实页发现嵌入 iframe 的表单限制导致预设按钮无反应，补齐编辑器所需表单能力后保存／载入复验成功；问题覆盖图按原版先缩放掩码再合成。草稿身份摘要规范化整数浮点数与对象键顺序，避免浏览器 JSON 往返丢失草稿恢复关系。模型身份见插件 MODEL_SOURCES.json，样例见 studio.workflow.json。
+
 - 2026-10-10（扩展对照）：新增颜色／姿势及真实 SaveImage 验收工具。修正 float 增量相加后在整数色阶下方舍入、被 SaveImage 截断少一级的问题；完整覆盖像素改由上游 uint8/255 加原输入的亚 8 位残差构成，软蒙版仍只混合一次。新增灰阶渐变回归（修复前加濑风 51 个通道值不符）及保存截断断言，20 项 CPU 合同通过。功能差异、820 组离线检查和在线验收范围见下节；原版私有 PSD、内置 SAM／深度模型未实跑。
 
 - 2026-10-10：对照固定提交完整 `Document → fields/coverage → look.Scene → export` 和 `static/look.js`。修复移植时漏掉的手动强度关闭自动联动；新建节点恢复亮部亮点 100%，已保存的 0 保留。深度亮点仍默认 0，因 ComfyUI 没有隐式深度模型。坐标恢复原工具“float32 求解结果装入 float64 全图”的精度次序，避免少量亮色像素在相位计算后相差 1 个色阶。新增可关闭的暗部适配与实际强度／8 位无变化诊断；见下节。
@@ -76,11 +88,11 @@ node snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_e
 
 最终 CPU 隔离和生产实例各跑 14 组固定图 API 用例及 1 个加载／保存基准；对应结果逐像素一致，区域外变化 0，PNG 图层复合最大误差 0.9922/255。实页分别执行 2／3 次，验证手动强度联动、保存及隔离页刷新往返。生产界面中重新输入相同数字不会触发值变更回调；实际改变数值会关闭自动强度，API 仍须显式关闭。新建独立验收工作流供查看，旧工作流未改。测试不运行扩散模型。原有 ComfyApp 初始化／Vite 错误仍存在，未将全前端标为无错误。
 
-## 原软件功能与跨颜色／姿势对照
+## 扩展前的功能差异与历史对照（保留验收边界）
 
-结论是核心织纹可对照复现，完整应用功能尚未等价。审核原版固定提交的 README、`document.py`、`server.py`、`static/app.js`、`static/look.js`、`export.py`、`psd_io.py`、`session.py` 及当前节点／编辑器。静态存在性与实测分别标记，不把原版示例截图当作本插件实测。
+本节记录本轮完整编辑器开发之前的差异；“未实现”只代表当时的两节点版，现行功能与测试以文首为准。当时结论是核心织纹可对照复现，完整应用功能尚未等价。审核原版固定提交的 README、`document.py`、`server.py`、`static/app.js`、`static/look.js`、`export.py`、`psd_io.py`、`session.py` 及当前节点／编辑器。静态存在性与实测分别标记，不把原版示例截图当作本插件实测。
 
-2026-10-10 在线复查还发现上游最新提交为 `6c0c620d1bfa6a2c2691cb2313e928d9c7244ee5`，比固定移植提交多 1 个提交（上游记录 2026-10-09 15:01:42 UTC）。新增第六种“线圈”样式、按透肤程度混合线圈与颗粒，以及本机参数预设保存／载入／覆盖／删除／撤销载入。当前插件均未实现；工作流保存不等于原版跨图片预设管理。没有自动升级 vendored 固定来源，也没有把新增样式归入五样式通过结论。已下载精确新版并核对 Document、求解、coverage、walls、oily、export 六个核心文件仍逐字节相同；既有五样式另做真实输入补充对照。
+2026-10-10 在线复查还发现上游最新提交为 `6c0c620d1bfa6a2c2691cb2313e928d9c7244ee5`，比固定移植提交多 1 个提交（上游记录 2026-10-09 15:01:42 UTC）。新增第六种“线圈”样式、按透肤程度混合线圈与颗粒，以及本机参数预设保存／载入／覆盖／删除／撤销载入。当时插件均未实现；工作流保存不等于原版跨图片预设管理。没有自动升级 vendored 固定来源，也没有把新增样式归入五样式通过结论。已下载精确新版并核对 Document、求解、coverage、walls、oily、export 六个核心文件仍逐字节相同；既有五样式另做真实输入补充对照。
 
 | 功能 | 插件状态 | 差异或条件 |
 |---|---|---|
