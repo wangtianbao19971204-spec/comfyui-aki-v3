@@ -883,9 +883,11 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_editor.cjs",
           "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/isolated_acceptance.py",
           "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/compare_upstream.py",
-          "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/image_acceptance.py"
+          "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/image_acceptance.py",
+          "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/parity_matrix.py",
+          "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/api_parity.py"
       ],
-        "evidence": ["docs/receipts/stocking_texture_20261009.json", "docs/receipts/stocking_texture_fix_20261010.json"],
+        "evidence": ["docs/receipts/stocking_texture_20261009.json", "docs/receipts/stocking_texture_fix_20261010.json", "docs/receipts/stocking_texture_parity_20261010.json"],
       "acceptance": "checked-source",
       "watch": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/",

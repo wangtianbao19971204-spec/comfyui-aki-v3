@@ -229,6 +229,10 @@ class TextureContracts(unittest.TestCase):
                 adapted = self.run_render(image=image, style=style, dark_adapt=False,
                                           sparkle_bright=bright, seed=look.SEED)[0][0].numpy()
                 np.testing.assert_array_equal(np.round(adapted * 255).astype(np.uint8)[active], original[active])
+                # SaveImage truncates, rather than rounding. The public PNG must
+                # match too: adding two float deltas used to lose one level.
+                np.testing.assert_array_equal(np.clip(adapted * 255, 0, 255).astype(np.uint8)[active],
+                                              original[active])
 
     def test_manual_strength_report_and_invisible_output_warning(self):
         image = torch.full_like(self.image, 19 / 255)
@@ -240,6 +244,24 @@ class TextureContracts(unittest.TestCase):
         self.assertTrue(any("没有可见变化" in x for x in report["messages"]))
         manual = self.run_render(image=image, strength=250)
         self.assertEqual(json.loads(manual[-1])["images"][0]["effective_strength"], 250)
+
+    def test_png_save_truncation_preserves_upstream_levels_across_brightness(self):
+        from stocking_plugin_tests.vendor import look
+        ramp = np.round(np.linspace(0, 255, 128)).astype(np.uint8)
+        rgb8 = np.broadcast_to(ramp[None, :, None], (160, 128, 3)).copy()
+        image = torch.from_numpy(rgb8.astype(np.float32)[None] / 255)
+        data = ENGINE.parse_guides(self.text, 128, 160)
+        g = ENGINE.solve_geometry(rgb8, data, self.mask[0].numpy(), False, None, False)
+        scene = look.Scene(rgb8, g["labels"], g["v"], g["across"], g["stock"], g["alpha"], ["左腿"], cut=g["cut"])
+        active = (g["labels"] > 0) & g["stock"] & (g["alpha"] > 0)
+        for style in ENGINE.STYLES:
+            q = dict(style=ENGINE.STYLE_IDS[style], density=65, strength=160, strength_auto=False,
+                     sparkle_link=False, sparkle_depth=0, sparkle_bright=100)
+            original = scene.render(q)[0][..., ::-1]
+            out = self.run_render(image=image, style=style, density=65, strength=160,
+                                  dark_adapt=False, sparkle_bright=100, seed=look.SEED)[0][0].numpy()
+            saved = np.clip(out * 255, 0, 255).astype(np.uint8)
+            np.testing.assert_array_equal(saved[active], original[active], err_msg=style)
 
     def test_shadow_adaptation_keeps_frequency_suppression(self):
         from stocking_plugin_tests.vendor import look

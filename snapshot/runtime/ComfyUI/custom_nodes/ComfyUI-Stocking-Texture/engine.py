@@ -191,10 +191,15 @@ def render_texture(rgb, data, geometry, disparity, params, seed, dark_adapt=True
                         [r["name"] for r in data["regions"]],
                         disparity=(lambda: disparity) if disparity is not None else None, cut=g["cut"])
     out8, metrics = render_scene(scene, params, dark_adapt)
-    delta = (out8[..., ::-1].astype(np.float32) - rgb8.astype(np.float32)) / 255
     active = (g["labels"] > 0) & g["stock"] & (g["alpha"] > 0)
-    delta *= (active * g["input_alpha"])[..., None]
-    result = np.clip(rgb + delta, 0, 1).astype(np.float32)
+    # Keep the exact uint8/255 representation at full coverage. Adding a
+    # separately divided integer delta can land just below that value, and
+    # ComfyUI SaveImage truncation then loses a colour level. Preserve the
+    # source's sub-8-bit residual for float inputs and blend soft masks once.
+    target = out8[..., ::-1].astype(np.float32) / 255 + (rgb - rgb8.astype(np.float32) / 255)
+    weight = (active * g["input_alpha"])[..., None]
+    result = np.where(weight == 1, target, rgb + (target - rgb) * weight)
+    result = np.clip(result, 0, 1).astype(np.float32)
     diff = result - rgb
     # Solve a straight-alpha layer in float space; it composites exactly, including soft edges.
     need = np.where(diff > 0, diff / np.maximum(1 - rgb, 1e-9),

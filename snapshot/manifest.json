@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-09T16:17:56.603404+00:00",
+  "created_at": "2026-10-09T21:54:57.540693+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -11213,8 +11213,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/README.md",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/README.md",
-      "sha256": "2fa0b5a6b761cbb830797ab239592a10b41570cff5574af62f7fc08af9e2db65",
-      "bytes": 3698,
+      "sha256": "134dc72286a6c62f46453b40474c2a6c63be32f321f254c7727533915d56ac22",
+      "bytes": 4555,
       "kind": "file"
     },
     {
@@ -11234,8 +11234,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/engine.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/engine.py",
-      "sha256": "6cf22f702f18957fdfce511a19470eba2954f0e8050d0dc0ec103c6026a2db35",
-      "bytes": 11549,
+      "sha256": "6638802c36e63fbcc67e101b0c2b4973347e5c6d07980ba0e2dd206ea5e6a620",
+      "bytes": 11932,
       "kind": "file"
     },
     {
@@ -11260,10 +11260,17 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/api_parity.py",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/api_parity.py",
+      "sha256": "d29de3e1c5372a66068c86ed2bbee5adbdf2b1730f49749a73ca6b82099cfe11",
+      "bytes": 6077,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/compare_upstream.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/compare_upstream.py",
-      "sha256": "dc44b2d56fed26b8034f59c36e210acb05ac1665acaa3c976ccd641b500e6ab1",
-      "bytes": 7035,
+      "sha256": "4df0d3c82ab00f44a9cf558b7021ce5632895017dbe9072abe98ded43a9c3b96",
+      "bytes": 7219,
       "kind": "file"
     },
     {
@@ -11281,6 +11288,13 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/parity_matrix.py",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/parity_matrix.py",
+      "sha256": "d282771fc42284e1fcf6967f33eb690d3c6f97ae2f3980be39018c5dc65d00c1",
+      "bytes": 13637,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_editor.cjs",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_editor.cjs",
       "sha256": "f471f5512470920eb5d6d7ded4f53279eb4767905cce8e8a84116ef9acf6d126",
@@ -11290,8 +11304,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py",
-      "sha256": "ead188e1d879c8668c3b6a70cdd705c8457a04c02d7802f024ca731d00a51bbb",
-      "bytes": 16122,
+      "sha256": "fcfc46375945b128f7d118a98aa1c5fcedf59a78515478f658d72c83f98261c3",
+      "bytes": 17733,
       "kind": "file"
     },
     {
@@ -67554,14 +67568,20 @@
     }
   ],
   "development_revision": {
-    "note": "Record fixed-image API acceptance helper for stocking visibility regression",
-    "previous_manifest_sha256": "abf96b325c271cc1580e92b479309092f44964bcab4bfe9500b3eeca30ed1dcb",
+    "note": "Stocking texture PNG parity fix and colour/pose acceptance matrix",
+    "previous_manifest_sha256": "c98603f42f05e80eb3a4b7fee0a48d76f4e4c465232fc0f69b22cdeda823de86",
     "source_changes": {
       "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/image_acceptance.py"
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/api_parity.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/parity_matrix.py"
       ],
       "removed": [],
-      "changed": []
+      "changed": [
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/README.md",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/engine.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/compare_upstream.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py"
+      ]
     },
     "live_deployed": false,
     "removed_sources": [

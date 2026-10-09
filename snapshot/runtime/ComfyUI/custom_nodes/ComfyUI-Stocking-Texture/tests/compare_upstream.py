@@ -69,6 +69,8 @@ def run(upstream, image_path, guides_path, out):
                 legacy = engine.render_texture(rgb, data, geometry, None, q, look.SEED, False)
                 legacy8 = np.round(legacy[0] * 255).astype(np.uint8)
                 assert np.array_equal(original[active], legacy8[active]), (style, bright, "upstream parity")
+                saved8 = np.clip(legacy[0] * 255, 0, 255).astype(np.uint8)
+                assert np.array_equal(original[active], saved8[active]), (style, bright, "SaveImage parity")
                 for adapt in (False, True):
                     result = engine.render_texture(rgb, data, geometry, None, q, look.SEED, adapt)
                     result8 = np.round(result[0] * 255).astype(np.uint8)
