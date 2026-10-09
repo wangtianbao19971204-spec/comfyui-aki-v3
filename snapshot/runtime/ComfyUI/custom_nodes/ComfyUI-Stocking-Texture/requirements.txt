@@ -1,0 +1,7 @@
+# Reuse ComfyUI's existing Torch, NumPy, SciPy, OpenCV, Pillow and contourpy.
+# No installer is run at import time. Only install a missing package after reviewing your environment.
+numpy>=1.26
+scipy>=1.11
+opencv-python>=4.8
+Pillow>=10
+contourpy>=1.2

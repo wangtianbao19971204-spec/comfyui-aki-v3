@@ -864,6 +864,35 @@
       "examples": [
         "examples/huishi-adapter/README.md"
       ]
+    },
+    {
+      "id": "runtime-stocking-texture",
+      "document": "docs/technical/runtime/stocking-texture.md",
+      "implementation": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/__init__.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/nodes.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/engine.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_texture.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/editor_model.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_texture.css"
+      ],
+      "tests": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_editor.cjs",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/isolated_acceptance.py"
+      ],
+      "evidence": ["docs/receipts/stocking_texture_20261009.json"],
+      "acceptance": "checked-source",
+      "watch": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/",
+        "examples/stocking-texture/"
+      ],
+      "examples": [
+        "examples/stocking-texture/README.md",
+        "examples/stocking-texture/guides.example.json",
+        "examples/stocking-texture/workflow_api.example.json"
+      ]
     }
   ]
 }

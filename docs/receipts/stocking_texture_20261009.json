@@ -1,0 +1,249 @@
+{
+  "schema": 1,
+  "date": "2026-10-09",
+  "time_utc": "2026-10-09T14:14:09.378613+00:00",
+  "receipt_id": "stocking-texture-20261009",
+  "base_commit": "5bd72be162d2e88d168c9e90620c272dcff98804",
+  "status": "isolated-acceptance-passed-not-deployed",
+  "upstream_commit": "ad4cc92de86021f20bedcf9de5b27ec0ae574184",
+  "environment": {
+    "comfyui": "0.33.0",
+    "frontend": "1.49.6",
+    "python": "3.13.11",
+    "mode": "isolated CPU, synthetic input, texture plugin whitelist"
+  },
+  "tests": {
+    "python_contract": {
+      "passed": 13,
+      "failed": 0
+    },
+    "frontend_regression": {
+      "passed": 10,
+      "failed": 0
+    }
+  },
+  "api": {
+    "styles": [
+      {
+        "style": "细线",
+        "prompt_id": "3fccd6da-6413-4f83-a4a1-05a38e9af151",
+        "success": true,
+        "changed_pixels": 12735,
+        "outside_changed_pixels": 0,
+        "layer_mode": "RGBA",
+        "png_composite_max_error_8bit": 0.9921568627451052,
+        "finished": "Stocking/0_finished_00001_.png",
+        "layer": "Stocking/0_layer_00001_.png"
+      },
+      {
+        "style": "针织",
+        "prompt_id": "51f8c4ad-bfa0-4718-90ca-d440730fb7bc",
+        "success": true,
+        "changed_pixels": 12750,
+        "outside_changed_pixels": 0,
+        "layer_mode": "RGBA",
+        "png_composite_max_error_8bit": 0.9921568627451052,
+        "finished": "Stocking/1_finished_00001_.png",
+        "layer": "Stocking/1_layer_00001_.png"
+      },
+      {
+        "style": "斜单线",
+        "prompt_id": "d59d914c-301c-48ce-9427-2179b221e1db",
+        "success": true,
+        "changed_pixels": 11741,
+        "outside_changed_pixels": 0,
+        "layer_mode": "RGBA",
+        "png_composite_max_error_8bit": 0.9921568627451052,
+        "finished": "Stocking/2_finished_00001_.png",
+        "layer": "Stocking/2_layer_00001_.png"
+      },
+      {
+        "style": "加濑风",
+        "prompt_id": "6a2ad22a-b4c5-4314-9fac-4ce1c6943710",
+        "success": true,
+        "changed_pixels": 13639,
+        "outside_changed_pixels": 0,
+        "layer_mode": "RGBA",
+        "png_composite_max_error_8bit": 0.9921568627451052,
+        "finished": "Stocking/3_finished_00001_.png",
+        "layer": "Stocking/3_layer_00001_.png"
+      },
+      {
+        "style": "油光（试验）",
+        "prompt_id": "3c05d3e7-b079-4177-a0e5-29add3bc0758",
+        "success": true,
+        "changed_pixels": 13713,
+        "outside_changed_pixels": 0,
+        "layer_mode": "RGBA",
+        "png_composite_max_error_8bit": 0.9921568627451052,
+        "finished": "Stocking/4_finished_00001_.png",
+        "layer": "Stocking/4_layer_00001_.png"
+      }
+    ],
+    "repeat_identical": true,
+    "queue_empty": true,
+    "maximum_png_composite_error_8bit": 0.9921568627451052
+  },
+  "browser": {
+    "fixture_dimensions": [
+      128,
+      160
+    ],
+    "preview_loaded": true,
+    "add_and_rename_region": true,
+    "draw_polygon": true,
+    "draw_stroke": true,
+    "undo_redo": true,
+    "zoom": true,
+    "save_actual_widget": true,
+    "cancel_preserves_widget": true,
+    "save_close_reopen_workflow": true,
+    "regions_after_roundtrip": 2,
+    "edited_executions_successful": 3,
+    "final_widget_element_save_rechecked": true,
+    "new_console_errors": 0
+  },
+  "plugin_files": [
+    {
+      "path": "__init__.py",
+      "sha256": "8c9a16fd302b77f5ebc201bc0fe86dd3fafbd217850b2341c1978625dac619b5"
+    },
+    {
+      "path": "engine.py",
+      "sha256": "4d083ec028bcdb6ec2d03465e816be3c873b77bcd790c1a0ced496d7dba6f9b4"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "12b3a43416cfda4d524b8d781639e33ea3c7862cc2200d7f61300f98bbfa91fe"
+    },
+    {
+      "path": "nodes.py",
+      "sha256": "ce9e8db724964af981d7223416bc556f27d07345c6e6175a3700f01b72f1243e"
+    },
+    {
+      "path": "README.md",
+      "sha256": "04f3b42ecde01e34e23fa23a25fb0041d3a2dcec03745dc9116c1130e36217af"
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "b75df3108ae535b25315c863c765dfba614a51142e3f972bedf720a7414c7292"
+    },
+    {
+      "path": "tests/isolated_acceptance.py",
+      "sha256": "686ba4cfb39b3d360350ee91feae94c6b74574bf853d64202e7512835d7ead66"
+    },
+    {
+      "path": "tests/test_editor.cjs",
+      "sha256": "0c8c862377e7f7cfbfc247eadd7e3d4cfbdad198229a9c91ba094c147d2fa4c8"
+    },
+    {
+      "path": "tests/test_nodes.py",
+      "sha256": "2d0efb8e896a320e25cec722e95d67360d1c7249e45980f1057ec4eeac6dfd16"
+    },
+    {
+      "path": "UPSTREAM.json",
+      "sha256": "bcda57b7623ba34d8f81653b9dea8be4b74794fdc0833543f762690742c23c7b"
+    },
+    {
+      "path": "vendor/__init__.py",
+      "sha256": "ada8615d30388fc74a41f6aecc31e604ff9cf5b66ba53395ea1440de15f2c9f8"
+    },
+    {
+      "path": "vendor/coverage.py",
+      "sha256": "d26f35cf71d80bf0c75aa9ea42d0d9f2e7d94b20692784a78541d7aa3f30d1b2"
+    },
+    {
+      "path": "vendor/guide_fields.py",
+      "sha256": "2cfa01559b78e3a2f8ea006243722e2c0722fc026c0f72776c0ed73945a3e340"
+    },
+    {
+      "path": "vendor/i18n.py",
+      "sha256": "7c59b707bd820055e37cee16d3b72a4ef062c768e03ea08363ace539ecfee7ba"
+    },
+    {
+      "path": "vendor/knit.py",
+      "sha256": "b73f3116e6a5098891769318c6584d5ffe62f093f452a3697da6e43913ea5f62"
+    },
+    {
+      "path": "vendor/look.py",
+      "sha256": "d2544f686e04ccb02b33c6b87894e4fc207047fef919b3b706f0178c8f5b53ba"
+    },
+    {
+      "path": "vendor/oily.py",
+      "sha256": "f6acb9f4b9732764d871346781d944d674552c66cacbc23db8f80762b15002c6"
+    },
+    {
+      "path": "vendor/tiles.py",
+      "sha256": "b325a2d3426e2ba6309c817fef8ee7f4af575e649e2177450d86b26f4e6c8575"
+    },
+    {
+      "path": "vendor/trace.py",
+      "sha256": "8c96481f96cc3d562709ae4834aa250a395e12c1ed2c0b5063c4a7acfa83e663"
+    },
+    {
+      "path": "vendor/walls.py",
+      "sha256": "1add5ddd582af05cdfff1c3a9b43b8cabd1fe265c8adb5a415df1a02b0914993"
+    },
+    {
+      "path": "web/editor_model.js",
+      "sha256": "9683203bea051adabfb4fd9922d554500e86ea63f93fd107a22febcf18776148"
+    },
+    {
+      "path": "web/stocking_texture.css",
+      "sha256": "ee13f2316c6e18b4582ad7b8b57dffb645f28b9b2e3437194dc49941aa02c923"
+    },
+    {
+      "path": "web/stocking_texture.js",
+      "sha256": "cf3c2613b6a0c4ac5e7bb50271c50ba490893c9e39f652ea469d5d7eadbdc9ca"
+    }
+  ],
+  "isolation_provenance": "Fresh snapshot materialization followed by an exact plugin overlay; final plugin file hashes rechecked against source. Original restore receipt describes the initial tree only.",
+  "raw_evidence": {
+    "stored_outside_git": true,
+    "files": [
+      {
+        "name": "RESTORE_RECEIPT.json",
+        "sha256": "bed0d1b60442959566d33515d675d2ef3b96bec51c2a31e77c95bb37ff4f573c"
+      },
+      {
+        "name": "API_ACCEPTANCE.json",
+        "sha256": "5c99c57060a5a274e6ea5b11c53e6834d1b040f593639c688ff95aa2f5ca1c08"
+      },
+      {
+        "name": "FINAL_PLUGIN_OVERLAY.json",
+        "sha256": "0a947772b49a1494d3ce819f5fc75497e37ff9b2cefdab8fa909fb682624fd58"
+      },
+      {
+        "name": "BROWSER_ACCEPTANCE.json",
+        "sha256": "008221d0f050f3115a47c543262819d9ebf506f76f12740162a39aa13305170a"
+      },
+      {
+        "name": "SERVER_IDENTITY.json",
+        "sha256": "b849eeffc1e90d7ee1dec09b56d6a3f6785f3e8f13426dce326950182e496a27"
+      },
+      {
+        "name": "EDITOR_ACCEPTANCE.jpg",
+        "sha256": "0ec40b51b3b25e07538ce7f92c9c9d8d205201599627115ee80e0100c37625c2"
+      },
+      {
+        "name": "EDITOR_ROUNDTRIP.jpg",
+        "sha256": "93a1aaf373c1d0fb62e693c7f23c473fa71236a0e75541df008211a0a3a1d7ee"
+      },
+      {
+        "name": "SERVER_CLEANUP.json",
+        "sha256": "7549601ba925e973a11eff109bfea5d3700e382f0fdb73d49da8405b456c0247"
+      }
+    ]
+  },
+  "production_deployed": false,
+  "production_service_modified": false,
+  "models_loaded": false,
+  "dependencies_installed": false,
+  "test_service_cleanup": "identity verified, queue empty, owned test server stopped",
+  "limits": [
+    "Synthetic CPU acceptance does not verify real illustration quality or every pose.",
+    "SAM point selection, PSD IO and pixel brushes are not implemented.",
+    "Ordinary layer source-over on a nonopaque RGBA base needs original alpha restoration.",
+    "Oily style remains experimental."
+  ]
+}

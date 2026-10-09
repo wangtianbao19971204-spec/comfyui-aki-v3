@@ -1,0 +1,77 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "stocking-example.png"
+    }
+  },
+  "2": {
+    "class_type": "StockingTextureGuides",
+    "inputs": {
+      "image": [
+        "1",
+        0
+      ],
+      "guides_json": "{\"schema\": 1, \"width\": 128, \"height\": 160, \"regions\": [{\"id\": \"left\", \"name\": \"左腿\", \"polygons\": [[[15, 10], [112, 10], [112, 149], [15, 149]]], \"strokes\": [[[20, 45], [50, 35], [80, 35], [106, 45]], [[20, 115], [50, 105], [80, 105], [106, 115]]]}], \"dividers\": []}"
+    }
+  },
+  "3": {
+    "class_type": "StockingTextureRender",
+    "inputs": {
+      "image": [
+        "2",
+        0
+      ],
+      "guides_json": [
+        "2",
+        2
+      ],
+      "mask": [
+        "2",
+        1
+      ],
+      "style": "细线",
+      "density": 100,
+      "strength": 100,
+      "auto_strength": true,
+      "tilt": 32,
+      "sparkle_bright": 0,
+      "sparkle_even": 0,
+      "sparkle_depth": 0,
+      "color_exclude": true,
+      "auto_walls": false,
+      "depth_mode": "近处较亮",
+      "seed": 20261005
+    }
+  },
+  "4": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "3",
+        0
+      ],
+      "filename_prefix": "Stocking/finished"
+    }
+  },
+  "5": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "3",
+        1
+      ],
+      "filename_prefix": "Stocking/layer"
+    }
+  },
+  "6": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "3",
+        3
+      ],
+      "filename_prefix": "Stocking/problems"
+    }
+  }
+}

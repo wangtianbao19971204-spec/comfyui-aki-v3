@@ -1,0 +1,39 @@
+{
+  "repository": "https://github.com/silvermoong/stocking-texture-tool",
+  "commit": "ad4cc92de86021f20bedcf9de5b27ec0ae574184",
+  "license": "MIT",
+  "files": [
+    {
+      "file": "coverage.py",
+      "sha256": "d26f35cf71d80bf0c75aa9ea42d0d9f2e7d94b20692784a78541d7aa3f30d1b2"
+    },
+    {
+      "file": "guide_fields.py",
+      "sha256": "2cfa01559b78e3a2f8ea006243722e2c0722fc026c0f72776c0ed73945a3e340"
+    },
+    {
+      "file": "knit.py",
+      "sha256": "b73f3116e6a5098891769318c6584d5ffe62f093f452a3697da6e43913ea5f62"
+    },
+    {
+      "file": "look.py",
+      "sha256": "d2544f686e04ccb02b33c6b87894e4fc207047fef919b3b706f0178c8f5b53ba"
+    },
+    {
+      "file": "oily.py",
+      "sha256": "f6acb9f4b9732764d871346781d944d674552c66cacbc23db8f80762b15002c6"
+    },
+    {
+      "file": "tiles.py",
+      "sha256": "b325a2d3426e2ba6309c817fef8ee7f4af575e649e2177450d86b26f4e6c8575"
+    },
+    {
+      "file": "trace.py",
+      "sha256": "8c96481f96cc3d562709ae4834aa250a395e12c1ed2c0b5063c4a7acfa83e663"
+    },
+    {
+      "file": "walls.py",
+      "sha256": "1add5ddd582af05cdfff1c3a9b43b8cabd1fe265c8adb5a415df1a02b0914993"
+    }
+  ]
+}

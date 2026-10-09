@@ -7,6 +7,7 @@
 | 工作台、主题、图标与交互 | [workbench.md](workbench.md) |
 | 五站网页提示词 → 工作台待采用 | [browser-import.md](browser-import.md) |
 | UAP、子图、部位细化、二放与独立工具 | [workflows.md](workflows.md) |
+| 丝袜纹理后处理与走向线编辑 | [stocking-texture.md](stocking-texture.md) |
 | 模型/LoRA 管理及资源契约 | [models.md](models.md) |
 | PixAI 图像反推标签 | [pixai.md](pixai.md) |
 | 独立 Qwen 实验实例、本地辅助工具与启动入口 | [independent-services.md](independent-services.md) |
