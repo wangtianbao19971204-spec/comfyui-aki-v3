@@ -25,9 +25,11 @@ def build():
     note = dict(id=4, type='Note', pos=[80, 690], size=[420, 230], flags={}, order=3, mode=0,
                 inputs=[], outputs=[], properties={'uap_layout_group': edit},
                 widgets_values=['1. 打开完整编辑器，直接导入 PNG / JPG / PSD。\n'
-                                '2. 点选或画笔涂出部位，画横纹走向，选择样式。\n'
-                                '3. 点击“应用到节点”，关闭编辑器后运行。\n'
-                                '4. 成品和透明丝袜图层分别保存到 StockingRepair。\n'
+                                '2. 双腿分别修边，检查袜口、脚部与遮挡；各画走向。\n'
+                                '3. 在纹理页选择样式；摩尔纹需先完成深度计算。\n'
+                                '4. 点击“应用到节点”，关闭编辑器后运行。\n'
+                                '5. 成品和透明丝袜图层分别保存到 StockingRepair。\n'
+                                '摩尔纹默认关闭；油光为试验效果，先用低强度预览。\n'
                                 'PSD 在编辑器内导出。继续放大时切换到 2× / 4× 并载入成品。\n'
                                 '此工作流独立运行，不包含生成、精修或放大步骤。'])
     branch = dict(id='stocking', label='丝袜纹理修复', group=edit, nodeIds=[1, 2, 3, 4],

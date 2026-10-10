@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-10T12:05:25.529109+00:00",
+  "created_at": "2026-10-10T12:50:40.969252+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -23673,8 +23673,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
-      "sha256": "85b6dd5d5d29221f998c71b6c32ab9b3aae6a377a7ac42d580988fac9b1dbe5d",
-      "bytes": 4566,
+      "sha256": "82010ef0f0955f7f5ea8ee3a2937d7ce9027770f99141f680a2afa418ee814dd",
+      "bytes": 4787,
       "kind": "file"
     },
     {
@@ -51393,8 +51393,8 @@
     {
       "source": "ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json",
-      "sha256": "ab68507daade1f1f8f9c903ef6b4269355efbca00ef53582fb3e93ce122c3a2f",
-      "bytes": 5478,
+      "sha256": "5667ad786b42d91b843765a1516641617bd6f7c2d899b23b790829b5132d2d4b",
+      "bytes": 5626,
       "kind": "file"
     },
     {
@@ -57518,15 +57518,15 @@
     {
       "source": "production_tools/build_stocking_workflow.py",
       "path": "runtime/production_tools/build_stocking_workflow.py",
-      "sha256": "716e7b787bd55971a538e3cfff6298ed81467cdaa0ca58fc4f0290b1f2467c77",
-      "bytes": 3822,
+      "sha256": "409fec42535e666b38e22fcbdc35f8b2dcb1c0409c0fdff821772994a68605e8",
+      "bytes": 4040,
       "kind": "file"
     },
     {
       "source": "production_tools/export_stocking_upstream.py",
       "path": "runtime/production_tools/export_stocking_upstream.py",
-      "sha256": "baf3de1291d9565a27f622195e7091e0b53b46d01c7f7b9bfbb7c2f63c2f8fba",
-      "bytes": 6693,
+      "sha256": "f93825eac4bc567059995372d3abd43294404928a0164b899f816efe327a17b1",
+      "bytes": 8439,
       "kind": "file"
     },
     {
@@ -57700,22 +57700,36 @@
     {
       "source": "production_tools/stocking_fork_intro.en.md",
       "path": "runtime/production_tools/stocking_fork_intro.en.md",
-      "sha256": "95d51ab079e8ac8fdb71bf59685be0ca2a352843dfdcbd19729543b042db5809",
-      "bytes": 3592,
+      "sha256": "e9695816122a7df7a0fc30a2f63b33682e7c8a19f8d960690f6e5df17f144f13",
+      "bytes": 3447,
       "kind": "file"
     },
     {
       "source": "production_tools/stocking_fork_intro.md",
       "path": "runtime/production_tools/stocking_fork_intro.md",
-      "sha256": "6afe8122f330f99ffb6e10ead301e1cbdb2853e157c62a9fb24f7c886528c1a1",
-      "bytes": 3165,
+      "sha256": "6b31961bc4063990585ccda11c4fba6c1b6dfac684f298222ca7e40e05944720",
+      "bytes": 3082,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/stocking_showcase.json",
+      "path": "runtime/production_tools/stocking_showcase.json",
+      "sha256": "d79d873ccafca1951c0028fce43db63f7e1bcbd445c673a2dd8be5c5b4affd9a",
+      "bytes": 1933,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/stocking_showcase.md",
+      "path": "runtime/production_tools/stocking_showcase.md",
+      "sha256": "970a81e25c38527aae012c412e07b15c951e8d560a5c0b6b95f964e006fc9331",
+      "bytes": 3693,
       "kind": "file"
     },
     {
       "source": "production_tools/stocking_upstream_README.md",
       "path": "runtime/production_tools/stocking_upstream_README.md",
-      "sha256": "fa568d12b93771841c4614aa498d05cdff6611bb23e645c7e37e506730237b23",
-      "bytes": 10960,
+      "sha256": "7bd61c03b330107f027bcee4a3398ebc538ca5e7fb0a90be787282fc3c1aa547",
+      "bytes": 11122,
       "kind": "file"
     },
     {
@@ -57805,8 +57819,8 @@
     {
       "source": "production_tools/templates/生产扩展_丝袜纹理修复.json",
       "path": "runtime/production_tools/templates/生产扩展_丝袜纹理修复.json",
-      "sha256": "ab68507daade1f1f8f9c903ef6b4269355efbca00ef53582fb3e93ce122c3a2f",
-      "bytes": 5478,
+      "sha256": "5667ad786b42d91b843765a1516641617bd6f7c2d899b23b790829b5132d2d4b",
+      "bytes": 5626,
       "kind": "file"
     },
     {
@@ -57833,8 +57847,8 @@
     {
       "source": "production_tools/test_export_stocking_upstream.py",
       "path": "runtime/production_tools/test_export_stocking_upstream.py",
-      "sha256": "7c811f0da31a008e963fae5d8f793f465a9f5561642cc80ec557558f03a8f4d8",
-      "bytes": 3270,
+      "sha256": "c1ae668c03a087982885f710acdbc8b6b2292cf252511b74c4a1710c7bf8e093",
+      "bytes": 5043,
       "kind": "file"
     },
     {
@@ -67820,13 +67834,16 @@
     }
   ],
   "development_revision": {
-    "note": "Normalize exported integration documentation line endings",
-    "previous_manifest_sha256": "07fd69acbddfcd93e9152039c437971d3d6c44233ffd20c99949a5007a4f81c3",
+    "note": "Finish stocking workflow upstream-effects guidance, saved workflow acceptance and reviewed fork showcase sources",
+    "previous_manifest_sha256": "13643d9afa7351c6ebd205cbb8be0743f0867aaace22da911763904c86b6b907",
     "source_changes": {
       "added": [],
       "removed": [],
       "changed": [
-        "production_tools/stocking_upstream_README.md"
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
+        "ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json",
+        "production_tools/build_stocking_workflow.py",
+        "production_tools/templates/生产扩展_丝袜纹理修复.json"
       ]
     },
     "live_deployed": false,

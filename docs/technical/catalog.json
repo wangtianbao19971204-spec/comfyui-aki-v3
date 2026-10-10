@@ -154,7 +154,8 @@
         "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261003_015012_R1_autonomous/UI_FINAL_ACCEPTANCE.json",
         "docs/receipts/browser_live_deployment_20261006.json",
         "docs/receipts/final_workflow_acceptance_20261007.json",
-        "docs/receipts/stocking_texture_complete_20261010.json"
+        "docs/receipts/stocking_texture_complete_20261010.json",
+        "docs/receipts/stocking_workflow_refresh_20261010.json"
       ],
       "acceptance": "historical",
       "watch": [
@@ -208,7 +209,8 @@
         "docs/receipts/browser_live_deployment_20261006.json",
         "docs/receipts/final_workflow_acceptance_20261007.json",
         "docs/receipts/workflow_failure_verification_20261007.json",
-        "docs/receipts/stocking_texture_complete_20261010.json"
+        "docs/receipts/stocking_texture_complete_20261010.json",
+        "docs/receipts/stocking_workflow_refresh_20261010.json"
       ],
       "acceptance": "historical",
       "watch": [
@@ -925,9 +927,11 @@
         "docs/receipts/stocking_texture_parity_20261010.json",
         "docs/receipts/stocking_texture_studio_20261010.json",
         "docs/receipts/stocking_texture_complete_20261010.json",
+        "docs/receipts/stocking_workflow_refresh_20261010.json",
         "docs/receipts/stocking_texture_bend_upstream_20261010.json",
           "docs/receipts/stocking_fork_presentation_20261010.json",
-          "docs/receipts/stocking_texture_upstream_refresh_20261010.json"
+          "docs/receipts/stocking_texture_upstream_refresh_20261010.json",
+          "docs/receipts/stocking_fork_showcase_20261010.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -937,7 +941,9 @@
         "snapshot/runtime/production_tools/test_export_stocking_upstream.py",
         "snapshot/runtime/production_tools/stocking_upstream_README.md",
         "snapshot/runtime/production_tools/stocking_fork_intro.md",
-        "snapshot/runtime/production_tools/stocking_fork_intro.en.md"
+        "snapshot/runtime/production_tools/stocking_fork_intro.en.md",
+        "snapshot/runtime/production_tools/stocking_showcase.json",
+        "snapshot/runtime/production_tools/stocking_showcase.md"
       ],
       "examples": [
         "examples/stocking-texture/README.md",
@@ -946,7 +952,9 @@
         "examples/stocking-texture/studio.workflow.json",
         "snapshot/runtime/production_tools/stocking_upstream_README.md",
         "snapshot/runtime/production_tools/stocking_fork_intro.md",
-        "snapshot/runtime/production_tools/stocking_fork_intro.en.md"
+        "snapshot/runtime/production_tools/stocking_fork_intro.en.md",
+        "snapshot/runtime/production_tools/stocking_showcase.json",
+        "snapshot/runtime/production_tools/stocking_showcase.md"
       ]
     }
   ]

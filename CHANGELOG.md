@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- 2026-10-10：自用丝袜独立工作流补充完整选区和新版效果的操作提示，完整双腿工程通过油光、摩尔纹与保存重载三次隔离执行，成品／透明层保持；见[更新说明](docs/technical/changes/runtime-workflows/2026-10-10-upstream-effects.md)。未部署生产。
+
+- 2026-10-10：按用户要求精简丝袜 fork 中英简介，新增三张完整选区／真实输出对照的精确发布清单与导出校验；原作者说明及署名保留。运行算法与工作流未变，见[展示发布说明](docs/technical/changes/runtime-stocking-texture/2026-10-10-reviewed-showcase.md)。
+
 - 2026-10-10：丝袜纹理来源更新至作者 `f74c8ac`，接入默认关闭的摩尔纹、深度就绪检查和新版油光遮挡连接；旧工作流参数兼容。修正展示说明，局部选区回归图不作为成品展示，完整选区候选留在仓外。测试与隔离实页范围见[更新记录](docs/technical/changes/runtime-stocking-texture/2026-10-10-upstream-effects.md)；本轮未部署生产。
 
 - 2026-10-09：新增独立丝袜纹理引导编辑／渲染节点，复用固定 MIT 算法、五样式、可选蒙版／深度和透明图层；支持工作流引导持久化及 CPU 隔离验收，未部署生产。见[技术说明](docs/technical/runtime/stocking-texture.md)。

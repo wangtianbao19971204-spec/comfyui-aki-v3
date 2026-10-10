@@ -1,8 +1,9 @@
 """Export a reviewed ComfyUI adapter payload without any maintenance-repo history.
 
 Develop here, export to a fresh directory, then overlay this allowlist onto a
-clean public upstream checkout for tests and publication. Never exports input
-images, weights, user settings, private workflows, or the maintenance Git data.
+clean public upstream checkout for tests and publication. Only the exact reviewed
+showcase panels in the pinned manifest may be copied from outside the repository.
+Never exports input collections, weights, settings, private workflows or Git data.
 """
 import argparse
 import hashlib
@@ -13,6 +14,8 @@ from build_stocking_workflow import build
 
 PLUGIN = Path(__file__).resolve().parents[1] / 'ComfyUI/custom_nodes/ComfyUI-Stocking-Texture'
 README = Path(__file__).with_name('stocking_upstream_README.md')
+SHOWCASE = Path(__file__).with_name('stocking_showcase.json')
+SHOWCASE_README = Path(__file__).with_name('stocking_showcase.md')
 FILES = (
     '__init__.py', 'nodes.py', 'engine.py', 'rendering.py', 'studio.py', 'studio_api.py',
     'studio_assets.py', 'studio_store.py', 'studio_models.py', 'studio_nodes.py',
@@ -57,7 +60,28 @@ def replace_once(text, before, after):
     return text.replace(before, after, 1)
 
 
-def export(upstream, out):
+def reviewed_showcase(directory):
+    """Read only the explicitly reviewed, hash-pinned publication assets."""
+    directory = Path(directory).resolve(strict=True)
+    manifest = json.loads(SHOWCASE.read_text(encoding='utf-8'))
+    data = {}
+    for row in manifest['files']:
+        name = row['name']
+        if Path(name).name != name or '/' in name or '\\' in name or not name.endswith('.png'):
+            raise ValueError('Invalid showcase filename')
+        source = directory / name
+        if source.is_symlink() or source.resolve() != source:
+            raise ValueError('Showcase links are not allowed: ' + name)
+        content = source.read_bytes()
+        if len(content) != row['bytes'] or hashlib.sha256(content).hexdigest() != row['sha256']:
+            raise ValueError('Showcase changed; review before publication: ' + name)
+        data['integrations/comfyui/docs/images/' + name] = content
+    data['integrations/comfyui/SHOWCASE.json'] = SHOWCASE.read_bytes()
+    data['integrations/comfyui/SHOWCASE.md'] = SHOWCASE_README.read_text(encoding='utf-8')
+    return data
+
+
+def export(upstream, out, showcase):
     upstream, out = Path(upstream).resolve(), Path(out).resolve()
     provenance = json.loads((PLUGIN/'UPSTREAM.json').read_text(encoding='utf-8'))
     for row in provenance['files']:
@@ -66,9 +90,10 @@ def export(upstream, out):
             raise ValueError('Upstream changed; rebase and revalidate: ' + row['file'])
     if (upstream/'__init__.py').exists() or (upstream/'integrations/comfyui').exists():
         raise ValueError('Upstream already has an integration; inspect instead of overwriting')
-    data = {'__init__.py': ROOT_ENTRY, 'integrations/__init__.py': '"""Optional host integrations."""\n',
+    data = reviewed_showcase(showcase)
+    data.update({'__init__.py': ROOT_ENTRY, 'integrations/__init__.py': '"""Optional host integrations."""\n',
             'integrations/comfyui/vendor/__init__.py': BRIDGE,
-            'integrations/comfyui/README.md': README.read_text(encoding='utf-8')}
+            'integrations/comfyui/README.md': README.read_text(encoding='utf-8')})
     for name in FILES:
         text = (PLUGIN/name).read_text(encoding='utf-8')
         if name == 'studio_assets.py':
@@ -105,22 +130,28 @@ def export(upstream, out):
     for name, content in data.items():
         dest=out/name
         dest.parent.mkdir(parents=True,exist_ok=True)
-        dest.write_text(content,encoding='utf-8',newline='\n')
+        if isinstance(content, bytes):
+            dest.write_bytes(content)
+        else:
+            dest.write_text(content,encoding='utf-8',newline='\n')
     return {'upstream_commit':provenance['commit'],'files':[
         {'path':name,'sha256':hashlib.sha256((out/name).read_bytes()).hexdigest()} for name in sorted(data)],
         'duplicated_upstream_core_or_ui':False,'private_history_exported':False,
-        'upstream_dark_adaptation_default':False}
+        'upstream_dark_adaptation_default':False,
+        'reviewed_showcase_files': [r['name'] for r in json.loads(SHOWCASE.read_text(encoding='utf-8'))['files']]}
 
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--upstream',type=Path,required=True)
     p.add_argument('--out',type=Path,required=True)
+    p.add_argument('--showcase-dir',type=Path,required=True,
+                   help='External directory containing the exact hash-pinned showcase panels')
     p.add_argument('--receipt',type=Path,required=True)
     a=p.parse_args()
     if a.receipt.exists():
         raise SystemExit('Receipt exists; preserve it and choose another path')
-    report=export(a.upstream,a.out)
+    report=export(a.upstream,a.out,a.showcase_dir)
     with a.receipt.open('x',encoding='utf-8') as file:
         json.dump(report,file,ensure_ascii=False,indent=2)
     print(json.dumps({'files':len(report['files']),'upstream_commit':report['upstream_commit'],'out':str(a.out)}))

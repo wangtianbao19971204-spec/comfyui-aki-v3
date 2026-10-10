@@ -35,3 +35,8 @@
 - 2026-10-05：补入 [主题交互测试](../archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/test_candidate.cjs)与 [浏览器回执](../archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/browser_acceptance.json)；[M9 测量实现](../archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/browser_measurement.js)、[生命周期采集](../archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/lifecycle_collector.js)及 [历史浏览器验收](../archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261003_015012_R1_autonomous/UI_FINAL_ACCEPTANCE.json)用于接手。未携带的基线、fixture、浏览器轨迹仍依赖仓外原件，不把本轮归档叫作重新 UI/物理 IME 验收。
 
 - 2026-10-05：保留彩色动漫主题、轻量图标和布局；登记常用参数、任务状态、弹窗及结果交互的真实实现与验收边界。
+
+
+## 2026-10-10 丝袜修复入口提示
+
+修复面板补充完整双腿选区、袜口／足部／遮挡修边、摩尔纹深度要求与试验性油光的使用提示。只改说明，导航、编辑器按钮、运行拦截和现有参数保持；工作台相关回归及实际双输出复验见[工作流更新](../changes/runtime-workflows/2026-10-10-upstream-effects.md)。本轮未部署生产。

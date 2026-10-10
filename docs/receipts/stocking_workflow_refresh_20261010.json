@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-10T12:50:08.846419+00:00",
+  "scope": "Independent stocking repair workflow guidance and final saved-workflow acceptance",
+  "upstream_commit": "f74c8ac0190ec43b2cdfcb13db86f35a83283311",
+  "template_change": "Note text only; all nodes, links, defaults, project data and output prefixes preserved",
+  "workbench_change": "Instruction text only; editor controls, task gating and navigation logic unchanged",
+  "focused_test_suites": [
+    {
+      "name": "workflow-tests",
+      "exit_code": 0,
+      "pass": true
+    },
+    {
+      "name": "navigation-tests",
+      "exit_code": 0,
+      "pass": true
+    },
+    {
+      "name": "daily-controls-tests",
+      "exit_code": 0,
+      "pass": true
+    },
+    {
+      "name": "compact-tests",
+      "exit_code": 0,
+      "pass": true
+    },
+    {
+      "name": "export-tests",
+      "exit_code": 0,
+      "pass": true
+    }
+  ],
+  "workflow_acceptance": {
+    "pass": true,
+    "finished_at": "2026-10-10T12:48:27.656881+00:00",
+    "upstream_commit": "f74c8ac0190ec43b2cdfcb13db86f35a83283311",
+    "template_only_note_changed": true,
+    "oily_matches_corrected_accepted_output": true,
+    "moire_changed_pixels": 151786,
+    "saved_workflow_reload_pixels_equal": true,
+    "cases": [
+      {
+        "case": "oily",
+        "prompt_id": "257c73a9-20dd-4071-99e9-61ffbc272634",
+        "success": true,
+        "finished_sha256": "19b750d7a205924b5510581c4ad97858dd82b5e32a4850b70ce9ceac6a47f512",
+        "layer_sha256": "e99053afa8e25b77c71e12c5b310603b121d7a1a93bc773602128431d06eaacb",
+        "workflow_project_exact": true,
+        "rgba_recompose_max_error_8bit": 0,
+        "output_files": [
+          "iso-output\\WorkflowRefresh\\oily\\finished_00001_.png",
+          "iso-output\\WorkflowRefresh\\oily\\layer_00001_.png"
+        ]
+      },
+      {
+        "case": "moire",
+        "prompt_id": "3ace15cc-b3c0-4445-b336-58641c225c73",
+        "success": true,
+        "finished_sha256": "06a010f1197a1ab9d95531ba1689d4be930e638e063c1460c9b2174913447b29",
+        "layer_sha256": "1e203140070aed750f1c1ad624bc04ce374e0ef8e45b8734c6b4ede43780615d",
+        "workflow_project_exact": true,
+        "rgba_recompose_max_error_8bit": 0,
+        "output_files": [
+          "iso-output\\WorkflowRefresh\\moire\\finished_00001_.png",
+          "iso-output\\WorkflowRefresh\\moire\\layer_00001_.png"
+        ]
+      },
+      {
+        "case": "reload",
+        "prompt_id": "6f6845a1-2307-4e2b-98ca-2d6d7c72883f",
+        "success": true,
+        "finished_sha256": "1e2ebb4aae4591e188671de1eb53417b7b715f71cee764a678bea8867ee2d546",
+        "layer_sha256": "263c0528665771f9f3b2e28eb0b35ab7375da2b9ded134e64be965eb5a63b285",
+        "workflow_project_exact": true,
+        "rgba_recompose_max_error_8bit": 0,
+        "output_files": [
+          "iso-output\\WorkflowRefresh\\reload\\finished_00001_.png",
+          "iso-output\\WorkflowRefresh\\reload\\layer_00001_.png"
+        ]
+      }
+    ],
+    "gpu_or_model_inference": false,
+    "new_browser_test": false,
+    "production_modified": false
+  },
+  "runtime_source_reuse": "All plugin Python and browser assets match the previously accepted isolated tree. Only README and UPSTREAM metadata differ; actual rendering code is identical to maintained source.",
+  "visual_review": {
+    "oily": "Matches the corrected complete-selection output exactly; no previous straight split seam.",
+    "moire": "Effect changes the rendered fabric with the cached depth; visible banding is stronger. This is a functional check, not a universal aesthetics approval.",
+    "default_parameters_unchanged": true
+  },
+  "production_deployed": false,
+  "new_browser_acceptance": false,
+  "cleanup": {
+    "stopped": true,
+    "identity_matches": true,
+    "queue_empty": true,
+    "production_touched": false
+  },
+  "external_evidence_id": "stocking-workflow-refresh-20261010-01",
+  "evidence": [
+    {
+      "file": "FOCUSED-TESTS.json",
+      "sha256": "b6af5aa3db7c845f67ee9992f544fe4575c7b34ce64bf245ee721af0376dc318"
+    },
+    {
+      "file": "SOURCE-PARITY.json",
+      "sha256": "acd6d78e351659e2f4a0368c4d5edf6d38c5f5c5cb1e92b830ba912a9ab03a94"
+    },
+    {
+      "file": "WORKFLOW-ACCEPTANCE.json",
+      "sha256": "f28c4b56e52ee50102feb896bf59f922d2a750f5d5cc69bb35ecc1dd887d572f"
+    },
+    {
+      "file": "CLEANUP.json",
+      "sha256": "121186afc2cee44b68e6977cdce9a58fb807bdd6762a1296e2bb9b97685f49ba"
+    },
+    {
+      "file": "REMOTE-STATUS.json",
+      "sha256": "9285723061793c1810fce9c1ab330431601d2751e964612a610f4252663ada56"
+    }
+  ]
+}

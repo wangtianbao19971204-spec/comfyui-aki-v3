@@ -64,7 +64,7 @@ export function mountStockingControls(host,{app,node,element,isCurrent}) {
     const section=element('section',null,host,{className:'desk-stocking'});
     section.dataset.deskArea='parameters';
     element('h3','丝袜纹理修复',section);
-    element('p','打开编辑器，导入 PNG / JPG / PSD，圈选部位并画走向线；调整纹理后点击“应用到节点”。',section);
+    element('p','打开编辑器，导入 PNG / JPG / PSD；双腿分别修边，检查袜口、脚部与遮挡边界，为每个部位画走向线。调整纹理后点击“应用到节点”。',section);
     const button=element('button','打开修复编辑器',section,{type:'button'});
     const status=element('p','',section);status.setAttribute('role','status');
     button.onclick=()=>{
@@ -74,6 +74,7 @@ export function mountStockingControls(host,{app,node,element,isCurrent}) {
         editor.callback();
     };
     element('p','应用后运行本工作流，同时保存成品和透明丝袜图层。需要继续放大时，在任务列表选择 2× 或 4× 放大并载入成品。',section);
+    element('p','摩尔纹默认关闭；开启前先在编辑器中完成深度计算。油光仍为试验效果，建议从低强度开始预览。',section);
     const sync=()=>{
         const project=stockingProject(node);
         status.textContent=project.asset?`已应用：${project.name||'图片'} · ${project.regions?.length||0} 个部位`:'尚未应用图片；请先在编辑器中完成导入和应用。';
