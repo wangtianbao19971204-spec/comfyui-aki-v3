@@ -676,8 +676,8 @@ class CachedObjectMismatch(ValueError):
 
 
 def scan_objects(repo, entries, staged=False, content_only=False, cache=None):
-    if cache is not None and (not staged or content_only):
-        raise ValueError('Cache is only allowed for the complete staged gate')
+    if cache is not None and (content_only or cache.scope != ('staged' if staged else 'all-history')):
+        raise ValueError('Cache scope must match the complete scan')
     # Keep this here so independent SourceGraph/parallel callers cannot skip refs.
     findings = ref_name_findings(repo)
     training_reviews = git_training_trigger_reviews(repo, staged)
@@ -762,7 +762,7 @@ def scan_objects(repo, entries, staged=False, content_only=False, cache=None):
             total += entry['bytes']
             digest = sha.hexdigest()
             if cached_digest is not None and (digest != cached_digest or inflater is not None or zip_signature or other_archive):
-                raise CachedObjectMismatch('Staged cache digest mismatch')
+                raise CachedObjectMismatch('Content cache digest mismatch')
             content_rules = set(scanner.findings)
             if entry['bytes'] == 0 and any(path.lower().endswith(('.gz', '.tgz', '.zip')) for path in entry['paths']):
                 errors.add('empty_archive_payload')
@@ -786,7 +786,8 @@ def scan_objects(repo, entries, staged=False, content_only=False, cache=None):
                 compressed.append({'paths': entry['paths'], 'object': oid, 'format': 'zip', **zip_metadata})
             elif zip_signature or other_archive:
                 errors.add('unsupported_archive_requires_review')
-            if cache is not None and not content_rules and not errors and inflater is None and not zip_signature and not other_archive:
+            historical_exception = any((path, digest) in REVIEWED_HISTORICAL_PATHS for path in entry['paths'])
+            if cache is not None and not content_rules and not errors and inflater is None and not zip_signature and not other_archive and not historical_exception:
                 # Never cache reviewed exceptions or compressed payloads.
                 cache.remember(entry, digest, reused=cached_digest is not None)
             fixture = REVIEWED_FIXTURES.get(digest)
@@ -859,40 +860,53 @@ def scan_objects(repo, entries, staged=False, content_only=False, cache=None):
                                   'training_trigger_registry_sha256': training_reviews['sha256']})
 
 
-def staged_policy_fingerprint(training_sha):
+def cache_policy_fingerprint(training_sha, scope='staged', git_dir=None):
     """Bind cache hits to scanner code, effective rules and exception registries."""
     module = Path(__file__).with_name('staged_scan_cache.py')
     state = {
+        'scope': scope,
         'guard': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         'cache_code': hashlib.sha256(module.read_bytes()).hexdigest(),
         'python': list(sys.version_info[:3]),
         'training_registry': training_sha,
         'fixtures': REVIEWED_FIXTURES, 'fixture_paths': FIXTURE_ENDS,
         'ace': REVIEWED_ACE_SOURCE_PATHS,
+        'source_review_rules': sorted(SOURCE_REVIEW_RULES),
+        'historical_path_reviews': sorted([path, sha, rule] for (path, sha), rule in REVIEWED_HISTORICAL_PATHS.items()),
         'strong': {k: [v.pattern.hex(), v.flags] for k, v in STRONG.items()},
+        'needles': {k: [v.hex() for v in values] for k, values in RULE_NEEDLES.items()},
         'limits': [CHUNK, OVERLAP, MAX_BLOB, MAX_INFLATED],
         'patterns': [[p.pattern.hex(), p.flags] for p in (ASSIGN, SQL_PAIR, UNQUOTED, QUERY, BEARER, UNESCAPE)],
     }
+    if git_dir is not None:
+        directory = Path(git_dir).resolve()
+        identity = directory.stat()
+        # A copied cache from a clone or another worktree grants no reuse.
+        state['repository'] = [os.path.normcase(str(directory)), identity.st_dev, identity.st_ino]
     return hashlib.sha256(json.dumps(state, sort_keys=True, ensure_ascii=True).encode()).hexdigest()
 
 
-def run(repo=REPO, staged=False, content_only=False, use_cache=False):
+def run(repo=REPO, staged=False, content_only=False, use_cache=False, *, cache_history=False):
     if use_cache and (not staged or content_only):
         raise ValueError('Cache cannot be used for publication or content-only scans')
+    if cache_history and (staged or content_only or use_cache):
+        raise ValueError('History cache requires the complete history gate')
     repo = Path(repo).resolve()
     refs_before = refs(repo)
     index_before = git(repo, 'ls-files', '--stage', '-z') if staged else None
     entries, gitlinks = inventory(repo, staged)
     cache = None
-    if use_cache:
-        # Import only on the explicitly requested local fast path. The release
-        # and bundle callers retain the uncached default.
+    if use_cache or cache_history:
+        # Opt-in only. Release, bundle and CI callers retain the uncached default.
         import importlib.util
         spec = importlib.util.spec_from_file_location('comfyui_staged_cache', Path(__file__).with_name('staged_scan_cache.py'))
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        policy = staged_policy_fingerprint(git_training_trigger_reviews(repo, True)['sha256'])
-        cache = module.StagedCache(git(repo, 'rev-parse', '--absolute-git-dir').decode().strip(), policy)
+        scope = 'staged' if staged else 'all-history'
+        git_dir = git(repo, 'rev-parse', '--absolute-git-dir').decode().strip()
+        policy = cache_policy_fingerprint(git_training_trigger_reviews(repo, staged)['sha256'], scope, git_dir)
+        cache_class = module.StagedCache if staged else module.HistoryCache
+        cache = cache_class(git_dir, policy)
     try:
         result = scan_objects(repo, entries, staged=staged, content_only=content_only, cache=cache)
     except CachedObjectMismatch:
@@ -902,7 +916,7 @@ def run(repo=REPO, staged=False, content_only=False, use_cache=False):
         cache.pending.clear()
         cache.hits = cache.reused_bytes = 0
         cache.state = 'digest_mismatch_full_rescan'
-        result = scan_objects(repo, entries, staged=True, cache=cache)
+        result = scan_objects(repo, entries, staged=staged, cache=cache)
     result['findings'].extend(item for item in gitlinks if not content_only or item['rule'] != 'nested_gitlink')
     refs_after = refs(repo)
     if refs_before != refs_after:
@@ -910,11 +924,13 @@ def run(repo=REPO, staged=False, content_only=False, use_cache=False):
     if staged and index_before != git(repo, 'ls-files', '--stage', '-z'):
         result['findings'].append({'path': '<git index>', 'object': '', 'rule': 'index_changed_during_scan'})
     if cache is not None:
-        if staged_policy_fingerprint(git_training_trigger_reviews(repo, True)['sha256']) != cache.policy:
+        if cache_policy_fingerprint(git_training_trigger_reviews(repo, staged)['sha256'], scope, git_dir) != cache.policy:
             result['findings'].append({'path': '<scanner policy>', 'object': '', 'rule': 'policy_changed_during_scan'})
         if not result['findings']:
             cache.save()
         result['cache'] = cache.report()
+        result['cache'].update(content_scanned_objects=len(entries) - cache.hits,
+                               content_scanned_bytes=result['scanned_bytes'] - cache.reused_bytes)
     result.update({'schema': 1, 'mode': 'staged' if staged else 'all-history', 'pass': not result['findings'],
                    'scanned_objects': len(entries), 'scanned_blobs': sum(e['type'] == 'blob' for e in entries),
                    'refs': refs_before, 'offline': True,
@@ -945,7 +961,7 @@ def scan_names(repo=REPO, staged=False):
                                   'limits': ['Names-only is supplemental and never replaces the full publication gate.']})
 
 
-def run_pre_push(repo, records):
+def run_pre_push(repo, records, *, cache_history=False):
     """Reject raw/unreferenced push roots which an --all scan cannot cover."""
     repo = Path(repo).resolve()
     before = refs(repo)
@@ -969,7 +985,7 @@ def run_pre_push(repo, records):
                     'scanned_bytes': 0, 'cross_part_boundaries': 0, 'reviewed_fixtures': [], 'compressed_objects': [],
                     'findings': push_name_findings + [{'path': '<push root; create a local branch or tag before audit>', 'object': oid,
                                   'rule': 'unscanned_unreferenced_push_root'} for oid in missing]}
-        report = run(repo, staged=False)
+        report = run(repo, staged=False, cache_history=cache_history)
         report['mode'] = 'pre-push'
         report['push_roots'] = sorted(roots)
         report['findings'].extend(push_name_findings)
@@ -994,6 +1010,7 @@ def main():
     parser.add_argument('--audit-content-only', action='store_true', help='Audit imported upstream content; not a publication payload gate')
     parser.add_argument('--names-only', action='store_true', help='Supplemental strong filename/refname check without reading payloads; not a publication gate')
     parser.add_argument('--cache-staged', action='store_true', help='Local staged content-scan reuse; still rehashes all bytes and checks names/boundaries')
+    parser.add_argument('--cache-history', action='store_true', help='Local history content-scan reuse; still checks all reachable history and rehashes every object')
     args = parser.parse_args()
     try:
         if args.pre_push and (args.audit_content_only or args.names_only):
@@ -1002,8 +1019,11 @@ def main():
             raise ValueError('Names-only cannot be combined with a content-only audit')
         if args.cache_staged and (not args.staged or args.names_only or args.audit_content_only):
             raise ValueError('Cache only supports the full staged gate')
+        if args.cache_history and (args.staged or args.cache_staged or args.names_only or args.audit_content_only):
+            raise ValueError('History cache only supports the full history gate')
         report = (scan_names(args.repo, args.staged) if args.names_only else
-                  run_pre_push(args.repo, sys.stdin.read()) if args.pre_push else run(args.repo, args.staged, args.audit_content_only, args.cache_staged))
+                  run_pre_push(args.repo, sys.stdin.read(), cache_history=args.cache_history) if args.pre_push else
+                  run(args.repo, args.staged, args.audit_content_only, args.cache_staged, cache_history=args.cache_history))
     except Exception as exc:
         # Exception text can originate in a malformed object; never echo it.
         print(json.dumps({'pass': False, 'error': type(exc).__name__, 'rule': 'scan_failed_closed'}))

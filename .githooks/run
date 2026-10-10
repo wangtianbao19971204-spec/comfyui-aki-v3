@@ -16,4 +16,7 @@ if [ "${1:-}" = "--staged" ]; then
 else
     "$interpreter" -X utf8 -B scripts/technical_catalog.py check --require-tracked
 fi
+if [ "${1:-}" = "--pre-push" ]; then
+    exec "$interpreter" -X utf8 -B scripts/security_guard.py "$@" --cache-history
+fi
 exec "$interpreter" -X utf8 -B scripts/security_guard.py "$@"
