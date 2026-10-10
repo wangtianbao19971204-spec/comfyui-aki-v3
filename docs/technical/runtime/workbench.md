@@ -22,6 +22,8 @@
 
 ## 更新记录
 
+- 2026-10-10：新增独立修复入口、专用控制台及任务类型。两处选择器共用 `web/repair_workflow.js`，实际打开独立图并保留旧标签状态；修复页隐藏无关提示词任务。详见[独立修复流程](../changes/runtime-workflows/2026-10-10-stocking-repair.md)。
+
 - 2026-10-07：最终隔离回归修复测试中退休插件目录与单条 import 假设，统一读取主仓 modules；导航 fixture 补现行阶段/控件契约，常用控制台调用真实共享写入 helper。融合测试保留 LoRA 零 CLIP/锁、异步提示词与过期目标校验，并覆盖 UAP 零/多目标拒绝、唯一目标成功、普通广播及禁用目标保持。测试修复不部署界面或修改正式工作流，来源网页、物理 IME 与 GPU 仍须独立验收。
 
 - 2026-10-06：经用户明确请求，将网页桥接、UAP 清理与维护保护共 11 文件部署到运行区，保留启动参数重载后端。真实收件、正负方向采用/序列化/撤销、新版 UAP 实页加载与三份执行源码摘要通过；五模块就绪、队列为空、保护范围与数据库逻辑内容保持。Chrome 油猴安装、五站当前网页 GM 发送及生产整页刷新仍为单独边界，见[运行区部署收据](../../receipts/browser_live_deployment_20261006.json)。
@@ -33,3 +35,8 @@
 - 2026-10-05：补入 [主题交互测试](../archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/test_candidate.cjs)与 [浏览器回执](../archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/browser_acceptance.json)；[M9 测量实现](../archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/browser_measurement.js)、[生命周期采集](../archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/lifecycle_collector.js)及 [历史浏览器验收](../archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261003_015012_R1_autonomous/UI_FINAL_ACCEPTANCE.json)用于接手。未携带的基线、fixture、浏览器轨迹仍依赖仓外原件，不把本轮归档叫作重新 UI/物理 IME 验收。
 
 - 2026-10-05：保留彩色动漫主题、轻量图标和布局；登记常用参数、任务状态、弹窗及结果交互的真实实现与验收边界。
+
+
+## 2026-10-10 丝袜修复入口提示
+
+修复面板补充完整双腿选区、袜口／足部／遮挡修边、摩尔纹深度要求与试验性油光的使用提示。只改说明，导航、编辑器按钮、运行拦截和现有参数保持；工作台相关回归及实际双输出复验见[工作流更新](../changes/runtime-workflows/2026-10-10-upstream-effects.md)。本轮未部署生产。

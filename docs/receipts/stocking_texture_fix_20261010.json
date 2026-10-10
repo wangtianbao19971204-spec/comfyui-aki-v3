@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "date": "2026-10-10",
+  "feature": "runtime-stocking-texture",
+  "pass_for_scoped_acceptance": true,
+  "upstream_commit": "ad4cc92de86021f20bedcf9de5b27ec0ae574184",
+  "upstream_archive_sha256": "d5cb7fdd7aea7a5d3902cf02126e0334d926bbfa1d1993ef9eba3f817267eb72",
+  "source_image_sha256": "d8e9f3b1d968560dcdcce959ad4707ef13ba5de905c9c927b93582ff47f2d672",
+  "validation": {
+    "cpu_contracts": 19,
+    "frontend_regressions": 11,
+    "final_offline_cases": 70,
+    "full_upstream_document_parity": true,
+    "upstream_renderer_parity_cases": 20,
+    "isolated_api_cases": 14,
+    "production_api_cases": 14,
+    "api_reference_jobs": 2,
+    "isolated_ui_executions": 2,
+    "production_ui_executions": 3,
+    "isolated_live_outputs_identical": 14,
+    "outside_changed_pixels": 0,
+    "max_png_layer_error_8bit": 0.9921568627450981,
+    "float_composite_error_bound": 1e-07
+  },
+  "dark_weave_default_without_sparkles": {
+    "original": [
+      0,
+      0,
+      0
+    ],
+    "fixed": [
+      13698,
+      14506,
+      10477
+    ],
+    "styles": [
+      "knit",
+      "loops",
+      "lines"
+    ]
+  },
+  "deployment": {
+    "changed_plugin_files": 9,
+    "verified_plugin_files": 26,
+    "protected_unchanged_files": 77,
+    "database_backup_count": 5,
+    "original_launcher_used": true,
+    "same_startup_flag_values": true,
+    "queue_empty": true,
+    "production_deployed": true,
+    "models_executed": false,
+    "prior_workflows_unchanged": true
+  },
+  "limitations": [
+    "One real near-black illustration and synthetic controls; not universal visual certification.",
+    "Pure black stays black; default shadow texture is subtle at reduced zoom.",
+    "Original private PSD fixtures were unavailable.",
+    "Pre-existing ComfyApp initialization and Vite errors remain outside this plugin scope."
+  ],
+  "evidence": {
+    "round2-dark/COMPARISON.json": "8e86fbca470011a59d936478d7688ab7b004d41727e667be25fd67298f7244de",
+    "round2-control/COMPARISON.json": "e87d2fe6e20549c92d32701c57c86c6b9cda6d7e6af9f737ab0aa4948d2f9fea",
+    "COORDINATE_ROUND1_REPRO.json": "631c5383f7c498d29f4dc1b696d3ac4250494ac293230054abf01f8b5a78b4b6",
+    "iso-api/ACCEPTANCE.json": "9e54c8417868f55f06c03ecf6881ecbc40009302b98def9893609ad1de182eab",
+    "live-api/ACCEPTANCE.json": "5aa703abd58bbb2529553b19068e17ba633f34faee3a7f1ea5a7a00b44280c97",
+    "ISO_BROWSER_ACCEPTANCE.json": "967f50f38e153bd9f10aaadec34a80379b4aa9db984455d05bd8a83ca245800d",
+    "LIVE_BROWSER_ACCEPTANCE.json": "06e13c5d244b24f00275486a34adcd2104c75e2da40035075e833c3a4d0af7eb",
+    "DEPLOY_BEFORE.json": "5ea85838b3129d406a5d884c44bfbcfeb2892c854620a437586c4ed2c6679a9c",
+    "DEPLOYMENT.json": "698850621259e3beca2f7d19334b69d5d4c2649836beb1434944412eb908cb58",
+    "LIVE_IDENTITY_CHECK.json": "fc32e8e4f197bffb03c506575e9db43247d821881c35a59bfaedabc1b022c221",
+    "LIVE_UI_FINAL.jpg": "d45e3501b689b10fb304c6327096f613bd99dcdeca7bf4c5341f5347862f2249",
+    "DARK_FIX_COMPARISON.png": "72600241e5eb0ec32ed2653afcce9017c27beec39eba2e1b96ab5d55f80ef182",
+    "ROLLBACK.md": "6e76ce0fb53d0e152251b008f72db5e40d6812fbed8a8b07557cb5ba1d45fef9"
+  }
+}

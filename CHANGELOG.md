@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- 2026-10-10：自用丝袜独立工作流补充完整选区和新版效果的操作提示，完整双腿工程通过油光、摩尔纹与保存重载三次隔离执行，成品／透明层保持；见[更新说明](docs/technical/changes/runtime-workflows/2026-10-10-upstream-effects.md)。未部署生产。
+
+- 2026-10-10：按用户要求精简丝袜 fork 中英简介，新增三张完整选区／真实输出对照的精确发布清单与导出校验；原作者说明及署名保留。运行算法与工作流未变，见[展示发布说明](docs/technical/changes/runtime-stocking-texture/2026-10-10-reviewed-showcase.md)。
+
+- 2026-10-10：丝袜纹理来源更新至作者 `f74c8ac`，接入默认关闭的摩尔纹、深度就绪检查和新版油光遮挡连接；旧工作流参数兼容。修正展示说明，局部选区回归图不作为成品展示，完整选区候选留在仓外。测试与隔离实页范围见[更新记录](docs/technical/changes/runtime-stocking-texture/2026-10-10-upstream-effects.md)；本轮未部署生产。
+
+- 2026-10-09：新增独立丝袜纹理引导编辑／渲染节点，复用固定 MIT 算法、五样式、可选蒙版／深度和透明图层；支持工作流引导持久化及 CPU 隔离验收，未部署生产。见[技术说明](docs/technical/runtime/stocking-texture.md)。
+
 - 2026-10-09：新增 LoRA 日常增量导入入口；本批 3 新增分类移入并登记来源，12 重复原件保留，旧缓存身份及个人字段保持。完整摘要与在线卡片／加载器通过，无重启；仅提交清单与工具。见[快速流程](docs/technical/runtime/lora-quick-import.md)。
 
 - 2026-10-09：适配原绘世图形界面与唯一主仓：恢复真实本体版本读取，保留 GUI 参数及自动打开浏览器选择，增加 opt-in 生产插件参数、源码／Git／进程保护、自动依赖维护延后及精确 7 文件候选／回滚包。隔离原界面和无服务启动／停止链通过；用户授权后已部署，原 GUI 启动、5 模块工作台实页及空队列通过现场验收，原版与回滚保留。管理范围与未测限制见[绘世说明](docs/technical/runtime/huishi-launcher.md)。

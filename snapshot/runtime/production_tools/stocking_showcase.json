@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "upstream_commit": "f74c8ac0190ec43b2cdfcb13db86f35a83283311",
+  "reviewed_on": "2026-10-10",
+  "reviewer": "AI assistant visual review; publication requested by the fork owner",
+  "panel_order": ["Input", "Corrected selection, separate legs", "Actual plugin output"],
+  "png_metadata": "IHDR, IDAT and IEND only; no embedded workflow or private paths",
+  "rendering": "Original renderer, dark adaptation off, sparkles off, moire off",
+  "scope": "Three reviewed comparison panels only; no input collection, project assets or model weights",
+  "files": [
+    {
+      "name": "black-crossed-before-mask-after.png",
+      "bytes": 628035,
+      "sha256": "b2c92a15666694a08a4742d1f2eab4e0b913298d85a3d340b55d38769049c5d2",
+      "width": 1290,
+      "height": 818,
+      "style": "oily",
+      "density": 75,
+      "manual_strength": 35,
+      "selection_pixels": 405708,
+      "review": "Both visible legs and foreground stocking-covered foot; split follows the curved overlap, with a crease divider. Straight split seam removed."
+    },
+    {
+      "name": "white-bent-before-mask-after.png",
+      "bytes": 278553,
+      "sha256": "ec67eb2bdf7681c2dc90101f4a9c6435d2b1a9a41973f764285b6710aa4c1919",
+      "width": 1920,
+      "height": 414,
+      "style": "coil",
+      "density": 90,
+      "manual_strength": 25,
+      "selection_pixels": 200153,
+      "review": "Both visible fabric surfaces selected and separated; fine weave is subtle at overview scale."
+    },
+    {
+      "name": "nearblack-standing-before-mask-after.png",
+      "bytes": 375677,
+      "sha256": "6ec261f41a893b04cc7d5692361df129b5bd29a7504128d5ebd4c94f212eabda",
+      "width": 1290,
+      "height": 806,
+      "style": "oily",
+      "density": 75,
+      "manual_strength": 35,
+      "selection_pixels": 31244,
+      "review": "Both socks selected from the tops to the shoe boundary; shoes excluded, continuous subdued sheen."
+    }
+  ]
+}

@@ -24,7 +24,8 @@
     "rgthree-comfy",
     "TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters",
     "vnccs-utils",
-    "ComfyUI-GGUF"
+    "ComfyUI-GGUF",
+    "ComfyUI-Stocking-Texture"
   ],
   "diagnostic": [
     "ComfyUI-Anima-LLLite",

@@ -1,0 +1,142 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-10T12:27:03.769644+00:00",
+  "scope": "Fork presentation and exact reviewed-media export; no runtime code or workflow changes",
+  "upstream_commit": "f74c8ac0190ec43b2cdfcb13db86f35a83283311",
+  "upstream_rechecked": true,
+  "previous_tested_fork_commit": "fe65244b218cb029179890da71e805963db464fe",
+  "user_requested_publication": true,
+  "visual_review_by": "assistant",
+  "user_visual_signoff_claimed": false,
+  "old_partial_masks_excluded": true,
+  "historical_candidate_reviews_unchanged": true,
+  "showcase_files": [
+    {
+      "name": "black-crossed-before-mask-after.png",
+      "bytes": 628035,
+      "sha256": "b2c92a15666694a08a4742d1f2eab4e0b913298d85a3d340b55d38769049c5d2",
+      "width": 1290,
+      "height": 818,
+      "style": "oily",
+      "density": 75,
+      "manual_strength": 35,
+      "selection_pixels": 405708,
+      "review": "Both visible legs and foreground stocking-covered foot; split follows the curved overlap, with a crease divider. Straight split seam removed."
+    },
+    {
+      "name": "white-bent-before-mask-after.png",
+      "bytes": 278553,
+      "sha256": "ec67eb2bdf7681c2dc90101f4a9c6435d2b1a9a41973f764285b6710aa4c1919",
+      "width": 1920,
+      "height": 414,
+      "style": "coil",
+      "density": 90,
+      "manual_strength": 25,
+      "selection_pixels": 200153,
+      "review": "Both visible fabric surfaces selected and separated; fine weave is subtle at overview scale."
+    },
+    {
+      "name": "nearblack-standing-before-mask-after.png",
+      "bytes": 375677,
+      "sha256": "6ec261f41a893b04cc7d5692361df129b5bd29a7504128d5ebd4c94f212eabda",
+      "width": 1290,
+      "height": 806,
+      "style": "oily",
+      "density": 75,
+      "manual_strength": 35,
+      "selection_pixels": 31244,
+      "review": "Both socks selected from the tops to the shoe boundary; shoes excluded, continuous subdued sheen."
+    }
+  ],
+  "export_contract_tests_passed": 5,
+  "payload_check": {
+    "pass": true,
+    "exported_files": 43,
+    "changed_from_previously_tested_payload": [
+      "README.en.md",
+      "README.md",
+      "integrations/comfyui/README.md"
+    ],
+    "added": [
+      "integrations/comfyui/SHOWCASE.json",
+      "integrations/comfyui/SHOWCASE.md",
+      "integrations/comfyui/docs/images/black-crossed-before-mask-after.png",
+      "integrations/comfyui/docs/images/nearblack-standing-before-mask-after.png",
+      "integrations/comfyui/docs/images/white-bent-before-mask-after.png"
+    ],
+    "runtime_source_unchanged": true,
+    "local_document_links_checked": 81,
+    "original_readmes_preserved": true,
+    "pngs_reviewed": 3,
+    "png_embedded_metadata": false,
+    "original_candidate_reviews_preserved": true
+  },
+  "production_deployed": false,
+  "workflow_pr_policy": "Submit only after completion; no additional workflow PR in this presentation phase",
+  "delivery_status": "Fork branch and About description updated; default-branch README/gallery/image bytes read back and verified",
+  "external_evidence_id": "stocking-upstream-refresh-20261010-01/showcase-publication",
+  "evidence": [
+    {
+      "file": "GITHUB-PREFLIGHT.json",
+      "sha256": "d516475e62a62cc32bcce796aa046a8f6c12fde60340e3cc60b028edb2185e03"
+    },
+    {
+      "file": "EXPORT.json",
+      "sha256": "fa1fc11c06903bbebc129f94ddc1b8698c58b57ef8eca778464790c748ad55f7"
+    },
+    {
+      "file": "PAYLOAD-CHECK.json",
+      "sha256": "347441c0e5fb3a1876b536a9bc7b9c4bce6beb3db3e1b445787a12caa76dab49"
+    },
+    {
+      "file": "PUBLICATION-CHECK.json",
+      "sha256": "4608cb67253a6c044b829443f2c326466a585697db9488687e9273cb88d75383"
+    },
+    {
+      "file": "FORK-STAGED-SECURITY.json",
+      "sha256": "11ef26604a9156487ca4588a08e757c98e2f98e49de1f8205eede046b9a79635"
+    },
+    {
+      "file": "FORK-HISTORY-SECURITY.json",
+      "sha256": "7457e92c06b907e64d1361e86711266f16254091d94dd96cb771b6e5af8b4d77"
+    },
+    {
+      "file": "FORK-DELIVERED.json",
+      "sha256": "bc3043f6016a4d1e79bdaebd32aee8d3fcbd3686f7427497b5832fc855d1893f"
+    },
+    {
+      "file": "FORK-READBACK.json",
+      "sha256": "6431e323353b1255df39c661413977212c894f05b0722339db641f61e00f7760"
+    },
+    {
+      "file": "UPSTREAM-ISSUE-ATTEMPT.json",
+      "sha256": "216c4d10ac8e4289d1c8c8540ebec865758168b9c87fba9435df038cf96ff42f"
+    },
+    {
+      "file": "UPSTREAM-ISSUE-BODY.md",
+      "sha256": "86590ecc6a7e9a374683e18f8abebbaa88ce69b286e59eba0a2c276063ec1918"
+    },
+    {
+      "file": "NATIVE-UI-BLOCKER.json",
+      "sha256": "a78e30dd63df39fe96a0f6d6ea93fbebae9dd3e24142dd2198fcfb26ecb7eb6f"
+    }
+  ],
+  "fork_commit": "dfb28731f4b39c3403f7427bd69fd3e4945de780",
+  "fork_url": "https://github.com/wangtianbao19971204-spec/stocking-texture-tool",
+  "upstream_issue": {
+    "created": false,
+    "status": 403,
+    "message": "Resource not accessible by personal access token",
+    "required_permissions": "issues=write",
+    "attempted_at": "2026-10-10T12:26:30.808583+00:00",
+    "browser_fallback": "User reports Chrome signed in. Browser extension transport failed. At user request, native Windows Computer Use found Chrome but stopped this turn because the current URL could not be reliably determined; no issue submitted."
+  },
+  "manual_issue_completion": {
+    "confirmed_by_user": true,
+    "verified_via_github": true,
+    "url": "https://github.com/silvermoong/stocking-texture-tool/issues/3",
+    "title": "pr提交申请",
+    "posted_by": "user",
+    "verification_receipt": "stocking_workflow_refresh_20261010.json"
+  }
+}

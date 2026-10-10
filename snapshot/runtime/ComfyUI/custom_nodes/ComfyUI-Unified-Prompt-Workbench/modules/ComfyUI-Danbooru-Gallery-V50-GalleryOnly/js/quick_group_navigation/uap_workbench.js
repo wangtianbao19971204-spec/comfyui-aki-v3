@@ -2,6 +2,7 @@ import { app } from "../../../scripts/app.js";
 import { createDailyControls } from "./uap_daily_controls.js";
 import {mountFunctionIcon} from '/extensions/ComfyUI-Unified-Prompt-Workbench/ui_identity.js';
 import {installWorkflowGuard} from '/extensions/ComfyUI-Unified-Prompt-Workbench/runtime_controls.js';
+import {workflowChoices, isWorkflowChoice, openWorkflowChoice} from '/extensions/ComfyUI-Unified-Prompt-Workbench/repair_workflow.js';
 
 export function focusGroups(names, zoom = 1) {
     const groups = app.graph._groups.filter(g => names.includes(g.title));
@@ -187,7 +188,13 @@ function mount() {
     };
     branchSelect = element("select", "", first);
     branchSelect.setAttribute("aria-label", "浏览工作分支");
-    branchSelect.onchange = () => setBranch(branchSelect.value);
+    branchSelect.onchange = async () => {
+        const value=branchSelect.value;
+        if(!isWorkflowChoice(value)) {setBranch(value);return;}
+        branchSelect.value=viewBranch;
+        try {await openWorkflowChoice(app,value);}
+        catch(error) {status.textContent=error.message;}
+    };
     activate = element("button", "启用此分支", first);
     activate.onclick = () => activateBranch(viewBranch);
     status = element("span", "", first, { className: "uap-status" });
@@ -250,7 +257,7 @@ app.registerExtension({
         panel.hidden = !c;
         if (!c) { dailyControls.show(false); return; }
         branchSelect.replaceChildren();
-        c.branches.forEach(b => element("option", b.label, branchSelect, { value: b.id }));
+        workflowChoices(c).forEach(b => element("option", b.label, branchSelect, { value: b.value }));
         setBranch(c.viewBranch || c.activeBranch, false);
         const requestedStage = branch().stages.some(s => s.id === c.stage) ? c.stage : branch().stages[0].id;
         requestAnimationFrame(() => requestAnimationFrame(() => setStage(requestedStage)));

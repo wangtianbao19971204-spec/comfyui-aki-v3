@@ -4,6 +4,7 @@ import {mountRuntimeControls,legacyControlIssue,refinementBatchIssue,modelOption
 import {mountRefinementControls} from '/extensions/ComfyUI-Unified-Prompt-Workbench/refinement_controls.js';
 import {attachPromptAutocomplete} from '/extensions/ComfyUI-Unified-Prompt-Workbench/resource_actions.js';
 import {mountThemeToggle} from '/extensions/ComfyUI-Unified-Prompt-Workbench/ui_theme.js';
+import {mountStockingControls} from '/extensions/ComfyUI-Unified-Prompt-Workbench/repair_workflow.js';
 import {SELECTOR_TOOLS, openPromptSelector} from '/extensions/ComfyUI-Unified-Prompt-Workbench/selector_tools.js';
 import { app } from "../../../scripts/app.js";
 import { api } from "../../../scripts/api.js";
@@ -466,6 +467,18 @@ export function createDailyControls(jump) {
         clearFind.onclick=()=>{findControl.value='';applyFind();findControl.focus();};
         findControl.onkeydown=event=>{if(composing||event.isComposing||event.keyCode===229)return;if(event.key==='Escape'&&findControl.value){event.preventDefault();event.stopPropagation();clearFind.click();}};
         const fields = el("fieldset", "", panel, { disabled: !isActive });
+        const stocking=find('StockingTextureStudio');
+        if(stocking) {
+            findBar.hidden=true;libraryShortcut.hidden=true;
+            fields.style.display='block';
+            sync.push(mountStockingControls(fields,{app,node:stocking,element:el,
+                isCurrent:()=>isCurrent()&&app.graph.extra?.uap_workbench?.activeBranch===branch.id}));
+            fitEmbeddedTools();
+            const embeddedTools=panel.querySelector('.desk-embedded-tools');
+            if(embeddedTools)embeddedTools.open=embeddedToolsOpen;
+            panel.hidden=!shown;position();
+            return;
+        }
         fields.addEventListener('focusin',event=>markArea(event.target.closest('section[data-desk-area]')?.dataset.deskArea));
         const left = el("div", "", fields, { className: "desk-column" });
         const middle = el("div", "", fields, { className: "desk-column" });

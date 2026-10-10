@@ -1,0 +1,157 @@
+{
+  "revision": 0,
+  "last_node_id": 2,
+  "last_link_id": 1,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadImage",
+      "pos": [
+        100,
+        150
+      ],
+      "size": [
+        270,
+        314
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "图像",
+          "name": "image",
+          "type": "COMBO",
+          "widget": {
+            "name": "image"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "选择文件上传",
+          "name": "upload",
+          "type": "IMAGEUPLOAD",
+          "widget": {
+            "name": "upload"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "图像",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            1
+          ]
+        },
+        {
+          "localized_name": "遮罩",
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "stocking-example.png",
+        "image"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "StockingTextureStudio",
+      "pos": [
+        510,
+        150
+      ],
+      "size": [
+        370,
+        450
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "image",
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 1
+        },
+        {
+          "localized_name": "depth",
+          "name": "depth",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "project_json",
+          "name": "project_json",
+          "type": "STRING",
+          "widget": {
+            "name": "project_json"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "成品",
+          "name": "成品",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "localized_name": "仅丝袜透明图层",
+          "name": "仅丝袜透明图层",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "localized_name": "图层透明度",
+          "name": "图层透明度",
+          "type": "MASK",
+          "links": null
+        },
+        {
+          "localized_name": "问题标记",
+          "name": "问题标记",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "localized_name": "处理说明",
+          "name": "处理说明",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "StockingTextureStudio"
+      },
+      "widgets_values": [
+        "{}"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+}
