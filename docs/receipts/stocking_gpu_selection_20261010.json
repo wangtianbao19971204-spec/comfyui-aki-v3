@@ -1,0 +1,322 @@
+{
+  "schema": 1,
+  "date": "2026-10-10",
+  "feature": "runtime-stocking-texture",
+  "scope": "GPU SAM/depth with bounded CPU caches and ComfyUI queue coordination",
+  "pass": true,
+  "production_deployed": false,
+  "base_commit": "976d0b636bc972edb8cfdbf904e754a648140205",
+  "validation": {
+    "python_tests": 55,
+    "frontend_tests": 17,
+    "compiled_adapter_syntax": true,
+    "images": [
+      {
+        "fixture": "black-crossed-fp32",
+        "image_sha256": "1115a0b586313743281533d69def83ef9ea6fbd68f944587dfbbc53d04a4fa93",
+        "points": [
+          [
+            440,
+            1174
+          ],
+          [
+            600,
+            1100
+          ],
+          [
+            350,
+            1500
+          ]
+        ],
+        "cpu_exact": true,
+        "sam_min_iou": 0.9999752080048394,
+        "sam_max_changed_pixels": 10,
+        "depth_error": {
+          "max": 3.218650817871094e-05,
+          "mean": 2.7988739930151496e-06,
+          "max_divided_by_range": 5.080451393966727e-06
+        },
+        "timings_seconds": {
+          "baseline_cpu_0": 4.336806,
+          "baseline_cpu_1": 3.088087,
+          "baseline_cpu_2": 3.139864,
+          "cached_cpu_0": 3.135907,
+          "cached_cpu_1": 0.041589,
+          "cached_cpu_2": 0.037444,
+          "gpu_0": 1.122476,
+          "gpu_1": 0.124865,
+          "gpu_2": 0.129727,
+          "gpu_3": 0.129023,
+          "gpu_4": 0.12073,
+          "gpu_5": 0.125204,
+          "other_image": 0.19685,
+          "return_image": 0.12069,
+          "baseline_depth": 6.897651,
+          "cached_cpu_depth": 4.576495,
+          "gpu_depth_0": 0.241686,
+          "gpu_depth_1": 0.222061
+        },
+        "cuda_workspace_bytes": 9568256,
+        "cuda_tensors_after_workspace_release": 0
+      },
+      {
+        "fixture": "white-bent-fp32",
+        "image_sha256": "c04e9b7b78474f9729928f9a05c8e18875187d6f867615fddb3420b475024ba4",
+        "points": [
+          [
+            672,
+            502
+          ],
+          [
+            710,
+            560
+          ]
+        ],
+        "cpu_exact": true,
+        "sam_min_iou": 0.9999702512056843,
+        "sam_max_changed_pixels": 26,
+        "depth_error": {
+          "max": 3.230571746826172e-05,
+          "mean": 1.7107771554947249e-06,
+          "max_divided_by_range": 6.5605189230058465e-06
+        },
+        "timings_seconds": {
+          "baseline_cpu_0": 4.332876,
+          "baseline_cpu_1": 3.073044,
+          "cached_cpu_0": 3.233519,
+          "cached_cpu_1": 0.035653,
+          "gpu_0": 0.967817,
+          "gpu_1": 0.110855,
+          "gpu_2": 0.121427,
+          "gpu_3": 0.125168,
+          "other_image": 0.198351,
+          "return_image": 0.11072,
+          "baseline_depth": 7.220398,
+          "cached_cpu_depth": 4.509695,
+          "gpu_depth_0": 0.27015,
+          "gpu_depth_1": 0.23928
+        },
+        "cuda_workspace_bytes": 9568256,
+        "cuda_tensors_after_workspace_release": 0
+      },
+      {
+        "fixture": "nearblack-standing-fp32",
+        "image_sha256": "07f6d7ef9cc0f4174c6fb4a39bb8130b27b1dc12dbe64153130713c7ca30dbf1",
+        "points": [
+          [
+            314,
+            1031
+          ],
+          [
+            580,
+            1010
+          ]
+        ],
+        "cpu_exact": true,
+        "sam_min_iou": 0.9999935659251395,
+        "sam_max_changed_pixels": 2,
+        "depth_error": {
+          "max": 3.165006637573242e-05,
+          "mean": 1.3623510994875687e-06,
+          "max_divided_by_range": 5.220792526924148e-06
+        },
+        "timings_seconds": {
+          "baseline_cpu_0": 4.62411,
+          "baseline_cpu_1": 3.096303,
+          "cached_cpu_0": 3.213961,
+          "cached_cpu_1": 0.030635,
+          "gpu_0": 0.957619,
+          "gpu_1": 0.120697,
+          "gpu_2": 0.119489,
+          "gpu_3": 0.113703,
+          "other_image": 0.1891,
+          "return_image": 0.111775,
+          "baseline_depth": 2.670404,
+          "cached_cpu_depth": 0.779964,
+          "gpu_depth_0": 0.134843,
+          "gpu_depth_1": 0.102731
+        },
+        "cuda_workspace_bytes": 9568256,
+        "cuda_tensors_after_workspace_release": 0
+      }
+    ],
+    "http_clicks": [
+      {
+        "label": "first_click",
+        "http_seconds": 2.59836709999945,
+        "inference": {
+          "model_cached": false,
+          "embedding_cached": false,
+          "device": "NVIDIA GeForce RTX 5090 D",
+          "backend": "cuda:0",
+          "fallback": null,
+          "seconds": 2.331730999998399
+        }
+      },
+      {
+        "label": "cached_click",
+        "http_seconds": 1.103845799996634,
+        "inference": {
+          "model_cached": true,
+          "embedding_cached": true,
+          "device": "NVIDIA GeForce RTX 5090 D",
+          "backend": "cuda:0",
+          "fallback": null,
+          "seconds": 0.8074879000050714
+        }
+      },
+      {
+        "label": "cached_click",
+        "http_seconds": 0.2973070000007283,
+        "inference": {
+          "model_cached": true,
+          "embedding_cached": true,
+          "device": "NVIDIA GeForce RTX 5090 D",
+          "backend": "cuda:0",
+          "fallback": null,
+          "seconds": 0.14568869999493472
+        }
+      },
+      {
+        "label": "during_depth",
+        "http_seconds": 0.8123105999984546,
+        "inference": {
+          "model_cached": true,
+          "embedding_cached": true,
+          "device": "NVIDIA GeForce RTX 5090 D",
+          "backend": "cuda:0",
+          "fallback": null,
+          "seconds": 0.4992513000033796
+        }
+      },
+      {
+        "label": "gpu_after_queue",
+        "http_seconds": 0.6837117000104627,
+        "inference": {
+          "model_cached": true,
+          "embedding_cached": true,
+          "device": "NVIDIA GeForce RTX 5090 D",
+          "backend": "cuda:0",
+          "fallback": null,
+          "seconds": 0.5097145000036107
+        }
+      }
+    ],
+    "http_depth": {
+      "model_cached": false,
+      "device": "NVIDIA GeForce RTX 5090 D",
+      "backend": "cuda:0",
+      "fallback": null,
+      "seconds": 1.4095315000013215
+    },
+    "http_busy_fallback": {
+      "model_cached": true,
+      "embedding_cached": false,
+      "device": "CPU",
+      "backend": "cpu",
+      "fallback": "comfy_busy",
+      "seconds": 9.325107399999979
+    },
+    "http_cycle_undo_redo_apply_reopen": true,
+    "depth_render_comparison": {
+      "pass": true,
+      "same_project_and_settings": true,
+      "rows": [
+        {
+          "style": "oily",
+          "moire_on": false,
+          "max_channel_error": 0,
+          "mean_channel_error": 0.0,
+          "changed_pixels": 0,
+          "pixels": 2073600
+        },
+        {
+          "style": "knit",
+          "moire_on": true,
+          "max_channel_error": 1,
+          "mean_channel_error": 5.304783950617284e-06,
+          "changed_pixels": 33,
+          "pixels": 2073600
+        }
+      ]
+    },
+    "oom_and_low_vram": "fault injection only",
+    "browser_verified": false,
+    "browser_blocker": "Native computer control could not determine the current browser URL reliably; no further UI input attempted",
+    "production_process_and_four_source_files_unchanged": true,
+    "isolated_service_stopped": true
+  },
+  "candidate_files": [
+    {
+      "file": "studio_models.py",
+      "candidate_sha256": "408903d0db54efc119a1bdcebcd27ad53519f0d8b39f4aa7ba1fea93bfbe7c30",
+      "production_sha256": "281bb2cc72d47b48e2d8f799361bdaf41948dec699280fb0a99e762282f12a2d",
+      "production_matches_base": true,
+      "isolated_matches_candidate": true
+    },
+    {
+      "file": "studio.py",
+      "candidate_sha256": "d3b12dbe3ab0d1c636bcd3939765fa05bce9a617314fa98adba6b7726e1633fc",
+      "production_sha256": "5e6f63e28e01f29b9f7901ed907d95cdbaa4bc4438d9ed23cf79eacd47cb8308",
+      "production_matches_base": true,
+      "isolated_matches_candidate": true
+    },
+    {
+      "file": "studio_api.py",
+      "candidate_sha256": "4a9800c934fa7d52abc1b2c2c43dce796a289fcc67a7df21f3cb8986d70d34d6",
+      "production_sha256": "d9477f4836c752ef45b8c75ba4981c72336609f45c1b780d401ea6a7e76b1d75",
+      "production_matches_base": true,
+      "isolated_matches_candidate": true
+    },
+    {
+      "file": "studio_assets.py",
+      "candidate_sha256": "2b2fd448c0f86b708a82865f07122485daf935a809c2405be22e2b6cedc33b2f",
+      "production_sha256": "4c3178f63da6f53426ed756fd11192a48dd327559e9745e9d662e4ee14b4f76c",
+      "production_matches_base": true,
+      "isolated_matches_candidate": true
+    }
+  ],
+  "evidence_directory": "stocking-gpu-selection-20261010-01",
+  "evidence_files": [
+    {
+      "path": "black-crossed-fp32/ACCEPTANCE.json",
+      "sha256": "581ee48771241c588df795a41ef6488ccfdd1fcfee096ef531bd2adf673efdae"
+    },
+    {
+      "path": "white-bent-fp32/ACCEPTANCE.json",
+      "sha256": "20253935e5a3d3a5aa53729905aeeae463ccea332ac4a2074dc2c99be055d4fb"
+    },
+    {
+      "path": "nearblack-standing-fp32/ACCEPTANCE.json",
+      "sha256": "0f8038d9f3c3f79bdec49e3a0ae6a06fc9787179d7057aa47247478eb0cf82eb"
+    },
+    {
+      "path": "http-02/ACCEPTANCE.json",
+      "sha256": "f644cf973ae1a7752abc5388577183b6aad9bab74fb3be1310180eea59772101"
+    },
+    {
+      "path": "depth-render-comparison/ACCEPTANCE.json",
+      "sha256": "28341f7c11229e910bb3b77e35da39e6d57c69ce8cd2678449f92bd2b74de718"
+    },
+    {
+      "path": "FINAL_VERIFICATION.json",
+      "sha256": "731964746207c6b013e3d4d10df6eb38a3c0cdde793fee5859e2fcad3569dd4b"
+    },
+    {
+      "path": "ISOLATED_SOURCE.json",
+      "sha256": "3e667f77dd9aac3d68a26ac4949a313cde397f3616ec62f48c4f37c9450f9b7e"
+    },
+    {
+      "path": "python-tests.log",
+      "sha256": "7a332d2dbefc0b702073df3123cb337113a2f0c389087be5976d0e631c2cf8a3"
+    },
+    {
+      "path": "frontend-editor.log",
+      "sha256": "2d9163d20efacb1bf5c5356d8f495c51e2d1843eb9d0645ae687fc2ed30dd48f"
+    },
+    {
+      "path": "frontend-studio.log",
+      "sha256": "6ae4738e931ad1f838374b776a17703b297a383925639a22d0b79ac4f50d06a5"
+    }
+  ]
+}

@@ -59,6 +59,7 @@ class Studio:
         self.depth_enabled = bool(self.project.get("depth_enabled", True))
         self.dark_adapt = bool(self.project.get("dark_adapt", True))
         self.depth_status, self.depth_error = "idle", None
+        self.sam_inference, self.depth_inference = {}, {}
         self.depth_revision = 0
         self.on_event = lambda event: None
         self.last_access = time.monotonic()
@@ -77,6 +78,7 @@ class Studio:
         doc.sam_error = None if doc.sam_state == "ready" else "缺少 SAM ViT-B 模型"
         self.depth_status = "ready" if doc.disparity is not None else "idle"
         self.depth_error = None
+        self.sam_inference, self.depth_inference = {}, {}
         self._scene, self._adapted = (None, None), (None, None)
 
     def publish(self, event):
@@ -108,7 +110,8 @@ class Studio:
         if self.doc is None:
             return None
         result = self.doc.state()
-        result["sam"]["device"] = "CPU"
+        result["sam"]["device"] = self.sam_inference.get("device") or models.available(self.model_paths)["device"]
+        result["sam"]["inference"] = dict(self.sam_inference)
         return result
 
     def scene(self):
@@ -176,11 +179,13 @@ class Studio:
 
         def run():
             try:
-                disparity = models.estimate_depth(doc.art, self.model_paths)
+                info = {}
+                disparity = models.estimate_depth(doc.art, self.model_paths, info=info)
                 with self.lock:
                     if self.closed or self.doc is not doc or not self.depth_enabled or self.depth_revision != revision:
                         return
                     doc.disparity = disparity
+                    self.depth_inference = info
                     self.depth_status = "ready"
                     self.save_draft()
             except Exception as exc:
@@ -195,9 +200,11 @@ class Studio:
         doc.region(rid)
         if not np.isfinite([x, y]).all() or not 0 <= x < doc.w or not 0 <= y < doc.h:
             raise ValueError("点选坐标在画面外")
-        masks, _ = models.segment(doc.art, x, y, self.model_paths)
+        info = {}
+        masks, _ = models.segment(doc.art, x, y, self.model_paths, info=info)
         if self.doc is not doc or self.closed:
             raise ValueError("图片已更换，请重新点选")
+        self.sam_inference = info
         doc.segment_click(rid, x, y, subtract, masks, 0)
 
     def project_data(self):
