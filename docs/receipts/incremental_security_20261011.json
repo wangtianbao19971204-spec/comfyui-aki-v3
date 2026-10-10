@@ -1,0 +1,132 @@
+{
+  "schema": 1,
+  "date": "2026-10-11",
+  "feature": "operations-source-of-truth",
+  "base_commit": "976d0b636bc972edb8cfdbf904e754a648140205",
+  "pass": true,
+  "scope": "Local incremental pre-push content checks with full reachable-history coverage",
+  "production_modified": false,
+  "model_files_modified": false,
+  "tests": {
+    "related_tests": 173,
+    "pass": true,
+    "hook_syntax": true,
+    "technical_catalog": true
+  },
+  "benchmark": {
+    "cold": {
+      "seconds": 859.8989435999974,
+      "exit_code": 0,
+      "pass": true,
+      "scanned_objects": 82588,
+      "scanned_bytes": 7750769463,
+      "cache": {
+        "mode": "local-history-content-reuse",
+        "scope": "all-history",
+        "state": "cold",
+        "reused_objects": 0,
+        "reused_content_scan_bytes": 0,
+        "written": true,
+        "policy_sha256": "1a7ff38f52d45c17b03c6325d6201568fcee442c144ad20552112126af793765",
+        "all_object_bytes_rehashed": true,
+        "publication_evidence": false,
+        "content_scanned_objects": 82588,
+        "content_scanned_bytes": 7750769463
+      }
+    },
+    "warm": {
+      "seconds": 31.918870599998627,
+      "exit_code": 0,
+      "pass": true,
+      "equivalent_to_cold": true,
+      "compared_fields": [
+        "pass",
+        "findings",
+        "scanned_objects",
+        "scanned_bytes",
+        "cross_part_boundaries",
+        "reviewed_fixtures",
+        "compressed_objects",
+        "sensitive_named_objects",
+        "refs"
+      ],
+      "scanned_objects": 82588,
+      "scanned_bytes": 7750769463,
+      "cache": {
+        "mode": "local-history-content-reuse",
+        "scope": "all-history",
+        "state": "warm",
+        "reused_objects": 82458,
+        "reused_content_scan_bytes": 7725905312,
+        "written": true,
+        "policy_sha256": "1a7ff38f52d45c17b03c6325d6201568fcee442c144ad20552112126af793765",
+        "all_object_bytes_rehashed": true,
+        "publication_evidence": false,
+        "content_scanned_objects": 130,
+        "content_scanned_bytes": 24864151
+      }
+    },
+    "speedup": 26.94,
+    "finding_count": 0,
+    "compressed_objects": 14,
+    "reviewed_exceptions": 116,
+    "cross_part_boundaries": 120,
+    "observation": "One local run per mode; the initial staged gate also ran during part of the cold history scan. OS disk caches were not cleared."
+  },
+  "boundaries": {
+    "all_history_enumerated": true,
+    "all_object_bytes_sha256_checked": true,
+    "cache_scope_and_repository_bound": true,
+    "release_bundle_ci_remain_uncached": true,
+    "cache_is_not_a_standalone_attestation": true
+  },
+  "source_files": [
+    {
+      "path": "scripts/security_guard.py",
+      "sha256": "b986b6d4ab2bc339471a07869ced03ec83ee8048ec7196b69ee7575cd7ff8b19"
+    },
+    {
+      "path": "scripts/staged_scan_cache.py",
+      "sha256": "e099405001e01beb9d4c0f848888663a399a01c5b286e224a60a5cc64aa2fed0"
+    },
+    {
+      "path": ".githooks/run",
+      "sha256": "ddbf2908eaed22c9aa5eec06b9146b0da55ead6512b2ce06e2b7dfd56b9841bd"
+    },
+    {
+      "path": "tests/test_history_scan_cache.py",
+      "sha256": "b1fe078b9fa4e8e9341b36c467091d7e7563b0d498e3ab10ffc426d811b38b74"
+    },
+    {
+      "path": "tests/test_staged_scan_cache.py",
+      "sha256": "ea55a036786bac4ed04ae23ad8af78efa423f2baf1878fb14d0838bf981fc4cd"
+    }
+  ],
+  "evidence_directory": "incremental-security-20261010-01",
+  "evidence_files": [
+    {
+      "path": "history-cold.json",
+      "sha256": "ef7ad677f827cd7ba381c1de7b39e476dabbbc9b8c1d5f7e77259ed8e054ba52"
+    },
+    {
+      "path": "history-warm.json",
+      "sha256": "8ae51d4e163917dfb795cd0ef593a5fc61b2807922a8ed277cb451619606a926"
+    },
+    {
+      "path": "history-cold-timing.json",
+      "sha256": "d626dffdedcc650ad463cb490c58e76b60362bf03643a45a353145d0fe9ee33d"
+    },
+    {
+      "path": "history-warm-timing.json",
+      "sha256": "1f422d775548a8a883a4f4c1d08c8888b77ba8088e991d4f3130023efd021f4a"
+    },
+    {
+      "path": "final-tests.log",
+      "sha256": "617dad7c1bc74a30944824fccdaa96dbc06d208651605c6eb23d10e76b839978"
+    },
+    {
+      "path": "staged-check.log",
+      "sha256": "2afb05a8b00b4bf436ad8a8647c2c5b58aeb774e954041ccb75b8d04de644fc1"
+    }
+  ]
+}

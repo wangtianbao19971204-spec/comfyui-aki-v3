@@ -247,9 +247,9 @@ class StagedCacheTests(unittest.TestCase):
         self.assertFalse(report['cache']['written'])
 
     def test_policy_code_fingerprint_changes(self):
-        first = guard.staged_policy_fingerprint(None)
+        first = guard.cache_policy_fingerprint(None)
         with mock.patch.object(guard, 'OVERLAP', guard.OVERLAP + 1):
-            self.assertNotEqual(first, guard.staged_policy_fingerprint(None))
+            self.assertNotEqual(first, guard.cache_policy_fingerprint(None))
 
 
 if __name__ == '__main__':
