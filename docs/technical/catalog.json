@@ -899,7 +899,8 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_models.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_nodes.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_studio.js",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/MODEL_SOURCES.json"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/MODEL_SOURCES.json",
+        "snapshot/runtime/production_tools/export_stocking_upstream.py"
       ],
       "tests": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py",
@@ -913,25 +914,33 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/model_acceptance.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio_editor.cjs",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/studio_compare.py",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/feature_acceptance.py"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/feature_acceptance.py",
+        "snapshot/runtime/production_tools/test_export_stocking_upstream.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/bend_acceptance.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/visual_review.py"
       ],
       "evidence": [
         "docs/receipts/stocking_texture_20261009.json",
         "docs/receipts/stocking_texture_fix_20261010.json",
         "docs/receipts/stocking_texture_parity_20261010.json",
         "docs/receipts/stocking_texture_studio_20261010.json",
-        "docs/receipts/stocking_texture_complete_20261010.json"
+        "docs/receipts/stocking_texture_complete_20261010.json",
+        "docs/receipts/stocking_texture_bend_upstream_20261010.json"
       ],
       "acceptance": "checked-source",
       "watch": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/",
-        "examples/stocking-texture/"
+        "examples/stocking-texture/",
+        "snapshot/runtime/production_tools/export_stocking_upstream.py",
+        "snapshot/runtime/production_tools/test_export_stocking_upstream.py",
+        "snapshot/runtime/production_tools/stocking_upstream_README.md"
       ],
       "examples": [
         "examples/stocking-texture/README.md",
         "examples/stocking-texture/guides.example.json",
         "examples/stocking-texture/workflow_api.example.json",
-        "examples/stocking-texture/studio.workflow.json"
+        "examples/stocking-texture/studio.workflow.json",
+        "snapshot/runtime/production_tools/stocking_upstream_README.md"
       ]
     }
   ]

@@ -1,0 +1,157 @@
+{
+  "schema": 1,
+  "date": "2026-10-10",
+  "recorded_utc": "2026-10-10T10:34:33.495014+00:00",
+  "feature": "runtime-stocking-texture",
+  "pass_for_scoped_acceptance": true,
+  "upstream_commit": "6c0c620d1bfa6a2c2691cb2313e928d9c7244ee5",
+  "production_deployment_performed_this_round": false,
+  "isolated_service": "http://127.0.0.1:8197",
+  "bend": {
+    "cases": 18,
+    "selection_union_preserved": true,
+    "dark_adapt": false,
+    "direction_changes": {
+      "split": {
+        "common_solved_pixels": 113728,
+        "pixels_rotated_over_15_degrees": 31792,
+        "p95_rotation_degrees": 75.79075646943792
+      },
+      "arc": {
+        "common_solved_pixels": 113728,
+        "pixels_rotated_over_15_degrees": 43936,
+        "p95_rotation_degrees": 78.8363461008913
+      }
+    }
+  },
+  "final_export_validation": {
+    "files": 38,
+    "python_tests": 40,
+    "frontend_tests": 17,
+    "bend_cases": 18,
+    "exporter_tests": 3,
+    "changes_since_previous_full_suite": [
+      "README.md",
+      "tests/bend_acceptance.py"
+    ],
+    "original_core_UI_unchanged": true
+  },
+  "prior_candidate_checks": {
+    "python": 40,
+    "frontend": 17,
+    "HTTP_operation_checks": 51,
+    "standalone_passed": 114,
+    "standalone_skipped": 51,
+    "skip_reason": "Author-private fixtures unavailable",
+    "not_claimed_as_new_runs": true
+  },
+  "upstream_submission": {
+    "branch": "https://github.com/wangtianbao19971204-spec/stocking-texture-tool/tree/feat/comfyui-integration",
+    "commit": "b0c37243370a01e2392ac7939f6938cdae919142",
+    "draft_PR_created": false,
+    "error": {
+      "pass": false,
+      "http_status": 403,
+      "method": "POST",
+      "message": "Resource not accessible by personal access token",
+      "documentation_url": "https://docs.github.com/rest/pulls/pulls#create-a-pull-request",
+      "rate_remaining": "4996"
+    },
+    "compare_url": "https://github.com/silvermoong/stocking-texture-tool/compare/main...wangtianbao19971204-spec:stocking-texture-tool:feat/comfyui-integration?expand=1",
+    "AI_disclosure_and_attribution_prepared": true
+  },
+  "evidence_root": "G:\\ComfyUI-local\\validation\\stocking-upstream-pr-20261010-01",
+  "private_evidence": [
+    {
+      "path": "PAYLOAD-FINAL.json",
+      "sha256": "77bc83e6b5f24786da98b067c08fdb16916885c415cd4e03127cfc81c0deb20b"
+    },
+    {
+      "path": "VALIDATION.json",
+      "sha256": "220baa06b7ddb9a48715d83c3c1055cfc1b20244372e9039a7b8f305f97e7536"
+    },
+    {
+      "path": "FINAL-UNIT.log",
+      "sha256": "0afd5d006985c5b7e48163e477f02a8330afffd48cf7da840923af2a320e791a"
+    },
+    {
+      "path": "FINAL-FRONTEND.log",
+      "sha256": "793b80401cbfc1f2a20addac0a2cf259356811f35fe22e12ef10d4cb2ff584a6"
+    },
+    {
+      "path": "FINAL-BEND.log",
+      "sha256": "d80b4de03948720cfca78090253b9753c170256216f89d7dcbb9668094c5f788"
+    },
+    {
+      "path": "UPSTREAM-HISTORY-SECURITY.json",
+      "sha256": "a79e0b3a58c4925c6b6feeea9eca102bf9806b7e5f17d23dbff2e288b5d2f1e7"
+    },
+    {
+      "path": "UPSTREAM-PR-PAYLOAD.json",
+      "sha256": "8643015a17e8b9d8e3f0576ebfe96abdb6cc08ad7a9852ad72f0bf3384762f68"
+    },
+    {
+      "path": "UPSTREAM-PR-ERROR.json",
+      "sha256": "df219cd71a044e66fb78b466447668a517bc0b8273f23bedbe3f20c1d210b19b"
+    },
+    {
+      "path": "bend-compare-final/ACCEPTANCE.json",
+      "sha256": "d32f43251f65a19edfda9eb2dbbe017eee28966c7c468acf6c473161f3d958cc"
+    },
+    {
+      "path": "bend-ui/06-workflow-check.json",
+      "sha256": "8197af6f2e822acc609ab7bd7ac4cb50995f8c090383ed7bc9e1b31c22816f02"
+    },
+    {
+      "path": "bend-ui/06-history.json",
+      "sha256": "26045de10265332e06bf38a02e7af3a18a8c247bd50962de656f56e8d8455018"
+    },
+    {
+      "path": "bend-ui/06-workflow.json",
+      "sha256": "19a92f26db5c4ac72f7ee0101d7c25022f09ade255c40f91ca6b78eff1fa8caa"
+    },
+    {
+      "path": "bend-ui/06-workflow-result.jpg",
+      "sha256": "fdb5aedeb0f50205cc6f0b29bd70b4054e07efee51a3ccbef634840d506a77e8"
+    },
+    {
+      "path": "bend-ui/03-split-guides.jpg",
+      "sha256": "21f2c5b0d411aa421f91095cb6072bfee38a7b3cd16e65a4b1d5076e114b886a"
+    },
+    {
+      "path": "bend-ui/04-divider-arc.jpg",
+      "sha256": "e94e688d5d6929b31a480d86483328d434f34dbc758be4c3f24677b5a67f802f"
+    },
+    {
+      "path": "demo-review/REVIEW.json",
+      "sha256": "2369eebc6d380f23c5757de716821ff2a1c369666ef4e1df9ca2ff73411a3c6c"
+    },
+    {
+      "path": "CLEANUP.json",
+      "sha256": "fa4d685a4d601220ee712b310af0b9956a56d3ac25b9cf2d1054dfdd32b20f65"
+    }
+  ],
+  "limits": [
+    "Video feature description mapped individually with sampled key frames; not a transcript or full frame-by-frame review.",
+    "SAM masks are not manual ground truth; crossed legs may require correction.",
+    "Oily changes 334 outside-selection pixels in this bent-leg example, matching upstream.",
+    "No new production deployment, restart, workflow overwrite or model download."
+  ],
+  "workflow_pixels": {
+    "prompt_id": "b3d595f2-4553-4c65-922f-a089d60cfc03",
+    "max_delta_upstream": 0,
+    "max_delta_recomposed": 0
+  },
+  "cleanup": {
+    "recorded_utc": "2026-10-10T10:36:37.612336+00:00",
+    "isolated_pid": 33344,
+    "process_identity_matched": true,
+    "isolated_queue_empty_before_stop": true,
+    "isolated_process_stopped": true,
+    "production_service_responding": true,
+    "production_queue_running": 0,
+    "production_queue_pending": 0,
+    "production_process_action": null,
+    "evidence_and_drafts_preserved": true
+  }
+}

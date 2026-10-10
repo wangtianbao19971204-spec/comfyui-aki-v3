@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-10T00:07:14.336476+00:00",
+  "created_at": "2026-10-10T10:35:34.860487+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -11316,6 +11316,13 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/bend_acceptance.py",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/bend_acceptance.py",
+      "sha256": "9dd464dc1ccd79f071f877b74fa3836c2dd161d7a483787deef5cdbe0a677852",
+      "bytes": 6981,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/compare_upstream.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/compare_upstream.py",
       "sha256": "4df0d3c82ab00f44a9cf558b7021ce5632895017dbe9072abe98ded43a9c3b96",
@@ -11390,6 +11397,13 @@
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio_editor.cjs",
       "sha256": "b6678a5dcb8dd3ef4221630a052cf5de194fb1a08fa085f7360728da56ff525c",
       "bytes": 6009,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/visual_review.py",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/visual_review.py",
+      "sha256": "58e5a3ddc9e572e959570a8e805ed288600b9205f9cfb1950efe20a595fb442c",
+      "bytes": 6194,
       "kind": "file"
     },
     {
@@ -57509,6 +57523,13 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/export_stocking_upstream.py",
+      "path": "runtime/production_tools/export_stocking_upstream.py",
+      "sha256": "ff63c78f64160480296126a87697988de0f477ae1f2d48463fcb53e6b1b6b6ee",
+      "bytes": 6920,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/huishi_adapter/AdapterTests.cs",
       "path": "runtime/production_tools/huishi_adapter/AdapterTests.cs",
       "sha256": "410d9596321c4ff64e320ccc63530ebcb3ade78823c807a5ffaf2abc2c958114",
@@ -57677,6 +57698,13 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/stocking_upstream_README.md",
+      "path": "runtime/production_tools/stocking_upstream_README.md",
+      "sha256": "a9bb5f7d238136ec7ef42e8ed5e62c6293f634012282963de1cbdff0878f250b",
+      "bytes": 8592,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/templates/UAP统一生产工作台_v1.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v1.json",
       "sha256": "e235d3335e7aec81aa44a49eb371f73edb7f5c929291fc0d9570b8e1b6e80618",
@@ -57786,6 +57814,13 @@
       "path": "runtime/production_tools/test_browser_receiver.cjs",
       "sha256": "2258c38a37b87d3e78733c7bb9a048cd9d41c451803cdd6276e3ed1086464568",
       "bytes": 16329,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/test_export_stocking_upstream.py",
+      "path": "runtime/production_tools/test_export_stocking_upstream.py",
+      "sha256": "ae9885ec31c978ee1867d1915c3c34191feae48505761d1e3f3642d773a77e94",
+      "bytes": 3043,
       "kind": "file"
     },
     {
@@ -67771,24 +67806,18 @@
     }
   ],
   "development_revision": {
-    "note": "Independent stocking repair workflow, peer navigation and complete upstream feature acceptance",
-    "previous_manifest_sha256": "e76742fff1e0fe46b5418d688d92d27572d3808dcd345dcf53260f3334ee8415",
+    "note": "Add reproducible bent-leg parity checks and reviewed upstream export; no new runtime deployment",
+    "previous_manifest_sha256": "520eaf4a272b43bb4414f0f6bb3788e77c3293e35764624975ff16d14e590a2e",
     "source_changes": {
       "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/feature_acceptance.py",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
-        "ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json",
-        "production_tools/build_stocking_workflow.py",
-        "production_tools/templates/生产扩展_丝袜纹理修复.json",
-        "production_tools/test_stocking_workflow.cjs"
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/bend_acceptance.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/visual_review.py",
+        "production_tools/export_stocking_upstream.py",
+        "production_tools/stocking_upstream_README.md",
+        "production_tools/test_export_stocking_upstream.py"
       ],
       "removed": [],
-      "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js"
-      ]
+      "changed": []
     },
     "live_deployed": false,
     "removed_sources": [
