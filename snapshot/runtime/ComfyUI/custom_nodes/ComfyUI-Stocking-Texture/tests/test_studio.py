@@ -261,6 +261,8 @@ class StudioContracts(unittest.TestCase):
         self.assertNotIn("/export/ask", app_js)
         self.assertIn("/segment/select", app_js)
         self.assertIn("/mirror", app_js)
+        self.assertNotIn("Depth Anything V2 Small · CPU", app_js)
+        self.assertIn("options.depth_inference?.device || options.models.device", app_js)
         with self.assertRaises(ValueError): assets_ui.static_asset("../../engine.py", base)
 
 
@@ -383,9 +385,17 @@ class StudioHTTP(unittest.IsolatedAsyncioTestCase):
             y, x = np.ogrid[:160, :128]
             candidates.append((x - 64)**2 + (y - 80)**2 < radius**2)
         # This verifies candidate application; model quality is tested separately with actual weights.
-        with mock.patch.object(studio_module.models, "segment", return_value=(candidates, [.9, .8, .7])):
+        def inference(*args, info):
+            info.update(device="test GPU", backend="cuda:0", embedding_cached=True)
+            return candidates, [.9, .8, .7]
+        with mock.patch.object(studio_module.models, "segment", side_effect=inference):
             response = await self.client.post(self.docbase + f"/regions/{self.rid}/segment", json={"x": 64, "y": 80, "subtract": True})
         self.assertEqual(response.status, 200, await response.text())
+        state = await self.call("GET", "/api/doc")
+        self.assertEqual(state["sam"]["device"], "test GPU")
+        self.assertTrue(state["sam"]["inference"]["embedding_cached"])
+        options = await self.call("GET", "/api/options")
+        self.assertEqual(options["depth_inference"], {})
         after_small = s.doc.region(self.rid).mask.copy()
         response = await self.client.post(self.docbase + "/segment/select", json={"k": 2})
         self.assertEqual(response.status, 200)
