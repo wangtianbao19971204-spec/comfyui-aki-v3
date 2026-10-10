@@ -44,6 +44,13 @@ def run(args):
                  "_png": lambda data: data}
     exec(compile(ast.Module(body=selected, type_ignores=[]), str(source), "exec"), namespace)
     rows = []
+    variants = [("plain", {})]
+    if args.moire:
+        variants += [("off-retained", dict(moire_on=False, moire=60, moire_area=35)),
+                     ("zero-strength", dict(moire_on=True, moire=0)),
+                     ("zero-area", dict(moire_on=True, moire_area=0)),
+                     ("moire-60-35", dict(moire_on=True, moire=60, moire_area=35)),
+                     ("moire-100-100", dict(moire_on=True, moire=100, moire_area=100))]
     for fixture in json.loads(args.fixtures.read_text(encoding="utf-8")):
         name = fixture["id"]
         art = np.array(Image.open(fixture["image"]).convert("RGB"))
@@ -70,21 +77,26 @@ def run(args):
             x, y = int(np.median(xx)), int(np.median(yy))
             rect = (max(0, x - 96), max(0, y - 96), min(w, x + 96), min(h, y + 96))
             for style in look.STYLES:
-                params = dict(look.DEFAULTS, style=style, density=65)
-                expected = reference.render(params)[0]
-                actual = own.render(params)[0]
-                np.testing.assert_array_equal(actual, expected)
-                crop = own.render(params, rect)[0]
-                np.testing.assert_array_equal(crop, expected[rect[1]:rect[3], rect[0]:rect[2]])
-                namespace["_params"] = lambda *a: params
-                check = namespace["render_check"]("id", None, 351, 247)
-                np.testing.assert_array_equal(studio.check_image(own.doc, own.scene(), params, size=(351, 247)), check)
-                check_crop = namespace["render_check"]("id", None, rect[2]-rect[0], rect[3]-rect[1], rect[0], rect[1])
-                np.testing.assert_array_equal(studio.check_image(own.doc, own.scene(), params, rect=rect), check_crop)
-                Image.fromarray(actual[..., ::-1]).save(args.out / f"{name}-{style}.png")
-                rows.append({"image": name, "style": style, "full_equal": True, "crop_equal": True,
-                             "check_fit_equal": True, "check_crop_equal": True,
-                             "changed_pixels": int(np.any(actual[..., ::-1] != art, axis=2).sum())})
+                plain = reference.render(dict(look.DEFAULTS, style=style, density=65))[0]
+                for variant, overrides in variants:
+                    params = dict(look.DEFAULTS, style=style, density=65, **overrides)
+                    expected = reference.render(params)[0]
+                    actual = own.render(params)[0]
+                    np.testing.assert_array_equal(actual, expected)
+                    crop = own.render(params, rect)[0]
+                    np.testing.assert_array_equal(crop, expected[rect[1]:rect[3], rect[0]:rect[2]])
+                    namespace["_params"] = lambda *a: params
+                    check = namespace["render_check"]("id", None, 351, 247)
+                    np.testing.assert_array_equal(studio.check_image(own.doc, own.scene(), params, size=(351, 247)), check)
+                    check_crop = namespace["render_check"]("id", None, rect[2]-rect[0], rect[3]-rect[1], rect[0], rect[1])
+                    np.testing.assert_array_equal(studio.check_image(own.doc, own.scene(), params, rect=rect), check_crop)
+                    Image.fromarray(actual[..., ::-1]).save(args.out / f"{name}-{style}-{variant}.png" if args.moire else f"{name}-{style}.png")
+                    if variant in ("off-retained", "zero-strength", "zero-area"):
+                        np.testing.assert_array_equal(actual, plain)
+                    rows.append({"image": name, "style": style, "variant": variant, "full_equal": True, "crop_equal": True,
+                                 "check_fit_equal": True, "check_crop_equal": True,
+                                 "changed_pixels": int(np.any(actual[..., ::-1] != art, axis=2).sum()),
+                                 "moire_changed_pixels": int(np.any(actual != plain, axis=2).sum())})
             print(json.dumps({"image": name, "six_styles_full_and_preview_equal": True}), flush=True)
         finally:
             own.close(); doc.close()
@@ -97,4 +109,5 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     for key in ("upstream", "fixtures", "models", "out"):
         parser.add_argument("--" + key, type=Path, required=True)
+    parser.add_argument("--moire", action="store_true", help="Also compare the moire switch, zero cases and two slider settings")
     run(parser.parse_args())

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 2026-10-10：丝袜纹理来源更新至作者 `f74c8ac`，接入默认关闭的摩尔纹、深度就绪检查和新版油光遮挡连接；旧工作流参数兼容。修正展示说明，局部选区回归图不作为成品展示，完整选区候选留在仓外。测试与隔离实页范围见[更新记录](docs/technical/changes/runtime-stocking-texture/2026-10-10-upstream-effects.md)；本轮未部署生产。
+
 - 2026-10-09：新增独立丝袜纹理引导编辑／渲染节点，复用固定 MIT 算法、五样式、可选蒙版／深度和透明图层；支持工作流引导持久化及 CPU 隔离验收，未部署生产。见[技术说明](docs/technical/runtime/stocking-texture.md)。
 
 - 2026-10-09：新增 LoRA 日常增量导入入口；本批 3 新增分类移入并登记来源，12 重复原件保留，旧缓存身份及个人字段保持。完整摘要与在线卡片／加载器通过，无重启；仅提交清单与工具。见[快速流程](docs/technical/runtime/lora-quick-import.md)。

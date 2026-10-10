@@ -150,12 +150,15 @@ class Studio:
         regions = doc.state()["regions"]
         untextured = [r["name"] for r in regions if r["status"] in ("nostroke", "error")]
         untextured += [r["name"] + "分开的一块" for r in regions if r["status"] == "ok" and r["unguided"]]
+        depth, depth_error = self.depth_status, self.depth_error
+        if look.moire_active(q) and not self.depth_enabled and doc.disparity is None:
+            depth, depth_error = "error", "内置深度已关闭，请启用内置深度或关闭摩尔纹效果"
         return dict(g, params=q, strength_suggested=scene.suggested_strength(), densest=scene.densest(),
                     untextured=untextured, solving=[r["name"] for r in regions if r["status"] in ("pending", "solving")],
                     check={"faded": float(faded.sum() / n), "excluded": float(excluded.sum() / n),
                            "nostroke": float(nostroke.sum() / n)},
                     textured=int((scene.R > 0).sum()), has_sparkle_layer=doc.sparkle is not None,
-                    depth=self.depth_status, depth_error=self.depth_error)
+                    depth=depth, depth_error=depth_error)
 
     def start_depth(self):
         with self.lock:
@@ -230,7 +233,7 @@ class Studio:
         self._bind(doc)
         return True
 
-    def wait_ready(self, timeout=180):
+    def wait_ready(self, timeout=180, *, params=None):
         doc = self.doc
         self.start_depth()
         end = time.monotonic() + timeout
@@ -238,6 +241,8 @@ class Studio:
             time.sleep(.05)
         if self.depth_enabled and self.depth_status != "ready":
             raise ValueError(self.depth_error or "深度计算超时，请重试")
+        if look.moire_active(self.params(params)) and doc.disparity is None:
+            raise ValueError("摩尔纹效果需要深度；请启用内置深度或关闭摩尔纹效果")
         if not doc.wait_idle(max(1, end - time.monotonic())):
             raise ValueError("走向求解超时，请减少区域或分辨率后重试")
         failed = [r for r in doc.state()["regions"] if r["status"] == "error"]
@@ -252,7 +257,8 @@ class Studio:
         check = check_image(self.doc, self.scene(), self.params())
         report = self.look_info()
         report.update(changed_pixels=int(np.any(rgb != self.doc.art, axis=2).sum()),
-                      dark_adapt=self.dark_adapt, sparkles_ready=info["sparkles_ready"])
+                      dark_adapt=self.dark_adapt, sparkles_ready=info["sparkles_ready"],
+                      moire_ready=info["moire_ready"])
         return rgb, layer, cv2.cvtColor(check, cv2.COLOR_BGRA2RGBA), report
 
     def close(self):

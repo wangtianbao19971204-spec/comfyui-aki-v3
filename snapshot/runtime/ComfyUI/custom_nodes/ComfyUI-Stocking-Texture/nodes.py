@@ -109,7 +109,10 @@ class StockingTextureRender:
             "depth_mode": (["近处较亮", "近处较暗"],),
             "seed": ("INT", {"default": 20261005, "min": 0, "max": 0xffffffffffffffff})},
             "optional": {"mask": ("MASK",), "depth": ("IMAGE",),
-                         "dark_adapt": ("BOOLEAN", {"default": True})}}
+                         "dark_adapt": ("BOOLEAN", {"default": True}),
+                         "moire_on": ("BOOLEAN", {"default": False}),
+                         "moire": ("FLOAT", {"default": 100, "min": 0, "max": 100, "step": 1}),
+                         "moire_area": ("FLOAT", {"default": 100, "min": 0, "max": 100, "step": 1})}}
 
     RETURN_TYPES = ("IMAGE", "IMAGE", "MASK", "IMAGE", "STRING")
     RETURN_NAMES = ("成品", "透明纹理图层", "图层透明度", "问题标记", "处理说明")
@@ -125,7 +128,7 @@ class StockingTextureRender:
     def render(self, image, guides_json=EMPTY_GUIDES, style="细线", density=100, strength=100,
                auto_strength=True, tilt=32, sparkle_bright=100, sparkle_even=0, sparkle_depth=0,
                color_exclude=True, auto_walls=False, depth_mode="近处较亮", seed=20261005,
-               mask=None, depth=None, dark_adapt=True):
+               mask=None, depth=None, dark_adapt=True, moire_on=False, moire=100, moire_area=100):
         a = image_array(image)
         b, h, w = a.shape[:3]
         data = parse_guides(guides_json, w, h)
@@ -135,17 +138,21 @@ class StockingTextureRender:
             raise ValueError("seed 必须为无符号 64 位整数")
         values = {"density": (density, 40, 200), "strength": (strength, 0, 250), "tilt": (tilt, 0, 75),
                   "sparkle_bright": (sparkle_bright, 0, 300), "sparkle_even": (sparkle_even, 0, 300),
-                  "sparkle_depth": (sparkle_depth, 0, 300)}
+                  "sparkle_depth": (sparkle_depth, 0, 300),
+                  "moire": (moire, 0, 100), "moire_area": (moire_area, 0, 100)}
         for name, (value, low, high) in values.items():
             if not isinstance(value, (int, float)) or not np.isfinite(value) or not low <= value <= high:
                 raise ValueError(f"{name} 必须为 {low}–{high} 的有限数值")
         masks, depths = mask_array(mask, b, h, w), depth_array(depth, b, h, w, depth_mode)
         if depths is None and (auto_walls or sparkle_depth > 0):
             raise ValueError("按深度亮点或自动隔开线需要接入深度 IMAGE；也可关闭这两项")
+        if depths is None and moire_on and moire > 0:
+            raise ValueError("摩尔纹效果需要接入深度 IMAGE；也可关闭摩尔纹效果")
         params = {"style": STYLE_IDS[style], "density": density, "strength": strength,
                   "strength_auto": bool(auto_strength), "tilt": tilt, "sparkle_link": False,
                   "sparkle_bright": sparkle_bright, "sparkle_even": sparkle_even,
-                  "sparkle_depth": sparkle_depth, "sparkle_painted": 0}
+                  "sparkle_depth": sparkle_depth, "sparkle_painted": 0,
+                  "moire_on": bool(moire_on), "moire": moire, "moire_area": moire_area}
         results, layers, alphas, checks, reports = [], [], [], [], []
         canonical = json.dumps(data, ensure_ascii=False, sort_keys=True).encode("utf-8")
         for i in range(b):

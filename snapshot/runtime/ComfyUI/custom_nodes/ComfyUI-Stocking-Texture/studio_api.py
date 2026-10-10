@@ -323,7 +323,8 @@ class StudioServer:
             image, info = s.render(query, (x, y, x + w, y + h) if crop else None)
             if not crop:
                 image = cv2.resize(image, (w, h), interpolation=cv2.INTER_AREA)
-            extra = {"ms": round(1000 * (time.perf_counter() - t0)), "sparkles_ready": info["sparkles_ready"]}
+            extra = {"ms": round(1000 * (time.perf_counter() - t0)),
+                     "sparkles_ready": info["sparkles_ready"], "moire_ready": info["moire_ready"]}
             if crop:
                 extra.update(x0=x, y0=y, w=image.shape[1], h=image.shape[0])
             return png(image, extra)
@@ -428,7 +429,7 @@ class StudioServer:
         target = folder / f"{key}-{name}-{export.NAMES[kind]}"
         params = s.params(body.get("params"))
         if kind != "guides":
-            s.wait_ready()
+            s.wait_ready(params=params)
             d.set_look(params)
         result = export.export(d, s, params, str(target), kind)
         if kind == "guides":

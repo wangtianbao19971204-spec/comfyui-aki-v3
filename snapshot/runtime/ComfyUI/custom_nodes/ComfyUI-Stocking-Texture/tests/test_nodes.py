@@ -245,6 +245,59 @@ class TextureContracts(unittest.TestCase):
         manual = self.run_render(image=image, strength=250)
         self.assertEqual(json.loads(manual[-1])["images"][0]["effective_strength"], 250)
 
+    def test_moire_optional_controls_preserve_old_workflows_and_mask_boundaries(self):
+        spec = NODES.StockingTextureRender.INPUT_TYPES()["optional"]
+        self.assertFalse(spec["moire_on"][1]["default"])
+        self.assertEqual(spec["moire"][1]["default"], 100)
+        self.assertEqual(spec["moire_area"][1]["default"], 100)
+        y, x = np.mgrid[:160, :128]
+        disp = np.exp(-((x - 64) / 42) ** 2 - ((y - 80) / 55) ** 2).astype(np.float32)
+        depth = torch.from_numpy(np.repeat(disp[None, ..., None], 3, axis=3))
+        node = NODES.StockingTextureRender()
+        for dark in (False, True):
+            settings = dict(node=node, depth=depth, dark_adapt=dark)
+            plain = self.run_render(**settings)[0]
+            for off in ({"moire_on": False, "moire": 60, "moire_area": 35},
+                        {"moire_on": True, "moire": 0}, {"moire_on": True, "moire_area": 0}):
+                self.assertTrue(torch.equal(plain, self.run_render(**settings, **off)[0]))
+            on = self.run_render(**settings, moire_on=True, moire=60, moire_area=35)
+            self.assertFalse(torch.equal(on[0], plain))
+            self.assertTrue(torch.equal(on[0][self.mask == 0], self.image[self.mask == 0]))
+            composite = self.image * (1 - on[2][..., None]) + on[1][..., :3] * on[2][..., None]
+            self.assertLess((composite - on[0]).abs().max().item(), 1e-7)
+            self.assertTrue(json.loads(on[-1])["images"][0]["moire_ready"])
+            self.assertTrue(torch.equal(on[0], self.run_render(**settings, moire_on=True, moire=60, moire_area=35)[0]))
+        with self.assertRaisesRegex(ValueError, "摩尔纹效果需要"):
+            self.run_render(moire_on=True)
+        for invalid in ({"moire": float("nan")}, {"moire_area": 101}):
+            with self.assertRaises(ValueError): self.run_render(**invalid)
+
+    def test_oily_occlusion_connections_match_document(self):
+        from stocking_plugin_tests.vendor.document import Document
+        from stocking_plugin_tests.vendor import look
+        mask = self.mask[0].numpy().copy()
+        mask[76:84] = 0
+        rgb = np.round(self.image[0].numpy() * 255).astype(np.uint8)
+        data = ENGINE.parse_guides(self.text, 128, 160)
+        g = ENGINE.solve_geometry(rgb, data, mask, False, None, False)
+        doc = Document.from_snapshot(rgb, "gap.png", None, [("左腿", "#65a7fa", mask > 0)],
+            [(np.asarray(p), 0) for p in data["regions"][0]["strokes"]], color_exclude=False)
+        try:
+            self.assertTrue(doc.wait_idle())
+            self.assertTrue(g["fill"])
+            self.assertEqual(g["fill"].keys(), doc.filled_map().keys())
+            for key, value in doc.filled_map().items():
+                np.testing.assert_array_equal(g["fill"][key], value)
+            scene = look.scene_from_doc(doc)
+            expected = scene.render(dict(style="oily", sparkle_link=False, sparkle_depth=0,
+                                         sparkle_bright=0, strength_auto=False))[0][..., ::-1]
+            actual = self.run_render(image=torch.from_numpy(rgb[None].astype(np.float32) / 255),
+                mask=torch.from_numpy(mask[None]), style="油光（试验）", dark_adapt=False)[0][0].numpy()
+            active = (g["labels"] > 0) & g["stock"] & (g["alpha"] > 0)
+            np.testing.assert_array_equal((actual * 255).astype(np.uint8)[active], expected[active])
+        finally:
+            doc.close()
+
     def test_png_save_truncation_preserves_upstream_levels_across_brightness(self):
         from stocking_plugin_tests.vendor import look
         ramp = np.round(np.linspace(0, 255, 128)).astype(np.uint8)

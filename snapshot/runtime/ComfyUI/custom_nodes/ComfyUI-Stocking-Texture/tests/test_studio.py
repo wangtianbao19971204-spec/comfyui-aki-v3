@@ -126,11 +126,14 @@ class StudioContracts(unittest.TestCase):
 
     def test_presets_are_independent_of_picture_and_keep_unreadable_records(self):
         p = store.Preferences(self.root / "user")
-        params = dict(look.DEFAULTS, style="coil", density=65, strength_auto=True, strength=17)
+        params = dict(look.DEFAULTS, style="coil", density=65, strength_auto=True, strength=17,
+                      moire_on=True, moire=60, moire_area=35)
         p.save_preset("常用白丝", params)
         fresh = store.Preferences(self.root / "user")
         self.assertEqual(fresh.presets()[0]["params"]["style"], "coil")
         self.assertEqual(fresh.presets()[0]["params"]["strength"], look.DEFAULTS["strength"])
+        for key in ("moire_on", "moire", "moire_area"):
+            self.assertEqual(fresh.presets()[0]["params"][key], params[key])
         fresh.save_preset("常用白丝", dict(params, density=80))
         self.assertEqual(len(p.presets()), 1)
         self.assertEqual(p.presets()[0]["params"]["density"], 80)
@@ -214,10 +217,40 @@ class StudioContracts(unittest.TestCase):
         self.owned.append(different)
         self.assertIsNone(different.disparity)
 
+    def test_moire_depth_readiness_and_saved_project_roundtrip(self):
+        old = json.loads(store.dumps(self.project))
+        for key in ("moire_on", "moire", "moire_area"):
+            old["look"].pop(key, None)
+        s = self.studio(old)
+        self.assertFalse(s.params()["moire_on"])
+        s.wait_ready()
+        s.doc.set_look(dict(s.params(), moire_on=True, moire=60, moire_area=35))
+        self.assertFalse(s.render()[1]["moire_ready"])
+        self.assertEqual(s.look_info()["depth"], "error")
+        with self.assertRaisesRegex(ValueError, "摩尔纹效果需要深度"):
+            s.outputs()
+        y, x = np.mgrid[:s.doc.h, :s.doc.w]
+        s.doc.disparity = np.exp(-((x - 64) / 42) ** 2 - ((y - 80) / 55) ** 2).astype(np.float32)
+        for dark in (False, True):
+            s.dark_adapt = dark
+            saved = s.project_data()
+            restored = self.studio(saved)
+            restored.wait_ready()
+            for style in look.STYLES:
+                whole, info = s.render({"style": style})
+                self.assertTrue(info["moire_ready"])
+                self.assertFalse(np.array_equal(whole, s.render({"style": style, "moire_on": False})[0]))
+                np.testing.assert_array_equal(whole, restored.render({"style": style})[0])
+                np.testing.assert_array_equal(s.render({"style": style}, (24, 32, 80, 104))[0], whole[32:104, 24:80])
+            for key in ("moire_on", "moire", "moire_area"):
+                self.assertEqual(restored.params()[key], s.params()[key])
+
     def test_static_adapter_uses_scoped_routes_and_preserves_all_upstream_tools(self):
         base = "/stocking_texture/studio/" + "f" * 32
         page = assets_ui.page(base)
         self.assertIn('id="stocking-apply"', page)
+        for control in ("moire-on", "moire", "moire-area"):
+            self.assertIn('id="' + control + '"', page)
         for name in ("app.js", "look.js", "i18n.js", "style.css", "i18n/en.json"):
             text, _ = assets_ui.static_asset(name, base)
             self.assertGreater(len(text), 100)
@@ -294,6 +327,35 @@ class StudioHTTP(unittest.IsolatedAsyncioTestCase):
         with mock.patch.object(store, "MAX_PROJECT_BYTES", 100):
             response = await self.client.post(api.PREFIX, data=b' ' * 101)
         self.assertEqual(response.status, 400)
+
+    async def test_moire_http_preview_export_and_apply_preserve_parameters(self):
+        s = self.manager.sessions[self.opened["session"]].studio
+        await asyncio.to_thread(s.wait_ready)
+        params = dict(s.params(), style="oily", moire_on=True, moire=60, moire_area=35)
+        response = await self.client.post(self.docbase + "/export", json={"kind": "png", "params": params})
+        self.assertEqual(response.status, 400)
+        self.assertIn("摩尔纹效果需要深度", await response.text())
+        y, x = np.mgrid[:s.doc.h, :s.doc.w]
+        s.doc.disparity = np.exp(-((x - 64) / 42) ** 2 - ((y - 80) / 55) ** 2).astype(np.float32)
+        response = await self.client.put(self.docbase + "/look", json=params)
+        self.assertEqual(response.status, 200, await response.text())
+        response = await self.client.get(self.docbase + "/render/fit?w=128&h=160")
+        self.assertTrue(json.loads(response.headers["X-Look"])["moire_ready"])
+        full = cv2.imdecode(np.frombuffer(await response.read(), np.uint8), cv2.IMREAD_COLOR)
+        np.testing.assert_array_equal(full, s.render()[0])
+        response = await self.client.post(self.docbase + "/export", json={"kind": "png"})
+        self.assertEqual(response.status, 200, await response.text())
+        result = await response.json()
+        data = await (await self.client.get(result["url"])).read()
+        np.testing.assert_array_equal(cv2.imdecode(np.frombuffer(data, np.uint8), cv2.IMREAD_COLOR), full)
+        applied = await self.call("POST", "/api/apply")
+        for key in ("moire_on", "moire", "moire_area"):
+            self.assertEqual(applied["project"]["look"][key], params[key])
+        restored = studio_module.Studio(self.assets, s.preferences, s.model_paths, applied["project"])
+        try:
+            np.testing.assert_array_equal(restored.outputs()[0], full[..., ::-1])
+        finally:
+            restored.close()
 
     async def test_apply_only_acknowledges_a_successful_parent_write(self):
         s = self.manager.sessions[self.opened["session"]].studio

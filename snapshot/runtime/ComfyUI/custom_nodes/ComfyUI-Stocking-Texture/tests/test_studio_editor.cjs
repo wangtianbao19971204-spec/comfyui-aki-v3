@@ -59,8 +59,10 @@ test('a current connected-image preview opens, applies, and acknowledges the ser
   h.node.onExecuted({ stocking_studio: [{ project: { image_sha256: 'image' },
     source_hash: await h.context.testing.projectHash('{}') }] });
   await h.open();
-  await h.emit({ project: { image_sha256: 'image', schema: 2, name: 'edited' } });
+  const look = { moire_on: true, moire: 60, moire_area: 35 };
+  await h.emit({ project: { image_sha256: 'image', schema: 2, name: 'edited', look } });
   assert.equal(JSON.parse(h.node.widgets[0].value).name, 'edited');
+  assert.deepEqual(JSON.parse(h.node.widgets[0].value).look, look);
   assert.equal(h.node.widgets[0].element.value, h.node.widgets[0].value);
   assert.equal(h.changes(), 1);
   assert.equal(h.requests.at(-1).url.endsWith('/apply/ack'), true);

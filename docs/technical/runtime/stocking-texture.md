@@ -2,6 +2,10 @@
 
 文档修订：2026-10-10。
 
+当前维护源码固定上游为 `f74c8ac0190ec43b2cdfcb13db86f35a83283311`，接入作者新增摩尔纹和新版油光。旧工作流默认关闭摩尔纹；开启且强度非零时需要深度，导出与节点执行均检查就绪状态。旧渲染节点新增三个末尾可选输入，油光传递求解器的遮挡连接；完整编辑器继续复用原版界面。见[新版效果与展示复核](../changes/runtime-stocking-texture/2026-10-10-upstream-effects.md)及[本轮收据](../../receipts/stocking_texture_upstream_refresh_20261010.json)。**本轮未部署生产。**
+
+展示复核纠正了旧局部选区不完整、交叉处分区过直的问题；这些旧图仅保留为功能回归输入，不作为 fork 展示成果。三张完整选区候选及原图／选区／成品对照留在仓外，未公开分发。像素与原版一致不代表选区正确或视觉效果合格。
+
 原独立软件的完整功能清单、逐项验证及主机适配差异见[全部功能验收](../changes/runtime-stocking-texture/2026-10-10-complete-acceptance.md)。新增[独立修复工作流](../changes/runtime-workflows/2026-10-10-stocking-repair.md)，无需向已有图插节点。
 
 弯腿真实操作、作者演示逐项映射及上游投稿导出边界见[弯腿与上游投稿验收](../changes/runtime-stocking-texture/2026-10-10-bend-upstream.md)。本次只新增验收/导出工具，不代表再次生产部署。

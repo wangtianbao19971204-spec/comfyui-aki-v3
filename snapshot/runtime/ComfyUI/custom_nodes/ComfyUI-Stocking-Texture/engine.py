@@ -131,6 +131,7 @@ def solve_geometry(rgb8, data, base_mask, color_exclude, disparity, auto_walls):
     # few bright pixels differently from the original export.
     v, across = np.zeros((h, w), np.float64), np.zeros((h, w), np.float64)
     cut = np.zeros((h, w), bool)
+    fill = {}
     messages = []
     for index, region in enumerate(data["regions"], 1):
         mc_full = labels == index
@@ -167,8 +168,14 @@ def solve_geometry(rgb8, data, base_mask, color_exclude, disparity, auto_walls):
             dst[sl][mc & valid] = field[mc & valid].astype(np.float32)
         if info.get("cut") is not None:
             cut[sl] |= info["cut"] & mc
+        gap = gf.fill_occlusions(mc) & ~mc & (labels[sl] == 0)
+        if info.get("cut") is not None:
+            gap &= ~info["cut"]
+        if gap.any():
+            fill[index] = np.zeros((h, w), bool)
+            fill[index][sl] = gap
     return dict(labels=solved, all_labels=labels, v=v, across=across, stock=stock,
-                alpha=alpha, input_alpha=input_alpha, cut=cut, messages=messages)
+                alpha=alpha, input_alpha=input_alpha, cut=cut, fill=fill, messages=messages)
 
 
 def render_texture(rgb, data, geometry, disparity, params, seed, dark_adapt=True):
@@ -189,7 +196,8 @@ def render_texture(rgb, data, geometry, disparity, params, seed, dark_adapt=True
     g = geometry
     scene = SeededScene(rgb8, g["labels"], g["v"], g["across"], g["stock"], g["alpha"],
                         [r["name"] for r in data["regions"]],
-                        disparity=(lambda: disparity) if disparity is not None else None, cut=g["cut"])
+                        disparity=(lambda: disparity) if disparity is not None else None,
+                        cut=g["cut"], fill=g["fill"])
     out8, metrics = render_scene(scene, params, dark_adapt)
     active = (g["labels"] > 0) & g["stock"] & (g["alpha"] > 0)
     # Keep the exact uint8/255 representation at full coverage. Adding a

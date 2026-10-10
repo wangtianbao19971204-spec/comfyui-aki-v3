@@ -926,7 +926,8 @@
         "docs/receipts/stocking_texture_studio_20261010.json",
         "docs/receipts/stocking_texture_complete_20261010.json",
         "docs/receipts/stocking_texture_bend_upstream_20261010.json",
-        "docs/receipts/stocking_fork_presentation_20261010.json"
+          "docs/receipts/stocking_fork_presentation_20261010.json",
+          "docs/receipts/stocking_texture_upstream_refresh_20261010.json"
       ],
       "acceptance": "checked-source",
       "watch": [

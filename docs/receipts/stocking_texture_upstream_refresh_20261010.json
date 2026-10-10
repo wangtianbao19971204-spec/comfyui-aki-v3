@@ -1,0 +1,157 @@
+{
+  "schema": 1,
+  "date": "2026-10-10",
+  "recorded_utc": "2026-10-10T12:00:18.982436+00:00",
+  "feature": "runtime-stocking-texture",
+  "scope": "Pinned upstream moire/oily update and correction of presentation claims",
+  "previous_upstream_commit": "6c0c620d1bfa6a2c2691cb2313e928d9c7244ee5",
+  "upstream_commit": "f74c8ac0190ec43b2cdfcb13db86f35a83283311",
+  "source_archive_sha256": "c194430f5e410be373f74c8f19157266bb855d4347842f56546819b8be4f8ab6",
+  "validation": {
+    "local_python_passed": 44,
+    "local_frontend_passed": 17,
+    "upstream_passed": 285,
+    "upstream_skipped": 52,
+    "http_checks_passed": 51,
+    "moire_style_comparisons_passed": 108,
+    "bend_comparisons_passed": 18,
+    "exporter_contracts_passed": 3,
+    "public_python_passed": 44,
+    "public_frontend_passed": 17,
+    "public_http_checks_passed": 51,
+    "public_local_links_valid": 70,
+    "public_payload_files": 38,
+    "browser_moire_presets_download_apply_executed": true,
+    "corrected_full_selection_workflow_save_reload_executed": true,
+    "new_model_inference": false,
+    "existing_checked_depth_reused": true
+  },
+  "visual_review": {
+    "old_partial_selection_showcase_rejected": true,
+    "corrected_full_selection_candidates": 3,
+    "selection_pixels": [
+      200153,
+      405708,
+      31244
+    ],
+    "untextured_regions": 0,
+    "public_showcase_approved": false,
+    "private_acceptance_images_published": false,
+    "scope": "Coverage and seam improvements were inspected; test equivalence does not certify showcase aesthetics."
+  },
+  "evidence_directory": "stocking-upstream-refresh-20261010-01",
+  "evidence_files": [
+    {
+      "path": "SOURCE.json",
+      "sha256": "f30b8202ed3d4f13bc1f4a8f68f384d8cbd1459d3d47638ee84c7660ee339492"
+    },
+    {
+      "path": "python-tests.log",
+      "sha256": "5907273e09cc4db7345f01ecd49934f34084a4517e7a236695ef44c6a5a795ab"
+    },
+    {
+      "path": "frontend-tests.log",
+      "sha256": "dcf7b57e95be7d28327e01bfef20e0b4e8ef7caea1e27f725872ef5d958565f4"
+    },
+    {
+      "path": "upstream-tests.log",
+      "sha256": "90360be6f7e2622a686183059534c6396232f7b8ab33975fdbcf3e17c651bddb"
+    },
+    {
+      "path": "api-acceptance/ACCEPTANCE.json",
+      "sha256": "78bbb7a486ff9b5c5e1025507494aa573f5f45582e1a1d1d73f13628300bdad5"
+    },
+    {
+      "path": "real-parity/ACCEPTANCE.json",
+      "sha256": "d85009738088c5dffc122603df71387bbc7e7179cb1d254c7504c7e6c8c21f9e"
+    },
+    {
+      "path": "bend-parity/ACCEPTANCE.json",
+      "sha256": "2c2c9e739d66ec371429f87cc78069189f410e60860b96a7ab0cb1f2e95a73d4"
+    },
+    {
+      "path": "WORKFLOW-CHECK.json",
+      "sha256": "e6511d40a8363426de741856f32795cb452a8554ff36b9b6f0cf45f579e38490"
+    },
+    {
+      "path": "UI-NETWORK-1.json",
+      "sha256": "692a9ea8053da26326f16befc3c6829de7d96c0f92f4014e1e007088e60b6fd0"
+    },
+    {
+      "path": "UI-COMFY-NETWORK.json",
+      "sha256": "d6b6e38f96a250c5d9b0d5b23a9e78ee04badf4ee42c3a4ab848d4c8212ac123"
+    },
+    {
+      "path": "FORK-PUBLIC-IMAGES.json",
+      "sha256": "9c8ae874d8a152ace316f8748305495d4ba2594b25f0c833ff8f7e98d8fa1194"
+    },
+    {
+      "path": "EXPORT.json",
+      "sha256": "0b5d012d9bc78363c9c26845d1a682793ddd69e20c2b555e4f5508b2e9cada03"
+    },
+    {
+      "path": "DOCUMENT-CHECK.json",
+      "sha256": "5c55a03a7cf0ddb82e0b39d56c381b0e155d4b378504e1df0b4d6a92a183a98a"
+    },
+    {
+      "path": "exporter-tests.log",
+      "sha256": "10161401969f5018475ef5d6f66c8d650484312b453d61191aaa0446315c6f57"
+    },
+    {
+      "path": "public-python-tests.log",
+      "sha256": "629acfc918110d7e792f4c03c3e544cdc183937455cb5d1303cbc86886144305"
+    },
+    {
+      "path": "public-frontend-tests.log",
+      "sha256": "25aeb4049b540671d91e4a385631334dd7b392803d343e287f93ce972e5f38df"
+    },
+    {
+      "path": "public-api-acceptance/ACCEPTANCE.json",
+      "sha256": "1efa8968b81b46ce2ab69b4e4285847682bed05e54632f73bca77058fc77b1e2"
+    },
+    {
+      "path": "full-selection-review-v2/CANDIDATES.json",
+      "sha256": "c893fa68f9aa549400074ccbd0dd8046f5273076a20abfdf70f3aa2122e031c2"
+    },
+    {
+      "path": "full-selection-review-v2/VISUAL-REVIEW.json",
+      "sha256": "a82294544eb2641b01e3458069ba54577e4e28993163d8d4ec8d9fdf316366df"
+    },
+    {
+      "path": "full-selection-review-v2/WORKFLOW-CHECK.json",
+      "sha256": "34783649fb398622bfe53436fd4fce52e1c1f23502fc84bdedce8f511814c72e"
+    },
+    {
+      "path": "PUBLICATION-CHECK.json",
+      "sha256": "d2f30072871774be08a51285d775191376c5e75d70a4ee17c4582162ae032c3b"
+    },
+    {
+      "path": "FORK-STAGED-SECURITY.json",
+      "sha256": "e6211f42be41d5189a63a461254c5089c625ac93ce1b58f401100ce937367464"
+    },
+    {
+      "path": "FORK-HISTORY-SECURITY.json",
+      "sha256": "e13842e106cfb49eecc57c81aae64902f0e987d10acfd6a993ffe3267f75703c"
+    },
+    {
+      "path": "FORK-DELIVERED.json",
+      "sha256": "fc2f6c0442fffce59bf1bbe005ab5b223f03161b2235a42180083209711412d0"
+    }
+  ],
+  "production_modified": false,
+  "deployment": "not deployed",
+  "publication_status": "fork branch uploaded and verified; maintenance branch/PR delivery recorded separately",
+  "limits": [
+    "Private illustrations, masks and weights remain outside Git.",
+    "The upstream tests skipped 52 cases; skips are not passes.",
+    "SAM/depth inference was not rerun for this renderer update.",
+    "Oily remains experimental and corrected local examples are not approved public showcases."
+  ],
+  "fork_delivery": {
+    "commit": "fe65244b218cb029179890da71e805963db464fe",
+    "branch": "feat/comfyui-integration",
+    "remote_matches": true,
+    "upstream": "f74c8ac0190ec43b2cdfcb13db86f35a83283311",
+    "private_media_uploaded": false
+  }
+}

@@ -30,6 +30,14 @@ def render_scene(scene, params, dark_adapt):
             phase = np.cos(theta) * scene.V / p + np.sin(theta * scene.side) * scene.A / p
             out, _ = knit.render_lines(scene.src, scene.R, phase, scene.alpha,
                                        amp=0.115 * strength, **common)
+        moire_ready = True
+        if look.moire_active(q):
+            fringes = scene.moire_map(q["moire_area"] / 100.0)
+            if fringes is None:
+                moire_ready = False
+            else:
+                out = look.apply_moire(out, scene.src, fringes, q["moire"] / 100.0,
+                                       scene.suggested_strength() / 100.0)
         weight, ready = scene.sparkle_weight(q, q["style"])
         if weight is not None:
             recipe = look.SPARKLE_RECIPES[q["style"]]
@@ -37,6 +45,6 @@ def render_scene(scene, params, dark_adapt):
             out = knit.add_sparkles(out, weight, None, density=recipe["density"],
                                     r_lo=recipe["r_lo"], r_hi=recipe["r_hi"],
                                     tint=recipe["tint"], draws=draws)
-        info = dict(info, style=q["style"], sparkles_ready=ready)
+        info = dict(info, style=q["style"], sparkles_ready=ready, moire_ready=moire_ready)
     return out, dict(info, effective_strength=float(q["strength"]),
                      automatic_strength=bool(q["strength_auto"]), dark_adapt=adapted)
