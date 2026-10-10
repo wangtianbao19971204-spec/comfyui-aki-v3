@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "date": "2026-10-10",
+  "recorded_utc": "2026-10-10T11:01:42.612019+00:00",
+  "feature": "runtime-stocking-texture",
+  "scope": "Fork presentation and exported documentation only",
+  "repository": "https://github.com/wangtianbao19971204-spec/stocking-texture-tool",
+  "previous_commit": "b0c37243370a01e2392ac7939f6938cdae919142",
+  "published_commit": "fa5819d650382d9d93440d4781947908e3770fe9",
+  "previous_default_branch": "main",
+  "default_branch": "feat/comfyui-integration",
+  "description_and_documentation_link_updated": true,
+  "export": {
+    "files": 38,
+    "changed_files": ["README.md", "README.en.md", "integrations/comfyui/README.md"],
+    "unchanged_runtime_files": 35,
+    "original_readmes_preserved": true,
+    "local_links_checked": 66,
+    "contract_tests_passed": 3
+  },
+  "github_default_branch_readback": [
+    {"path": "README.md", "sha256": "921e8c90bf51ede7403ed0579487290988eec976ef797602f49529987752a1d6"},
+    {"path": "README.en.md", "sha256": "c77809cbbf0f2aee72bcaed7720eed75b960d8e521b0a0ad7d31d984ad82695d"},
+    {"path": "integrations/comfyui/README.md", "sha256": "2bb65ace0c7728bef5732bdbc25155c60504214e1c54c0af37e1ee477f0445a0"}
+  ],
+  "public_payload_security": {
+    "staged_blobs": 127,
+    "history_objects": 135,
+    "history_blobs": 132,
+    "history_bytes": 7497352,
+    "findings": 0
+  },
+  "evidence_directory": "stocking-fork-presentation-20261010-01",
+  "evidence_files": ["DOCUMENT-CHECK.json", "EXPORT.json", "FORK-BEFORE.json", "FORK-DELIVERED.json", "FORK-STAGED-SECURITY.json", "FORK-HISTORY-SECURITY.json"],
+  "upstream_PR_created": false,
+  "production_modified": false,
+  "limits": [
+    "Earlier integration and real-image results are cited, not claimed as new runs for this documentation-only change.",
+    "Repository settings and content were verified through the GitHub API; browser automation timed out and no rendered-page screenshot is claimed.",
+    "The earlier upstream PR request returned HTTP 403 for the current token; no credential permission changes were made."
+  ]
+}

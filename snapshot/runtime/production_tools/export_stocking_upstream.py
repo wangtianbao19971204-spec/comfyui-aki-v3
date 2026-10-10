@@ -97,8 +97,10 @@ def export(upstream, out):
         'Export guide PSD from the editor. No diffusion model, upscaler or workbench extension is required.\n'
         'For matching standalone output, keep Dark adaptation OFF.']
     data['integrations/comfyui/examples/stocking-repair.json'] = json.dumps(workflow,ensure_ascii=False,indent=2)+'\n'
-    data['README.md'] = (upstream/'README.md').read_text(encoding='utf-8') + '\n## ComfyUI 实验性接入\n\n可选的 AI 编写接入与独立丝袜修复工作流见 [ComfyUI 说明](integrations/comfyui/README.md)。原桌面启动方式保持不变。\n'
-    data['README.en.md'] = (upstream/'README.en.md').read_text(encoding='utf-8') + '\n## Experimental ComfyUI integration\n\nSee the [AI-written optional integration and independent repair workflow](integrations/comfyui/README.md). The standalone launcher is unchanged.\n'
+    for name, intro in (('README.md', 'stocking_fork_intro.md'),
+                        ('README.en.md', 'stocking_fork_intro.en.md')):
+        data[name] = (Path(__file__).with_name(intro).read_text(encoding='utf-8').rstrip()
+                      + '\n\n' + (upstream/name).read_text(encoding='utf-8'))
     out.mkdir(parents=True, exist_ok=False)
     for name, content in data.items():
         dest=out/name

@@ -925,7 +925,8 @@
         "docs/receipts/stocking_texture_parity_20261010.json",
         "docs/receipts/stocking_texture_studio_20261010.json",
         "docs/receipts/stocking_texture_complete_20261010.json",
-        "docs/receipts/stocking_texture_bend_upstream_20261010.json"
+        "docs/receipts/stocking_texture_bend_upstream_20261010.json",
+        "docs/receipts/stocking_fork_presentation_20261010.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -933,14 +934,18 @@
         "examples/stocking-texture/",
         "snapshot/runtime/production_tools/export_stocking_upstream.py",
         "snapshot/runtime/production_tools/test_export_stocking_upstream.py",
-        "snapshot/runtime/production_tools/stocking_upstream_README.md"
+        "snapshot/runtime/production_tools/stocking_upstream_README.md",
+        "snapshot/runtime/production_tools/stocking_fork_intro.md",
+        "snapshot/runtime/production_tools/stocking_fork_intro.en.md"
       ],
       "examples": [
         "examples/stocking-texture/README.md",
         "examples/stocking-texture/guides.example.json",
         "examples/stocking-texture/workflow_api.example.json",
         "examples/stocking-texture/studio.workflow.json",
-        "snapshot/runtime/production_tools/stocking_upstream_README.md"
+        "snapshot/runtime/production_tools/stocking_upstream_README.md",
+        "snapshot/runtime/production_tools/stocking_fork_intro.md",
+        "snapshot/runtime/production_tools/stocking_fork_intro.en.md"
       ]
     }
   ]

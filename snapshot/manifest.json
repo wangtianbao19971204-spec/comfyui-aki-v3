@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-10T10:35:34.860487+00:00",
+  "created_at": "2026-10-10T10:59:27.485839+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -57525,8 +57525,8 @@
     {
       "source": "production_tools/export_stocking_upstream.py",
       "path": "runtime/production_tools/export_stocking_upstream.py",
-      "sha256": "ff63c78f64160480296126a87697988de0f477ae1f2d48463fcb53e6b1b6b6ee",
-      "bytes": 6920,
+      "sha256": "baf3de1291d9565a27f622195e7091e0b53b46d01c7f7b9bfbb7c2f63c2f8fba",
+      "bytes": 6693,
       "kind": "file"
     },
     {
@@ -57698,10 +57698,24 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/stocking_fork_intro.en.md",
+      "path": "runtime/production_tools/stocking_fork_intro.en.md",
+      "sha256": "3c3d11360b6b0697d49e2b392c520796aa5d249154e44bbbb3b7a7b2b39941e4",
+      "bytes": 3226,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/stocking_fork_intro.md",
+      "path": "runtime/production_tools/stocking_fork_intro.md",
+      "sha256": "db19009bd51d5448fae241a0e81a47e2a5f3141b9cd525d9f6c18223a3c204f1",
+      "bytes": 2840,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/stocking_upstream_README.md",
       "path": "runtime/production_tools/stocking_upstream_README.md",
-      "sha256": "a9bb5f7d238136ec7ef42e8ed5e62c6293f634012282963de1cbdff0878f250b",
-      "bytes": 8592,
+      "sha256": "2bb65ace0c7728bef5732bdbc25155c60504214e1c54c0af37e1ee477f0445a0",
+      "bytes": 10047,
       "kind": "file"
     },
     {
@@ -57819,8 +57833,8 @@
     {
       "source": "production_tools/test_export_stocking_upstream.py",
       "path": "runtime/production_tools/test_export_stocking_upstream.py",
-      "sha256": "ae9885ec31c978ee1867d1915c3c34191feae48505761d1e3f3642d773a77e94",
-      "bytes": 3043,
+      "sha256": "7c811f0da31a008e963fae5d8f793f465a9f5561642cc80ec557558f03a8f4d8",
+      "bytes": 3270,
       "kind": "file"
     },
     {
@@ -67806,18 +67820,19 @@
     }
   ],
   "development_revision": {
-    "note": "Add reproducible bent-leg parity checks and reviewed upstream export; no new runtime deployment",
-    "previous_manifest_sha256": "520eaf4a272b43bb4414f0f6bb3788e77c3293e35764624975ff16d14e590a2e",
+    "note": "Improve bilingual stocking fork landing pages and preserve upstream documentation",
+    "previous_manifest_sha256": "4cb9e3bebd8eb1e12f83737501a9b4b4222abb1943f4104ac148f40a63274983",
     "source_changes": {
       "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/bend_acceptance.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/visual_review.py",
+        "production_tools/stocking_fork_intro.en.md",
+        "production_tools/stocking_fork_intro.md"
+      ],
+      "removed": [],
+      "changed": [
         "production_tools/export_stocking_upstream.py",
         "production_tools/stocking_upstream_README.md",
         "production_tools/test_export_stocking_upstream.py"
-      ],
-      "removed": [],
-      "changed": []
+      ]
     },
     "live_deployed": false,
     "removed_sources": [

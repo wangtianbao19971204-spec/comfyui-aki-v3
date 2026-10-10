@@ -41,6 +41,9 @@ class ExportContracts(unittest.TestCase):
         self.assertTrue((out/'integrations/comfyui/README.md').read_text(encoding='utf-8').startswith('> **AI disclosure'))
         self.assertIn('self.project.get("dark_adapt", False)',(out/'integrations/comfyui/studio.py').read_text(encoding='utf-8'))
         self.assertEqual((self.upstream/'README.md').read_text(),'Original README\n')
+        for name in ('README.md', 'README.en.md'):
+            # Public presentation must preserve the complete original README.
+            self.assertTrue((out/name).read_text(encoding='utf-8').endswith('Original README\n'))
 
     def test_existing_destination_is_preserved(self):
         out=self.root/'export';out.mkdir()

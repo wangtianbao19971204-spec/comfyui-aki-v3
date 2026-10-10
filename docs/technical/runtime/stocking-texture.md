@@ -6,6 +6,8 @@
 
 弯腿真实操作、作者演示逐项映射及上游投稿导出边界见[弯腿与上游投稿验收](../changes/runtime-stocking-texture/2026-10-10-bend-upstream.md)。本次只新增验收/导出工具，不代表再次生产部署。
 
+公开 fork 的中英首页、作者归属、改动/测试入口及展示设置范围见 [fork 首页说明](../changes/runtime-stocking-texture/2026-10-10-fork-presentation.md)。文档由主仓模板导出，原版说明完整保留。
+
 ## 完整编辑器扩展（2026-10-10）
 
 新增 `StockingTextureStudio`（丝袜纹理 · 完整编辑器），保留原有引导／渲染节点和工作流。固定上游更新至 `6c0c620d1bfa6a2c2691cb2313e928d9c7244ee5`，新“线圈”也加入原渲染节点。完整编辑器复用该提交的 Document、PSD 与静态界面，独立文档实例通过 ComfyUI 的同源 `/stocking_texture/studio` 路由接入，不启动原桌面服务器或安装器。

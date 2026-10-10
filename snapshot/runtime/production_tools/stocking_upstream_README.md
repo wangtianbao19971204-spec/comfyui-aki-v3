@@ -4,9 +4,13 @@
 
 This hosts the existing Stocking Texture Tool editor inside ComfyUI and provides an independent fabric-repair workflow. The original `stocking/` algorithms and browser assets are read directly from this repository; they are not duplicated or modified by this integration. The MIT license and original attribution continue to apply. This is a draft proposal for maintainer feedback, not an assertion of maintainer endorsement.
 
+**中文快速上手：** 将本仓库的 `feat/comfyui-integration` 分支放入 `ComfyUI/custom_nodes/stocking-texture-tool`，在运行 ComfyUI 的 Python 环境中补齐本目录 `requirements.txt` 的依赖，重启后载入[独立工作流](examples/stocking-repair.json)。打开完整编辑器，导入图片、修正选区、画走向，再“应用到节点”并执行工作流。SAM/深度权重需按 [MODEL_SOURCES.json](MODEL_SOURCES.json) 事先放置；手绘选区无需 SAM 权重。请勿同时安装另一份同名节点。
+
+**Review map / 审查入口：** [host API](studio_api.py) · [node bridge](studio_nodes.py) · [storage](studio_store.py) · [original-module bridge](vendor/__init__.py) · [tests](tests/). Rendering, selection and editor capabilities are credited to the original project; this contribution provides the ComfyUI host and workflow integration.
+
 ## Install and try
 
-1. Place a checkout of this repository under `ComfyUI/custom_nodes/stocking-texture-tool`. Avoid installing another copy exposing the same `StockingTexture*` nodes/routes.
+1. Place a checkout of this repository's `feat/comfyui-integration` branch under `ComfyUI/custom_nodes/stocking-texture-tool`. The upstream `main` branch does not include this proposal. Avoid installing another copy exposing the same `StockingTexture*` nodes/routes.
 2. In the **Python environment that runs ComfyUI**, install the missing dependencies from `integrations/comfyui/requirements.txt`. Review the requirements first; importing the plugin never installs packages or downloads models. ComfyUI already supplies Torch and aiohttp.
 3. Restart ComfyUI and load [examples/stocking-repair.json](examples/stocking-repair.json). It contains `StockingTextureStudio`, two standard `SaveImage` nodes and a note; it requires no workbench, diffusion model or upscaler.
 4. Click **打开完整编辑器** (Open full editor). Import PNG/JPG/PSD, select the fabric, correct the mask and draw at least one course guide for each region. Choose a texture in the Look tab. Click **Apply to node**, close the editor and queue the workflow.
@@ -41,6 +45,8 @@ Alternatively connect a single IMAGE and run the node once to supply its editor 
 - Real visual tests cover three existing illustrations: white bent leg, black crossed legs, near-black standing legs. Other colors/poses have synthetic coverage, **not** comprehensive real-image acceptance. Author-private samples and arbitrary complex third-party PSD/PSB files were unavailable. Multi-user deployment, OS/browser variations and heavy concurrent use need wider review.
 
 ## Review and tests
+
+Recorded validation on 2026-10-10: **40 Python tests, 17 frontend tests and 18 bent-leg stage/style comparisons passed** for the exported adapter. Earlier checks of the same implementation covered **51 HTTP operations** and **54 real-image comparisons**; the standalone suite returned **114 passed / 51 skipped**. The skips require unavailable author-private fixtures. The README update itself changes no runtime code and does not represent a new full validation run.
 
 All added host code lives in this directory. A small repository-root `__init__.py` exposes nodes only in a ComfyUI environment. `vendor/__init__.py` adds `stocking/` to a host-local module search path; the sole local override is request-local i18n, avoiding the standalone settings file. `studio_assets.py` reads original assets and makes checked, fail-closed substitutions for browser upload/download and the Apply bridge. This is pinned to [UPSTREAM.json](UPSTREAM.json); future UI changes may require adapter updates.
 
