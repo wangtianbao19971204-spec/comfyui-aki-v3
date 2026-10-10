@@ -1,0 +1,198 @@
+{
+  "schema": 1,
+  "date": "2026-10-10",
+  "feature": "runtime-stocking-texture",
+  "pass_for_scoped_acceptance": true,
+  "upstream_commit": "6c0c620d1bfa6a2c2691cb2313e928d9c7244ee5",
+  "source_manifest_sha256": "520eaf4a272b43bb4414f0f6bb3788e77c3293e35764624975ff16d14e590a2e",
+  "workflow": {
+    "file": "生产扩展_丝袜纹理修复.json",
+    "independent_file": true,
+    "peer_before_upscale": true,
+    "both_selectors_verified": true,
+    "source_and_deployed_template_project_empty": true,
+    "outputs": [
+      "finished PNG",
+      "RGBA stockings PNG"
+    ],
+    "existing_UAP_file_unchanged": true
+  },
+  "validation": {
+    "upstream_tests_passed": 114,
+    "upstream_tests_skipped": 51,
+    "skip_reason": "Author-private sample.png and sample-guides.psd are unavailable",
+    "new_HTTP_operation_parity_checks": 51,
+    "python_tests": 40,
+    "plugin_frontend_tests": 17,
+    "workflow_frontend_regressions": [
+      "test_stocking_workflow.cjs",
+      "test_uap_navigation.cjs",
+      "test_uap_daily_controls.cjs",
+      "test_uap_compact_widgets.cjs"
+    ],
+    "isolated_jobs_successful": 2,
+    "isolated_second_job_used_cache": true,
+    "fresh_page_with_preserved_runtime_overlay_verified": true,
+    "production": {
+      "navigation": {
+        "nodes": 291,
+        "node_parameters_equal": true,
+        "links_equal": true,
+        "definitions_equal": true,
+        "native_drawing_version_timestamps": [
+          1791591180463,
+          1791591339249
+        ]
+      },
+      "jobs": 1,
+      "all_successful": true,
+      "editor_equals_saved": true,
+      "rgba_mode": [
+        320,
+        256,
+        4
+      ],
+      "recompose_max_error": 0,
+      "changed_pixels": 44669
+    }
+  },
+  "deployment": {
+    "production_deployed": true,
+    "runtime_files_written": 7,
+    "restart": false,
+    "service_identity": [
+      {
+        "pid": 21376,
+        "created": 1791587798.9687512
+      }
+    ],
+    "modules_ready": 5,
+    "nodes_ready": 76,
+    "queue_empty": true,
+    "protected_paths": 9558,
+    "raw_guard_pass": false,
+    "observed_runtime_drift": [
+      "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/user_data/userdatas_zh_CN_tags.db-wal",
+      "ComfyUI/custom_nodes/vnccs-utils/PoseLibrary/repositories.user.json"
+    ],
+    "database_consistent_backups": 5,
+    "databases_logically_unchanged": 5,
+    "original_input_unchanged": true,
+    "whole_environment_byte_equality_claimed": false,
+    "isolated_service_stopped": true
+  },
+  "source_runtime_boundary": {
+    "whole_files_equal_main_source": 6,
+    "reviewed_patch_composition_files": 1,
+    "preserved_overlay": {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
+      "runtime_before_sha256": "5653e69cb66ac1e2a5f4813bdc84a592ce4166895a27bc3b98226fc0bcd806e3",
+      "main_candidate_sha256": "1c06a293fffb3de039dd829f52f4b03fa520c13ad0ede954194353cb9dba50bf",
+      "candidate_sha256": "add53d35f2b1ced947416a963662dc8b5a9ce45a18023e324ccc267d9b39bbfa",
+      "preserved_features": [
+        "common dimension choices",
+        "width/height swap",
+        "atomic dimension validation"
+      ],
+      "source_first_repair_patch": true,
+      "runtime_overlay_not_adopted_into_main": true
+    },
+    "note": "Existing runtime dimension controls were preserved; only the main-source repair additions were overlaid. Do not replace this deployed file wholesale with the branch snapshot before reconciling those pre-existing dimension changes."
+  },
+  "limitations": [
+    "Original tests needing unpublished author fixtures remain skipped; this is not universal PSD/pose/color certification.",
+    "Exact upstream parity requires matching input, masks, guides, depth and parameters with dark adaptation off.",
+    "Prior real-image/SAM/depth and 912 synthetic controls are referenced by the separate studio receipt, not counted as reruns here.",
+    "Studio is single-image with 24 MP, 32 region, 4 session and 24 MiB project bounds; browser import/download and CPU inference replace desktop hosting.",
+    "Main-workflow reload updates OlmDragCrop drawing_version using Date.now; all other observed node values, modes, connections and subgraphs match.",
+    "Existing frontend initialization/Vite diagnostics and a Gallery initialization toast during rapid main-workflow switching were observed; this receipt does not certify the unrelated Gallery or all production generators.",
+    "The strict byte guard records tag DB WAL activity and VNCCS repository metadata auto-refresh; preserve current runtime data. Five SQLite logical backups remain equal."
+  ],
+  "prior_evidence_receipt": "docs/receipts/stocking_texture_studio_20261010.json",
+  "external_evidence_id": "stocking-complete-20261010-01",
+  "rollback": {
+    "scope": "DEPLOY_PLAN.json exact before/after hashes and rollback originals; preserve live databases, source images, existing workflows, presets, drafts and outputs. Archive new workflow files only when unchanged from this deployment.",
+    "restart_needed": false,
+    "executed": false
+  },
+  "deployed_files": [
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
+      "before_sha256": null,
+      "after_sha256": "85b6dd5d5d29221f998c71b6c32ab9b3aae6a377a7ac42d580988fac9b1dbe5d",
+      "main_source_sha256": "85b6dd5d5d29221f998c71b6c32ab9b3aae6a377a7ac42d580988fac9b1dbe5d",
+      "preserves_reviewed_runtime_overlay": false
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
+      "before_sha256": "1c9540aecfb6f9facb236ff4b4623fa0da3dc50e673bc01c2e7ffcd50d53ab33",
+      "after_sha256": "7e4b65407314b2c70cdbd5d62443966d85bda9965b9971dafa8266bc89310499",
+      "main_source_sha256": "7e4b65407314b2c70cdbd5d62443966d85bda9965b9971dafa8266bc89310499",
+      "preserves_reviewed_runtime_overlay": false
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
+      "before_sha256": "e3b68ebcf1dc99cb4aa00bcdb3dad593a24db02bfda87212bf4b7e868f4750e7",
+      "after_sha256": "60f4c10b8669c554655ca1ebe2138239c365de7482475e3027a96c873c2bda69",
+      "main_source_sha256": "60f4c10b8669c554655ca1ebe2138239c365de7482475e3027a96c873c2bda69",
+      "preserves_reviewed_runtime_overlay": false
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js",
+      "before_sha256": "98d551955f3767494f99114567534b89a1013247bf075dd6d1c0a1958033b908",
+      "after_sha256": "2c8db20f3edf5efb4e4be153f265f0d71797fdadc9fe59a1304283ed727148d3",
+      "main_source_sha256": "2c8db20f3edf5efb4e4be153f265f0d71797fdadc9fe59a1304283ed727148d3",
+      "preserves_reviewed_runtime_overlay": false
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
+      "before_sha256": "5653e69cb66ac1e2a5f4813bdc84a592ce4166895a27bc3b98226fc0bcd806e3",
+      "after_sha256": "add53d35f2b1ced947416a963662dc8b5a9ce45a18023e324ccc267d9b39bbfa",
+      "main_source_sha256": "1c06a293fffb3de039dd829f52f4b03fa520c13ad0ede954194353cb9dba50bf",
+      "preserves_reviewed_runtime_overlay": true
+    },
+    {
+      "source": "production_tools/templates/生产扩展_丝袜纹理修复.json",
+      "before_sha256": null,
+      "after_sha256": "ab68507daade1f1f8f9c903ef6b4269355efbca00ef53582fb3e93ce122c3a2f",
+      "main_source_sha256": "ab68507daade1f1f8f9c903ef6b4269355efbca00ef53582fb3e93ce122c3a2f",
+      "preserves_reviewed_runtime_overlay": false
+    },
+    {
+      "source": "ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json",
+      "before_sha256": null,
+      "after_sha256": "ab68507daade1f1f8f9c903ef6b4269355efbca00ef53582fb3e93ce122c3a2f",
+      "main_source_sha256": "ab68507daade1f1f8f9c903ef6b4269355efbca00ef53582fb3e93ce122c3a2f",
+      "preserves_reviewed_runtime_overlay": false
+    }
+  ],
+  "evidence_sha256": {
+    "UPSTREAM_TESTS.log": "a18208c7fefa18d2ea6dbabdabd42f786cb0398740c00fd7ff284ac29cc3033f",
+    "UPSTREAM_TESTS.xml": "7172af77703d9dfdffa4083416129c260ee33ce404da7b1017dcb7e93804827d",
+    "full-api-03/ACCEPTANCE.json": "6473014ec61021caa7a928c21a416380adaf42f9f73c183508213050798f5be8",
+    "PYTHON_TESTS.log": "914bffb5c9b0dc75921a5a536d6387ca3927bfb472705cdb62cfcb53c9beffef",
+    "UI_EXPORT_VERIFY.json": "7e0cc4f6242e26ff7e00bbfd46de3699e5495769b43d3c1a5e956bc9081d769c",
+    "NAVIGATION_VERIFY.json": "eaa78ee5717009edfd46bed9a0e5dfdb79bf8fddd8b91d3c34a450588efecb18",
+    "ISOLATED_REPEAT_HISTORY.json": "6034ce622e2ffc51234078754b68279e06aab155f452f5c0d4e6560862edcedd",
+    "ISOLATED_WORKSPACE.png": "4d93c883fd0edb321ca7a86e959c1ed9e167eb5a7759c6f26af8a3b8d6d8619f",
+    "ISOLATED_OVERLAY_WORKSPACE.png": "585e97fdf237dd2c4bbd05ef0aaae59e0a89b1b4f576229e5640e32f6a0b742a",
+    "ISOLATED_CLEANUP.json": "954f4a324690cda3aed90c605f56ca904b119a85c16e8901079572596af4de70",
+    "PRODUCTION_BEFORE.json": "fb16379f93e53ca28e7f9c4802831d28d6f3dfdfa6484d717c1c835e6d7329f4",
+    "DEPLOY_PLAN.json": "7ec73eccba8ed111c1aead44a4e5d44fb476053f08934189d657778913a03ffd",
+    "DEPLOY_WRITES.json": "431639798a5e6b3a9a8f4324b9ebd076e016fe638b3ba95804719fb02b10c3c4",
+    "PRESERVED_RUNTIME_OVERLAY.json": "9719d2378ef8672852c2dce1b076d336ddce1ddf35c6fe03edf570003f8500ac",
+    "SCOPED_RUNTIME_PATCH.diff": "ea425f5465da89770fa61a586476c49fbc586923478fba8954a4ae8d6f92d7b9",
+    "DATABASE_PREDEPLOY.json": "fe6398a14b0d7fb81d67330a649d963fc64e5ea68327d846e7e7d6e17e1f8847",
+    "DATABASE_POSTUI.json": "fe339a72225f66942c8830cb32fcbf7b6be57ff4e5e6e2589d95c14a22876fad",
+    "DATABASE_COMPARE.json": "4848e66d28aed874706f8ed2dbef5ed524a4f791349e3ea6993dd3c5f7e4b146",
+    "PRODUCTION_SERVED_VERIFY.json": "fc206fd7753ce2a1d46b09ef65a1b5dfb51c5d26080dec70d14ff633d3f589aa",
+    "PRODUCTION_DEPLOY_VERIFY.json": "a8d64f728f2880c8f7e0aa65888667af12bd915f81886d34c6b1499266f9ae2b",
+    "PRODUCTION_FINAL_GUARD.json": "a25b3d9ec8e669bdc7182d3fd291513568e270d3c8eec548c38b474fbdd99da7",
+    "PRODUCTION_UI_VERIFY.json": "fcdfb9ed8c639f538266ffd24277b1a95e0dca6df4b751d31c6128bdea668feb",
+    "PRODUCTION_REPAIR_HISTORY.json": "5003d6cb49dcdfa9c4ae4c0aa7e9259e9b82023aaa05b2376589e5a375e8547b",
+    "PRODUCTION_FINAL_WORKSPACE.png": "2ba62fec1674e24a8a6cd2b16baf99d5c5dffe29a567e401264cebb586235ceb",
+    "PRODUCTION_EDITOR_EXPORT.png": "fe6a8c7c54731478b8a76cbb8526fb79eb366419d577ff4d2a27481bd0f1de88",
+    "PRODUCTION_FINISHED.png": "12cdd72fe4b586d03ec49f08f3e40952041fdcef328a0611db46fa154e523db6",
+    "PRODUCTION_STOCKINGS.png": "37eec989eb6b3512548217b300e7f737bebec352cbedefaf66e8759440004f16"
+  }
+}

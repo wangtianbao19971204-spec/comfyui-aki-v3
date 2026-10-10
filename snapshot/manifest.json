@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-09T23:10:51.430594+00:00",
+  "created_at": "2026-10-10T00:07:14.336476+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -11323,6 +11323,13 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/feature_acceptance.py",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/feature_acceptance.py",
+      "sha256": "a8f4355a03e70be0506c8d448a5980e8976b8c3ea46b70966ad243c6bb4a4b8d",
+      "bytes": 11382,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/image_acceptance.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/image_acceptance.py",
       "sha256": "3f7a12523a2916c8b279c6ac12c7a2474f181c5cfa2e642ead9c01c7c16e9d14",
@@ -12172,15 +12179,15 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
-      "sha256": "77d8d5723f87d9cd56b6b26c96d0aeb786b9e200b314cbbbf9e340519419aa40",
-      "bytes": 59086,
+      "sha256": "1c06a293fffb3de039dd829f52f4b03fa520c13ad0ede954194353cb9dba50bf",
+      "bytes": 59804,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js",
-      "sha256": "98d551955f3767494f99114567534b89a1013247bf075dd6d1c0a1958033b908",
-      "bytes": 13330,
+      "sha256": "2c8db20f3edf5efb4e4be153f265f0d71797fdadc9fe59a1304283ed727148d3",
+      "bytes": 13711,
       "kind": "file"
     },
     {
@@ -23650,6 +23657,13 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
+      "sha256": "85b6dd5d5d29221f998c71b6c32ab9b3aae6a377a7ac42d580988fac9b1dbe5d",
+      "bytes": 4566,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/resource_actions.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/resource_actions.js",
       "sha256": "29eb4fa506ede9b5f7f3db14a07d4bd169de3d3c8a584d9bd9a901034c09652c",
@@ -23715,8 +23729,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
-      "sha256": "e3b68ebcf1dc99cb4aa00bcdb3dad593a24db02bfda87212bf4b7e868f4750e7",
-      "bytes": 24179,
+      "sha256": "60f4c10b8669c554655ca1ebe2138239c365de7482475e3027a96c873c2bda69",
+      "bytes": 24777,
       "kind": "file"
     },
     {
@@ -23764,8 +23778,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
-      "sha256": "1c9540aecfb6f9facb236ff4b4623fa0da3dc50e673bc01c2e7ffcd50d53ab33",
-      "bytes": 19005,
+      "sha256": "7e4b65407314b2c70cdbd5d62443966d85bda9965b9971dafa8266bc89310499",
+      "bytes": 19569,
       "kind": "file"
     },
     {
@@ -51363,6 +51377,13 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json",
+      "path": "runtime/ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json",
+      "sha256": "ab68507daade1f1f8f9c903ef6b4269355efbca00ef53582fb3e93ce122c3a2f",
+      "bytes": 5478,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/utils/__init__.py",
       "path": "runtime/ComfyUI/utils/__init__.py",
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -57481,6 +57502,13 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/build_stocking_workflow.py",
+      "path": "runtime/production_tools/build_stocking_workflow.py",
+      "sha256": "716e7b787bd55971a538e3cfff6298ed81467cdaa0ca58fc4f0290b1f2467c77",
+      "bytes": 3822,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/huishi_adapter/AdapterTests.cs",
       "path": "runtime/production_tools/huishi_adapter/AdapterTests.cs",
       "sha256": "410d9596321c4ff64e320ccc63530ebcb3ade78823c807a5ffaf2abc2c958114",
@@ -57733,6 +57761,13 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/templates/生产扩展_丝袜纹理修复.json",
+      "path": "runtime/production_tools/templates/生产扩展_丝袜纹理修复.json",
+      "sha256": "ab68507daade1f1f8f9c903ef6b4269355efbca00ef53582fb3e93ce122c3a2f",
+      "bytes": 5478,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/test_browser_bridge_server.py",
       "path": "runtime/production_tools/test_browser_bridge_server.py",
       "sha256": "d7233af3ed088fd925aa74de5ec6c019d2331dfeddedda865b94429cea938a99",
@@ -57758,6 +57793,13 @@
       "path": "runtime/production_tools/test_plugin_fusion.cjs",
       "sha256": "41a45e05980bf72418baf4cb2c9b53b2d35e7a3551f5978a915c80aedb3f5a5c",
       "bytes": 9548,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/test_stocking_workflow.cjs",
+      "path": "runtime/production_tools/test_stocking_workflow.cjs",
+      "sha256": "9377ae1586e82e6b26e7aa8efc18fc408ba1e1868e04188ce3acccd0257c5497",
+      "bytes": 4026,
       "kind": "file"
     },
     {
@@ -67729,16 +67771,23 @@
     }
   ],
   "development_revision": {
-    "note": "Preserve editor draft ownership across browser numeric JSON normalization",
-    "previous_manifest_sha256": "eaf5d244a9d4bd42b980eb498cb9db9da98e1a81455e57d179b530608b06ff73",
+    "note": "Independent stocking repair workflow, peer navigation and complete upstream feature acceptance",
+    "previous_manifest_sha256": "e76742fff1e0fe46b5418d688d92d27572d3808dcd345dcf53260f3334ee8415",
     "source_changes": {
-      "added": [],
+      "added": [
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/feature_acceptance.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
+        "ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json",
+        "production_tools/build_stocking_workflow.py",
+        "production_tools/templates/生产扩展_丝袜纹理修复.json",
+        "production_tools/test_stocking_workflow.cjs"
+      ],
       "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_api.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio.py"
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js"
       ]
     },
     "live_deployed": false,

@@ -32,7 +32,7 @@ ComfyUI 相关修改的唯一开发入口是 `maintenance/comfyui/`，本机为 
 
 五模块为 WeiLin 共享资料、Anima 选择器、Gallery/UAP、LoRA Manager、Custom Scripts；装配以 `WB/modules.json` 为准。外层旧同名目录的兼容／历史身份不形成第二套开发权威；源码收录也不等于生产启用。
 
-UAP 九分支为 Anima 原版、Anima 2.9B、Krea2 生产、Krea2 编辑、裁剪精修、透明抠图、左右扩图、独立二倍与四倍超分。内嵌子图、细化次序、二放和验收边界见[工作流说明](technical/runtime/workflows.md)。
+UAP 九分支为 Anima 原版、Anima 2.9B、Krea2 生产、Krea2 编辑、裁剪精修、透明抠图、左右扩图、独立二倍与四倍超分。内嵌子图、细化次序、二放和验收边界见[工作流说明](technical/runtime/workflows.md)。 新增的[丝袜纹理修复](../snapshot/runtime/ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json)是独立工作流，导航与精修同级、位于放大之前；不向原 UAP 加入节点。
 
 本轮另补入 22 份模型架构 YAML、训练器采样示例和一份 WanVideo 的 Qwen 架构配置，按精确路径维护；它们不含权重。12 份旧技术／QA 原件保留在历史归档，范围及实际验收见[完整性复核](technical/changes/operations-source-of-truth/2026-10-07-completeness-recheck.md)。
 

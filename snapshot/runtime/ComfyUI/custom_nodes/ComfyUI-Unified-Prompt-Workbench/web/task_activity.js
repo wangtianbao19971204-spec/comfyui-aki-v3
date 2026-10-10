@@ -2,6 +2,7 @@ import {api} from '../../scripts/api.js';
 import {commitWidget, createWidgetInserter, isWritableTarget} from './prompt_target.js';
 import {listPromptTargets} from './resource_actions.js';
 import {mountPromptOptimizer} from './prompt_optimizer.js';
+import {stockingProject} from './repair_workflow.js';
 
 const methods=[['SW-01C','PixAI · 标签反推'],['SW-01D','JoyCaption · 三路反推'],['SW-01B','在线模型 · 综合反推']];
 const imageTypes=new Set(['SaveImage','PreviewImage']);
@@ -58,6 +59,7 @@ function generationResults(context){
 
 function imageTaskName(context){
     const has=type=>context.roots.some(node=>node.type===type);
+    if(has('StockingTextureStudio'))return '纹理修复';
     return has('BiRefNetRMBG')?'抠图':has('ImagePadForOutpaint')?'扩图':has('OlmDragCrop')?'局部精修':has('Krea2EditGroundedEncode')?'指令编辑':!has('KSampler')&&has('UpscaleModelLoader')?'放大':'生图';
 }
 
@@ -73,9 +75,12 @@ export function taskPlan(app,task,method){
     }
     const methodRoots=roots.filter(node=>captionMethod(node)===method);
     const label=task==='generate'?'开始'+imageTaskName(context):task==='caption'?'开始反推':'开始优化';
-    const reason=app.rootGraph&&app.rootGraph!==app.graph?'请先返回主工作流，再选择要执行的任务。':task==='optimize'?'请在提示词优化面板中准备草稿。'
+    let reason=app.rootGraph&&app.rootGraph!==app.graph?'请先返回主工作流，再选择要执行的任务。':task==='optimize'?'请在提示词优化面板中准备草稿。'
         : !candidates.length?'当前分支没有可识别的'+(task==='generate'?'图片输出节点。':'反推结果节点。')
         : !targets.length?'请先启用'+(task==='generate'?'当前分支的图片输出节点。':'所选反推工具。'):'';
+    const editor=roots.find(node=>node.type==='StockingTextureStudio');
+    if(!reason&&task==='generate'&&editor&&!editor.inputs?.some(i=>i.name==='image'&&i.link!=null)&&!stockingProject(editor).asset)
+        reason='请打开修复编辑器，导入图片并应用到节点。';
     return {...context,task,method,label,reason,methodRoots,targets,queueNodeIds:targets.map(item=>item.id)};
 }
 
@@ -191,6 +196,9 @@ export function mountTaskActivity(host,{app,element,button,report,onChange,actio
     function refresh(force=false){
         if(disposed)return;
         const next=taskNodes(app);
+        const repairing=next.roots.some(node=>node.type==='StockingTextureStudio');
+        if(repairing)task='generate';
+        for(const [id,choice]of choices)choice.hidden=repairing&&id!=='generate';
         const changed=context?.graph!==next.graph||context?.branch!==next.branch||next.entries.some((item,i)=>context?.entries[i]?.node!==item.node)||context?.entries.length!==next.entries.length;
         if(changed){record=null;historyVersion++;reference=null;referenceValue=null;writer?.dispose();writer=null;}
         context=next;

@@ -1,0 +1,265 @@
+{
+  "revision": 0,
+  "last_node_id": 4,
+  "last_link_id": 2,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "StockingTextureStudio",
+      "title": "丝袜纹理修复 · 打开完整编辑器",
+      "pos": [
+        80,
+        160
+      ],
+      "size": [
+        420,
+        470
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "shape": 7,
+          "link": null
+        },
+        {
+          "name": "depth",
+          "type": "IMAGE",
+          "shape": 7,
+          "link": null
+        },
+        {
+          "name": "project_json",
+          "type": "STRING",
+          "widget": {
+            "name": "project_json"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "成品",
+          "type": "IMAGE",
+          "links": [
+            1
+          ]
+        },
+        {
+          "name": "仅丝袜透明图层",
+          "type": "IMAGE",
+          "links": [
+            2
+          ]
+        },
+        {
+          "name": "图层透明度",
+          "type": "MASK",
+          "links": null
+        },
+        {
+          "name": "问题标记",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "name": "处理说明",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "StockingTextureStudio",
+        "uap_layout_group": "01 原图与纹理修复"
+      },
+      "widgets_values": [
+        "{}"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "SaveImage",
+      "title": "修复成品",
+      "pos": [
+        630,
+        160
+      ],
+      "size": [
+        360,
+        470
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 1
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage",
+        "uap_layout_group": "03 成品与透明图层"
+      },
+      "widgets_values": [
+        "StockingRepair/finished"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "SaveImage",
+      "title": "仅丝袜透明图层",
+      "pos": [
+        1060,
+        160
+      ],
+      "size": [
+        360,
+        470
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 2
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage",
+        "uap_layout_group": "03 成品与透明图层"
+      },
+      "widgets_values": [
+        "StockingRepair/stockings"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "Note",
+      "pos": [
+        80,
+        690
+      ],
+      "size": [
+        420,
+        230
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "uap_layout_group": "01 原图与纹理修复"
+      },
+      "widgets_values": [
+        "1. 打开完整编辑器，直接导入 PNG / JPG / PSD。\n2. 点选或画笔涂出部位，画横纹走向，选择样式。\n3. 点击“应用到节点”，关闭编辑器后运行。\n4. 成品和透明丝袜图层分别保存到 StockingRepair。\nPSD 在编辑器内导出。继续放大时切换到 2× / 4× 并载入成品。\n此工作流独立运行，不包含生成、精修或放大步骤。"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      1,
+      1,
+      3,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [
+    {
+      "title": "01 原图与纹理修复",
+      "bounding": [
+        40,
+        90,
+        500,
+        880
+      ],
+      "color": "#56747e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "03 成品与透明图层",
+      "bounding": [
+        590,
+        90,
+        870,
+        580
+      ],
+      "color": "#647e56",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "uap_workbench": {
+      "version": 1,
+      "activeBranch": "stocking",
+      "viewBranch": "stocking",
+      "stage": "daily",
+      "compactWidgets": false,
+      "branches": [
+        {
+          "id": "stocking",
+          "label": "丝袜纹理修复",
+          "group": "01 原图与纹理修复",
+          "nodeIds": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "modes": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0
+          },
+          "stages": [
+            {
+              "id": "daily",
+              "label": "导入与修复",
+              "groups": [
+                "01 原图与纹理修复"
+              ]
+            },
+            {
+              "id": "compare",
+              "label": "成品与图层",
+              "groups": [
+                "03 成品与透明图层"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}

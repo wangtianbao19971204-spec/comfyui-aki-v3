@@ -133,7 +133,10 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_optimizer.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/run_controls.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/refinement_controls.js"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/refinement_controls.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js"
       ],
       "tests": [
         "snapshot/runtime/production_tools/test_uap_navigation.cjs",
@@ -141,7 +144,8 @@
         "snapshot/runtime/production_tools/test_uap_compact_widgets.cjs",
         "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/test_candidate.cjs",
         "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/browser_measurement.js",
-        "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/lifecycle_collector.js"
+        "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/lifecycle_collector.js",
+        "snapshot/runtime/production_tools/test_stocking_workflow.cjs"
       ],
       "evidence": [
         "snapshot/evidence/20261005_workbench_anime_polish/REPORT.txt",
@@ -149,7 +153,8 @@
         "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/browser_acceptance.json",
         "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261003_015012_R1_autonomous/UI_FINAL_ACCEPTANCE.json",
         "docs/receipts/browser_live_deployment_20261006.json",
-        "docs/receipts/final_workflow_acceptance_20261007.json"
+        "docs/receipts/final_workflow_acceptance_20261007.json",
+        "docs/receipts/stocking_texture_complete_20261010.json"
       ],
       "acceptance": "historical",
       "watch": [
@@ -159,7 +164,9 @@
         "snapshot/runtime/production_tools/arrange_uap_daily_controls.py",
         "snapshot/runtime/production_tools/test_uap_navigation.cjs",
         "snapshot/runtime/production_tools/test_uap_daily_controls.cjs",
-        "snapshot/runtime/production_tools/test_uap_compact_widgets.cjs"
+        "snapshot/runtime/production_tools/test_uap_compact_widgets.cjs",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js"
       ],
       "examples": [
         "snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
@@ -177,7 +184,10 @@
         "snapshot/runtime/production_tools/analyze_workflow_dependencies.py",
         "docs/technical/archive/benchmark_reports/2026-10-04_full_workflow_review/build_component_catalog.py",
         "snapshot/runtime/production_tools/layout_uap_workbench.py",
-        "scripts/native_workflow_acceptance.py"
+        "scripts/native_workflow_acceptance.py",
+        "snapshot/runtime/production_tools/build_stocking_workflow.py",
+        "snapshot/runtime/production_tools/templates/生产扩展_丝袜纹理修复.json",
+        "snapshot/runtime/ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json"
       ],
       "tests": [
         "snapshot/runtime/production_tools/validate_uap_workflow.py",
@@ -185,7 +195,8 @@
         "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workflow_product_repair/test_candidate.cjs",
         "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_native_e2e_acceptance/acceptance.py",
         "snapshot/runtime/production_tools/test_uap_browser_retirement.py",
-        "tests/test_native_workflow_acceptance.py"
+        "tests/test_native_workflow_acceptance.py",
+        "snapshot/runtime/production_tools/test_stocking_workflow.cjs"
       ],
       "evidence": [
         "snapshot/evidence/20261005_workflow_product_repair/FINAL_DELIVERY.json",
@@ -196,7 +207,8 @@
         "docs/receipts/browser_workflow_retirement_20261006.json",
         "docs/receipts/browser_live_deployment_20261006.json",
         "docs/receipts/final_workflow_acceptance_20261007.json",
-        "docs/receipts/workflow_failure_verification_20261007.json"
+        "docs/receipts/workflow_failure_verification_20261007.json",
+        "docs/receipts/stocking_texture_complete_20261010.json"
       ],
       "acceptance": "historical",
       "watch": [
@@ -208,10 +220,13 @@
         "snapshot/runtime/production_tools/layout_uap_workbench.py",
         "snapshot/runtime/production_tools/test_uap_browser_retirement.py",
         "scripts/native_workflow_acceptance.py",
-        "tests/test_native_workflow_acceptance.py"
+        "tests/test_native_workflow_acceptance.py",
+        "snapshot/runtime/production_tools/build_stocking_workflow.py",
+        "snapshot/runtime/production_tools/test_stocking_workflow.cjs"
       ],
       "examples": [
-        "snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json"
+        "snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json",
+        "snapshot/runtime/production_tools/templates/生产扩展_丝袜纹理修复.json"
       ]
     },
     {
@@ -897,13 +912,15 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/model_acceptance.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio_editor.cjs",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/studio_compare.py"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/studio_compare.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/feature_acceptance.py"
       ],
       "evidence": [
         "docs/receipts/stocking_texture_20261009.json",
         "docs/receipts/stocking_texture_fix_20261010.json",
         "docs/receipts/stocking_texture_parity_20261010.json",
-        "docs/receipts/stocking_texture_studio_20261010.json"
+        "docs/receipts/stocking_texture_studio_20261010.json",
+        "docs/receipts/stocking_texture_complete_20261010.json"
       ],
       "acceptance": "checked-source",
       "watch": [

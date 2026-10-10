@@ -3,6 +3,7 @@ import {listPromptTargets,attachPromptAutocomplete,promptDirection} from './reso
 import {mountRunControls} from './run_controls.js';
 import {mountTaskActivity} from './task_activity.js';
 import {inspectStaticPromptInputs} from './static_prompt_inspector.js';
+import {workflowChoices, isWorkflowChoice, openWorkflowChoice} from './repair_workflow.js';
 
 export function mountWorkspace(host, {app, element, button, browse, selectTarget, report, savePlan, models, close}) {
     host.classList.add('uw-workspace-page');
@@ -66,7 +67,7 @@ export function mountWorkspace(host, {app, element, button, browse, selectTarget
         branchBar.hidden=branchSummary.hidden=!state?.branches?.length;if(branchBar.hidden)return;
         const signature=state.branches.map(branch=>`${branch.id}:${branch.label}`).join('|');
         if(branchGraph!==app.graph||branchSignature!==signature){
-            branchPicker.replaceChildren();for(const branch of state.branches)element('option',branch.label,branchPicker,{value:branch.id});
+            branchPicker.replaceChildren();for(const choice of workflowChoices(state))element('option',choice.label,branchPicker,{value:choice.value});
             branchPicker.value=state.activeBranch;branchGraph=app.graph;branchSignature=signature;
         }
         if(lastActiveBranch!==state.activeBranch&&branchPicker.value===lastActiveBranch)branchPicker.value=state.activeBranch;
@@ -77,12 +78,18 @@ export function mountWorkspace(host, {app, element, button, browse, selectTarget
         activeBranch.textContent='正在编辑与运行：'+(active?.label||'未选择');
         const nodes=selected?.nodeIds.map(id=>app.graph.getNodeById(id)).filter(Boolean)||[];
         const has=type=>nodes.some(node=>node.type===type);
-        const use=has('BiRefNetRMBG')?'图片 → 抠图 → 透明素材':has('ImagePadForOutpaint')?'输入图片 → 扩展边缘 → 结果':has('OlmDragCrop')?'输入图片 → 裁剪精修 → 回贴':has('Krea2EditGroundedEncode')?'输入图片 + 编辑指令 → 结果':!has('KSampler')&&has('UpscaleModelLoader')?'输入图片 → 模型放大 → 结果':'提示词 + 模型 + 参数 → 生成图片';
-        const details=has('BiRefNetRMBG')?'不需要提示词。':selected?.id==='a29'?'使用 2.9B 模型；原版 Anima 的 LLLite 控制模型不通用。':selected?.id==='a1'?'原版 Anima，使用此分支的 LoRA 与控制组件。':selected?.id==='ext08'?'OmniSR 原生4×，随后缩放0.5×，最终2×；修改后按合成倍率交付。':selected?.id==='ext09'?'预设为四倍素材，使用放大模型的原始输出。':'';
+        const use=has('StockingTextureStudio')?'导入图片 / PSD → 纹理修复 → 成品与透明图层':has('BiRefNetRMBG')?'图片 → 抠图 → 透明素材':has('ImagePadForOutpaint')?'输入图片 → 扩展边缘 → 结果':has('OlmDragCrop')?'输入图片 → 裁剪精修 → 回贴':has('Krea2EditGroundedEncode')?'输入图片 + 编辑指令 → 结果':!has('KSampler')&&has('UpscaleModelLoader')?'输入图片 → 模型放大 → 结果':'提示词 + 模型 + 参数 → 生成图片';
+        const details=has('StockingTextureStudio')?'点击打开修复编辑器；应用到节点后输出。':has('BiRefNetRMBG')?'不需要提示词。':selected?.id==='a29'?'使用 2.9B 模型；原版 Anima 的 LLLite 控制模型不通用。':selected?.id==='a1'?'原版 Anima，使用此分支的 LoRA 与控制组件。':selected?.id==='ext08'?'OmniSR 原生4×，随后缩放0.5×，最终2×；修改后按合成倍率交付。':selected?.id==='ext09'?'预设为四倍素材，使用放大模型的原始输出。':'';
         branchSummary.hidden=selected===active&&!details;
         branchSummary.textContent=(selected===active?'当前流程：':'待切换流程：')+use+'。'+details+(selected===active?'':' 仅选择不会切换运行；点击“启用并切换”后，控制项和运行任务会一起切换。');
     }
-    branchPicker.onchange=refreshBranchPicker;
+    branchPicker.onchange=async()=>{
+        const value=branchPicker.value;
+        if(!isWorkflowChoice(value)) {refreshBranchPicker();return;}
+        branchPicker.value=app.graph?.extra?.uap_workbench?.activeBranch;
+        try {await openWorkflowChoice(app,value);refresh();}
+        catch(error) {report(error);}
+    };
     const planHost=element('div',null,auxiliary,{hidden:true,className:'uw-plan-create'});
     button('保存正负向方案','workspace-save-pair',()=>{
         if(restoreDaily&&window.unifiedDailyControls?.readPlan){const sections=window.unifiedDailyControls.readPlan();return savePlan(Object.values(sections).join('\n'),'mixed','当前分支',sections);}

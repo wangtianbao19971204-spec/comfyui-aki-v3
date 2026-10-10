@@ -2,6 +2,8 @@
 
 文档修订：2026-10-10。
 
+原独立软件的完整功能清单、逐项验证及主机适配差异见[全部功能验收](../changes/runtime-stocking-texture/2026-10-10-complete-acceptance.md)。新增[独立修复工作流](../changes/runtime-workflows/2026-10-10-stocking-repair.md)，无需向已有图插节点。
+
 ## 完整编辑器扩展（2026-10-10）
 
 新增 `StockingTextureStudio`（丝袜纹理 · 完整编辑器），保留原有引导／渲染节点和工作流。固定上游更新至 `6c0c620d1bfa6a2c2691cb2313e928d9c7244ee5`，新“线圈”也加入原渲染节点。完整编辑器复用该提交的 Document、PSD 与静态界面，独立文档实例通过 ComfyUI 的同源 `/stocking_texture/studio` 路由接入，不启动原桌面服务器或安装器。
