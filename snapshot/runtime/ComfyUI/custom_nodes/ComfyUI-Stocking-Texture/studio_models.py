@@ -1,6 +1,6 @@
 """Local SAM/depth inference. Bounded CPU caches; CUDA is borrowed only while idle."""
 from collections import OrderedDict
-from contextlib import contextmanager
+from contextlib import ExitStack, contextmanager
 import hashlib
 from pathlib import Path
 import sys
@@ -106,15 +106,21 @@ def _full_precision(device):
         return
     # TF32 convolutions can visibly change depth around sharp edges. The GPU
     # lease prevents ComfyUI prompts from running while these global flags change.
-    matmul, cudnn = torch.backends.cuda.matmul.allow_tf32, torch.backends.cudnn.allow_tf32
-    try:
-        torch.backends.cuda.matmul.allow_tf32 = False
-        torch.backends.cudnn.allow_tf32 = False
+    with ExitStack() as restore:
+        matmul, cudnn = torch.backends.cuda.matmul, torch.backends.cudnn
+        if hasattr(matmul, "fp32_precision") and hasattr(cudnn, "conv"):
+            # Torch 2.9 forbids mixing precision APIs. Preserve the exact setting,
+            # including inherited "none", rather than round-tripping a boolean.
+            for backend in (matmul, cudnn.conv):
+                restore.callback(setattr, backend, "fp32_precision", backend.fp32_precision)
+                backend.fp32_precision = "ieee"
+        else:
+            restore.callback(torch.set_float32_matmul_precision, torch.get_float32_matmul_precision())
+            restore.callback(setattr, cudnn, "allow_tf32", cudnn.allow_tf32)
+            torch.set_float32_matmul_precision("highest")
+            cudnn.allow_tf32 = False
         with torch.autocast(device_type="cuda", enabled=False):
             yield
-    finally:
-        torch.backends.cuda.matmul.allow_tf32 = matmul
-        torch.backends.cudnn.allow_tf32 = cudnn
 
 
 def _infer(model, operation, required_bytes, info):

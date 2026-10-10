@@ -10,7 +10,7 @@
 - CPU 内存最多保留一份 SAM、一份深度模型/处理器，以及四份 SAM 特征（ViT-B 合计约 16 MiB）。缓存键包含权重路径、大小、修改时间以及图像内容、尺寸、类型和执行设备；换模型清空对应特征，不同图片不串用选区。
 - SAM、深度各自串行；GPU 推理另行互斥。模型载入和深度预处理在取得 GPU 使用权前进行。仅在队列空闲时持有 ComfyUI `PromptQueue.mutex` 完成短时 GPU 推理，防止工作线程在推理中启动新任务。期间队列状态/提交可能短暂等待。已有排队/执行任务、队列锁忙、空闲显存小于 3 GiB 加 ComfyUI 保留量时改用 CPU；CPU 推理不占 GPU/队列锁。
 - GPU 不卸载 ComfyUI 模型，不调用其全局模型加载/释放逻辑。成功、异常或 OOM 后均将本模型移回 CPU；OOM 在释放 GPU/队列锁后重试 CPU，其他错误照常报告。CUDA allocator 可保留可复用内存，cuBLAS 也有少量工作区，这不等于模型常驻显存。
-- GPU 使用 FP32 并在持有使用权期间临时关闭 TF32/自动混合精度，结束恢复原标志。首次 TF32 对照的深度边缘误差超阈值，未作为验收结果。
+- GPU 使用 FP32 并在持有使用权期间临时关闭 TF32/自动混合精度，结束恢复精确原设置；Torch 2.9 使用新的 fp32_precision API，旧版本保留 high/medium/highest 原状态，避免混用新旧接口。首次 TF32 对照的深度边缘误差超阈值，未作为验收结果。
 - `sam.inference`、`depth_inference` 返回实际设备、CPU 回退原因、缓存命中和耗时；编辑器设备文字与深度提示同步更新。状态不写入工作流。
 
 ## 验证
@@ -19,21 +19,21 @@
 
 | 检查 | 结果 |
 | --- | --- |
-| 原 CPU 每次 SAM 点选 | 3.07–4.62 秒 |
-| GPU 首次 SAM 点选 | 0.96–1.12 秒 |
-| GPU 同图后续 SAM 点选 | 0.11–0.13 秒 |
-| CPU 缓存命中后点选 | 0.031–0.042 秒 |
-| 隔离 ComfyUI 点选 HTTP | 首次 2.60 秒；后续 0.30–1.10 秒；含线程、文档更新开销 |
-| GPU 深度，模型已缓存 | 0.10–0.27 秒 |
+| 原 CPU 每次 SAM 点选 | 2.87–4.48 秒 |
+| GPU 首次 SAM 点选 | 0.91–1.16 秒 |
+| GPU 同图后续 SAM 点选 | 0.077–0.097 秒 |
+| CPU 缓存命中后点选 | 0.030–0.035 秒 |
+| 隔离 ComfyUI 点选 HTTP | 首次 2.28 秒；后续 0.28–1.01 秒；含线程、文档更新开销 |
+| GPU 深度，模型已缓存 | 0.08–0.30 秒 |
 | CPU 回退与旧版 | SAM、分数、深度逐元素相同 |
 | GPU 与 CPU 选区 | 最低 IoU 0.999970；单个候选最多 26 个边缘像素不同；非逐像素相同 |
 | GPU 与 CPU 深度 | 最大绝对误差 3.231e-5；最大误差/该图深度范围 < 6.561e-6 |
 | 深度替换后的完整成品 | 黑袜交叉腿：油光逐像素相同；摩尔纹 2073600 像素中 33 像素相差 1 色阶 |
 | 模型/特征显存 | 每次推理后参数、buffer、缓存均在 CPU；重复点击分配量不增长。独立进程清除 cuBLAS 工作区后存活 CUDA 张量为 0 |
-| ComfyUI 调度 | 隔离实例执行真实纹理节点期间点选回退 CPU，队列完成后再用 GPU；未跑扩散模型。繁忙 CPU 回退实测 9.33 秒，不能保证队列忙时即时响应 |
+| ComfyUI 调度 | 隔离实例执行真实纹理节点期间点选回退 CPU，队列完成后再用 GPU；未跑扩散模型。繁忙 CPU 回退实测 7.23 秒，不能保证队列忙时即时响应 |
 | 编辑器流程 | 真实模型 HTTP 点选、候选切换、撤销重做、后台深度并行、应用确认、重开数据一致通过 |
 
-[推理合同](../../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio_models.py)覆盖缓存失效/上限、CPU 配置、GPU 协调、低显存、OOM/异常释放、本地模型加载与精度标志恢复；全插件共 55 项 Python 测试通过，前端 17 项通过。新增 [真实模型对照工具](../../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/gpu_acceptance.py)和 [隔离 HTTP 工具](../../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/gpu_http_acceptance.py)。摘要与证据哈希见[收据](../../../receipts/stocking_gpu_selection_20261010.json)。图片、模型、完整项目和输出都保留仓外。
+[推理合同](../../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio_models.py)覆盖缓存失效/上限、CPU 配置、GPU 协调、低显存、OOM/异常释放、本地模型加载与精度标志恢复；全插件共 56 项 Python 测试通过，前端 17 项通过。新增 [真实模型对照工具](../../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/gpu_acceptance.py)和 [隔离 HTTP 工具](../../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/gpu_http_acceptance.py)。摘要与证据哈希见[收据](../../../receipts/stocking_gpu_selection_20261010.json)。图片、模型、完整项目和输出都保留仓外。
 
 ## 限制与发布
 

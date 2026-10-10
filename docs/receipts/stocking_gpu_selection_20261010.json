@@ -7,12 +7,12 @@
   "production_deployed": false,
   "base_commit": "976d0b636bc972edb8cfdbf904e754a648140205",
   "validation": {
-    "python_tests": 55,
+    "python_tests": 56,
     "frontend_tests": 17,
     "compiled_adapter_syntax": true,
     "images": [
       {
-        "fixture": "black-crossed-fp32",
+        "fixture": "black-crossed-final",
         "image_sha256": "1115a0b586313743281533d69def83ef9ea6fbd68f944587dfbbc53d04a4fa93",
         "points": [
           [
@@ -37,30 +37,30 @@
           "max_divided_by_range": 5.080451393966727e-06
         },
         "timings_seconds": {
-          "baseline_cpu_0": 4.336806,
-          "baseline_cpu_1": 3.088087,
-          "baseline_cpu_2": 3.139864,
-          "cached_cpu_0": 3.135907,
-          "cached_cpu_1": 0.041589,
-          "cached_cpu_2": 0.037444,
-          "gpu_0": 1.122476,
-          "gpu_1": 0.124865,
-          "gpu_2": 0.129727,
-          "gpu_3": 0.129023,
-          "gpu_4": 0.12073,
-          "gpu_5": 0.125204,
-          "other_image": 0.19685,
-          "return_image": 0.12069,
-          "baseline_depth": 6.897651,
-          "cached_cpu_depth": 4.576495,
-          "gpu_depth_0": 0.241686,
-          "gpu_depth_1": 0.222061
+          "baseline_cpu_0": 4.484293,
+          "baseline_cpu_1": 3.016392,
+          "baseline_cpu_2": 2.902346,
+          "cached_cpu_0": 2.945636,
+          "cached_cpu_1": 0.034768,
+          "cached_cpu_2": 0.035435,
+          "gpu_0": 1.158033,
+          "gpu_1": 0.081769,
+          "gpu_2": 0.083639,
+          "gpu_3": 0.084977,
+          "gpu_4": 0.078158,
+          "gpu_5": 0.097458,
+          "other_image": 0.140042,
+          "return_image": 0.081735,
+          "baseline_depth": 6.424558,
+          "cached_cpu_depth": 3.948986,
+          "gpu_depth_0": 0.290841,
+          "gpu_depth_1": 0.172523
         },
         "cuda_workspace_bytes": 9568256,
         "cuda_tensors_after_workspace_release": 0
       },
       {
-        "fixture": "white-bent-fp32",
+        "fixture": "white-bent-final",
         "image_sha256": "c04e9b7b78474f9729928f9a05c8e18875187d6f867615fddb3420b475024ba4",
         "points": [
           [
@@ -81,26 +81,26 @@
           "max_divided_by_range": 6.5605189230058465e-06
         },
         "timings_seconds": {
-          "baseline_cpu_0": 4.332876,
-          "baseline_cpu_1": 3.073044,
-          "cached_cpu_0": 3.233519,
-          "cached_cpu_1": 0.035653,
-          "gpu_0": 0.967817,
-          "gpu_1": 0.110855,
-          "gpu_2": 0.121427,
-          "gpu_3": 0.125168,
-          "other_image": 0.198351,
-          "return_image": 0.11072,
-          "baseline_depth": 7.220398,
-          "cached_cpu_depth": 4.509695,
-          "gpu_depth_0": 0.27015,
-          "gpu_depth_1": 0.23928
+          "baseline_cpu_0": 3.942197,
+          "baseline_cpu_1": 2.899573,
+          "cached_cpu_0": 2.940235,
+          "cached_cpu_1": 0.034359,
+          "gpu_0": 0.907331,
+          "gpu_1": 0.084358,
+          "gpu_2": 0.086415,
+          "gpu_3": 0.088363,
+          "other_image": 0.143766,
+          "return_image": 0.083468,
+          "baseline_depth": 5.521973,
+          "cached_cpu_depth": 3.957347,
+          "gpu_depth_0": 0.297324,
+          "gpu_depth_1": 0.171141
         },
         "cuda_workspace_bytes": 9568256,
         "cuda_tensors_after_workspace_release": 0
       },
       {
-        "fixture": "nearblack-standing-fp32",
+        "fixture": "nearblack-standing-final",
         "image_sha256": "07f6d7ef9cc0f4174c6fb4a39bb8130b27b1dc12dbe64153130713c7ca30dbf1",
         "points": [
           [
@@ -121,20 +121,20 @@
           "max_divided_by_range": 5.220792526924148e-06
         },
         "timings_seconds": {
-          "baseline_cpu_0": 4.62411,
-          "baseline_cpu_1": 3.096303,
-          "cached_cpu_0": 3.213961,
-          "cached_cpu_1": 0.030635,
-          "gpu_0": 0.957619,
-          "gpu_1": 0.120697,
-          "gpu_2": 0.119489,
-          "gpu_3": 0.113703,
-          "other_image": 0.1891,
-          "return_image": 0.111775,
-          "baseline_depth": 2.670404,
-          "cached_cpu_depth": 0.779964,
-          "gpu_depth_0": 0.134843,
-          "gpu_depth_1": 0.102731
+          "baseline_cpu_0": 3.837085,
+          "baseline_cpu_1": 2.872762,
+          "cached_cpu_0": 2.926076,
+          "cached_cpu_1": 0.030089,
+          "gpu_0": 0.977565,
+          "gpu_1": 0.076936,
+          "gpu_2": 0.084122,
+          "gpu_3": 0.079711,
+          "other_image": 0.128259,
+          "return_image": 0.074055,
+          "baseline_depth": 2.226726,
+          "cached_cpu_depth": 0.758761,
+          "gpu_depth_0": 0.093983,
+          "gpu_depth_1": 0.08222
         },
         "cuda_workspace_bytes": 9568256,
         "cuda_tensors_after_workspace_release": 0
@@ -143,62 +143,62 @@
     "http_clicks": [
       {
         "label": "first_click",
-        "http_seconds": 2.59836709999945,
+        "http_seconds": 2.2792152000038186,
         "inference": {
           "model_cached": false,
           "embedding_cached": false,
           "device": "NVIDIA GeForce RTX 5090 D",
           "backend": "cuda:0",
           "fallback": null,
-          "seconds": 2.331730999998399
+          "seconds": 2.0285541000048397
         }
       },
       {
         "label": "cached_click",
-        "http_seconds": 1.103845799996634,
+        "http_seconds": 1.0070016999961808,
         "inference": {
           "model_cached": true,
           "embedding_cached": true,
           "device": "NVIDIA GeForce RTX 5090 D",
           "backend": "cuda:0",
           "fallback": null,
-          "seconds": 0.8074879000050714
+          "seconds": 0.7298821000003954
         }
       },
       {
         "label": "cached_click",
-        "http_seconds": 0.2973070000007283,
+        "http_seconds": 0.27761249999457505,
         "inference": {
           "model_cached": true,
           "embedding_cached": true,
           "device": "NVIDIA GeForce RTX 5090 D",
           "backend": "cuda:0",
           "fallback": null,
-          "seconds": 0.14568869999493472
+          "seconds": 0.12478109999210574
         }
       },
       {
         "label": "during_depth",
-        "http_seconds": 0.8123105999984546,
+        "http_seconds": 0.6131135000032373,
         "inference": {
           "model_cached": true,
           "embedding_cached": true,
           "device": "NVIDIA GeForce RTX 5090 D",
           "backend": "cuda:0",
           "fallback": null,
-          "seconds": 0.4992513000033796
+          "seconds": 0.32490259999758564
         }
       },
       {
         "label": "gpu_after_queue",
-        "http_seconds": 0.6837117000104627,
+        "http_seconds": 0.3530633000045782,
         "inference": {
           "model_cached": true,
           "embedding_cached": true,
           "device": "NVIDIA GeForce RTX 5090 D",
           "backend": "cuda:0",
           "fallback": null,
-          "seconds": 0.5097145000036107
+          "seconds": 0.19899889999942388
         }
       }
     ],
@@ -207,7 +207,7 @@
       "device": "NVIDIA GeForce RTX 5090 D",
       "backend": "cuda:0",
       "fallback": null,
-      "seconds": 1.4095315000013215
+      "seconds": 1.1560050000116462
     },
     "http_busy_fallback": {
       "model_cached": true,
@@ -215,7 +215,7 @@
       "device": "CPU",
       "backend": "cpu",
       "fallback": "comfy_busy",
-      "seconds": 9.325107399999979
+      "seconds": 7.234642800001893
     },
     "http_cycle_undo_redo_apply_reopen": true,
     "depth_render_comparison": {
@@ -244,12 +244,14 @@
     "browser_verified": false,
     "browser_blocker": "Native computer control could not determine the current browser URL reliably; no further UI input attempted",
     "production_process_and_four_source_files_unchanged": true,
-    "isolated_service_stopped": true
+    "isolated_service_stopped": true,
+    "precision_restoration": true,
+    "final_depth_arrays_identical_to_render_inputs": true
   },
   "candidate_files": [
     {
       "file": "studio_models.py",
-      "candidate_sha256": "408903d0db54efc119a1bdcebcd27ad53519f0d8b39f4aa7ba1fea93bfbe7c30",
+      "candidate_sha256": "37b57475d67b9f32d9b20fd8a2e433d6bc56feb08320cf608e4b02bc48a0f828",
       "production_sha256": "281bb2cc72d47b48e2d8f799361bdaf41948dec699280fb0a99e762282f12a2d",
       "production_matches_base": true,
       "isolated_matches_candidate": true
@@ -279,36 +281,40 @@
   "evidence_directory": "stocking-gpu-selection-20261010-01",
   "evidence_files": [
     {
-      "path": "black-crossed-fp32/ACCEPTANCE.json",
-      "sha256": "581ee48771241c588df795a41ef6488ccfdd1fcfee096ef531bd2adf673efdae"
+      "path": "black-crossed-final/ACCEPTANCE.json",
+      "sha256": "b469fe1f017eec0217fc416edc327711bebc8c7a92615d8bcb742a00c7ffe6bb"
     },
     {
-      "path": "white-bent-fp32/ACCEPTANCE.json",
-      "sha256": "20253935e5a3d3a5aa53729905aeeae463ccea332ac4a2074dc2c99be055d4fb"
+      "path": "white-bent-final/ACCEPTANCE.json",
+      "sha256": "8286429df1987ff94da774068e0b727769c0839fead84d46742409fa6df3f333"
     },
     {
-      "path": "nearblack-standing-fp32/ACCEPTANCE.json",
-      "sha256": "0f8038d9f3c3f79bdec49e3a0ae6a06fc9787179d7057aa47247478eb0cf82eb"
+      "path": "nearblack-standing-final/ACCEPTANCE.json",
+      "sha256": "3943067625d7726811f699ef049a4f4961213d928e00e63ac21f9f3a7f5bbec0"
     },
     {
-      "path": "http-02/ACCEPTANCE.json",
-      "sha256": "f644cf973ae1a7752abc5388577183b6aad9bab74fb3be1310180eea59772101"
+      "path": "http-final/ACCEPTANCE.json",
+      "sha256": "b3fd5fcc824865bab0cfd4848c51e020cf036efdd3dc21496d51bd4a3eec43ed"
     },
     {
       "path": "depth-render-comparison/ACCEPTANCE.json",
       "sha256": "28341f7c11229e910bb3b77e35da39e6d57c69ce8cd2678449f92bd2b74de718"
     },
     {
-      "path": "FINAL_VERIFICATION.json",
-      "sha256": "731964746207c6b013e3d4d10df6eb38a3c0cdde793fee5859e2fcad3569dd4b"
+      "path": "depth-evidence-revalidation.json",
+      "sha256": "7524bb7af25577db1313c3c7c0d6259eacd47ae4922eed4faf290d227ebfb9a7"
     },
     {
-      "path": "ISOLATED_SOURCE.json",
-      "sha256": "3e667f77dd9aac3d68a26ac4949a313cde397f3616ec62f48c4f37c9450f9b7e"
+      "path": "precision-restoration.json",
+      "sha256": "d30df486973911ddfe1c96424fe987c8be0c438806a8420ea62682942e9e59a3"
     },
     {
-      "path": "python-tests.log",
-      "sha256": "7a332d2dbefc0b702073df3123cb337113a2f0c389087be5976d0e631c2cf8a3"
+      "path": "FINAL_VERIFICATION_02.json",
+      "sha256": "f890980a8918431ff24be0b564662f77f6a4ecacbab3656a086410704a05b887"
+    },
+    {
+      "path": "python-tests-final.json",
+      "sha256": "15f4126cd0af6358bdb2ef728445b39de3fda1ea2724ea5aa147d0af9fc9c845"
     },
     {
       "path": "frontend-editor.log",

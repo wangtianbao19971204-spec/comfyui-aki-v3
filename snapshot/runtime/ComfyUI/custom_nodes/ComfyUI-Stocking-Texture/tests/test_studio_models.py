@@ -197,14 +197,30 @@ class DeviceContracts(unittest.TestCase):
         self.assertTrue(self.queue_available())
 
     def test_fp32_flags_are_scoped_to_inference_even_when_it_fails(self):
-        previous = torch.backends.cuda.matmul.allow_tf32, torch.backends.cudnn.allow_tf32
-        def operation(device):
-            self.assertFalse(torch.backends.cuda.matmul.allow_tf32)
-            self.assertFalse(torch.backends.cudnn.allow_tf32)
-            raise ValueError("inference failed")
-        with self.assertRaisesRegex(ValueError, "inference failed"):
-            models._infer(FakeModel(), operation, models._GIB, {})
-        self.assertEqual((torch.backends.cuda.matmul.allow_tf32, torch.backends.cudnn.allow_tf32), previous)
+        # Exercise new precision settings without touching or mixing legacy APIs.
+        matmul = types.SimpleNamespace(fp32_precision="none")
+        conv = types.SimpleNamespace(fp32_precision="tf32")
+        with mock.patch.object(torch.backends.cuda, "matmul", matmul), \
+                mock.patch.object(torch.backends.cudnn, "conv", conv):
+            def operation(device):
+                self.assertEqual(matmul.fp32_precision, "ieee")
+                self.assertEqual(conv.fp32_precision, "ieee")
+                raise ValueError("inference failed")
+            with self.assertRaisesRegex(ValueError, "inference failed"):
+                models._infer(FakeModel(), operation, models._GIB, {})
+            self.assertEqual((matmul.fp32_precision, conv.fp32_precision), ("none", "tf32"))
+
+    def test_legacy_medium_precision_is_restored_without_boolean_roundtrip(self):
+        cudnn = types.SimpleNamespace(allow_tf32=True)
+        with mock.patch.object(torch.backends.cuda, "matmul", types.SimpleNamespace()), \
+                mock.patch.object(torch.backends, "cudnn", cudnn), \
+                mock.patch.object(torch, "get_float32_matmul_precision", return_value="medium"), \
+                mock.patch.object(torch, "set_float32_matmul_precision") as setter:
+            with models._full_precision(torch.device("cuda:0")):
+                self.assertFalse(cudnn.allow_tf32)
+                setter.assert_called_once_with("highest")
+            self.assertTrue(cudnn.allow_tf32)
+            self.assertEqual(setter.call_args_list, [mock.call("highest"), mock.call("medium")])
 
 
 class DepthContracts(unittest.TestCase):

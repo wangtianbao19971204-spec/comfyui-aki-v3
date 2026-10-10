@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-10T15:19:58.976012+00:00",
+  "created_at": "2026-10-10T15:41:55.712439+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -11290,8 +11290,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_models.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_models.py",
-      "sha256": "408903d0db54efc119a1bdcebcd27ad53519f0d8b39f4aa7ba1fea93bfbe7c30",
-      "bytes": 9858,
+      "sha256": "37b57475d67b9f32d9b20fd8a2e433d6bc56feb08320cf608e4b02bc48a0f828",
+      "bytes": 10372,
       "kind": "file"
     },
     {
@@ -11416,8 +11416,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio_models.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio_models.py",
-      "sha256": "9722b9f3266ba5bf1118c9622a4ef3f1ed159e88dffaaa88ba067044db454c12",
-      "bytes": 11154,
+      "sha256": "bd390c9b3214bbf3e57404395862ec6a16a485f6dc9f5687249ab3d2c308e2a1",
+      "bytes": 12205,
       "kind": "file"
     },
     {
@@ -67855,22 +67855,14 @@
     }
   ],
   "development_revision": {
-    "note": "Stocking Studio GPU selection and depth; bounded CPU caches; verified on isolated CUDA instance, not deployed",
-    "previous_manifest_sha256": "592fae6add965edf976a31bbf5785688496de493cd7714ecba649bb9f06f7489",
+    "note": "Verify GPU selection and restore exact PyTorch precision settings",
+    "previous_manifest_sha256": "c69f69b917ba6998f46dbe9e97a492a6f86dde6db14dcde8951845e53a9131e1",
     "source_changes": {
-      "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/gpu_acceptance.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/gpu_http_acceptance.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio_models.py"
-      ],
+      "added": [],
       "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/README.md",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_api.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_assets.py",
         "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_models.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio.py"
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio_models.py"
       ]
     },
     "live_deployed": false,
