@@ -10,6 +10,8 @@
 
 2026-10-08 本轮检查 12 个新下载，新增 **11 个 LoRA**（7 Krea2、4 Anima），ABP_ART 与既有文件同摘要，未重复导入。当前共 **306 个用户 LoRA**，11 项来源、触发词、预览和离线缓存已登记；离线加载器枚举通过，在线管理页与 GPU 未测试，下载原件暂留。详情见[本轮记录](receipts/lora_download_import_20261008.json)。
 
+2026-10-10 丝袜完整编辑器增加可选 SAM ViT-B 与 Depth Anything V2 Small HF（Small，与历史来源目录中的 Large 区分）。精确来源、固定 revision、配套三个文件与内容摘要见[插件模型清单](../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/MODEL_SOURCES.json)。权重留在仓外，不随 Git 分发；插件只读取本地模型。
+
 ## 清单各负责什么
 
 | 清单 | 用途 |

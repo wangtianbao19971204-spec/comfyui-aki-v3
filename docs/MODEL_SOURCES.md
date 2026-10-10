@@ -10,8 +10,6 @@
 
 [完整机器目录](../snapshot/inventory/model_sources.json) · [原模型清单](../snapshot/inventory/models.json) · [模型与兼容说明](MODELS.md)
 
-2026-10-10 丝袜完整编辑器增加可选 SAM ViT-B 与 Depth Anything V2 Small HF（Small，非本页历史 Large）。精确来源、固定 revision、配套三个文件与内容摘要见[插件模型清单](../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/MODEL_SOURCES.json)。权重留在仓外，不随 Git 分发；插件只读取本地模型。
-
 原清单 SHA-256：`d526702803eb2be7ae500563c0e416ee10d89fc0243b0483d8008a63932820ab`。
 
 正式 v2 SHA-256：`8e11892bd970534e3fe04e6d07e206a1a344ce922a726132b8c7646aa301f3e0`。

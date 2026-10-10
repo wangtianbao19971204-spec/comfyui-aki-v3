@@ -1,6 +1,6 @@
 # 模型、LoRA 管理与资源配套
 
-文档修订：2026-10-08.1。
+文档修订：2026-10-10。
 
 ## 实现与资源
 
@@ -43,6 +43,8 @@ LM Civitai 前后端兼容、插件版本和下载队列是独立边界，不能
 2026-10-07 [最终验收](../../receipts/final_workflow_acceptance_20261007.json)：Krea2 三个初始黑图在复合模型／执行缓存清理后用相同输入恢复。当前与历史正常记录的实际 UNET/VAE 均为 BF16，当前进程未强制其精度；原生 latent 类也有成功反证。本轮不盲改 dtype、latent 或正式参数，不能把冷态恢复称为根因永久修复。现行模型检查绑定此前完整摘要，不重复认证全部权重。
 
 ## 更新记录
+
+- 2026-10-10：修正丝袜插件说明误写入生成目录导致的 CI `rendered_document_mismatch`。SAM ViT-B 与 Depth Anything V2 Small HF 的来源指引移至[模型维护](../../MODELS.md)，易读来源表由 `scripts/model_sources.py render` 重新生成并经 `check` 核对。仅调整文档，保留原来源 JSON、模型文件及工作流参数。
 
 - 2026-10-08：检查 12 个新下载，ABP_ART 与既有文件完整 SHA 相同，保留旧项并跳过重复导入；新增 11 项（7 Krea2 画风、2 Anima 服装、2 Anima 概念效果）。当前 306 用户 LoRA：Anima 208、Anima 2.9B 2、Krea2 96。11 项完整 SHA、AutoV3、公开文件身份、静图预览、离线加载器枚举和持久缓存读回通过，原 295 项、4 自训成品及 9,451 个受保护运行文件保持。服务关闭期间，先用 SQLite backup API 和隔离副本验证，再调用插件的单项缓存接口登记，未替换数据库或全库重建；在线管理页／接口与 GPU 推理未验收，下载原件暂留。事实和回退边界见[本轮收据](../../receipts/lora_download_import_20261008.json)。
 
