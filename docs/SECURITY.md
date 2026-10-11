@@ -31,13 +31,15 @@ git config --local core.hooksPath .githooks
 
 本地 pre-commit 强制 index 门禁，pre-push 强制全历史门禁；bundle 工具也内置全历史门禁。GitHub CI 对新推送/PR 跑工具测试、快照、数据库契约和全部可达历史扫描。新 clone 不会自动启用 hooks，须执行上面的 repo-local 配置。
 
-### 本地暂存快检缓存
+### 本地增量内容检查
 
-pre-commit 使用 `--staged --cache-staged`；`--staged` 单独运行仍完全不使用缓存。缓存只在该工作树的 Git 管理目录保存 `comfyui-staged-scan-v1.json`，内容只有身份/规则/内容摘要，没有文件正文、分片首尾或凭证值。只在整次检查成功且 refs/index/规则稳定后写入，原子替换；拒绝链接/硬链接，损坏或失效时完整重扫。
+pre-commit 使用 `--staged --cache-staged`；日常 pre-push 使用 `--pre-push --cache-history`。两者分别在该工作树的 Git 管理目录保存 `comfyui-staged-scan-v1.json`、`comfyui-history-scan-v1.json`，互不作为对方的可信基线。首次完整执行内容规则，后续只对新增或变化对象重做内容规则。`--all-history --cache-history` 可以预建／核验本机历史缓存；不带缓存参数的 `--staged`、`--all-history` 仍完整重扫。
 
-命中仍读取 Git 对象全部字节，核对 SHA、大小、所有路径、当前 manifest 顺序及跨片边界。缓存只省略此前干净、未压缩、未使用审核例外对象的重复内容模式匹配；压缩包与所有审核例外每次重扫。实际检测器/缓存代码、Python 版本、规则、例外登记、路径别名或对象变化会失效。合法临时 `GIT_INDEX_FILE` 使用实际选定的 index，不读取编辑器未暂存内容。
+历史模式仍重新枚举全部可达提交、tag、blob 和历史路径别名，包括已经删除的文件；不是只看当前分支 diff。命中仍读取对象全部字节，核对 SHA-256、大小、所有路径、全部 manifest 顺序及跨片边界。缓存只省略此前干净、未压缩、未使用审核例外对象的重复内容模式匹配；压缩包与审核例外每次重扫。提交／tag 消息、文件名／ref 名和 gitlink 检查保留。push 根必须在受检可达历史中，不能用一个未知 SHA 绕过检查。
 
-摘要用于发现偶然损坏，不是对本机 Git 管理员的防篡改认证；管理员同样可以改 hooks。缓存不能提交、不能从别人的仓库导入为可信证据，不缓存未知来源的 PASS。**全历史、pre-push、release、bundle、CI 都不读该缓存**，也不提供以缓存替代公开门禁的开关。`scanned_bytes` 仍是实际读取字节，报告另外列出复用的内容扫描量，不把复用称为重新执行所有内容规则。
+缓存内容只有身份／规则／内容摘要，没有文件正文、分片首尾或凭证值。检测器／缓存代码、Python 版本、规则、审核登记或 Git 管理目录身份改变会使整份缓存失效；对象字节、类型、大小或路径别名改变只使相应条目失效。缓存绑定本机 Git 目录的路径与文件系统身份，复制到另一克隆／工作树不予复用。合法临时 `GIT_INDEX_FILE` 仍检查实际选定的 index；历史审核登记从 HEAD 读取。缓存仅在整次扫描成功且 refs/index/规则稳定后原子写入，拒绝链接／硬链接；损坏、摘要不符或容量超限时保留完整扫描能力。
+
+摘要用于发现偶然损坏，不是对本机 Git 管理员的防篡改认证；管理员同样可以改 hooks。缓存不能提交、不能从别人提供的 PASS 报告导入。**正式发布、bundle 和 CI 继续执行不带缓存参数的全历史扫描**；显式 `--all-history` 也是完整重扫入口。`scanned_bytes` 仍是实际读取字节，报告分别列出重新执行和复用的内容扫描量；缓存本身不是一份发布许可。测试与实测见[增量检查说明](technical/changes/operations-source-of-truth/2026-10-10-incremental-security.md)。
 
 ## 历史凭证处理与后续整理
 

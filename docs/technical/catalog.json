@@ -706,6 +706,7 @@
         "tests/test_backup_status.py",
         "tests/test_workspace_audit.py",
         "tests/test_staged_scan_cache.py",
+        "tests/test_history_scan_cache.py",
         "tests/test_snapshot.py",
         "tests/test_project.py",
         "tests/test_external_state.py",
@@ -730,7 +731,8 @@
         "docs/receipts/pull_audit_20261006.json",
         "docs/receipts/final_workflow_acceptance_20261007.json",
         "docs/receipts/github_content_reconciliation_20261007.json",
-        "docs/receipts/privacy_completeness_recheck_20261007.json"
+        "docs/receipts/privacy_completeness_recheck_20261007.json",
+        "docs/receipts/incremental_security_20261011.json"
       ],
       "acceptance": "checked-source",
       "watch": [

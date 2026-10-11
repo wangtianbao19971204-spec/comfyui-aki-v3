@@ -1,9 +1,10 @@
 """Local performance cache, never a publication attestation or a payload store.
 
-Only the staged guard may use this cache. Every hit still reads and hashes the
-Git object; names, size, manifest order and cross-part edges are checked afresh.
+Staged and history guards have separate, policy-bound local caches. Every hit
+still reads and hashes the Git object; names, size, manifest order and cross-part
+edges are checked afresh. No cache is fetched from Git or the remote server.
 The checksum catches accidental damage, not an administrator who can also edit
-the hooks. Full-history, pre-push and release gates never consume this cache.
+the hooks. Uncached scans remain the default for release, bundle and CI callers.
 """
 from __future__ import annotations
 
@@ -45,8 +46,14 @@ def plain_path(path):
 
 
 class StagedCache:
+    name = NAME
+    scope = 'staged'
+    mode = 'local-staged-only'
+    limit = LIMIT
+    max_records = 100000
+
     def __init__(self, git_dir, policy):
-        self.path = Path(git_dir).absolute() / NAME
+        self.path = Path(git_dir).absolute() / self.name
         self.policy = policy
         self.records = {}
         self.pending = {}
@@ -67,11 +74,11 @@ class StagedCache:
             if not self.path.exists():
                 return
             before = self.path.stat()
-            if not stat.S_ISREG(before.st_mode) or before.st_size > LIMIT:
+            if not stat.S_ISREG(before.st_mode) or before.st_size > self.limit:
                 raise ValueError('Cache size/type')
             with self.path.open('rb') as stream:
                 opened = os.fstat(stream.fileno())
-                raw = stream.read(LIMIT + 1)
+                raw = stream.read(self.limit + 1)
             after = self.path.lstat()
             plain_path(self.path)
             if len({(s.st_dev, s.st_ino, s.st_size, s.st_mtime_ns) for s in (before, opened, after)}) != 1 or len(raw) != after.st_size:
@@ -86,7 +93,7 @@ class StagedCache:
                 self.state = 'policy_changed'
                 return
             records = payload['records']
-            if not isinstance(records, dict) or len(records) > 100000 or not all(is_digest(k) and is_digest(v) for k, v in records.items()):
+            if not isinstance(records, dict) or len(records) > self.max_records or not all(is_digest(k) and is_digest(v) for k, v in records.items()):
                 raise ValueError('Cache records')
             self.records = records
             self.state = 'warm'
@@ -105,10 +112,10 @@ class StagedCache:
             self.reused_bytes += entry['bytes']
 
     def save(self):
-        """Called only after all staged gates and stability checks passed."""
+        """Called only after the complete scan and stability checks passed."""
         payload = {'schema': 1, 'policy': self.policy, 'records': self.pending}
         raw = canonical({'payload': payload, 'checksum': digest(canonical(payload))}) + b'\n'
-        if len(raw) > LIMIT:
+        if len(raw) > self.limit or len(self.pending) > self.max_records:
             self.state = 'write_size_limit'
             return
         temporary = None
@@ -132,7 +139,17 @@ class StagedCache:
                 Path(temporary).unlink(missing_ok=True)
 
     def report(self):
-        return {'mode': 'local-staged-only', 'state': self.state,
+        return {'mode': self.mode, 'scope': self.scope, 'state': self.state,
                 'reused_objects': self.hits, 'reused_content_scan_bytes': self.reused_bytes,
                 'written': self.written, 'policy_sha256': self.policy,
                 'all_object_bytes_rehashed': True, 'publication_evidence': False}
+
+
+class HistoryCache(StagedCache):
+    # The maintained repository already has more than 80,000 historical objects.
+    # Keep a bounded metadata store large enough for history, separate from index.
+    name = 'comfyui-history-scan-v1.json'
+    scope = 'all-history'
+    mode = 'local-history-content-reuse'
+    limit = 64 * 1024 * 1024
+    max_records = 400000
