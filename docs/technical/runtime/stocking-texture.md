@@ -1,6 +1,8 @@
 # 丝袜纹理节点与引导编辑
 
-文档修订：2026-10-10。
+文档修订：2026-10-11。
+
+Issue #3 修订：T0 改为独立插件发布制品，采用固定 Git blob 拷贝与显式 SHA 同步脚本；原版源码移到插件 `upstream/stocking/`，`vendor/` 只保留宿主命名空间与 i18n。此轮源码在主 Git 工作树维护，独立制品不携带维护仓历史；详见[修订记录](../changes/runtime-stocking-texture/2026-10-11-issue-3.md)。本轮未部署。
 
 SAM 点选与内置深度现已实现空闲 CUDA GPU 推理、CPU 模型缓存和最多四份 SAM 图像特征缓存，消除每次点击重新载入模型及编码整图的等待。GPU 使用完整 FP32；生图队列忙或显存不足时回退 CPU。三张真实图片及隔离 ComfyUI 接口验证通过，GPU 改动尚未部署生产，原生浏览器操作验收被工具的网址识别保护阻断。速度、误差和调度边界见 [GPU 点选优化](../changes/runtime-stocking-texture/2026-10-10-gpu-selection.md)。
 

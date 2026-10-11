@@ -1,16 +1,16 @@
 > **AI disclosure / AI 修改说明：This ComfyUI integration was written almost entirely by an AI coding agent at a user's request. It is an experimental contribution, not a claim of complete human review. 核心算法、六种纹理样式、编辑器及原有功能均属于 Silvermoong 与原项目贡献者；此提案主要添加宿主适配。**
 
-# Optional ComfyUI integration
+# Independent ComfyUI integration
 
-This hosts the existing Stocking Texture Tool editor inside ComfyUI and provides an independent fabric-repair workflow. The original `stocking/` algorithms and browser assets are read directly from this repository; they are not duplicated or modified by this integration. The MIT license and original attribution continue to apply. This is a draft proposal for maintainer feedback, not an assertion of maintainer endorsement.
+This hosts the existing Stocking Texture Tool editor inside ComfyUI and provides an independent fabric-repair workflow. The original algorithms and browser assets are preserved as a fixed, unmodified dependency in `upstream/stocking/`, pinned to `{{UPSTREAM_COMMIT}}`. The MIT license and original attribution continue to apply. This adapter is maintained independently; the upstream project does not maintain or endorse this integration.
 
-**中文快速上手：** 将本仓库的 `feat/comfyui-integration` 分支放入 `ComfyUI/custom_nodes/stocking-texture-tool`，在运行 ComfyUI 的 Python 环境中补齐本目录 `requirements.txt` 的依赖，重启后载入[独立工作流](examples/stocking-repair.json)。打开完整编辑器，导入图片、修正选区、画走向，再“应用到节点”并执行工作流。SAM/深度权重需按 [MODEL_SOURCES.json](MODEL_SOURCES.json) 事先放置；手绘选区无需 SAM 权重。请勿同时安装另一份同名节点。
+**中文快速上手：** 将本仓库放入 `ComfyUI/custom_nodes/stocking-texture-comfyui`，在运行 ComfyUI 的 Python 环境中补齐本目录 `requirements.txt` 的依赖，重启后载入[独立工作流](examples/stocking-repair.json)。打开完整编辑器，导入图片、修正选区、画走向，再“应用到节点”并执行工作流。SAM/深度权重需按 [MODEL_SOURCES.json](MODEL_SOURCES.json) 事先放置；手绘选区无需 SAM 权重。请勿同时安装另一份同名节点。
 
 **Review map / 审查入口：** [host API](studio_api.py) · [node bridge](studio_nodes.py) · [storage](studio_store.py) · [original-module bridge](vendor/__init__.py) · [tests](tests/). Rendering, selection and editor capabilities are credited to the original project; this contribution provides the ComfyUI host and workflow integration.
 
 ## Install and try
 
-1. Place a checkout of this repository's `feat/comfyui-integration` branch under `ComfyUI/custom_nodes/stocking-texture-tool`. The upstream `main` branch does not include this proposal. Avoid installing another copy exposing the same `StockingTexture*` nodes/routes.
+1. Place this independent repository under `ComfyUI/custom_nodes/stocking-texture-comfyui`. The pinned upstream dependency is already included; no recursive clone is needed. Avoid installing another copy exposing the same `StockingTexture*` nodes/routes.
 2. In the **Python environment that runs ComfyUI**, install the missing dependencies from `integrations/comfyui/requirements.txt`. Review the requirements first; importing the plugin never installs packages or downloads models. ComfyUI already supplies Torch and aiohttp.
 3. Restart ComfyUI and load [examples/stocking-repair.json](examples/stocking-repair.json). It contains `StockingTextureStudio`, two standard `SaveImage` nodes and a note; it requires no workbench, diffusion model or upscaler.
 4. Click **打开完整编辑器** (Open full editor). Import PNG/JPG/PSD, select the fabric, correct the mask and draw at least one course guide for each region. Choose a texture in the Look tab. Click **Apply to node**, close the editor and queue the workflow.
@@ -37,7 +37,7 @@ Alternatively connect a single IMAGE and run the node once to supply its editor 
 
 - This is **not complete desktop/host equivalence**. The standalone installer/updater, native OS file dialog/path save, Reveal in folder, drag-to-launch and independent process shutdown are replaced by ComfyUI service management and browser upload/download.
 - Built-in SAM/depth inference uses CPU and releases model references after calls; it is slower than the standalone GPU path and does not retain SAM embeddings across clicks. No automatic download is provided. Manually place SAM ViT-B at `models/sams/sam_vit_b_01ec64.pth`, and Depth Anything V2 Small HF at `models/stocking_texture/Depth-Anything-V2-Small-hf/` (`config.json`, `preprocessor_config.json`, `model.safetensors`). Exact sources/hashes: [MODEL_SOURCES.json](MODEL_SOURCES.json).
-- **Dark adaptation defaults OFF in this upstream proposal**, matching the original renderer. The optional additional dark-weave enhancement changes results intentionally. For parity, use the same input, region masks, guides, dividers, depth and look parameters, and keep this option off.
+- **Dark adaptation defaults OFF in this independent distribution**, matching the original renderer. The optional additional dark-weave enhancement changes results intentionally. For parity, use the same input, region masks, guides, dividers, depth and look parameters, and keep this option off.
 - Pixel parity does not establish selection accuracy. In real illustration checks, small SAM candidates fit a simple white/near-black leg reasonably; crossed legs had missing areas, the medium candidate merged both legs and the foreground foot, and large candidates included the whole character. Manual brush/eraser and splitting are still necessary. No claim of automatic correct selection for every color/pose is made.
 - Before judging a finished result, inspect the full visible fabric at 100%: both legs, stocking tops, feet and overlaps. Split limbs along the actual overlap, remove clothing/background spill, and add guides to every disconnected piece. Partial-mask regression inputs exercise rendering but are not finished demonstrations. After incomplete masks and unnatural seams were identified, the candidates were corrected and visually reviewed. Three selected comparison panels are published in [the gallery](SHOWCASE.md), with parameters and complete selection overlays. They are actual plugin outputs, with manual mask correction; the original author's demonstrations remain separately attributed in the root README.
 - Near-black multiplicative textures can be nearly invisible; pure black remains black. Excessively dense textures fade to avoid aliasing; oily is experimental; small images can miss depth walls. These original limits remain.
@@ -57,11 +57,12 @@ Run from the repository root with the required dependencies available:
 ```shell
 python -m unittest discover -s integrations/comfyui/tests -p "test_*.py" -v
 node --test integrations/comfyui/tests/test_editor.cjs integrations/comfyui/tests/test_studio_editor.cjs
-python integrations/comfyui/tests/feature_acceptance.py --upstream . --out /new/private/acceptance-directory
+python integrations/comfyui/tests/feature_acceptance.py --upstream /path/to/pristine-upstream --out /new/private/acceptance-directory
+cd /path/to/pristine-upstream
 python -m pytest -q
 ```
 
-The last command runs the standalone suite. Some tests require the author's unshared `sample.png` / `sample-guides.psd`; skips must be reported as skips. Real-image/model runners accept caller-owned fixtures and local weights; they neither download nor publish them. `tests/studio_compare.py --moire` checks three real illustrations × six styles × six switch/slider combinations (108 cases), including full/crop/problem previews with dark adaptation off. The existing independently checked depth inputs were reused; SAM/depth inference was not rerun for this renderer update. Those private fixtures are not redistributed in this PR; the synthetic API runner is included for reproduction.
+The last command runs the standalone suite. Some tests require the author's unshared `sample.png` / `sample-guides.psd`; skips must be reported as skips. Real-image/model runners accept caller-owned fixtures and local weights; they neither download nor publish them. `tests/studio_compare.py --moire` checks three real illustrations × six styles × six switch/slider combinations (108 cases), including full/crop/problem previews with dark adaptation off. The existing independently checked depth inputs were reused; SAM/depth inference was not rerun for this renderer update. Those private fixtures are not redistributed in this repository; the synthetic API runner is included for reproduction.
 
 `tests/bend_acceptance.py` accepts caller-owned baseline/split/divider-and-arc project snapshots and an immutable assets directory. It checks that splitting preserves the selection union, direction actually changes, and all six rendered styles and solved fields match an independently obtained upstream. The tested bent-leg sequence passed all 18 stage/style cases; its final Studio → SaveImage output matched the original exactly, and the RGBA layer recomposed without pixel error. This is a bounded regression check, not proof that SAM selects every bent or crossed leg correctly.
 
