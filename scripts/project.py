@@ -13,9 +13,10 @@ from pathlib import Path
 from snapshot import (REPO, digest, is_link, now, payload_relative,
                       private_config, safe_path, save, supported_source_payload, verify, walk)
 from security_guard import blocked_path
+from snapshot_cache import local_cache
 
 
-def source_entries(repo):
+def source_entries(repo, cache=None):
     snapshot = repo / 'snapshot'
     runtime = snapshot / 'runtime'
     entries = []
@@ -39,7 +40,8 @@ def source_entries(repo):
         if file.stat().st_size > 50 * 1024 * 1024:
             raise ValueError('Source file exceeds 50 MiB: ' + relative)
         entries.append({'source': relative, 'path': file.relative_to(snapshot).as_posix(),
-                        'sha256': digest(file), 'bytes': file.stat().st_size, 'kind': 'file'})
+                        'sha256': cache.hash(file) if cache is not None else digest(file),
+                        'bytes': file.stat().st_size, 'kind': 'file'})
     return sorted(entries, key=lambda row: row['source'])
 
 
@@ -51,12 +53,13 @@ def source_changes(previous, current):
             'changed': sorted(key for key in old.keys() & new.keys() if old[key] != new[key])}
 
 
-def status(repo=REPO):
+def status(repo=REPO, *, fresh=False):
     manifest = json.loads((repo / 'snapshot/manifest.json').read_text(encoding='utf-8'))
-    return source_changes(manifest['files'], source_entries(repo))
+    cache = None if fresh else local_cache(repo / 'snapshot')
+    return source_changes(manifest['files'], source_entries(repo, cache))
 
 
-def seal(note, repo=REPO):
+def seal(note, repo=REPO, *, fresh=False):
     """Refresh source hashes only; existing library/SQL payloads must verify unchanged."""
     if not note.strip():
         raise ValueError('A short change description is required')
@@ -64,12 +67,15 @@ def seal(note, repo=REPO):
     manifest_file = root / 'manifest.json'
     original = manifest_file.read_bytes()
     manifest = json.loads(original.decode('utf-8'))
-    current = source_entries(repo)
+    cache = None if fresh else local_cache(root)
+    current = source_entries(repo, cache)
     changes = source_changes(manifest['files'], current)
     if not any(changes.values()):
-        if not verify(root)['pass']:
+        result = verify(root, cache=cache)
+        if not result['pass']:
             raise RuntimeError('Snapshot integrity failed; a no-op seal cannot accept damaged data')
-        return {'updated': False, 'changes': changes, 'production_modified': False}
+        return {'updated': False, 'changes': changes, 'production_modified': False,
+                **({'cache': result['cache']} if 'cache' in result else {})}
     previous_sources = {entry['source']: entry for entry in manifest['files'] if entry['kind'] == 'file'}
     removed = {entry['source']: entry for entry in manifest.get('development_revision', {}).get('removed_sources', [])}
     for source in changes['removed']:
@@ -92,7 +98,7 @@ def seal(note, repo=REPO):
         previous.write_bytes(original)
     try:
         save(manifest_file, manifest)
-        result = verify(root)
+        result = verify(root, cache=cache)
         if not result['pass']:
             raise RuntimeError('Source seal rejected: ' + json.dumps(result['failures'], ensure_ascii=False))
         save(root / 'verification.json', result)
@@ -100,20 +106,26 @@ def seal(note, repo=REPO):
         manifest_file.write_bytes(original)
         raise
     return {'updated': True, 'changes': changes, 'production_modified': False,
-            'live_deployed': False, 'previous_manifest': str(previous)}
+            'live_deployed': False, 'previous_manifest': str(previous),
+            **({'cache': result['cache']} if 'cache' in result else {})}
 
 
-def deploy_plan(runtime, repo=REPO):
+def deploy_plan(runtime, repo=REPO, *, fresh=False, scopes=()):
     """Read-only source diff; workflows and all data require separate explicit review."""
     runtime = runtime.resolve()
     if runtime == repo.resolve() or runtime.is_relative_to(repo.resolve()):
         raise ValueError('Runtime must be outside the source checkout')
     manifest = json.loads((repo / 'snapshot/manifest.json').read_text(encoding='utf-8'))
-    if not verify(repo / 'snapshot')['pass']:
+    for scope in scopes:
+        safe_path(runtime, scope)  # Reject absolute paths, traversal and links.
+    selected = lambda source: not scopes or any(source == s or source.startswith(s + '/') for s in scopes)
+    cache = None if fresh else local_cache(repo / 'snapshot')
+    verified = verify(repo / 'snapshot', cache=cache)
+    if not verified['pass']:
         raise RuntimeError('Seal and verify the current Git sources before building a deployment plan')
     changes = []
     for entry in manifest['files']:
-        if entry['kind'] != 'file':
+        if entry['kind'] != 'file' or not selected(entry['source']):
             continue
         target = safe_path(runtime, entry['source'])
         before = digest(target) if target.is_file() else None
@@ -122,30 +134,37 @@ def deploy_plan(runtime, repo=REPO):
             changes.append({'source': relative, 'operation': 'add' if before is None else 'replace', 'runtime_sha256': before, 'git_source_sha256': entry['sha256'],
                             'requires_data_review': '/user/' in relative or '/user_data/' in relative or '/templates/' in relative})
     for entry in manifest.get('development_revision', {}).get('removed_sources', []):
+        if not selected(entry['source']):
+            continue
         target = safe_path(runtime, entry['source'])
         if target.is_file():
             changes.append({'source': entry['source'], 'operation': 'delete_requires_review',
                             'runtime_sha256': digest(target), 'previous_git_sha256': entry['previous_sha256'],
                             'git_source_sha256': None, 'requires_data_review': True})
     return {'mode': 'READ_ONLY_PLAN', 'changes': changes, 'production_modified': False,
+            'scopes': list(scopes), **({'cache': verified['cache']} if 'cache' in verified else {}),
             'warning': 'This plan does not authorize deployment, workflow replacement, or database writes.'}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest='command', required=True)
-    commands.add_parser('status')
+    status_parser = commands.add_parser('status')
+    status_parser.add_argument('--fresh', action='store_true')
     seal_parser = commands.add_parser('seal')
     seal_parser.add_argument('--note', required=True)
+    seal_parser.add_argument('--fresh', action='store_true')
     plan = commands.add_parser('deploy-plan')
     plan.add_argument('--runtime', type=Path, required=True)
+    plan.add_argument('--fresh', action='store_true')
+    plan.add_argument('--scope', action='append', default=[], help='Exact runtime-relative file or directory to compare')
     args = parser.parse_args()
     if args.command == 'status':
-        result = status()
+        result = status(fresh=args.fresh)
     elif args.command == 'seal':
-        result = seal(args.note)
+        result = seal(args.note, fresh=args.fresh)
     else:
-        result = deploy_plan(args.runtime)
+        result = deploy_plan(args.runtime, fresh=args.fresh, scopes=args.scope)
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 

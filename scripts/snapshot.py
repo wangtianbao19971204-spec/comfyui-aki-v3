@@ -617,8 +617,13 @@ def capture(root, out, offline=False):
     print(json.dumps({'captured':str(out), 'files':len(entries), 'plugins':len(plugins), 'models':len(model_files), 'media':media_count, 'pass':True}),flush=True)
 
 
-def verify(snapshot):
+def verify(snapshot, *, cache=None):
     snapshot = snapshot.resolve()
+    if cache is not None and cache.root != snapshot:
+        raise ValueError('Snapshot cache belongs to another root')
+    hash_file = cache.hash if cache is not None else digest
+    if cache is not None:
+        cache.hash(snapshot / 'manifest.json')  # Bind the manifest before parsing, too.
     manifest = json.loads((snapshot / 'manifest.json').read_text(encoding='utf-8'))
     failures = manifest_path_failures(manifest)
     if failures:
@@ -628,23 +633,28 @@ def verify(snapshot):
     for entry in manifest.get('metadata_files', []):
         expected_paths.add(entry['path'])
         target = safe_path(snapshot, entry['path'])
-        if not target.is_file() or digest(target) != entry['sha256']:
+        if not target.is_file() or hash_file(target) != entry['sha256']:
             failures.append({'path':entry['path'],'reason':'metadata_hash_mismatch'})
     for entry in manifest['files']:
         target = safe_path(snapshot, entry['path'])
         if entry['kind'] == 'file':
             expected_paths.add(entry['path'])
-            if not target.is_file() or digest(target) != entry['sha256']:
+            if not target.is_file() or hash_file(target) != entry['sha256']:
                 failures.append({'path':entry['path'],'reason':'hash_mismatch'})
         else:
             total = hashlib.sha256()
+            valid_parts = []
             for part in entry['parts']:
                 file = safe_path(target, part['path'])
                 expected_paths.add(file.relative_to(snapshot).as_posix())
-                if not file.is_file() or digest(file) != part['sha256']:
+                if not file.is_file() or hash_file(file) != part['sha256']:
                     failures.append({'path':file.relative_to(snapshot).as_posix(),'reason':'part_hash_mismatch'});continue
-                total.update(file.read_bytes())
-            if total.hexdigest() != entry.get('sha256', entry.get('sql_sha256')):
+                valid_parts.append(file)
+                if cache is None:
+                    total.update(file.read_bytes())
+            expected = entry.get('sha256', entry.get('sql_sha256'))
+            actual = cache.joined_hash(target, valid_parts, expected) if cache is not None else total.hexdigest()
+            if actual != expected:
                 failures.append({'path':entry['path'],'reason':'joined_hash_mismatch'})
     for folder, directories, files in os.walk(snapshot, followlinks=False):
         for name in directories + files:
@@ -664,12 +674,16 @@ def verify(snapshot):
             failures.append({'path': relative, 'reason': 'private_config_payload'})
         for reason in blocked_path('snapshot/' + relative):
             failures.append({'path': relative, 'reason': reason})
-        if relative in REVIEWED_SECURITY_FIXTURES and REVIEWED_SECURITY_FIXTURES[relative] == digest(file):
-            reviewed_fixtures.append({'path': relative, 'sha256': digest(file), 'reason': 'reviewed_synthetic_security_test'})
+        if relative in REVIEWED_SECURITY_FIXTURES and REVIEWED_SECURITY_FIXTURES[relative] == hash_file(file):
+            reviewed_fixtures.append({'path': relative, 'sha256': hash_file(file), 'reason': 'reviewed_synthetic_security_test'})
             continue
-        for reason in scan(file):
+        for reason in (cache.scan(file, scan) if cache is not None else scan(file)):
             failures.append({'path':file.relative_to(snapshot).as_posix(),'reason':reason})
+    if cache is not None:
+        cache.finish(not failures)
     result={'time':now(),'pass':not failures,'entry_count':len(manifest['files']),'failures':failures,'reviewed_security_fixtures':reviewed_fixtures}
+    if cache is not None:
+        result['cache'] = cache.report()
     return result
 
 
@@ -730,11 +744,17 @@ def main():
     commands=parser.add_subparsers(dest='command',required=True)
     cap=commands.add_parser('capture');cap.add_argument('--runtime',type=Path,required=True);cap.add_argument('--out',type=Path,required=True);cap.add_argument('--offline',action='store_true')
     ver=commands.add_parser('verify');ver.add_argument('--snapshot',type=Path,default=REPO/'snapshot')
+    ver.add_argument('--incremental', action='store_true', help='Reuse local checkout fingerprints; explicit default remains a full scan')
     restore=commands.add_parser('materialize');restore.add_argument('--snapshot',type=Path,default=REPO/'snapshot');restore.add_argument('--dest',type=Path,required=True)
     args=parser.parse_args()
     if args.command=='capture':capture(args.runtime,args.out,args.offline)
     elif args.command=='verify':
-        result=verify(args.snapshot);print(json.dumps({'pass':result['pass'],'entries':result['entry_count'],'failures':result['failures']}));sys.exit(0 if result['pass'] else 1)
+        from snapshot_cache import local_cache
+        cache = local_cache(args.snapshot) if args.incremental else None
+        result=verify(args.snapshot, cache=cache)
+        print(json.dumps({'pass':result['pass'],'entries':result['entry_count'],'failures':result['failures'],
+                          **({'cache': result['cache']} if 'cache' in result else {})}))
+        sys.exit(0 if result['pass'] else 1)
     else:materialize(args.snapshot,args.dest)
 
 

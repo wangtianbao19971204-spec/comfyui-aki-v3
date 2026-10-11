@@ -683,6 +683,7 @@
         "scripts/backup_status.py",
         "scripts/workspace_audit.py",
         "scripts/staged_scan_cache.py",
+        "scripts/snapshot_cache.py",
         "governance/retention-policy.json",
         "governance/runtime-support.json",
         "governance/runtime-support-import.json",
@@ -707,6 +708,7 @@
         "tests/test_workspace_audit.py",
         "tests/test_staged_scan_cache.py",
         "tests/test_history_scan_cache.py",
+        "tests/test_snapshot_cache.py",
         "tests/test_snapshot.py",
         "tests/test_project.py",
         "tests/test_external_state.py",
@@ -732,7 +734,8 @@
         "docs/receipts/final_workflow_acceptance_20261007.json",
         "docs/receipts/github_content_reconciliation_20261007.json",
         "docs/receipts/privacy_completeness_recheck_20261007.json",
-        "docs/receipts/incremental_security_20261011.json"
+        "docs/receipts/incremental_security_20261011.json",
+        "docs/receipts/snapshot_fingerprints_20261011.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -908,8 +911,8 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_nodes.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_studio.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/MODEL_SOURCES.json",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/sync_upstream.py",
-        "snapshot/runtime/production_tools/export_stocking_upstream.py"
+        "snapshot/runtime/production_tools/export_stocking_upstream.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/sync_upstream.py"
       ],
       "tests": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py",
@@ -925,16 +928,16 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_gpu_contours.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/gpu_acceptance.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/gpu_http_acceptance.py",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_issue3.py",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_retention.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/model_acceptance.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio_editor.cjs",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/studio_compare.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/feature_acceptance.py",
         "snapshot/runtime/production_tools/test_export_stocking_upstream.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/bend_acceptance.py",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/visual_review.py"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/visual_review.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_issue3.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_retention.py"
       ],
       "evidence": [
         "docs/receipts/stocking_texture_20261009.json",
@@ -945,11 +948,13 @@
         "docs/receipts/stocking_texture_complete_20261010.json",
         "docs/receipts/stocking_workflow_refresh_20261010.json",
         "docs/receipts/stocking_texture_bend_upstream_20261010.json",
-          "docs/receipts/stocking_fork_presentation_20261010.json",
-          "docs/receipts/stocking_texture_upstream_refresh_20261010.json",
-          "docs/receipts/stocking_fork_showcase_20261010.json",
-          "docs/receipts/stocking_texture_issue3_20261011.json",
-          "docs/receipts/stocking_independent_gpu_20261011.json"
+        "docs/receipts/stocking_fork_presentation_20261010.json",
+        "docs/receipts/stocking_texture_upstream_refresh_20261010.json",
+        "docs/receipts/stocking_fork_showcase_20261010.json",
+        "docs/receipts/stocking_gpu_guides_20261011.json",
+        "docs/receipts/stocking_gpu_production_20261011.json",
+        "docs/receipts/stocking_texture_issue3_20261011.json",
+        "docs/receipts/stocking_independent_gpu_20261011.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -958,11 +963,11 @@
         "snapshot/runtime/production_tools/export_stocking_upstream.py",
         "snapshot/runtime/production_tools/test_export_stocking_upstream.py",
         "snapshot/runtime/production_tools/stocking_upstream_README.md",
-        "snapshot/runtime/production_tools/stocking_independent_README.md",
         "snapshot/runtime/production_tools/stocking_fork_intro.md",
         "snapshot/runtime/production_tools/stocking_fork_intro.en.md",
         "snapshot/runtime/production_tools/stocking_showcase.json",
-        "snapshot/runtime/production_tools/stocking_showcase.md"
+        "snapshot/runtime/production_tools/stocking_showcase.md",
+        "snapshot/runtime/production_tools/stocking_independent_README.md"
       ],
       "examples": [
         "examples/stocking-texture/README.md",
@@ -970,11 +975,11 @@
         "examples/stocking-texture/workflow_api.example.json",
         "examples/stocking-texture/studio.workflow.json",
         "snapshot/runtime/production_tools/stocking_upstream_README.md",
-        "snapshot/runtime/production_tools/stocking_independent_README.md",
         "snapshot/runtime/production_tools/stocking_fork_intro.md",
         "snapshot/runtime/production_tools/stocking_fork_intro.en.md",
         "snapshot/runtime/production_tools/stocking_showcase.json",
-        "snapshot/runtime/production_tools/stocking_showcase.md"
+        "snapshot/runtime/production_tools/stocking_showcase.md",
+        "snapshot/runtime/production_tools/stocking_independent_README.md"
       ]
     }
   ]

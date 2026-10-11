@@ -7,6 +7,7 @@
 - 复用原版六种样式、SAM 选区、画笔/橡皮、走向/隔开线、预设、PSD 和实时预览。
 - `StockingTextureStudio → 两个 SaveImage`，分别输出成品和 RGBA 图层；可独立使用，无需 UAP、扩散模型或放大节点。
 - 已同步作者 **`f74c8ac` 的摩尔纹开关、强度/面积控制及新版油光**（2026-10-10 核对）。摩尔纹默认关闭，开启时需要深度。
+- 新增 **CPU/GPU 选择，默认 GPU**：加速点选、深度和走向求解；离开最后一个编辑页面后释放专用模型与图像特征缓存，保留草稿和已算好的深度。
 
 ## 实际输出
 
@@ -20,12 +21,12 @@
 
 | 内容 | 入口与范围 |
 |---|---|
-| 改了什么 | 新增 [`integrations/comfyui/`](integrations/comfyui/) 与根 [`__init__.py`](__init__.py)；直接复用 `stocking/`，没有修改原算法或静态界面 |
+| 改了什么 | 新增 [`integrations/comfyui/`](integrations/comfyui/) 与根 [`__init__.py`](__init__.py)；直接复用 `stocking/` 文件，可选 GPU 求解实现在接入目录 |
 | 代码对比 | [相对 `f74c8ac` 的全部差异](https://github.com/wangtianbao19971204-spec/stocking-texture-tool/compare/f74c8ac0190ec43b2cdfcb13db86f35a83283311...feat/comfyui-integration) |
-| 如何验证 | [测试说明](integrations/comfyui/README.md#review-and-tests)：44 项 Python、17 项前端、51 项 HTTP、108 组摩尔纹/样式及 18 组弯腿对照通过；原版测试 285 通过、52 跳过 |
-| 已知限制 | SAM 复杂姿势仍需修边；CPU 推理较慢；近黑织纹较弱；模型需自行放置。仅分发选定的三张展示对照，不附原始工程、其他测试资料或权重 |
+| 如何验证 | [分日期测试与复现](integrations/comfyui/README.md#review-and-tests)：本轮 65 项 Python、2 项 CUDA、17 项前端通过；CPU/GPU 六种样式最大差 2/255。此前摩尔纹与弯腿验收另列 |
+| 已知限制 | SAM 复杂姿势仍需修边；GPU 首次初始化较慢，依赖缺失或资源忙时回退 CPU；近黑织纹较弱；模型需自行放置。三张展示图保持原样，不附原始工程或权重 |
 
-> **作者归属与 AI 说明：** 核心算法、编辑器、样式及原版功能归 Silvermoong 与原项目贡献者，保留 MIT 许可。新增接入几乎全部由 AI 编程助手在用户指导下编写，属于待审查的实验分支，尚未获原作者认可或合并。像素一致证明渲染兼容，不保证任意图片的选区或画质。
+> **作者归属与 AI 说明：** 核心算法、编辑器、样式及原版功能归 Silvermoong 与原项目贡献者，保留 MIT 许可。新增接入几乎全部由 AI 编程助手在用户指导下编写。本 fork 独立维护，不作为向原仓提交的 PR，也不声称获得原作者认可。像素对照只说明受测范围的兼容性，不保证任意图片的选区或画质。
 
 ComfyUI 使用者请从上面的安装入口开始；下方 `install.bat` 等步骤属于原独立软件。
 

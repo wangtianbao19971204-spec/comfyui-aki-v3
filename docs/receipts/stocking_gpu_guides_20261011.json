@@ -1,0 +1,192 @@
+{
+  "schema": 1,
+  "id": "stocking_gpu_guides_20261011",
+  "scope": "isolated_acceptance",
+  "production_deployed": false,
+  "source_sha256": {
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/README.md": "9e5c46d6a82b6a08bdf084b39dc89b6df15a28da683b167b7774ede2cd69e259",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/gpu_contours.py": "a18ecb031aeb40506e8c782d15a4a2e659c7ca7262313489f8b4facb76d24d79",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/guide_solver.py": "175405bd5539431abfcc308bc2147b7aadef526a7a5147e675c2d539d362e745",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/requirements-cuda13.txt": "c5ddbe05eecc642ef82350d010b7eb1dd053fefc0136457ef2cc9db2bd5a68fa",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py": "40be54eca6bc373068712334d209f3c93abcf6e70a084a9a029c60a9a2dcc68d",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_api.py": "6a8ec2aa66de45f6ad39c20d8d76531c36da013755826b6e0ad2fef7f1c19538",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_assets.py": "e3440a53120715d6816d62c00591f874ea4ccc162ed818939f1f1b26f7454a3a",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_document.py": "a73b305a47f6c793d59a08aee9f1d2bbbf7d754596ff271549188064e8a62f5f",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_models.py": "b44964c2099856c3b3cff8ca779cff182bb23362f1470c9ed588860af76563e3",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py": "97685708b5a1e7c7b4d1a248edbd8edd261cfc4dd46575d68ab7467ed57f6f4d",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_gpu_contours.py": "3d3f97e647cd31862c14627edb8c46ff9775ebd64e3e42f2ed9f507fca6b0100",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_guide_solver.py": "88f2abac598bf51838eae85dc7979688a02ffcb6935dbeae422d17d2d3308e28",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio.py": "3082b3d89299a143d0f7cec1809a1788f975ec76c17ad193ad22480430837dc9",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio_models.py": "840dc3d725b580d9ef05edeb613e0baa856cab4790453c3e07229f3f6ff205d1",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_studio.js": "feb4a7b6b634bc55b2d7df570abfaed4bfa644d72c5073d5cb08b03e17b4c9a4",
+    "snapshot/runtime/production_tools/export_stocking_upstream.py": "ab9d17acd8efb63bcc5cfb5cf032a644308650ba799f1902a3fb0601be17d246"
+  },
+  "tests": {
+    "python_contracts": {
+      "tests": 67,
+      "passed": 65,
+      "optional_cuda_skipped": 2
+    },
+    "explicit_cuda": {
+      "tests": 2,
+      "passed": 2,
+      "contour_cases": 126
+    },
+    "frontend": {
+      "tests": 17,
+      "passed": 17
+    },
+    "exporter": {
+      "tests": 5,
+      "passed": 5
+    },
+    "installed_cuda_without_private_bootstrap": {
+      "tests": 2,
+      "passed": 2
+    }
+  },
+  "evidence_sha256": {
+    "MODEL_RELEASE.json": "d5e3f0e12ba1e8f6c6e17d028247f75612c19078b5bad2a554ba40f070350f5f",
+    "RENDER_COMPARE.json": "3ee1a19038f088acca4f0c676cbc9e5e23146a842e20a0ab70d9a1a07cc6a4b9",
+    "DEPTH_RELOAD_PARITY.json": "2bb7e9ca487b0f095d4df0fda3de71739396c4afb861f57de9d379e5ff017503",
+    "CONTOURS_SYNTHETIC.json": "db189bdf93eb543f378f9d204bee93f510ec7601fc5c6d28e0573cf37bfe07a6",
+    "UI_FINAL_LOADED.json": "994f0b0869df7ccdc71a9111171e4c6e8c3547869a26a0f42f14b5c37f98f310",
+    "UI_FINAL_LEFT.json": "9a22ff0edbadc88ff37a16751174bb352e5228eaa29bb78f3c5a04e2957782e8",
+    "UI_FINAL_RELOADED.json": "81851f20f6deefdb7b29f74109b52304fbcb61e2785f7402d5fde1d93e7600bb",
+    "UI_FINAL_CPU.json": "0f296aa12d8b1837d95ec24a108a78820ad7234ab22efb4971f6ee1590492683",
+    "UI_FINAL_GPU.json": "f67a66f8279fbff38301018d9439c37f2aab3d6ec82c5f6d151f082c2478afb9",
+    "UI_CLOSE_BEFORE.json": "be3d66c139f762f5663212e3713e6151f553c1590ccfdf2bd0d18f29c66349ae",
+    "UI_CLOSE_AFTER.json": "2298de0a8be169edf5b4755379a60b2c98010fbed8156972cf830b4d189b650b",
+    "editor-gpu-settings.jpg": "2e05e39339352f0e5bc8ccab3dca755d90907e6388c1104c43105fa721c0714a",
+    "UNIT_FINAL.log": "05dbaee60fc78d56d4b92d38a16c00cca64e490cfe552f7630a55d1c26a1a165",
+    "FRONTEND_FINAL.log": "32a15fe5d6e76d006af25b84cf6008623aaed52d4421eb79f0198d49bc1a2c15",
+    "EXPORT_FINAL.log": "6f96084834e6bbd9dbc1294bd3f2e32ce3de73d6ede876ac645bc3199f1bf331",
+    "CUDA_FINAL.log": "d67315b34bbbc91485d32094505ce88275580763e26abfb05dc23e84a5515ff9",
+    "CUDA_INSTALLED.log": "54192765cea1c30d1ff2653ab1897d92c2a094da8c4bdc8c4b841f6ac70b1609"
+  },
+  "model_release": {
+    "concurrent_cold_load": true,
+    "sam": {
+      "model_cached": false,
+      "embedding_cached": false,
+      "device": "NVIDIA GeForce RTX 5090 D",
+      "backend": "cuda:0",
+      "fallback": null,
+      "preferred": "gpu",
+      "model_offloaded": true,
+      "seconds": 2.7049083999881987
+    },
+    "depth": {
+      "model_cached": false,
+      "device": "NVIDIA GeForce RTX 5090 D",
+      "backend": "cuda:0",
+      "fallback": null,
+      "preferred": "gpu",
+      "model_offloaded": true,
+      "seconds": 2.861466100002872
+    },
+    "loaded": {
+      "cache": {
+        "sam_loaded": true,
+        "depth_loaded": true,
+        "embeddings": 1,
+        "active_editors": 1,
+        "running": 0,
+        "release_pending": false
+      },
+      "rss": 2571513856,
+      "cuda_allocated": 19136512
+    },
+    "released": {
+      "cache": {
+        "sam_loaded": false,
+        "depth_loaded": false,
+        "embeddings": 0,
+        "active_editors": 0,
+        "running": 0,
+        "release_pending": false
+      },
+      "rss": 2571526144,
+      "cuda_allocated": 19136512,
+      "sam_collected": true,
+      "depth_collected": true
+    },
+    "reopened": {
+      "model_cached": false,
+      "embedding_cached": false,
+      "device": "NVIDIA GeForce RTX 5090 D",
+      "backend": "cuda:0",
+      "fallback": null,
+      "preferred": "gpu",
+      "model_offloaded": true,
+      "seconds": 0.6502869000250939
+    }
+  },
+  "render_comparison": [
+    {
+      "style": "knit",
+      "maximum": 1,
+      "mean": 0.0004812885802469136,
+      "p9999": 1.0,
+      "changed_pixels": 2907,
+      "over8": 0
+    },
+    {
+      "style": "loops",
+      "maximum": 1,
+      "mean": 0.0018597286522633746,
+      "p9999": 1.0,
+      "changed_pixels": 10149,
+      "over8": 0
+    },
+    {
+      "style": "coil",
+      "maximum": 2,
+      "mean": 0.0027835648148148147,
+      "p9999": 1.0,
+      "changed_pixels": 12856,
+      "over8": 0
+    },
+    {
+      "style": "lines",
+      "maximum": 1,
+      "mean": 0.001058545524691358,
+      "p9999": 1.0,
+      "changed_pixels": 6331,
+      "over8": 0
+    },
+    {
+      "style": "grain",
+      "maximum": 2,
+      "mean": 0.0002592914094650206,
+      "p9999": 1.0,
+      "changed_pixels": 1592,
+      "over8": 0
+    },
+    {
+      "style": "oily",
+      "maximum": 2,
+      "mean": 0.0005214763374485596,
+      "p9999": 1.0,
+      "changed_pixels": 3182,
+      "over8": 0
+    }
+  ],
+  "ui": {
+    "device_default": "gpu",
+    "cpu_gpu_switch": true,
+    "leave_clears_model_caches": true,
+    "return_preserves_document_depth": true,
+    "return_reloads_sam": true,
+    "standalone_close": true
+  },
+  "upstream_vendor_changed": false,
+  "limitations": [
+    "Tested local CUDA 13 environment and fixed inputs only.",
+    "Cold GPU initialization can be slower; warm performance depends on the region.",
+    "Topology, line assembly and OpenCV remain on CPU.",
+    "Model objects were collected; process RSS did not materially decrease.",
+    "General allocators and CUDA library contexts retain memory.",
+    "No production deployment is claimed by this isolated receipt."
+  ]
+}
