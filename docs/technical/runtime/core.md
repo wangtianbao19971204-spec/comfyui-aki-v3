@@ -2,6 +2,9 @@
 
 文档修订：2026-10-09。
 
+
+2026-10-11 更新：源码 production / diagnostic / anima 白名单用 `ComfyUI-Anima-LoRA-ControlNet-Patch` 替换旧 `ComfyUI-Anima-2.9B-loraPatch`，避免 LoRA 双重映射；其他启动参数保持。隔离 CPU 服务确认 LoRA 与原生 ControlNet 两个 hook 安装。新增原生权重加载器无需搬动模型；本轮未重启/部署生产，见 [兼容说明](../training/anima-compat.md)。
+
 ## 职责与实现
 
 [本体入口](../../../snapshot/runtime/ComfyUI/main.py)负责参数和服务启动，[节点加载](../../../snapshot/runtime/ComfyUI/nodes.py)负责注册。项目级启动入口为 [launch.py](../../../snapshot/runtime/production_tools/launch.py)，白名单在 [profiles.json](../../../snapshot/runtime/production_tools/profiles.json)，统一插件装配由 [统一包入口](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/__init__.py)与 [modules.json](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules.json)定义。

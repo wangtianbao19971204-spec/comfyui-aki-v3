@@ -1,0 +1,18 @@
+[project]
+name = "comfyui-anima-lora-controlnet-patch"
+description = "Unified, bidirectional block-index remapping for Anima LoRAs and ControlNet-LLLite checkpoints across the 28/40/52-block architecture chain (Anima Base / 2.9B / 3.8B), applied automatically at load time -- no file conversion, no extra workflow node."
+version = "1.0.0"
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+readme = "README.md"
+classifiers = ["Operating System :: OS Independent"]
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/INuBq8/ComfyUI-Anima-LoRA-ControlNet-Patch"
+Issues = "https://github.com/INuBq8/ComfyUI-Anima-LoRA-ControlNet-Patch/issues"
+
+[tool.comfy]
+PublisherId = "inubq8"
+DisplayName = "Anima LoRA + ControlNet Patch"
+Icon = ""

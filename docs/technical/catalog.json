@@ -136,7 +136,8 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/refinement_controls.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js"
       ],
       "tests": [
         "snapshot/runtime/production_tools/test_uap_navigation.cjs",
@@ -145,7 +146,8 @@
         "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_workbench_anime_polish/test_candidate.cjs",
         "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/browser_measurement.js",
         "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/lifecycle_collector.js",
-        "snapshot/runtime/production_tools/test_stocking_workflow.cjs"
+        "snapshot/runtime/production_tools/test_stocking_workflow.cjs",
+        "snapshot/runtime/production_tools/test_anima_control.cjs"
       ],
       "evidence": [
         "snapshot/evidence/20261005_workbench_anime_polish/REPORT.txt",
@@ -155,7 +157,8 @@
         "docs/receipts/browser_live_deployment_20261006.json",
         "docs/receipts/final_workflow_acceptance_20261007.json",
         "docs/receipts/stocking_texture_complete_20261010.json",
-        "docs/receipts/stocking_workflow_refresh_20261010.json"
+        "docs/receipts/stocking_workflow_refresh_20261010.json",
+        "docs/receipts/anima_control_simple_20261011.json"
       ],
       "acceptance": "historical",
       "watch": [
@@ -167,7 +170,8 @@
         "snapshot/runtime/production_tools/test_uap_daily_controls.cjs",
         "snapshot/runtime/production_tools/test_uap_compact_widgets.cjs",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
+        "snapshot/runtime/production_tools/test_anima_control.cjs"
       ],
       "examples": [
         "snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
@@ -188,7 +192,8 @@
         "scripts/native_workflow_acceptance.py",
         "snapshot/runtime/production_tools/build_stocking_workflow.py",
         "snapshot/runtime/production_tools/templates/生产扩展_丝袜纹理修复.json",
-        "snapshot/runtime/ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json"
+        "snapshot/runtime/ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json",
+        "snapshot/runtime/production_tools/simplify_anima_control.py"
       ],
       "tests": [
         "snapshot/runtime/production_tools/validate_uap_workflow.py",
@@ -197,7 +202,8 @@
         "docs/technical/archive/benchmark_reports/2026-10-04_part_refinement_pipeline/runs/20261005_native_e2e_acceptance/acceptance.py",
         "snapshot/runtime/production_tools/test_uap_browser_retirement.py",
         "tests/test_native_workflow_acceptance.py",
-        "snapshot/runtime/production_tools/test_stocking_workflow.cjs"
+        "snapshot/runtime/production_tools/test_stocking_workflow.cjs",
+        "tests/test_anima_control_workflow.py"
       ],
       "evidence": [
         "snapshot/evidence/20261005_workflow_product_repair/FINAL_DELIVERY.json",
@@ -210,7 +216,8 @@
         "docs/receipts/final_workflow_acceptance_20261007.json",
         "docs/receipts/workflow_failure_verification_20261007.json",
         "docs/receipts/stocking_texture_complete_20261010.json",
-        "docs/receipts/stocking_workflow_refresh_20261010.json"
+        "docs/receipts/stocking_workflow_refresh_20261010.json",
+        "docs/receipts/anima_control_simple_20261011.json"
       ],
       "acceptance": "historical",
       "watch": [
@@ -224,7 +231,10 @@
         "scripts/native_workflow_acceptance.py",
         "tests/test_native_workflow_acceptance.py",
         "snapshot/runtime/production_tools/build_stocking_workflow.py",
-        "snapshot/runtime/production_tools/test_stocking_workflow.cjs"
+        "snapshot/runtime/production_tools/test_stocking_workflow.cjs",
+        "snapshot/runtime/production_tools/simplify_anima_control.py",
+        "tests/test_anima_control_workflow.py",
+        "tests/fixtures/anima_control_before.json"
       ],
       "examples": [
         "snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json",
@@ -659,17 +669,26 @@
       "document": "docs/technical/training/anima-compat.md",
       "implementation": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-2.9B-loraPatch/__init__.py",
-        "snapshot/runtime/production_tools/profiles.json"
+        "snapshot/runtime/production_tools/profiles.json",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/__init__.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/native_loader.py",
+        "scripts/anima_control_cpu_acceptance.py"
       ],
-      "tests": [],
+      "tests": [
+        "scripts/anima_control_cpu_acceptance.py"
+      ],
       "evidence": [
         "docs/receipts/anima29_lorapatch_20261005.json",
         "docs/receipts/anima29_lorapatch_original_anima_check_20261005.json",
-        "docs/receipts/anima29_lorapatch_production_lora_strength_20261005.json"
+        "docs/receipts/anima29_lorapatch_production_lora_strength_20261005.json",
+        "docs/receipts/anima_control_simple_20261011.json"
       ],
       "acceptance": "historical",
       "watch": [
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-2.9B-loraPatch/"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-2.9B-loraPatch/",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/",
+        "scripts/anima_control_cpu_acceptance.py"
       ],
       "examples": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-2.9B-loraPatch/README.md"
@@ -944,11 +963,11 @@
         "docs/receipts/stocking_texture_complete_20261010.json",
         "docs/receipts/stocking_workflow_refresh_20261010.json",
         "docs/receipts/stocking_texture_bend_upstream_20261010.json",
-          "docs/receipts/stocking_fork_presentation_20261010.json",
-          "docs/receipts/stocking_texture_upstream_refresh_20261010.json",
-          "docs/receipts/stocking_fork_showcase_20261010.json",
-          "docs/receipts/stocking_gpu_guides_20261011.json",
-          "docs/receipts/stocking_gpu_production_20261011.json"
+        "docs/receipts/stocking_fork_presentation_20261010.json",
+        "docs/receipts/stocking_texture_upstream_refresh_20261010.json",
+        "docs/receipts/stocking_fork_showcase_20261010.json",
+        "docs/receipts/stocking_gpu_guides_20261011.json",
+        "docs/receipts/stocking_gpu_production_20261011.json"
       ],
       "acceptance": "checked-source",
       "watch": [

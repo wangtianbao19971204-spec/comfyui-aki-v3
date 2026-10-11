@@ -4,6 +4,9 @@
 
 独立丝袜修复工作流已跟进摩尔纹与新版油光的使用说明，并完成完整选区工程的成品／透明层及保存重载复验；详见[本轮更新](../changes/runtime-workflows/2026-10-10-upstream-effects.md)。既有 UAP 九分支、参数和默认开关保持，本轮未部署生产。
 
+
+2026-10-11 更新：2.9B 的线稿/姿态控制主图从 24 节点缩至 9 节点，擦线与临时导出移入 8 节点高级子图。四种预处理合为单个 AIO 选择器；2.9B 的姿态/VNCCS 使用原生应用与统一映射。UAP 与独立 02 流的源码/模板均迁移，原版 Anima 图、提示词、种子、采样、LoRA、默认开关及既有强度保持。迁移、实页发现的尺寸端口修复、旁路输出抑制及待验收范围见 [变更说明](../changes/runtime-workflows/2026-10-11-anima-control.md)。本轮未部署。
+
 ## 唯一构建入口
 
 [正式 UAP v2](../../../snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json)与 [权威模板](../../../snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json)各自保存并核对哈希。构建/校验用 [merge_unified_workflow.py](../../../snapshot/runtime/production_tools/merge_unified_workflow.py)、[validate_uap_workflow.py](../../../snapshot/runtime/production_tools/validate_uap_workflow.py)。子图内嵌在完整 JSON，不拆成丢失连线/模式的孤立备份。

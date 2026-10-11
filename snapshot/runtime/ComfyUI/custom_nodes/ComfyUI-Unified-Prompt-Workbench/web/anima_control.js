@@ -1,0 +1,147 @@
+import {api} from '../../../scripts/api.js';
+import {commitWidget} from './prompt_target.js';
+
+const children = owner => owner?.subgraph?._nodes || owner?.subgraph?.nodes || [];
+const widget = (node, name) => node?.widgets?.find(item => item.name === name);
+export const controlChoices = [
+    ['PyraCannyPreprocessor', '细致线稿'], ['HEDPreprocessor', '柔和线稿'],
+    ['Manga2Anime_LineArt_Preprocessor', '漫画线稿'], ['DepthAnythingV2Preprocessor', '深度图'],
+];
+
+export function controlNodes(owner) {
+    const roles = owner?.properties?.anima_control_roles || {};
+    return Object.fromEntries(Object.entries(roles).map(([role, id]) =>
+        [role, children(owner).find(node => String(node.id) === String(id))]));
+}
+
+export function setEraseMode(node, enabled) {
+    const saved = node.properties.anima_erase_modes;
+    if (!enabled && !saved) node.properties.anima_erase_modes =
+        Object.fromEntries(children(node).map(child => [child.id, child.mode]));
+    // Bypassing a subgraph passes its image through, but its output nodes can
+    // still enter a full export. Mute those children until erasing is reenabled.
+    for (const child of children(node)) child.mode = enabled ? (saved?.[child.id] ?? child.mode) : 2;
+    if (enabled) delete node.properties.anima_erase_modes;
+    node.mode = enabled ? 0 : 4;
+}
+
+export function mountAnimaControl(host, app, branch, nodes, isCurrent) {
+    const owner = nodes.find(node => node.properties?.uap_anima_control);
+    if (!owner) return {sync() {}, dispose() {}};
+    const graph = app.graph, controls = controlNodes(owner), rows = [];
+    let disposed = false, uploading = false;
+    const current = () => !disposed && isCurrent() && app.graph === graph &&
+        graph.extra?.uap_workbench?.activeBranch === branch.id && graph.getNodeById(owner.id) === owner;
+    const valid = (node, value) => current() && children(owner).includes(node) &&
+        node.widgets?.includes(value) && !node.inputs?.some(port => port.name === value.name && port.link != null);
+    const el = (tag, text, parent, attrs = {}) => {
+        const item = document.createElement(tag); if (text) item.textContent = text;
+        Object.assign(item, attrs); parent.append(item); return item;
+    };
+    const box = el('section', '', host, {className: 'desk-anima-control'});
+    box.dataset.deskArea = 'parameters';
+    el('h3', '姿态与构图控制', box);
+    el('small', '从参考图提取线稿或深度图；只处理选中的方式。', box);
+    const line = el('label', '', box, {className: 'switch'});
+    const enabled = el('input', '', line, {type: 'checkbox'});
+    enabled.setAttribute('aria-label', '启用姿态与构图控制');
+    el('span', '启用控制', line);
+    const setMode = (node, mode) => {
+        graph.beforeChange?.();
+        try {
+            if (node === controls.advanced) setEraseMode(node, mode === 0);
+            else node.mode = mode;
+            if (node === owner && branch.modes) branch.modes[node.id] = mode;
+        }
+        finally { graph.afterChange?.(); graph.setDirtyCanvas?.(true, true); }
+        sync();
+    };
+    enabled.onchange = () => { if (current()) setMode(owner, enabled.checked ? 0 : 2); };
+    const grid = el('div', '', box, {className: 'fields'});
+    function bind(parent, node, name, label, options) {
+        const value = widget(node, name); if (!value) return;
+        const row = el('label', '', parent, {className: 'field'}); el('span', label, row);
+        let choices = options || value.options?.values;
+        if (typeof choices === 'function') choices = choices();
+        const select = Array.isArray(choices);
+        const input = el(select ? 'select' : 'input', '', row);
+        input.setAttribute('aria-label', label);
+        if (select) {
+            for (const option of choices) {
+                const [key, title] = Array.isArray(option) ? option : [option, option];
+                el('option', String(title), input, {value: String(key)});
+            }
+        } else {
+            input.type = 'number'; input.step = String(value.options?.step ? value.options.step / 10 : 'any');
+            input.required = true;
+            if (Number.isFinite(value.options?.min)) input.min = value.options.min;
+            if (Number.isFinite(value.options?.max)) input.max = value.options.max;
+        }
+        input.onchange = () => {
+            if (!valid(node, value) || !input.checkValidity()) return;
+            const next = select ? input.value : Number(input.value);
+            if (!select && (!input.value.trim() || !Number.isFinite(next))) return;
+            commitWidget(app, node, value, next); sync();
+        };
+        rows.push(() => {
+            input.disabled = !valid(node, value);
+            if (select && ![...input.options].some(option => option.value === String(value.value)))
+                el('option', String(value.value), input, {value: String(value.value)});
+            if (document.activeElement !== input) input.value = String(value.value);
+        });
+        return input;
+    }
+    const reference = controls.reference, imageWidget = widget(reference, 'image');
+    const referencePicker = bind(grid, reference, 'image', '姿态参考图');
+    const upload = el('input', '', box, {type: 'file', accept: 'image/*', hidden: true});
+    const uploadButton = el('button', '上传参考图', box, {type: 'button'});
+    uploadButton.onclick = () => upload.click();
+    const status = el('small', '', box); status.setAttribute('role', 'status');
+    upload.onchange = async () => {
+        const file = upload.files?.[0]; if (!file || uploading || !valid(reference, imageWidget)) return;
+        uploading = true; sync();
+        try {
+            const body = new FormData(); body.append('image', file); body.append('type', 'input');
+            const response = await api.fetchApi('/upload/image', {method: 'POST', body});
+            if (!response.ok) throw new Error('参考图上传失败。');
+            const data = await response.json();
+            if (!valid(reference, imageWidget)) throw new Error('工作流已切换；图片已上传，请在新流程中重新选择。');
+            const name = (data.subfolder ? data.subfolder + '/' : '') + data.name;
+            if (Array.isArray(imageWidget.options?.values) && !imageWidget.options.values.includes(name)) imageWidget.options.values.push(name);
+            if (referencePicker && ![...referencePicker.options].some(option => option.value === name)) el('option', name, referencePicker, {value: name});
+            commitWidget(app, reference, imageWidget, name); status.textContent = '参考图已更新。';
+        } catch (error) { if (!disposed) status.textContent = error.message; }
+        finally { uploading = false; upload.value = ''; sync(); }
+    };
+    bind(grid, controls.preprocessor, 'preprocessor', '控制方式', controlChoices);
+    bind(grid, controls.apply, 'strength', '控制强度');
+    const preview = el('img', '', box, {alt: '最终控制图', hidden: true});
+    preview.style.cssText = 'max-width:100%;max-height:300px;object-fit:contain;margin:8px auto';
+    const previewHint = el('small', '执行控制分支后，这里显示最终控制图。', box);
+    const details = el('details', '', box);
+    el('summary', '高级 · 擦线、时段与权重', details);
+    const eraseLine = el('label', '', details, {className: 'switch'});
+    const erase = el('input', '', eraseLine, {type: 'checkbox'});
+    erase.setAttribute('aria-label', '使用原擦线遮罩'); el('span', '使用原擦线遮罩', eraseLine);
+    erase.onchange = () => { if (current() && children(owner).includes(controls.advanced)) setMode(controls.advanced, erase.checked ? 0 : 4); };
+    const edit = el('button', '打开擦线与导出子图', details, {type: 'button'});
+    edit.onclick = () => { if (current()) app.canvas.openSubgraph(controls.advanced.subgraph); };
+    const advancedGrid = el('div', '', details, {className: 'fields'});
+    bind(advancedGrid, controls.preprocessor, 'resolution', '控制图分辨率');
+    bind(advancedGrid, controls.apply, 'start_percent', '控制开始');
+    bind(advancedGrid, controls.apply, 'end_percent', '控制结束');
+    bind(advancedGrid, controls.loader, 'lllite_name', '控制权重');
+    el('small', '保留原擦线设置；取消勾选会直接使用预处理图，遮罩和导出参数仍保存在高级子图。', details);
+    function sync() {
+        if (disposed) return;
+        enabled.checked = owner.mode === 0; enabled.disabled = !current();
+        erase.checked = controls.advanced?.mode === 0; erase.disabled = !current(); edit.disabled = !current();
+        uploadButton.disabled = uploading || !imageWidget || !valid(reference, imageWidget);
+        rows.forEach(update => update());
+        const source = controls.preview?.imgs?.[0]?.src;
+        preview.hidden = !source; previewHint.hidden = !!source;
+        if (source && preview.src !== source) preview.src = source;
+    }
+    sync();
+    return {sync, dispose() {disposed = true;}};
+}

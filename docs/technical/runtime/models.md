@@ -2,6 +2,9 @@
 
 文档修订：2026-10-10。
 
+
+2026-10-11 更新：Anima 2.9B 控制图简化后，仅刷新 model_sources.json 的 UAP 文件摘要绑定，并重新生成下载表；对比基线确认 UAP 模型引用集合、23 项目录关联与所有资产身份保持。权重没有移动、下载或转换；[专用加载器](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/native_loader.py)继续读取原 controlnet 目录。见 [简化收据](../../receipts/anima_control_simple_20261011.json)。
+
 ## 实现与资源
 
 统一包内 `modules/comfyui-lora-manager/` 是当前管理实现；模块入口通过 [modules.json](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules.json)登记。[模型说明](../../MODELS.md)、[模型清单](../../../snapshot/inventory/models.json)和 [工作流模型引用](../../../snapshot/inventory/workflow_models.json)提供路径、用途及捕获时依赖。

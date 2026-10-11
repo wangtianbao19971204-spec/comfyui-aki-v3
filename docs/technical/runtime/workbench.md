@@ -2,6 +2,9 @@
 
 文档修订：2026-10-05.1。
 
+
+2026-10-11 更新：[anima_control.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js)给 UAP 2.9B 提供参考图、四种控制方式、强度和最终预览；高级区保留擦线、分辨率、时段、权重与子图入口。直接编辑子图原节点，异步上传检查当前图/分支/节点身份。擦线旁路同时静音内部输出节点，保存原 mode 后再恢复，防止不用擦线仍读遮罩/导出图片。原生菜单 API 导出及保存重载已在独立 CPU 页面核验；控件测试见 [test_anima_control.cjs](../../../snapshot/runtime/production_tools/test_anima_control.cjs)，范围与限制见 [收据](../../receipts/anima_control_simple_20261011.json)。没有生产部署或 GPU 出图验收。
+
 ## 代码入口
 
 统一包 `web/` 是外层工作台唯一实现。主要入口：[workbench_shell.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js)、[workbench.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.js)。主题/图标为 [ui_theme.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_theme.js)、[ui_identity.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_identity.js)、[anime.css](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime.css)。
