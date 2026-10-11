@@ -131,17 +131,22 @@ export function mountAnimaControl(host, app, branch, nodes, isCurrent) {
     bind(advancedGrid, controls.apply, 'start_percent', '控制开始');
     bind(advancedGrid, controls.apply, 'end_percent', '控制结束');
     bind(advancedGrid, controls.loader, 'lllite_name', '控制权重');
-    el('small', '保留原擦线设置；取消勾选会直接使用预处理图，遮罩和导出参数仍保存在高级子图。', details);
+    el('small', '取消勾选会直接使用预处理图，原遮罩与导出设置仍保留。擦线用于线稿；深度图建议关闭，黑色覆盖区域可能生成额外的空间结构。', details);
     function sync() {
         if (disposed) return;
         enabled.checked = owner.mode === 0; enabled.disabled = !current();
         erase.checked = controls.advanced?.mode === 0; erase.disabled = !current(); edit.disabled = !current();
         uploadButton.disabled = uploading || !imageWidget || !valid(reference, imageWidget);
         rows.forEach(update => update());
-        const source = controls.preview?.imgs?.[0]?.src;
+        const picture = app.nodeOutputs?.[`${owner.subgraph.id}:${controls.preview?.id}`]?.images?.[0];
+        const source = picture && api.apiURL('/view?' + new URLSearchParams({
+            filename: picture.filename, subfolder: picture.subfolder || '', type: picture.type || 'temp',
+        }));
         preview.hidden = !source; previewHint.hidden = !!source;
         if (source && preview.src !== source) preview.src = source;
     }
+    const completed = () => { if (current()) sync(); };
+    api.addEventListener('execution_success', completed);
     sync();
-    return {sync, dispose() {disposed = true;}};
+    return {sync, dispose() {disposed = true; api.removeEventListener('execution_success', completed);}};
 }

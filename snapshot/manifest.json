@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-11T10:29:12.366467+00:00",
+  "created_at": "2026-10-11T11:20:56.016782+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -23589,8 +23589,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
-      "sha256": "2eeba3432e63e7e2ec27fb3893189ac153803b350b5951bf5065d9999ff3e29e",
-      "bytes": 9070,
+      "sha256": "2d2bd132e009a254946c01459c11a9f1651fccab021c699a38481ca827d62057",
+      "bytes": 9548,
       "kind": "file"
     },
     {
@@ -23883,8 +23883,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
-      "sha256": "60f4c10b8669c554655ca1ebe2138239c365de7482475e3027a96c873c2bda69",
-      "bytes": 24777,
+      "sha256": "af35a74fa2a62cc044397abbeaa19a5f2b64c6f6b206614308c7bd9e39108b06",
+      "bytes": 25007,
       "kind": "file"
     },
     {
@@ -47732,8 +47732,8 @@
     {
       "source": "ComfyUI/custom_nodes/vnccs-utils/nodes/pose_studio.py",
       "path": "runtime/ComfyUI/custom_nodes/vnccs-utils/nodes/pose_studio.py",
-      "sha256": "8dd50725bd32ea42383d29cc35509fb74a4ec05f529e3e6bbd981399c0d5e7e1",
-      "bytes": 26076,
+      "sha256": "2ebcf77ad2d8fa85723d7c8472d1a59964d5060fefae6b35037a70130b8335cb",
+      "bytes": 26220,
       "kind": "file"
     },
     {
@@ -49748,8 +49748,8 @@
     {
       "source": "ComfyUI/custom_nodes/vnccs-utils/web/vnccs_pose_studio.js",
       "path": "runtime/ComfyUI/custom_nodes/vnccs-utils/web/vnccs_pose_studio.js",
-      "sha256": "3c43d2513ca1883e0ff18e52dce1646476bba98468c1e28ce18bc07fd586bd6d",
-      "bytes": 382170,
+      "sha256": "1f3905dc2e8e2f736f81a02df40d93a1bef19c38fbc922e2555c1264415123a7",
+      "bytes": 382468,
       "kind": "file"
     },
     {
@@ -57973,8 +57973,8 @@
     {
       "source": "production_tools/test_anima_control.cjs",
       "path": "runtime/production_tools/test_anima_control.cjs",
-      "sha256": "a0e13d41e513dc0231d27995012b39dd6f72d2dd89bdae179c05a0691ab23a7e",
-      "bytes": 5180,
+      "sha256": "e36d4b76d1376bf7a8ea87a350129b00401ec2191a65bc1e55f0ef8361706fdf",
+      "bytes": 7116,
       "kind": "file"
     },
     {
@@ -58052,6 +58052,13 @@
       "path": "runtime/production_tools/test_validate_profiles.py",
       "sha256": "1d4c3bdc54eb18a696862e8b2a256fd6869ddface67feb5e99e4fab441276a88",
       "bytes": 5042,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/test_vnccs_pose_sync.cjs",
+      "path": "runtime/production_tools/test_vnccs_pose_sync.cjs",
+      "sha256": "055fe958544150743a98c0383ee6cf6370446b82d18abbbcd0e138db48fad95a",
+      "bytes": 1572,
       "kind": "file"
     },
     {
@@ -67988,14 +67995,19 @@
     }
   ],
   "development_revision": {
-    "note": "Simplify Anima 2.9B control subgraphs and integrate native LLLite remapping; isolated CPU/UI accepted, not deployed",
-    "previous_manifest_sha256": "0c955cc3f14d7b025f22f27f2218b3496263a243a995a62c4d9f98b3aab7507c",
+    "note": "Fix Anima control output preview and nested VNCCS capture synchronization after GPU acceptance",
+    "previous_manifest_sha256": "3bfb9ee7ea7f1fd83e022ee02110886fc6cb16b3664c6d1aaed432f1236441ee",
     "source_changes": {
-      "added": [],
+      "added": [
+        "production_tools/test_vnccs_pose_sync.cjs"
+      ],
       "removed": [],
       "changed": [
-        "production_tools/README.md",
-        "production_tools/profiles.json"
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
+        "ComfyUI/custom_nodes/vnccs-utils/nodes/pose_studio.py",
+        "ComfyUI/custom_nodes/vnccs-utils/web/vnccs_pose_studio.js",
+        "production_tools/test_anima_control.cjs"
       ]
     },
     "live_deployed": false,

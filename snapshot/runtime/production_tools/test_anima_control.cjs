@@ -24,16 +24,34 @@ function harness() {
     const graph = {extra:{uap_workbench:{activeBranch:'a29'}},getNodeById:id => id===1 ? owner : null,beforeChange(){changes.push('before');},afterChange(){changes.push('after');},setDirtyCanvas(){}};
     const app = {graph,canvas:{openSubgraph(value){app.opened=value;}}}, branch = {id:'a29',modes:{1:2}};
     let fetchResolve;
-    const context = vm.createContext({document,FormData:class{append(){}},api:{fetchApi:()=>new Promise(resolve=>{fetchResolve=resolve;})},commitWidget:(_,node,widget,value)=>{widget.value=value;changes.push(widget.name);}});
+    const listeners=new Map();
+    const context = vm.createContext({document,URLSearchParams,FormData:class{append(){}},api:{addEventListener:(event,fn)=>listeners.set(event,fn),removeEventListener:event=>listeners.delete(event),apiURL:path=>path,fetchApi:()=>new Promise(resolve=>{fetchResolve=resolve;})},commitWidget:(_,node,widget,value)=>{widget.value=value;changes.push(widget.name);}});
     vm.runInContext(fs.readFileSync(path.join(web,'anima_control.js'),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,''),context);
     const panel = context.mountAnimaControl(host,app,branch,[owner],()=>true);
-    return {host,app,graph,branch,owner,advanced,apply,reference,preprocessor,panel,context,changes,
+    return {host,app,graph,branch,owner,advanced,apply,reference,preprocessor,panel,context,changes,listeners,
         input:label=>all(host).find(e=>e.attributes['aria-label']===label),
         resolveUpload:()=>fetchResolve({ok:true,json:async()=>({name:'uploaded.png'})})};
 }
 
 async function main() {
+    const taskContext=vm.createContext({});
+    vm.runInContext(fs.readFileSync(path.join(web,'task_activity.js'),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,''),taskContext);
+    const control={id:1,mode:0,properties:{uap_anima_control:1,anima_control_roles:{preview:7},uap_layout_group:'SW-05'},subgraph:{_nodes:[
+        {id:7,type:'PreviewImage',mode:0},{id:8,type:'SaveImage',mode:0},{id:9,type:'PreviewImage',mode:0}]}};
+    const delivery={id:10,type:'SaveImage',mode:0,properties:{uap_layout_group:'03 delivery'}};
+    const taskApp={graph:{_nodes:[control,delivery],extra:{uap_workbench:{activeBranch:'a29',branches:[{id:'a29',nodeIds:[1,10]}]}}}};
+    assert.deepEqual(Array.from(taskContext.taskPlan(taskApp,'generate').queueNodeIds),['10','1:7'],'Generation includes only the designated final control preview, not mask/export outputs');
+    control.mode=2;
+    assert.deepEqual(Array.from(taskContext.taskPlan(taskApp,'generate').queueNodeIds),['10'],'Disabled control cannot enqueue its preview');
+    control.mode=0;control.subgraph._nodes[0].mode=2;
+    assert.deepEqual(Array.from(taskContext.taskPlan(taskApp,'generate').queueNodeIds),['10'],'Muted preview remains muted');
     const h = harness();
+    h.owner.subgraph.id='control-graph';
+    h.app.nodeOutputs={'control-graph:7':{images:[{filename:'control preview.png',subfolder:'',type:'temp'}]}};
+    h.listeners.get('execution_success')();
+    const image=all(h.host).find(e=>e.tagName==='img');
+    assert.equal(image.hidden,false,'Native subgraph cache displays the preview even before the canvas draws the child');
+    assert.equal(image.src,'/view?filename=control+preview.png&subfolder=&type=temp');
     const enable = h.input('启用姿态与构图控制'); enable.checked=true; enable.onchange();
     assert.equal(h.owner.mode,0); assert.equal(h.branch.modes[1],0);
     const choice=h.input('控制方式'); choice.value='HEDPreprocessor'; choice.onchange();
@@ -53,6 +71,7 @@ async function main() {
     assert.match(all(h.host).find(e=>e.attributes.role==='status').textContent,/工作流已切换/);
     const snapshot=JSON.stringify(h.owner); enable.checked=false;enable.onchange();assert.equal(JSON.stringify(h.owner),snapshot);
     h.graph.extra.uap_workbench.activeBranch='a29';h.panel.dispose();strength.value='0.4';strength.onchange();assert.equal(h.apply.widgets[0].value,0.8);
+    assert.equal(h.listeners.size,0,'Disposed panel removes its execution listener');
     console.log('PASS: panel bindings, mode persistence, linked inputs, stale upload, branch switch and disposed handlers.');
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});

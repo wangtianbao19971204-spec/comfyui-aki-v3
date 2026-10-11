@@ -3,7 +3,7 @@
 文档修订：2026-10-05.1。
 
 
-2026-10-11 更新：[anima_control.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js)给 UAP 2.9B 提供参考图、四种控制方式、强度和最终预览；高级区保留擦线、分辨率、时段、权重与子图入口。直接编辑子图原节点，异步上传检查当前图/分支/节点身份。擦线旁路同时静音内部输出节点，保存原 mode 后再恢复，防止不用擦线仍读遮罩/导出图片。原生菜单 API 导出及保存重载已在独立 CPU 页面核验；控件测试见 [test_anima_control.cjs](../../../snapshot/runtime/production_tools/test_anima_control.cjs)，范围与限制见 [收据](../../receipts/anima_control_simple_20261011.json)。没有生产部署或 GPU 出图验收。
+2026-10-11 更新：[anima_control.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js)给 UAP 2.9B 提供参考图、四种控制方式、强度和最终预览；高级区保留擦线、分辨率、时段、权重与子图入口。直接编辑子图原节点，异步上传检查当前图/分支/节点身份。擦线旁路同时静音内部输出节点，保存原 mode 后再恢复，防止不用擦线仍读遮罩/导出图片。原生菜单 API 导出及保存重载已在独立 CPU 页面核验；控件测试见 [test_anima_control.cjs](../../../snapshot/runtime/production_tools/test_anima_control.cjs)，范围与限制见 [收据](../../receipts/anima_control_simple_20261011.json)。后续 GPU 实测补齐最终预览目标与原生输出缓存刷新，已按限定范围部署并重启；见 [GPU/部署收据](../../receipts/anima_control_gpu_deployment_20261011.json)。深度模式建议关闭擦线，原默认值保留。
 
 ## 代码入口
 

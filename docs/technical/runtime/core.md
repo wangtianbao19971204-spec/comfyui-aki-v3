@@ -3,7 +3,9 @@
 文档修订：2026-10-09。
 
 
-2026-10-11 更新：源码 production / diagnostic / anima 白名单用 `ComfyUI-Anima-LoRA-ControlNet-Patch` 替换旧 `ComfyUI-Anima-2.9B-loraPatch`，避免 LoRA 双重映射；其他启动参数保持。隔离 CPU 服务确认 LoRA 与原生 ControlNet 两个 hook 安装。新增原生权重加载器无需搬动模型；本轮未重启/部署生产，见 [兼容说明](../training/anima-compat.md)。
+2026-10-11 更新：源码 production / diagnostic / anima 白名单用 `ComfyUI-Anima-LoRA-ControlNet-Patch` 替换旧 `ComfyUI-Anima-2.9B-loraPatch`，避免 LoRA 双重映射；其他启动参数保持。隔离 CPU 服务确认 LoRA 与原生 ControlNet 两个 hook 安装。新增原生权重加载器无需搬动模型；已完成限定部署与生产重启，见 [GPU/部署收据](../../receipts/anima_control_gpu_deployment_20261011.json)及 [兼容说明](../training/anima-compat.md)。
+
+VNCCS 子图执行同步现按冒号路径定位节点，后端与上传 API 复用相同的安全文件名；修复重启后缓存失效时无法使用浏览器捕获的问题。实页证明前后端控制图逐像素一致，Python 备用渲染和 SAM3D 图片提取仍未认证。回归见 `test_vnccs_pose_sync.cjs` 与 `tests/test_vnccs_pose_sync.py`。
 
 ## 职责与实现
 

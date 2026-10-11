@@ -15,6 +15,7 @@ import hashlib
 import torch
 import numpy as np
 from PIL import Image, ImageDraw
+from ..api.pose_library import sanitize_node_id
 
 # Import from CharacterData module
 from ..CharacterData.mh_parser import TargetParser, HumanSolver
@@ -182,7 +183,10 @@ class VNCCS_PoseStudio:
         import folder_paths
 
         temp_dir = folder_paths.get_temp_directory()
-        filepath = os.path.join(temp_dir, f"vnccs_debug_{unique_id}.json")
+        node_id = sanitize_node_id(unique_id)
+        if not node_id:
+            return None
+        filepath = os.path.join(temp_dir, f"vnccs_debug_{node_id}.json")
 
         while time.time() - start_time < timeout:
             if os.path.exists(filepath) and os.path.getmtime(filepath) > start_time - 1.0:

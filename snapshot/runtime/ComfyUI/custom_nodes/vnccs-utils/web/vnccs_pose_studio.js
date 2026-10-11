@@ -18,6 +18,18 @@ let VNCCS_SHARED_MORPH_WORKER_WARMED = false;
 let VNCCS_SHARED_MORPH_CLIENT_ID = 1;
 const VNCCS_SHARED_MORPH_CLIENTS = new Map();
 
+function findExecutionNode(nodeId) {
+    let graph = app.rootGraph || app.graph;
+    const ids = String(nodeId).split(":");
+    let node;
+    for (const id of ids) {
+        node = graph?.getNodeById(id);
+        if (!node) return null;
+        graph = node.subgraph;
+    }
+    return node;
+}
+
 function getVNCCSSharedMorphWorker() {
     if (VNCCS_SHARED_MORPH_WORKER_FAILED || typeof Worker === "undefined") return null;
     if (VNCCS_SHARED_MORPH_WORKER) return VNCCS_SHARED_MORPH_WORKER;
@@ -9445,7 +9457,7 @@ app.registerExtension({
 
         api.addEventListener("vnccs_req_pose_sync", async (event) => {
             const nodeId = event.detail.node_id;
-            const node = app.graph.getNodeById(nodeId);
+            const node = findExecutionNode(nodeId);
             if (node && node.studioWidget) {
                 try {
                     // Safe mode: ensure viewer is initialized
@@ -9471,7 +9483,7 @@ app.registerExtension({
         api.addEventListener("vnccs_apply_sam3d_pose", async (event) => {
             const nodeId = event.detail.node_id;
             const poseData = event.detail.pose_data;
-            const node = app.graph.getNodeById(nodeId);
+            const node = findExecutionNode(nodeId);
             if (!node?.studioWidget || !poseData) return;
 
             try {

@@ -91,17 +91,22 @@
         "governance/plugin-support-20261007.json",
         "snapshot/runtime/ComfyUI/models/configs/v1-inference.yaml",
         "snapshot/runtime/qwen21_lab/ComfyUI/models/configs/v1-inference.yaml",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/qwen/config.json"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/qwen/config.json",
+        "snapshot/runtime/ComfyUI/custom_nodes/vnccs-utils/nodes/pose_studio.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/vnccs-utils/web/vnccs_pose_studio.js"
       ],
       "tests": [
         "snapshot/runtime/production_tools/validate_profiles.py",
         "snapshot/runtime/production_tools/validate_lean_profile.py",
         "snapshot/runtime/production_tools/test_plugin_fusion.cjs",
-        "snapshot/runtime/production_tools/test_validate_profiles.py"
+        "snapshot/runtime/production_tools/test_validate_profiles.py",
+        "snapshot/runtime/production_tools/test_vnccs_pose_sync.cjs",
+        "tests/test_vnccs_pose_sync.py"
       ],
       "evidence": [
         "docs/receipts/browser_live_deployment_20261006.json",
-        "docs/receipts/final_workflow_acceptance_20261007.json"
+        "docs/receipts/final_workflow_acceptance_20261007.json",
+        "docs/receipts/anima_control_gpu_deployment_20261011.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -111,7 +116,8 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/__init__.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules.json",
         "snapshot/runtime/production_tools/validate_profiles.py",
-        "snapshot/runtime/production_tools/test_validate_profiles.py"
+        "snapshot/runtime/production_tools/test_validate_profiles.py",
+        "tests/test_vnccs_pose_sync.py"
       ],
       "examples": [
         "docs/technical/runtime/independent-services.md",
@@ -158,7 +164,8 @@
         "docs/receipts/final_workflow_acceptance_20261007.json",
         "docs/receipts/stocking_texture_complete_20261010.json",
         "docs/receipts/stocking_workflow_refresh_20261010.json",
-        "docs/receipts/anima_control_simple_20261011.json"
+        "docs/receipts/anima_control_simple_20261011.json",
+        "docs/receipts/anima_control_gpu_deployment_20261011.json"
       ],
       "acceptance": "historical",
       "watch": [
@@ -217,7 +224,8 @@
         "docs/receipts/workflow_failure_verification_20261007.json",
         "docs/receipts/stocking_texture_complete_20261010.json",
         "docs/receipts/stocking_workflow_refresh_20261010.json",
-        "docs/receipts/anima_control_simple_20261011.json"
+        "docs/receipts/anima_control_simple_20261011.json",
+        "docs/receipts/anima_control_gpu_deployment_20261011.json"
       ],
       "acceptance": "historical",
       "watch": [
@@ -681,7 +689,8 @@
         "docs/receipts/anima29_lorapatch_20261005.json",
         "docs/receipts/anima29_lorapatch_original_anima_check_20261005.json",
         "docs/receipts/anima29_lorapatch_production_lora_strength_20261005.json",
-        "docs/receipts/anima_control_simple_20261011.json"
+        "docs/receipts/anima_control_simple_20261011.json",
+        "docs/receipts/anima_control_gpu_deployment_20261011.json"
       ],
       "acceptance": "historical",
       "watch": [
