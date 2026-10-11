@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 2026-10-11：原版 Anima 接入简化的姿态与构图控制台，主图 24→9 节点，保持原版参数和其他分支；源码、CPU 路由与实页往返验收通过，原版 GPU 和生产部署待执行。见[原版控制说明](docs/technical/changes/runtime-workflows/2026-10-11-anima-original-control.md)。
+
 - 2026-10-11：丝袜纹理修复入口移到 2× / 4× 放大之后，并同步修复页和模板的操作提示，建议按最终输出尺寸补纹理；见[工作流说明](docs/technical/runtime/workflows.md)。
 
 - 2026-10-11：丝袜完整编辑器增加默认 GPU 的 CPU/GPU 设置及 GPU 走向求解；关闭或离开后回收 SAM、深度和图像特征缓存，保留草稿，修复两种模型同时冷加载时的初始化冲突。见[设备设置与模型释放](docs/technical/changes/runtime-stocking-texture/2026-10-11-device-and-release.md)。

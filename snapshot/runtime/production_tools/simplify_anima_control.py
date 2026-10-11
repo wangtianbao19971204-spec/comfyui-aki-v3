@@ -1,4 +1,4 @@
-"""Migrate only the current Anima 2.9B control subgraphs; never deploy or enqueue."""
+"""Simplify the selected Anima branch's control subgraphs; never deploy or enqueue."""
 from __future__ import annotations
 
 import argparse
@@ -9,6 +9,8 @@ import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
 FILES = ("UAP统一生产工作台_v2.json", "生产套件_02_Anima2.9B_动漫生产_v2.json")
+BRANCH_FILES = {"a29": FILES,
+                "a1": (FILES[0], "生产套件_01_Anima原版_LoRA生产_v2.json")}
 CHOICES = {"细致线稿": "PyraCannyPreprocessor", "中细线稿": "HEDPreprocessor",
            "粗略线稿": "Manga2Anime_LineArt_Preprocessor", "灰度图": "DepthAnythingV2Preprocessor"}
 
@@ -110,13 +112,15 @@ def compact_pose(graph, next_id):
     return advanced
 
 
-def migrate(data):
+def migrate(data, branch_id="a29"):
+    if branch_id not in BRANCH_FILES:
+        raise ValueError("Unsupported Anima branch: " + str(branch_id))
     result = copy.deepcopy(data)
     definitions = result["definitions"]["subgraphs"]
     lookup = {g["id"]: g for g in definitions}
     next_id = max(n["id"] for g in [result, *definitions] for n in g["nodes"]) + 1
     branches = result.get("extra", {}).get("uap_workbench", {}).get("branches")
-    allowed = set(next(b["nodeIds"] for b in branches if b["id"] == "a29")) if branches else {n["id"] for n in result["nodes"]}
+    allowed = set(next(b["nodeIds"] for b in branches if b["id"] == branch_id)) if branches else {n["id"] for n in result["nodes"]}
     for owner in result["nodes"]:
         graph = lookup.get(owner["type"])
         if owner["id"] not in allowed or not graph or graph["name"] not in ("[05] 线稿与姿态控制", "[09] VNCCS 光影控制"):
@@ -147,6 +151,10 @@ def migrate(data):
     for item in result["nodes"]:
         if item["id"] in allowed and item["type"] in ("Note", "MarkdownNote"):
             for i, value in enumerate(item.get("widgets_values", [])):
+                if branch_id == "a1" and isinstance(value, str):
+                    item["widgets_values"][i] = value.replace(
+                        "Anima 2.9B 不可启用原版 28 层 LLLite。",
+                        "原版 Anima 使用原生 28 层 LLLite 控制，无需区块映射。")
                 if isinstance(value, str) and "当前 any-v2 与 inpainting-v2 LLLite" in value:
                     item["widgets_values"][i] = "## 姿态与构图控制\n\n本流的线稿/深度和 VNCCS 控制使用原生 Anima LLLite 与自动区块映射。需要启用 ComfyUI-Anima-LoRA-ControlNet-Patch；旧 LoRA 补丁由统一补丁替代。\n\n控制分支仍默认关闭。线稿控制先选参考图和控制方式，再调强度；原擦线遮罩与导出设置保留在高级子图，可旁路。采样、LoRA 和提示词沿用原值。层映射正确不保证每张图的控制效果，须用实际参考图验收。"
     return result
@@ -154,17 +162,20 @@ def migrate(data):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--branch", choices=BRANCH_FILES, default="a29",
+                        help="Branch to simplify; defaults to the existing a29 migration.")
     parser.add_argument("--write-source", action="store_true")
     args = parser.parse_args()
     for directory in (ROOT / "ComfyUI/user/default/workflows", ROOT / "production_tools/templates"):
-        for name in FILES:
+        for name in BRANCH_FILES[args.branch]:
             path = directory / name
             text = path.read_text(encoding="utf-8")
             indent = len(text.splitlines()[1]) - len(text.splitlines()[1].lstrip())
             before = json.loads(text)
-            after = migrate(before)
+            after = migrate(before, args.branch)
             print(json.dumps({"file": str(path.relative_to(ROOT)), "changed": before != after, "written": args.write_source}, ensure_ascii=False))
-            if args.write_source: path.write_bytes((json.dumps(after, ensure_ascii=False, indent=indent) + "\n").encode("utf-8"))
+            if args.write_source and before != after:
+                path.write_bytes((json.dumps(after, ensure_ascii=False, indent=indent) + "\n").encode("utf-8"))
 
 
 if __name__ == "__main__": main()

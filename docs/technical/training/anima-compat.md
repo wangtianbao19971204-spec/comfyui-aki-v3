@@ -2,6 +2,8 @@
 
 文档修订：2026-10-05.3；状态：已收到独立功能任务的部署、固定参数 A/B 与工作流强度判定交接。
 
+2026-10-11 原版控制候选：a1 也迁入原生 LLLite 控制。CPU 验收使用实际 any-v2 权重增加 28 层逐块等值、40→28→40 共享权重状态切换及原版 28-block LoRA 透传检查；28 层基模不保留 2.9B 映射。Torch GPU 分配为 0，未采样。原版 GPU/画质与部署仍待执行，见[原版收据](../../receipts/anima_original_control_20261011.json)；下方旧 sdscripts 保留给原版的描述属于前一轮范围。
+
 
 2026-10-11 更新：统一 [LoRA/ControlNet 补丁](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/README.md)锁定 `b25ae637102f2358116fe419a409f0594f61245b`，8 份上游原件摘要见 `UPSTREAM.json`，未改上游代码。production / diagnostic / anima 白名单以统一补丁替代旧 LoRA-only 补丁，旧源码保留但不叠加加载。新增 [原生加载器](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/native_loader.py)直接读取现有 controlnet 目录，输出 MODEL_PATCH；只有原生 AnimaLLLiteApply 能获得 ControlNet 映射，旧 sdscripts 节点保留给原版流程。
 

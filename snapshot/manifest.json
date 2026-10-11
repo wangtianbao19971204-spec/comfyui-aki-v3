@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-11T11:46:34.067469+00:00",
+  "created_at": "2026-10-11T13:33:26.482615+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -51393,8 +51393,8 @@
     {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-      "sha256": "16484f68b9b9dee7cd9d8cf0b5a948f18756acbd6ab9f3d6bd04161747dd6faa",
-      "bytes": 1367340,
+      "sha256": "2bbde1fc5ea6ac0f2992919a7dcfc9fe72f1aef98d96d8e73d745d588324bf4f",
+      "bytes": 1348826,
       "kind": "file"
     },
     {
@@ -51456,8 +51456,8 @@
     {
       "source": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
-      "sha256": "e92f675608bf2b511ac31004a035514e0ab87e813db2dec3daa06a1dae79184f",
-      "bytes": 557951,
+      "sha256": "b28113dcecf6dc6f19db07da42b96047d07fa02414888fb86d375eccd8c18190",
+      "bytes": 542596,
       "kind": "file"
     },
     {
@@ -57840,8 +57840,8 @@
     {
       "source": "production_tools/simplify_anima_control.py",
       "path": "runtime/production_tools/simplify_anima_control.py",
-      "sha256": "0226924edc1670d8736a5240b5ed1599c02e748a753188e5bcd0c0d7002bdca2",
-      "bytes": 11170,
+      "sha256": "5d36098143c9193e4e39c0ebd1644713c384b899489d18df7b1fada716fd875b",
+      "bytes": 11950,
       "kind": "file"
     },
     {
@@ -57889,15 +57889,15 @@
     {
       "source": "production_tools/templates/UAP统一生产工作台_v2.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v2.json",
-      "sha256": "16484f68b9b9dee7cd9d8cf0b5a948f18756acbd6ab9f3d6bd04161747dd6faa",
-      "bytes": 1367340,
+      "sha256": "2bbde1fc5ea6ac0f2992919a7dcfc9fe72f1aef98d96d8e73d745d588324bf4f",
+      "bytes": 1348826,
       "kind": "file"
     },
     {
       "source": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
       "path": "runtime/production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
-      "sha256": "46f5bfaf4639cba62c840689cf1ca0158892c97f5135f2acc0168597d3630bdc",
-      "bytes": 504643,
+      "sha256": "c97b4cd78782e922a4a4f5ab792fcc8d342e2099c3feead51248bfbffba1da98",
+      "bytes": 490544,
       "kind": "file"
     },
     {
@@ -67995,17 +67995,17 @@
     }
   ],
   "development_revision": {
-    "note": "Merge latest main into Anima 2.9B controls; preserve stocking order and LoRA import updates",
-    "previous_manifest_sha256": "117d83bc2e2f54fef6fcea806daa57c715c76d5b1b9ab23be55f79692ffc1d53",
+    "note": "Simplify original Anima controls; CPU and browser accepted, GPU and deployment pending",
+    "previous_manifest_sha256": "5775279bf67af6036b09bc33f77bc77795f2e674ad9f1bf7f18d9324d7073a3b",
     "source_changes": {
       "added": [],
       "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
-        "ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json",
-        "production_tools/build_stocking_workflow.py",
-        "production_tools/templates/生产扩展_丝袜纹理修复.json",
-        "production_tools/test_stocking_workflow.cjs"
+        "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+        "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+        "production_tools/simplify_anima_control.py",
+        "production_tools/templates/UAP统一生产工作台_v2.json",
+        "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json"
       ]
     },
     "live_deployed": false,

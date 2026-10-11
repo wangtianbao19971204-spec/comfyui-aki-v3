@@ -1,0 +1,122 @@
+{
+  "status": "source-cpu-and-browser-accepted-gpu-and-deployment-pending",
+  "scope": "Original Anima a1 pose and VNCCS control simplification",
+  "production_deployed": false,
+  "gpu_sampling_executed": false,
+  "service_restarted": false,
+  "workflow_migration_tests": 8,
+  "frontend_suites": [
+    "test_anima_control.cjs",
+    "test_uap_daily_controls.cjs",
+    "test_uap_navigation.cjs",
+    "test_uap_compact_widgets.cjs"
+  ],
+  "uap_structure_validation": "passed",
+  "cpu": {
+    "native_actual_checkpoint_loaded": true,
+    "control_blocks": 28,
+    "host_blocks": 40,
+    "exact_cpu_routing_cases": 40,
+    "inherited_blocks": 28,
+    "inserted_blocks_passthrough": 12,
+    "disabled_patch_rejected": true,
+    "original_anima_28_exact_routing_cases": 28,
+    "host_switch_40_to_28_to_40_pass": true,
+    "original_28_lora_passthrough": true,
+    "unlisted_paths_rejected": 3,
+    "lora_28_to_40_mapping_pass": true,
+    "native_40_lora_passthrough": true,
+    "tensor_device": "cpu",
+    "cuda_initialized_by_import_probe": true,
+    "torch_cuda_memory_allocated": 0,
+    "sampling_executed": false,
+    "checkpoint_sha256": "8863424f04a2445815a827b22cbda557a085d2752e05fab54a2b303821a9e3b2"
+  },
+  "source_preservation": [
+    {
+      "file": "snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+      "changed_root_ids": [
+        1004,
+        1022,
+        1040
+      ],
+      "control_owners": [
+        1004,
+        1022
+      ],
+      "other_subgraphs_unchanged": true,
+      "root_modes_and_parameters_preserved": true,
+      "source_sha256": "2bbde1fc5ea6ac0f2992919a7dcfc9fe72f1aef98d96d8e73d745d588324bf4f"
+    },
+    {
+      "file": "snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json",
+      "changed_root_ids": [
+        1004,
+        1022,
+        1040
+      ],
+      "control_owners": [
+        1004,
+        1022
+      ],
+      "other_subgraphs_unchanged": true,
+      "root_modes_and_parameters_preserved": true,
+      "source_sha256": "2bbde1fc5ea6ac0f2992919a7dcfc9fe72f1aef98d96d8e73d745d588324bf4f"
+    },
+    {
+      "file": "snapshot/runtime/ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+      "changed_root_ids": [
+        553,
+        552
+      ],
+      "control_owners": [
+        552,
+        553
+      ],
+      "other_subgraphs_unchanged": true,
+      "root_modes_and_parameters_preserved": true,
+      "source_sha256": "b28113dcecf6dc6f19db07da42b96047d07fa02414888fb86d375eccd8c18190"
+    },
+    {
+      "file": "snapshot/runtime/production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+      "changed_root_ids": [
+        553,
+        552
+      ],
+      "control_owners": [
+        552,
+        553
+      ],
+      "other_subgraphs_unchanged": true,
+      "root_modes_and_parameters_preserved": true,
+      "source_sha256": "c97b4cd78782e922a4a4f5ab792fcc8d342e2099c3feead51248bfbffba1da98"
+    }
+  ],
+  "browser": {
+    "candidate_imported_in_separate_tab": true,
+    "backend_port": 8188,
+    "formal_workflow_files_not_saved": true,
+    "original_branch_panel_visible": true,
+    "all_four_choices_selected": true,
+    "strength_063_preserved_in_native_api_and_workflow_export": true,
+    "erase_disabled_internal_nodes_absent": true,
+    "erase_enabled_composite_and_solidmask_ports_correct": true,
+    "full_workflow_export_and_reload_pass": true,
+    "a29_keeps_own_method_and_strength": true,
+    "screenshot_restores_source_control_defaults": true,
+    "queue_submitted": false
+  },
+  "evidence_sha256": {
+    "cpu.json": "e735d4f66059716ba789fdba92e0355652617ce9c85b4f99a8abc750746a6600",
+    "source-preservation.json": "bdfbaeaee9bd538b6cb7464af50851e784fbead1afbf98394ff1f1f389803f63",
+    "api-erase-disabled.json": "d4564f1a20fb8f8f3d6551d97998f4aede7e8c820336f57e1415081f33cb33e6",
+    "api-erase-enabled.json": "714e62253178992916f80f4e32ea880c651afee2bb92bc1a633c68ec2189493d",
+    "ui-roundtrip.json": "46592fa633134ec3d24ead84a624f213889562b2171212f81b44d5d546df724c",
+    "anima-original-control-candidate.jpg": "9776a148f9c661d793f26708708a8a67d356d0a572dba3c3ae53fd785fe61cb3"
+  },
+  "limits": [
+    "No original Anima GPU inference or image-quality acceptance.",
+    "No formal workflow deployment, restart or merge.",
+    "Native patch semantics are not certified pixel-identical to the previous sdscripts implementation."
+  ]
+}
