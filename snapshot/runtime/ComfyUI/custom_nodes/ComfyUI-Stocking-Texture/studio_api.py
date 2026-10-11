@@ -250,6 +250,7 @@ class StudioServer:
                     studio.depth_revision += 1
                     studio.doc.disparity = None
                     studio.depth_status, studio.depth_error = "idle", None
+                    studio.depth_inference = {}
                     studio.start_depth()
                 studio.save_draft()
                 studio.publish({"type": "depth"})
@@ -257,7 +258,7 @@ class StudioServer:
                 raise web.HTTPMethodNotAllowed(method, ["GET", "PUT"])
             return {"dark_adapt": studio.dark_adapt, "depth_enabled": studio.depth_enabled,
                     "models": models.available(studio.model_paths), "depth": studio.depth_status,
-                    "depth_error": studio.depth_error}
+                    "depth_error": studio.depth_error, "depth_inference": dict(studio.depth_inference)}
         if path == "api/apply" and method == "POST":
             if studio.doc is None:
                 raise ValueError("请先导入或连接图片")

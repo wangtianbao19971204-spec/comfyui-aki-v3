@@ -72,6 +72,8 @@ def static_asset(name, base):
         text = replace_once(text,
             "if (S.doc) request('POST', `/api/doc/${S.doc.id}/export/reveal`).catch((e) => flash(e.message, true));",
             "if (S.doc) request('POST', `/api/doc/${S.doc.id}/export/reveal`).then(r => { const a = document.createElement('a'); a.href = r.url; a.download = ''; a.click(); }).catch((e) => flash(e.message, true));")
+        text = replace_once(text, "else if (ev.type === 'depth') lookUI.onEvent(ev);",
+                            "else if (ev.type === 'depth') { lookUI.onEvent(ev); loadOptions().catch(() => {}); }")
         text += BRIDGE_JS
     if name in ("app.js", "look.js"):
         text = text.replace("/api/", base + "/api/")
@@ -97,7 +99,8 @@ async function loadOptions() {
   const options = await request('GET', '/api/options');
   $('#stocking-depth').checked = options.depth_enabled;
   $('#stocking-dark').checked = options.dark_adapt;
-  $('#stocking-depth').title = englishBridge ? 'Depth Anything V2 Small · CPU' : 'Depth Anything V2 Small · CPU';
+  const device = options.depth_inference?.device || options.models.device;
+  $('#stocking-depth').title = `Depth Anything V2 Small · ${device}`;
 }
 for (const [id, key] of [['stocking-depth', 'depth_enabled'], ['stocking-dark', 'dark_adapt']]) {
   $(`#${id}`).addEventListener('change', async e => {
