@@ -22,7 +22,7 @@ FILES = (
     'studio_assets.py', 'studio_store.py', 'studio_models.py', 'studio_nodes.py',
     'requirements.txt', 'MODEL_SOURCES.json', 'UPSTREAM.json', 'sync_upstream.py',
     'web/stocking_texture.js', 'web/editor_model.js', 'web/stocking_texture.css', 'web/stocking_studio.js',
-    'tests/test_nodes.py', 'tests/test_studio.py', 'tests/test_issue3.py', 'tests/test_editor.cjs', 'tests/test_studio_editor.cjs',
+    'tests/test_nodes.py', 'tests/test_studio.py', 'tests/test_issue3.py', 'tests/test_request_contract.py', 'tests/test_editor.cjs', 'tests/test_studio_editor.cjs',
     'tests/compare_upstream.py', 'tests/studio_compare.py', 'tests/model_acceptance.py',
     'tests/feature_acceptance.py', 'tests/bend_acceptance.py', 'tests/parity_matrix.py', 'tests/api_parity.py',
     'tests/image_acceptance.py', 'tests/isolated_acceptance.py',
