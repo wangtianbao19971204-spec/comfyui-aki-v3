@@ -1,5 +1,6 @@
 """Issue 3: real HTTP fields must preserve upstream segmentation and snapping."""
 import unittest
+import json
 from unittest import mock
 
 import cv2
@@ -21,6 +22,14 @@ def seam_document(size=100):
 class NewFieldHTTP(unittest.IsolatedAsyncioTestCase):
     asyncSetUp = baseline.StudioHTTP.asyncSetUp
     asyncTearDown = baseline.StudioHTTP.asyncTearDown
+
+    async def test_ping_version_tracks_the_pinned_dependency(self):
+        response = await self.client.get(self.base + "/api/ping")
+        self.assertEqual(response.status, 200)
+        result = await response.json()
+        pin = json.loads((baseline.assets_ui.SOURCE_ROOT.parents[1] / "UPSTREAM.json").read_text(encoding="utf-8"))["commit"]
+        self.assertEqual(result["upstream_commit"], pin)
+        self.assertEqual(result["version"], "comfy-studio-" + pin[:12])
 
     def install(self, doc):
         studio = self.manager.sessions[self.opened["session"]].studio

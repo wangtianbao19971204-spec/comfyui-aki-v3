@@ -26,4 +26,6 @@ node --test integrations/comfyui/tests/test_editor.cjs integrations/comfyui/test
 
 同步脚本只读取 `stocking/` 的已知源文件类型和 LICENSE，不读取上游开发材料，不启动原服务，不修改上游 checkout。升级须重新验证前端接入点、接口契约、干净 ComfyUI 安装和实际编辑效果，再发布新的固定版本。素材缺失导致的跳过单独报告。
 
+发布目录的 `.gitattributes` 固定文本文件为 LF，即使 Windows 开启 `core.autocrlf=true` 也能校验原始 SHA。编辑器 iframe 使用同源自有代码，同时允许 scripts 和 same-origin；它是界面嵌入方式，不构成不可信代码的安全沙箱。请按 ComfyUI 自身的认证与访问边界部署。
+
 更多[使用说明与限制](integrations/comfyui/README.md)、[模型来源](integrations/comfyui/MODEL_SOURCES.json)、[既有人工修正选区的展示](integrations/comfyui/SHOWCASE.md)。展示图属于注明版本的历史结果，不代替新版本验收。

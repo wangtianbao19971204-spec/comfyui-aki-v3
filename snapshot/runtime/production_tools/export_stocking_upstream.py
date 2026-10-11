@@ -22,7 +22,7 @@ FILES = (
     'studio_assets.py', 'studio_store.py', 'studio_models.py', 'studio_nodes.py',
     'requirements.txt', 'MODEL_SOURCES.json', 'UPSTREAM.json', 'sync_upstream.py',
     'web/stocking_texture.js', 'web/editor_model.js', 'web/stocking_texture.css', 'web/stocking_studio.js',
-    'tests/test_nodes.py', 'tests/test_studio.py', 'tests/test_issue3.py', 'tests/test_request_contract.py', 'tests/test_retention.py', 'tests/test_editor.cjs', 'tests/test_studio_editor.cjs',
+    'tests/test_nodes.py', 'tests/test_studio.py', 'tests/test_studio_models.py', 'tests/test_issue3.py', 'tests/test_request_contract.py', 'tests/test_retention.py', 'tests/test_editor.cjs', 'tests/test_studio_editor.cjs',
     'tests/compare_upstream.py', 'tests/studio_compare.py', 'tests/model_acceptance.py',
     'tests/feature_acceptance.py', 'tests/bend_acceptance.py', 'tests/parity_matrix.py', 'tests/api_parity.py',
     'tests/image_acceptance.py', 'tests/isolated_acceptance.py',
@@ -91,6 +91,7 @@ def export(upstream, out, showcase):
             'LICENSE': (PLUGIN/'LICENSE').read_bytes(),
             'integrations/comfyui/upstream/LICENSE': license_bytes,
             '.gitignore': '__pycache__/\n.pytest_cache/\n*.pyc\n',
+            '.gitattributes': '# Fixed upstream blobs must survive Windows core.autocrlf=true.\n* text=auto eol=lf\n*.png binary\n*.ico binary\n',
             'README.md': ROOT_README.read_text(encoding='utf-8').replace('{{UPSTREAM_COMMIT}}', provenance['commit']),
             'integrations/comfyui/README.md': README.read_text(encoding='utf-8').replace('{{UPSTREAM_COMMIT}}', provenance['commit'])})
     for name in FILES:

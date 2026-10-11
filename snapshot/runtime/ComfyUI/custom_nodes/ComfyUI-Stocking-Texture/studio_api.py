@@ -20,6 +20,7 @@ from .vendor import export, i18n, look
 
 PREFIX = "/stocking_texture/studio"
 NO_STORE = {"Cache-Control": "no-store"}
+UPSTREAM_COMMIT = json.loads(Path(__file__).with_name("UPSTREAM.json").read_text(encoding="utf-8"))["commit"]
 
 
 def boolean(value, *, nullable=False):
@@ -250,7 +251,8 @@ class StudioServer:
     def action(self, entry, method, path, body, query, base):
         studio = entry.studio
         if path == "api/ping" and method == "GET":
-            return {"app": "stocking-texture", "version": "comfy-studio-6c0c620-1"}
+            return {"app": "stocking-texture", "version": "comfy-studio-" + UPSTREAM_COMMIT[:12],
+                    "upstream_commit": UPSTREAM_COMMIT}
         if path == "api/doc" and method == "GET":
             return studio.state()
         if path == "api/lang":
