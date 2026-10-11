@@ -43,6 +43,8 @@ async def run(args):
     ref.sparkle=np.where((x>60)&(x<85)&(y>70)&(y<170),255,0).astype(np.uint8)
     assets=args.out/'assets'
     project=store.snapshot(ref,assets,depth_enabled=True,dark_adapt=False)
+    # This runner asserts exact equality with the upstream CPU implementation.
+    store.Preferences(args.out/'user/stocking_texture').update(compute_device='cpu')
     users=types.SimpleNamespace(get_request_user_filepath=lambda request,file:str(args.out/'user'/file))
     manager=api.StudioServer(types.SimpleNamespace(user_manager=users),assets,
                             {'sam':args.out/'no-model','depth':args.out/'no-model'})
@@ -61,6 +63,7 @@ async def run(args):
         opened=await request('POST',api.PREFIX,{'project':project,'draft_id':'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'})
         base=opened['url'].rstrip('/')
         own=manager.sessions[opened['session']].studio
+        assert own.compute_device == 'cpu'
         docbase=base+'/api/doc/'+own.doc.id
 
         def same_document():

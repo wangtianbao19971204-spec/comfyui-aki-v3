@@ -51,6 +51,11 @@ class ExportContracts(unittest.TestCase):
             self.assertEqual((out/'integrations/comfyui/upstream/stocking'/row['file']).read_bytes(),
                              (self.upstream/'stocking'/row['file']).read_bytes())
         self.assertEqual(result['dependency_mode'], 'fixed-raw-blob-copy')
+        for name in ('studio_document.py', 'guide_solver.py', 'gpu_contours.py',
+                     'requirements-cuda13.txt', 'tests/test_guide_solver.py',
+                     'tests/test_gpu_contours.py', 'tests/test_request_contract.py',
+                     'tests/test_issue3.py', 'tests/test_retention.py'):
+            self.assertIn('integrations/comfyui/' + name, actual)
         self.assertFalse(result['upstream_files_modified'])
         self.assertEqual([p for p in actual if p.endswith('.png')],
                          ['integrations/comfyui/docs/images/reviewed-panel.png'])

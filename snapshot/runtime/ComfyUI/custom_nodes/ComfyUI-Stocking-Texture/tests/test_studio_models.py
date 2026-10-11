@@ -53,6 +53,9 @@ class FakePredictor:
 
 class CacheContracts(unittest.TestCase):
     def setUp(self):
+        self.owner = object()
+        models.cache_activity(self.owner, True)
+        self.addCleanup(models.cache_activity, self.owner, False)
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.checkpoint = Path(self.temp.name) / "sam.pth"
@@ -160,6 +163,13 @@ class DeviceContracts(unittest.TestCase):
             self.assertIsNone(reason)
             self.assertTrue(self.queue_available())
 
+    def test_explicit_cpu_never_inspects_or_borrows_gpu(self):
+        with mock.patch.object(models, "_device", side_effect=AssertionError("GPU queried")):
+            with models._device_lease(models._GIB, "cpu") as (device, reason):
+                self.assertEqual(device.type, "cpu")
+                self.assertIsNone(reason)
+                self.assertTrue(self.queue_available())
+
     def test_success_and_unexpected_error_both_offload(self):
         model, info = FakeModel(), {}
         result = models._infer(model, lambda device: 42, models._GIB, info)
@@ -225,9 +235,15 @@ class DeviceContracts(unittest.TestCase):
 
 class DepthContracts(unittest.TestCase):
     def test_local_model_processor_reuse_and_config_invalidation(self):
+        owner = object()
+        models.cache_activity(owner, True)
+        self.addCleanup(models.cache_activity, owner, False)
         class Model(FakeModel):
             def __call__(self, pixel_values):
                 return types.SimpleNamespace(predicted_depth=pixel_values[:, 0])
+
+            def load_state_dict(self, weights, strict):
+                assert strict
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             for name in ("model.safetensors", "config.json", "preprocessor_config.json"):
@@ -235,11 +251,14 @@ class DepthContracts(unittest.TestCase):
             processor = mock.Mock(return_value={"pixel_values": torch.ones((1, 3, 8, 8))})
             processor_loader = mock.Mock(return_value=processor)
             model_loader = mock.Mock(side_effect=lambda *args, **kwargs: Model())
+            config_loader = mock.Mock(return_value=types.SimpleNamespace(model_type="depth_anything"))
             module = types.SimpleNamespace(AutoImageProcessor=types.SimpleNamespace(from_pretrained=processor_loader),
-                AutoModelForDepthEstimation=types.SimpleNamespace(from_pretrained=model_loader))
+                AutoConfig=types.SimpleNamespace(from_pretrained=config_loader),
+                DepthAnythingForDepthEstimation=model_loader)
             models._depth_cache.clear()
             self.addCleanup(models._depth_cache.clear)
             with mock.patch.dict(sys.modules, transformers=module), \
+                    mock.patch("safetensors.torch.load_file", return_value={}) as load_weights, \
                     mock.patch.object(models, "_device", return_value=torch.device("cpu")):
                 art, paths = np.zeros((8, 8, 3), np.uint8), {"depth": root, "sam": root / "absent"}
                 for k in range(2):
@@ -248,11 +267,56 @@ class DepthContracts(unittest.TestCase):
                     np.testing.assert_array_equal(depth, np.ones((8, 8), np.float32))
                     self.assertEqual(info["model_cached"], k == 1)
                 self.assertEqual(model_loader.call_count, 1)
-                self.assertTrue(model_loader.call_args.kwargs["local_files_only"])
+                self.assertTrue(config_loader.call_args.kwargs["local_files_only"])
+                self.assertFalse(config_loader.call_args.kwargs["trust_remote_code"])
+                self.assertEqual(load_weights.call_args.kwargs["device"], "cpu")
                 self.assertTrue(processor_loader.call_args.kwargs["local_files_only"])
                 (root / "preprocessor_config.json").write_bytes(b"changed fixture")
                 models.estimate_depth(art, paths)
                 self.assertEqual(model_loader.call_count, 2)
+
+
+class CacheLifecycle(unittest.TestCase):
+    def setUp(self):
+        self.first, self.second = object(), object()
+        self.addCleanup(models.cache_activity, self.first, False)
+        self.addCleanup(models.cache_activity, self.second, False)
+
+    def seed(self):
+        models._sam_cache["model"] = FakeModel()
+        models._depth_cache["model"] = FakeModel()
+        models._embeddings["image"] = torch.ones(4)
+
+    def test_last_editor_leaving_releases_both_models_and_embeddings(self):
+        models.cache_activity(self.first, True)
+        models.cache_activity(self.second, True)
+        self.seed()
+        models.cache_activity(self.first, False)
+        self.assertTrue(models.cache_state()["sam_loaded"])
+        models.cache_activity(self.second, False)
+        state = models.cache_state()
+        self.assertFalse(state["sam_loaded"])
+        self.assertFalse(state["depth_loaded"])
+        self.assertEqual(state["embeddings"], 0)
+
+    def test_inflight_inference_defers_release_including_late_cache_writes(self):
+        models.cache_activity(self.first, True)
+        with models._model_use():
+            models.cache_activity(self.first, False)
+            self.assertTrue(models.cache_state()["release_pending"])
+            self.seed()
+            self.assertTrue(models.cache_state()["depth_loaded"])
+        self.assertFalse(models.cache_state()["depth_loaded"])
+        self.assertEqual(models.cache_state()["embeddings"], 0)
+
+    def test_reentering_during_inference_keeps_cache_for_active_editor(self):
+        models.cache_activity(self.first, True)
+        with models._model_use():
+            models.cache_activity(self.first, False)
+            models.cache_activity(self.second, True)
+            self.seed()
+        self.assertTrue(models.cache_state()["sam_loaded"])
+        self.assertFalse(models.cache_state()["release_pending"])
 
 
 if __name__ == "__main__":

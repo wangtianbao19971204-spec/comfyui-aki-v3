@@ -10,6 +10,14 @@
 
 加载[独立工作流](integrations/comfyui/examples/stocking-repair.json)，打开完整编辑器，导入图片、修正选区、绘制走向并调整纹理，再“应用到节点”并执行工作流。工作流不需要扩散模型或工作台插件。SAM 与深度权重由用户另行准备，手绘选区不依赖这些权重。
 
+## 计算设备与缓存
+
+完整编辑器默认选择 GPU，也可在顶部切换到 CPU；设置控制 SAM 点选、内置深度和走向求解。走向的 CUDA 13 加速依赖见 [requirements-cuda13.txt](integrations/comfyui/requirements-cuda13.txt)，需在 ComfyUI 的 Python 环境安装匹配版本。依赖缺失、队列忙、显存不足或求解失败时自动回到 CPU，界面显示实际设备与回退原因。
+
+离开或关闭最后一个活跃编辑页面后，释放插件缓存的 SAM、深度模型和图像特征；正在推理时延后到任务结束。草稿、已算好的深度和磁盘模型保持。框架分配器与 CUDA 上下文可能继续占用内存，不能以进程内存未归零判断模型未释放。
+
+2026-10-11 整合验收：78 项 Python 测试（含实际 CUDA）、17 项前端测试、51 项 CPU HTTP 对照通过。三张真实图片的六种样式共 18 组，CPU 与固定上游逐像素一致；GPU 求解有浮点差异，本次样例最大单通道差异为 9/255，局部目视复核未见明显结构变化。需要精确对照上游时请选择 CPU。实页已验证设备切换、真实 SAM／深度推理、关闭重开和导航离开后回收缓存；这些结果不代表所有硬件、姿势和图片均已验收。
+
 ## 固定依赖与升级
 
 上游固定提交：`{{UPSTREAM_COMMIT}}`。原始 Git blob 的拷贝位于 `integrations/comfyui/upstream/stocking/`；[UPSTREAM.json](integrations/comfyui/UPSTREAM.json) 记录每个源文件的 SHA256。没有浮动引用，无需 submodule。`vendor/` 仅提供独立模块命名空间及本地 i18n 适配，不改原版源文件。

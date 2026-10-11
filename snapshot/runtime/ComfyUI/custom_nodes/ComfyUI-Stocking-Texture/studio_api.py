@@ -1,9 +1,11 @@
 """Local aiohttp adapter for the pinned editor, scoped to independent ComfyUI nodes."""
 import asyncio
+from contextlib import suppress
 import json
 import logging
 from pathlib import Path
 import re
+import threading
 import time
 import uuid
 from urllib.parse import quote, urlsplit
@@ -20,6 +22,7 @@ from .vendor import export, i18n, look
 
 PREFIX = "/stocking_texture/studio"
 NO_STORE = {"Cache-Control": "no-store"}
+ACTIVITY_TTL = 60
 UPSTREAM_COMMIT = json.loads(Path(__file__).with_name("UPSTREAM.json").read_text(encoding="utf-8"))["commit"]
 
 
@@ -74,7 +77,38 @@ class EditorSession:
         self.downloads = {}
         self.pending_apply = None
         self.operation = asyncio.Lock()
+        self.clients = {}
+        self.activity_lock = threading.RLock()
+        self.created = time.monotonic()
         self.studio.on_event = self.publish
+
+    def activity(self, body, now=None):
+        with self.activity_lock:
+            self._activity(body, now)
+
+    def _activity(self, body, now=None):
+        now = time.monotonic() if now is None else now
+        client, active, seq = body.get("client"), body.get("active"), body.get("seq")
+        if not isinstance(client, str) or not re.fullmatch(r"[0-9a-f]{32}", client):
+            raise ValueError("页面标识无效")
+        if type(active) is not bool or type(seq) is not int or not 0 <= seq < 2 ** 53:
+            raise ValueError("页面状态无效")
+        self.clients = {k: v for k, v in self.clients.items() if now - v[2] < ACTIVITY_TTL * 2}
+        if client not in self.clients and len(self.clients) >= 16:
+            raise ValueError("这个编辑器打开了过多页面")
+        previous = self.clients.get(client)
+        if previous is None or seq > previous[0]:
+            self.clients[client] = (seq, active, now)
+        self.reap_activity(now)
+
+    def reap_activity(self, now=None):
+        with self.activity_lock:
+            now = time.monotonic() if now is None else now
+            active = any(v[1] and now - v[2] < ACTIVITY_TTL for v in self.clients.values())
+            if not self.clients:
+                active = now - self.created < ACTIVITY_TTL
+            if active != self.studio.active:
+                self.studio.set_active(active)
 
     def publish(self, event):
         for q in tuple(self.queues):
@@ -97,6 +131,7 @@ class StudioServer:
         self.sessions = {}
         self.creation = asyncio.Lock()
         self.retention_days = store.retention_days(retention_days)
+        self.reaper = None
 
     def protected_files(self):
         protected = []
@@ -129,6 +164,8 @@ class StudioServer:
 
     async def _create(self, request):
         try:
+            if self.reaper is None:
+                self.reaper = asyncio.create_task(self.reap())
             same_origin(request)
             data = await body_json(request)
             now = time.monotonic()
@@ -214,6 +251,12 @@ class StudioServer:
                     await asyncio.to_thread(entry.close)
                 self.sessions.pop(sid, None)
                 return json_response({"ok": True})
+            if path == "api/activity" and request.method == "POST":
+                # Do not wait behind a slow inference or export. Cache release is
+                # deferred by the model job counter until that work has finished.
+                data = await body_json(request)
+                await asyncio.to_thread(entry.activity, data)
+                return json_response({"active": entry.studio.active, "cache": models.cache_state()})
             if path.startswith("api/download/") and request.method == "GET":
                 key = path.split("/")[-1]
                 if key not in entry.downloads:
@@ -276,9 +319,13 @@ class StudioServer:
             return {"presets": result}
         if path == "api/options":
             if method == "PUT":
+                if "compute_device" in body:
+                    models.preference(body["compute_device"])
                 for key in ("dark_adapt", "depth_enabled"):
                     if key in body and type(body[key]) is not bool:
                         raise ValueError("开关值必须为布尔值")
+                if "compute_device" in body:
+                    studio.set_compute_device(body["compute_device"])
                 studio.dark_adapt = body.get("dark_adapt", studio.dark_adapt)
                 changed = "depth_enabled" in body and body["depth_enabled"] != studio.depth_enabled
                 studio.depth_enabled = body.get("depth_enabled", studio.depth_enabled)
@@ -293,7 +340,9 @@ class StudioServer:
             elif method != "GET":
                 raise web.HTTPMethodNotAllowed(method, ["GET", "PUT"])
             return {"dark_adapt": studio.dark_adapt, "depth_enabled": studio.depth_enabled,
-                    "models": models.available(studio.model_paths), "depth": studio.depth_status,
+                    "compute_device": studio.compute_device, "active": studio.active,
+                    "cache": models.cache_state(),
+                    "models": models.available(studio.model_paths, studio.compute_device), "depth": studio.depth_status,
                     "depth_error": studio.depth_error, "depth_inference": dict(studio.depth_inference)}
         if path == "api/apply" and method == "POST":
             if studio.doc is None:
@@ -476,7 +525,23 @@ class StudioServer:
         return {"kind": kind, "file": target.name, "folder": "浏览器下载", "seconds": result["seconds"],
                 "notes": [], "url": base + "/api/download/" + key}
 
+    async def reap(self):
+        while True:
+            await asyncio.sleep(15)
+            now = time.monotonic()
+            for sid, entry in list(self.sessions.items()):
+                await asyncio.to_thread(entry.reap_activity, now)
+                if not entry.studio.active and now - entry.studio.last_access > 1800 and not entry.operation.locked():
+                    async with entry.operation:
+                        await asyncio.to_thread(entry.close)
+                    self.sessions.pop(sid, None)
+
     async def shutdown(self, app):
+        if self.reaper is not None:
+            self.reaper.cancel()
+            with suppress(asyncio.CancelledError):
+                await self.reaper
+            self.reaper = None
         for entry in self.sessions.values():
             await asyncio.to_thread(entry.close)
         self.sessions.clear()

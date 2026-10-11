@@ -66,7 +66,9 @@ def run(args):
         doc.disparity = np.load(args.models / model_name / "depth.npy", allow_pickle=False)
         assets = args.out / "assets"
         saved = store.snapshot(doc, assets, depth_enabled=True, dark_adapt=False)
-        own = studio.Studio(assets, store.Preferences(args.out / "user"), {"sam": Path("missing"), "depth": Path("missing")}, saved)
+        preferences = store.Preferences(args.out / "user")
+        preferences.update(compute_device="cpu")  # Exact comparison with upstream CPU fields.
+        own = studio.Studio(assets, preferences, {"sam": Path("missing"), "depth": Path("missing")}, saved)
         try:
             assert doc.wait_idle(120)
             own.wait_ready()

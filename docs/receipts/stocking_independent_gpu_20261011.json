@@ -1,0 +1,489 @@
+{
+  "schema": 1,
+  "date": "2026-10-11",
+  "feature": "runtime-stocking-texture",
+  "upstream_commit": "e72a262bd917924bc82d45f19992344f2680a303",
+  "integration_source": "4ee44002d778e3ff9893f064705309c933dbdfb2",
+  "maintenance_base": "0334f45e144f132634de3e635497b57a5fc7d2d2",
+  "independent_repository": "https://github.com/wangtianbao19971204-spec/stocking-texture-comfyui",
+  "independent_base": "fc51080924c2adb862008486af1e293fdf6aa141",
+  "preserved": [
+    "T0-T5",
+    "pristine upstream blobs",
+    "six existing task commits",
+    "approved showcase hashes"
+  ],
+  "validation": {
+    "python_passed": 78,
+    "python_skipped": 0,
+    "actual_cuda_included": true,
+    "frontend_passed": 17,
+    "export_contracts_passed": 5,
+    "cpu_http_checks": 51,
+    "real_image_style_cases": 18,
+    "cpu_pixels_and_fields_exact": true,
+    "gpu_max_channel_error_255": 9,
+    "gpu_all_regions_cuda": true,
+    "gpu_private_pools_empty": true,
+    "real_sam_and_depth_gpu": true,
+    "ui_device_switch": true,
+    "close_reopen_release": true,
+    "navigate_away_release": true,
+    "navigation_sample_gap_seconds": 19.648,
+    "after_navigation_active_editors": 0,
+    "after_navigation_embeddings": 0,
+    "computed_depth_retained": true,
+    "sam_reloaded_on_next_point": true,
+    "browser_tab_hide_separately_verified": false,
+    "model_weakrefs_rerun": false,
+    "validated_export_files": 86
+  },
+  "real_image_cases": [
+    {
+      "image": "white-bent",
+      "style": "knit",
+      "cpu_exact": true,
+      "gpu_max_error": 3,
+      "gpu_mean_error": 0.0005447852366255144,
+      "gpu_over_2": 1
+    },
+    {
+      "image": "white-bent",
+      "style": "loops",
+      "cpu_exact": true,
+      "gpu_max_error": 6,
+      "gpu_mean_error": 0.0022561406893004117,
+      "gpu_over_2": 47
+    },
+    {
+      "image": "white-bent",
+      "style": "coil",
+      "cpu_exact": true,
+      "gpu_max_error": 4,
+      "gpu_mean_error": 0.0014911265432098766,
+      "gpu_over_2": 11
+    },
+    {
+      "image": "white-bent",
+      "style": "lines",
+      "cpu_exact": true,
+      "gpu_max_error": 2,
+      "gpu_mean_error": 0.001349826388888889,
+      "gpu_over_2": 0
+    },
+    {
+      "image": "white-bent",
+      "style": "grain",
+      "cpu_exact": true,
+      "gpu_max_error": 2,
+      "gpu_mean_error": 0.0003034979423868313,
+      "gpu_over_2": 0
+    },
+    {
+      "image": "white-bent",
+      "style": "oily",
+      "cpu_exact": true,
+      "gpu_max_error": 2,
+      "gpu_mean_error": 0.00031491126543209874,
+      "gpu_over_2": 0
+    },
+    {
+      "image": "black-crossed",
+      "style": "knit",
+      "cpu_exact": true,
+      "gpu_max_error": 1,
+      "gpu_mean_error": 0.0005176183127572016,
+      "gpu_over_2": 0
+    },
+    {
+      "image": "black-crossed",
+      "style": "loops",
+      "cpu_exact": true,
+      "gpu_max_error": 1,
+      "gpu_mean_error": 0.002004083076131687,
+      "gpu_over_2": 0
+    },
+    {
+      "image": "black-crossed",
+      "style": "coil",
+      "cpu_exact": true,
+      "gpu_max_error": 2,
+      "gpu_mean_error": 0.0027890303497942388,
+      "gpu_over_2": 0
+    },
+    {
+      "image": "black-crossed",
+      "style": "lines",
+      "cpu_exact": true,
+      "gpu_max_error": 1,
+      "gpu_mean_error": 0.001058545524691358,
+      "gpu_over_2": 0
+    },
+    {
+      "image": "black-crossed",
+      "style": "grain",
+      "cpu_exact": true,
+      "gpu_max_error": 2,
+      "gpu_mean_error": 0.0002592914094650206,
+      "gpu_over_2": 0
+    },
+    {
+      "image": "black-crossed",
+      "style": "oily",
+      "cpu_exact": true,
+      "gpu_max_error": 1,
+      "gpu_mean_error": 0.0012602880658436214,
+      "gpu_over_2": 0
+    },
+    {
+      "image": "nearblack-standing",
+      "style": "knit",
+      "cpu_exact": true,
+      "gpu_max_error": 1,
+      "gpu_mean_error": 2.2605613425925925e-06,
+      "gpu_over_2": 0
+    },
+    {
+      "image": "nearblack-standing",
+      "style": "loops",
+      "cpu_exact": true,
+      "gpu_max_error": 1,
+      "gpu_mean_error": 7.750496031746031e-06,
+      "gpu_over_2": 0
+    },
+    {
+      "image": "nearblack-standing",
+      "style": "coil",
+      "cpu_exact": true,
+      "gpu_max_error": 1,
+      "gpu_mean_error": 6.071221891534391e-05,
+      "gpu_over_2": 0
+    },
+    {
+      "image": "nearblack-standing",
+      "style": "lines",
+      "cpu_exact": true,
+      "gpu_max_error": 1,
+      "gpu_mean_error": 3.552310681216931e-06,
+      "gpu_over_2": 0
+    },
+    {
+      "image": "nearblack-standing",
+      "style": "grain",
+      "cpu_exact": true,
+      "gpu_max_error": 0,
+      "gpu_mean_error": 0.0,
+      "gpu_over_2": 0
+    },
+    {
+      "image": "nearblack-standing",
+      "style": "oily",
+      "cpu_exact": true,
+      "gpu_max_error": 9,
+      "gpu_mean_error": 0.0020225565269510583,
+      "gpu_over_2": 411
+    }
+  ],
+  "evidence_directory": "stocking-independent-gpu-20261011-01",
+  "evidence_files": [
+    {
+      "path": "INTEGRATION.json",
+      "sha256": "dc7a8affbecdf0365b07d8f9a86e60edc5c819817955277e31df019a191c982e"
+    },
+    {
+      "path": "UNIT-CUDA.log",
+      "sha256": "cae20caab66ea6a72bbac694d2dd06d2d0aa4b05427edf505c36418f6037d283"
+    },
+    {
+      "path": "FRONTEND.log",
+      "sha256": "057e4b6d8d1d4cbfe68c505de5d2843be96d5749159d4b2b655491bdf62ee8a4"
+    },
+    {
+      "path": "EXPORT-TESTS.log",
+      "sha256": "fbc27bc0add83acc9eb7accaac875dcd573004f3a54e69220a8a3d89f305d62f"
+    },
+    {
+      "path": "HTTP-CPU.log",
+      "sha256": "e0d7f0b10c3edf14f0a8eb00bcca6479aa6354fdac943908634435a0ed343a05"
+    },
+    {
+      "path": "http-cpu/ACCEPTANCE.json",
+      "sha256": "47ae45650b67027acf4c09b236bd6c3f37e07d125d13d59a39b981583e163355"
+    },
+    {
+      "path": "EXPORT.json",
+      "sha256": "01112861bfbe465ac25d7d41105981cf69fc4890fa6a13a5875568f4258333d1"
+    },
+    {
+      "path": "EXPORT-FINAL.json",
+      "sha256": "569d313e6d753075281f951df64ab8020c8ec4eb29664d01f6536a0bda6afab1"
+    },
+    {
+      "path": "VALIDATED-SOURCE-MATCH.json",
+      "sha256": "80e14799837429d157b81da5d6b8992e202ffd32f70b4be654b61a15a0a7ade9"
+    },
+    {
+      "path": "real-parity-diagnostic/COMPARISON.json",
+      "sha256": "84a76c6b4375e5314f33ae6cc9b30fac5123d2a665b83169b6655874d672d027"
+    },
+    {
+      "path": "real-parity-diagnostic/white-bent-inference.json",
+      "sha256": "ef82e6c18aac97bb99720e278787039dd7cb1ee87d788e98e4097a3ec847491b"
+    },
+    {
+      "path": "real-parity-diagnostic/black-crossed-inference.json",
+      "sha256": "806b95aa68d8046fdf584df8e6a40f7baab0e4c7136ccf02edd05444710124c0"
+    },
+    {
+      "path": "real-parity-diagnostic/nearblack-standing-inference.json",
+      "sha256": "1a4f9ff2689989d3850ecba0daece2efec670a11f8c0d65bfae9532878fa3c58"
+    },
+    {
+      "path": "UI-CPU.png",
+      "sha256": "14163466ac7d10b0803a7db8287a9417b8d0e0e7e472fb0a9a8dfcacf5221e07"
+    },
+    {
+      "path": "UI-GPU.png",
+      "sha256": "2a8afb13c4ac6df1c50e11fecc077ec9c0fdb513c2d915f1bb8d73dff065f94e"
+    },
+    {
+      "path": "UI-LOADED.json",
+      "sha256": "9ed7426c942a87944d5715971c3e576a8de494858c4b1ed7ab7cd0a2c5d34bf2"
+    },
+    {
+      "path": "UI-DEPTH.json",
+      "sha256": "292e212d231a72c01b201f8cf8baf8d3a62b5b35919d868116c2d68fee7f710d"
+    },
+    {
+      "path": "UI-CLOSED-CACHE.json",
+      "sha256": "1411776ae8b509f7368eac46ff5d40f4e1522790ce40ac4f4c5408d4ea83404a"
+    },
+    {
+      "path": "UI-REOPENED.json",
+      "sha256": "ab30d834213f92ade773341092a5f42a82373aa182037c1f05e55710613f88fe"
+    },
+    {
+      "path": "UI-SAM-RELOADED.json",
+      "sha256": "266ac344c6a9b19eac3828046edc3da279cd4615b45e9f234be20933c3f79204"
+    },
+    {
+      "path": "UI-NETWORK.json",
+      "sha256": "96b50260ff9ca1a0faa64e4e984bd3473702858b242fc7b7971ab952dfa00b39"
+    },
+    {
+      "path": "UI-NAV-BEFORE.json",
+      "sha256": "9ed7426c942a87944d5715971c3e576a8de494858c4b1ed7ab7cd0a2c5d34bf2"
+    },
+    {
+      "path": "UI-NAV-AFTER.json",
+      "sha256": "359ba0f56ad72af8c11c7f4ceb870648b02f726e29488bdcdada82d51ddd7546"
+    },
+    {
+      "path": "UI-NAV-NETWORK.json",
+      "sha256": "82ac315b5448b26455f9a88dd40f49319857c8a68c96da98873a7a3209557b7b"
+    }
+  ],
+  "source_files": [
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/__init__.py",
+      "sha256": "95574c34ba6a00274d4f4c0368679e428737029e2abab9a7350aa5b95ff6ddf2"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/nodes.py",
+      "sha256": "3dc957706ac2a520bee0d863d7537649ac2ab51901209430c68ed0c846df5405"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/engine.py",
+      "sha256": "8b790e8e95ec280a8136a92767ba1b049e8dba93d37835d07e6264721d833ddd"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/rendering.py",
+      "sha256": "ccc3d6d3d6b06f7e2b736a9ca72b05d86a84ea4a86f3af29b0a0953f48ba2f43"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py",
+      "sha256": "a416daf93cc8726f0cd30210944e6b7695d75dcf89d5b1e7de2546f3fe3a4899"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_api.py",
+      "sha256": "285b381378a5c0eaafdee957e7e22ad43f60d61a8cc6bf30785e301f8c0d4598"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_assets.py",
+      "sha256": "74c385b04c06d2faa5bb902d561fb66b85f6ab24615c2d329b224a5f53c80cb0"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
+      "sha256": "1024e1f15f4171dc0340b12c1ae70b80012faf60afcc27654008de49e119bdad"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_models.py",
+      "sha256": "b44964c2099856c3b3cff8ca779cff182bb23362f1470c9ed588860af76563e3"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_nodes.py",
+      "sha256": "50519fcf422682515bf4e95d156f37ac458c612e148afc4cf6a26d6383660b38"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_document.py",
+      "sha256": "a73b305a47f6c793d59a08aee9f1d2bbbf7d754596ff271549188064e8a62f5f"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/guide_solver.py",
+      "sha256": "175405bd5539431abfcc308bc2147b7aadef526a7a5147e675c2d539d362e745"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/gpu_contours.py",
+      "sha256": "a18ecb031aeb40506e8c782d15a4a2e659c7ca7262313489f8b4facb76d24d79"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/requirements.txt",
+      "sha256": "2e4b3646cd52f6a2cc2494d83667bbfe3690d4de2d730a802128f74bcbea49d5"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/requirements-cuda13.txt",
+      "sha256": "c5ddbe05eecc642ef82350d010b7eb1dd053fefc0136457ef2cc9db2bd5a68fa"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/MODEL_SOURCES.json",
+      "sha256": "8300443c2b639b80fd2f8a258458df33abca48a9600674298bbbd86a99faf94d"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
+      "sha256": "31d54f5656239ae65205bc30f8664816f7b7c7c11b0c76fbbfe02979c50f36e5"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/sync_upstream.py",
+      "sha256": "39b5ddbc6c604a8473c7c8eff36179c453f0ac273503cddb71610efbb315dc9a"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_texture.js",
+      "sha256": "06df3a64632e5b0550a421186a3a4155e5ba611c9d0fb28858ca61a69d9948e9"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/editor_model.js",
+      "sha256": "9683203bea051adabfb4fd9922d554500e86ea63f93fd107a22febcf18776148"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_texture.css",
+      "sha256": "ee13f2316c6e18b4582ad7b8b57dffb645f28b9b2e3437194dc49941aa02c923"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_studio.js",
+      "sha256": "feb4a7b6b634bc55b2d7df570abfaed4bfa644d72c5073d5cb08b03e17b4c9a4"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py",
+      "sha256": "32728634a050f663508de1a23c06813dfbccd2447cb8113ae952044a2940b372"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio.py",
+      "sha256": "3082b3d89299a143d0f7cec1809a1788f975ec76c17ad193ad22480430837dc9"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio_models.py",
+      "sha256": "840dc3d725b580d9ef05edeb613e0baa856cab4790453c3e07229f3f6ff205d1"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_issue3.py",
+      "sha256": "14da9f462d1ca9c80b92edce0b8ac0d47bd8e4624943baf3f5e4d233bf2c9cfb"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py",
+      "sha256": "1227d19122234128765b1c77917c8aba7634a8607b4fd1970e9e56fd7b11a19c"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_retention.py",
+      "sha256": "78f305d2de935fdadb1fe9fdc508c6627865277f8d3539f7e4257c69cdce72f7"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_editor.cjs",
+      "sha256": "f471f5512470920eb5d6d7ded4f53279eb4767905cce8e8a84116ef9acf6d126"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio_editor.cjs",
+      "sha256": "3253b056936b6a27f9c1788a085bc164db0f86f0616cbd3d7a4bc75040cb974d"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_guide_solver.py",
+      "sha256": "88f2abac598bf51838eae85dc7979688a02ffcb6935dbeae422d17d2d3308e28"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_gpu_contours.py",
+      "sha256": "3d3f97e647cd31862c14627edb8c46ff9775ebd64e3e42f2ed9f507fca6b0100"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/compare_upstream.py",
+      "sha256": "4df0d3c82ab00f44a9cf558b7021ce5632895017dbe9072abe98ded43a9c3b96"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/studio_compare.py",
+      "sha256": "380b112d518723832bd2c0183ec0902562c19d80fefb72d7e5a1ed499a62de9d"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/model_acceptance.py",
+      "sha256": "df174699e783fed3fb943f5a706ee6c09e97f7874bdc4566d0718a1992e21521"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/feature_acceptance.py",
+      "sha256": "d8d5561706ed7ff4d0e3e6dfdd15d82cc5db29fbf5e70c92ee1fed6228dbdf93"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/bend_acceptance.py",
+      "sha256": "0c0f2075db04d55bdb3384580d6643cf35cb6dcc29c567772f9b589041a17447"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/parity_matrix.py",
+      "sha256": "d282771fc42284e1fcf6967f33eb690d3c6f97ae2f3980be39018c5dc65d00c1"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/api_parity.py",
+      "sha256": "d29de3e1c5372a66068c86ed2bbee5adbdf2b1730f49749a73ca6b82099cfe11"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/image_acceptance.py",
+      "sha256": "3f7a12523a2916c8b279c6ac12c7a2474f181c5cfa2e642ead9c01c7c16e9d14"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/isolated_acceptance.py",
+      "sha256": "686ba4cfb39b3d360350ee91feae94c6b74574bf853d64202e7512835d7ead66"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/__init__.py",
+      "sha256": "d7ebc52b1c97348651c7d05da032d653200f4e375cad80a6db496c44686625f3"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/i18n.py",
+      "sha256": "179f0c9c843e0a4423f15b65c0d7550c2155134507da77adfe664a33a3984da2"
+    },
+    {
+      "path": "snapshot/runtime/production_tools/export_stocking_upstream.py",
+      "sha256": "eb2b783dfe3fe756dcd26bb7a18432a7e339b0abaf94e1dc72b35a2547356c65"
+    },
+    {
+      "path": "snapshot/runtime/production_tools/test_export_stocking_upstream.py",
+      "sha256": "ad99aae57385376234277b59e928e00dd2b9383fee81358d74441d8d5f8fe512"
+    },
+    {
+      "path": "snapshot/runtime/production_tools/stocking_independent_README.md",
+      "sha256": "b032ae42d22ce54e4044659eb41b12d34fbd92cc8f97fa13e0e5cd265c02848b"
+    },
+    {
+      "path": "snapshot/runtime/production_tools/stocking_upstream_README.md",
+      "sha256": "1b28e1c33c3a865489f9b181304f19b32fcccefc809fdae6b13463a87ecba6d6"
+    }
+  ],
+  "limitations": [
+    "Isolated ComfyUI with existing Python dependencies and local weights, not a clean-machine install.",
+    "GPU is approximate: measured maximum 9/255, not an arbitrary-input error guarantee.",
+    "Offline image comparison reused depth assets; real model inference was tested separately in browser.",
+    "UI-CLOSED-CACHE observer temporarily counts as one editor; navigation receipt has no observer editor.",
+    "Tab-hide attempt did not hide the page; navigation CDP buffer was truncated and is not beacon proof.",
+    "No fresh browser-crash, model weakref or process RSS return-to-baseline acceptance."
+  ],
+  "production_modified": false,
+  "live_deployed": false,
+  "upstream_merge_requested": false,
+  "new_private_images_published": false,
+  "publication": "separate independent branch and PR; maintenance upload paused; no merge"
+}

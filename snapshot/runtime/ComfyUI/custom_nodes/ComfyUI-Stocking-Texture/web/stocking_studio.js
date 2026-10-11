@@ -82,9 +82,15 @@ async function openStudio(node) {
   let imageHash = project.image_sha256;
   const imageLink = node.inputs?.find(i => i.name === "image")?.link ?? null;
   let closed = false;
+  const visibility = typeof IntersectionObserver === 'function' ? new IntersectionObserver(entries => {
+    frame.contentWindow?.postMessage({ type: 'stocking-studio-visibility', session: session.session,
+      active: entries.some(entry => entry.isIntersecting) }, location.origin);
+  }) : null;
+  visibility?.observe(frame);
   const close = () => {
     if (closed) return;
     closed = true;
+    visibility?.disconnect();
     window.removeEventListener("message", receive);
     dialog.remove();
     if (state.panel === dialog) state.panel = null;

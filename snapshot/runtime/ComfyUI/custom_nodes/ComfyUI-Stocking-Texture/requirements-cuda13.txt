@@ -1,0 +1,5 @@
+# Optional guide-solving backend for a CUDA 13 ComfyUI environment.
+# Install with the same Python as ComfyUI. No model weights are downloaded.
+cupy-cuda13x==14.2.0
+nvidia-cuda-runtime==13.0.96
+numba>=0.61,<1

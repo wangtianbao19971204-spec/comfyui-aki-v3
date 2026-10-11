@@ -19,7 +19,8 @@ import numpy as np
 from PIL import Image
 
 from .vendor import look
-from .vendor.document import Document, PALETTE
+from .vendor.document import PALETTE
+from .studio_document import Document
 
 MAX_PIXELS = 24_000_000
 MAX_PROJECT_BYTES = 24 * 1024 * 1024
@@ -230,14 +231,15 @@ def snapshot(doc, assets, *, depth_enabled=True, dark_adapt=False, asset=None):
     return parse_project(result)
 
 
-def restore(value, assets, art=None):
+def restore(value, assets, art=None, *, preferred="gpu"):
+    document_type = Document.configured(preferred)
     p = parse_project(value)
     if not p:
         if art is None:
             raise ValueError("请连接原图后运行，或在完整编辑器中导入图片/PSD")
         if art.ndim != 3 or art.shape[2] != 3 or min(art.shape[:2]) < 8 or art.shape[0] * art.shape[1] > MAX_PIXELS:
             raise ValueError("图片须至少 8 像素且不超过 2400 万像素")
-        doc = Document(np.asarray(art, np.uint8), "ComfyUI.png")
+        doc = document_type(np.asarray(art, np.uint8), "ComfyUI.png")
         for name in ("左腿", "右腿"):
             doc.add_region(name)
         doc.look = dict(look.DEFAULTS)
@@ -271,7 +273,7 @@ def restore(value, assets, art=None):
         erased = points(np.asarray(erased).ravel().tolist(), w, h, 1).tolist()
     sparkle = unpack(p["sparkle"], w, h, False) if p.get("sparkle") is not None else None
     params = look.clean_params(p["look"]) if p.get("look") is not None else None
-    doc = Document.from_snapshot(np.asarray(art, np.uint8), str(p.get("name", "ComfyUI.png"))[:180], None,
+    doc = document_type.from_snapshot(np.asarray(art, np.uint8), str(p.get("name", "ComfyUI.png"))[:180], None,
                                  regions, strokes, sparkle, params, dividers, erased,
                                  p.get("color_exclude", True), p.get("guides_saved", False))
     try:

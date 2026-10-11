@@ -11,7 +11,7 @@ from . import studio_models as models
 from . import studio_store as store
 from .rendering import render_scene
 from .vendor import export, look
-from .vendor.document import Document
+from .studio_document import Document
 
 
 def base_params(doc):
@@ -50,12 +50,13 @@ def check_image(doc, scene, params, *, rect=None, size=None):
 class Studio:
     def __init__(self, assets, preferences, model_paths, project=None, *, art=None, draft_id=None):
         self.assets, self.preferences, self.model_paths = Path(assets), preferences, model_paths
+        self.compute_device = models.preference(preferences.read().get("compute_device", "gpu"))
         self.project = store.parse_project(project or {})
         self.base_hash = store.project_digest(self.project)
         self.draft_id = draft_id
         if draft_id is not None and not store.DRAFT_ID.fullmatch(draft_id):
             raise ValueError("自动保存标识无效")
-        self.doc = store.restore(self.project, self.assets, art) if self.project or art is not None else None
+        self.doc = store.restore(self.project, self.assets, art, preferred=self.compute_device) if self.project or art is not None else None
         self.depth_enabled = bool(self.project.get("depth_enabled", True))
         self.dark_adapt = bool(self.project.get("dark_adapt", True))
         self.depth_status, self.depth_error = "idle", None
@@ -64,17 +65,20 @@ class Studio:
         self.on_event = lambda event: None
         self.last_access = time.monotonic()
         self.closed = False
+        self.active = True
+        self._cache_owner = object()
         self.lock = threading.RLock()
         self._scene = (None, None)
         self._adapted = (None, None)
         self._asset = self.project.get("asset") if art is None else None
         if self.doc:
             self._bind(self.doc)
+        models.cache_activity(self._cache_owner, True)
 
     def _bind(self, doc):
         self.depth_revision += 1
         doc.on_event = self.publish
-        doc.sam_state = "ready" if models.available(self.model_paths)["sam"] else "error"
+        doc.sam_state = "ready" if models.available(self.model_paths, self.compute_device)["sam"] else "error"
         doc.sam_error = None if doc.sam_state == "ready" else "缺少 SAM ViT-B 模型"
         self.depth_status = "ready" if doc.disparity is not None else "idle"
         self.depth_error = None
@@ -99,7 +103,7 @@ class Studio:
     def open_bytes(self, data, filename):
         if len(data) > 128 * 1024 * 1024:
             raise ValueError("导入文件超过 128 MiB")
-        doc = Document.open(data=data, filename=Path(filename).name)
+        doc = Document.configured(self.compute_device).open(data=data, filename=Path(filename).name)
         if doc.w * doc.h > store.MAX_PIXELS or min(doc.w, doc.h) < 8:
             doc.close()
             raise ValueError("图片须至少 8 像素且不超过 2400 万像素")
@@ -110,9 +114,35 @@ class Studio:
         if self.doc is None:
             return None
         result = self.doc.state()
-        result["sam"]["device"] = self.sam_inference.get("device") or models.available(self.model_paths)["device"]
+        result["sam"]["device"] = self.sam_inference.get("device") or models.available(self.model_paths, self.compute_device)["device"]
         result["sam"]["inference"] = dict(self.sam_inference)
+        result["compute_device"] = self.compute_device
         return result
+
+    def set_compute_device(self, preferred):
+        preferred = models.preference(preferred)
+        with self.lock:
+            self.preferences.update(compute_device=preferred)
+            if preferred == self.compute_device:
+                return
+            self.compute_device = preferred
+            self.sam_inference = {}
+            if self.doc:
+                self.doc.set_device(preferred)
+            if self.depth_status == "working":
+                self.depth_revision += 1
+                self.depth_status = "idle"
+            self._scene, self._adapted = (None, None), (None, None)
+        self.start_depth()
+
+    def set_active(self, active):
+        with self.lock:
+            if self.closed:
+                return
+            self.active = bool(active)
+            models.cache_activity(self._cache_owner, self.active)
+        if self.active:
+            self.start_depth()
 
     def scene(self):
         doc = self.doc
@@ -166,21 +196,22 @@ class Studio:
     def start_depth(self):
         with self.lock:
             doc = self.doc
-            if self.closed or doc is None or not self.depth_enabled or doc.disparity is not None:
+            if self.closed or not self.active or doc is None or not self.depth_enabled or doc.disparity is not None:
                 return
             if self.depth_status == "working":
                 return
-            if not models.available(self.model_paths)["depth"]:
+            if not models.available(self.model_paths, self.compute_device)["depth"]:
                 self.depth_status, self.depth_error = "error", "缺少 Depth Anything V2 Small 模型"
                 self.publish({"type": "depth"})
                 return
             self.depth_status, self.depth_error = "working", None
             revision = self.depth_revision
+            preferred = self.compute_device
 
         def run():
             try:
                 info = {}
-                disparity = models.estimate_depth(doc.art, self.model_paths, info=info)
+                disparity = models.estimate_depth(doc.art, self.model_paths, info=info, preferred=preferred)
                 with self.lock:
                     if self.closed or self.doc is not doc or not self.depth_enabled or self.depth_revision != revision:
                         return
@@ -203,7 +234,7 @@ class Studio:
         if not np.isfinite([x, y]).all() or not 0 <= x < doc.w or not 0 <= y < doc.h:
             raise ValueError("点选坐标在画面外")
         info = {}
-        masks, _ = models.segment(doc.art, x, y, self.model_paths, info=info)
+        masks, _ = models.segment(doc.art, x, y, self.model_paths, info=info, preferred=self.compute_device)
         if self.doc is not doc or self.closed:
             raise ValueError("图片已更换，请重新点选")
         self.sam_inference = info
@@ -234,7 +265,7 @@ class Studio:
         if record["base_hash"] != self.base_hash:
             return False
         draft = store.parse_project(record["project"])
-        doc = store.restore(draft, self.assets)
+        doc = store.restore(draft, self.assets, preferred=self.compute_device)
         if self.doc:
             self.doc.close()
         self.doc, self._asset = doc, draft.get("asset")
@@ -274,6 +305,7 @@ class Studio:
         with self.lock:
             self.save_draft()
             self.closed = True
+            models.cache_activity(self._cache_owner, False)
             if self.doc:
                 self.doc.close()
             self._scene, self._adapted = (None, None), (None, None)
