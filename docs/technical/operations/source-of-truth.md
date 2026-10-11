@@ -32,6 +32,8 @@ Git 源码与文字检查点、图库和权重、Python/CUDA 环境、最新在�
 
 ## 更新记录
 
+- 2026-10-11：`project.py` 的本地 status/seal/deploy-plan 复用 [snapshot_cache.py](../../../scripts/snapshot_cache.py) 的文件身份与目录指纹。未变文件不再重复读取正文／SHA，分片顺序及内容身份不变时复用拼接验证；运行比较支持 `--scope`。显式全读、CI、恢复、release 与历史上传门禁边界保持独立；见[实现和失效条件](../changes/operations-source-of-truth/2026-10-11-snapshot-fingerprints.md)及[回归](../../../tests/test_snapshot_cache.py)。
+
 - 2026-10-10：日常上传复用已验证的历史对象内容扫描，保留完整历史覆盖与 SHA-256 复核；历史／暂存缓存相互隔离，复制到另一个克隆或工作树会失效。新增历史风险回归和实际冷／热扫描对照，见[增量检查说明](../changes/operations-source-of-truth/2026-10-10-incremental-security.md)。LoRA 等仓外资源整理不触发 Git 上传门禁，部署同哈希文件继续跳过。
 
 - 2026-10-09：快照文本类型接纳 `.cs` 自有源码，以维护绘世适配及隔离回归；生成的 `.dll`／`.exe` 继续拒绝入源码清单。新增类型测试；构建和候选包保持仓外，不把二进制或原版启动器作为公开载荷。

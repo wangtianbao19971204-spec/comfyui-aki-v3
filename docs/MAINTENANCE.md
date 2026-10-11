@@ -73,6 +73,10 @@ git config --local core.longpaths true
 
 `seal` 只重建普通源码清单，不重新认可被任意改写的 JSON/SQL；它保留旧 manifest 于 ignored local/source-seals，并明确标记 `live_deployed=false`、清空当前现场验收字段。旧 evidence 仍是历史凭据。`deploy-plan` 只读，未 seal 的源码会拒绝出计划，删除条目列为需审核候选，不会删除运行文件。
 
+本地主仓的 `project.py status/seal/deploy-plan` 默认使用目录与文件指纹缓存。每次轻量枚举文件名、身份、大小和修改／变更时间；未变文件复用上次成功校验的 SHA-256 和内容检查，SQL 等分片的顺序与摘要未变时复用拼接校验。Windows 使用 NTFS/ReFS 的 ChangeTime，能识别同大小且恢复 mtime 的改写；无法取得可靠元数据时完整读取。规则／缓存损坏／首次运行会重检。加 `--fresh` 强制全读；`snapshot.py verify --incremental` 显式使用同一缓存，不加参数仍为全读，CI、恢复与发布工具也维持全读。详见[指纹说明](technical/changes/operations-source-of-truth/2026-10-11-snapshot-fingerprints.md)。
+
+日常部署比较加 `--scope ComfyUI/custom_nodes/本次插件` 或多个精确文件范围，避免读取不涉及的运行目录。范围按完整路径组件匹配；同 SHA-256 的文件不会列入覆盖计划。此缓存不扫描仓外 LoRA，不把目录修改时间当作内容一致证明，也不替代新资源首次内容确认。
+
 部署需要另建隔离候选、测试、线上基线和回滚，按明确范围写回后现场验收；不要一次覆盖整个 snapshot/runtime。工作台日常产生的资料记录仍由应用写入运行库，但任何相关代码/迁移脚本只能在主 Git 维护。完成真实部署后才允许第 2–3 步回收现场资料/验收基线。
 
 ## 2. 捕获已经确认的现场状态（不是日常反向同步）
