@@ -1,0 +1,328 @@
+{
+  "schema": 1,
+  "date": "2026-10-10",
+  "feature": "runtime-stocking-texture",
+  "scope": "GPU SAM/depth with bounded CPU caches and ComfyUI queue coordination",
+  "pass": true,
+  "production_deployed": false,
+  "base_commit": "976d0b636bc972edb8cfdbf904e754a648140205",
+  "validation": {
+    "python_tests": 56,
+    "frontend_tests": 17,
+    "compiled_adapter_syntax": true,
+    "images": [
+      {
+        "fixture": "black-crossed-final",
+        "image_sha256": "1115a0b586313743281533d69def83ef9ea6fbd68f944587dfbbc53d04a4fa93",
+        "points": [
+          [
+            440,
+            1174
+          ],
+          [
+            600,
+            1100
+          ],
+          [
+            350,
+            1500
+          ]
+        ],
+        "cpu_exact": true,
+        "sam_min_iou": 0.9999752080048394,
+        "sam_max_changed_pixels": 10,
+        "depth_error": {
+          "max": 3.218650817871094e-05,
+          "mean": 2.7988739930151496e-06,
+          "max_divided_by_range": 5.080451393966727e-06
+        },
+        "timings_seconds": {
+          "baseline_cpu_0": 4.484293,
+          "baseline_cpu_1": 3.016392,
+          "baseline_cpu_2": 2.902346,
+          "cached_cpu_0": 2.945636,
+          "cached_cpu_1": 0.034768,
+          "cached_cpu_2": 0.035435,
+          "gpu_0": 1.158033,
+          "gpu_1": 0.081769,
+          "gpu_2": 0.083639,
+          "gpu_3": 0.084977,
+          "gpu_4": 0.078158,
+          "gpu_5": 0.097458,
+          "other_image": 0.140042,
+          "return_image": 0.081735,
+          "baseline_depth": 6.424558,
+          "cached_cpu_depth": 3.948986,
+          "gpu_depth_0": 0.290841,
+          "gpu_depth_1": 0.172523
+        },
+        "cuda_workspace_bytes": 9568256,
+        "cuda_tensors_after_workspace_release": 0
+      },
+      {
+        "fixture": "white-bent-final",
+        "image_sha256": "c04e9b7b78474f9729928f9a05c8e18875187d6f867615fddb3420b475024ba4",
+        "points": [
+          [
+            672,
+            502
+          ],
+          [
+            710,
+            560
+          ]
+        ],
+        "cpu_exact": true,
+        "sam_min_iou": 0.9999702512056843,
+        "sam_max_changed_pixels": 26,
+        "depth_error": {
+          "max": 3.230571746826172e-05,
+          "mean": 1.7107771554947249e-06,
+          "max_divided_by_range": 6.5605189230058465e-06
+        },
+        "timings_seconds": {
+          "baseline_cpu_0": 3.942197,
+          "baseline_cpu_1": 2.899573,
+          "cached_cpu_0": 2.940235,
+          "cached_cpu_1": 0.034359,
+          "gpu_0": 0.907331,
+          "gpu_1": 0.084358,
+          "gpu_2": 0.086415,
+          "gpu_3": 0.088363,
+          "other_image": 0.143766,
+          "return_image": 0.083468,
+          "baseline_depth": 5.521973,
+          "cached_cpu_depth": 3.957347,
+          "gpu_depth_0": 0.297324,
+          "gpu_depth_1": 0.171141
+        },
+        "cuda_workspace_bytes": 9568256,
+        "cuda_tensors_after_workspace_release": 0
+      },
+      {
+        "fixture": "nearblack-standing-final",
+        "image_sha256": "07f6d7ef9cc0f4174c6fb4a39bb8130b27b1dc12dbe64153130713c7ca30dbf1",
+        "points": [
+          [
+            314,
+            1031
+          ],
+          [
+            580,
+            1010
+          ]
+        ],
+        "cpu_exact": true,
+        "sam_min_iou": 0.9999935659251395,
+        "sam_max_changed_pixels": 2,
+        "depth_error": {
+          "max": 3.165006637573242e-05,
+          "mean": 1.3623510994875687e-06,
+          "max_divided_by_range": 5.220792526924148e-06
+        },
+        "timings_seconds": {
+          "baseline_cpu_0": 3.837085,
+          "baseline_cpu_1": 2.872762,
+          "cached_cpu_0": 2.926076,
+          "cached_cpu_1": 0.030089,
+          "gpu_0": 0.977565,
+          "gpu_1": 0.076936,
+          "gpu_2": 0.084122,
+          "gpu_3": 0.079711,
+          "other_image": 0.128259,
+          "return_image": 0.074055,
+          "baseline_depth": 2.226726,
+          "cached_cpu_depth": 0.758761,
+          "gpu_depth_0": 0.093983,
+          "gpu_depth_1": 0.08222
+        },
+        "cuda_workspace_bytes": 9568256,
+        "cuda_tensors_after_workspace_release": 0
+      }
+    ],
+    "http_clicks": [
+      {
+        "label": "first_click",
+        "http_seconds": 2.2792152000038186,
+        "inference": {
+          "model_cached": false,
+          "embedding_cached": false,
+          "device": "NVIDIA GeForce RTX 5090 D",
+          "backend": "cuda:0",
+          "fallback": null,
+          "seconds": 2.0285541000048397
+        }
+      },
+      {
+        "label": "cached_click",
+        "http_seconds": 1.0070016999961808,
+        "inference": {
+          "model_cached": true,
+          "embedding_cached": true,
+          "device": "NVIDIA GeForce RTX 5090 D",
+          "backend": "cuda:0",
+          "fallback": null,
+          "seconds": 0.7298821000003954
+        }
+      },
+      {
+        "label": "cached_click",
+        "http_seconds": 0.27761249999457505,
+        "inference": {
+          "model_cached": true,
+          "embedding_cached": true,
+          "device": "NVIDIA GeForce RTX 5090 D",
+          "backend": "cuda:0",
+          "fallback": null,
+          "seconds": 0.12478109999210574
+        }
+      },
+      {
+        "label": "during_depth",
+        "http_seconds": 0.6131135000032373,
+        "inference": {
+          "model_cached": true,
+          "embedding_cached": true,
+          "device": "NVIDIA GeForce RTX 5090 D",
+          "backend": "cuda:0",
+          "fallback": null,
+          "seconds": 0.32490259999758564
+        }
+      },
+      {
+        "label": "gpu_after_queue",
+        "http_seconds": 0.3530633000045782,
+        "inference": {
+          "model_cached": true,
+          "embedding_cached": true,
+          "device": "NVIDIA GeForce RTX 5090 D",
+          "backend": "cuda:0",
+          "fallback": null,
+          "seconds": 0.19899889999942388
+        }
+      }
+    ],
+    "http_depth": {
+      "model_cached": false,
+      "device": "NVIDIA GeForce RTX 5090 D",
+      "backend": "cuda:0",
+      "fallback": null,
+      "seconds": 1.1560050000116462
+    },
+    "http_busy_fallback": {
+      "model_cached": true,
+      "embedding_cached": false,
+      "device": "CPU",
+      "backend": "cpu",
+      "fallback": "comfy_busy",
+      "seconds": 7.234642800001893
+    },
+    "http_cycle_undo_redo_apply_reopen": true,
+    "depth_render_comparison": {
+      "pass": true,
+      "same_project_and_settings": true,
+      "rows": [
+        {
+          "style": "oily",
+          "moire_on": false,
+          "max_channel_error": 0,
+          "mean_channel_error": 0.0,
+          "changed_pixels": 0,
+          "pixels": 2073600
+        },
+        {
+          "style": "knit",
+          "moire_on": true,
+          "max_channel_error": 1,
+          "mean_channel_error": 5.304783950617284e-06,
+          "changed_pixels": 33,
+          "pixels": 2073600
+        }
+      ]
+    },
+    "oom_and_low_vram": "fault injection only",
+    "browser_verified": false,
+    "browser_blocker": "Native computer control could not determine the current browser URL reliably; no further UI input attempted",
+    "production_process_and_four_source_files_unchanged": true,
+    "isolated_service_stopped": true,
+    "precision_restoration": true,
+    "final_depth_arrays_identical_to_render_inputs": true
+  },
+  "candidate_files": [
+    {
+      "file": "studio_models.py",
+      "candidate_sha256": "37b57475d67b9f32d9b20fd8a2e433d6bc56feb08320cf608e4b02bc48a0f828",
+      "production_sha256": "281bb2cc72d47b48e2d8f799361bdaf41948dec699280fb0a99e762282f12a2d",
+      "production_matches_base": true,
+      "isolated_matches_candidate": true
+    },
+    {
+      "file": "studio.py",
+      "candidate_sha256": "d3b12dbe3ab0d1c636bcd3939765fa05bce9a617314fa98adba6b7726e1633fc",
+      "production_sha256": "5e6f63e28e01f29b9f7901ed907d95cdbaa4bc4438d9ed23cf79eacd47cb8308",
+      "production_matches_base": true,
+      "isolated_matches_candidate": true
+    },
+    {
+      "file": "studio_api.py",
+      "candidate_sha256": "4a9800c934fa7d52abc1b2c2c43dce796a289fcc67a7df21f3cb8986d70d34d6",
+      "production_sha256": "d9477f4836c752ef45b8c75ba4981c72336609f45c1b780d401ea6a7e76b1d75",
+      "production_matches_base": true,
+      "isolated_matches_candidate": true
+    },
+    {
+      "file": "studio_assets.py",
+      "candidate_sha256": "2b2fd448c0f86b708a82865f07122485daf935a809c2405be22e2b6cedc33b2f",
+      "production_sha256": "4c3178f63da6f53426ed756fd11192a48dd327559e9745e9d662e4ee14b4f76c",
+      "production_matches_base": true,
+      "isolated_matches_candidate": true
+    }
+  ],
+  "evidence_directory": "stocking-gpu-selection-20261010-01",
+  "evidence_files": [
+    {
+      "path": "black-crossed-final/ACCEPTANCE.json",
+      "sha256": "b469fe1f017eec0217fc416edc327711bebc8c7a92615d8bcb742a00c7ffe6bb"
+    },
+    {
+      "path": "white-bent-final/ACCEPTANCE.json",
+      "sha256": "8286429df1987ff94da774068e0b727769c0839fead84d46742409fa6df3f333"
+    },
+    {
+      "path": "nearblack-standing-final/ACCEPTANCE.json",
+      "sha256": "3943067625d7726811f699ef049a4f4961213d928e00e63ac21f9f3a7f5bbec0"
+    },
+    {
+      "path": "http-final/ACCEPTANCE.json",
+      "sha256": "b3fd5fcc824865bab0cfd4848c51e020cf036efdd3dc21496d51bd4a3eec43ed"
+    },
+    {
+      "path": "depth-render-comparison/ACCEPTANCE.json",
+      "sha256": "28341f7c11229e910bb3b77e35da39e6d57c69ce8cd2678449f92bd2b74de718"
+    },
+    {
+      "path": "depth-evidence-revalidation.json",
+      "sha256": "7524bb7af25577db1313c3c7c0d6259eacd47ae4922eed4faf290d227ebfb9a7"
+    },
+    {
+      "path": "precision-restoration.json",
+      "sha256": "d30df486973911ddfe1c96424fe987c8be0c438806a8420ea62682942e9e59a3"
+    },
+    {
+      "path": "FINAL_VERIFICATION_02.json",
+      "sha256": "f890980a8918431ff24be0b564662f77f6a4ecacbab3656a086410704a05b887"
+    },
+    {
+      "path": "python-tests-final.json",
+      "sha256": "15f4126cd0af6358bdb2ef728445b39de3fda1ea2724ea5aa147d0af9fc9c845"
+    },
+    {
+      "path": "frontend-editor.log",
+      "sha256": "2d9163d20efacb1bf5c5356d8f495c51e2d1843eb9d0645ae687fc2ed30dd48f"
+    },
+    {
+      "path": "frontend-studio.log",
+      "sha256": "6ae4738e931ad1f838374b776a17703b297a383925639a22d0b79ac4f50d06a5"
+    }
+  ]
+}
