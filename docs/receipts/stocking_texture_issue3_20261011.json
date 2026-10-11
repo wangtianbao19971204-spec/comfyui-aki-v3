@@ -1,0 +1,147 @@
+{
+  "schema": 1,
+  "date": "2026-10-11",
+  "feature": "runtime-stocking-texture",
+  "upstream_issue": "https://github.com/silvermoong/stocking-texture-tool/issues/3",
+  "upstream_commit": "e72a262bd917924bc82d45f19992344f2680a303",
+  "scope": "T0-T5 independent package, pinned pristine dependency, seams/snap, request contract, retention, LF/ping/iframe",
+  "validation": {
+    "python_passed": 67,
+    "pre_gpu_task_python_passed": 55,
+    "frontend_passed": 17,
+    "export_contracts_passed": 5,
+    "upstream_passed": 313,
+    "upstream_skipped": 52,
+    "upstream_skip_reason": "Private sample images and PSD unavailable",
+    "http_checks_passed": 51,
+    "real_image_style_comparisons": 18,
+    "browser_snap_on_off_png_psd_apply_save_reload": true,
+    "browser_jobs_success": 2,
+    "new_model_inference": false,
+    "synthetic_sam_seams_http": true,
+    "windows_autocrlf_true_passed": true
+  },
+  "evidence_directory": "stocking-issue3-20261011",
+  "evidence_files": [
+    {
+      "path": "SOURCE.json",
+      "sha256": "e39b95de9b5abe4602662cd07a8f324e54b4d731dcf388208e6f139375295ba3"
+    },
+    {
+      "path": "T0-CLEAN-INSTALL.json",
+      "sha256": "f5dd01eeb2ff4beaa2ff62bc5e093d439fc391d7944db5a1051528c946d8f15f"
+    },
+    {
+      "path": "T1-upstream-tests.log",
+      "sha256": "6d5e88134b52b4dac0faf8b882f15cef0cd3225a43d037b68731fbe03cdff7ca"
+    },
+    {
+      "path": "T2-tests.log",
+      "sha256": "f6158ceec053cd24d688e55de4669663d991704fd957717d138b902a8441d905"
+    },
+    {
+      "path": "T3-RED-GREEN.json",
+      "sha256": "5e59d0d1d610d8b34512d58cf7b86ba6cc99476ae1ef7dc2fec4d765f6ece3cb"
+    },
+    {
+      "path": "T4-tests.log",
+      "sha256": "0bfd0446450390ab1fa6497244885cbf35e5d2a50a42d8cacfd2fd2a971cb861"
+    },
+    {
+      "path": "T5-autocrlf-python.log",
+      "sha256": "79338d5c0129891acb3718f245e079df2a750facff3a5f05fb6bc8f4d6083041"
+    },
+    {
+      "path": "T5-autocrlf-frontend.log",
+      "sha256": "f845349d0bc54f622ed2d14ebbc04f3009b1b4ccd17b1615620485f43b8ae1b8"
+    },
+    {
+      "path": "T5-export-tests.log",
+      "sha256": "069d2df54193b441aa73c78ad4b5074f28f9889ea8b8bc86d29f7e77f6156b0a"
+    },
+    {
+      "path": "final-http.log",
+      "sha256": "e0d7f0b10c3edf14f0a8eb00bcca6479aa6354fdac943908634435a0ed343a05"
+    },
+    {
+      "path": "corrected-real-parity/ACCEPTANCE.json",
+      "sha256": "f91cfd97f3dacc87d4a3398c220b2acab14d5fc535d2b51f008a18e5c422b215"
+    },
+    {
+      "path": "BROWSER-ACCEPTANCE.json",
+      "sha256": "15605581c8eab0087307be01c5e083abf7ccd1b3075bde25eba434ad55dac17f"
+    },
+    {
+      "path": "BROWSER-NETWORK.json",
+      "sha256": "e50e3aab1070e379d2f052f08e99eeaadc05c85e866f603efbc1bda86f1177ae"
+    },
+    {
+      "path": "BROWSER-preview.png",
+      "sha256": "d1909b83d6cf6b7fbf2e1b79ceee8145129bf58fb0e9a0747038e6040b0bc309"
+    },
+    {
+      "path": "BROWSER-workflow.png",
+      "sha256": "49fd62fb83e896fb6bbd4dfb9a1ce23705b5a296db3270d16e4f8e2840821991"
+    },
+    {
+      "path": "REBASED-python.log",
+      "sha256": "3629df97bd4ac1d34f955b473cea8c174bac4d4bb0b6d5ba6ac5e0f7742988cf"
+    },
+    {
+      "path": "REBASED-frontend.log",
+      "sha256": "1348ce20669501197b95fbf92d45fc06a96fa54849ae3ffb8ee436b3cc4aaa45"
+    },
+    {
+      "path": "REBASED-http.log",
+      "sha256": "e0d7f0b10c3edf14f0a8eb00bcca6479aa6354fdac943908634435a0ed343a05"
+    },
+    {
+      "path": "REBASED-export.log",
+      "sha256": "31a4330aabb85d221c35f5c97a7ab6d3d723edfe7117ed09d301d713687501cc"
+    },
+    {
+      "path": "REMOTE-COMPAT-python.log",
+      "sha256": "929ac98f8ec109d641448dcd54afa56116909b021e3e2cf4f5a8dd7a5a845813"
+    },
+    {
+      "path": "REMOTE-COMPAT-frontend.log",
+      "sha256": "0e1a461a56a0562f27c65ab38f2d027b2666502b744cd86db57303f45518d49b"
+    },
+    {
+      "path": "REBASED-ACCEPTANCE.json",
+      "sha256": "1435ddc876c8351847a30520f96e97bffae3c9f82b8216fa1bc4e7a8f247dd18"
+    },
+    {
+      "path": "REBASED-NETWORK.json",
+      "sha256": "a13d0d226ed56788d40af6d1cd311876b2239f8bb3a80a1b8f02d993232991ac"
+    },
+    {
+      "path": "REBASED-preview.png",
+      "sha256": "3bca69069ab79b33632c074a88ea05f8b65aac179fe7252e4ef36d50957bd8c4"
+    },
+    {
+      "path": "REBASED-workflow.png",
+      "sha256": "94ad09a261e37e853bad63508b6a57cdaca794ef7486bb786ef6f3592f281616"
+    },
+    {
+      "path": "RELEASE-COMPAT-SECURITY.json",
+      "sha256": "aed183e590e0c642b416db9d910ab919a4ad9cf4d1c312fa8546f8a17d012998"
+    }
+  ],
+  "limitations": [
+    "Isolated clean ComfyUI source/data with existing Python dependencies.",
+    "SAM candidates are synthetic in new seams tests; depth cache reused for real pictures.",
+    "Near-black textures can be weak at fixed parameters, matching upstream.",
+    "Same-origin iframe is trusted embedding, not a security sandbox."
+  ],
+  "production_modified": false,
+  "live_deployed": false,
+  "upstream_merge_requested": false,
+  "private_acceptance_images_published": false,
+  "maintenance_base": "aec0a6d83d105c67b5c0f873d4831c72603a8be8",
+  "independent_repository": "https://github.com/wangtianbao19971204-spec/stocking-texture-comfyui",
+  "independent_head": "fc51080924c2adb862008486af1e293fdf6aa141",
+  "independent_private": true,
+  "independent_task_commits_preserved": 6,
+  "independent_gpu_compatibility_commit_added": true
+}

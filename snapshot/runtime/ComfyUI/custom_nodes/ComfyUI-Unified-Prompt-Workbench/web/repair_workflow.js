@@ -75,6 +75,7 @@ export function mountStockingControls(host,{app,node,element,isCurrent}) {
     };
     element('p','应用后运行本工作流，同时保存成品和透明丝袜图层。需要继续放大时，在任务列表选择 2× 或 4× 放大并载入成品。',section);
     element('p','摩尔纹默认关闭；开启前先在编辑器中完成深度计算。油光仍为试验效果，建议从低强度开始预览。',section);
+    element('p','编辑器顶部可切换 GPU / CPU；精确对照原版时请选择 CPU。离开或关闭编辑器会释放模型缓存，草稿和计算完成的深度会保留。',section);
     const sync=()=>{
         const project=stockingProject(node);
         status.textContent=project.asset?`已应用：${project.name||'图片'} · ${project.regions?.length||0} 个部位`:'尚未应用图片；请先在编辑器中完成导入和应用。';

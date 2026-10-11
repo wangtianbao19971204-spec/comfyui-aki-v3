@@ -1,0 +1,263 @@
+{
+  "schema": 1,
+  "date": "2026-10-11",
+  "feature": "runtime-stocking-texture",
+  "source_commit": "efaabdaa0be492a621900a6faca4c727eb0837ad",
+  "upstream_commit": "e72a262bd917924bc82d45f19992344f2680a303",
+  "independent_repository": "https://github.com/wangtianbao19971204-spec/stocking-texture-comfyui",
+  "independent_branch": "feature/gpu-guides-lifecycle",
+  "independent_head": "a5eb1d8ca65142103b3ec18d565b9ec9e7797a6a",
+  "independent_pr": "https://github.com/wangtianbao19971204-spec/stocking-texture-comfyui/pull/1",
+  "merged": false,
+  "author_approved": false,
+  "issue_comment_posted": false,
+  "repository_private": true,
+  "production": {
+    "deployed": true,
+    "original_launcher_and_arguments": true,
+    "source_matches": true,
+    "protected_files": 47,
+    "protected_files_unchanged": true,
+    "file_operations": 63,
+    "old_vendor_files_quarantined": 19,
+    "consistent_database_backup": true,
+    "database_replaced": false,
+    "stocking_nodes": 3,
+    "workflow_successful_jobs": 1,
+    "output_modes": [
+      "RGB",
+      "RGBA"
+    ],
+    "output_size": [
+      1920,
+      1080
+    ],
+    "texture_only": true,
+    "diffusion_executed": false,
+    "cpu_gpu_ui_verified": true,
+    "real_sam_inference": true,
+    "leave_cache_cleared": true,
+    "cache_observation": "Inactive empty observer session read cache after UI closed the last active editor; observer then closed.",
+    "user_graph_preserved": true,
+    "queue_empty": true
+  },
+  "old_fork": {
+    "at": "2026-10-11T04:21:59.926240+00:00",
+    "deleted_repository": "wangtianbao19971204-spec/stocking-texture-tool",
+    "id": 1413059700,
+    "delete_http": 204,
+    "get_after_http": 404,
+    "independent_retained": "wangtianbao19971204-spec/stocking-texture-comfyui",
+    "independent_private": true,
+    "upstream_retained": "silvermoong/stocking-texture-tool",
+    "backup_bundle_sha256": "fd5089c43e63e9398e27756ff4db389a9d9d7991ee8a259fd80206b402ee27fe"
+  },
+  "validation": {
+    "plugin_python_passed": 78,
+    "plugin_skipped": 0,
+    "frontend_passed": 17,
+    "export_passed": 5,
+    "cpu_http_passed": 51,
+    "upstream_passed": 313,
+    "upstream_skipped": 52,
+    "upstream_failed": 0,
+    "exact_cpu_real_cases": 18,
+    "gpu_max_channel_error_255": 9,
+    "runtime_and_tests_unchanged_since_cuda_windows_clone": true
+  },
+  "limitations": [
+    "Upstream 52 skips require unpublished sample PNG/PSD.",
+    "Isolated ComfyUI reused existing Python dependencies and weights; not bare-machine installation.",
+    "GPU approximates CPU; sample maximum is not an arbitrary-image bound.",
+    "Tab hiding not separately verified; no new weakref/RSS test.",
+    "Private repository requires access for author review; old issue links to deleted fork are obsolete.",
+    "No PR merge or author acceptance is claimed. CI is a separate remote check."
+  ],
+  "evidence": [
+    {
+      "collection": "stocking-independent-production-20261011-01",
+      "file": "PLAN.json",
+      "sha256": "c25d2bc859f1295b678553144efaa75197fbf6a4aa801d1d4c31604d541d487f"
+    },
+    {
+      "collection": "stocking-independent-production-20261011-01",
+      "file": "PRESTOP.json",
+      "sha256": "aa7c705370cc3c8d6d90e34781707a36bf024cc74785ceeeddbb759fa7566399"
+    },
+    {
+      "collection": "stocking-independent-production-20261011-01",
+      "file": "DEPLOYED.json",
+      "sha256": "b56890991980f6ccfe49a7deadc420a081df91355d8b3696ad602eb0df1ad8ed"
+    },
+    {
+      "collection": "stocking-independent-production-20261011-01",
+      "file": "STARTUP.json",
+      "sha256": "cf1ad15114b860bb0f243a9db292897cf5a707fe9fc50d2456235784d0ccaf11"
+    },
+    {
+      "collection": "stocking-independent-production-20261011-01",
+      "file": "FINAL-INTEGRITY.json",
+      "sha256": "598867af9a6f680fb2c9ad8f761465b8b78305952c122b00a03b1f0b11fd1db0"
+    },
+    {
+      "collection": "stocking-independent-production-20261011-01",
+      "file": "WORKFLOW-OUTPUTS.json",
+      "sha256": "5a3d916878526176e6e87c1b313d843edac802e95975fd46d03f606191373a6d"
+    },
+    {
+      "collection": "stocking-independent-production-20261011-01",
+      "file": "EXECUTED-WORKFLOW.json",
+      "sha256": "548cb37aae2528d95ccc666980ed95607664fa74333efc663fbbc06c8a369f90"
+    },
+    {
+      "collection": "stocking-independent-production-20261011-01",
+      "file": "UI-GPU.json",
+      "sha256": "2a2d23372eda21e0662ec3008cc61a2dcd9ae363759851e3a90ddc00185a7cea"
+    },
+    {
+      "collection": "stocking-independent-production-20261011-01",
+      "file": "UI-CPU.json",
+      "sha256": "17f885b1ec2019abae622dbf5bec08d5a95dd2181951c2e32b2271a08e43f91a"
+    },
+    {
+      "collection": "stocking-independent-production-20261011-01",
+      "file": "UI-SAM-LOADED.json",
+      "sha256": "471aa21b96a5c4c0db6b98c82faf052a409c473c7464e3e09a561fccadf4d595"
+    },
+    {
+      "collection": "stocking-independent-production-20261011-01",
+      "file": "OBSERVER.json",
+      "sha256": "a896054ee2a308823dd2299ea89ceb15d2df7d8dd5e2d475b7dc9f388ef1c6ac"
+    },
+    {
+      "collection": "stocking-independent-production-20261011-01",
+      "file": "UI-LEFT.json",
+      "sha256": "52bedb2930d886d3f49e1d22cd7696a94b7d6365bcb6789f80cfb66e376674d7"
+    },
+    {
+      "collection": "stocking-independent-production-20261011-01",
+      "file": "UI-GPU.png",
+      "sha256": "3245fe8e3204d291135358e0c7efc0921ec8c595d9807010bd44c66d8ebc41b3"
+    },
+    {
+      "collection": "stocking-independent-production-20261011-01",
+      "file": "UI-PREVIEW.png",
+      "sha256": "b5e451320ad3254b8684d6385f0265da776f87dbc6e591eb290b76fbd9abb131"
+    },
+    {
+      "collection": "stocking-independent-production-20261011-01",
+      "file": "UI-WORKFLOW.png",
+      "sha256": "c127102ee8796458436a3564b6bfdf33c73605ce6f18bed87d3c7cd511ba6309"
+    },
+    {
+      "collection": "stocking-independent-production-20261011-01",
+      "file": "REMOTE-AUDIT.json",
+      "sha256": "d8fdf9953e0fe758144b09d7ca87735f2a69b5e3dd7cb60650241641064b7c7f"
+    },
+    {
+      "collection": "stocking-independent-gpu-20261011-01",
+      "file": "WORKFLOW-FOLLOWUP.json",
+      "sha256": "18454f998842ec67bddcd87b401f0aeb57cdeafd6517a0f6e40883cd9ef6bbdf"
+    },
+    {
+      "collection": "stocking-independent-gpu-20261011-01",
+      "file": "WORKFLOW-SECURITY.json",
+      "sha256": "1f17f0f1bc1110ece69ea9f49514f1c95bf87fccc0f4b8481b1d72b4adbf2fde"
+    },
+    {
+      "collection": "stocking-independent-gpu-20261011-01",
+      "file": "DISTRIBUTION-VALIDATED.json",
+      "sha256": "a9b3a01835dfa0489edd484a964b34ecaaa6c014219e4434b08361d2862a2796"
+    },
+    {
+      "collection": "stocking-independent-gpu-20261011-01",
+      "file": "DIST-PYTHON.log",
+      "sha256": "4ac67b0c7712a16e951e00f835cff97e21b4db767214dac705fdeaaec42b6219"
+    },
+    {
+      "collection": "stocking-independent-gpu-20261011-01",
+      "file": "DIST-FRONTEND.log",
+      "sha256": "e8046ca9e10367bf1a55c9441df0fd8185905b61504df297aaa137c4e124864d"
+    },
+    {
+      "collection": "stocking-independent-gpu-20261011-01",
+      "file": "VALIDATED-SOURCE-MATCH.json",
+      "sha256": "80e14799837429d157b81da5d6b8992e202ffd32f70b4be654b61a15a0a7ade9"
+    },
+    {
+      "collection": "stocking-independent-gpu-20261011-01",
+      "file": "OLD-FORK-DELETED.json",
+      "sha256": "a0e7059ad5f9e8014fdeef5ffd7e7149f56834d1977d25938ec7e302ff4b846a"
+    },
+    {
+      "collection": "stocking-independent-gpu-20261011-01",
+      "file": "real-parity-diagnostic/COMPARISON.json",
+      "sha256": "84a76c6b4375e5314f33ae6cc9b30fac5123d2a665b83169b6655874d672d027"
+    },
+    {
+      "collection": "stocking-independent-gpu-20261011-01",
+      "file": "UI-LOADED.json",
+      "sha256": "9ed7426c942a87944d5715971c3e576a8de494858c4b1ed7ab7cd0a2c5d34bf2"
+    },
+    {
+      "collection": "stocking-independent-gpu-20261011-01",
+      "file": "UI-DEPTH.json",
+      "sha256": "292e212d231a72c01b201f8cf8baf8d3a62b5b35919d868116c2d68fee7f710d"
+    },
+    {
+      "collection": "stocking-independent-gpu-20261011-01",
+      "file": "UI-CLOSED-CACHE.json",
+      "sha256": "1411776ae8b509f7368eac46ff5d40f4e1522790ce40ac4f4c5408d4ea83404a"
+    },
+    {
+      "collection": "stocking-independent-gpu-20261011-01",
+      "file": "UI-REOPENED.json",
+      "sha256": "ab30d834213f92ade773341092a5f42a82373aa182037c1f05e55710613f88fe"
+    },
+    {
+      "collection": "stocking-independent-gpu-20261011-01",
+      "file": "UI-SAM-RELOADED.json",
+      "sha256": "266ac344c6a9b19eac3828046edc3da279cd4615b45e9f234be20933c3f79204"
+    },
+    {
+      "collection": "stocking-independent-gpu-20261011-01",
+      "file": "UI-NAV-BEFORE.json",
+      "sha256": "9ed7426c942a87944d5715971c3e576a8de494858c4b1ed7ab7cd0a2c5d34bf2"
+    },
+    {
+      "collection": "stocking-independent-gpu-20261011-01",
+      "file": "UI-NAV-AFTER.json",
+      "sha256": "359ba0f56ad72af8c11c7f4ceb870648b02f726e29488bdcdada82d51ddd7546"
+    },
+    {
+      "collection": "stocking-issue3-20261011",
+      "file": "SOURCE.json",
+      "sha256": "e39b95de9b5abe4602662cd07a8f324e54b4d731dcf388208e6f139375295ba3"
+    },
+    {
+      "collection": "stocking-issue3-20261011",
+      "file": "T0-CLEAN-INSTALL.json",
+      "sha256": "f5dd01eeb2ff4beaa2ff62bc5e093d439fc391d7944db5a1051528c946d8f15f"
+    },
+    {
+      "collection": "stocking-issue3-20261011",
+      "file": "T1-upstream-tests.log",
+      "sha256": "6d5e88134b52b4dac0faf8b882f15cef0cd3225a43d037b68731fbe03cdff7ca"
+    },
+    {
+      "collection": "stocking-issue3-20261011",
+      "file": "T2-tests.log",
+      "sha256": "f6158ceec053cd24d688e55de4669663d991704fd957717d138b902a8441d905"
+    },
+    {
+      "collection": "stocking-issue3-20261011",
+      "file": "T3-RED-GREEN.json",
+      "sha256": "5e59d0d1d610d8b34512d58cf7b86ba6cc99476ae1ef7dc2fec4d765f6ece3cb"
+    },
+    {
+      "collection": "stocking-issue3-20261011",
+      "file": "T4-tests.log",
+      "sha256": "0bfd0446450390ab1fa6497244885cbf35e5d2a50a42d8cacfd2fd2a971cb861"
+    }
+  ]
+}

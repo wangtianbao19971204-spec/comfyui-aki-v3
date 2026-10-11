@@ -2,11 +2,21 @@
 
 文档修订：2026-10-11。
 
+最新补齐：完整复核发现运行区遗漏 9 份测试，现更新 4 份、补入 5 份；原哈希测试由实际失败转为通过，运行目录新跑 78 Python（实际 CUDA）/17 前端全部通过，0 失败/0 跳过。78 份跟踪插件文件与维护源一致，49 份受保护资料及九文件之外的插件内容保持，服务未重启、数据库未操作。独立仓按用户要求公开且未登录可读；Issue 回帖受令牌权限与浏览器连接阻碍，完整稿已备好，尚未获得作者认可。见[最新核对](../changes/runtime-stocking-texture/2026-10-11-issue-3-final-review.md)与[补齐收据](../../receipts/stocking_test_repair_20261011.json)。
+
+当前交付：独立组合插件及自用工作流已限定部署到正式实例，原启动器重启、CPU/GPU、真实 SAM、关闭后缓存清空和 RGB/RGBA 双输出通过；受保护的 47 份用户文件哈希保持。旧 fork 备份后删除，独立仓保留；PR 等待用户合并。作者 T0–T5 的提交、命令和跳过项见[最终核对](../changes/runtime-stocking-texture/2026-10-11-issue-3-final-review.md)，生产与删除证据见[交付收据](../../receipts/stocking_independent_delivery_20261011.json)。下文未部署等表述属于各阶段历史。
+
+独立导出的示例工作流补充 GPU/CPU 选择及关闭后缓存回收提示，与自用流程同步；保持节点、参数和双输出契约，5 项导出测试通过。用户随后要求工作流 PR 和正式使用版本更新，现行交付范围见[工作流更新记录](../changes/runtime-workflows/2026-10-11-stocking-independent.md)，此前暂停维护仓上传的状态已被这次明确请求更新。
+
+独立仓 GPU 整合：将维护主线 `4ee44002d` 中的走向 CUDA 求解、CPU/GPU 选择和编辑器缓存生命周期整合到 Issue #3 分支，保持 T0–T5 及 `e72a262` 原始依赖。78 项 Python（含 CUDA）、17 项前端、51 项 HTTP、5 项导出合同通过；18 组真实图 CPU 完全一致，GPU 最大单通道差异为 9/255。隔离导出包实页完成设备切换、真实 SAM/深度、关闭重开和导航离开回收；此组合版本本轮未部署生产。详见[整合说明](../changes/runtime-stocking-texture/2026-10-11-independent-gpu.md)与[收据](../../receipts/stocking_independent_gpu_20261011.json)。以下各段历史验收只代表其注明版本。
+
+Issue #3 修订：T0 改为独立插件发布制品，采用固定 Git blob 拷贝与显式 SHA 同步脚本；原版源码移到插件 `upstream/stocking/`，`vendor/` 只保留宿主命名空间与 i18n。此轮源码在主 Git 工作树维护，独立制品不携带维护仓历史；详见[修订记录](../changes/runtime-stocking-texture/2026-10-11-issue-3.md)。本轮未部署。
+
 完整编辑器新增默认 GPU 的 CPU/GPU 设置，覆盖 SAM、深度和走向求解；离开或关闭最后一个活跃编辑器后清空专用模型与图像特征缓存，推理中离开则在本轮结束后回收。GPU 求解保留作者算法与 CPU 回退，使用独立显存池。依赖、调度、内存回收与验收边界见 [设备设置与模型释放](../changes/runtime-stocking-texture/2026-10-11-device-and-release.md)。
 
 此前 SAM 点选与内置深度的 GPU 优化已于 2026-10-11 合并并部署到正式 8188 实例，完成真实页面点选与深度检查；仍沿用完整 FP32、CPU 模型缓存和最多四份图像特征缓存。历史速度、误差和调度边界见 [GPU 点选优化](../changes/runtime-stocking-texture/2026-10-10-gpu-selection.md)。本轮设备选择及离开卸载的生产状态单独记录。
 
-当前维护源码固定上游为 `f74c8ac0190ec43b2cdfcb13db86f35a83283311`，接入作者新增摩尔纹和新版油光。旧工作流默认关闭摩尔纹；开启且强度非零时需要深度，导出与节点执行均检查就绪状态。旧渲染节点新增三个末尾可选输入，油光传递求解器的遮挡连接；完整编辑器继续复用原版界面。见[新版效果与展示复核](../changes/runtime-stocking-texture/2026-10-10-upstream-effects.md)及[本轮收据](../../receipts/stocking_texture_upstream_refresh_20261010.json)。**本轮未部署生产。**
+当前维护源码固定上游为 `e72a262bd917924bc82d45f19992344f2680a303`（2026-10-11 T1），接入作者新增摩尔纹和新版油光。旧工作流默认关闭摩尔纹；开启且强度非零时需要深度，导出与节点执行均检查就绪状态。旧渲染节点新增三个末尾可选输入，油光传递求解器的遮挡连接；完整编辑器继续复用原版界面。见[新版效果与展示复核](../changes/runtime-stocking-texture/2026-10-10-upstream-effects.md)及[本轮收据](../../receipts/stocking_texture_upstream_refresh_20261010.json)。**本轮未部署生产。**
 
 展示复核纠正了旧局部选区不完整、交叉处分区过直的问题；这些旧图仅保留为功能回归输入，不作为 fork 展示成果。用户随后要求更新公开图片，三张完整选区对照经再次复核后纳入精确发布清单；维护仓只保存摘要与导出规则，实际图片留在仓外并作为 fork 展示制品导出。见[展示发布说明](../changes/runtime-stocking-texture/2026-10-10-reviewed-showcase.md)。像素与原版一致不代表选区正确或视觉效果合格。
 

@@ -1,8 +1,8 @@
 """Small browser adaptations over the byte-preserved upstream UI."""
-from pathlib import Path
+from .vendor import SOURCE_ROOT
 import re
 
-ROOT = Path(__file__).parent / "vendor/static"
+ROOT = SOURCE_ROOT / "static"
 FILES = {"app.js": "text/javascript", "look.js": "text/javascript", "i18n.js": "text/javascript",
          "style.css": "text/css", "i18n/en.json": "application/json"}
 

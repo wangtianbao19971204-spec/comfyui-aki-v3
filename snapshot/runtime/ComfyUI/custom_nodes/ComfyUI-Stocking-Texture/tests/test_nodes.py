@@ -185,7 +185,7 @@ class TextureContracts(unittest.TestCase):
     def test_vendored_files_match_the_reviewed_upstream_commit(self):
         upstream = json.loads((ROOT / "UPSTREAM.json").read_text(encoding="utf-8"))
         for item in upstream["files"]:
-            self.assertEqual(hashlib.sha256((ROOT / "vendor" / item["file"]).read_bytes()).hexdigest(), item["sha256"])
+            self.assertEqual(hashlib.sha256((ROOT / "upstream/stocking" / item["file"]).read_bytes()).hexdigest(), item["sha256"])
 
     def test_near_black_weave_survives_8bit_without_sparkles(self):
         image = torch.full_like(self.image, 19 / 255)
