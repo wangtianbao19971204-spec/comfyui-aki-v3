@@ -2,6 +2,13 @@
 
 文档修订：2026-10-05.3；状态：已收到独立功能任务的部署、固定参数 A/B 与工作流强度判定交接。
 
+
+2026-10-11 更新：统一 [LoRA/ControlNet 补丁](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/README.md)锁定 `b25ae637102f2358116fe419a409f0594f61245b`，8 份上游原件摘要见 `UPSTREAM.json`，未改上游代码。production / diagnostic / anima 白名单以统一补丁替代旧 LoRA-only 补丁，旧源码保留但不叠加加载。新增 [原生加载器](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/native_loader.py)直接读取现有 controlnet 目录，输出 MODEL_PATCH；只有原生 AnimaLLLiteApply 能获得 ControlNet 映射，旧 sdscripts 节点保留给原版流程。
+
+真实 any-v2 权重在 CPU 上完成 40 个区块逐项精确路由检查：28 个继承块应用对应模块，12 个新增块原样透传；原生 40-block LoRA 不再次转换，禁用补丁及非列表路径被加载器拒绝。工具为 [anima_control_cpu_acceptance.py](../../../scripts/anima_control_cpu_acceptance.py)，须显式给出权重目录和全新收据路径；它不采样，ComfyUI 的注意力能力探测仍可能初始化 CUDA。本轮 Torch GPU 分配为 0。
+
+后续用户授权的 GPU 验收已完成四种控制、擦线、原尺寸深度及 VNCCS 浏览器捕获实测，统一补丁已按 22 文件范围部署并重启。准确证据见 [新收据](../../receipts/anima_control_gpu_deployment_20261011.json)；当前实测 LoRA 栈为空，不借用 10 月 5 日历史 A/B 认证新补丁的任意 LoRA 画质。 上游还支持其他层数/方向，本轮只验收 28→40 的 2.9B 用例。禁用变量改为 `ANIMA_COMPAT_LORA_REMAP` / `ANIMA_COMPAT_CONTROLNET_REMAP`；旧 `ANIMA_LORA_REMAP` 不控制新补丁。回滚必须成组恢复白名单、节点源码和四份工作流，不能只关新补丁后继续执行新控制图。详情见 [简化变更](../changes/runtime-workflows/2026-10-11-anima-control.md)与 [收据](../../receipts/anima_control_simple_20261011.json)。
+
 ## 当前功能来源
 
 独立任务“探索 Anima 2.9B LoRA Patch”在本轮整理期间，按用户请求将原版 28-block LoRA 的层映射适配到 40-block Anima 2.9B。其新增源码/配置与运行部署，不属于旧 `f1e61294` 冻结包；不能用旧包 PASS 宣称新补丁已验收。

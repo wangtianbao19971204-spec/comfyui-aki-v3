@@ -1,0 +1,708 @@
+{
+  "pass": true,
+  "scope": "Anima 2.9B native LLLite control migration and simplified workbench",
+  "cases": [
+    {
+      "case": "baseline",
+      "pass": true,
+      "prompt_id": "35236b8a-11f5-4312-bc1c-2745c264734b",
+      "image_metrics": [
+        {
+          "node_id": "1116",
+          "type": "output",
+          "relative_path": "_codex_qa/anima_control_20261011/qa_00001_.png",
+          "sha256": "56d8473e1a27ad4d3b717b10a41619c7b50e3fd5821cd833160f39890b666f06",
+          "bytes": 778586,
+          "size": [
+            768,
+            1024
+          ],
+          "mode": "RGB",
+          "rgb_mean": [
+            146.81688817342123,
+            164.3946329752604,
+            171.2290941874186
+          ],
+          "rgb_stddev": [
+            92.54584850163107,
+            75.2795550063949,
+            78.9503843397396
+          ]
+        }
+      ],
+      "native_export_sha256": "471b88cc42e3d18d251771e46c2dc8ae2488a6cd0d8e0ba3baa5f98d35e804b8",
+      "history_sha256": "331e92f0d7cd7106bfb57c82800c896e04fe8847f9efc67e4a4d32f9ea7c0dc5"
+    },
+    {
+      "case": "canny",
+      "pass": true,
+      "prompt_id": "2f449d94-fb3f-4123-84aa-387029b26788",
+      "image_metrics": [
+        {
+          "node_id": "1090:130300",
+          "type": "output",
+          "relative_path": "_codex_qa/anima_control_20261011/control_00001_.png",
+          "sha256": "4e8a678c4e9b054175684ec3ad6cfba02c89aedde6589e2a3c1e2e3372b3d8c7",
+          "bytes": 1319910,
+          "size": [
+            1024,
+            1365
+          ],
+          "mode": "RGB",
+          "rgb_mean": [
+            43.05116472069597,
+            43.05116472069597,
+            43.05116472069597
+          ],
+          "rgb_stddev": [
+            62.90745067710516,
+            62.90745067710516,
+            62.90745067710516
+          ]
+        },
+        {
+          "node_id": "1116",
+          "type": "output",
+          "relative_path": "_codex_qa/anima_control_20261011/qa_00002_.png",
+          "sha256": "925c18e788741df81844b413a698c4143e960232880076e70388b346156ad74e",
+          "bytes": 818855,
+          "size": [
+            768,
+            1024
+          ],
+          "mode": "RGB",
+          "rgb_mean": [
+            138.19687525431314,
+            171.9148737589518,
+            183.1203155517578
+          ],
+          "rgb_stddev": [
+            84.14314904071901,
+            61.247581124206185,
+            70.55097449443181
+          ]
+        }
+      ],
+      "native_export_sha256": "088d51f696e66cf7fc1fa415ae8619436353a64ad1649f5e23fff031daca975b",
+      "history_sha256": "1acf64ab843a535521b7ccbd0ccf443d4f5fd19024f4bcf0a4433ff13b7b85ce"
+    },
+    {
+      "case": "hed",
+      "pass": true,
+      "prompt_id": "a0d4912f-2450-42ba-acb2-80935147207e",
+      "image_metrics": [
+        {
+          "node_id": "1090:130300",
+          "type": "output",
+          "relative_path": "_codex_qa/anima_control_20261011/control_00002_.png",
+          "sha256": "b4d04cbe33467d72569a1ac058b25201e68908472b9ee0851835d2e2dbb360ca",
+          "bytes": 138441,
+          "size": [
+            1024,
+            1365
+          ],
+          "mode": "RGB",
+          "rgb_mean": [
+            57.51985462454213,
+            57.51985462454213,
+            57.51985462454213
+          ],
+          "rgb_stddev": [
+            98.11794289747033,
+            98.11794289747033,
+            98.11794289747033
+          ]
+        },
+        {
+          "node_id": "1116",
+          "type": "output",
+          "relative_path": "_codex_qa/anima_control_20261011/qa_00003_.png",
+          "sha256": "e1bd50877ad61436b789d7c3eb190997759189f3b22932814df5a324aa16efa8",
+          "bytes": 792117,
+          "size": [
+            768,
+            1024
+          ],
+          "mode": "RGB",
+          "rgb_mean": [
+            141.07209014892578,
+            171.1206029256185,
+            178.2220344543457
+          ],
+          "rgb_stddev": [
+            86.31829337899443,
+            62.408443063282185,
+            70.80102679962587
+          ]
+        }
+      ],
+      "native_export_sha256": "79fc8b05256d5cd1a1f128d3115f3eb7ca5cdbcc29ac6cb41c1c132c6ceb3411",
+      "history_sha256": "218927b1e5aff6ac09b6ac331785449a3c9871a50f544ddcdf4f73375737df38"
+    },
+    {
+      "case": "manga",
+      "pass": true,
+      "prompt_id": "74ab013d-8d30-4048-961e-74a46c04f426",
+      "image_metrics": [
+        {
+          "node_id": "1090:130300",
+          "type": "output",
+          "relative_path": "_codex_qa/anima_control_20261011/control_00003_.png",
+          "sha256": "6de95bb9a5764f316b7bf2cdc30d216d59abbf8e738f4a85b8f11a328e9d8059",
+          "bytes": 818947,
+          "size": [
+            1024,
+            1365
+          ],
+          "mode": "RGB",
+          "rgb_mean": [
+            25.00769946199634,
+            25.00769946199634,
+            25.00769946199634
+          ],
+          "rgb_stddev": [
+            59.25565758980757,
+            59.25565758980757,
+            59.25565758980757
+          ]
+        },
+        {
+          "node_id": "1116",
+          "type": "output",
+          "relative_path": "_codex_qa/anima_control_20261011/qa_00004_.png",
+          "sha256": "5b379c17ad1701f9690e6e5185024bb2da55e5d31729713582dc8306fb420864",
+          "bytes": 734744,
+          "size": [
+            768,
+            1024
+          ],
+          "mode": "RGB",
+          "rgb_mean": [
+            137.4645907084147,
+            166.0055809020996,
+            175.54534784952799
+          ],
+          "rgb_stddev": [
+            81.72694659841336,
+            56.82769765166967,
+            66.88713607959646
+          ]
+        }
+      ],
+      "native_export_sha256": "e15bae7f1a001e9362fac991b2725b73b52beb58d862da2c9dc1c8c850df5fbb",
+      "history_sha256": "91de282d90ede71e8af847cfecde024ec4ecca81bb9ece55c0467129857f24cc"
+    },
+    {
+      "case": "depth",
+      "pass": true,
+      "prompt_id": "3755530c-3607-404b-9a91-3e0f704ca24a",
+      "image_metrics": [
+        {
+          "node_id": "1090:130300",
+          "type": "output",
+          "relative_path": "_codex_qa/anima_control_20261011/control_00004_.png",
+          "sha256": "9f44b02bbc72c3eb10465593b68343943df94c41b4bc241b47e11a0185e94a46",
+          "bytes": 260679,
+          "size": [
+            1024,
+            1365
+          ],
+          "mode": "RGB",
+          "rgb_mean": [
+            124.16672461652931,
+            124.16672461652931,
+            124.16672461652931
+          ],
+          "rgb_stddev": [
+            78.78898634560917,
+            78.78898634560917,
+            78.78898634560917
+          ]
+        },
+        {
+          "node_id": "1116",
+          "type": "output",
+          "relative_path": "_codex_qa/anima_control_20261011/qa_00005_.png",
+          "sha256": "2e89d939b901bad04ccfd321fd2db5c6c55ca4c73f2701b7d43ebebdded614bc",
+          "bytes": 729719,
+          "size": [
+            768,
+            1024
+          ],
+          "mode": "RGB",
+          "rgb_mean": [
+            142.1878547668457,
+            169.50474166870117,
+            179.87592569986978
+          ],
+          "rgb_stddev": [
+            85.43008806886391,
+            61.840280843279594,
+            74.67453493366679
+          ]
+        }
+      ],
+      "native_export_sha256": "3b5e1389abeaa617c41e038ce11edce9b4bd9d4d4b2d7b0407a656a50d8cea41",
+      "history_sha256": "405aad185f81f8af1d3f06b1a9d5ed694832b2d90417d083afd92bf52a284100"
+    },
+    {
+      "case": "erase",
+      "pass": true,
+      "prompt_id": "531127ff-68ae-4a2c-ad96-4e09e0d5898a",
+      "image_metrics": [
+        {
+          "node_id": "1090:130300",
+          "type": "output",
+          "relative_path": "_codex_qa/anima_control_20261011/control_00005_.png",
+          "sha256": "33ab65bab78a22c6d64d1995ce2bd888396b0dfbdd7faba0523d9ec9a589f4be",
+          "bytes": 1045837,
+          "size": [
+            1024,
+            1365
+          ],
+          "mode": "RGB",
+          "rgb_mean": [
+            33.58795000572344,
+            33.58795000572344,
+            33.58795000572344
+          ],
+          "rgb_stddev": [
+            57.85516830822269,
+            57.85516830822269,
+            57.85516830822269
+          ]
+        },
+        {
+          "node_id": "1116",
+          "type": "output",
+          "relative_path": "_codex_qa/anima_control_20261011/qa_00006_.png",
+          "sha256": "3d3a24edbba12796b6262250cf3c2a290c58ed69e2d1cbe68cba1fee8a7705b0",
+          "bytes": 687155,
+          "size": [
+            768,
+            1024
+          ],
+          "mode": "RGB",
+          "rgb_mean": [
+            135.54474639892578,
+            170.32595698038736,
+            180.82269414265951
+          ],
+          "rgb_stddev": [
+            79.40329362213501,
+            54.867261454892684,
+            62.522204588858685
+          ]
+        }
+      ],
+      "native_export_sha256": "a7b1146b1a2624b1a921deeb61c04fc90a0b0a4777b692369c25effbd4ba5b80",
+      "history_sha256": "13be696f8894936a97961a3dcd2f67a008bcd420d6f2d417fb1c1e29f7e54d76"
+    },
+    {
+      "case": "vnccs-csr",
+      "pass": true,
+      "prompt_id": "fc282756-bc61-437a-be54-21bdceb9bda9",
+      "image_metrics": [
+        {
+          "node_id": "1067:130301",
+          "type": "output",
+          "relative_path": "_codex_qa/anima_control_20261011/vnccs_control_00001_.png",
+          "sha256": "42b6753020776c8d995749fadea0fc35a7acd232c9649a5ec659d4bff20969c8",
+          "bytes": 90245,
+          "size": [
+            768,
+            1024
+          ],
+          "mode": "RGB",
+          "rgb_mean": [
+            247.88166300455728,
+            246.81437174479166,
+            246.13238779703775
+          ],
+          "rgb_stddev": [
+            27.695359860849933,
+            31.281643021759166,
+            33.57197696669533
+          ]
+        },
+        {
+          "node_id": "1116",
+          "type": "output",
+          "relative_path": "_codex_qa/anima_control_20261011/qa_00012_.png",
+          "sha256": "b546f3be347bd194a3477591da686c1d4e9e5668798183bb41464adbcbbbfd6b",
+          "bytes": 674187,
+          "size": [
+            768,
+            1024
+          ],
+          "mode": "RGB",
+          "rgb_mean": [
+            145.9227180480957,
+            162.433474222819,
+            172.31177393595377
+          ],
+          "rgb_stddev": [
+            99.62539066529945,
+            81.25009810616378,
+            85.8872904597758
+          ]
+        }
+      ],
+      "native_export_sha256": "ac01917b2b3129c5f6f5b5e959957dd92b4d18836ebedb15d58811573cb29ff1",
+      "history_sha256": "b481d8642028fe39bc8a27836963203765a6e2aae19fbe1292cd91b4df9ea425"
+    },
+    {
+      "case": "vnccs-cold-v2",
+      "pass": true,
+      "prompt_id": "90310fd8-a967-47f3-9f7f-96b5d53fc86d",
+      "image_metrics": [
+        {
+          "node_id": "1067:130301",
+          "type": "output",
+          "relative_path": "_codex_qa/anima_control_20261011/vnccs_control_00003_.png",
+          "sha256": "91dc9c9de434e99b896bacdceb247281230836de2948ce939e949f5182a1df13",
+          "bytes": 90257,
+          "size": [
+            768,
+            1024
+          ],
+          "mode": "RGB",
+          "rgb_mean": [
+            247.88166300455728,
+            246.81437174479166,
+            246.13238779703775
+          ],
+          "rgb_stddev": [
+            27.695359860849933,
+            31.281643021759166,
+            33.57197696669533
+          ]
+        },
+        {
+          "node_id": "1116",
+          "type": "output",
+          "relative_path": "_codex_qa/anima_control_20261011/qa_00014_.png",
+          "sha256": "23834b1f5e9044514bad59b84934cde89dc396463c4846849e49897d51f9f2fe",
+          "bytes": 674199,
+          "size": [
+            768,
+            1024
+          ],
+          "mode": "RGB",
+          "rgb_mean": [
+            145.9227180480957,
+            162.433474222819,
+            172.31177393595377
+          ],
+          "rgb_stddev": [
+            99.62539066529945,
+            81.25009810616378,
+            85.8872904597758
+          ]
+        }
+      ],
+      "native_export_sha256": "404fcf087a4a32e40b6ce70d31bd103cc255a3fa762252c8d8017cef92fda82e",
+      "history_sha256": "af61c2171b3d344dc1262f33b562283e15204193022878b8f104c18079d3efbf"
+    }
+  ],
+  "fixed_seed": 845401323336067,
+  "settings": {
+    "steps": 28,
+    "cfg": 3.5,
+    "sampler": "euler",
+    "scheduler": "sgm_uniform",
+    "denoise": 1,
+    "shift": 3,
+    "batch": 1,
+    "actual_lora_stack": []
+  },
+  "ui_preview": {
+    "prompt_id": "e71dc60b-dc1b-4afe-a49b-583d14b957d3",
+    "history_sha256": "0082d8710e50880bfb564cebc6fa0ae02fbbfb17dee1b36f8b1f548f89fbcf36",
+    "control_preview_node": "1090:110022",
+    "output": "qa_00011_.png",
+    "size": [
+      1136,
+      1520
+    ]
+  },
+  "erasing": {
+    "changed_pixels": 196593,
+    "bbox": [
+      93,
+      513,
+      395,
+      1335
+    ]
+  },
+  "vnccs_sync": {
+    "missing_cache_id": true,
+    "frontend_module_fixed": true,
+    "upload_http_status": 200,
+    "frontend_backend_pixels_identical": true
+  },
+  "visual_review": "Four control methods visibly constrain reference stance, hand/bicycle placement and orientation; full-size depth without erasing reviewed. VNCCS rendered capture is applied successfully.",
+  "preserved_failures": [
+    "cases/vnccs: old sync miss reached broken Python fallback; retained",
+    "cases/vnccs-cold: old browser module, backend fallback output; excluded from sync acceptance"
+  ],
+  "limitations": [
+    "One neutral prompt and fixed seed, no arbitrary LoRA or broad image-quality certification",
+    "Canny at strength 1 obscures eyes in this sample",
+    "Depth with black erasing can create extra spatial structures; disable erasing for depth",
+    "VNCCS headless Python rendering and SAM3D image extraction not certified; valid browser capture required",
+    "No model downloads or online database replacement"
+  ],
+  "schema": 1,
+  "date": "2026-10-11",
+  "evidence_ref": "external-local://validation/anima29-control-gpu-20261011-01",
+  "source_base_commit": "b945647d109bf4c6c0c3601ef43e463964e7503b",
+  "deployment": {
+    "pass": true,
+    "files": [
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/anima_arch.py",
+        "before_sha256": null,
+        "candidate_sha256": "d4c35b9bc39779ec3a84a871164aa5629a2383656cd5bbb2f15772296f8ce280",
+        "source_sha256": "d4c35b9bc39779ec3a84a871164aa5629a2383656cd5bbb2f15772296f8ce280",
+        "preservation": null
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/controlnet_patch.py",
+        "before_sha256": null,
+        "candidate_sha256": "11040edb023521eb539c11b1b4239c16534ae632e698b1fed53b81d0cb42b147",
+        "source_sha256": "11040edb023521eb539c11b1b4239c16534ae632e698b1fed53b81d0cb42b147",
+        "preservation": null
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/expand.py",
+        "before_sha256": null,
+        "candidate_sha256": "72fa827ba579bd9040e8cb9b40fa361076a17eba1a0902905772d99f8685f352",
+        "source_sha256": "72fa827ba579bd9040e8cb9b40fa361076a17eba1a0902905772d99f8685f352",
+        "preservation": null
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/LICENSE",
+        "before_sha256": null,
+        "candidate_sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+        "source_sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+        "preservation": null
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/lora_patch.py",
+        "before_sha256": null,
+        "candidate_sha256": "56629310dd41c8c1b242f4d815ce3973fc5ecdac3c92977f6b9b33f4c1010811",
+        "source_sha256": "56629310dd41c8c1b242f4d815ce3973fc5ecdac3c92977f6b9b33f4c1010811",
+        "preservation": null
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/pyproject.toml",
+        "before_sha256": null,
+        "candidate_sha256": "7438d980e537fd73d36007693eafe936846a09a5d6baaed6dcdd5b8827b9d6f0",
+        "source_sha256": "7438d980e537fd73d36007693eafe936846a09a5d6baaed6dcdd5b8827b9d6f0",
+        "preservation": null
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/README.md",
+        "before_sha256": null,
+        "candidate_sha256": "42684e71fc522b7b3be8d05915e660d792dc0eb6051ee9d99e6c387cbbda4983",
+        "source_sha256": "42684e71fc522b7b3be8d05915e660d792dc0eb6051ee9d99e6c387cbbda4983",
+        "preservation": null
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/UPSTREAM.json",
+        "before_sha256": null,
+        "candidate_sha256": "441eccdb3f207ce2320efbffd613b50cc3e1f08a943b4f87dfc976479da232e3",
+        "source_sha256": "441eccdb3f207ce2320efbffd613b50cc3e1f08a943b4f87dfc976479da232e3",
+        "preservation": null
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/__init__.py",
+        "before_sha256": null,
+        "candidate_sha256": "5e702b88f3d250505c378a3e4e4ca48a493f0b3187059c6e20e57f9d1b1cc673",
+        "source_sha256": "5e702b88f3d250505c378a3e4e4ca48a493f0b3187059c6e20e57f9d1b1cc673",
+        "preservation": null
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/__init__.py",
+        "before_sha256": "ecf4e66676adf5ec2ba9d5e3f72cfa7a852b6af878cb1e4ff126830e1f9bfd21",
+        "candidate_sha256": "5b549ede1b4492bb5de50a3bfbd20433e61b92444e3f030ce6c021be01c15a7c",
+        "source_sha256": "5b549ede1b4492bb5de50a3bfbd20433e61b92444e3f030ce6c021be01c15a7c",
+        "preservation": null
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/native_loader.py",
+        "before_sha256": null,
+        "candidate_sha256": "6c314573791c78a34e77a5ef1159598ae34443a292d103880f11c4f662161960",
+        "source_sha256": "6c314573791c78a34e77a5ef1159598ae34443a292d103880f11c4f662161960",
+        "preservation": null
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
+        "before_sha256": "d60d9c712a3d2ed5715096de2f4275bf7192248ef699cf9c2050f1944446e76b",
+        "candidate_sha256": "a63b7d75b9e33c9ec38fcfdf25c6836ea60f0d995b975a96f6d5149436e4d36f",
+        "source_sha256": "a63b7d75b9e33c9ec38fcfdf25c6836ea60f0d995b975a96f6d5149436e4d36f",
+        "preservation": null
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
+        "before_sha256": null,
+        "candidate_sha256": "2d2bd132e009a254946c01459c11a9f1651fccab021c699a38481ca827d62057",
+        "source_sha256": "2d2bd132e009a254946c01459c11a9f1651fccab021c699a38481ca827d62057",
+        "preservation": null
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
+        "before_sha256": "60f4c10b8669c554655ca1ebe2138239c365de7482475e3027a96c873c2bda69",
+        "candidate_sha256": "af35a74fa2a62cc044397abbeaa19a5f2b64c6f6b206614308c7bd9e39108b06",
+        "source_sha256": "af35a74fa2a62cc044397abbeaa19a5f2b64c6f6b206614308c7bd9e39108b06",
+        "preservation": null
+      },
+      {
+        "path": "ComfyUI/custom_nodes/vnccs-utils/nodes/pose_studio.py",
+        "before_sha256": "8dd50725bd32ea42383d29cc35509fb74a4ec05f529e3e6bbd981399c0d5e7e1",
+        "candidate_sha256": "2ebcf77ad2d8fa85723d7c8472d1a59964d5060fefae6b35037a70130b8335cb",
+        "source_sha256": "2ebcf77ad2d8fa85723d7c8472d1a59964d5060fefae6b35037a70130b8335cb",
+        "preservation": null
+      },
+      {
+        "path": "ComfyUI/custom_nodes/vnccs-utils/web/vnccs_pose_studio.js",
+        "before_sha256": "3c43d2513ca1883e0ff18e52dce1646476bba98468c1e28ce18bc07fd586bd6d",
+        "candidate_sha256": "1f3905dc2e8e2f736f81a02df40d93a1bef19c38fbc922e2555c1264415123a7",
+        "source_sha256": "1f3905dc2e8e2f736f81a02df40d93a1bef19c38fbc922e2555c1264415123a7",
+        "preservation": null
+      },
+      {
+        "path": "production_tools/profiles.json",
+        "before_sha256": "6cf0ad167ca4d151f1d27d482bc33a1696fb0ab5b9716b6d1298878c989ee673",
+        "candidate_sha256": "5d72a884029d2c0eee8bfacfae25f04ab429669a9919e692a99fb4ae5d838aee",
+        "source_sha256": "5d72a884029d2c0eee8bfacfae25f04ab429669a9919e692a99fb4ae5d838aee",
+        "preservation": null
+      },
+      {
+        "path": "production_tools/simplify_anima_control.py",
+        "before_sha256": null,
+        "candidate_sha256": "0226924edc1670d8736a5240b5ed1599c02e748a753188e5bcd0c0d7002bdca2",
+        "source_sha256": "0226924edc1670d8736a5240b5ed1599c02e748a753188e5bcd0c0d7002bdca2",
+        "preservation": null
+      },
+      {
+        "path": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+        "before_sha256": "8e11892bd970534e3fe04e6d07e206a1a344ce922a726132b8c7646aa301f3e0",
+        "candidate_sha256": "16484f68b9b9dee7cd9d8cf0b5a948f18756acbd6ab9f3d6bd04161747dd6faa",
+        "source_sha256": "16484f68b9b9dee7cd9d8cf0b5a948f18756acbd6ab9f3d6bd04161747dd6faa",
+        "preservation": {
+          "changed_root_ids": [
+            1067,
+            1090,
+            1128
+          ],
+          "root_links_and_extra_preserved": true,
+          "other_subgraphs_preserved": true,
+          "all_root_modes_preserved": true
+        }
+      },
+      {
+        "path": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+        "before_sha256": "f6368a1a85f870acb859644ead6447389069dc47a4aefe8e428302c8d8b57cd1",
+        "candidate_sha256": "37f99da27ae9bdcc92f1cf8e353fea1abaef5fc3174b76b23a9e3ae5d986baeb",
+        "source_sha256": "37f99da27ae9bdcc92f1cf8e353fea1abaef5fc3174b76b23a9e3ae5d986baeb",
+        "preservation": {
+          "changed_root_ids": [
+            553,
+            552,
+            717
+          ],
+          "root_links_and_extra_preserved": true,
+          "other_subgraphs_preserved": true,
+          "all_root_modes_preserved": true
+        }
+      },
+      {
+        "path": "production_tools/templates/UAP统一生产工作台_v2.json",
+        "before_sha256": "8e11892bd970534e3fe04e6d07e206a1a344ce922a726132b8c7646aa301f3e0",
+        "candidate_sha256": "16484f68b9b9dee7cd9d8cf0b5a948f18756acbd6ab9f3d6bd04161747dd6faa",
+        "source_sha256": "16484f68b9b9dee7cd9d8cf0b5a948f18756acbd6ab9f3d6bd04161747dd6faa",
+        "preservation": {
+          "changed_root_ids": [
+            1067,
+            1090,
+            1128
+          ],
+          "root_links_and_extra_preserved": true,
+          "other_subgraphs_preserved": true,
+          "all_root_modes_preserved": true
+        }
+      },
+      {
+        "path": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+        "before_sha256": "bb43d9815e8a9b3e235976c50f59cc383546c5a8ed115cfabd3ff45cadefcdcc",
+        "candidate_sha256": "19af7a3e3307bc237e02a518e9b7bc7edea015fae82b7344116cbd8c1dddb105",
+        "source_sha256": "19af7a3e3307bc237e02a518e9b7bc7edea015fae82b7344116cbd8c1dddb105",
+        "preservation": {
+          "changed_root_ids": [
+            553,
+            552,
+            717
+          ],
+          "root_links_and_extra_preserved": true,
+          "other_subgraphs_preserved": true,
+          "all_root_modes_preserved": true
+        }
+      }
+    ],
+    "consistent_sqlite_backups": 5,
+    "protected_files_unchanged": 65,
+    "old_pid": 22540,
+    "new_pid": 11168,
+    "new_create_time": 1791717773.8248243,
+    "queue": {
+      "queue_running": [],
+      "queue_pending": []
+    },
+    "workbench_all_modules_ready": true,
+    "required_nodes_registered": true,
+    "unified_remap_hooks_installed": true,
+    "old_patch_not_whitelisted": true,
+    "database_replaced": false,
+    "rollback_ref": "external-local://validation/anima29-control-gpu-20261011-01/deployment-v3/ROLLBACK.json",
+    "rollback_executed": false,
+    "global_manifest_live_deployed": false
+  },
+  "tests": {
+    "new": [
+      "test_anima_control.cjs",
+      "test_vnccs_pose_sync.cjs",
+      "tests/test_vnccs_pose_sync.py (2 cases)"
+    ],
+    "also_rerun_before_handoff": [
+      "test_stocking_workflow.cjs",
+      "test_uap_daily_controls.cjs",
+      "test_uap_navigation.cjs",
+      "test_uap_compact_widgets.cjs"
+    ],
+    "unchanged_migration_cpu_profile_evidence": "docs/receipts/anima_control_simple_20261011.json"
+  },
+  "production_ui": {
+    "pass": true,
+    "root_nodes": 291,
+    "pose_nodes": 9,
+    "default_pose_mode": 2,
+    "initial_active_branch": "a1",
+    "temporary_ui_branch_activation": "a29",
+    "native_vnccs_apply": true,
+    "preview_fix_loaded": true,
+    "vnccs_sync_fix_loaded": true,
+    "missing_root_types": [],
+    "four_choices": [
+      "PyraCanny",
+      "HED",
+      "Manga2Anime",
+      "DepthAnythingV2"
+    ],
+    "advanced_controls_visible": true,
+    "formal_workflow_saved": false,
+    "temporary_graph_closed_without_saving": true,
+    "screenshot_sha256": "41a285193589bf57eb9604358030805a1239d57568215ecc438d0d017681a306"
+  }
+}

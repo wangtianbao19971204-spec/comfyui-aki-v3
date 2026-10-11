@@ -4793,7 +4793,7 @@
         ],
         "uap_compact_widgets": true,
         "uap_layout_group": "SW-09 VNCCS 光影控制 · A29 2.9B",
-        "uap_legacy_lllite": true
+        "uap_native_lllite": true
       }
     },
     {
@@ -5999,117 +5999,25 @@
           "input_ue_unconnectable": {},
           "version": "7.8"
         },
-        "proxyWidgetErrorQuarantine": [
-          {
-            "originalEntry": [
-              "590",
-              "$$canvas-image-preview"
-            ],
-            "reason": "missingSourceNode",
-            "attemptedAtVersion": 1
-          },
-          {
-            "originalEntry": [
-              "596",
-              "$$canvas-image-preview"
-            ],
-            "reason": "missingSourceNode",
-            "attemptedAtVersion": 1
-          },
-          {
-            "originalEntry": [
-              "597",
-              "$$canvas-image-preview"
-            ],
-            "reason": "missingSourceNode",
-            "attemptedAtVersion": 1
-          },
-          {
-            "originalEntry": [
-              "598",
-              "$$canvas-image-preview"
-            ],
-            "reason": "missingSourceNode",
-            "attemptedAtVersion": 1
-          },
-          {
-            "originalEntry": [
-              "599",
-              "$$canvas-image-preview"
-            ],
-            "reason": "missingSourceNode",
-            "attemptedAtVersion": 1
-          },
-          {
-            "originalEntry": [
-              "602",
-              "$$canvas-image-preview"
-            ],
-            "reason": "missingSourceNode",
-            "attemptedAtVersion": 1
-          },
-          {
-            "originalEntry": [
-              "603",
-              "$$canvas-image-preview"
-            ],
-            "reason": "missingSourceNode",
-            "attemptedAtVersion": 1
-          },
-          {
-            "originalEntry": [
-              "608",
-              "$$canvas-image-preview"
-            ],
-            "reason": "missingSourceNode",
-            "attemptedAtVersion": 1
-          }
-        ],
         "previewExposures": [
           {
             "name": "$$canvas-image-preview",
-            "sourceNodeId": "110004",
-            "sourcePreviewName": "$$canvas-image-preview"
-          },
-          {
-            "name": "$$canvas-image-preview_1",
-            "sourceNodeId": "110010",
-            "sourcePreviewName": "$$canvas-image-preview"
-          },
-          {
-            "name": "$$canvas-image-preview_2",
-            "sourceNodeId": "110011",
-            "sourcePreviewName": "$$canvas-image-preview"
-          },
-          {
-            "name": "$$canvas-image-preview_3",
-            "sourceNodeId": "110012",
-            "sourcePreviewName": "$$canvas-image-preview"
-          },
-          {
-            "name": "$$canvas-image-preview_4",
-            "sourceNodeId": "110013",
-            "sourcePreviewName": "$$canvas-image-preview"
-          },
-          {
-            "name": "$$canvas-image-preview_5",
-            "sourceNodeId": "110016",
-            "sourcePreviewName": "$$canvas-image-preview"
-          },
-          {
-            "name": "$$canvas-image-preview_6",
-            "sourceNodeId": "110017",
-            "sourcePreviewName": "$$canvas-image-preview"
-          },
-          {
-            "name": "$$canvas-image-preview_7",
             "sourceNodeId": "110022",
             "sourcePreviewName": "$$canvas-image-preview"
           }
         ],
         "uap_compact_widgets": true,
         "uap_layout_group": "SW-05 线稿与姿态控制 · A29 2.9B",
-        "uap_legacy_lllite": true
+        "uap_anima_control": 1,
+        "anima_control_roles": {
+          "reference": 110001,
+          "preprocessor": 110014,
+          "advanced": 130156,
+          "preview": 110022,
+          "apply": 110023,
+          "loader": 130155
+        },
+        "uap_native_lllite": true
       }
     },
     {
@@ -9307,7 +9215,7 @@
         "uap_layout_group": "模型补充说明 · A29 2.9B"
       },
       "widgets_values": [
-        "## 控制分支兼容性说明（2026-09-06 实测）\n\n当前 any-v2 与 inpainting-v2 LLLite 权重适配原版 Anima，不能直接用于 40 层 Anima 2.9B。\n\n本流基础出图、LoRA、普通图生图/局部精修可继续使用；两个 SW 控制分支保持关闭。需要姿态/边缘控制时，请先用原版 Anima 控制流生成，再用 2.9B 低降噪精修。此处未通过插值或忽略缺失层强行加载。"
+        "## 姿态与构图控制\n\n本流的线稿/深度和 VNCCS 控制使用原生 Anima LLLite 与自动区块映射。需要启用 ComfyUI-Anima-LoRA-ControlNet-Patch；旧 LoRA 补丁由统一补丁替代。\n\n控制分支仍默认关闭。线稿控制先选参考图和控制方式，再调强度；原擦线遮罩与导出设置保留在高级子图，可旁路。采样、LoRA 和提示词沿用原值。层映射正确不保证每张图的控制效果，须用实际参考图验收。"
       ],
       "widgets_values_named": {
         "text": "## 控制分支兼容性说明（2026-09-06 实测）\n\n当前 any-v2 与 inpainting-v2 LLLite 权重适配原版 Anima，不能直接用于 40 层 Anima 2.9B。\n\n本流基础出图、LoRA、普通图生图/局部精修可继续使用；两个 SW 控制分支保持关闭。需要姿态/边缘控制时，请先用原版 Anima 控制流生成，再用 2.9B 低降噪精修。此处未通过插值或忽略缺失层强行加载。"
@@ -36525,8 +36433,8 @@
         "version": 1,
         "state": {
           "lastGroupId": 501901,
-          "lastNodeId": 119012,
-          "lastLinkId": 320031,
+          "lastNodeId": 130156,
+          "lastLinkId": 12,
           "lastRerouteId": 0
         },
         "revision": 0,
@@ -36535,8 +36443,8 @@
         "inputNode": {
           "id": -10,
           "bounding": [
-            -10600,
-            -6380,
+            -190,
+            60,
             128,
             48
           ]
@@ -36544,8 +36452,8 @@
         "outputNode": {
           "id": -20,
           "bounding": [
-            -8950,
-            -6380,
+            1130,
+            700,
             128,
             68
           ]
@@ -36556,7 +36464,7 @@
             "name": "model",
             "type": "MODEL",
             "linkIds": [
-              320029
+              10
             ],
             "localized_name": "model",
             "label": "model",
@@ -36572,7 +36480,7 @@
             "name": "MODEL",
             "type": "MODEL",
             "linkIds": [
-              320030
+              11
             ],
             "localized_name": "MODEL",
             "label": "MODEL",
@@ -36586,7 +36494,7 @@
             "name": "LATENT",
             "type": "LATENT",
             "linkIds": [
-              320031
+              12
             ],
             "localized_name": "LATENT",
             "label": "LATENT",
@@ -36599,81 +36507,11 @@
         "widgets": [],
         "nodes": [
           {
-            "id": 110000,
-            "type": "LoadImage",
-            "pos": [
-              -10620,
-              -5880
-            ],
-            "size": [
-              330,
-              340
-            ],
-            "flags": {},
-            "order": 0,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "图像",
-                "name": "image",
-                "type": "COMBO",
-                "widget": {
-                  "name": "image"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "选择文件上传",
-                "name": "upload",
-                "type": "IMAGEUPLOAD",
-                "widget": {
-                  "name": "upload"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "图像",
-                "name": "IMAGE",
-                "type": "IMAGE",
-                "links": []
-              },
-              {
-                "localized_name": "遮罩",
-                "name": "MASK",
-                "type": "MASK",
-                "links": [
-                  320018,
-                  320019
-                ]
-              }
-            ],
-            "title": "[05C] 擦线遮罩",
-            "properties": {
-              "Node name for S&R": "LoadImage",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0",
-              "label": "载入与 [05C-LINEART-SOURCE-IN] 相同的线稿文件；只在这里 Open in MaskEditor / Image Canvas 画遮罩。注意：这是 MASK，不是图像画笔。白色/灰色遮罩区域会被擦掉；黑色区域保留原线稿。不要在这里追求“黑笔擦线”，MaskEditor 的黑色等于不选中。",
-              "image": "clipspace/clipspace-painted-masked-1782566128506.png [input]"
-            },
-            "widgets_values": [
-              "ComfyUI_temp_oflff_00001_.png",
-              "image"
-            ],
-            "widgets_values_named": {
-              "image": "ComfyUI_temp_oflff_00001_.png",
-              "upload": "image"
-            },
-            "color": "#607A3B",
-            "bgcolor": "#1F2A1E"
-          },
-          {
             "id": 110001,
             "type": "LoadImage",
             "pos": [
-              -10600,
-              -6240
+              0,
+              0
             ],
             "size": [
               280,
@@ -36708,7 +36546,7 @@
                 "name": "IMAGE",
                 "type": "IMAGE",
                 "links": [
-                  320023
+                  1
                 ]
               },
               {
@@ -36737,59 +36575,15 @@
             "bgcolor": "#1F2A1E"
           },
           {
-            "id": 110002,
-            "type": "MaskToImage",
-            "pos": [
-              -10270,
-              -5410
-            ],
-            "size": [
-              400,
-              220
-            ],
-            "flags": {
-              "collapsed": true
-            },
-            "order": 2,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "遮罩",
-                "name": "mask",
-                "type": "MASK",
-                "link": 320019
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "图像",
-                "name": "IMAGE",
-                "type": "IMAGE",
-                "links": [
-                  320020
-                ]
-              }
-            ],
-            "title": "[05C] 遮罩转图",
-            "properties": {
-              "Node name for S&R": "MaskToImage",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0",
-              "label": "把擦线遮罩转成可预览图。白色区域就是会被擦掉的区域；黑色区域保留线稿。"
-            },
-            "color": "#607A3B",
-            "bgcolor": "#1F2A1E"
-          },
-          {
             "id": 110003,
             "type": "ResizeImagesByLongerEdge",
             "pos": [
-              -10590,
-              -6340
+              360,
+              0
             ],
             "size": [
-              270,
-              60
+              300,
+              220
             ],
             "flags": {},
             "order": 3,
@@ -36799,7 +36593,7 @@
                 "localized_name": "图像",
                 "name": "images",
                 "type": "IMAGE",
-                "link": 320023
+                "link": 1
               },
               {
                 "localized_name": "长边",
@@ -36817,11 +36611,8 @@
                 "name": "images",
                 "type": "IMAGE",
                 "links": [
-                  320024,
-                  320025,
-                  320026,
-                  320027,
-                  320028
+                  2,
+                  3
                 ]
               }
             ],
@@ -36839,329 +36630,52 @@
             }
           },
           {
-            "id": 110004,
-            "type": "PreviewImage",
-            "pos": [
-              -9910,
-              -5670
-            ],
-            "size": [
-              370,
-              360
-            ],
-            "flags": {},
-            "order": 4,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "图像",
-                "name": "images",
-                "type": "IMAGE",
-                "link": 320020
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "images",
-                "name": "images",
-                "type": "IMAGE",
-                "links": []
-              }
-            ],
-            "title": "[05C] 遮罩预览",
-            "properties": {
-              "Node name for S&R": "PreviewImage",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0",
-              "label": "先看这里：白色/灰色区域会被黑图覆盖，等于擦掉线稿；纯黑区域保留原线稿。"
-            },
-            "color": "#607A3B",
-            "bgcolor": "#1F2A1E"
-          },
-          {
-            "id": 110005,
+            "id": 110014,
             "type": "AIO_Preprocessor",
+            "title": "控制方式",
             "pos": [
-              -10270,
-              -6340
+              720,
+              0
             ],
             "size": [
-              270,
-              140
+              300,
+              220
             ],
             "flags": {},
-            "order": 5,
+            "order": 0,
             "mode": 0,
             "inputs": [
               {
-                "localized_name": "image",
                 "name": "image",
                 "type": "IMAGE",
-                "link": 320024
-              },
-              {
-                "localized_name": "preprocessor",
-                "name": "preprocessor",
-                "shape": 7,
-                "type": "COMBO",
-                "widget": {
-                  "name": "preprocessor"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "resolution",
-                "name": "resolution",
-                "shape": 7,
-                "type": "INT",
-                "widget": {
-                  "name": "resolution"
-                },
-                "link": null
+                "link": 2
               }
             ],
             "outputs": [
               {
-                "localized_name": "图像",
                 "name": "IMAGE",
                 "type": "IMAGE",
                 "links": [
-                  320002,
-                  320005
+                  6
                 ]
               }
             ],
-            "title": "[05B1] Canny 线稿",
-            "properties": {
-              "Node name for S&R": "AIO_Preprocessor",
-              "cnr_id": "comfyui_controlnet_aux",
-              "ver": "e8b689a513c3e6b63edc44066560ca5919c0576e"
-            },
+            "properties": {},
             "widgets_values": [
-              "PyraCannyPreprocessor",
+              "DepthAnythingV2Preprocessor",
               1024
-            ],
-            "widgets_values_named": {
-              "preprocessor": "PyraCannyPreprocessor",
-              "resolution": 1024
-            }
-          },
-          {
-            "id": 110006,
-            "type": "AIO_Preprocessor",
-            "pos": [
-              -10270,
-              -6170
-            ],
-            "size": [
-              270,
-              140
-            ],
-            "flags": {},
-            "order": 6,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "image",
-                "name": "image",
-                "type": "IMAGE",
-                "link": 320025
-              },
-              {
-                "localized_name": "preprocessor",
-                "name": "preprocessor",
-                "shape": 7,
-                "type": "COMBO",
-                "widget": {
-                  "name": "preprocessor"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "resolution",
-                "name": "resolution",
-                "shape": 7,
-                "type": "INT",
-                "widget": {
-                  "name": "resolution"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "图像",
-                "name": "IMAGE",
-                "type": "IMAGE",
-                "links": [
-                  320008,
-                  320009
-                ]
-              }
-            ],
-            "title": "[05B2] HED 线稿",
-            "properties": {
-              "Node name for S&R": "AIO_Preprocessor",
-              "cnr_id": "comfyui_controlnet_aux",
-              "ver": "e8b689a513c3e6b63edc44066560ca5919c0576e"
-            },
-            "widgets_values": [
-              "HEDPreprocessor",
-              1024
-            ],
-            "widgets_values_named": {
-              "preprocessor": "HEDPreprocessor",
-              "resolution": 1024
-            }
-          },
-          {
-            "id": 110007,
-            "type": "AIO_Preprocessor",
-            "pos": [
-              -10270,
-              -6000
-            ],
-            "size": [
-              270,
-              140
-            ],
-            "flags": {
-              "collapsed": false
-            },
-            "order": 7,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "image",
-                "name": "image",
-                "type": "IMAGE",
-                "link": 320026
-              },
-              {
-                "localized_name": "preprocessor",
-                "name": "preprocessor",
-                "shape": 7,
-                "type": "COMBO",
-                "widget": {
-                  "name": "preprocessor"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "resolution",
-                "name": "resolution",
-                "shape": 7,
-                "type": "INT",
-                "widget": {
-                  "name": "resolution"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "图像",
-                "name": "IMAGE",
-                "type": "IMAGE",
-                "links": [
-                  320000,
-                  320003
-                ]
-              }
-            ],
-            "title": "[05B3] 漫画线稿",
-            "properties": {
-              "Node name for S&R": "AIO_Preprocessor",
-              "cnr_id": "comfyui_controlnet_aux",
-              "ver": "e8b689a513c3e6b63edc44066560ca5919c0576e"
-            },
-            "widgets_values": [
-              "Manga2Anime_LineArt_Preprocessor",
-              1024
-            ],
-            "widgets_values_named": {
-              "preprocessor": "Manga2Anime_LineArt_Preprocessor",
-              "resolution": 1024
-            }
-          },
-          {
-            "id": 110008,
-            "type": "DepthAnythingV2Preprocessor",
-            "pos": [
-              -10270,
-              -5830
-            ],
-            "size": [
-              270,
-              140
-            ],
-            "flags": {},
-            "order": 8,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "image",
-                "name": "image",
-                "type": "IMAGE",
-                "link": 320027
-              },
-              {
-                "localized_name": "ckpt_name",
-                "name": "ckpt_name",
-                "shape": 7,
-                "type": "COMBO",
-                "widget": {
-                  "name": "ckpt_name"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "resolution",
-                "name": "resolution",
-                "shape": 7,
-                "type": "INT",
-                "widget": {
-                  "name": "resolution"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "图像",
-                "name": "IMAGE",
-                "type": "IMAGE",
-                "links": [
-                  320001,
-                  320004
-                ]
-              }
-            ],
-            "title": "[05B4] 深度图",
-            "properties": {
-              "Node name for S&R": "DepthAnythingV2Preprocessor",
-              "cnr_id": "comfyui_controlnet_aux",
-              "ver": "e8b689a513c3e6b63edc44066560ca5919c0576e"
-            },
-            "widgets_values": [
-              "depth_anything_v2_vitl.pth",
-              1024
-            ],
-            "widgets_values_named": {
-              "ckpt_name": "depth_anything_v2_vitl.pth",
-              "resolution": 1024
-            }
+            ]
           },
           {
             "id": 110009,
             "type": "GetImageSize",
             "pos": [
-              -9160,
-              -6340
+              0,
+              340
             ],
             "size": [
-              230,
-              160
+              300,
+              220
             ],
             "flags": {},
             "order": 9,
@@ -37171,7 +36685,7 @@
                 "localized_name": "图像",
                 "name": "image",
                 "type": "IMAGE",
-                "link": 320028
+                "link": 3
               }
             ],
             "outputs": [
@@ -37180,7 +36694,7 @@
                 "name": "width",
                 "type": "INT",
                 "links": [
-                  320006
+                  4
                 ]
               },
               {
@@ -37188,7 +36702,7 @@
                 "name": "height",
                 "type": "INT",
                 "links": [
-                  320007
+                  5
                 ]
               },
               {
@@ -37206,279 +36720,15 @@
             }
           },
           {
-            "id": 110010,
-            "type": "PreviewImage",
-            "pos": [
-              -10000,
-              -6340
-            ],
-            "size": [
-              230,
-              290
-            ],
-            "flags": {},
-            "order": 10,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "图像",
-                "name": "images",
-                "type": "IMAGE",
-                "link": 320002
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "images",
-                "name": "images",
-                "type": "IMAGE",
-                "links": []
-              }
-            ],
-            "title": "[05B1] Canny 预览",
-            "properties": {
-              "Node name for S&R": "PreviewImage",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0"
-            }
-          },
-          {
-            "id": 110011,
-            "type": "PreviewImage",
-            "pos": [
-              -9770,
-              -6340
-            ],
-            "size": [
-              230,
-              290
-            ],
-            "flags": {},
-            "order": 11,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "图像",
-                "name": "images",
-                "type": "IMAGE",
-                "link": 320009
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "images",
-                "name": "images",
-                "type": "IMAGE",
-                "links": []
-              }
-            ],
-            "title": "[05B2] HED 预览",
-            "properties": {
-              "Node name for S&R": "PreviewImage",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0"
-            }
-          },
-          {
-            "id": 110012,
-            "type": "PreviewImage",
-            "pos": [
-              -10000,
-              -6020
-            ],
-            "size": [
-              230,
-              310
-            ],
-            "flags": {},
-            "order": 12,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "图像",
-                "name": "images",
-                "type": "IMAGE",
-                "link": 320000
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "images",
-                "name": "images",
-                "type": "IMAGE",
-                "links": []
-              }
-            ],
-            "title": "[05B3] 漫画线稿预览",
-            "properties": {
-              "Node name for S&R": "PreviewImage",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0"
-            }
-          },
-          {
-            "id": 110013,
-            "type": "PreviewImage",
-            "pos": [
-              -9770,
-              -6020
-            ],
-            "size": [
-              230,
-              310
-            ],
-            "flags": {},
-            "order": 13,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "图像",
-                "name": "images",
-                "type": "IMAGE",
-                "link": 320001
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "images",
-                "name": "images",
-                "type": "IMAGE",
-                "links": []
-              }
-            ],
-            "title": "[05B4] 深度图预览",
-            "properties": {
-              "Node name for S&R": "PreviewImage",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0"
-            }
-          },
-          {
-            "id": 110014,
-            "type": "DazzleSwitch",
-            "pos": [
-              -9510,
-              -5990
-            ],
-            "size": [
-              300,
-              270
-            ],
-            "flags": {},
-            "order": 14,
-            "mode": 0,
-            "inputs": [
-              {
-                "label": "细致线稿",
-                "localized_name": "input_01",
-                "name": "input_01",
-                "shape": 7,
-                "type": "*",
-                "link": 320005
-              },
-              {
-                "label": "中细线稿",
-                "localized_name": "input_02",
-                "name": "input_02",
-                "shape": 7,
-                "type": "*",
-                "link": 320008
-              },
-              {
-                "label": "粗略线稿",
-                "localized_name": "input_03",
-                "name": "input_03",
-                "shape": 7,
-                "type": "*",
-                "link": 320003
-              },
-              {
-                "localized_name": "select",
-                "name": "select",
-                "type": "COMBO",
-                "widget": {
-                  "name": "select"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "mode",
-                "name": "mode",
-                "type": "COMBO",
-                "widget": {
-                  "name": "mode"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "select_override",
-                "name": "select_override",
-                "shape": 7,
-                "type": "INT",
-                "widget": {
-                  "name": "select_override"
-                },
-                "link": null
-              },
-              {
-                "label": "灰度图",
-                "name": "input_04",
-                "type": "*",
-                "link": 320004
-              },
-              {
-                "name": "input_05",
-                "type": "*",
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "label": "IMAGE",
-                "localized_name": "output",
-                "name": "output",
-                "type": "IMAGE",
-                "links": [
-                  320010,
-                  320011,
-                  320021,
-                  320022
-                ]
-              },
-              {
-                "localized_name": "selected_index",
-                "name": "selected_index",
-                "type": "INT",
-                "links": []
-              }
-            ],
-            "title": "[05B] 控制图选择",
-            "properties": {
-              "Node name for S&R": "DazzleSwitch",
-              "aux_id": "DazzleNodes/ComfyUI-DazzleSwitch",
-              "ver": "0c11da0fc65abb32b8f7584fd7d6ba449aec8c9a"
-            },
-            "widgets_values": [
-              "灰度图",
-              "priority",
-              0
-            ],
-            "widgets_values_named": {
-              "select": "灰度图",
-              "mode": "priority",
-              "select_override": 0
-            }
-          },
-          {
             "id": 110015,
             "type": "EmptyLatentImage",
             "pos": [
-              -9140,
-              -5520
+              360,
+              340
             ],
             "size": [
-              370,
-              190
+              300,
+              220
             ],
             "flags": {
               "collapsed": false
@@ -37493,7 +36743,7 @@
                 "widget": {
                   "name": "width"
                 },
-                "link": 320006
+                "link": 4
               },
               {
                 "localized_name": "高度",
@@ -37502,7 +36752,7 @@
                 "widget": {
                   "name": "height"
                 },
-                "link": 320007
+                "link": 5
               },
               {
                 "localized_name": "批量大小",
@@ -37521,7 +36771,7 @@
                 "type": "LATENT",
                 "slot_index": 0,
                 "links": [
-                  320031
+                  12
                 ]
               }
             ],
@@ -37546,381 +36796,52 @@
             "bgcolor": "#272132"
           },
           {
-            "id": 110016,
-            "type": "PreviewImage",
+            "id": 130156,
+            "type": "197cab6b-e9f2-5154-8ef8-1bb2d4497b6e",
+            "title": "高级 · 擦线与导出",
             "pos": [
-              -9180,
-              -6140
+              720,
+              340
             ],
             "size": [
-              390,
-              390
+              300,
+              220
             ],
             "flags": {},
-            "order": 16,
+            "order": 0,
             "mode": 0,
             "inputs": [
               {
-                "localized_name": "图像",
-                "name": "images",
-                "type": "IMAGE",
-                "link": 320010
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "images",
-                "name": "images",
-                "type": "IMAGE",
-                "links": []
-              }
-            ],
-            "title": "[05B] 选中线稿预览",
-            "properties": {
-              "Node name for S&R": "PreviewImage",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0",
-              "label": "DazzleSwitch 当前输出。确认这里的线稿后，可用右侧 Save 临时保存，再载入到 [05C] 手绘擦线输入。"
-            },
-            "color": "#607A3B",
-            "bgcolor": "#1F2A1E"
-          },
-          {
-            "id": 110017,
-            "type": "SaveImage",
-            "pos": [
-              -9140,
-              -5710
-            ],
-            "size": [
-              350,
-              270
-            ],
-            "flags": {
-              "collapsed": true
-            },
-            "order": 17,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "图片",
-                "name": "images",
-                "type": "IMAGE",
-                "link": 320011
-              },
-              {
-                "localized_name": "文件名前缀",
-                "name": "filename_prefix",
-                "type": "STRING",
-                "widget": {
-                  "name": "filename_prefix"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "images",
-                "name": "images",
-                "type": "IMAGE",
-                "links": []
-              }
-            ],
-            "title": "[05B] 保存临时线稿",
-            "properties": {
-              "Node name for S&R": "SaveImage",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0",
-              "label": "只保存 DazzleSwitch 当前线稿，文件名前缀放在 lineart_tmp，方便手动画/载入后擦线。"
-            },
-            "widgets_values": [
-              "lineart_tmp/lineart_source"
-            ],
-            "widgets_values_named": {
-              "filename_prefix": "lineart_tmp/lineart_source"
-            },
-            "color": "#607A3B",
-            "bgcolor": "#1F2A1E"
-          },
-          {
-            "id": 110018,
-            "type": "GetImageSize",
-            "pos": [
-              -10160,
-              -5650
-            ],
-            "size": [
-              200,
-              130
-            ],
-            "flags": {
-              "collapsed": true
-            },
-            "order": 18,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "图像",
                 "name": "image",
                 "type": "IMAGE",
-                "link": 320021
+                "link": 6
               }
             ],
             "outputs": [
               {
-                "localized_name": "宽度",
-                "name": "width",
-                "type": "INT",
-                "links": [
-                  320012
-                ]
-              },
-              {
-                "localized_name": "高度",
-                "name": "height",
-                "type": "INT",
-                "links": [
-                  320013
-                ]
-              },
-              {
-                "localized_name": "批处理大小",
-                "name": "batch_size",
-                "type": "INT",
-                "links": []
-              }
-            ],
-            "title": "[05C] 读取线稿尺寸",
-            "properties": {
-              "Node name for S&R": "GetImageSize",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0"
-            },
-            "color": "#607A3B",
-            "bgcolor": "#1F2A1E"
-          },
-          {
-            "id": 110019,
-            "type": "SolidMask",
-            "pos": [
-              -10250,
-              -5540
-            ],
-            "size": [
-              240,
-              130
-            ],
-            "flags": {
-              "collapsed": true
-            },
-            "order": 19,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "明度",
-                "name": "value",
-                "type": "FLOAT",
-                "widget": {
-                  "name": "value"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "宽度",
-                "name": "width",
-                "type": "INT",
-                "widget": {
-                  "name": "width"
-                },
-                "link": 320012
-              },
-              {
-                "localized_name": "高度",
-                "name": "height",
-                "type": "INT",
-                "widget": {
-                  "name": "height"
-                },
-                "link": 320013
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "遮罩",
-                "name": "MASK",
-                "type": "MASK",
-                "links": [
-                  320014
-                ]
-              }
-            ],
-            "title": "[05C] 纯黑遮罩底",
-            "properties": {
-              "Node name for S&R": "SolidMask",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0"
-            },
-            "widgets_values": [
-              0,
-              1024,
-              1024
-            ],
-            "widgets_values_named": {
-              "value": 0,
-              "width": 1024,
-              "height": 1024
-            },
-            "color": "#607A3B",
-            "bgcolor": "#1F2A1E"
-          },
-          {
-            "id": 110020,
-            "type": "MaskToImage",
-            "pos": [
-              -10260,
-              -5470
-            ],
-            "size": [
-              260,
-              80
-            ],
-            "flags": {
-              "collapsed": true
-            },
-            "order": 20,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "遮罩",
-                "name": "mask",
-                "type": "MASK",
-                "link": 320014
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "图像",
                 "name": "IMAGE",
                 "type": "IMAGE",
                 "links": [
-                  320015
+                  7,
+                  8
                 ]
               }
             ],
-            "title": "[05C] 黑色覆盖图",
             "properties": {
-              "Node name for S&R": "MaskToImage",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0"
+              "uap_anima_erase": true
             },
-            "color": "#607A3B",
-            "bgcolor": "#1F2A1E"
-          },
-          {
-            "id": 110021,
-            "type": "ImageCompositeMasked",
-            "pos": [
-              -10220,
-              -5590
-            ],
-            "size": [
-              340,
-              200
-            ],
-            "flags": {
-              "collapsed": true
-            },
-            "order": 21,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "目标图像",
-                "name": "destination",
-                "type": "IMAGE",
-                "link": 320022
-              },
-              {
-                "localized_name": "来源图像",
-                "name": "source",
-                "type": "IMAGE",
-                "link": 320015
-              },
-              {
-                "localized_name": "遮罩",
-                "name": "mask",
-                "shape": 7,
-                "type": "MASK",
-                "link": 320018
-              },
-              {
-                "localized_name": "x",
-                "name": "x",
-                "type": "INT",
-                "widget": {
-                  "name": "x"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "y",
-                "name": "y",
-                "type": "INT",
-                "widget": {
-                  "name": "y"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "缩放来源图像",
-                "name": "resize_source",
-                "type": "BOOLEAN",
-                "widget": {
-                  "name": "resize_source"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "图像",
-                "name": "IMAGE",
-                "type": "IMAGE",
-                "links": [
-                  320016,
-                  320017
-                ]
-              }
-            ],
-            "title": "[05C] 擦除白色区域",
-            "properties": {
-              "Node name for S&R": "ImageCompositeMasked",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0",
-              "label": "规则：destination=原始线稿，source=黑图，mask=手绘遮罩。白色/灰色遮罩区域会被黑色覆盖，即擦掉线稿；黑色遮罩区域保留原线稿。"
-            },
-            "widgets_values": [
-              0,
-              0,
-              false
-            ],
-            "widgets_values_named": {
-              "x": 0,
-              "y": 0,
-              "resize_source": false
-            },
-            "color": "#607A3B",
-            "bgcolor": "#1F2A1E"
+            "widgets_values": []
           },
           {
             "id": 110022,
             "type": "PreviewImage",
             "pos": [
-              -9530,
-              -5670
+              0,
+              680
             ],
             "size": [
-              380,
-              410
+              300,
+              220
             ],
             "flags": {},
             "order": 22,
@@ -37930,7 +36851,7 @@
                 "localized_name": "图像",
                 "name": "images",
                 "type": "IMAGE",
-                "link": 320016
+                "link": 7
               }
             ],
             "outputs": [
@@ -37941,7 +36862,7 @@
                 "links": []
               }
             ],
-            "title": "[05C] 擦线结果预览",
+            "title": "最终控制图",
             "properties": {
               "Node name for S&R": "PreviewImage",
               "cnr_id": "comfy-core",
@@ -37951,305 +36872,93 @@
             "bgcolor": "#1F2A1E"
           },
           {
-            "id": 110023,
-            "type": "AnimaLLLiteApply_sdscripts",
+            "id": 130155,
+            "type": "AnimaLLLiteModelLoader",
+            "title": "控制权重",
             "pos": [
-              -9510,
-              -6320
+              360,
+              680
             ],
             "size": [
-              310,
-              280
+              300,
+              220
             ],
             "flags": {},
-            "order": 23,
+            "order": 0,
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+              {
+                "name": "MODEL_PATCH",
+                "type": "MODEL_PATCH",
+                "links": [
+                  9
+                ]
+              }
+            ],
+            "properties": {},
+            "widgets_values": [
+              "anima-lllite-any-test-like-v2.safetensors"
+            ]
+          },
+          {
+            "id": 110023,
+            "type": "AnimaLLLiteApply",
+            "title": "应用姿态控制",
+            "pos": [
+              720,
+              680
+            ],
+            "size": [
+              300,
+              220
+            ],
+            "flags": {},
+            "order": 0,
             "mode": 0,
             "inputs": [
               {
-                "localized_name": "model",
                 "name": "model",
                 "type": "MODEL",
-                "link": 320029
+                "link": 10
               },
               {
-                "localized_name": "image",
+                "name": "model_patch",
+                "type": "MODEL_PATCH",
+                "link": 9
+              },
+              {
                 "name": "image",
                 "type": "IMAGE",
-                "link": 320017
+                "link": 8
               },
               {
-                "localized_name": "mask",
                 "name": "mask",
-                "shape": 7,
                 "type": "MASK",
-                "link": null
-              },
-              {
-                "localized_name": "lllite_name",
-                "name": "lllite_name",
-                "type": "COMBO",
-                "widget": {
-                  "name": "lllite_name"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "strength",
-                "name": "strength",
-                "type": "FLOAT",
-                "widget": {
-                  "name": "strength"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "start_percent",
-                "name": "start_percent",
-                "type": "FLOAT",
-                "widget": {
-                  "name": "start_percent"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "end_percent",
-                "name": "end_percent",
-                "type": "FLOAT",
-                "widget": {
-                  "name": "end_percent"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "preserve_wrapper",
-                "name": "preserve_wrapper",
-                "type": "BOOLEAN",
-                "widget": {
-                  "name": "preserve_wrapper"
-                },
                 "link": null
               }
             ],
             "outputs": [
               {
-                "localized_name": "模型",
                 "name": "MODEL",
                 "type": "MODEL",
                 "links": [
-                  320030
+                  11
                 ]
               }
             ],
-            "title": "[05D] 应用 LLLite 控制",
-            "properties": {
-              "Node name for S&R": "AnimaLLLiteApply_sdscripts",
-              "aux_id": "kohya-ss/ComfyUI-Anima-LLLite",
-              "label": "image 现在来自 [05C-ERASE-LINEART] 擦线后的线稿；model 来自 LoRA+Shift 后模型。"
-            },
+            "properties": {},
             "widgets_values": [
-              "anima-lllite-any-test-like-v2.safetensors",
               1,
               0,
-              1,
-              false
-            ],
-            "widgets_values_named": {
-              "lllite_name": "anima-lllite-any-test-like-v2.safetensors",
-              "strength": 1,
-              "start_percent": 0,
-              "end_percent": 1,
-              "preserve_wrapper": false
-            }
+              1
+            ]
           }
         ],
         "groups": [],
         "links": [
           {
-            "id": 320000,
-            "origin_id": 110007,
-            "origin_slot": 0,
-            "target_id": 110012,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320001,
-            "origin_id": 110008,
-            "origin_slot": 0,
-            "target_id": 110013,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320002,
-            "origin_id": 110005,
-            "origin_slot": 0,
-            "target_id": 110010,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320003,
-            "origin_id": 110007,
-            "origin_slot": 0,
-            "target_id": 110014,
-            "target_slot": 2,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320004,
-            "origin_id": 110008,
-            "origin_slot": 0,
-            "target_id": 110014,
-            "target_slot": 6,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320005,
-            "origin_id": 110005,
-            "origin_slot": 0,
-            "target_id": 110014,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320006,
-            "origin_id": 110009,
-            "origin_slot": 0,
-            "target_id": 110015,
-            "target_slot": 0,
-            "type": "INT"
-          },
-          {
-            "id": 320007,
-            "origin_id": 110009,
-            "origin_slot": 1,
-            "target_id": 110015,
-            "target_slot": 1,
-            "type": "INT"
-          },
-          {
-            "id": 320008,
-            "origin_id": 110006,
-            "origin_slot": 0,
-            "target_id": 110014,
-            "target_slot": 1,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320009,
-            "origin_id": 110006,
-            "origin_slot": 0,
-            "target_id": 110011,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320010,
-            "origin_id": 110014,
-            "origin_slot": 0,
-            "target_id": 110016,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320011,
-            "origin_id": 110014,
-            "origin_slot": 0,
-            "target_id": 110017,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320012,
-            "origin_id": 110018,
-            "origin_slot": 0,
-            "target_id": 110019,
-            "target_slot": 1,
-            "type": "INT"
-          },
-          {
-            "id": 320013,
-            "origin_id": 110018,
-            "origin_slot": 1,
-            "target_id": 110019,
-            "target_slot": 2,
-            "type": "INT"
-          },
-          {
-            "id": 320014,
-            "origin_id": 110019,
-            "origin_slot": 0,
-            "target_id": 110020,
-            "target_slot": 0,
-            "type": "MASK"
-          },
-          {
-            "id": 320015,
-            "origin_id": 110020,
-            "origin_slot": 0,
-            "target_id": 110021,
-            "target_slot": 1,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320016,
-            "origin_id": 110021,
-            "origin_slot": 0,
-            "target_id": 110022,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320017,
-            "origin_id": 110021,
-            "origin_slot": 0,
-            "target_id": 110023,
-            "target_slot": 1,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320018,
-            "origin_id": 110000,
-            "origin_slot": 1,
-            "target_id": 110021,
-            "target_slot": 2,
-            "type": "MASK"
-          },
-          {
-            "id": 320019,
-            "origin_id": 110000,
-            "origin_slot": 1,
-            "target_id": 110002,
-            "target_slot": 0,
-            "type": "MASK"
-          },
-          {
-            "id": 320020,
-            "origin_id": 110002,
-            "origin_slot": 0,
-            "target_id": 110004,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320021,
-            "origin_id": 110014,
-            "origin_slot": 0,
-            "target_id": 110018,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320022,
-            "origin_id": 110014,
-            "origin_slot": 0,
-            "target_id": 110021,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320023,
+            "id": 1,
             "origin_id": 110001,
             "origin_slot": 0,
             "target_id": 110003,
@@ -38257,39 +36966,15 @@
             "type": "IMAGE"
           },
           {
-            "id": 320024,
+            "id": 2,
             "origin_id": 110003,
             "origin_slot": 0,
-            "target_id": 110005,
+            "target_id": 110014,
             "target_slot": 0,
             "type": "IMAGE"
           },
           {
-            "id": 320025,
-            "origin_id": 110003,
-            "origin_slot": 0,
-            "target_id": 110006,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320026,
-            "origin_id": 110003,
-            "origin_slot": 0,
-            "target_id": 110007,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320027,
-            "origin_id": 110003,
-            "origin_slot": 0,
-            "target_id": 110008,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 320028,
+            "id": 3,
             "origin_id": 110003,
             "origin_slot": 0,
             "target_id": 110009,
@@ -38297,7 +36982,55 @@
             "type": "IMAGE"
           },
           {
-            "id": 320029,
+            "id": 4,
+            "origin_id": 110009,
+            "origin_slot": 0,
+            "target_id": 110015,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 5,
+            "origin_id": 110009,
+            "origin_slot": 1,
+            "target_id": 110015,
+            "target_slot": 1,
+            "type": "INT"
+          },
+          {
+            "id": 6,
+            "origin_id": 110014,
+            "origin_slot": 0,
+            "target_id": 130156,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 7,
+            "origin_id": 130156,
+            "origin_slot": 0,
+            "target_id": 110022,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 8,
+            "origin_id": 130156,
+            "origin_slot": 0,
+            "target_id": 110023,
+            "target_slot": 2,
+            "type": "IMAGE"
+          },
+          {
+            "id": 9,
+            "origin_id": 130155,
+            "origin_slot": 0,
+            "target_id": 110023,
+            "target_slot": 1,
+            "type": "MODEL_PATCH"
+          },
+          {
+            "id": 10,
             "origin_id": -10,
             "origin_slot": 0,
             "target_id": 110023,
@@ -38305,7 +37038,7 @@
             "type": "MODEL"
           },
           {
-            "id": 320030,
+            "id": 11,
             "origin_id": 110023,
             "origin_slot": 0,
             "target_id": -20,
@@ -38313,7 +37046,7 @@
             "type": "MODEL"
           },
           {
-            "id": 320031,
+            "id": 12,
             "origin_id": 110015,
             "origin_slot": 0,
             "target_id": -20,
@@ -38323,7 +37056,16 @@
         ],
         "extra": {
           "ue_links": [],
-          "links_added_by_ue": []
+          "links_added_by_ue": [],
+          "anima_control_compact": 1,
+          "anima_control_roles": {
+            "reference": 110001,
+            "preprocessor": 110014,
+            "advanced": 130156,
+            "preview": 110022,
+            "apply": 110023,
+            "loader": 130155
+          }
         }
       },
       {
@@ -38331,8 +37073,8 @@
         "version": 1,
         "state": {
           "lastGroupId": 501901,
-          "lastNodeId": 119012,
-          "lastLinkId": 322006,
+          "lastNodeId": 130154,
+          "lastLinkId": 8,
           "lastRerouteId": 0
         },
         "revision": 0,
@@ -38362,7 +37104,7 @@
             "name": "model",
             "type": "MODEL",
             "linkIds": [
-              322005
+              6
             ],
             "localized_name": "model",
             "label": "model",
@@ -38378,7 +37120,7 @@
             "name": "MODEL",
             "type": "MODEL",
             "linkIds": [
-              322006
+              7
             ],
             "localized_name": "MODEL",
             "label": "MODEL",
@@ -38430,8 +37172,8 @@
                 "name": "IMAGE",
                 "type": "IMAGE",
                 "links": [
-                  322000,
-                  322002
+                  1,
+                  3
                 ]
               },
               {
@@ -38476,7 +37218,7 @@
                 "name": "pose_image",
                 "shape": 7,
                 "type": "IMAGE",
-                "link": 322000
+                "link": 1
               },
               {
                 "localized_name": "pose_data",
@@ -38495,9 +37237,9 @@
                 "shape": 6,
                 "type": "IMAGE",
                 "links": [
-                  322001,
-                  322003,
-                  322004
+                  2,
+                  4,
+                  5
                 ]
               },
               {
@@ -38542,7 +37284,7 @@
                 "localized_name": "图像",
                 "name": "images",
                 "type": "IMAGE",
-                "link": 322001
+                "link": 2
               }
             ],
             "outputs": [
@@ -38580,14 +37322,14 @@
                 "name": "image_a",
                 "shape": 7,
                 "type": "IMAGE",
-                "link": 322002
+                "link": 3
               },
               {
                 "localized_name": "image_b",
                 "name": "image_b",
                 "shape": 7,
                 "type": "IMAGE",
-                "link": 322003
+                "link": 4
               }
             ],
             "outputs": [],
@@ -38630,120 +37372,92 @@
           },
           {
             "id": 111004,
-            "type": "AnimaLLLiteApply_sdscripts",
+            "type": "AnimaLLLiteApply",
+            "title": "[09E] 应用 LLLite 控制",
             "pos": [
               -9070,
               -7190
             ],
             "size": [
-              310,
-              280
+              300,
+              150
             ],
             "flags": {},
-            "order": 4,
+            "order": 0,
             "mode": 0,
             "inputs": [
               {
-                "localized_name": "model",
                 "name": "model",
                 "type": "MODEL",
-                "link": 322005
+                "link": 6
               },
               {
-                "localized_name": "image",
+                "name": "model_patch",
+                "type": "MODEL_PATCH",
+                "link": 8
+              },
+              {
                 "name": "image",
                 "type": "IMAGE",
-                "link": 322004
+                "link": 5
               },
               {
-                "localized_name": "mask",
                 "name": "mask",
-                "shape": 7,
                 "type": "MASK",
-                "link": null
-              },
-              {
-                "localized_name": "lllite_name",
-                "name": "lllite_name",
-                "type": "COMBO",
-                "widget": {
-                  "name": "lllite_name"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "strength",
-                "name": "strength",
-                "type": "FLOAT",
-                "widget": {
-                  "name": "strength"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "start_percent",
-                "name": "start_percent",
-                "type": "FLOAT",
-                "widget": {
-                  "name": "start_percent"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "end_percent",
-                "name": "end_percent",
-                "type": "FLOAT",
-                "widget": {
-                  "name": "end_percent"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "preserve_wrapper",
-                "name": "preserve_wrapper",
-                "type": "BOOLEAN",
-                "widget": {
-                  "name": "preserve_wrapper"
-                },
                 "link": null
               }
             ],
             "outputs": [
               {
-                "localized_name": "模型",
                 "name": "MODEL",
                 "type": "MODEL",
                 "links": [
-                  322006
+                  7
                 ]
               }
             ],
-            "title": "[09E] 应用 LLLite 控制",
-            "properties": {
-              "Node name for S&R": "AnimaLLLiteApply_sdscripts",
-              "aux_id": "kohya-ss/ComfyUI-Anima-LLLite",
-              "label": "image 来自 [SW-09] VNCCS_PoseStudio 输出；model 来自 LoRA+Shift 后模型。开启 SW-09 时自动流入主链。"
-            },
+            "properties": {},
             "widgets_values": [
-              "anima-lllite-any-test-like-v2.safetensors",
               0.94,
               0,
-              1,
-              true
+              1
+            ]
+          },
+          {
+            "id": 130154,
+            "type": "AnimaLLLiteModelLoader",
+            "title": "控制权重",
+            "pos": [
+              -9070,
+              -7450
             ],
-            "widgets_values_named": {
-              "lllite_name": "anima-lllite-any-test-like-v2.safetensors",
-              "strength": 0.94,
-              "start_percent": 0,
-              "end_percent": 1,
-              "preserve_wrapper": true
-            }
+            "size": [
+              300,
+              150
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+              {
+                "name": "MODEL_PATCH",
+                "type": "MODEL_PATCH",
+                "links": [
+                  8
+                ]
+              }
+            ],
+            "properties": {},
+            "widgets_values": [
+              "anima-lllite-any-test-like-v2.safetensors"
+            ]
           }
         ],
         "groups": [],
         "links": [
           {
-            "id": 322000,
+            "id": 1,
             "origin_id": 111000,
             "origin_slot": 0,
             "target_id": 111001,
@@ -38751,7 +37465,7 @@
             "type": "IMAGE"
           },
           {
-            "id": 322001,
+            "id": 2,
             "origin_id": 111001,
             "origin_slot": 0,
             "target_id": 111002,
@@ -38759,7 +37473,7 @@
             "type": "IMAGE"
           },
           {
-            "id": 322002,
+            "id": 3,
             "origin_id": 111000,
             "origin_slot": 0,
             "target_id": 111003,
@@ -38767,7 +37481,7 @@
             "type": "IMAGE"
           },
           {
-            "id": 322003,
+            "id": 4,
             "origin_id": 111001,
             "origin_slot": 0,
             "target_id": 111003,
@@ -38775,15 +37489,15 @@
             "type": "IMAGE"
           },
           {
-            "id": 322004,
+            "id": 5,
             "origin_id": 111001,
             "origin_slot": 0,
             "target_id": 111004,
-            "target_slot": 1,
+            "target_slot": 2,
             "type": "IMAGE"
           },
           {
-            "id": 322005,
+            "id": 6,
             "origin_id": -10,
             "origin_slot": 0,
             "target_id": 111004,
@@ -38791,12 +37505,20 @@
             "type": "MODEL"
           },
           {
-            "id": 322006,
+            "id": 7,
             "origin_id": 111004,
             "origin_slot": 0,
             "target_id": -20,
             "target_slot": 0,
             "type": "MODEL"
+          },
+          {
+            "id": 8,
+            "origin_id": 130154,
+            "origin_slot": 0,
+            "target_id": 111004,
+            "target_slot": 1,
+            "type": "MODEL_PATCH"
           }
         ],
         "extra": {
@@ -48345,6 +47067,630 @@
           "links_added_by_ue": [],
           "uap_refinement": "eye"
         }
+      },
+      {
+        "id": "197cab6b-e9f2-5154-8ef8-1bb2d4497b6e",
+        "version": 1,
+        "revision": 0,
+        "name": "高级 · 擦线与导出",
+        "state": {
+          "lastGroupId": 0,
+          "lastNodeId": 110021,
+          "lastLinkId": 11,
+          "lastRerouteId": 0
+        },
+        "config": {},
+        "inputNode": {
+          "id": -10,
+          "bounding": [
+            -200,
+            80,
+            128,
+            48
+          ]
+        },
+        "outputNode": {
+          "id": -20,
+          "bounding": [
+            1150,
+            80,
+            128,
+            48
+          ]
+        },
+        "inputs": [
+          {
+            "id": "b01445b2-6e31-559f-acbb-8644f94b63fb",
+            "name": "image",
+            "type": "IMAGE",
+            "linkIds": [
+              1,
+              2,
+              3
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "id": "2a51a253-3048-506e-aac2-3aee9a2e75be",
+            "name": "IMAGE",
+            "type": "IMAGE",
+            "linkIds": [
+              11
+            ]
+          }
+        ],
+        "widgets": [],
+        "groups": [],
+        "extra": {},
+        "nodes": [
+          {
+            "id": 110000,
+            "type": "LoadImage",
+            "pos": [
+              0,
+              0
+            ],
+            "size": [
+              330,
+              340
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "图像",
+                "name": "image",
+                "type": "COMBO",
+                "widget": {
+                  "name": "image"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "选择文件上传",
+                "name": "upload",
+                "type": "IMAGEUPLOAD",
+                "widget": {
+                  "name": "upload"
+                },
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "图像",
+                "name": "IMAGE",
+                "type": "IMAGE",
+                "links": []
+              },
+              {
+                "localized_name": "遮罩",
+                "name": "MASK",
+                "type": "MASK",
+                "links": [
+                  4,
+                  10
+                ]
+              }
+            ],
+            "title": "[05C] 擦线遮罩",
+            "properties": {
+              "Node name for S&R": "LoadImage",
+              "cnr_id": "comfy-core",
+              "ver": "0.22.0",
+              "label": "载入与 [05C-LINEART-SOURCE-IN] 相同的线稿文件；只在这里 Open in MaskEditor / Image Canvas 画遮罩。注意：这是 MASK，不是图像画笔。白色/灰色遮罩区域会被擦掉；黑色区域保留原线稿。不要在这里追求“黑笔擦线”，MaskEditor 的黑色等于不选中。",
+              "image": "clipspace/clipspace-painted-masked-1782566128506.png [input]"
+            },
+            "widgets_values": [
+              "ComfyUI_temp_oflff_00001_.png",
+              "image"
+            ],
+            "widgets_values_named": {
+              "image": "ComfyUI_temp_oflff_00001_.png",
+              "upload": "image"
+            },
+            "color": "#607A3B",
+            "bgcolor": "#1F2A1E"
+          },
+          {
+            "id": 110002,
+            "type": "MaskToImage",
+            "pos": [
+              340,
+              0
+            ],
+            "size": [
+              400,
+              220
+            ],
+            "flags": {
+              "collapsed": true
+            },
+            "order": 2,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "遮罩",
+                "name": "mask",
+                "type": "MASK",
+                "link": 4
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "图像",
+                "name": "IMAGE",
+                "type": "IMAGE",
+                "links": [
+                  5
+                ]
+              }
+            ],
+            "title": "[05C] 遮罩转图",
+            "properties": {
+              "Node name for S&R": "MaskToImage",
+              "cnr_id": "comfy-core",
+              "ver": "0.22.0",
+              "label": "把擦线遮罩转成可预览图。白色区域就是会被擦掉的区域；黑色区域保留线稿。"
+            },
+            "color": "#607A3B",
+            "bgcolor": "#1F2A1E"
+          },
+          {
+            "id": 110004,
+            "type": "PreviewImage",
+            "pos": [
+              680,
+              0
+            ],
+            "size": [
+              370,
+              360
+            ],
+            "flags": {},
+            "order": 4,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "图像",
+                "name": "images",
+                "type": "IMAGE",
+                "link": 5
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "images",
+                "name": "images",
+                "type": "IMAGE",
+                "links": []
+              }
+            ],
+            "title": "[05C] 遮罩预览",
+            "properties": {
+              "Node name for S&R": "PreviewImage",
+              "cnr_id": "comfy-core",
+              "ver": "0.22.0",
+              "label": "先看这里：白色/灰色区域会被黑图覆盖，等于擦掉线稿；纯黑区域保留原线稿。"
+            },
+            "color": "#607A3B",
+            "bgcolor": "#1F2A1E"
+          },
+          {
+            "id": 110017,
+            "type": "SaveImage",
+            "pos": [
+              0,
+              330
+            ],
+            "size": [
+              350,
+              270
+            ],
+            "flags": {
+              "collapsed": true
+            },
+            "order": 17,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "图片",
+                "name": "images",
+                "type": "IMAGE",
+                "link": 1
+              },
+              {
+                "localized_name": "文件名前缀",
+                "name": "filename_prefix",
+                "type": "STRING",
+                "widget": {
+                  "name": "filename_prefix"
+                },
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "images",
+                "name": "images",
+                "type": "IMAGE",
+                "links": []
+              }
+            ],
+            "title": "[05B] 保存临时线稿",
+            "properties": {
+              "Node name for S&R": "SaveImage",
+              "cnr_id": "comfy-core",
+              "ver": "0.22.0",
+              "label": "只保存 DazzleSwitch 当前线稿，文件名前缀放在 lineart_tmp，方便手动画/载入后擦线。"
+            },
+            "widgets_values": [
+              "lineart_tmp/lineart_source"
+            ],
+            "widgets_values_named": {
+              "filename_prefix": "lineart_tmp/lineart_source"
+            },
+            "color": "#607A3B",
+            "bgcolor": "#1F2A1E"
+          },
+          {
+            "id": 110018,
+            "type": "GetImageSize",
+            "pos": [
+              340,
+              330
+            ],
+            "size": [
+              200,
+              130
+            ],
+            "flags": {
+              "collapsed": true
+            },
+            "order": 18,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "图像",
+                "name": "image",
+                "type": "IMAGE",
+                "link": 2
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "宽度",
+                "name": "width",
+                "type": "INT",
+                "links": [
+                  6
+                ]
+              },
+              {
+                "localized_name": "高度",
+                "name": "height",
+                "type": "INT",
+                "links": [
+                  7
+                ]
+              },
+              {
+                "localized_name": "批处理大小",
+                "name": "batch_size",
+                "type": "INT",
+                "links": []
+              }
+            ],
+            "title": "[05C] 读取线稿尺寸",
+            "properties": {
+              "Node name for S&R": "GetImageSize",
+              "cnr_id": "comfy-core",
+              "ver": "0.22.0"
+            },
+            "color": "#607A3B",
+            "bgcolor": "#1F2A1E"
+          },
+          {
+            "id": 110019,
+            "type": "SolidMask",
+            "pos": [
+              680,
+              330
+            ],
+            "size": [
+              240,
+              130
+            ],
+            "flags": {
+              "collapsed": true
+            },
+            "order": 19,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "value",
+                "type": "FLOAT",
+                "widget": {
+                  "name": "value"
+                },
+                "link": null
+              },
+              {
+                "name": "width",
+                "type": "INT",
+                "widget": {
+                  "name": "width"
+                },
+                "link": 6
+              },
+              {
+                "name": "height",
+                "type": "INT",
+                "widget": {
+                  "name": "height"
+                },
+                "link": 7
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "遮罩",
+                "name": "MASK",
+                "type": "MASK",
+                "links": [
+                  8
+                ]
+              }
+            ],
+            "title": "[05C] 纯黑遮罩底",
+            "properties": {
+              "Node name for S&R": "SolidMask",
+              "cnr_id": "comfy-core",
+              "ver": "0.22.0"
+            },
+            "widgets_values": [
+              0,
+              1024,
+              1024
+            ],
+            "widgets_values_named": {
+              "value": 0,
+              "width": 1024,
+              "height": 1024
+            },
+            "color": "#607A3B",
+            "bgcolor": "#1F2A1E"
+          },
+          {
+            "id": 110020,
+            "type": "MaskToImage",
+            "pos": [
+              0,
+              660
+            ],
+            "size": [
+              260,
+              80
+            ],
+            "flags": {
+              "collapsed": true
+            },
+            "order": 20,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "遮罩",
+                "name": "mask",
+                "type": "MASK",
+                "link": 8
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "图像",
+                "name": "IMAGE",
+                "type": "IMAGE",
+                "links": [
+                  9
+                ]
+              }
+            ],
+            "title": "[05C] 黑色覆盖图",
+            "properties": {
+              "Node name for S&R": "MaskToImage",
+              "cnr_id": "comfy-core",
+              "ver": "0.22.0"
+            },
+            "color": "#607A3B",
+            "bgcolor": "#1F2A1E"
+          },
+          {
+            "id": 110021,
+            "type": "ImageCompositeMasked",
+            "pos": [
+              340,
+              660
+            ],
+            "size": [
+              340,
+              200
+            ],
+            "flags": {
+              "collapsed": true
+            },
+            "order": 21,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "目标图像",
+                "name": "destination",
+                "type": "IMAGE",
+                "link": 3
+              },
+              {
+                "localized_name": "来源图像",
+                "name": "source",
+                "type": "IMAGE",
+                "link": 9
+              },
+              {
+                "localized_name": "遮罩",
+                "name": "mask",
+                "shape": 7,
+                "type": "MASK",
+                "link": 10
+              },
+              {
+                "localized_name": "x",
+                "name": "x",
+                "type": "INT",
+                "widget": {
+                  "name": "x"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "y",
+                "name": "y",
+                "type": "INT",
+                "widget": {
+                  "name": "y"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "缩放来源图像",
+                "name": "resize_source",
+                "type": "BOOLEAN",
+                "widget": {
+                  "name": "resize_source"
+                },
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "图像",
+                "name": "IMAGE",
+                "type": "IMAGE",
+                "links": [
+                  11
+                ]
+              }
+            ],
+            "title": "[05C] 擦除白色区域",
+            "properties": {
+              "Node name for S&R": "ImageCompositeMasked",
+              "cnr_id": "comfy-core",
+              "ver": "0.22.0",
+              "label": "规则：destination=原始线稿，source=黑图，mask=手绘遮罩。白色/灰色遮罩区域会被黑色覆盖，即擦掉线稿；黑色遮罩区域保留原线稿。"
+            },
+            "widgets_values": [
+              0,
+              0,
+              false
+            ],
+            "widgets_values_named": {
+              "x": 0,
+              "y": 0,
+              "resize_source": false
+            },
+            "color": "#607A3B",
+            "bgcolor": "#1F2A1E"
+          }
+        ],
+        "links": [
+          {
+            "id": 1,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 110017,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 2,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 110018,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 3,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 110021,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 4,
+            "origin_id": 110000,
+            "origin_slot": 1,
+            "target_id": 110002,
+            "target_slot": 0,
+            "type": "MASK"
+          },
+          {
+            "id": 5,
+            "origin_id": 110002,
+            "origin_slot": 0,
+            "target_id": 110004,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 6,
+            "origin_id": 110018,
+            "origin_slot": 0,
+            "target_id": 110019,
+            "target_slot": 1,
+            "type": "INT"
+          },
+          {
+            "id": 7,
+            "origin_id": 110018,
+            "origin_slot": 1,
+            "target_id": 110019,
+            "target_slot": 2,
+            "type": "INT"
+          },
+          {
+            "id": 8,
+            "origin_id": 110019,
+            "origin_slot": 0,
+            "target_id": 110020,
+            "target_slot": 0,
+            "type": "MASK"
+          },
+          {
+            "id": 9,
+            "origin_id": 110020,
+            "origin_slot": 0,
+            "target_id": 110021,
+            "target_slot": 1,
+            "type": "IMAGE"
+          },
+          {
+            "id": 10,
+            "origin_id": 110000,
+            "origin_slot": 1,
+            "target_id": 110021,
+            "target_slot": 2,
+            "type": "MASK"
+          },
+          {
+            "id": 11,
+            "origin_id": 110021,
+            "origin_slot": 0,
+            "target_id": -20,
+            "target_slot": 0,
+            "type": "IMAGE"
+          }
+        ]
       }
     ]
   },

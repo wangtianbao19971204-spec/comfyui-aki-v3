@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-11T06:08:57.482969+00:00",
+  "created_at": "2026-10-11T11:46:34.067469+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -5928,8 +5928,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/__init__.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/__init__.py",
-      "sha256": "ecf4e66676adf5ec2ba9d5e3f72cfa7a852b6af878cb1e4ff126830e1f9bfd21",
-      "bytes": 135,
+      "sha256": "5b549ede1b4492bb5de50a3bfbd20433e61b92444e3f030ce6c021be01c15a7c",
+      "bytes": 351,
       "kind": "file"
     },
     {
@@ -5940,10 +5940,80 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/native_loader.py",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/native_loader.py",
+      "sha256": "6c314573791c78a34e77a5ef1159598ae34443a292d103880f11c4f662161960",
+      "bytes": 1955,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/nodes.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/nodes.py",
       "sha256": "5adffdab1a71d7da463e269d6656b8f9ef0d8720340dd02569793dbaf48383cb",
       "bytes": 12851,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/LICENSE",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "bytes": 35149,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/README.md",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/README.md",
+      "sha256": "42684e71fc522b7b3be8d05915e660d792dc0eb6051ee9d99e6c387cbbda4983",
+      "bytes": 20058,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/UPSTREAM.json",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/UPSTREAM.json",
+      "sha256": "441eccdb3f207ce2320efbffd613b50cc3e1f08a943b4f87dfc976479da232e3",
+      "bytes": 905,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/__init__.py",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/__init__.py",
+      "sha256": "5e702b88f3d250505c378a3e4e4ca48a493f0b3187059c6e20e57f9d1b1cc673",
+      "bytes": 1745,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/anima_arch.py",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/anima_arch.py",
+      "sha256": "d4c35b9bc39779ec3a84a871164aa5629a2383656cd5bbb2f15772296f8ce280",
+      "bytes": 9773,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/controlnet_patch.py",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/controlnet_patch.py",
+      "sha256": "11040edb023521eb539c11b1b4239c16534ae632e698b1fed53b81d0cb42b147",
+      "bytes": 12589,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/expand.py",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/expand.py",
+      "sha256": "72fa827ba579bd9040e8cb9b40fa361076a17eba1a0902905772d99f8685f352",
+      "bytes": 21018,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/lora_patch.py",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/lora_patch.py",
+      "sha256": "56629310dd41c8c1b242f4d815ce3973fc5ecdac3c92977f6b9b33f4c1010811",
+      "bytes": 13615,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/pyproject.toml",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/pyproject.toml",
+      "sha256": "7438d980e537fd73d36007693eafe936846a09a5d6baaed6dcdd5b8827b9d6f0",
+      "bytes": 754,
       "kind": "file"
     },
     {
@@ -23517,6 +23587,13 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
+      "sha256": "2d2bd132e009a254946c01459c11a9f1651fccab021c699a38481ca827d62057",
+      "bytes": 9548,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime.css",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime.css",
       "sha256": "6e59a415c4814d64b840be16e00c372d8cf48bf163bd63147f531f3e4f8b51ce",
@@ -23764,8 +23841,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
-      "sha256": "d60d9c712a3d2ed5715096de2f4275bf7192248ef699cf9c2050f1944446e76b",
-      "bytes": 11642,
+      "sha256": "a63b7d75b9e33c9ec38fcfdf25c6836ea60f0d995b975a96f6d5149436e4d36f",
+      "bytes": 12005,
       "kind": "file"
     },
     {
@@ -23806,8 +23883,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
-      "sha256": "60f4c10b8669c554655ca1ebe2138239c365de7482475e3027a96c873c2bda69",
-      "bytes": 24777,
+      "sha256": "af35a74fa2a62cc044397abbeaa19a5f2b64c6f6b206614308c7bd9e39108b06",
+      "bytes": 25007,
       "kind": "file"
     },
     {
@@ -47655,8 +47732,8 @@
     {
       "source": "ComfyUI/custom_nodes/vnccs-utils/nodes/pose_studio.py",
       "path": "runtime/ComfyUI/custom_nodes/vnccs-utils/nodes/pose_studio.py",
-      "sha256": "8dd50725bd32ea42383d29cc35509fb74a4ec05f529e3e6bbd981399c0d5e7e1",
-      "bytes": 26076,
+      "sha256": "2ebcf77ad2d8fa85723d7c8472d1a59964d5060fefae6b35037a70130b8335cb",
+      "bytes": 26220,
       "kind": "file"
     },
     {
@@ -49671,8 +49748,8 @@
     {
       "source": "ComfyUI/custom_nodes/vnccs-utils/web/vnccs_pose_studio.js",
       "path": "runtime/ComfyUI/custom_nodes/vnccs-utils/web/vnccs_pose_studio.js",
-      "sha256": "3c43d2513ca1883e0ff18e52dce1646476bba98468c1e28ce18bc07fd586bd6d",
-      "bytes": 382170,
+      "sha256": "1f3905dc2e8e2f736f81a02df40d93a1bef19c38fbc922e2555c1264415123a7",
+      "bytes": 382468,
       "kind": "file"
     },
     {
@@ -51316,8 +51393,8 @@
     {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-      "sha256": "8e11892bd970534e3fe04e6d07e206a1a344ce922a726132b8c7646aa301f3e0",
-      "bytes": 1387576,
+      "sha256": "16484f68b9b9dee7cd9d8cf0b5a948f18756acbd6ab9f3d6bd04161747dd6faa",
+      "bytes": 1367340,
       "kind": "file"
     },
     {
@@ -51386,8 +51463,8 @@
     {
       "source": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
-      "sha256": "f6368a1a85f870acb859644ead6447389069dc47a4aefe8e428302c8d8b57cd1",
-      "bytes": 421482,
+      "sha256": "37f99da27ae9bdcc92f1cf8e353fea1abaef5fc3174b76b23a9e3ae5d986baeb",
+      "bytes": 411391,
       "kind": "file"
     },
     {
@@ -57532,8 +57609,8 @@
     {
       "source": "production_tools/README.md",
       "path": "runtime/production_tools/README.md",
-      "sha256": "7258a7c6a58562041bea0f6c8d11392925ba1cd908c99122a3630f2be0febea7",
-      "bytes": 12643,
+      "sha256": "defe791928784256248a854de1bfd316ad9f4532a72e687034345b39831620cd",
+      "bytes": 12928,
       "kind": "file"
     },
     {
@@ -57749,8 +57826,8 @@
     {
       "source": "production_tools/profiles.json",
       "path": "runtime/production_tools/profiles.json",
-      "sha256": "6cf0ad167ca4d151f1d27d482bc33a1696fb0ab5b9716b6d1298878c989ee673",
-      "bytes": 4112,
+      "sha256": "5d72a884029d2c0eee8bfacfae25f04ab429669a9919e692a99fb4ae5d838aee",
+      "bytes": 4130,
       "kind": "file"
     },
     {
@@ -57758,6 +57835,13 @@
       "path": "runtime/production_tools/resource_archive.py",
       "sha256": "933ed48214d3c65cd38c475939540564e7ca0fd3d3cb0e12cb0d3b072130255a",
       "bytes": 9683,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/simplify_anima_control.py",
+      "path": "runtime/production_tools/simplify_anima_control.py",
+      "sha256": "0226924edc1670d8736a5240b5ed1599c02e748a753188e5bcd0c0d7002bdca2",
+      "bytes": 11170,
       "kind": "file"
     },
     {
@@ -57805,8 +57889,8 @@
     {
       "source": "production_tools/templates/UAP统一生产工作台_v2.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v2.json",
-      "sha256": "8e11892bd970534e3fe04e6d07e206a1a344ce922a726132b8c7646aa301f3e0",
-      "bytes": 1387576,
+      "sha256": "16484f68b9b9dee7cd9d8cf0b5a948f18756acbd6ab9f3d6bd04161747dd6faa",
+      "bytes": 1367340,
       "kind": "file"
     },
     {
@@ -57819,8 +57903,8 @@
     {
       "source": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
       "path": "runtime/production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
-      "sha256": "bb43d9815e8a9b3e235976c50f59cc383546c5a8ed115cfabd3ff45cadefcdcc",
-      "bytes": 418487,
+      "sha256": "19af7a3e3307bc237e02a518e9b7bc7edea015fae82b7344116cbd8c1dddb105",
+      "bytes": 408396,
       "kind": "file"
     },
     {
@@ -57884,6 +57968,13 @@
       "path": "runtime/production_tools/templates/生产扩展_丝袜纹理修复.json",
       "sha256": "cf545e5128efb3a113c75fe18deb4eefbd08c7449514d113a37f1ce451556f35",
       "bytes": 5650,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/test_anima_control.cjs",
+      "path": "runtime/production_tools/test_anima_control.cjs",
+      "sha256": "e36d4b76d1376bf7a8ea87a350129b00401ec2191a65bc1e55f0ef8361706fdf",
+      "bytes": 7116,
       "kind": "file"
     },
     {
@@ -57961,6 +58052,13 @@
       "path": "runtime/production_tools/test_validate_profiles.py",
       "sha256": "1d4c3bdc54eb18a696862e8b2a256fd6869ddface67feb5e99e4fab441276a88",
       "bytes": 5042,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/test_vnccs_pose_sync.cjs",
+      "path": "runtime/production_tools/test_vnccs_pose_sync.cjs",
+      "sha256": "055fe958544150743a98c0383ee6cf6370446b82d18abbbcd0e138db48fad95a",
+      "bytes": 1572,
       "kind": "file"
     },
     {
@@ -67801,7 +67899,7 @@
     },
     {
       "path": "inventory/model_sources.json",
-      "sha256": "8e848e43eba411db12e6a0ea5c74df6bca7f2318b8efd2326a644c2ee342d8bb",
+      "sha256": "4d5a172ebd31600ee0cfd8d912e10b1a553ce3cd2cfd60f87ee5e4fd27e556bf",
       "bytes": 1259888
     }
   ],
@@ -67897,8 +67995,8 @@
     }
   ],
   "development_revision": {
-    "note": "Move stocking texture repair after upscale and align guidance",
-    "previous_manifest_sha256": "3ae8d0ea6f0b5ea637ee9550466bc60dbc1878ee3b8b81f2e1945a9ebb419c58",
+    "note": "Merge latest main into Anima 2.9B controls; preserve stocking order and LoRA import updates",
+    "previous_manifest_sha256": "117d83bc2e2f54fef6fcea806daa57c715c76d5b1b9ab23be55f79692ffc1d53",
     "source_changes": {
       "added": [],
       "removed": [],

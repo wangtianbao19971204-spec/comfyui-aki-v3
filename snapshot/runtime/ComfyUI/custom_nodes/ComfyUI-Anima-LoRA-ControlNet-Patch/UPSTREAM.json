@@ -1,0 +1,15 @@
+{
+  "repository": "https://github.com/INuBq8/ComfyUI-Anima-LoRA-ControlNet-Patch",
+  "commit": "b25ae637102f2358116fe419a409f0594f61245b",
+  "files_sha256": {
+    "__init__.py": "5e702b88f3d250505c378a3e4e4ca48a493f0b3187059c6e20e57f9d1b1cc673",
+    "anima_arch.py": "d4c35b9bc39779ec3a84a871164aa5629a2383656cd5bbb2f15772296f8ce280",
+    "lora_patch.py": "56629310dd41c8c1b242f4d815ce3973fc5ecdac3c92977f6b9b33f4c1010811",
+    "controlnet_patch.py": "11040edb023521eb539c11b1b4239c16534ae632e698b1fed53b81d0cb42b147",
+    "expand.py": "72fa827ba579bd9040e8cb9b40fa361076a17eba1a0902905772d99f8685f352",
+    "README.md": "42684e71fc522b7b3be8d05915e660d792dc0eb6051ee9d99e6c387cbbda4983",
+    "LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+    "pyproject.toml": "7438d980e537fd73d36007693eafe936846a09a5d6baaed6dcdd5b8827b9d6f0"
+  },
+  "local_changes": []
+}

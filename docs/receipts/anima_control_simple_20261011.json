@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-11",
+  "status": "source-and-isolated-ui-accepted-gpu-pending",
+  "upstream_commit": "b25ae637102f2358116fe419a409f0594f61245b",
+  "production_deployed": false,
+  "production_restarted": false,
+  "generation_submitted": false,
+  "models_downloaded": false,
+  "cpu": {
+    "native_actual_checkpoint_loaded": true,
+    "control_blocks": 28,
+    "host_blocks": 40,
+    "exact_cpu_routing_cases": 40,
+    "inherited_blocks": 28,
+    "inserted_blocks_passthrough": 12,
+    "disabled_patch_rejected": true,
+    "unlisted_paths_rejected": 3,
+    "lora_28_to_40_mapping_pass": true,
+    "native_40_lora_passthrough": true,
+    "tensor_device": "cpu",
+    "cuda_initialized_by_import_probe": true,
+    "torch_cuda_memory_allocated": 0,
+    "sampling_executed": false,
+    "checkpoint_sha256": "8863424f04a2445815a827b22cbda557a085d2752e05fab54a2b303821a9e3b2"
+  },
+  "source_preservation": [
+    {
+      "path": "snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+      "changed_root_ids": [
+        1067,
+        1090,
+        1128
+      ],
+      "unrelated_graphs_unchanged": true,
+      "root_links_and_branch_config_unchanged": true,
+      "graph_validation_pass": true,
+      "sha256": "16484f68b9b9dee7cd9d8cf0b5a948f18756acbd6ab9f3d6bd04161747dd6faa"
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "changed_root_ids": [
+        553,
+        552,
+        717
+      ],
+      "unrelated_graphs_unchanged": true,
+      "root_links_and_branch_config_unchanged": true,
+      "graph_validation_pass": true,
+      "sha256": "37f99da27ae9bdcc92f1cf8e353fea1abaef5fc3174b76b23a9e3ae5d986baeb"
+    },
+    {
+      "path": "snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json",
+      "changed_root_ids": [
+        1067,
+        1090,
+        1128
+      ],
+      "unrelated_graphs_unchanged": true,
+      "root_links_and_branch_config_unchanged": true,
+      "graph_validation_pass": true,
+      "sha256": "16484f68b9b9dee7cd9d8cf0b5a948f18756acbd6ab9f3d6bd04161747dd6faa"
+    },
+    {
+      "path": "snapshot/runtime/production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "changed_root_ids": [
+        553,
+        552,
+        717
+      ],
+      "unrelated_graphs_unchanged": true,
+      "root_links_and_branch_config_unchanged": true,
+      "graph_validation_pass": true,
+      "sha256": "19af7a3e3307bc237e02a518e9b7bc7edea015fae82b7344116cbd8c1dddb105"
+    }
+  ],
+  "ui": {
+    "isolated_port": 8220,
+    "native_nodes_available": true,
+    "all_four_choices": true,
+    "strength_native_edit": true,
+    "advanced_navigation": true,
+    "erase_enabled_correct_image_and_dimensions": true,
+    "erase_disabled_no_internal_nodes_in_api_export": true,
+    "save_and_reload_preserved": true,
+    "native_menu_export_api_verified": true,
+    "default_main_control_disabled_in_source": true,
+    "generation_preview_not_exercised": true
+  },
+  "tests": {
+    "workflow_migration_unittest_count": 6,
+    "panel_behavior": "passed",
+    "uap_daily_controls": "passed",
+    "uap_navigation": "passed",
+    "uap_compact_widgets": "passed"
+  },
+  "external_evidence": {
+    "cpu-final.json": "d9f16322dd7211492308a145bc17bab3dfec073d5779ece76065da4a2c9480ee",
+    "ui-export-api.json": "5fcd9b98b159360245cb3dff11a4c40a8c0542080007ead56bd165acf787e270",
+    "control-panel.png": "591fb1292ac478aa541012aaaaf6a3d25e452bdfe5f681876ef3e75dff17b9d1",
+    "source-preservation.json": "64c6d8164f807524a2b460c27db95744ae8873040bfd100d825fbdcaa7b86e87"
+  },
+  "limits": [
+    "No GPU sampling, image quality or production deployment acceptance.",
+    "CPU candidate exposes only existing controlnet weights; full workflow dependencies are intentionally incomplete.",
+    "Other upstream architecture pairs and full multi-ControlNet image behavior not certified.",
+    "Screenshot uses isolated test selections; source default strength, method and modes remain preserved."
+  ]
+}

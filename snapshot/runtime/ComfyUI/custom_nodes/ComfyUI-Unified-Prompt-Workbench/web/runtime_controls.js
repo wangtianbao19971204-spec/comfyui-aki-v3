@@ -1,5 +1,6 @@
 import {commitWidget} from './prompt_target.js';
 import {taskPlan} from './task_activity.js';
+import {mountAnimaControl} from './anima_control.js';
 
 const modelPath=value=>String(value||'').replace(/\\/g,'/');
 export function modelOptionIssue(name,value,branch,contracts){
@@ -89,6 +90,7 @@ export function cleanupMode(nodes) {
 }
 
 export function mountRuntimeControls(host, app, branch, nodes, isCurrent) {
+    const animaControl=mountAnimaControl(host,app,branch,nodes,isCurrent);
     const graph=app.graph, graphId=graph.id;
     const cleanups=nodes.filter(node=>node.type==='VRAMCleanup');
     const model=nodes.find(node=>node.type==='UNETLoader');
@@ -147,6 +149,7 @@ export function mountRuntimeControls(host, app, branch, nodes, isCurrent) {
     }
     function sync(){
         if(disposed)return;
+        animaControl.sync();
         if(modelStatus){const issue=modelCompatibilityIssue(nodes,branch,graph.extra?.uap_model_contracts);modelStatus.textContent=!current()?'浏览未启用分支；启用后检查实际模型组合。':issue||'底模架构、编码器文件/type 与 VAE 符合本分支已核验清单。新模型需更新清单；此检查不保证 LoRA 兼容性或画质。';modelStatus.dataset.valid=String(!issue);}
         if(unload){
             const mode=cleanupMode(cleanups);
@@ -158,8 +161,8 @@ export function mountRuntimeControls(host, app, branch, nodes, isCurrent) {
             const name=String(model?.widgets?.find(w=>w.name==='unet_name')?.value||'');
             const linked=model?.inputs?.some(input=>input.name==='unet_name'&&input.link!=null);
             const known29=!linked&&/anima[-_ ]?2[._]?9|2\.9b|29b/i.test(name);
-            hint.textContent=known29?'当前为 Anima 2.9B（40 层）；已安装的原版 28 层 LLLite 不兼容。这些控制开关已禁用，画布误启用也会在提交前拦截。基础出图、普通图生图可用。':'LLLite 必须与实际基模的层数及权重版本匹配。当前模型未在此确认；请核对基模与控制权重，不据此认定兼容。';
+            hint.textContent=known29&&nodes.some(node=>node.properties?.uap_native_lllite)?'此流程使用原生控制链与自动层映射；需要启用 Anima LoRA/ControlNet 兼容补丁。控制效果取决于参考图、方式和强度。':known29?'当前为 Anima 2.9B（40 层）；此旧流程仍使用原版 28 层 LLLite。请加载已适配的控制流程，或关闭线稿/姿态和 VNCCS 控制。':'LLLite 必须与实际基模的层数及权重版本匹配。当前模型未在此确认；请核对基模与控制权重，不据此认定兼容。';
         }
     }
-    sync();return {sync,dispose(){disposed=true;}};
+    sync();return {sync,dispose(){disposed=true;animaControl.dispose();}};
 }
