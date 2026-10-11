@@ -195,7 +195,9 @@ class Studio:
             self.publish({"type": "depth"})
         threading.Thread(target=run, name="stocking-studio-depth", daemon=True).start()
 
-    def segment(self, rid, x, y, subtract=False):
+    def segment(self, rid, x, y, subtract=False, seams=False):
+        if type(seams) is not bool:
+            raise ValueError("填缝开关必须为布尔值")
         doc = self.doc
         doc.region(rid)
         if not np.isfinite([x, y]).all() or not 0 <= x < doc.w or not 0 <= y < doc.h:
@@ -205,7 +207,7 @@ class Studio:
         if self.doc is not doc or self.closed:
             raise ValueError("图片已更换，请重新点选")
         self.sam_inference = info
-        doc.segment_click(rid, x, y, subtract, masks, 0)
+        doc.segment_click(rid, x, y, subtract, masks, 0, seams=seams)
 
     def project_data(self):
         if self.doc is None:

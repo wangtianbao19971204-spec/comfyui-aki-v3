@@ -21,6 +21,18 @@ PREFIX = "/stocking_texture/studio"
 NO_STORE = {"Cache-Control": "no-store"}
 
 
+def boolean(value, *, nullable=False):
+    if type(value) is not bool and not (nullable and value is None):
+        raise ValueError("开关值必须为布尔值")
+    return value
+
+
+def snap_radius(value, width, height):
+    if type(value) not in (int, float) or not np.isfinite(value) or not 0 <= value <= max(width, height):
+        raise ValueError("吸附半径无效")
+    return float(value)
+
+
 def json_response(data, status=200):
     return web.Response(text=store.dumps(data), status=status, content_type="application/json", headers=NO_STORE)
 
@@ -354,7 +366,8 @@ class StudioServer:
             d.delete_stroke(int(action.split("/")[1]))
         elif action == "dividers" and method == "POST":
             pts = store.points(body.get("pts"), d.w, d.h)
-            created["created"] = d.add_divider(pts.ravel().tolist())
+            snap = snap_radius(body.get("snap", 0), d.w, d.h)
+            created["created"] = d.add_divider(pts.ravel().tolist(), snap)
         elif action == "walls/remove" and method == "POST":
             xy = store.points([body.get("x"), body.get("y")], d.w, d.h, 1)[0]
             created["removed"] = d.remove_wall_at(*xy, max(1., min(float(body.get("tol", 8)), 60.)))
@@ -365,7 +378,8 @@ class StudioServer:
         elif action == "segment/cycle" and method == "POST":
             d.cycle_segment(int(body.get("step", 1)))
         elif action == "segment/select" and method == "POST":
-            d.select_segment(int(body["k"]))
+            seams = boolean(body.get("seams"), nullable=True)
+            d.select_segment(int(body["k"]), seams=seams)
         elif action == "export" and method == "POST":
             return self.export_document(entry, body, base)
         elif action == "export/reveal" and method == "POST":
@@ -393,14 +407,13 @@ class StudioServer:
             elif op == "clear":
                 d.clear_region(rid)
             elif op == "segment":
-                s.segment(rid, float(body["x"]), float(body["y"]), bool(body.get("subtract", False)))
+                seams = boolean(body.get("seams", False))
+                s.segment(rid, float(body["x"]), float(body["y"]), bool(body.get("subtract", False)), seams=seams)
             elif op == "split":
                 if len(d.regions) >= 32:
                     raise ValueError("最多 32 个部位")
                 line = store.points(body["pts"], d.w, d.h).tolist() if body.get("pts") else None
-                snap = float(body.get("snap", 0))
-                if not np.isfinite(snap) or not 0 <= snap <= max(d.w, d.h):
-                    raise ValueError("吸附半径无效")
+                snap = snap_radius(body.get("snap", 0), d.w, d.h)
                 created["split"] = list(d.split_region(rid, line, snap))
             elif op == "merge":
                 d.merge_region(rid, int(body["into"]))
