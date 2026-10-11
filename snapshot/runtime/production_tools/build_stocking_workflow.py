@@ -30,7 +30,7 @@ def build():
                                 '4. 点击“应用到节点”，关闭编辑器后运行。\n'
                                 '5. 成品和透明丝袜图层分别保存到 StockingRepair。\n'
                                 '摩尔纹默认关闭；油光为试验效果，先用低强度预览。\n'
-                                'PSD 在编辑器内导出。继续放大时切换到 2× / 4× 并载入成品。\n'
+                                'PSD 在编辑器内导出。建议先完成 2× / 4× 放大，再导入最终尺寸图片修复纹理。\n'
                                 '此工作流独立运行，不包含生成、精修或放大步骤。'])
     branch = dict(id='stocking', label='丝袜纹理修复', group=edit, nodeIds=[1, 2, 3, 4],
                   modes={str(i): 0 for i in range(1, 5)}, stages=[

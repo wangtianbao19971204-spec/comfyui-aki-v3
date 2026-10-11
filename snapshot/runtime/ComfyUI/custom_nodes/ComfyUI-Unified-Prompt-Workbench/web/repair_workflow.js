@@ -9,13 +9,13 @@ export function workflowChoices(config) {
         return [
             {value:'@main',label:'返回统一生产工作台'},
             {value:'@main:ext05',label:'裁剪精修'},
-            ...choices,
             {value:'@main:ext08',label:'2× 放大'},
             {value:'@main:ext09',label:'4× 放大'},
+            ...choices,
         ];
     }
-    const before=choices.findIndex(b=>b.value==='ext08'||b.value==='ext09');
-    choices.splice(before<0?choices.length:before,0,{value:REPAIR_CHOICE,label:'丝袜纹理修复'});
+    const after=choices.findLastIndex(b=>b.value==='ext08'||b.value==='ext09');
+    choices.splice(after<0?choices.length:after+1,0,{value:REPAIR_CHOICE,label:'丝袜纹理修复'});
     return choices;
 }
 
@@ -73,7 +73,7 @@ export function mountStockingControls(host,{app,node,element,isCurrent}) {
         if(!editor?.callback) {status.textContent='完整编辑器尚未加载，请刷新页面。';return;}
         editor.callback();
     };
-    element('p','应用后运行本工作流，同时保存成品和透明丝袜图层。需要继续放大时，在任务列表选择 2× 或 4× 放大并载入成品。',section);
+    element('p','建议先完成精修和 2× / 4× 放大，再导入最终尺寸图片修复纹理。应用后运行本工作流，同时保存成品和透明丝袜图层。',section);
     element('p','摩尔纹默认关闭；开启前先在编辑器中完成深度计算。油光仍为试验效果，建议从低强度开始预览。',section);
     const sync=()=>{
         const project=stockingProject(node);
