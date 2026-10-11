@@ -112,6 +112,8 @@ def export(upstream, out, showcase):
         'Select the fabric, correct the mask, draw course guides, choose a style.\n'
         'Apply to node, close the editor, then queue this independent workflow.\n'
         'SaveImage writes the finished RGB image and a separate RGBA fabric layer.\n'
+        'Select GPU or CPU at the top of the editor; use CPU for exact upstream comparison.\n'
+        'Leaving the editor releases model caches while retaining the draft and computed depth.\n'
         'Export guide PSD from the editor. No diffusion model, upscaler or workbench extension is required.\n'
         'For matching standalone output, keep Dark adaptation OFF.']
     data['integrations/comfyui/examples/stocking-repair.json'] = json.dumps(workflow,ensure_ascii=False,indent=2)+'\n'

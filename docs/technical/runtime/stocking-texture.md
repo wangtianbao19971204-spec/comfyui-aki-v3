@@ -2,6 +2,8 @@
 
 文档修订：2026-10-11。
 
+独立导出的示例工作流补充 GPU/CPU 选择及关闭后缓存回收提示，与自用流程同步；保持节点、参数和双输出契约，5 项导出测试通过。用户随后要求工作流 PR 和正式使用版本更新，现行交付范围见[工作流更新记录](../changes/runtime-workflows/2026-10-11-stocking-independent.md)，此前暂停维护仓上传的状态已被这次明确请求更新。
+
 独立仓 GPU 整合：将维护主线 `4ee44002d` 中的走向 CUDA 求解、CPU/GPU 选择和编辑器缓存生命周期整合到 Issue #3 分支，保持 T0–T5 及 `e72a262` 原始依赖。78 项 Python（含 CUDA）、17 项前端、51 项 HTTP、5 项导出合同通过；18 组真实图 CPU 完全一致，GPU 最大单通道差异为 9/255。隔离导出包实页完成设备切换、真实 SAM/深度、关闭重开和导航离开回收；此组合版本本轮未部署生产。详见[整合说明](../changes/runtime-stocking-texture/2026-10-11-independent-gpu.md)与[收据](../../receipts/stocking_independent_gpu_20261011.json)。以下各段历史验收只代表其注明版本。
 
 Issue #3 修订：T0 改为独立插件发布制品，采用固定 Git blob 拷贝与显式 SHA 同步脚本；原版源码移到插件 `upstream/stocking/`，`vendor/` 只保留宿主命名空间与 i18n。此轮源码在主 Git 工作树维护，独立制品不携带维护仓历史；详见[修订记录](../changes/runtime-stocking-texture/2026-10-11-issue-3.md)。本轮未部署。
