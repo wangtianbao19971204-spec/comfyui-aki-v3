@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-11T11:20:56.016782+00:00",
+  "created_at": "2026-10-11T11:46:34.067469+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -23813,8 +23813,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
-      "sha256": "82010ef0f0955f7f5ea8ee3a2937d7ce9027770f99141f680a2afa418ee814dd",
-      "bytes": 4787,
+      "sha256": "cb29a53a55feb8e052a3468005d362cd79f9bf2daf6558418c336007411439b4",
+      "bytes": 4794,
       "kind": "file"
     },
     {
@@ -51533,8 +51533,8 @@
     {
       "source": "ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json",
-      "sha256": "5667ad786b42d91b843765a1516641617bd6f7c2d899b23b790829b5132d2d4b",
-      "bytes": 5626,
+      "sha256": "cf545e5128efb3a113c75fe18deb4eefbd08c7449514d113a37f1ce451556f35",
+      "bytes": 5650,
       "kind": "file"
     },
     {
@@ -57658,8 +57658,8 @@
     {
       "source": "production_tools/build_stocking_workflow.py",
       "path": "runtime/production_tools/build_stocking_workflow.py",
-      "sha256": "409fec42535e666b38e22fcbdc35f8b2dcb1c0409c0fdff821772994a68605e8",
-      "bytes": 4040,
+      "sha256": "153a37e1f1dfb6c73fe78fd8d2cb6c4c4cce933d6053110812e81df7bab8a02c",
+      "bytes": 4064,
       "kind": "file"
     },
     {
@@ -57966,8 +57966,8 @@
     {
       "source": "production_tools/templates/生产扩展_丝袜纹理修复.json",
       "path": "runtime/production_tools/templates/生产扩展_丝袜纹理修复.json",
-      "sha256": "5667ad786b42d91b843765a1516641617bd6f7c2d899b23b790829b5132d2d4b",
-      "bytes": 5626,
+      "sha256": "cf545e5128efb3a113c75fe18deb4eefbd08c7449514d113a37f1ce451556f35",
+      "bytes": 5650,
       "kind": "file"
     },
     {
@@ -58015,7 +58015,7 @@
     {
       "source": "production_tools/test_stocking_workflow.cjs",
       "path": "runtime/production_tools/test_stocking_workflow.cjs",
-      "sha256": "9377ae1586e82e6b26e7aa8efc18fc408ba1e1868e04188ce3acccd0257c5497",
+      "sha256": "0731f196917c001a7d90ce136ec10e04e83bb2e45c6f4af393c32ff5af84c466",
       "bytes": 4026,
       "kind": "file"
     },
@@ -67899,8 +67899,8 @@
     },
     {
       "path": "inventory/model_sources.json",
-      "sha256": "3fe7ea8d62eb4674a2e94586c75eb4d9146e7034ee895f653a410d22c57bca2f",
-      "bytes": 1249598
+      "sha256": "4d5a172ebd31600ee0cfd8d912e10b1a553ce3cd2cfd60f87ee5e4fd27e556bf",
+      "bytes": 1259888
     }
   ],
   "production_plugins": [
@@ -67995,19 +67995,17 @@
     }
   ],
   "development_revision": {
-    "note": "Fix Anima control output preview and nested VNCCS capture synchronization after GPU acceptance",
-    "previous_manifest_sha256": "3bfb9ee7ea7f1fd83e022ee02110886fc6cb16b3664c6d1aaed432f1236441ee",
+    "note": "Merge latest main into Anima 2.9B controls; preserve stocking order and LoRA import updates",
+    "previous_manifest_sha256": "117d83bc2e2f54fef6fcea806daa57c715c76d5b1b9ab23be55f79692ffc1d53",
     "source_changes": {
-      "added": [
-        "production_tools/test_vnccs_pose_sync.cjs"
-      ],
+      "added": [],
       "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
-        "ComfyUI/custom_nodes/vnccs-utils/nodes/pose_studio.py",
-        "ComfyUI/custom_nodes/vnccs-utils/web/vnccs_pose_studio.js",
-        "production_tools/test_anima_control.cjs"
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
+        "ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json",
+        "production_tools/build_stocking_workflow.py",
+        "production_tools/templates/生产扩展_丝袜纹理修复.json",
+        "production_tools/test_stocking_workflow.cjs"
       ]
     },
     "live_deployed": false,

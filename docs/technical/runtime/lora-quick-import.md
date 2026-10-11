@@ -18,7 +18,7 @@ Python 3.11+ 的可移植入口：
 python -X utf8 -B scripts/import_lora_downloads.py --downloads '<下载目录>' --runtime '<运行根>' --apply
 ```
 
-`--api` 只允许本机服务；`--cache-db` 可指定当前 LoRA Manager SQLite；`--evidence-root` 可指定仓外收据根；`--categories` 接受“完整 SHA256 → 用途”的已核对 JSON。默认收据在本机 LocalAppData 的 `ComfyUI-LoRA-Imports`，每次使用新子目录。来源页、版本、文件 ID、原文件名和完整摘要见[公开下载表](../../MODEL_SOURCES.md)；命名规则见[分类说明](../../MODEL_NAMING.md)。
+`--api` 只允许本机服务；`--cache-db` 可指定当前 LoRA Manager SQLite；`--evidence-root` 可指定仓外收据根；`--categories` 接受“完整 SHA256 → 用途”的已核对 JSON；`--keep-originals` 在成功导入后仍保留下载原件。支持 Civitai 的 LORA 和 LoCon 类型，仍须匹配完整 SHA256 和确切文件身份，不因此认证 GPU 推理兼容。默认收据在本机 LocalAppData 的 `ComfyUI-LoRA-Imports`，每次使用新子目录。来源页、版本、文件 ID、原文件名和完整摘要见[公开下载表](../../MODEL_SOURCES.md)；命名规则见[分类说明](../../MODEL_NAMING.md)。
 
 不会覆盖既有同名文件，也不会批量迁移旧模型、重建全库、改变收藏／备注／排除或保存工作流。SQLite 使用一致 backup 留存；中断时按 `journal.jsonl` 和 `completed-assets.json` 核对本批文件，再恢复来源登记，不能用旧库覆盖在线库。若存在半完成目标，停止重复导入，人工核对摘要和卡片；未完成卡片／加载器核验前保留下载原件。复制后的内容摘要验证属于路径验收，未代表 GPU 推理通过。新卡片只尝试确切版本的官方静图缩略图，失败不阻断权重导入；`--no-preview` 可跳过。此批插件下载器报告离线，三项预览尚未取到，后续可用管理器“获取”补图。
 
@@ -26,4 +26,5 @@ python -X utf8 -B scripts/import_lora_downloads.py --downloads '<下载目录>' 
 
 ## 更新记录
 
+- 2026-10-11：修复官方标为 LoCon 的两款和服适配器被当成非 LoRA 跳过的问题，保留来源类型、摘要与家族校验；新增 `--keep-originals` 以支持只整理副本的范围。相关回归覆盖来源身份拒绝、LoCon 接纳、注册后保留原件和既有移动行为；不改变旧卡片或工作流，回滚须按本批路径／摘要收据执行，不能覆盖在线数据库。
 - 2026-10-09：提炼日常增量导入流程，复用现行命名规则和单卡片登记，避免新下载等待全库迁移。检查 15 个下载，12 个完整摘要重复，新增 3 个确切来源；具体现场结果见[本批收据](../../receipts/lora_quick_import_20261009.json)。上传门禁和 PR 验收另行执行。

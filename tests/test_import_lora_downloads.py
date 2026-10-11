@@ -75,6 +75,16 @@ class SourceTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'invalid_source_identity'):
                 importer.selected_version(candidate, self.row['sha256'])
 
+    def test_locon_keeps_exact_file_identity_and_source_type(self):
+        self.version['model']['type'] = 'LoCon'
+        asset = importer.public_asset(self.row, self.version, '服装与配饰')
+        self.assertEqual(asset['sources'][0]['declared_sha256'], self.row['sha256'])
+        self.assertEqual(asset['sources'][0]['file_id'], 300)
+        self.assertEqual(self.version['model']['type'], 'LoCon')
+        self.version['files'][0]['hashes']['SHA256'] = 'b' * 64
+        with self.assertRaisesRegex(ValueError, 'exact_source_file_not_found'):
+            importer.selected_version(self.version, self.row['sha256'])
+
     def test_exact_version_base_beats_cross_family_title(self):
         self.version.update(baseModel='Krea2')
         self.version['model']['name'] = 'Anima 2.9B / Krea2 / Illustrious style'
@@ -226,6 +236,16 @@ class ApplyTests(unittest.TestCase):
         self.assertEqual(self.target.read_bytes(), before)
         self.assertTrue((self.evidence / 'completed-assets.json').exists())
         self.assertTrue(all('/scan' not in url and '/free' not in url for url, _ in self.requests))
+
+    def test_keep_originals_registers_verified_copy_without_removing_download(self):
+        before = self.source.read_bytes()
+        with patch.object(importer, 'request', side_effect=self.response), redirect_stdout(io.StringIO()):
+            assets = importer.apply_rows([self.row], self.downloads, self.runtime,
+                                         'http://127.0.0.1:8188', self.evidence, keep_originals=True)
+        self.assertEqual(assets, [self.row['asset']])
+        self.assertEqual(self.source.read_bytes(), before)
+        self.assertEqual(self.target.read_bytes(), before)
+        self.assertTrue((self.evidence / 'completed-assets.json').exists())
 
     def test_existing_model_and_personal_fields_untouched(self):
         personal = self.runtime / 'ComfyUI/models/loras/anima/old.metadata.json'
@@ -392,10 +412,11 @@ class MainBoundaryTests(unittest.TestCase):
             finally:
                 connection.close()
 
-            def apply_mock(rows, actual_downloads, actual_runtime, api, evidence, previews=True):
+            def apply_mock(rows, actual_downloads, actual_runtime, api, evidence, previews=True, keep_originals=False):
                 self.assertEqual(actual_downloads, downloads)
                 self.assertEqual(actual_runtime, runtime)
                 self.assertTrue(previews)
+                self.assertFalse(keep_originals)
                 self.assertTrue((evidence / 'cache-before.sqlite').exists())
                 return [row['asset'] for row in rows]
 
