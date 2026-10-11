@@ -226,6 +226,84 @@
       "the live input file was not replaced and the live workflow still points at the old name",
       "the converted file erases the reference's bright line work, which is what the stored brightness encodes; a region the user paints in the mask editor remains the intended use"
     ],
-    "open_question": "whether the shipped mask editor writes the alpha channel back on save was not exercised in this round; if it composites to opaque, the same no-op returns after a reload"
+    "editor_round_trip": {
+      "method": "headless Chrome opened the mask editor through the shipped command Comfy.MaskEditor.OpenMaskEditor on the advanced erase subgraph mask node, painted one stroke with synthesized mouse input, pressed the editor's own Save button, and captured the blobs the frontend uploaded",
+      "paint_result": {
+        "opaque_pixels": 13614,
+        "bbox_xyxy": [
+          340,
+          440,
+          809,
+          909
+        ]
+      },
+      "uploads": [
+        {
+          "name": "clipspace-mask-*.png",
+          "mode": "RGBA",
+          "bytes": 1026980,
+          "transparent_pixels": 13337,
+          "transparent_bbox_xyxy": [
+            340,
+            440,
+            809,
+            909
+          ]
+        },
+        {
+          "name": "clipspace-paint-*.png",
+          "mode": "RGBA",
+          "bytes": 36460,
+          "transparent_pixels": 1550336,
+          "note": "the paint layer alone"
+        },
+        {
+          "name": "clipspace-painted-*.png",
+          "mode": "RGBA",
+          "bytes": 1182688,
+          "transparent_pixels": 0,
+          "note": "fully opaque composite; as a mask it would be all zeros again"
+        },
+        {
+          "name": "clipspace-painted-masked-*.png",
+          "mode": "RGBA",
+          "bytes": 1026980,
+          "transparent_pixels": 13337,
+          "transparent_bbox_xyxy": [
+            340,
+            440,
+            809,
+            909
+          ],
+          "note": "same bytes as clipspace-mask"
+        }
+      ],
+      "selected_after_save": "clipspace-painted-masked-*.png [input]",
+      "repeat_run_same_result": true,
+      "conclusion": "the shipped editor writes the painted region as transparency and the node ends up pointing at the alpha-preserving file, so editing and saving the mask in the mask editor does keep erasing working",
+      "execution_proof": {
+        "method": "the same control chain rendered with the old stored mask and with the editor-saved mask",
+        "mean_abs_diff": [
+          0.2294,
+          0.2294,
+          0.2294
+        ],
+        "max_abs_diff": 255,
+        "changed_bbox_xyxy": [
+          340,
+          451,
+          756,
+          848
+        ],
+        "mask_transparent_bbox_xyxy": [
+          340,
+          440,
+          809,
+          909
+        ],
+        "reading": "the control image changes inside the painted region and nowhere else"
+      },
+      "sequencing_note": "the uploaded files are timestamped, so the image widget still showed the previously stored mask at the end of the round trip; the editor-selected file was taken from the save result"
+    }
   }
 }
