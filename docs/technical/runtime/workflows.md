@@ -2,6 +2,8 @@
 
 文档修订：2026-10-11。
 
+丝袜独立组合版本已完成正式更新与一次真实双输出验收，原工作流图结构、参数和默认空工程保持；对应[交付收据](../../receipts/stocking_independent_delivery_20261011.json)与[作者评审核对](../changes/runtime-stocking-texture/2026-10-11-issue-3-final-review.md)列出当前证据。下文各轮未部署表述保留为历史。
+
 当前自用丝袜工作流同步独立插件的设备切换与缓存说明，节点、连线、空工程和保存前缀保持；用户本轮明确要求工作流 PR 与正式使用版本更新，详见[更新记录](../changes/runtime-workflows/2026-10-11-stocking-independent.md)。
 
 独立丝袜修复工作流已跟进摩尔纹与新版油光的使用说明，并完成完整选区工程的成品／透明层及保存重载复验；详见[本轮更新](../changes/runtime-workflows/2026-10-10-upstream-effects.md)。既有 UAP 九分支、参数和默认开关保持，本轮未部署生产。

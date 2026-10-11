@@ -954,7 +954,8 @@
         "docs/receipts/stocking_gpu_guides_20261011.json",
         "docs/receipts/stocking_gpu_production_20261011.json",
         "docs/receipts/stocking_texture_issue3_20261011.json",
-        "docs/receipts/stocking_independent_gpu_20261011.json"
+        "docs/receipts/stocking_independent_gpu_20261011.json",
+        "docs/receipts/stocking_independent_delivery_20261011.json"
       ],
       "acceptance": "checked-source",
       "watch": [

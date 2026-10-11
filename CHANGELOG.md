@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 2026-10-11：独立丝袜插件和当前工作流完成正式实例限定更新，原启动器重启、CPU/GPU、SAM、缓存回收和双输出实测通过；旧 fork 备份后删除，保留独立仓。作者 Issue #3 的 T0–T5 逐项提交、测试命令、跳过项与证据见[最终核对](docs/technical/changes/runtime-stocking-texture/2026-10-11-issue-3-final-review.md)。两个 PR 均待用户合并。
+
 - 2026-10-11：自用丝袜修复工作流与工作台提示同步 CPU/GPU 选择及离开后缓存回收，保持原图数据、节点连线和输出前缀；配套部署从旧 vendor 布局迁移到独立插件的固定上游布局。范围与验收见[工作流更新](docs/technical/changes/runtime-workflows/2026-10-11-stocking-independent.md)。
 
 - 2026-10-11：丝袜完整编辑器增加默认 GPU 的 CPU/GPU 设置及 GPU 走向求解；关闭或离开后回收 SAM、深度和图像特征缓存，保留草稿，修复两种模型同时冷加载时的初始化冲突。见[设备设置与模型释放](docs/technical/changes/runtime-stocking-texture/2026-10-11-device-and-release.md)。

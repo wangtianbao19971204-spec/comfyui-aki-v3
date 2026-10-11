@@ -4,6 +4,8 @@
 
 2026-10-11：丝袜修复控制面板增加编辑器 CPU/GPU 选择、精确上游对照使用 CPU 和离开后缓存回收说明，导航与参数绑定保持；独立流程合同通过，见[本次更新](../changes/runtime-workflows/2026-10-11-stocking-independent.md)。
 
+该提示已随独立插件部署并在正式实页验证，修复面板打开/应用/执行链成功，RGB 与 RGBA 双输出可用；既有资料和工作流哈希保持，详见[交付收据](../../receipts/stocking_independent_delivery_20261011.json)。
+
 ## 代码入口
 
 统一包 `web/` 是外层工作台唯一实现。主要入口：[workbench_shell.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js)、[workbench.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.js)。主题/图标为 [ui_theme.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_theme.js)、[ui_identity.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_identity.js)、[anime.css](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime.css)。
