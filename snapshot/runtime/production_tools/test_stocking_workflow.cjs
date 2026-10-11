@@ -6,7 +6,7 @@ const web=path.join(__dirname,'../ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Wo
 const context=vm.createContext({console,window:{unifiedUapNavigation:{activateBranch(id){context.activated=id;}}}});
 vm.runInContext(fs.readFileSync(path.join(web,'repair_workflow.js'),'utf8').replace(/^export /gm,''),context);
 const choices=context.workflowChoices({branches:[{id:'ext05',label:'精修'},{id:'ext08',label:'2×'},{id:'ext09',label:'4×'}]});
-assert.deepEqual(Array.from(choices,c=>c.value),['ext05','@workflow:stocking','ext08','ext09']);
+assert.deepEqual(Array.from(choices,c=>c.value),['ext05','ext08','ext09','@workflow:stocking']);
 const original=JSON.stringify(choices);
 assert.equal(context.workflowChoices({branches:[]}).length,1);
 assert.equal(JSON.stringify(choices),original);

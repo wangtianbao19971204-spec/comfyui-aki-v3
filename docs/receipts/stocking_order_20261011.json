@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-11T06:11:32.853189+00:00",
+  "scope": "Move stocking repair navigation after 2x/4x upscale and update guidance",
+  "tests": {
+    "stocking_workflow": true,
+    "uap_navigation": true,
+    "uap_daily_controls": true,
+    "uap_compact_widgets": true,
+    "technical_catalog": true,
+    "runtime_candidate_main_and_repair_order": true,
+    "maintained_workflow_note_only": true
+  },
+  "browser": {
+    "main_navigation": true,
+    "full_workbench_main": true,
+    "repair_navigation": true,
+    "full_workbench_repair": true,
+    "final_size_guidance": true,
+    "existing_gpu_guidance_preserved": true,
+    "real_page_origin": "http://127.0.0.1:8188",
+    "gpu_generation_executed": false
+  },
+  "deployment": {
+    "deployed": true,
+    "files": [
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
+        "before_sha256": "aebeed0177eab6111cff00606fb0f3897c43f4e7f2e3a262dac501a229dd59fe",
+        "candidate_sha256": "1c25a00dbfbdc401c15ec8d34867263d8c739fc96786da78a84662c26ebcbd62",
+        "maintained_sha256": "cb29a53a55feb8e052a3468005d362cd79f9bf2daf6558418c336007411439b4"
+      },
+      {
+        "path": "ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json",
+        "before_sha256": "10dff2a8b99281bf1a30e886ed11ad825ed54406b8cb9231f892ef54f44a9a0d",
+        "candidate_sha256": "e060092cac284f640bfca37f476c15e17883f1d2a3fc2f03175a5f20453157c2",
+        "maintained_sha256": "cf545e5128efb3a113c75fe18deb4eefbd08c7449514d113a37f1ce451556f35"
+      }
+    ],
+    "service_identity_unchanged": true,
+    "queue": {
+      "queue_running": 0,
+      "queue_pending": 0
+    },
+    "restart": false,
+    "database_consistent_backups": 5,
+    "database_replaced": false,
+    "database_unchanged_claimed": false,
+    "protected_files_unchanged": 50,
+    "runtime_only_gpu_guidance_and_note_size_preserved": true,
+    "source_runtime_hashes_intentionally_differ": true
+  },
+  "rollback": {
+    "external_evidence_id": "stocking-order-20261011-03",
+    "before_directory": "before",
+    "rule": "Restore only the two before files after matching this deployment candidate hashes and confirming current service and queue; preserve current databases, user projects and subsequent edits."
+  },
+  "limitations": [
+    "Ordering and guidance only; no generation or image-quality comparison.",
+    "Existing runtime GPU guidance and Note size are preserved separately from maintained source.",
+    "Initial strict raw-DB/WAL fingerprint attempts stopped on live history activity; accepted backups use SQLite online backup API plus integrity_check, without claiming online databases stayed byte-identical."
+  ],
+  "evidence": [
+    {
+      "file": "BASELINE.json",
+      "sha256": "72da81fa1e94326b804a655f7e29081be2e32b624348d2f6b9871ed5d8c35e07"
+    },
+    {
+      "file": "DEPLOYED.json",
+      "sha256": "aff7751e97717c4b1e825fa034899706eac94d2d50d9a201901ffc47f99e7846"
+    },
+    {
+      "file": "HTTP-ACCEPTANCE.json",
+      "sha256": "cce8f4639d741a328520b1705b90e884f0242349777cabf60026a12ca8701a61"
+    },
+    {
+      "file": "BROWSER-ACCEPTANCE.json",
+      "sha256": "af25f34d10c3c6a2ef404c2a9d09a617698be6aea751ea828d641a596723cee8"
+    },
+    {
+      "file": "menu-after-upscale.jpg",
+      "sha256": "500a4c288d5b7701639011bc7b10eb938448a949fc1e3add075125d1197fe911"
+    }
+  ]
+}
