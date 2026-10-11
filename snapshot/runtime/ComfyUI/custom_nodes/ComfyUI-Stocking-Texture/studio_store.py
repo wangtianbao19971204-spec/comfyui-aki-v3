@@ -5,10 +5,13 @@ import base64
 import hashlib
 import io
 import json
+import math
 import os
 from pathlib import Path
 import re
+import stat
 import threading
+import time
 import uuid
 import zlib
 
@@ -23,6 +26,58 @@ MAX_PROJECT_BYTES = 24 * 1024 * 1024
 ID = re.compile(r"[0-9a-f]{64}\Z")
 DRAFT_ID = re.compile(r"[0-9a-f]{32}\Z")
 _settings_lock = threading.RLock()
+
+
+def retention_days(value=None):
+    """Zero explicitly disables cleanup; invalid settings must not cause deletion."""
+    value = os.environ.get("STOCKING_STUDIO_RETENTION_DAYS", "7") if value is None else value
+    try:
+        days = float(value)
+    except (TypeError, ValueError) as exc:
+        raise ValueError("STOCKING_STUDIO_RETENTION_DAYS must be a finite number >= 0") from exc
+    if isinstance(value, bool) or not math.isfinite(days) or days < 0:
+        raise ValueError("STOCKING_STUDIO_RETENTION_DAYS must be a finite number >= 0")
+    return days
+
+
+def cleanup_transient(root, protected=(), *, days=7, now=None):
+    """Remove only expired, unreferenced adapter-owned drafts/exports, never assets.
+
+    No recursion or link following. Unknown files, preferences, recent writes,
+    active-session paths and concurrently replaced files are preserved.
+    """
+    days = retention_days(days)
+    result = {"removed": [], "errors": []}
+    if days == 0:
+        return result
+    root = Path(root).resolve()
+    protected = {Path(p).resolve() for p in protected}
+    cutoff = (time.time() if now is None else now) - days * 86400
+    patterns = {"drafts": re.compile(r"[0-9a-f]{32}\.json\Z"),
+                "exports": re.compile(r"[0-9a-f]{32}-.+\.(?:png|psd)\Z", re.IGNORECASE)}
+    for name, pattern in patterns.items():
+        folder = root / name
+        if not folder.is_dir() or folder.is_symlink() or folder.resolve().parent != root:
+            continue
+        if getattr(folder, "is_junction", lambda: False)():
+            continue
+        for path in folder.iterdir():
+            try:
+                if not pattern.fullmatch(path.name) or path.is_symlink() or path.resolve() in protected:
+                    continue
+                before = path.stat(follow_symlinks=False)
+                if not stat.S_ISREG(before.st_mode) or before.st_mtime >= cutoff or path.resolve().parent != folder:
+                    continue
+                after = path.stat(follow_symlinks=False)
+                if (before.st_ino, before.st_size, before.st_mtime_ns) != (after.st_ino, after.st_size, after.st_mtime_ns):
+                    continue
+                path.unlink()
+                result["removed"].append(name + "/" + path.name)
+            except FileNotFoundError:
+                pass  # Another cleanup already handled it.
+            except OSError:
+                result["errors"].append(name + "/" + path.name)
+    return result
 
 
 def dumps(value):

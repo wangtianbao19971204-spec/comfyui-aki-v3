@@ -1,6 +1,7 @@
 """Local aiohttp adapter for the pinned editor, scoped to independent ComfyUI nodes."""
 import asyncio
 import json
+import logging
 from pathlib import Path
 import re
 import time
@@ -90,10 +91,22 @@ class EditorSession:
 
 
 class StudioServer:
-    def __init__(self, server, assets, model_paths):
+    def __init__(self, server, assets, model_paths, *, retention_days=None):
         self.server, self.assets, self.model_paths = server, Path(assets), model_paths
         self.sessions = {}
         self.creation = asyncio.Lock()
+        self.retention_days = store.retention_days(retention_days)
+
+    def protected_files(self):
+        protected = []
+        for entry in self.sessions.values():
+            studio = entry.studio
+            if studio.closed:
+                continue
+            if studio.draft_id:
+                protected.append(studio.preferences.path.parent / "drafts" / (studio.draft_id + ".json"))
+            protected.extend(entry.downloads.values())
+        return protected
 
     def preferences(self, request):
         root = self.server.user_manager.get_request_user_filepath(request, "stocking_texture/preferences.json")
@@ -136,6 +149,15 @@ class StudioServer:
                 raise ValueError("自动保存草稿无法读取，请保留草稿文件后重试")
             sid = uuid.uuid4().hex
             self.sessions[sid] = EditorSession(studio, asyncio.get_running_loop())
+            # Reserve the new session before cleanup so an old draft being
+            # reopened, or a download held by any live session, stays protected.
+            try:
+                cleaned = await asyncio.to_thread(store.cleanup_transient, preferences.path.parent,
+                    self.protected_files(), days=self.retention_days)
+                if cleaned["errors"]:
+                    logging.warning("Stocking Studio retained %d transient files after cleanup errors", len(cleaned["errors"]))
+            except OSError:
+                logging.warning("Stocking Studio could not clean transient storage; files retained", exc_info=True)
             studio.start_depth()
             return json_response({"session": sid, "draft_id": draft_id, "url": f"{PREFIX}/{sid}/",
                                   "restored": restored})

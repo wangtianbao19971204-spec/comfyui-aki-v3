@@ -67,3 +67,10 @@ The last command runs the standalone suite. Some tests require the author's unsh
 `tests/bend_acceptance.py` accepts caller-owned baseline/split/divider-and-arc project snapshots and an immutable assets directory. It checks that splitting preserves the selection union, direction actually changes, and all six rendered styles and solved fields match an independently obtained upstream. The tested bent-leg sequence passed all 18 stage/style cases; its final Studio → SaveImage output matched the original exactly, and the RGBA layer recomposed without pixel error. This is a bounded regression check, not proof that SAM selects every bent or crossed leg correctly.
 
 Drafts/presets/exports live in the current ComfyUI user's `stocking_texture` directory. The editor checks same-origin mutations, per-session ownership, stale inputs and Apply acknowledgements. This is not a substitute for ComfyUI authentication or public-Internet hardening.
+
+
+## Storage and retention
+
+`ComfyUI/user/<current-user>/stocking_texture/exports/` and `drafts/` are temporary storage. Creating an editor session removes adapter-owned files older than 7 days unless any open session references them. Recently written files and a draft currently being reopened are retained. Set `STOCKING_STUDIO_RETENTION_DAYS` before starting ComfyUI to change the number of days; `0` disables cleanup. Only direct PNG/PSD exports and JSON drafts are considered; unknown files and subdirectories are preserved. Preferences/presets are never expired.
+
+`ComfyUI/input/stocking_studio/assets/` contains SHA256-named original images and depth arrays referenced by saved workflow JSON. **Assets are never deleted automatically.** Back up this directory together with workflows, and use the folder's Properties to inspect its size. For manual cleanup, first close the editors, retain a backup, and check every workflow and draft you intend to keep for `asset` and `depth_asset` references. Move only confirmed unreferenced files to a recoverable archive; do not clear the folder merely because an editor session ended. Guide PSD is an additional portable export, not a replacement for all workflow settings.

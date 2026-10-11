@@ -58,3 +58,10 @@
 白色屈腿、黑色交叉腿、近黑站姿已用现有图片对照；红／蓝／紫和遮挡／折叠另有合成控制。纯黑无织纹、过密淡出和小图深度墙漏检仍是边界，颜色控制通过不等于所有真实彩丝图片已验收。完整功能表与验收范围见技术说明。
 
 本仓唯一源码位置为 `snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/`。测试、数据契约、隔离验收及部署状态见[技术说明](../../../../../docs/technical/runtime/stocking-texture.md)。插件源码入库不等于生产启用。
+
+
+## Storage and retention
+
+`ComfyUI/user/<current-user>/stocking_texture/exports/` and `drafts/` are temporary storage. Creating an editor session removes adapter-owned files older than 7 days unless any open session references them. Recently written files and a draft currently being reopened are retained. Set `STOCKING_STUDIO_RETENTION_DAYS` before starting ComfyUI to change the number of days; `0` disables cleanup. Only direct PNG/PSD exports and JSON drafts are considered; unknown files and subdirectories are preserved. Preferences/presets are never expired.
+
+`ComfyUI/input/stocking_studio/assets/` contains SHA256-named original images and depth arrays referenced by saved workflow JSON. **Assets are never deleted automatically.** Back up this directory together with workflows, and use the folder's Properties to inspect its size. For manual cleanup, first close the editors, retain a backup, and check every workflow and draft you intend to keep for `asset` and `depth_asset` references. Move only confirmed unreferenced files to a recoverable archive; do not clear the folder merely because an editor session ended. Guide PSD is an additional portable export, not a replacement for all workflow settings.
