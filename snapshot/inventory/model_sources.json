@@ -24176,18 +24176,234 @@
           "ComfyUI/models/loras/starshadowmagician_style_krea2_uma_v1_krea2_3335939_epoch_10.metadata.json"
         ]
       }
+    },
+    {
+      "path": "ComfyUI/models/loras/Bandless Stockings.safetensors",
+      "bytes": 336768126,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "e0297cb1820de7eee9f9d850c11a17a89226dfaa090bd505dcf81458a5164301",
+      "source_status": "version_metadata",
+      "family": "krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2986484?modelVersionId=3385970",
+          "download_url": "https://civitai.com/api/download/models/3385970",
+          "model_id": 2986484,
+          "version_id": 3385970,
+          "file_id": 3274828,
+          "filename": "Bandless Stockings.safetensors",
+          "declared_sha256": "e0297cb1820de7eee9f9d850c11a17a89226dfaa090bd505dcf81458a5164301",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/technical/runtime/lora-quick-import.md"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/krea2/服装与配饰/Krea2__Bandless Stocking and Garter for Krea 2__v1.0__BF16__cv3385970__f3274828.metadata.json",
+        "ComfyUI/models/loras/krea2/服装与配饰/Krea2__Bandless Stocking and Garter for Krea 2__v1.0__BF16__cv3385970__f3274828.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "Downloaded file verified by full SHA-256 against the exact public version; weights stay outside Git."
+      ],
+      "current_path": "ComfyUI/models/loras/krea2/服装与配饰/Krea2__Bandless Stocking and Garter for Krea 2__v1.0__BF16__cv3385970__f3274828.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "服装与配饰",
+        "display_name": "Bandless Stocking and Garter for Krea 2",
+        "version": "v1.0",
+        "precision": "BF16",
+        "source_identity": "civitai:model=2986484,version=3385970,file=3274828",
+        "target_path": "ComfyUI/models/loras/krea2/服装与配饰/Krea2__Bandless Stocking and Garter for Krea 2__v1.0__BF16__cv3385970__f3274828.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "ComfyUI/models/loras/Bandless Stockings.metadata.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/CandlelitRevelry_Anima-000007.safetensors",
+      "bytes": 138925880,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "7725883b9a75dcbb2233f9a11a0c853ecce21ce88dcae2c34103e04302c392c4",
+      "source_status": "version_metadata",
+      "family": "anima",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2992989?modelVersionId=3394109",
+          "download_url": "https://civitai.com/api/download/models/3394109",
+          "model_id": 2992989,
+          "version_id": 3394109,
+          "file_id": 3283808,
+          "filename": "CandlelitRevelry_Anima-000007.safetensors",
+          "declared_sha256": "7725883b9a75dcbb2233f9a11a0c853ecce21ce88dcae2c34103e04302c392c4",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/technical/runtime/lora-quick-import.md"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/anima/服装与配饰/Anima__Genshin Impact Miliastra Wonderland - Candlelit Re__v1.0 Anima__BF16__cv3394109__f3283808.metadata.json",
+        "ComfyUI/models/loras/anima/服装与配饰/Anima__Genshin Impact Miliastra Wonderland - Candlelit Re__v1.0 Anima__BF16__cv3394109__f3283808.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "Downloaded file verified by full SHA-256 against the exact public version; weights stay outside Git."
+      ],
+      "current_path": "ComfyUI/models/loras/anima/服装与配饰/Anima__Genshin Impact Miliastra Wonderland - Candlelit Re__v1.0 Anima__BF16__cv3394109__f3283808.safetensors",
+      "standardization": {
+        "family_slug": "anima",
+        "family_label": "Anima",
+        "category": "服装与配饰",
+        "display_name": "Genshin Impact Miliastra Wonderland - Candlelit Revelry | 千星奇域-烛影狂欢夜",
+        "version": "v1.0 Anima",
+        "precision": "BF16",
+        "source_identity": "civitai:model=2992989,version=3394109,file=3283808",
+        "target_path": "ComfyUI/models/loras/anima/服装与配饰/Anima__Genshin Impact Miliastra Wonderland - Candlelit Re__v1.0 Anima__BF16__cv3394109__f3283808.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "ComfyUI/models/loras/CandlelitRevelry_Anima-000007.metadata.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/undressing kimono_anima_V1.0.safetensors",
+      "bytes": 138726296,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "3289efca1c8d8f0fbeffafbed93870d88ccf4a9ae4be54b4588da5fdea096aae",
+      "source_status": "version_metadata",
+      "family": "anima",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/1679631?modelVersionId=2928394",
+          "download_url": "https://civitai.com/api/download/models/2928394",
+          "model_id": 1679631,
+          "version_id": 2928394,
+          "file_id": 2807145,
+          "filename": "undressing kimono_anima_V1.0.safetensors",
+          "declared_sha256": "3289efca1c8d8f0fbeffafbed93870d88ccf4a9ae4be54b4588da5fdea096aae",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/technical/runtime/lora-quick-import.md"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/anima/服装与配饰/Anima__脱ぎ掛け(着物)-undressing kimono__v1.0 anima__cv2928394__f2807145.metadata.json",
+        "ComfyUI/models/loras/anima/服装与配饰/Anima__脱ぎ掛け(着物)-undressing kimono__v1.0 anima__cv2928394__f2807145.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "Downloaded file verified by full SHA-256 against the exact public version; weights stay outside Git."
+      ],
+      "current_path": "ComfyUI/models/loras/anima/服装与配饰/Anima__脱ぎ掛け(着物)-undressing kimono__v1.0 anima__cv2928394__f2807145.safetensors",
+      "standardization": {
+        "family_slug": "anima",
+        "family_label": "Anima",
+        "category": "服装与配饰",
+        "display_name": "脱ぎ掛け(着物)/undressing kimono",
+        "version": "v1.0 anima",
+        "precision": null,
+        "source_identity": "civitai:model=1679631,version=2928394,file=2807145",
+        "target_path": "ComfyUI/models/loras/anima/服装与配饰/Anima__脱ぎ掛け(着物)-undressing kimono__v1.0 anima__cv2928394__f2807145.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "ComfyUI/models/loras/undressing kimono_anima_V1.0.metadata.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/undressing-kimono_Krea2_V1.0.safetensors",
+      "bytes": 234703520,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "16657c6d6febf42d6ca4d8182865e3cb5efd1200e31e88487c61583bb0177ae6",
+      "source_status": "version_metadata",
+      "family": "krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/1679631?modelVersionId=3395408",
+          "download_url": "https://civitai.com/api/download/models/3395408",
+          "model_id": 1679631,
+          "version_id": 3395408,
+          "file_id": 3285271,
+          "filename": "undressing-kimono_Krea2_V1.0.safetensors",
+          "declared_sha256": "16657c6d6febf42d6ca4d8182865e3cb5efd1200e31e88487c61583bb0177ae6",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/technical/runtime/lora-quick-import.md"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/krea2/服装与配饰/Krea2__脱ぎ掛け(着物)-undressing kimono__v1.0 Krea2__FP32__cv3395408__f3285271.metadata.json",
+        "ComfyUI/models/loras/krea2/服装与配饰/Krea2__脱ぎ掛け(着物)-undressing kimono__v1.0 Krea2__FP32__cv3395408__f3285271.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "Downloaded file verified by full SHA-256 against the exact public version; weights stay outside Git."
+      ],
+      "current_path": "ComfyUI/models/loras/krea2/服装与配饰/Krea2__脱ぎ掛け(着物)-undressing kimono__v1.0 Krea2__FP32__cv3395408__f3285271.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "服装与配饰",
+        "display_name": "脱ぎ掛け(着物)/undressing kimono",
+        "version": "v1.0 Krea2",
+        "precision": "FP32",
+        "source_identity": "civitai:model=1679631,version=3395408,file=3285271",
+        "target_path": "ComfyUI/models/loras/krea2/服装与配饰/Krea2__脱ぎ掛け(着物)-undressing kimono__v1.0 Krea2__FP32__cv3395408__f3285271.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "ComfyUI/models/loras/undressing-kimono_Krea2_V1.0.metadata.json"
+        ]
+      }
     }
   ],
   "missing_workflow_references": [],
   "summary": {
-    "asset_count": 418,
+    "asset_count": 422,
     "inventory_asset_count": 384,
-    "observed_present_count": 403,
+    "observed_present_count": 407,
     "observed_missing_count": 15,
     "workflow_asset_count": 23,
     "missing_workflow_reference_count": 0,
     "source_status_counts": {
-      "version_metadata": 325,
+      "version_metadata": 329,
       "upstream_mapping": 73,
       "local_derivative": 19,
       "unresolved": 1

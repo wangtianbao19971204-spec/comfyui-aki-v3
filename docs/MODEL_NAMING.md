@@ -2,7 +2,7 @@
 
 现行安装位置以 [来源目录](../snapshot/inventory/model_sources.json) 的 `current_path` 为准；没有此字段的资源仍使用 `path`。`path` 保留首次捕获身份，旧 inventory、训练发布记录与历史收据不重写。已删除的 15 个评估条目不参与命名或迁移。
 
-2026-10-08 当前有 **306 个用户 LoRA**：Anima 208、Anima 2.9B 2、Krea2 96。本轮 12 个下载中新增 11 个，ABP_ART 同摘要重复件保留现有版本；权重、预览、来源和离线缓存已登记，在线界面未测试，下载原件暂留。见[本轮导入记录](receipts/lora_download_import_20261008.json)。下面的 2026-10-07 表格保留当时全量整理的基线。
+2026-10-08 整理后有 **306 个用户 LoRA**：Anima 208、Anima 2.9B 2、Krea2 96。本轮 12 个下载中新增 11 个，ABP_ART 同摘要重复件保留现有版本；权重、预览、来源和离线缓存已登记，在线界面未测试，下载原件暂留。见[本轮导入记录](receipts/lora_download_import_20261008.json)。下面的 2026-10-07 表格保留当时全量整理的基线。
 
 2026-10-07 首轮完成 306 个权重的分类与改名，迁移 690 件配套并同步已有引用，见[标准化收据](receipts/model_standardization_20261007.json)。随后又导入 9 个下载的 LoRA，现有 **295 个用户 LoRA、19 个图像底模和 1 个 SAM 工具**；新增来源、摘要及实际导入结果见[导入收据](receipts/lora_download_import_20261007.json)。
 
@@ -14,6 +14,8 @@
 | Qwen Image 2.1 | 0 | 1 | 0 |
 | SAM3.1 | 0 | 0 | 1 |
 | 合计 | 295 | 19 | 1 |
+
+2026-10-11 增量导入 4 个服装 LoRA（Anima 2 个、Krea2 2 个），当前共 **313 个用户 LoRA**，含 2026-10-09 导入的 3 个。新文件均已分类、改名、登记卡片和预览；本批 Downloads 原件保留。见[本批收据](receipts/lora_download_import_20261011.json)。
 
 ## 分类
 
