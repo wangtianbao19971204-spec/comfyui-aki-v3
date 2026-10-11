@@ -43,7 +43,10 @@
       "prompt": "matched",
       "output": "_codex_qa/anima_promptpair_20261011/pair-matched_00002_.png",
       "sha256": "deb74ee91d2c1e89194cf58dcda3689450a2ba5a0dbf5cb26fec63b44fd94ec7",
-      "size": [1024, 1520],
+      "size": [
+        1024,
+        1520
+      ],
       "history_sha256": "cd189b5e5a1665ada30faf767e1d1c9392d68970f45b158c6916e485077763ef"
     },
     {
@@ -54,7 +57,10 @@
       "prompt": "mismatched",
       "output": "_codex_qa/anima_promptpair_20261011/pair-mismatched_00002_.png",
       "sha256": "f7ef467e195dfe5cb9b28792249b691d89b9b35587e98d9f40fc92de31733478",
-      "size": [1024, 1520],
+      "size": [
+        1024,
+        1520
+      ],
       "history_sha256": "638d438915fc960378c4803ddb3173bf40bc582b4561c48eab533cde61339b21"
     },
     {
@@ -65,7 +71,10 @@
       "prompt": "appearance",
       "output": "_codex_qa/anima_promptpair_20261011/pair-appearance_00002_.png",
       "sha256": "8810c94e3e24c035dd560e5f9ee338527c7dc428c761e104b571cd14f348a203",
-      "size": [1024, 1520],
+      "size": [
+        1024,
+        1520
+      ],
       "history_sha256": "244e2a7222515807c0e0efe536d0e83885290130141b1d186991d6728c8250c3"
     },
     {
@@ -76,7 +85,10 @@
       "prompt": "matched",
       "output": "_codex_qa/anima_promptpair_20261011/pair-canny_00001_.png",
       "sha256": "f5fbb79920e4637c91ffbe2f0330d782a7246cfcfbbddd8db5e2eda261150019",
-      "size": [1024, 1520],
+      "size": [
+        1024,
+        1520
+      ],
       "history_sha256": "6b9f73c114304f386a47cc57c3462521af9d586364d0e4da773cbe8ae345fcf5"
     },
     {
@@ -87,7 +99,10 @@
       "prompt": "matched",
       "output": "_codex_qa/anima_promptpair_20261011/pair-depth_00001_.png",
       "sha256": "b175a0f100ae29d228423c91067ced03d1a911212a496a0892285dbe7980effc",
-      "size": [1024, 1520],
+      "size": [
+        1024,
+        1520
+      ],
       "history_sha256": "bbc8f3464f034be9bd6d78b64482f15ba849257b863c6bfa76426cd7c5fecc5c"
     },
     {
@@ -99,25 +114,67 @@
       "erase": "advanced subgraph left active with the saved mask",
       "output": "_codex_qa/anima_promptpair_20261011/pair-erase_00001_.png",
       "sha256": "d586881c2e1e72f76fe9def489da371c97a2c55821e2c262e32d08fc2af0f52e",
-      "size": [1024, 1520],
+      "size": [
+        1024,
+        1520
+      ],
       "history_sha256": "fe67044f05efca07ce8d622c1ad472e2162752510868c382cb15e629589b38f1"
     }
   ],
   "comparisons": {
-    "mismatched_vs_matched": {"mean_abs_diff": [58.158, 50.073, 50.661],
-                              "reading": "One reference image and one sampler seed; only the prompt's description of the subject changed, and the render changes completely. The prompt, not the control, decides whether the limbs read as intact."},
-    "appearance_vs_matched": {"mean_abs_diff": [61.104, 72.098, 61.27],
-                              "reading": "Same pose and framing, different hair, eye colour and outfit: the control holds the pose while the prompt still controls appearance."},
-    "canny_vs_matched": {"mean_abs_diff": [12.639, 13.087, 12.806]},
-    "depth_vs_matched": {"mean_abs_diff": [35.33, 36.772, 34.729]},
-    "erase_vs_matched": {"mean_abs_diff": [14.306, 14.897, 15.554]}
+    "mismatched_vs_matched": {
+      "mean_abs_diff": [
+        58.158,
+        50.073,
+        50.661
+      ],
+      "reading": "One reference image and one sampler seed; only the prompt's description of the subject changed, and the render changes completely. The prompt, not the control, decides whether the limbs read as intact."
+    },
+    "appearance_vs_matched": {
+      "mean_abs_diff": [
+        61.104,
+        72.098,
+        61.27
+      ],
+      "reading": "Same pose and framing, different hair, eye colour and outfit: the control holds the pose while the prompt still controls appearance."
+    },
+    "canny_vs_matched": {
+      "mean_abs_diff": [
+        12.639,
+        13.087,
+        12.806
+      ]
+    },
+    "depth_vs_matched": {
+      "mean_abs_diff": [
+        35.33,
+        36.772,
+        34.729
+      ]
+    },
+    "erase_vs_matched": {
+      "mean_abs_diff": [
+        14.306,
+        14.897,
+        15.554
+      ]
+    }
   },
   "strength_check": {
     "reason": "A first pair of runs at this seed produced byte-equal pixels at strength 1 and 0.63, so the strength path was re-probed instead of being reported as a no-op.",
     "probe": "the same graph submitted at strengths 1.0, 0.8, 0.63 and 0.4 with one fixed seed",
-    "seed_5150515": {"distinct_outputs": 4, "of": 4},
-    "seed_845401323336067": {"distinct_outputs": 4, "of": 4},
-    "strength_zero": {"output": "pair-strength063_00002_.png", "reading": "strength 0.0 differs from strength 1.0 by mean absolute difference 36.8-38.9, so the control path is active"},
+    "seed_5150515": {
+      "distinct_outputs": 4,
+      "of": 4
+    },
+    "seed_845401323336067": {
+      "distinct_outputs": 4,
+      "of": 4
+    },
+    "strength_zero": {
+      "output": "pair-strength063_00002_.png",
+      "reading": "strength 0.0 differs from strength 1.0 by mean absolute difference 36.8-38.9, so the control path is active"
+    },
     "conclusion": "strength reaches sampling; the earlier equal pair was not reproducible"
   },
   "erase_mask_behaviour": {
@@ -131,5 +188,43 @@
     "Soft or unresolved areas remain where the line-art reference carries little structure; this round does not claim an artifact-free render at strength 1.",
     "Two-image control (pose reference plus a separate colour reference) is not expressible without adding a model or node to the deployed workflow, so it was not tested.",
     "The line-art reference supplied by the user is exposed artwork and is used only inside the isolated runtime; the deployment scope is unchanged."
-  ]
+  ],
+  "erase_mask_fix": {
+    "root_cause": "this ComfyUI's LoadImage.load_image builds a MASK only when the file carries an alpha channel (mask = 1 - alpha); otherwise it returns an all-zero 64x64 mask broadcast over the batch, so the stored RGB mask cannot erase anything",
+    "probe": {
+      "stored_rgb_mask": "control image unchanged versus itself (reference run)",
+      "single_channel_white_rectangle": "control image identical to the stored-mask run (mean abs diff 0.0), so brightness alone is not read as a mask",
+      "rgba_transparent_rectangle": "control image changes inside the rectangle (mean abs diff 4.9255, max 255)"
+    },
+    "fix": "write the brightness described by the workbench label into a new RGBA file's alpha channel (white = erased)",
+    "fix_verification": {
+      "source": "ComfyUI/input/ComfyUI_temp_oflff_00001_.png (1024x1514 RGB)",
+      "converted": "runtime/ComfyUI/input/anima-original-erase-mask.png (1024x1514 RGBA, sha256 a49f401b137a240f)",
+      "erased_fraction": 0.0635,
+      "control_difference": {
+        "mean_abs_diff": [
+          10.4794,
+          10.4794,
+          10.4794
+        ],
+        "max_abs_diff": 255,
+        "changed_bbox_xyxy": [
+          0,
+          0,
+          1024,
+          1515
+        ],
+        "mask_bbox_xyxy": [
+          0,
+          2,
+          1023,
+          1512
+        ]
+      }
+    },
+    "not_done": [
+      "the live input file was not replaced and the live workflow still points at the old name",
+      "the converted file erases the reference's bright line work, which is what the stored brightness encodes; a region the user paints in the mask editor remains the intended use"
+    ]
+  }
 }

@@ -23,7 +23,7 @@
 - 已在本机完成一次隔离冷启动（物化新树 + 备用端口 + 25 个生产插件）：5/5 模块、76 节点、1,939 个节点类型、队列 0/0，运行区零改动，见[隔离启动收据](receipts/isolated_boot_20261006.json)。仍未验收的是独立依赖环境、GPU 出图质量、具体工作流以及整机迁移。
 - `triton` 在本机缺失，使 `ComfyUI-RMBG` 的 `SAM3Segment` 未注册；`vnccs-utils` 的 SAM3 节点正常，当前 UAP 工作流只引用 RMBG/BiRefNet，暂不受影响。
 - Comfyroll 的 `CR Output Flow Frames`、`CR XY From Folder`、`CR XY Save Grid Image` 在 `INPUT_TYPES` 阶段报错；其余 Comfyroll 节点正常。
-- 2026-10-11 原版 Anima 控制实机验收保留两项现场事实：两套 Anima 控制子图在保存文件中默认 `mode=2`（需先启用分支才执行控制），擦线高级子图默认启用但已保存遮罩完全不透明，`LoadImage` 取 `1 - alpha`，因此合成为空操作；要真正擦线须让遮罩带透明区（透明遮罩轮次已证明擦线本身可用）。另该流控制强度仍取生产默认 1，本轮已确认强度确实进入采样，但强度 1 下线稿结构稀少处仍偏软，未改默认值，见[实机收据](receipts/anima_original_control_gpu_20261011.json)与[参考图匹配轮收据](receipts/anima_original_control_promptpair_20261011.json)。
+- 2026-10-11 原版 Anima 控制实机验收保留两项现场事实：两套 Anima 控制子图在保存文件中默认 `mode=2`（需先启用分支才执行控制）；擦线高级子图默认启用，但本机 ComfyUI 的 `LoadImage` 只从 alpha 通道生成 MASK（`1 - alpha`），无 alpha 时返回 64×64 全零蒙版并在批内广播，而运行区已保存的遮罩是 RGB，因此该合成是空操作。修复方向已实测：把亮度写进 alpha 通道的新 RGBA 文件能让控制图在该区域内真实改变（平均绝对差 10.5，最大 255），旧文件保持原样；详见[参考图匹配轮收据](receipts/anima_original_control_promptpair_20261011.json)与[实机收据](receipts/anima_original_control_gpu_20261011.json)。另该流控制强度仍取生产默认 1，本轮已确认强度确实进入采样，但强度 1 下线稿结构稀少处仍偏软，未改默认值。
 - 冷缓存启动较慢：prompt-assistant 与统一包导入各约 83 / 129 秒，随后约 247 秒预热资料缓存。
 - 部分生产插件在导入期检查依赖并在缺失时 `pip install`（WeiLin、Impact-Pack）；裸机首次启动会联网改动解释器，重建前须先预装。
 
