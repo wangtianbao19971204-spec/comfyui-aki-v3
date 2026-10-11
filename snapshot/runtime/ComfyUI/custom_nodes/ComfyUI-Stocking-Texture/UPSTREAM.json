@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/silvermoong/stocking-texture-tool",
-  "commit": "f74c8ac0190ec43b2cdfcb13db86f35a83283311",
+  "commit": "e72a262bd917924bc82d45f19992344f2680a303",
   "license": "MIT",
   "snapshot_format": 2,
   "license_sha256": "12b3a43416cfda4d524b8d781639e33ea3c7862cc2200d7f61300f98bbfa91fe",
@@ -23,7 +23,7 @@
     },
     {
       "file": "document.py",
-      "sha256": "041bf0b0435212754b6fec5eec2bc82aceed55c585c48864d88ab694e02f4188"
+      "sha256": "3448ae749163fbe188c11b45ff75e3a3c4f90b38dc964e07963f27a8f1d36a6e"
     },
     {
       "file": "export.py",
@@ -39,15 +39,15 @@
     },
     {
       "file": "knit.py",
-      "sha256": "ea6b23ef47e0618000c97220409c1956d175f00cbbed063ede89dc1d9c825de5"
+      "sha256": "e58dce4fd55c8c44f0c71ed6391e5a1f6b920c8fd5392707af74b1da569d794a"
     },
     {
       "file": "look.py",
-      "sha256": "487fe842aac8ce4ddbb8992c855c84b2a66c321ad46f8c2ef72561aaffaf01e2"
+      "sha256": "185112aad60427723869007c0f6065ec56cb865da473fc629c4d9c1e86f321c2"
     },
     {
       "file": "oily.py",
-      "sha256": "c7b6035ee3381a4a2c27eb892032d4192e29f0d873ba5b6c349d365c66401691"
+      "sha256": "9bfbbbe0787305fb93ec243df6173cc5f6140a9f50bdcc54f4944f9c1225eecc"
     },
     {
       "file": "presets.py",
@@ -63,7 +63,7 @@
     },
     {
       "file": "server.py",
-      "sha256": "67917eb769a7296b023759414330aabfbc2af884789ffb954d767cf83bae612b"
+      "sha256": "ef7cfea148fe520545c997e6eed0f53d54bbedc7232f0289fbbe950cc32a32d8"
     },
     {
       "file": "session.py",
@@ -75,11 +75,11 @@
     },
     {
       "file": "split.py",
-      "sha256": "08525de55928ac825a3b6efa5402ca88d9eca1d22352b5ab8138838a9aabf15d"
+      "sha256": "a35293e7c8821a657fc5360ffb98dcc3392a38195a24bf246d59ccc632e001c0"
     },
     {
       "file": "static/app.js",
-      "sha256": "536a7dc029cfe350c348ab90071abff29648fe4c5a5ddb43e796abb41073ff75"
+      "sha256": "89114a1c3ac2ba105488440172e05f47327fcf8f44549636d2f3a902f9d1871d"
     },
     {
       "file": "static/i18n.js",
@@ -87,11 +87,11 @@
     },
     {
       "file": "static/i18n/en.json",
-      "sha256": "b301c35c5cd109cd4905e8723e040d95492122b3e80ab145389b1bce194ae158"
+      "sha256": "8de7e198279173f256a249f0f81be457275cc1a4fbc39dbc03cdf340ea649d04"
     },
     {
       "file": "static/index.html",
-      "sha256": "e3034a6c2ffb912542c7651411bd4d493d3b1cac03b0e4c77cf3616d3c90d987"
+      "sha256": "576a56f184e1ba6dc960132a031660636d3c0c075fe9cd056f0625f094cefc7b"
     },
     {
       "file": "static/look.js",
@@ -99,7 +99,7 @@
     },
     {
       "file": "static/style.css",
-      "sha256": "a56d991706afd70a2b4fbc94fa3a14a250e390ae6c9955cc5c30153394e00916"
+      "sha256": "9caf6e566ef44300dbbeeb16ce5a3324bfd1466722e6dc706fb023237df8e1d3"
     },
     {
       "file": "symmetry.py",
@@ -119,7 +119,7 @@
     },
     {
       "file": "walls.py",
-      "sha256": "1add5ddd582af05cdfff1c3a9b43b8cabd1fe265c8adb5a415df1a02b0914993"
+      "sha256": "96756223c751458d695c3610c88c24f5bb8b1f4980e0897f13a99921dfabb162"
     }
   ],
   "local_adapters": [

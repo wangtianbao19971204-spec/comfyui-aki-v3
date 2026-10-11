@@ -6,7 +6,7 @@ Issue #3 修订：T0 改为独立插件发布制品，采用固定 Git blob 拷�
 
 SAM 点选与内置深度现已实现空闲 CUDA GPU 推理、CPU 模型缓存和最多四份 SAM 图像特征缓存，消除每次点击重新载入模型及编码整图的等待。GPU 使用完整 FP32；生图队列忙或显存不足时回退 CPU。三张真实图片及隔离 ComfyUI 接口验证通过，GPU 改动尚未部署生产，原生浏览器操作验收被工具的网址识别保护阻断。速度、误差和调度边界见 [GPU 点选优化](../changes/runtime-stocking-texture/2026-10-10-gpu-selection.md)。
 
-当前维护源码固定上游为 `f74c8ac0190ec43b2cdfcb13db86f35a83283311`，接入作者新增摩尔纹和新版油光。旧工作流默认关闭摩尔纹；开启且强度非零时需要深度，导出与节点执行均检查就绪状态。旧渲染节点新增三个末尾可选输入，油光传递求解器的遮挡连接；完整编辑器继续复用原版界面。见[新版效果与展示复核](../changes/runtime-stocking-texture/2026-10-10-upstream-effects.md)及[本轮收据](../../receipts/stocking_texture_upstream_refresh_20261010.json)。**本轮未部署生产。**
+当前维护源码固定上游为 `e72a262bd917924bc82d45f19992344f2680a303`（2026-10-11 T1），接入作者新增摩尔纹和新版油光。旧工作流默认关闭摩尔纹；开启且强度非零时需要深度，导出与节点执行均检查就绪状态。旧渲染节点新增三个末尾可选输入，油光传递求解器的遮挡连接；完整编辑器继续复用原版界面。见[新版效果与展示复核](../changes/runtime-stocking-texture/2026-10-10-upstream-effects.md)及[本轮收据](../../receipts/stocking_texture_upstream_refresh_20261010.json)。**本轮未部署生产。**
 
 展示复核纠正了旧局部选区不完整、交叉处分区过直的问题；这些旧图仅保留为功能回归输入，不作为 fork 展示成果。用户随后要求更新公开图片，三张完整选区对照经再次复核后纳入精确发布清单；维护仓只保存摘要与导出规则，实际图片留在仓外并作为 fork 展示制品导出。见[展示发布说明](../changes/runtime-stocking-texture/2026-10-10-reviewed-showcase.md)。像素与原版一致不代表选区正确或视觉效果合格。
 
