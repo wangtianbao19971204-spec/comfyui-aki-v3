@@ -1,0 +1,482 @@
+{
+  "schema": 1,
+  "date": "2026-10-11",
+  "at": "2026-10-11T05:46:20.991087+00:00",
+  "feature": "runtime-stocking-texture",
+  "source_commit": "b3fecce8ba7aa95c18580ed98ea4b2cbf0ab1aea",
+  "upstream_commit": "e72a262bd917924bc82d45f19992344f2680a303",
+  "independent_main": "fc51080924c2adb862008486af1e293fdf6aa141",
+  "independent_pr_head": "a5eb1d8ca65142103b3ec18d565b9ec9e7797a6a",
+  "finding": {
+    "previous_runtime_hash_test": {
+      "passed": 0,
+      "failed": 1,
+      "skipped": 0
+    },
+    "stale_tests": 4,
+    "missing_tests": 5,
+    "runtime_code_drift": false,
+    "cause": "Previous production scope excluded tests; old test still hashed vendor instead of upstream/stocking."
+  },
+  "repair": {
+    "test_files_updated": 4,
+    "test_files_added": 5,
+    "files": [
+      {
+        "path": "tests/bend_acceptance.py",
+        "before": "9dd464dc1ccd79f071f877b74fa3836c2dd161d7a483787deef5cdbe0a677852",
+        "after": "0c0f2075db04d55bdb3384580d6643cf35cb6dcc29c567772f9b589041a17447"
+      },
+      {
+        "path": "tests/feature_acceptance.py",
+        "before": "a8f4355a03e70be0506c8d448a5980e8976b8c3ea46b70966ad243c6bb4a4b8d",
+        "after": "d8d5561706ed7ff4d0e3e6dfdd15d82cc5db29fbf5e70c92ee1fed6228dbdf93"
+      },
+      {
+        "path": "tests/gpu_acceptance.py",
+        "before": null,
+        "after": "379a8101039371b4bb5f3eeb8e12adaf8e6439df0fbe90c749467e65f03a4749"
+      },
+      {
+        "path": "tests/gpu_http_acceptance.py",
+        "before": null,
+        "after": "e69179c45be46cb9951f583053883a13b31d8aa7f854ecc4a75eb7b220c2497a"
+      },
+      {
+        "path": "tests/studio_compare.py",
+        "before": "73a0265c26b260ccbd18a589bcece725d3e4db5405a63b9bb086e70389ae2efd",
+        "after": "380b112d518723832bd2c0183ec0902562c19d80fefb72d7e5a1ed499a62de9d"
+      },
+      {
+        "path": "tests/test_issue3.py",
+        "before": null,
+        "after": "14da9f462d1ca9c80b92edce0b8ac0d47bd8e4624943baf3f5e4d233bf2c9cfb"
+      },
+      {
+        "path": "tests/test_nodes.py",
+        "before": "9c70c6a318643fbc2f7a453bf9c6a6db5304a61532b31d8965072133fec3c5c6",
+        "after": "32728634a050f663508de1a23c06813dfbccd2447cb8113ae952044a2940b372"
+      },
+      {
+        "path": "tests/test_request_contract.py",
+        "before": null,
+        "after": "1227d19122234128765b1c77917c8aba7634a8607b4fd1970e9e56fd7b11a19c"
+      },
+      {
+        "path": "tests/test_retention.py",
+        "before": null,
+        "after": "78f305d2de935fdadb1fe9fdc508c6627865277f8d3539f7e4257c69cdce72f7"
+      }
+    ],
+    "backups_verified": true,
+    "tracked_plugin_files": 78,
+    "source_match": true,
+    "protected_files": 49,
+    "protected_unchanged": true,
+    "non_scope_plugin_unchanged": true,
+    "service_identity_unchanged": true,
+    "production_restarted": false,
+    "database_touched": false,
+    "queue_empty": true
+  },
+  "validation": {
+    "runtime_hash": {
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    "runtime_python": {
+      "passed": 78,
+      "failed": 0,
+      "skipped": 0,
+      "real_cuda": true
+    },
+    "runtime_frontend": {
+      "passed": 17,
+      "failed": 0,
+      "skipped": 0
+    },
+    "fresh_main_python": {
+      "passed": 67,
+      "failed": 0,
+      "skipped": 0
+    },
+    "fresh_pr_python": {
+      "passed": 78,
+      "failed": 0,
+      "skipped": 0,
+      "real_cuda": true
+    },
+    "fresh_main_frontend": {
+      "passed": 17,
+      "failed": 0,
+      "skipped": 0
+    },
+    "fresh_pr_frontend": {
+      "passed": 17,
+      "failed": 0,
+      "skipped": 0
+    },
+    "upstream": {
+      "passed": 313,
+      "failed": 0,
+      "skipped": 52,
+      "warnings": 28
+    },
+    "raw_blob_matches": 116,
+    "t3_old_adapter": {
+      "passed": 0,
+      "failed": 1,
+      "skipped": 0,
+      "expected_failure": true
+    },
+    "t3_current": {
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    "clean_host": {
+      "nodes": 3,
+      "successful_workflows": 1,
+      "output_modes": [
+        "RGB",
+        "RGBA"
+      ],
+      "size": [
+        128,
+        160
+      ],
+      "bare_machine_install": false
+    },
+    "prior_evidence_files_rechecked": 87,
+    "subsets_not_added_to_totals": true
+  },
+  "author_access": {
+    "at": "2026-10-11T05:38:45.985639+00:00",
+    "status": "public_anonymous_read_verified",
+    "repository": "https://github.com/wangtianbao19971204-spec/stocking-texture-comfyui",
+    "repository_private": false,
+    "anonymous_read": true,
+    "anonymous_head": "a5eb1d8ca65142103b3ec18d565b9ec9e7797a6a",
+    "invitation_sent": false,
+    "write_access_granted": false,
+    "maintenance_visibility_unchanged": true,
+    "pr_merged": false
+  },
+  "issue_comment": null,
+  "issue_comment_posted": false,
+  "author_approved": false,
+  "merged": false,
+  "reply_blocker": "GitHub API 403: Resource not accessible by personal access token; browser control timed out.",
+  "reply_draft": "docs/technical/changes/runtime-stocking-texture/2026-10-11-issue-3-author-reply.md",
+  "rollback": {
+    "restore_existing": 4,
+    "quarantine_added": 5,
+    "scope": "Only the nine listed tests after validating current hashes; preserve later data.",
+    "material_collection": "stocking-test-repair-20261011-02",
+    "plan_sha256": "f33ad9aced727342c325b63693fa339cf4ec3b21ef5aa2db631ca1ec98a122fc"
+  },
+  "limitations": [
+    "52 upstream tests require author-private PNG/PSD and remain skipped.",
+    "Clean host reuses existing Python dependencies/core and synthetic input; not bare-machine installation.",
+    "Test-only repair did not repeat all earlier real-image, SAM, depth or visual acceptance.",
+    "GPU sample error up to 9/255 is not an arbitrary-image guarantee.",
+    "Author review and remote CI success are not asserted."
+  ],
+  "evidence": [
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "AUTHOR-RAW-BLOB-CHECKS.json",
+      "sha256": "46f7c630e3f642ab90f167c6ff82e00f51d0d1466afc6616a11a99744c7e6385",
+      "bytes": 22853
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "CLEAN-EDITOR-DOM.txt",
+      "sha256": "7b1a3d13aee5ddf4fba1765a8cde4048261137a166beeb4c4b514d3c0d6bce32",
+      "bytes": 2913
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "CLEAN-EDITOR-FINAL-DOM.txt",
+      "sha256": "71658eb56d255b3c7b652df11618e456963e61a6ffbb8c99234e314e98ca6e84",
+      "bytes": 2893
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "CLEAN-EDITOR.jpg",
+      "sha256": "edd363ace013bfc6f7b27ff58de53c9e4c61257ed7ce3113c4f98694110cd2c6",
+      "bytes": 115816
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "CLEAN-INSTALL-ACCEPTANCE.json",
+      "sha256": "84165ccf2a8532fceb70f933ea9119cdb87398f61954c0cf3eff1ec84a7d1757",
+      "bytes": 3814
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "CLEAN-SERVER-FIRST-ATTEMPT.json",
+      "sha256": "4894ee2012b669198174b315a485e88d7fd593b8a07407c23fddbdbbbe52cd19",
+      "bytes": 1020
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "CLEAN-SERVER-ISOLATED.log",
+      "sha256": "62dc6ade0eb6c5016307f4d678ea6d32b14e430f00f3699ec156bd65457b57c3",
+      "bytes": 6051
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "CLEAN-SERVER.json",
+      "sha256": "e02be4d42bccbfdb7737bdbc8c3a97802a7fe8bc17d6ea226edb2356569fdaa8",
+      "bytes": 1293
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "CLEAN-SERVER.log",
+      "sha256": "90f8fdb20440fed1cdc93d69fe511cf6ac5c0cfc3fa7d45ebb79f5364d664d56",
+      "bytes": 5588
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "CLEANUP.json",
+      "sha256": "e29948ea532350915a9722baaaabedf06784d7722579034c1b799bcc96e71230",
+      "bytes": 317
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "CLONE-CHECKS.json",
+      "sha256": "ae168faa802f1eabb9293ee53b33eb6d6e5da7a0b93a0f1c3a56d21f710aa9d0",
+      "bytes": 6171
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "DEPLOYED-SOURCE-CHECK.json",
+      "sha256": "7e91615b5c133a2e9b9eaedb418f760066de769a7d8153621d74a9f329ba30db",
+      "bytes": 18908
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "MAIN-FRONTEND.json",
+      "sha256": "d0e406728b27adf09e8022c68544fe266a860803dd794750a997a9b8293b7eda",
+      "bytes": 253
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "MAIN-FRONTEND.log",
+      "sha256": "656ee3628f8d2793cec63a029e1c4641438ae7fb58a820000e07f98b69d42ce9",
+      "bytes": 1693
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "MAIN-PYTHON.json",
+      "sha256": "9f146a0cdd025cdce47f3837235c92dc196183462eea9190b29381ae1fdb1ed5",
+      "bytes": 298
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "MAIN-PYTHON.log",
+      "sha256": "34ecc51adb04a48ea32c57c30df2c64964de9872c09aafe83becc1f5ea10db9e",
+      "bytes": 11932
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "PR-FRONTEND.log",
+      "sha256": "fac1043d519c1e3ce69a5f7de0d569c4c0f591066f8ce5bc918d3ff5349f6e06",
+      "bytes": 1692
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "PR-PYTHON.json",
+      "sha256": "3ed992dd45ede2df4732b05c1204e01328a03c738b416f7a62097f69cdefa2e7",
+      "bytes": 438
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "PR-PYTHON.log",
+      "sha256": "fffbbdf06d1188308ffbc92d80edfc49901453d5251f82dd76477b7ef5e69574",
+      "bytes": 14126
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "PRIOR-ACCEPTED-SOURCE-CHECK.json",
+      "sha256": "baa385dcbe41b9cb3362c6b4827c168ab1a44cc5285b0eb0d19015b050318b10",
+      "bytes": 6139
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "PRIOR-EVIDENCE-HASHES.json",
+      "sha256": "265d5181aaefe10fce6c7853df934673f20153aeac22f9985cf21b353fba3397",
+      "bytes": 29579
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "REMOTE-FINAL.json",
+      "sha256": "3ebb0f95bb54524b1162e9ffe85b583a5dd27ed46f54ceec4fdd59fc6ea7e7f4",
+      "bytes": 544
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "REMOTE.json",
+      "sha256": "2ae77be407da21e2eb979d677a57e11c31e62743e3bf18d455c988db5f052f31",
+      "bytes": 87951
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "REPORT.json",
+      "sha256": "f38302167736328cf7d39eccfc6e2def1734f752616a338b9bed264826610af5",
+      "bytes": 20610
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "REPORT.txt",
+      "sha256": "bbfc013bd4ed75274f1cc584ecbebce51ba77b612c94f5fa86eb31d1502df100",
+      "bytes": 9556
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "RUNTIME-OLD-TEST.json",
+      "sha256": "d1dced2acd2dc8065b3ef3b775ee9ced095ec02d93ade56bcec623abab3e3e03",
+      "bytes": 340
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "RUNTIME-OLD-TEST.log",
+      "sha256": "e631c02f642d98a1803ebdb8e1ac841dffb9f75d1c434f95c823dd8d8bbf0269",
+      "bytes": 1279
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "SYNC-FLOATING-REF-REJECTED.json",
+      "sha256": "191bee9ec893ae71554a26b97f32067ac36ab77558aefa9063d6991d1909adea",
+      "bytes": 461
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "T1-studio_api.py",
+      "sha256": "d9477f4836c752ef45b8c75ba4981c72336609f45c1b780d401ea6a7e76b1d75",
+      "bytes": 21889
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "T3-GREEN.log",
+      "sha256": "0486272200e43a0140829def32ab2f82d616215a1cd6c48df7462b02ec1d302c",
+      "bytes": 272
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "T3-RED-GREEN.json",
+      "sha256": "2f83ce072f12d0ccf6490d9cab5d05bf463d757725a8ed90ffcc2cd729987cd4",
+      "bytes": 615
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "T3-RED.log",
+      "sha256": "cfc23587630cce144de47ab1aef1be2b7b72dce5a5eb0c3c61cb93839be02cbc",
+      "bytes": 1421
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "UPSTREAM-PYTEST.json",
+      "sha256": "e0f61299102cd155668c36c5c41f177d9b312ab7915990951fa853d64a96c5fc",
+      "bytes": 252
+    },
+    {
+      "collection": "stocking-issue3-full-audit-20261011-131035",
+      "file": "UPSTREAM-PYTEST.log",
+      "sha256": "b13fdc8bc6579ea8333c87b1b63c08410b1a2842deaacc6f7f9d68ab8550e841",
+      "bytes": 10084
+    },
+    {
+      "collection": "stocking-test-repair-20261011-02",
+      "file": "PLAN.json",
+      "sha256": "f33ad9aced727342c325b63693fa339cf4ec3b21ef5aa2db631ca1ec98a122fc",
+      "bytes": 17356
+    },
+    {
+      "collection": "stocking-test-repair-20261011-02",
+      "file": "DEPLOYED.json",
+      "sha256": "492e3020ee2c7e271068686581bb4961fa7f55cc0768304b6b7f51e1b30ad282",
+      "bytes": 2285
+    },
+    {
+      "collection": "stocking-test-repair-20261011-02",
+      "file": "RUNTIME-HASH.log",
+      "sha256": "bb1060b8e7530d87e3312a829174707b346b7175df6543f94205177755462d70",
+      "bytes": 250
+    },
+    {
+      "collection": "stocking-test-repair-20261011-02",
+      "file": "RUNTIME-HASH.json",
+      "sha256": "0c5ae6486dc7f917d3c914682ddfeab36030992764e31757a4449bb14cc2926a",
+      "bytes": 508
+    },
+    {
+      "collection": "stocking-test-repair-20261011-02",
+      "file": "RUNTIME-PYTHON.log",
+      "sha256": "fd83d5ff623a19735e162d59912236ea58918863870d2b6cb18a538ebe541566",
+      "bytes": 13958
+    },
+    {
+      "collection": "stocking-test-repair-20261011-02",
+      "file": "RUNTIME-PYTHON.json",
+      "sha256": "39820997902af4ef18e93a6679f19bf51ad9b5153773da2284ad84f958c78cbd",
+      "bytes": 477
+    },
+    {
+      "collection": "stocking-test-repair-20261011-02",
+      "file": "RUNTIME-FRONTEND.log",
+      "sha256": "11d74be86c4065734c810925ae936ce38ef6bb8f54bd97354f2c7cfe7dbd1821",
+      "bytes": 1669
+    },
+    {
+      "collection": "stocking-test-repair-20261011-02",
+      "file": "RUNTIME-FRONTEND.json",
+      "sha256": "c8379dea2ecb63c776698a961d37eb1551dd696898b4622a67de046fd52035c5",
+      "bytes": 416
+    },
+    {
+      "collection": "stocking-test-repair-20261011-02",
+      "file": "VERIFIED.json",
+      "sha256": "5b483674b4cb3c8d70b9274dec0c96931c8770a72bea489fb5d04be4220b5c55",
+      "bytes": 780
+    },
+    {
+      "collection": "stocking-author-review-20261011-01",
+      "file": "REMOTE.json",
+      "sha256": "61b2f292e2d1fd6944b11e8b02bdf9cb9b457e8b64ae01a5a20c634449f4fa34",
+      "bytes": 16618
+    },
+    {
+      "collection": "stocking-author-review-20261011-01",
+      "file": "GITHUB-PERMISSIONS.md",
+      "sha256": "aedb40186bf7aaa9358648f6f9b2d1c8ddac32654d95d0fcd748826f3d9cc82d",
+      "bytes": 10785
+    },
+    {
+      "collection": "stocking-author-review-20261011-01",
+      "file": "ACCESS-RESULT.json",
+      "sha256": "b961d1eacd89a66f6b28cad02946ee9074a716315cf9e812f0100960790e72b1",
+      "bytes": 429
+    },
+    {
+      "collection": "stocking-author-review-20261011-01",
+      "file": "PUBLIC-HISTORY-SECURITY.json",
+      "sha256": "b050107b5d7fdf5ab9d36e229ebd430e2764e4fb29a62a75d2804ff88a05ef0e",
+      "bytes": 1052
+    },
+    {
+      "collection": "stocking-author-review-20261011-01",
+      "file": "PUBLIC-PREFLIGHT.json",
+      "sha256": "719772d6ed02a627f9551db806b9a0e42211d46d2d7b78be47840e01c567e333",
+      "bytes": 631
+    },
+    {
+      "collection": "stocking-author-review-20261011-01",
+      "file": "ISSUE-POST-ERROR.json",
+      "sha256": "b3dd8de8dad58609344bfb8ece43974eb90f2c2fb50f919f2036fb689130bc8b",
+      "bytes": 238
+    }
+  ]
+}

@@ -2,7 +2,13 @@
 
 核对日期：2026-10-11。来源为[作者评审](https://github.com/silvermoong/stocking-texture-tool/issues/3#issuecomment-6101011657)。再次读取远端后，作者评论仍更新于 2026-10-10T19:29:37Z，未新增任务；上游 main 仍为 `e72a262bd917924bc82d45f19992344f2680a303`。
 
-T0–T5 的技术修改和要求的验证均已完成；原版测试有 52 项因作者未公开素材而跳过，不能算通过。这里是我方技术核对，不代表作者复审认可或 Issue 已关闭。没有代发评论。独立仓仍为私有，作者能否查看取决于仓库访问权限；删除旧 fork 后，原 Issue 中旧 fork 的链接已失效。
+T0–T5 的技术修改通过我方核对；原版测试有 52 项因作者未公开素材而跳过，不能算通过。后续完整复核发现本机部署漏了测试目录：4 份旧测试、5 份缺失，运行区原始哈希测试实际失败。这个遗漏现已按九文件范围补齐并重新测试通过，不能用此前维护源/独立仓的绿灯代替当时运行目录的结果。完整复核及补齐证据见[补齐收据](../../../receipts/stocking_test_repair_20261011.json)。这里不代表作者复审认可或 Issue 已关闭。
+
+本机测试补齐前后均为同一服务进程，未重启、未操作数据库；49 份受保护工作流/草稿/素材哈希和九文件以外的插件内容不变。78 份跟踪插件文件现与维护源一致。四份旧测试有原字节备份，五份新增文件登记了原先不存在的状态；回滚仅恢复/归档这九份测试，不能覆盖后续用户数据。首次准备在读取审计中“缺失文件”记录时中止，尚未写运行目录；修正准备脚本后使用新证据目录完成部署，失败准备原件保留。
+
+用户明确选择将独立插件仓公开，已完成可见性切换和未登录读取验证；没有授予作者写权限。公开前对全部可达历史执行完整安全门禁，138 对象/129 blobs、0 发现，三张展示图与已批准清单匹配且无嵌入私有元数据。该检查不等于对所有秘密的绝对证明。作者现在可直接读取 T0–T5 和 PR #1；删除旧 fork 后原 Issue 中的旧链接已失效。
+
+Issue 回帖尚未成功：GitHub API 返回 403 `Resource not accessible by personal access token`，当前令牌没有作者仓的评论写权限，网页控制连续超时。[完整回复稿](2026-10-11-issue-3-author-reply.md)已备好，逐项给出提交 SHA、命令、结果和未完成边界。访问、回帖、作者认可状态分别记录，不把仓库公开当作作者复审通过。
 
 ## 逐项证据
 
@@ -27,11 +33,11 @@ python -X utf8 -B -m unittest discover -s integrations/comfyui/tests -p "test_*.
 node --test integrations/comfyui/tests/test_editor.cjs integrations/comfyui/tests/test_studio_editor.cjs
 ```
 
-分别为 78 通过/0 失败/0 跳过（包含实际 CUDA），17 通过/0 失败/0 跳过。Windows 克隆使用 `git clone --no-local --branch feature/gpu-guides-lifecycle -c core.autocrlf=true`，原始上游 SHA 在该检出中再次通过。验收基于 `c4d1769cdc4677aa3add48c987ba045b848d0210`；追加的 `a5eb1d8ca65142103b3ec18d565b9ec9e7797a6a` 只改变示例工作流 Note。86 文件清单逐项比较确认全部运行代码和测试文件未变，复用这些测试结果，不伪称重新运行。
+本次完整复核从 GitHub 新克隆 main `fc51080924c2adb862008486af1e293fdf6aa141` 与 PR `a5eb1d8ca65142103b3ec18d565b9ec9e7797a6a`，均使用 Windows `core.autocrlf=true`。main 为 67 Python、17 前端通过；PR 为 78 Python（实际 CUDA）、17 前端通过，均 0 失败/0 跳过，含原始上游哈希。测试目录补齐后在运行插件目录执行 `python -X utf8 -B -m unittest discover -s tests -p "test_*.py" -v` 和相应 `node --test tests/test_editor.cjs tests/test_studio_editor.cjs`，再次取得 78/17，0 失败/0 跳过；原先失败的单独哈希测试现 1 通过。
 
-原版固定目录执行 `python -m pytest -q -ra -p no:cacheprovider`，313 通过、52 跳过、0 失败；52 项均缺少未公开 sample PNG/PSD。该日志属于 T1 同一 pin 的既有运行，本次核验 pin 后复用。未读取或依赖上游 `.scratch/`、`AGENTS.md`、`docs/agents/`。
+本次完整复核在原版固定目录重新执行 `python -X utf8 -B -m pytest -q -ra -p no:cacheprovider`，313 通过、52 跳过、0 失败；52 项均缺少未公开 sample PNG/PSD，另有 28 条现有 Pillow 弃用警告。未读取或依赖上游 `.scratch/`、`AGENTS.md`、`docs/agents/`。新隔离数据目录仅安装独立插件：3 个节点注册、一次 Studio → 两个 SaveImage 成功（128×160 RGB/RGBA），实页编辑器/CPU/贴线开关通过；复用既有 Python/核心及合成输入，不是裸机依赖安装。
 
-专项命令为 `python -m unittest discover -s integrations/comfyui/tests -p test_issue3.py -v`（5 通过）、同命令替换 `test_retention.py`（4 通过）；`test_request_contract.py` 通过环境变量 `STOCKING_ADAPTER_SOURCE` 指向 T1 原始适配得到红灯，移除变量后为绿灯。上述子集已包含在最终 78 项，不相加计算总数。
+专项命令为 `python -m unittest discover -s integrations/comfyui/tests -p test_issue3.py -v`（当前 6 项：T2 的 5 项加 T5 ping）、同命令替换 `test_retention.py`（4 项）；这些子集在本次完整集均通过。`test_request_contract.py` 本次再次通过环境变量 `STOCKING_ADAPTER_SOURCE` 指向 T1 原始适配得到预期 1 失败，移除变量后 1 通过。上述子集已包含在最终 78 项，不相加计算总数。
 
 维护源额外完成 5 项导出合同、当前工作流合同和 51 项显式 CPU HTTP 对照。详情见[初次 Issue 收据](../../../receipts/stocking_texture_issue3_20261011.json)、[GPU 整合收据](../../../receipts/stocking_independent_gpu_20261011.json)及[本次交付收据](../../../receipts/stocking_independent_delivery_20261011.json)。
 
