@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "date": "2026-10-11",
+  "scanned_downloads": 4,
+  "imported": 4,
+  "download_originals_retained": 4,
+  "new_bytes": 849123822,
+  "user_loras_after": 313,
+  "assets": [
+    {
+      "original_name": "Bandless Stockings.safetensors",
+      "current_path": "ComfyUI/models/loras/krea2/服装与配饰/Krea2__Bandless Stocking and Garter for Krea 2__v1.0__BF16__cv3385970__f3274828.safetensors",
+      "sha256": "e0297cb1820de7eee9f9d850c11a17a89226dfaa090bd505dcf81458a5164301",
+      "page_url": "https://civitai.com/models/2986484?modelVersionId=3385970",
+      "version_id": 3385970,
+      "file_id": 3274828
+    },
+    {
+      "original_name": "CandlelitRevelry_Anima-000007.safetensors",
+      "current_path": "ComfyUI/models/loras/anima/服装与配饰/Anima__Genshin Impact Miliastra Wonderland - Candlelit Re__v1.0 Anima__BF16__cv3394109__f3283808.safetensors",
+      "sha256": "7725883b9a75dcbb2233f9a11a0c853ecce21ce88dcae2c34103e04302c392c4",
+      "page_url": "https://civitai.com/models/2992989?modelVersionId=3394109",
+      "version_id": 3394109,
+      "file_id": 3283808
+    },
+    {
+      "original_name": "undressing kimono_anima_V1.0.safetensors",
+      "current_path": "ComfyUI/models/loras/anima/服装与配饰/Anima__脱ぎ掛け(着物)-undressing kimono__v1.0 anima__cv2928394__f2807145.safetensors",
+      "sha256": "3289efca1c8d8f0fbeffafbed93870d88ccf4a9ae4be54b4588da5fdea096aae",
+      "page_url": "https://civitai.com/models/1679631?modelVersionId=2928394",
+      "version_id": 2928394,
+      "file_id": 2807145
+    },
+    {
+      "original_name": "undressing-kimono_Krea2_V1.0.safetensors",
+      "current_path": "ComfyUI/models/loras/krea2/服装与配饰/Krea2__脱ぎ掛け(着物)-undressing kimono__v1.0 Krea2__FP32__cv3395408__f3285271.safetensors",
+      "sha256": "16657c6d6febf42d6ca4d8182865e3cb5efd1200e31e88487c61583bb0177ae6",
+      "page_url": "https://civitai.com/models/1679631?modelVersionId=3395408",
+      "version_id": 3395408,
+      "file_id": 3285271
+    }
+  ],
+  "validation": {
+    "full_target_sha256": true,
+    "exact_public_version_file": true,
+    "cards_and_loader_enumeration": true,
+    "existing_identity_and_personal_fields_preserved": true,
+    "existing_cache_rows_preserved": 326,
+    "old_index_rows_preserved": true,
+    "queue_empty_before_after": true,
+    "preview_downloaded_count": 4,
+    "unit_tests": 32,
+    "source_tests": 26,
+    "standardization_tests": 47,
+    "gpu_tested": false,
+    "service_restarted": false,
+    "full_library_rescan": false
+  },
+  "private_receipt_id": "lora-import-20261011/import-20261011-140824-848357",
+  "rollback": "Retained original downloads plus exact per-item path/hash journal. Remove only this batch after re-verification if rollback is requested; never replace the online SQLite with the historical backup."
+}

@@ -1,8 +1,10 @@
 # 模型、LoRA 管理与资源配套
 
-文档修订：2026-10-10。
+文档修订：2026-10-11。
 
 ## 实现与资源
+
+2026-10-11：增量导入昨晚下载的 4 个服装 LoRA（Anima 2 个、Krea2 2 个），现有 313 个用户 LoRA。补齐分类、规范名、来源、触发词与 4 张官方预览，保留全部下载原件；326 条旧缓存身份／个人字段和既有索引保持。整理工具接纳 Civitai LoCon 类型，仍严格核对完整摘要与版本／文件身份，并新增 `--keep-originals`。32 项导入回归、26 项来源回归、47 项命名回归及在线卡片／加载器核验通过；未重启、全库重扫或做 GPU 生图。回滚依赖保留原件与本批路径／摘要日志，不覆盖在线库。见[本批收据](../../receipts/lora_download_import_20261011.json)。
 
 统一包内 `modules/comfyui-lora-manager/` 是当前管理实现；模块入口通过 [modules.json](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules.json)登记。[模型说明](../../MODELS.md)、[模型清单](../../../snapshot/inventory/models.json)和 [工作流模型引用](../../../snapshot/inventory/workflow_models.json)提供路径、用途及捕获时依赖。
 

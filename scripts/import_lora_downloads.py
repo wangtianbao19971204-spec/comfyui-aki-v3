@@ -78,7 +78,8 @@ def request(url, data=None):
 
 def selected_version(version, sha):
     """Bind a public version to its exact file, never to its title alone."""
-    if version.get('model', {}).get('type', '').upper() != 'LORA':
+    # Civitai labels some supported low-rank adapters as LoCon.
+    if version.get('model', {}).get('type', '').upper() not in {'LORA', 'LOCON'}:
         raise ValueError('source_is_not_lora')
     selected = [f for f in version.get('files', [])
                 if (f.get('hashes', {}).get('SHA256') or '').lower() == sha]
@@ -159,7 +160,7 @@ def metadata_for(row, asset, version, target):
             'preview_url': ''}
 
 
-def apply_rows(rows, downloads, runtime, api, evidence, previews=True):
+def apply_rows(rows, downloads, runtime, api, evidence, previews=True, keep_originals=False):
     queue = request(api + '/queue')
     if queue.get('queue_running') or queue.get('queue_pending'):
         raise ValueError('queue_is_not_empty')
@@ -199,7 +200,8 @@ def apply_rows(rows, downloads, runtime, api, evidence, previews=True):
             raise ValueError('card_or_loader_verification_failed_original_retained')
         if fingerprint(source) != row['stat']:
             raise ValueError('source_changed_original_retained')
-        source.unlink()
+        if not keep_originals:
+            source.unlink()
         completed.append(asset)
         save(evidence / 'completed-assets.json', completed)
         print(json.dumps({'imported': relative}, ensure_ascii=False), flush=True)
@@ -239,6 +241,7 @@ def main(argv=None):
     parser.add_argument('--cache-db', type=Path, default=Path(os.environ.get('LOCALAPPDATA', str(Path.home()))) / 'ComfyUI-LoRA-Manager/cache/model/comfyui.sqlite')
     parser.add_argument('--categories', type=Path, help='Reviewed JSON mapping of full SHA256 to category')
     parser.add_argument('--apply', action='store_true')
+    parser.add_argument('--keep-originals', action='store_true', help='Retain downloaded originals after verified import')
     parser.add_argument('--no-preview', action='store_true', help='Skip public static preview thumbnails')
     args = parser.parse_args(argv)
     url = urlsplit(args.api)
@@ -300,7 +303,8 @@ def main(argv=None):
     db = regular(args.cache_db)
     with closing(sqlite3.connect(db.as_uri() + '?mode=ro', uri=True)) as src, closing(sqlite3.connect(evidence / 'cache-before.sqlite')) as dst:
         src.backup(dst)
-    assets = apply_rows(rows, downloads, runtime, args.api, evidence, previews=not args.no_preview)
+    assets = apply_rows(rows, downloads, runtime, args.api, evidence,
+                        previews=not args.no_preview, keep_originals=args.keep_originals)
     if original != catalogue.digest(REPO / catalogue.CATALOGUE):
         raise ValueError('catalogue_changed_completed_assets_in_receipt')
     cat['assets'].extend(assets); cat['summary'] = catalogue.compute_summary(cat)
@@ -313,7 +317,7 @@ def main(argv=None):
             item.update(sha256=catalogue.digest(REPO / catalogue.CATALOGUE), bytes=(REPO / catalogue.CATALOGUE).stat().st_size)
     save(manifest_path, manifest)
     save(evidence / 'result.json', {'imported': len(assets), 'duplicates': len(duplicates), 'skipped': skipped,
-                                   'source_originals_moved': True, 'single_card_registration': True,
+                                   'source_originals_moved': not args.keep_originals, 'single_card_registration': True,
                                    'full_library_rescan': False, 'restarted': False, 'gpu_tested': False})
 
 
