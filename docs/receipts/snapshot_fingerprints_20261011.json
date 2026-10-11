@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "date": "2026-10-11",
+  "scope": "Local snapshot fingerprints and scoped deployment planning",
+  "pass": true,
+  "baseline_commit": "a91576d2acb4c9df505bc29ee8d8c17cc55ffb17",
+  "snapshot_manifest_sha256": "592fae6add965edf976a31bbf5785688496de493cd7714ecba649bb9f06f7489",
+  "cold_seconds": 118.44416459999047,
+  "warm_seconds": 9.671851199993398,
+  "speedup": 12.24627655562684,
+  "cold": {
+    "mode": "local-snapshot-fingerprints",
+    "state": "policy_changed",
+    "written": true,
+    "hashed_files": 9692,
+    "hashed_bytes": 1723996855,
+    "joined_hashed_bytes": 1031261601,
+    "content_scanned_files": 9690,
+    "reused_content_scans": 0,
+    "reused_joined_hashes": 0,
+    "unchanged_directories": 0,
+    "directory_count": 1504,
+    "all_names_and_metadata_checked": true,
+    "publication_evidence": false
+  },
+  "warm": {
+    "mode": "local-snapshot-fingerprints",
+    "state": "warm",
+    "written": true,
+    "hashed_files": 2,
+    "hashed_bytes": 37712,
+    "joined_hashed_bytes": 0,
+    "content_scanned_files": 0,
+    "reused_content_scans": 9690,
+    "reused_joined_hashes": 19,
+    "unchanged_directories": 1504,
+    "directory_count": 1504,
+    "all_names_and_metadata_checked": true,
+    "publication_evidence": false
+  },
+  "full_result_fields_equal": true,
+  "tests": {
+    "related_regression_run": 111,
+    "related_run_pass": true,
+    "final_fingerprint_suite": 16,
+    "final_fingerprint_suite_pass": true
+  },
+  "limits": [
+    "Timing is observed wall time; OS caches were not cleared.",
+    "Warm mode still enumerates names and metadata and rereads two reviewed fixtures totaling 37712 bytes.",
+    "Local performance cache is not a tamper-proof publication attestation.",
+    "Production models, workflows and databases are outside this source-cache change."
+  ],
+  "external_evidence_id": "snapshot-fingerprints-20261011-01",
+  "evidence": [
+    {
+      "file": "final-cold.json",
+      "sha256": "0a52d747542ba70991edc1822c82e4d99069edaa80f92254d0946e3899d27b89"
+    },
+    {
+      "file": "final-warm.json",
+      "sha256": "a31f95a47e0bbaa06d295c9d2195bda172f01112dc4276bdff1afb6ee22f1361"
+    },
+    {
+      "file": "FINAL_TIMINGS.json",
+      "sha256": "80899dc5231f6b9cf037a5eabe9cc68188e3912ee504b8579f95579f4bf63a16"
+    }
+  ]
+}

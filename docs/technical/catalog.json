@@ -683,6 +683,7 @@
         "scripts/backup_status.py",
         "scripts/workspace_audit.py",
         "scripts/staged_scan_cache.py",
+        "scripts/snapshot_cache.py",
         "governance/retention-policy.json",
         "governance/runtime-support.json",
         "governance/runtime-support-import.json",
@@ -707,6 +708,7 @@
         "tests/test_workspace_audit.py",
         "tests/test_staged_scan_cache.py",
         "tests/test_history_scan_cache.py",
+        "tests/test_snapshot_cache.py",
         "tests/test_snapshot.py",
         "tests/test_project.py",
         "tests/test_external_state.py",
@@ -732,7 +734,8 @@
         "docs/receipts/final_workflow_acceptance_20261007.json",
         "docs/receipts/github_content_reconciliation_20261007.json",
         "docs/receipts/privacy_completeness_recheck_20261007.json",
-        "docs/receipts/incremental_security_20261011.json"
+        "docs/receipts/incremental_security_20261011.json",
+        "docs/receipts/snapshot_fingerprints_20261011.json"
       ],
       "acceptance": "checked-source",
       "watch": [
