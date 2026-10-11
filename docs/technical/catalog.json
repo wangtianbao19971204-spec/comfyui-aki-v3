@@ -947,7 +947,8 @@
           "docs/receipts/stocking_fork_presentation_20261010.json",
           "docs/receipts/stocking_texture_upstream_refresh_20261010.json",
           "docs/receipts/stocking_fork_showcase_20261010.json",
-          "docs/receipts/stocking_gpu_guides_20261011.json"
+          "docs/receipts/stocking_gpu_guides_20261011.json",
+          "docs/receipts/stocking_gpu_production_20261011.json"
       ],
       "acceptance": "checked-source",
       "watch": [

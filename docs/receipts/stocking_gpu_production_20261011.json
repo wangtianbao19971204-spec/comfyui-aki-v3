@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "id": "stocking_gpu_production_20261011",
+  "scope": "production_acceptance",
+  "pass": true,
+  "main_commit": "813e7fad7b869b23d577c42bb8fa18e4ffe5b371",
+  "deployed_file_count": 16,
+  "source_sha256": {
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/README.md": "9e5c46d6a82b6a08bdf084b39dc89b6df15a28da683b167b7774ede2cd69e259",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/gpu_contours.py": "a18ecb031aeb40506e8c782d15a4a2e659c7ca7262313489f8b4facb76d24d79",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/guide_solver.py": "175405bd5539431abfcc308bc2147b7aadef526a7a5147e675c2d539d362e745",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/requirements-cuda13.txt": "c5ddbe05eecc642ef82350d010b7eb1dd053fefc0136457ef2cc9db2bd5a68fa",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py": "40be54eca6bc373068712334d209f3c93abcf6e70a084a9a029c60a9a2dcc68d",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_api.py": "6a8ec2aa66de45f6ad39c20d8d76531c36da013755826b6e0ad2fef7f1c19538",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_assets.py": "e3440a53120715d6816d62c00591f874ea4ccc162ed818939f1f1b26f7454a3a",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_document.py": "a73b305a47f6c793d59a08aee9f1d2bbbf7d754596ff271549188064e8a62f5f",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_models.py": "b44964c2099856c3b3cff8ca779cff182bb23362f1470c9ed588860af76563e3",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py": "97685708b5a1e7c7b4d1a248edbd8edd261cfc4dd46575d68ab7467ed57f6f4d",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_gpu_contours.py": "3d3f97e647cd31862c14627edb8c46ff9775ebd64e3e42f2ed9f507fca6b0100",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_guide_solver.py": "88f2abac598bf51838eae85dc7979688a02ffcb6935dbeae422d17d2d3308e28",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio.py": "3082b3d89299a143d0f7cec1809a1788f975ec76c17ad193ad22480430837dc9",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio_models.py": "840dc3d725b580d9ef05edeb613e0baa856cab4790453c3e07229f3f6ff205d1",
+    "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_studio.js": "feb4a7b6b634bc55b2d7df570abfaed4bfa644d72c5073d5cb08b03e17b4c9a4",
+    "snapshot/runtime/production_tools/export_stocking_upstream.py": "ab9d17acd8efb63bcc5cfb5cf032a644308650ba799f1902a3fb0601be17d246"
+  },
+  "default_gpu": true,
+  "sam_and_depth_gpu": true,
+  "cpu_and_gpu_real_page": true,
+  "leaving_clears_models_and_embeddings": true,
+  "return_preserves_depth_and_reloads_sam": true,
+  "close_clears_models": true,
+  "guide_gpu_private_pool_empty": true,
+  "observed_sam_seconds": {
+    "gpu_cold": 1.3393346999946516,
+    "gpu_reload": 0.8095775000110734,
+    "cpu": 4.72302989999298
+  },
+  "observed_final_gpu_guides_seconds": [
+    0.47,
+    0.71
+  ],
+  "existing_workflows_and_drafts_preserved": true,
+  "database_replaced": false,
+  "diffusion_prompt_submitted": false,
+  "preference_change": "compute_device=gpu; all pre-existing preset data preserved",
+  "evidence_sha256": {
+    "UI_CLOSE_CACHE.json": "e0d012b7379a6674f412dd8d5cd35dc0133484d69265113a5650c36b6fff947e",
+    "UI_CPU.json": "4b81137e606a78f481c9844ba30d0abc58b7f3e72c09d1f814924db3c18efce6",
+    "UI_DEFAULT.json": "5d0f39bb46262590968d3caed06add63203c473dce0f933d00c7daa37409d544",
+    "UI_GPU.json": "585a132f5a5946323ebab0ad08201d43edf71c83f2e3165439f22304a5f70eab",
+    "UI_LEFT.json": "01f8d691b20641e2d4c98e1e03a14e5e5a2a6894973ee1a1c6d69b5a98d43187",
+    "UI_LOADED.json": "b222d6c46e88882d9f53a82da54e14c94300556617f33fa55d191620a789d5b9",
+    "UI_RELOADED.json": "00e0c6cc7763f81774e8f0a4315fd0b382d44669467f5ad7aae2f19fe702233c",
+    "UI_SESSION.json": "7f5596d1420b9d58a00f4bb6e3d55735526e4b7a60233db2f2b7da35feeba41c",
+    "production-gpu-settings.jpg": "71c8a4f74424011bc1300935cca8f99192326601c1b81c247a17bfc750dd6697"
+  },
+  "evidence_location": "External private deployment receipt; user assets and screenshots are not committed.",
+  "limits": [
+    "Changed plugin paths only; two older runtime test-script differences left untouched.",
+    "Model objects and tensors are released from caches. General allocators and CUDA library contexts may retain process memory; RSS returning to baseline is not claimed."
+  ]
+}
