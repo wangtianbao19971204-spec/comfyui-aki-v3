@@ -1,11 +1,11 @@
 # 本体、插件装配与启动
 
-文档修订：2026-10-09。
+文档修订：2026-10-11。
 
 
 2026-10-11 更新：源码 production / diagnostic / anima 白名单用 `ComfyUI-Anima-LoRA-ControlNet-Patch` 替换旧 `ComfyUI-Anima-2.9B-loraPatch`，避免 LoRA 双重映射；其他启动参数保持。隔离 CPU 服务确认 LoRA 与原生 ControlNet 两个 hook 安装。新增原生权重加载器无需搬动模型；已完成限定部署与生产重启，见 [GPU/部署收据](../../receipts/anima_control_gpu_deployment_20261011.json)及 [兼容说明](../training/anima-compat.md)。
 
-VNCCS 子图执行同步现按冒号路径定位节点，后端与上传 API 复用相同的安全文件名；修复重启后缓存失效时无法使用浏览器捕获的问题。实页证明前后端控制图逐像素一致，Python 备用渲染和 SAM3D 图片提取仍未认证。回归见 `test_vnccs_pose_sync.cjs` 与 `tests/test_vnccs_pose_sync.py`。
+VNCCS 子图执行同步现按冒号路径定位节点，后端与上传 API 复用相同的安全文件名；修复重启后缓存失效时无法使用浏览器捕获的问题。实页证明前后端控制图逐像素一致，Python 备用渲染和 SAM3D 图片提取仍未认证。回归见 `test_vnccs_pose_sync.cjs` 与 `tests/test_vnccs_pose_sync.py`。原版 a1 实机轮进一步用无头真实前端捕获姿势并经同步／缓存接口上传，后端执行日志确认从缓存取用；仍属真实浏览器捕获路径，不改变上述备用渲染限制。
 
 ## 职责与实现
 
@@ -26,6 +26,8 @@ VNCCS 子图执行同步现按冒号路径定位节点，后端与上传 API 复
 旧 `.git` 退休后的静态探测回退已审计，但不据此声称所有插件都完成重启验收。Anima 2.9B LoRA Patch 已完成独立任务的限定部署与对照交接，见 [兼容层档案](../training/anima-compat.md)；其服务身份与 A/B 结果只代表记录时的现场和样本，后续操作仍须重新核对当前状态。
 
 ## 更新记录
+
+- 2026-10-11：原版 Anima 控制实机验收复用了同一批已部署插件代码：隔离实例里原生权重加载器按 28 层直接应用，VNCCS 注册与冒号路径同步正常，控制分支无需额外插件改动。该轮只部署四份 a1 工作流／模板并用原命令行重启，白名单、补丁与加载器保持；重启后注册缺失为零、队列为空。见[原版实机变更](../changes/runtime-workflows/2026-10-11-anima-original-gpu.md)。
 
 - 2026-10-09：按用户的生产部署／实测请求，将丝袜纹理节点加入 production 白名单（25→26）；其余配置不变。原 GUI 和项目启动器都在启动时读取该清单，无需改本体或绘世适配。此次部署与真实图片验收以[丝袜纹理档案](stocking-texture.md)的现场收据为准。
 

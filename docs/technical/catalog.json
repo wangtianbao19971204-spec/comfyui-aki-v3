@@ -226,7 +226,8 @@
         "docs/receipts/stocking_workflow_refresh_20261010.json",
         "docs/receipts/anima_control_simple_20261011.json",
         "docs/receipts/anima_control_gpu_deployment_20261011.json",
-        "docs/receipts/anima_original_control_20261011.json"
+        "docs/receipts/anima_original_control_20261011.json",
+        "docs/receipts/anima_original_control_gpu_20261011.json"
       ],
       "acceptance": "historical",
       "watch": [
@@ -693,7 +694,8 @@
         "docs/receipts/anima29_lorapatch_production_lora_strength_20261005.json",
         "docs/receipts/anima_control_simple_20261011.json",
         "docs/receipts/anima_control_gpu_deployment_20261011.json",
-        "docs/receipts/anima_original_control_20261011.json"
+        "docs/receipts/anima_original_control_20261011.json",
+        "docs/receipts/anima_original_control_gpu_20261011.json"
       ],
       "acceptance": "historical",
       "watch": [

@@ -23,6 +23,7 @@
 - 已在本机完成一次隔离冷启动（物化新树 + 备用端口 + 25 个生产插件）：5/5 模块、76 节点、1,939 个节点类型、队列 0/0，运行区零改动，见[隔离启动收据](receipts/isolated_boot_20261006.json)。仍未验收的是独立依赖环境、GPU 出图质量、具体工作流以及整机迁移。
 - `triton` 在本机缺失，使 `ComfyUI-RMBG` 的 `SAM3Segment` 未注册；`vnccs-utils` 的 SAM3 节点正常，当前 UAP 工作流只引用 RMBG/BiRefNet，暂不受影响。
 - Comfyroll 的 `CR Output Flow Frames`、`CR XY From Folder`、`CR XY Save Grid Image` 在 `INPUT_TYPES` 阶段报错；其余 Comfyroll 节点正常。
+- 2026-10-11 原版 Anima 控制实机验收保留两项现场事实：两套 Anima 控制子图在保存文件中默认 `mode=2`（需先启用分支才执行控制），擦线高级子图默认启用但已保存遮罩为 RGB，`LoadImage` 取不到 alpha，因此合成为空操作；要真正擦线须让遮罩带 alpha。另该流控制强度仍取生产默认 1，此强度下姿态跟随参考图但脸与四肢退化，未改默认值，见[收据](receipts/anima_original_control_gpu_20261011.json)。
 - 冷缓存启动较慢：prompt-assistant 与统一包导入各约 83 / 129 秒，随后约 247 秒预热资料缓存。
 - 部分生产插件在导入期检查依赖并在缺失时 `pip install`（WeiLin、Impact-Pack）；裸机首次启动会联网改动解释器，重建前须先预装。
 
