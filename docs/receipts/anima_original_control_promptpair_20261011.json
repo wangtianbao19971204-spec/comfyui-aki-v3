@@ -225,6 +225,7 @@
     "not_done": [
       "the live input file was not replaced and the live workflow still points at the old name",
       "the converted file erases the reference's bright line work, which is what the stored brightness encodes; a region the user paints in the mask editor remains the intended use"
-    ]
+    ],
+    "open_question": "whether the shipped mask editor writes the alpha channel back on save was not exercised in this round; if it composites to opaque, the same no-op returns after a reload"
   }
 }
