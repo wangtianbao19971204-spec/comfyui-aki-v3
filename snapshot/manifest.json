@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-11T02:47:32.141605+00:00",
+  "created_at": "2026-10-11T03:34:12.136272+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -57763,15 +57763,15 @@
     {
       "source": "production_tools/stocking_fork_intro.en.md",
       "path": "runtime/production_tools/stocking_fork_intro.en.md",
-      "sha256": "e9695816122a7df7a0fc30a2f63b33682e7c8a19f8d960690f6e5df17f144f13",
-      "bytes": 3447,
+      "sha256": "2c88c51887e9c3415ec25e0527384801b1680b16d3599e125e0a6cde9b422f82",
+      "bytes": 3816,
       "kind": "file"
     },
     {
       "source": "production_tools/stocking_fork_intro.md",
       "path": "runtime/production_tools/stocking_fork_intro.md",
-      "sha256": "6b31961bc4063990585ccda11c4fba6c1b6dfac684f298222ca7e40e05944720",
-      "bytes": 3082,
+      "sha256": "507ccd36286568d00daa93d3b4ba5916037433089e7ef50b45c21fa4f1c5b765",
+      "bytes": 3352,
       "kind": "file"
     },
     {
@@ -57791,8 +57791,8 @@
     {
       "source": "production_tools/stocking_upstream_README.md",
       "path": "runtime/production_tools/stocking_upstream_README.md",
-      "sha256": "7bd61c03b330107f027bcee4a3398ebc538ca5e7fb0a90be787282fc3c1aa547",
-      "bytes": 11122,
+      "sha256": "c080986dd1b9b08e10c3b34a5b186188f383be8cdb6831c8bb2162f928474e75",
+      "bytes": 13447,
       "kind": "file"
     },
     {
@@ -67897,29 +67897,15 @@
     }
   ],
   "development_revision": {
-    "note": "Stocking editor GPU device selection, accelerated guides and model release on leaving",
-    "previous_manifest_sha256": "22c522c767b26d6a9adcc9d4798876db84adb38997a9e30cebf0fe32054e4953",
+    "note": "Update independent stocking fork GPU and cache lifecycle documentation",
+    "previous_manifest_sha256": "e87f06ed5e618b3f69379deaba73beb708b100c60a20538a9e7c7574942d293c",
     "source_changes": {
-      "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/gpu_contours.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/guide_solver.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/requirements-cuda13.txt",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_document.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_gpu_contours.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_guide_solver.py"
-      ],
+      "added": [],
       "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/README.md",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_api.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_assets.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_models.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio_models.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_studio.js",
-        "production_tools/export_stocking_upstream.py"
+        "production_tools/stocking_fork_intro.en.md",
+        "production_tools/stocking_fork_intro.md",
+        "production_tools/stocking_upstream_README.md"
       ]
     },
     "live_deployed": false,
