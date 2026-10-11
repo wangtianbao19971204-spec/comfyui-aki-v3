@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import sys
 import tempfile
+import time
 import types
 import unittest
 from unittest import mock
@@ -371,6 +372,35 @@ class StudioHTTP(unittest.IsolatedAsyncioTestCase):
         await self.call("POST", "/api/apply/ack", {"ticket": prepared["ticket"]})
         self.assertNotEqual(s.base_hash, original)
 
+    async def test_device_preference_is_persistent_and_not_workflow_data(self):
+        before = await self.call("GET", "/api/options")
+        self.assertEqual(before["compute_device"], "gpu")
+        changed = await self.call("PUT", "/api/options", {"compute_device": "cpu"})
+        self.assertEqual(changed["compute_device"], "cpu")
+        studio = self.manager.sessions[self.opened["session"]].studio
+        await asyncio.to_thread(studio.wait_ready)
+        self.assertTrue(all(r["inference"]["backend"] == "cpu" for r in studio.state()["regions"]))
+        self.assertEqual(studio.preferences.read()["compute_device"], "cpu")
+        self.assertNotIn("compute_device", studio.project_data())
+        response = await self.client.put(self.base + "/api/options", json={"compute_device": "invalid"})
+        self.assertEqual(response.status, 400)
+        self.assertEqual(studio.compute_device, "cpu")
+
+    async def test_hidden_page_releases_cache_and_stale_heartbeat_cannot_reactivate(self):
+        entry = self.manager.sessions[self.opened["session"]]
+        client = "b" * 32
+        await self.call("POST", "/api/activity", {"client": client, "active": True, "seq": 1})
+        studio_module.models._sam_cache["model"] = object()
+        result = await self.call("POST", "/api/activity", {"client": client, "active": False, "seq": 3})
+        self.assertFalse(result["cache"]["sam_loaded"])
+        self.assertFalse(entry.studio.active)
+        await self.call("POST", "/api/activity", {"client": client, "active": True, "seq": 2})
+        self.assertFalse(entry.studio.active)
+        await self.call("POST", "/api/activity", {"client": client, "active": True, "seq": 4})
+        self.assertTrue(entry.studio.active)
+        entry.reap_activity(time.monotonic() + api.ACTIVITY_TTL + 1)
+        self.assertFalse(entry.studio.active)
+
     async def test_concurrent_creates_respect_session_limit_and_user_ownership(self):
         responses = await asyncio.gather(*[self.client.post(api.PREFIX, json={"project": self.project}) for _ in range(5)])
         self.assertEqual(sorted(r.status for r in responses), [200, 200, 200, 400, 400])
@@ -385,7 +415,8 @@ class StudioHTTP(unittest.IsolatedAsyncioTestCase):
             y, x = np.ogrid[:160, :128]
             candidates.append((x - 64)**2 + (y - 80)**2 < radius**2)
         # This verifies candidate application; model quality is tested separately with actual weights.
-        def inference(*args, info):
+        def inference(*args, info, preferred):
+            self.assertEqual(preferred, "gpu")
             info.update(device="test GPU", backend="cuda:0", embedding_cached=True)
             return candidates, [.9, .8, .7]
         with mock.patch.object(studio_module.models, "segment", side_effect=inference):

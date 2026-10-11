@@ -19,9 +19,11 @@ SHOWCASE_README = Path(__file__).with_name('stocking_showcase.md')
 FILES = (
     '__init__.py', 'nodes.py', 'engine.py', 'rendering.py', 'studio.py', 'studio_api.py',
     'studio_assets.py', 'studio_store.py', 'studio_models.py', 'studio_nodes.py',
-    'requirements.txt', 'MODEL_SOURCES.json', 'UPSTREAM.json',
+    'studio_document.py', 'guide_solver.py', 'gpu_contours.py',
+    'requirements.txt', 'requirements-cuda13.txt', 'MODEL_SOURCES.json', 'UPSTREAM.json',
     'web/stocking_texture.js', 'web/editor_model.js', 'web/stocking_texture.css', 'web/stocking_studio.js',
     'tests/test_nodes.py', 'tests/test_studio.py', 'tests/test_editor.cjs', 'tests/test_studio_editor.cjs',
+    'tests/test_studio_models.py', 'tests/test_guide_solver.py', 'tests/test_gpu_contours.py',
     'tests/compare_upstream.py', 'tests/studio_compare.py', 'tests/model_acceptance.py',
     'tests/feature_acceptance.py', 'tests/bend_acceptance.py', 'tests/parity_matrix.py', 'tests/api_parity.py',
     'tests/image_acceptance.py', 'tests/isolated_acceptance.py',

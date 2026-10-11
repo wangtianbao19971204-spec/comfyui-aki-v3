@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 2026-10-11：丝袜完整编辑器增加默认 GPU 的 CPU/GPU 设置及 GPU 走向求解；关闭或离开后回收 SAM、深度和图像特征缓存，保留草稿，修复两种模型同时冷加载时的初始化冲突。见[设备设置与模型释放](docs/technical/changes/runtime-stocking-texture/2026-10-11-device-and-release.md)。
+
 - 2026-10-10：自用丝袜独立工作流补充完整选区和新版效果的操作提示，完整双腿工程通过油光、摩尔纹与保存重载三次隔离执行，成品／透明层保持；见[更新说明](docs/technical/changes/runtime-workflows/2026-10-10-upstream-effects.md)。未部署生产。
 
 - 2026-10-10：按用户要求精简丝袜 fork 中英简介，新增三张完整选区／真实输出对照的精确发布清单与导出校验；原作者说明及署名保留。运行算法与工作流未变，见[展示发布说明](docs/technical/changes/runtime-stocking-texture/2026-10-10-reviewed-showcase.md)。

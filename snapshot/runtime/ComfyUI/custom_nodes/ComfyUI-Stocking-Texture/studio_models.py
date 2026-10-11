@@ -21,8 +21,62 @@ _gpu_lock = threading.Lock()
 _sam_cache = {}
 _depth_cache = {}
 _embeddings = OrderedDict()
+_cache_lock = threading.RLock()
+_cache_users = set()
+_model_jobs = 0
+_release_requested = False
 MAX_EMBEDDINGS = 4
 _GIB = 1024 ** 3
+
+
+def preference(value):
+    if value not in ("cpu", "gpu"):
+        raise ValueError("计算设备须为 CPU 或 GPU")
+    return value
+
+
+def _clear_caches():
+    # Called with _cache_lock and no active model jobs. Drop only our models and
+    # image embeddings, never the host's diffusion models or the saved project.
+    _sam_cache.clear()
+    _depth_cache.clear()
+    _embeddings.clear()
+
+
+def cache_activity(owner, active):
+    global _release_requested
+    with _cache_lock:
+        if active:
+            _cache_users.add(owner)
+            _release_requested = False
+        else:
+            _cache_users.discard(owner)
+            if not _cache_users:
+                _release_requested = True
+                if not _model_jobs:
+                    _clear_caches()
+        return cache_state()
+
+
+def cache_state():
+    with _cache_lock:
+        return {"sam_loaded": bool(_sam_cache), "depth_loaded": bool(_depth_cache),
+                "embeddings": len(_embeddings), "active_editors": len(_cache_users),
+                "running": _model_jobs, "release_pending": _release_requested and _model_jobs > 0}
+
+
+@contextmanager
+def _model_use():
+    global _model_jobs
+    with _cache_lock:
+        _model_jobs += 1
+    try:
+        yield
+    finally:
+        with _cache_lock:
+            _model_jobs -= 1
+            if not _model_jobs and _release_requested:
+                _clear_caches()
 
 
 def _identity(*files):
@@ -52,14 +106,15 @@ def _prompt_queue():
 
 
 @contextmanager
-def _device_lease(required_bytes):
+def _device_lease(required_bytes, preferred="gpu"):
     """Keep prompt admission and this short GPU operation mutually exclusive.
 
     Disk loading/preprocessing happens before this lease. Never unload ComfyUI
     models. A CPU fallback runs after releasing both locks, including on OOM.
     """
     import torch
-    device, reason = _device(), None
+    device = torch.device("cpu") if preference(preferred) == "cpu" else _device()
+    reason = None
     acquired_queue = None
     acquired_gpu = False
     try:
@@ -123,10 +178,10 @@ def _full_precision(device):
             yield
 
 
-def _infer(model, operation, required_bytes, info):
+def _infer(model, operation, required_bytes, info, preferred="gpu"):
     import torch
     oom = False
-    with _device_lease(required_bytes) as (device, reason):
+    with _device_lease(required_bytes, preferred) as (device, reason):
         try:
             with torch.inference_mode(), _full_precision(device):
                 model.to(device)
@@ -138,11 +193,14 @@ def _infer(model, operation, required_bytes, info):
         finally:
             # Even a failed transfer/prediction must not pin a model in VRAM.
             model.to("cpu")
+            if device.type == "cuda":
+                torch.cuda.empty_cache()
     if oom:
         device, reason = torch.device("cpu"), "cuda_oom"
         with torch.inference_mode():
             result = operation(device)
-    info.update(device=_label(device), backend=str(device), fallback=reason)
+    info.update(device=_label(device), backend=str(device), fallback=reason,
+                preferred=preferred, model_offloaded=True)
     return result
 
 
@@ -158,14 +216,14 @@ def paths():
             "depth": next((p for p in depth_candidates if (p / "model.safetensors").is_file()), depth_candidates[-1])}
 
 
-def available(model_paths):
+def available(model_paths, preferred="gpu"):
     return {"sam": Path(model_paths["sam"]).is_file(),
             "depth": all((Path(model_paths["depth"]) / f).is_file()
                          for f in ("config.json", "preprocessor_config.json", "model.safetensors")),
-            "device": _label(_device())}
+            "device": "CPU" if preference(preferred) == "cpu" else _label(_device())}
 
 
-def segment(art, x, y, model_paths, *, info=None):
+def segment(art, x, y, model_paths, *, info=None, preferred="gpu"):
     started = time.perf_counter()
     info = {} if info is None else info
     checkpoint = Path(model_paths["sam"])
@@ -175,7 +233,7 @@ def segment(art, x, y, model_paths, *, info=None):
     from segment_anything import SamPredictor, sam_model_registry
     art = np.ascontiguousarray(art)
     digest = (art.shape, art.dtype.str, hashlib.sha256(memoryview(art)).digest())
-    with _sam_lock:
+    with _model_use(), _sam_lock:
         key = _identity(checkpoint)
         info["model_cached"] = _sam_cache.get("key") == key
         if not info["model_cached"]:
@@ -204,26 +262,36 @@ def segment(art, x, y, model_paths, *, info=None):
             return predictor.predict(point_coords=np.array([[x, y]], np.float32),
                                      point_labels=np.array([1]), multimask_output=True)
 
-        masks, scores, _ = _infer(model, predict, 3 * _GIB, info)
+        masks, scores, _ = _infer(model, predict, 3 * _GIB, info, preferred)
         order = np.argsort([m.sum() for m in masks], kind="stable")
         info["seconds"] = time.perf_counter() - started
         return [masks[i].copy() for i in order], [float(scores[i]) for i in order]
 
 
-def estimate_depth(art, model_paths, *, info=None):
+def estimate_depth(art, model_paths, *, info=None, preferred="gpu"):
     started = time.perf_counter()
     info = {} if info is None else info
     path = Path(model_paths["depth"])
-    if not available(model_paths)["depth"]:
+    if not available(model_paths, preferred)["depth"]:
         raise ValueError("缺少 Depth Anything V2 Small：请将模型放入 models/stocking_texture/Depth-Anything-V2-Small-hf")
-    from transformers import AutoImageProcessor, AutoModelForDepthEstimation
-    with _depth_lock:
+    from transformers import AutoImageProcessor, AutoConfig, DepthAnythingForDepthEstimation
+    from safetensors.torch import load_file
+    with _model_use(), _depth_lock:
         key = _identity(*(path / f for f in ("config.json", "preprocessor_config.json", "model.safetensors")))
         info["model_cached"] = _depth_cache.get("key") == key
         if not info["model_cached"]:
             _depth_cache.clear()
             processor = AutoImageProcessor.from_pretrained(str(path), local_files_only=True, use_fast=False)
-            model = AutoModelForDepthEstimation.from_pretrained(str(path), local_files_only=True).eval().cpu()
+            config = AutoConfig.from_pretrained(str(path), local_files_only=True, trust_remote_code=False)
+            if config.model_type != "depth_anything":
+                raise ValueError("内置深度只支持已登记的 Depth Anything 模型")
+            # Transformers.from_pretrained temporarily replaces the process-wide
+            # Module.register_parameter with a meta-device loader. A concurrent
+            # cold SAM (or host model) would then contain unusable meta tensors.
+            # This fixed, small architecture can initialize normally on CPU and
+            # load its local safetensors strictly, without global init patches.
+            model = DepthAnythingForDepthEstimation(config).eval().cpu()
+            model.load_state_dict(load_file(str(path / "model.safetensors"), device="cpu"), strict=True)
             _depth_cache.update(key=key, model=model, processor=processor)
         model, processor = _depth_cache["model"], _depth_cache["processor"]
         inputs = processor(images=np.array(art), return_tensors="pt",
@@ -234,6 +302,6 @@ def estimate_depth(art, model_paths, *, info=None):
             output = model(**{k: v.to(device) for k, v in inputs.items()})
             return output.predicted_depth[0].float().cpu().numpy()
 
-        prediction = _infer(model, predict, 3 * _GIB, info)
+        prediction = _infer(model, predict, 3 * _GIB, info, preferred)
         info["seconds"] = time.perf_counter() - started
         return cv2.resize(prediction, (art.shape[1], art.shape[0]), interpolation=cv2.INTER_CUBIC).astype(np.float32)
