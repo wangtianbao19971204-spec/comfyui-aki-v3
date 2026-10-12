@@ -32,6 +32,8 @@ Git 推送本身只传远端缺少的对象，日常修改无需重新 fork／cl
 
 2026-10-07 用户明确委托助手合并本轮 [PR #1](https://github.com/wangtianbao19971204-spec/comfyui-aki-v3/pull/1)并统一主线；本轮按该次授权执行。后续 PR 仍沿用上述用户允许合并流程。
 
+2026-10-11 用户要求"生产实例也合并到最新"，该次授权包含合并 [PR #20](https://github.com/wangtianbao19971204-spec/comfyui-aki-v3/pull/20)：head `d7315fdd0`、CI run 38189641348 成功后以 merge commit `7cd55d350` 合入 `main`，本地 `main` 已 ff-only 同步，四份 a1 工作流/模板与运行区哈希逐项一致（无需再部署或重启），功能分支保留。首轮 CI 因 `model_sources.json` 的工作流哈希未随 UAP 变更刷新而失败，已按 2.9B 先例修正后重跑通过。记录见[合并收据](receipts/anima_original_control_merge_20261011.json)。
+
 本地 hooks 现有功能是技术说明、完整性与凭证门禁，**不是远端主线保护**。首次建立远端 `main` 后，另核 GitHub 权限/套餐并配置、验证要求 PR 与必要 CI 的保护规则；尚未实际配置前不能宣称服务器已防直推。私有仓的 protected branches/rulesets 通常需要 Pro/Team 等支持套餐。使用用户同一账号创建的 PR 不能由作者批准自己的 review，单人流程不设置会阻塞自己的“必须 1 个 approving review”；由用户实际决定 Merge。官方：[分支保护](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)、[PR review](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/reviewing-proposed-changes-in-a-pull-request)。
 
 ### 两端一致性的核验

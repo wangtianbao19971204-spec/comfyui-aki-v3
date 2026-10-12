@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "date": "2026-10-11",
+  "scope": "Merge of the original-Anima control branch and production consistency check",
+  "pull_request": {
+    "number": 20,
+    "url": "https://github.com/wangtianbao19971204-spec/comfyui-aki-v3/pull/20",
+    "title": "为原版 Anima 接入简化姿态控制",
+    "head_branch": "feature/anima-original-control-simple",
+    "head_sha": "d7315fdd0bcb4b1b656fd292661fc8decad57c1f",
+    "base_branch": "main",
+    "base_sha_before": "cb9d80482ee26e3baab2d08c75fd9ca54482f113",
+    "merge_commit_sha": "7cd55d35017a0e9f89fa325300356fbb9df920cd",
+    "merge_method": "merge",
+    "state_after": "closed",
+    "merged": true
+  },
+  "authorization": "The user asked to merge the production instance onto the latest state, which includes merging this pull request; the merge was performed explicitly rather than by the assistant acting on its own.",
+  "gate": {
+    "draft_dismissed_first": true,
+    "mergeable_state": "clean",
+    "head_sha_checked_before_merge": true,
+    "ci": {
+      "workflow": "Maintenance integrity",
+      "run_id": 38189641348,
+      "event": "workflow_dispatch",
+      "head_sha": "d7315fdd0bcb4b1b656fd292661fc8decad57c1f",
+      "conclusion": "success",
+      "note": "push and pull_request events do not trigger this workflow in this repository; every run so far was dispatched explicitly, so CI for the commit was dispatched before merging"
+    },
+    "first_attempt_failure": {
+      "run_id": 38188389999,
+      "conclusion": "failure",
+      "failing_step": "Portable model source catalogue",
+      "error": "workflow_sha256_mismatch",
+      "cause": "the a1 change rewrote the UAP workflow but snapshot/inventory/model_sources.json still bound the previous workflow hash",
+      "fix_commit": "d7315fdd0bcb4b1b656fd292661fc8decad57c1f",
+      "fix_scope": ["snapshot/inventory/model_sources.json", "docs/MODEL_SOURCES.md",
+                    "snapshot/manifest.json", "docs/technical/runtime/models.md"]
+    },
+    "local_pre_run_of_every_ci_step": {
+      "unit_tests": "694 tests OK (11 skipped)",
+      "snapshot_verify": "pass, 9578 entries",
+      "database_contract": "pass",
+      "technical_catalog_require_tracked": "pass",
+      "model_sources_check": "pass",
+      "security_guard_all_history": "pass, 0 findings"
+    }
+  },
+  "local_sync": {
+    "origin_main": "7cd55d35017a0e9f89fa325300356fbb9df920cd",
+    "local_main": "7cd55d35017a0e9f89fa325300356fbb9df920cd",
+    "fast_forwarded": true,
+    "feature_branch": "retained; deletion is the user's call"
+  },
+  "production_consistency": {
+    "method": "each deployed file compared against snapshot/runtime on the fast-forwarded local main",
+    "all_match": true,
+    "files": [
+      {"path": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+       "live_sha256": "2bbde1fc5ea6ac0f2992919a7dcfc9fe72f1aef98d96d8e73d745d588324bf4f", "match": true},
+      {"path": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+       "live_sha256": "b28113dcecf6dc6f19db07da42b96047d07fa02414888fb86d375eccd8c18190", "match": true},
+      {"path": "production_tools/templates/UAP统一生产工作台_v2.json",
+       "live_sha256": "2bbde1fc5ea6ac0f2992919a7dcfc9fe72f1aef98d96d8e73d745d588324bf4f", "match": true},
+      {"path": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+       "live_sha256": "c97b4cd78782e922a4a4f5ab792fcc8d342e2099c3feead51248bfbffba1da98", "match": true}
+    ],
+    "deployment_needed": false,
+    "reading": "the production instance already carries these files from the earlier scoped deployment, so no further runtime write or restart was required for this merge"
+  },
+  "service_state_after": {
+    "pid": 24688,
+    "version": "0.33.0",
+    "queue_running": 0,
+    "queue_pending": 0,
+    "restarted_by_this_step": false
+  },
+  "not_done": [
+    "no maintenance version bump, tag or bundle",
+    "no repository visibility change",
+    "no further runtime deployment or restart (not needed; hashes already matched)",
+    "remote branch protection is still not verified as enforced"
+  ],
+  "evidence_ref": "external-local://validation/anima-original-control-gpu-20261011-01"
+}
