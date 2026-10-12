@@ -12,7 +12,7 @@
 
 原清单 SHA-256：`d526702803eb2be7ae500563c0e416ee10d89fc0243b0483d8008a63932820ab`。
 
-正式 v2 SHA-256：`16484f68b9b9dee7cd9d8cf0b5a948f18756acbd6ab9f3d6bd04161747dd6faa`。
+正式 v2 SHA-256：`2bbde1fc5ea6ac0f2992919a7dcfc9fe72f1aef98d96d8e73d745d588324bf4f`。
 
 - 本清单覆盖捕获时全部 384 权重和 runtime-support 的 11 个辅助文件；全部路径相对运行根。
 - Civitai 记录来自已存的公开元数据，站点匿名请求本轮连接超时；不宣称它们当前可下载。

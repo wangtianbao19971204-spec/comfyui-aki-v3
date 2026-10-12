@@ -5,6 +5,8 @@
 
 2026-10-11 更新：Anima 2.9B 控制图简化后，仅刷新 model_sources.json 的 UAP 文件摘要绑定，并重新生成下载表；对比基线确认 UAP 模型引用集合、23 项目录关联与所有资产身份保持。权重没有移动、下载或转换；[专用加载器](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/native_loader.py)继续读取原 controlnet 目录。见 [简化收据](../../receipts/anima_control_simple_20261011.json)。
 
+2026-10-11 原版补充：原版 Anima 控制简化同样只改 UAP 工作流，因此按同一先例把 `model_sources.json` 与 [下载表](../../MODEL_SOURCES.md)的 `workflow_sha256` 刷到当前 UAP 摘要 `2bbde1fc…`，并同步快照清单里该元数据条目的摘要，使来源清单门禁与快照校验恢复一致；资产数、23 项工作流关联、观察存在计数与所有模型身份不变，权重未移动、下载或转换。见[原版实机收据](../../receipts/anima_original_control_gpu_20261011.json)。
+
 ## 实现与资源
 
 2026-10-11：增量导入昨晚下载的 4 个服装 LoRA（Anima 2 个、Krea2 2 个），现有 313 个用户 LoRA。补齐分类、规范名、来源、触发词与 4 张官方预览，保留全部下载原件；326 条旧缓存身份／个人字段和既有索引保持。整理工具接纳 Civitai LoCon 类型，仍严格核对完整摘要与版本／文件身份，并新增 `--keep-originals`。32 项导入回归、26 项来源回归、47 项命名回归及在线卡片／加载器核验通过；未重启、全库重扫或做 GPU 生图。回滚依赖保留原件与本批路径／摘要日志，不覆盖在线库。见[本批收据](../../receipts/lora_download_import_20261011.json)。
