@@ -2,7 +2,7 @@
   "schema": 1,
   "captured_at": "2026-10-06T16:23:12.453830+00:00",
   "inventory_sha256": "d526702803eb2be7ae500563c0e416ee10d89fc0243b0483d8008a63932820ab",
-  "workflow_sha256": "bb9fd2668f581f2255dc71c19928898d801e557d520a18f268994b6ef7eeb4fa",
+  "workflow_sha256": "7f911ea32143587738376d4134a2c0b88d628d7df620d3dd59e25462b6e78b3b",
   "notes": [
     "本清单覆盖捕获时全部 384 权重和 runtime-support 的 11 个辅助文件；全部路径相对运行根。",
     "Civitai 记录来自已存的公开元数据，站点匿名请求本轮连接超时；不宣称它们当前可下载。",

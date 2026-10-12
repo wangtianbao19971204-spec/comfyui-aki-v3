@@ -13,6 +13,8 @@
 
 2026-10-11 K2 擦线修复：只改工作流接线与节点静音状态，`workflow_sha256` 随之刷到 `bb9fd266…` 并同步清单条目；未新增、移动或替换任何权重，遮罩文件是运行区 `input/clipspace/` 下已有的编辑器产物（未进入 Git）。见[擦线修复](../changes/runtime-workflows/2026-10-11-krea2-erase-repair.md)。
 
+2026-10-11 Anima 擦线遮罩：把 `高级 · 擦线与导出` 子图内的遮罩加载器从无 alpha 的 `ComfyUI_temp_oflff_00001_.png` 改为遮罩编辑器保存的 RGBA 文件，六份源码（UAP 工作流与模板、两个 Anima 套件的工作流与模板）随之更新，UAP `workflow_sha256` 刷到 `7f911ea3…` 并同步清单条目；未新增或移动权重，遮罩文件是运行区已有资料。见[子图化调查](../changes/runtime-workflows/2026-10-11-krea2-erase-subgraph-investigation.md)。
+
 ## 实现与资源
 
 2026-10-11：增量导入昨晚下载的 4 个服装 LoRA（Anima 2 个、Krea2 2 个），现有 313 个用户 LoRA。补齐分类、规范名、来源、触发词与 4 张官方预览，保留全部下载原件；326 条旧缓存身份／个人字段和既有索引保持。整理工具接纳 Civitai LoCon 类型，仍严格核对完整摘要与版本／文件身份，并新增 `--keep-originals`。32 项导入回归、26 项来源回归、47 项命名回归及在线卡片／加载器核验通过；未重启、全库重扫或做 GPU 生图。回滚依赖保留原件与本批路径／摘要日志，不覆盖在线库。见[本批收据](../../receipts/lora_download_import_20261011.json)。

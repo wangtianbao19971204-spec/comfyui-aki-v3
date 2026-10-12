@@ -381,5 +381,33 @@
       "partial_execution_targets must be strings; integers are rejected with HTTP 400 and leave no history entry"
     ],
     "mask_semantics": "LoadImage derives MASK from alpha, so transparent areas become mask=1 and are the areas the composite fills with black"
+  },
+  "erase_subgraph_investigation": {
+    "goal": "make the Krea2 erase segment a subgraph with its own instance per branch",
+    "attempts": [
+      "hand-written definition in the frontend format (structurally identical to the working one, loaded fine after adding inputNode/outputNode bounding, but the instance output never resolved)",
+      "frontend-side conversion via app.rootGraph.convertToSubgraph() with correct definitions and wiring (verified byte-for-byte between file and live graph)"
+    ],
+    "measurement": "converted in the live page, ran two renders that differ only in the mask file; the control image hash was identical (9eaf73ce), so the subgraph output never reached the encoder",
+    "cause": "the frontend export cannot resolve a subgraph output into a DazzleSwitch (dynamic/wildcard input): the link exists in the graph and survives reload, but graphToPrompt omits that input and the switch falls back to the next available input",
+    "consequence": "the Krea2 erase chain stays flat inside the k2 branch; the Anima branches keep their own copy inside the [05] subgraph, so neither branch depends on the other",
+    "artifacts_removed": [
+      "production_tools/krea2_erase_subgraph.py",
+      "production_tools/consolidate_krea2_erase.py"
+    ],
+    "record": "docs/technical/changes/runtime-workflows/2026-10-11-krea2-erase-subgraph-investigation.md"
+  },
+  "anima_erase_mask_fix": {
+    "what": "the erase subgraph inside 高级 · 擦线与导出 (used by the Anima branches and by both Anima suites) pointed its mask loader at ComfyUI_temp_oflff_00001_.png, an RGB render without alpha, which made the erase a no-op",
+    "fix": "image widget set to clipspace/clipspace-painted-masked-1782566128506.png in all six sources: the UAP workflow and template plus both Anima suite workflows and templates",
+    "evidence": "the minimal chain test showed the RGBA mask changes the composite by 20.17% of pixels while the RGB file changes nothing",
+    "deployment": {
+      "files": 6,
+      "new_pid": 49600,
+      "all_six_match_source": true,
+      "uap_sha256_prefix": "7f911ea32143",
+      "queue_at_deploy": "0/0",
+      "live_acceptance": "k2 render success, 1136 -> _codex_qa/krea2_default_base_20261011/krea2_00002_.png"
+    }
   }
 }

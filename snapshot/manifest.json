@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-12T13:53:43.508588+00:00",
+  "created_at": "2026-10-12T14:48:04.364880+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -51393,8 +51393,8 @@
     {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-      "sha256": "bb9fd2668f581f2255dc71c19928898d801e557d520a18f268994b6ef7eeb4fa",
-      "bytes": 1351625,
+      "sha256": "7f911ea32143587738376d4134a2c0b88d628d7df620d3dd59e25462b6e78b3b",
+      "bytes": 1351655,
       "kind": "file"
     },
     {
@@ -51456,15 +51456,15 @@
     {
       "source": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
-      "sha256": "b28113dcecf6dc6f19db07da42b96047d07fa02414888fb86d375eccd8c18190",
-      "bytes": 542596,
+      "sha256": "b78421000e2f826f5e084e96efad48aa3505756ce4109e262cebf872ef427439",
+      "bytes": 542611,
       "kind": "file"
     },
     {
       "source": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
-      "sha256": "37f99da27ae9bdcc92f1cf8e353fea1abaef5fc3174b76b23a9e3ae5d986baeb",
-      "bytes": 411391,
+      "sha256": "432ab427152c2a6db60e3a85f0778f025a59734fbe91207a18c5b9bcc976b7a2",
+      "bytes": 411406,
       "kind": "file"
     },
     {
@@ -57684,6 +57684,13 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/fix_anima_erase_mask.py",
+      "path": "runtime/production_tools/fix_anima_erase_mask.py",
+      "sha256": "93cedbf40c913d4e066ddf789c17596de1035962ca82a1949443f26f799574b3",
+      "bytes": 3522,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/fix_krea2_erase_mask.py",
       "path": "runtime/production_tools/fix_krea2_erase_mask.py",
       "sha256": "d6cd20b85f9770b56e984dfc4c710796f066d536c0ec92ce88fd168c0913a098",
@@ -57917,22 +57924,22 @@
     {
       "source": "production_tools/templates/UAP统一生产工作台_v2.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v2.json",
-      "sha256": "bb9fd2668f581f2255dc71c19928898d801e557d520a18f268994b6ef7eeb4fa",
-      "bytes": 1351625,
+      "sha256": "7f911ea32143587738376d4134a2c0b88d628d7df620d3dd59e25462b6e78b3b",
+      "bytes": 1351655,
       "kind": "file"
     },
     {
       "source": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
       "path": "runtime/production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
-      "sha256": "c97b4cd78782e922a4a4f5ab792fcc8d342e2099c3feead51248bfbffba1da98",
-      "bytes": 490544,
+      "sha256": "08e8b1707f45887967345c7d53c4717d87ea07af448e4d1cecfe220cf95a372c",
+      "bytes": 490562,
       "kind": "file"
     },
     {
       "source": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
       "path": "runtime/production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
-      "sha256": "19af7a3e3307bc237e02a518e9b7bc7edea015fae82b7344116cbd8c1dddb105",
-      "bytes": 408396,
+      "sha256": "2b0e2a566a241ddefbf9968d2858655500179e218298f967db95ac62769c0c31",
+      "bytes": 408414,
       "kind": "file"
     },
     {
@@ -67927,7 +67934,7 @@
     },
     {
       "path": "inventory/model_sources.json",
-      "sha256": "62cc85f9396e9c0691ee3d3c2b9e43d39d3048b62fd60f4f66cb15de8b3c9106",
+      "sha256": "e8101269d81b627c597b1864599e939859ca696e2f4483abc866521960a4e8b1",
       "bytes": 1259888
     }
   ],
@@ -68023,17 +68030,20 @@
     }
   ],
   "development_revision": {
-    "note": "Repair the K2 erase chain and connect it to the control image",
-    "previous_manifest_sha256": "90b47eb9c2bba33a7ad28d6aa59a7d5bda9458c68391b43bb7922833fd84248c",
+    "note": "Point the Anima erase subgraph at the editor-saved mask",
+    "previous_manifest_sha256": "25c28449f5e260f193da7b376bd69f743bfcb5afa1f7a8694e7d02437bbd8123",
     "source_changes": {
       "added": [
-        "production_tools/connect_krea2_erase_to_control.py",
-        "production_tools/fix_krea2_erase_mask.py"
+        "production_tools/fix_anima_erase_mask.py"
       ],
       "removed": [],
       "changed": [
         "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-        "production_tools/templates/UAP统一生产工作台_v2.json"
+        "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+        "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+        "production_tools/templates/UAP统一生产工作台_v2.json",
+        "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+        "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json"
       ]
     },
     "live_deployed": false,
