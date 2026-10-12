@@ -2,17 +2,36 @@
   "schema": 1,
   "date": "2026-10-11",
   "scope": "Krea2 (k2) branch: VNCCS pose depth as a selectable control source",
-  "status": "source-verified-not-deployed",
+  "status": "deployed-full-sampling-executed",
   "evidence_ref": "external-local://validation/krea2-pose-control-20261011-01",
   "problem": "The k2 branch already routed a depth map into the Krea2 depth ControlNet-LoRA, but the VNCCS pose studio output (1172) only fed a preview and a before/after compare node, so the pose reference never reached the model.",
   "change": {
     "pattern_alignment": "same shape as the existing line-art source selector 1157",
     "added_nodes": [
-      {"id": 130160, "type": "DazzleSwitch", "title": "[05B6] Depth 来源选择（参考图 / VNCCS 姿势）",
-       "widgets": ["(none)", "priority", 0]},
-      {"id": 130161, "type": "DepthAnythingV2Preprocessor", "title": "[05B4P] VNCCS 姿势深度",
-       "widgets": ["depth_anything_v2_vitl.pth", 1024]},
-      {"id": 130162, "type": "PreviewImage", "title": "[05V4] VNCCS 姿势深度预览"}
+      {
+        "id": 130160,
+        "type": "DazzleSwitch",
+        "title": "[05B6] Depth 来源选择（参考图 / VNCCS 姿势）",
+        "widgets": [
+          "(none)",
+          "priority",
+          0
+        ]
+      },
+      {
+        "id": 130161,
+        "type": "DepthAnythingV2Preprocessor",
+        "title": "[05B4P] VNCCS 姿势深度",
+        "widgets": [
+          "depth_anything_v2_vitl.pth",
+          1024
+        ]
+      },
+      {
+        "id": 130162,
+        "type": "PreviewImage",
+        "title": "[05V4] VNCCS 姿势深度预览"
+      }
     ],
     "wiring": {
       "input_01": "1191 reference depth",
@@ -43,36 +62,152 @@
     },
     "frontend": {
       "isolated_port": 8220,
-      "branch_activation": {"branch_nodes": 99, "unmuted": 96, "missing": []},
-      "switch_inputs_connected": ["input_01", "input_02"],
+      "branch_activation": {
+        "branch_nodes": 99,
+        "unmuted": 96,
+        "missing": []
+      },
+      "switch_inputs_connected": [
+        "input_01",
+        "input_02"
+      ],
       "encoder_input_connected": true
     },
     "depth_source_ab": {
       "method": "one frontend session, the pose capture pre-uploaded once so both runs use the same pose, then two submissions that differ only in the switch position",
-      "prompt_ids": {"reference": "c3217303-b401-4083-b149-a3b7cb7c11be", "pose": "855c23fe-e9d8-4931-bb87-b6e288e31392"},
+      "prompt_ids": {
+        "reference": "c3217303-b401-4083-b149-a3b7cb7c11be",
+        "pose": "855c23fe-e9d8-4931-bb87-b6e288e31392"
+      },
       "history_status": "success",
       "stable_inputs": {
-        "pose_depth_130162": {"size": [1024, 1497], "same_pixels_across_runs": true},
-        "reference_depth_1189": {"size": [1024, 1498], "same_pixels_across_runs": true}
+        "pose_depth_130162": {
+          "size": [
+            1024,
+            1497
+          ],
+          "same_pixels_across_runs": true
+        },
+        "reference_depth_1189": {
+          "size": [
+            1024,
+            1498
+          ],
+          "same_pixels_across_runs": true
+        }
       },
       "encoded_control_1162": {
-        "size": [696, 1024],
+        "size": [
+          696,
+          1024
+        ],
         "same_pixels_across_runs": false,
         "mean_abs_diff_between_runs": 90.324,
         "max_abs_diff_between_runs": 220
       },
       "attribution": {
-        "select_none": {"vs_reference_depth": 0.9351, "vs_pose_depth": 90.1633},
-        "select_input_02": {"vs_reference_depth": 90.1571, "vs_pose_depth": 0.4585}
+        "select_none": {
+          "vs_reference_depth": 0.9351,
+          "vs_pose_depth": 90.1633
+        },
+        "select_input_02": {
+          "vs_reference_depth": 90.1571,
+          "vs_pose_depth": 0.4585
+        }
       },
       "reading": "the encoder output follows whichever depth source the switch selects; the two sources themselves are unchanged between runs"
     }
   },
   "limits": [
-    "No full Krea2 sampling was executed, so pose-control quality on the rendered image is not certified.",
-    "A depth ControlNet-LoRA expects natural-scene depth; a rendered mesh figure is an approximation whose fidelity needs its own image-level acceptance round.",
-    "Two earlier runs in the same runtime varied because the VNCCS pose capture was not held fixed; that variation is recorded, not used as evidence.",
-    "Not deployed to the runtime: the live workflow files still predate this change.",
-    "No prompt, seed, LoRA, strength or default switch was modified."
-  ]
+    "One prompt, one seed, one base model and one sampler setting; no strength sweep or base-model comparison.",
+    "Pose fidelity of the produced image is not certified.",
+    "The probes replaced node 1191 with a LoadImage node inside the isolated runtime only; the deployed workflow was not modified by them.",
+    "No conclusion is drawn that the control plugin is defective; the effective-vs-not question is left to a strength or base-model comparison."
+  ],
+  "deployment": {
+    "commit": "733c510c833e669a2f8d474eb5f1809a53be3f3c",
+    "scope": [
+      "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+      "production_tools/templates/UAP统一生产工作台_v2.json"
+    ],
+    "candidates_match_commit": true,
+    "protected_neighbours_unchanged": 42,
+    "consistent_database_backups": 1,
+    "old_pid": 24688,
+    "new_pid": 47972,
+    "restart": "saved original command line with AKI_HUISHI_PROFILE=production",
+    "post_deploy": {
+      "files_match_source": true,
+      "sha256": "cfae9c3560b1d6d38e1c29d75e49ce5b4ff6403a032f740f19660227d1b7a729",
+      "k2_branch_nodes": 99,
+      "added_nodes_present": true,
+      "encoder_control_image_from": 130160,
+      "switch_inputs": [
+        1191,
+        130161
+      ],
+      "registered_missing": [],
+      "queue": {
+        "queue_running": [],
+        "queue_pending": []
+      }
+    },
+    "database_replaced": false,
+    "rollback_executed": false
+  },
+  "full_sampling": {
+    "settings": {
+      "size": [
+        768,
+        1344
+      ],
+      "steps": 8,
+      "cfg": 1,
+      "sampler": "euler",
+      "scheduler": "simple",
+      "seed": 845401323336067,
+      "seed_mode": "fixed",
+      "base_model": "DaSiWa Krea2 - Turbo - Raw",
+      "control_lora_strength": 1,
+      "prompt": "fixed neutral acceptance prompt",
+      "pose_capture_held_fixed": true
+    },
+    "cases": {
+      "baseline (model switch off)": {
+        "sha256": "1eeb1ffb9fea58649bbe3c55e04749ee31c2d1d2b61a353c33230e5006dc2d0f"
+      },
+      "reference-depth (input_01)": {
+        "sha256": "1eeb1ffb9fea58649bbe3c55e04749ee31c2d1d2b61a353c33230e5006dc2d0f",
+        "equals_baseline_pixels": true
+      },
+      "pose-depth (input_02)": {
+        "sha256": "b7a3e2352da7afbc7bf7d084779fa8ba76b9546cca1dc8bffceb2774260914bb"
+      }
+    },
+    "on_off_on": {
+      "off": "1eeb1ffb",
+      "on": "1eeb1ffb",
+      "off_again": "1eeb1ffb",
+      "reading": "switching the depth control on does not change the render, and the off case reproduces"
+    },
+    "probes": {
+      "noise control image": {
+        "sha256": "140886dd",
+        "mean_abs_diff_vs_natural_depth": 64.0586,
+        "max_abs_diff": 254,
+        "reading": "the control path can strongly affect sampling"
+      },
+      "flat grey control image": {
+        "sha256": "bfd71c79"
+      },
+      "black/white split control image": {
+        "sha256": "5de5ff2b"
+      },
+      "natural depth control image": {
+        "sha256": "42ad8d79"
+      },
+      "reading": "arbitrary control images all change the render, so the chain is wired and injecting; the natural depth map is the case that lands in the same basin as the unconstrained model"
+    },
+    "interpretation": "Krea2 depth control is wired and can affect sampling, but with this Turbo base model, 8 steps and LoRA strength 1 it is not distinguishable from no control when the control map is the natural depth of the reference image"
+  }
 }
