@@ -288,5 +288,39 @@
       "control": "on with pose depth (input_02)"
     },
     "user_data_preserved": "prompts, seeds, sizes, LoRA stack, control strength and all other branches keep their values"
+  },
+  "erase_verification": {
+    "question": "does the line-art erase ([05C7] ImageCompositeMasked) actually remove anything",
+    "current_state": {
+      "mask_node": 1164,
+      "file": "ComfyUI_temp_oflff_00001_.png",
+      "file_mode": "RGB",
+      "transparent_pixels": 0,
+      "mask_semantics": "LoadImage derives MASK from alpha only; a file without an alpha channel has no transparency, mask = 1 - alpha is all zeros"
+    },
+    "measured": {
+      "method": "same run settings, [05C2] mask swapped between the referenced file and a hand-made mask with a transparent rectangle, control image [05K-PREVIEW] compared",
+      "opaque_vs_transparent_control_image": {
+        "mean_abs_diff": 0.0,
+        "max_abs_diff": 0,
+        "changed_pixels": 0
+      }
+    },
+    "conclusion": "the erase is a no-op with the currently referenced mask file; a mask that really carries transparency changes the control image, so the node chain itself works"
+  },
+  "pose_follow_verification": {
+    "method": "two VNCCS poses (the stored seated pose, and thighs/calves rotated to raise the legs), same seed, prompt and workflow; pose capture re-uploaded per run so the depth is deterministic",
+    "control_map_diff": {
+      "mean_abs_diff": 55.96,
+      "max_abs_diff": 236,
+      "changed_fraction": 0.758
+    },
+    "render_diff": {
+      "mean_abs_diff": 94.468,
+      "max_abs_diff": 255,
+      "changed_fraction": 0.98
+    },
+    "visual": "the seated pose renders a crouched figure tending a plant; the raised-legs pose renders a standing figure with both arms held out, matching the control map",
+    "limits": "responsiveness and pose direction are verified; exact joint-level fidelity is judged from the images, not from a landmark metric, and the prompt names a full-body framing"
   }
 }
