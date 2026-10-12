@@ -27,6 +27,8 @@ VNCCS 子图执行同步现按冒号路径定位节点，后端与上传 API 复
 
 ## 更新记录
 
+- 2026-10-11：K2 擦线（擦除）修复只改工作流接线与一个节点的静音状态：`[05C7]` 擦线合成此前没有下游消费者，现把深度来源选择 `[05B6]` 的 `input_01` 接到它；`[05C2]` 遮罩输入解除静音并指回遮罩编辑器保存的 RGBA 文件。本体、插件与启动参数未动，未新增依赖。运行区按原命令行重启为进程 51716，注册缺失 0、队列为空，实页验收见[擦线修复](../changes/runtime-workflows/2026-10-11-krea2-erase-repair.md)。
+
 - 2026-10-11：Krea2 默认底模由 Turbo 换为非蒸馏 `Krea2-Anime v2.0`（同批把该底模需要的步数/CFG/scheduler 写入 K2 采样节点），只改工作流与模板，本体、插件白名单与启动参数未动，两个底模都是库存既有资产、无下载或转换。运行区部署后按原命令行重启为进程 15244，注册缺失 0、队列为空。见[底模变更](../changes/runtime-workflows/2026-10-11-krea2-anime-default-base.md)。
 
 - 2026-10-11：Krea2 深度来源选择只改工作流与模板，本体、插件白名单与启动参数未动；新增的 `[05B6]` 深度来源选择器使用已注册的 `DazzleSwitch`，姿势深度复用已安装的 `DepthAnythingV2Preprocessor`，不新增依赖。运行区未部署，隔离实例验证由[Krea2 变更](../changes/runtime-workflows/2026-10-11-krea2-pose-control.md)与[收据](../../receipts/krea2_pose_control_20261011.json)记录。

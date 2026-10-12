@@ -10711,7 +10711,8 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            10229
+            10229,
+            338027
           ]
         }
       ],
@@ -11973,7 +11974,7 @@
         "collapsed": false
       },
       "order": 57,
-      "mode": 2,
+      "mode": 0,
       "inputs": [
         {
           "localized_name": "图像",
@@ -12022,7 +12023,7 @@
         "uap_layout_group": "CORE-05 参考预处理与控制图生成 · K2 Krea2"
       },
       "widgets_values": [
-        "ComfyUI_temp_oflff_00001_.png",
+        "clipspace/clipspace-painted-masked-1782566128506.png",
         "image"
       ],
       "widgets_values_named": {
@@ -13771,8 +13772,7 @@
           "type": "IMAGE",
           "links": [
             10216,
-            10219,
-            338027
+            10219
           ]
         }
       ],
@@ -24889,7 +24889,7 @@
     ],
     [
       338027,
-      1191,
+      1147,
       0,
       130160,
       0,

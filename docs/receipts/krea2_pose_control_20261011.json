@@ -322,5 +322,64 @@
     },
     "visual": "the seated pose renders a crouched figure tending a plant; the raised-legs pose renders a standing figure with both arms held out, matching the control map",
     "limits": "responsiveness and pose direction are verified; exact joint-level fidelity is judged from the images, not from a landmark metric, and the prompt names a full-body framing"
+  },
+  "erase_repair": {
+    "causes": [
+      "the erase composite [05C7] had no downstream consumer: its only sink was the preview [05V7], while the control chain read 1191 DepthAnything <- 1153 <- 1190 reference image",
+      "the mask loader [05C2] was muted (mode=2), so its MASK output never reached the composite",
+      "its image widget pointed at ComfyUI_temp_oflff_00001_.png, an ordinary RGB render without alpha, while properties.image still recorded the editor-saved RGBA mask"
+    ],
+    "fixes": [
+      "unmute 1164 and point it at clipspace/clipspace-painted-masked-1782566128506.png",
+      "repoint 130160.input_01 from 1191 to 1147 so the erased line art reaches the control image"
+    ],
+    "minimal_chain_test": {
+      "editor RGBA mask": {
+        "changed_fraction": 0.2017,
+        "bbox": [
+          0,
+          0,
+          767,
+          919
+        ]
+      },
+      "opaque mask": {
+        "changed_fraction": 0.0
+      },
+      "temp rgb image": {
+        "changed_fraction": 0.0
+      }
+    },
+    "isolation_session_ab": {
+      "A vs B (repeat)": {
+        "same_pixels": true
+      },
+      "A/B vs C (pre-repair)": {
+        "mean_abs_diff": 24.6033,
+        "changed_pixels": 104900
+      }
+    },
+    "live_acceptance": {
+      "control_image_1162": {
+        "mean_abs_diff": 24.603,
+        "changed_pixels": 104900
+      },
+      "erased_lineart_1155": {
+        "mean_abs_diff": 24.403,
+        "changed_pixels": 193891
+      }
+    },
+    "deployment": {
+      "new_pid": 51716,
+      "live_sha256": "bb9fd2668f581f22",
+      "files_match_source": true,
+      "queue_at_deploy": "0/0",
+      "database_replaced": false
+    },
+    "notes": [
+      "my earlier reading that unmuting plus swapping the file still changed nothing was an artefact: the test harness unmutes the whole k2 branch during preparation, so the mute variable did not exist in those runs",
+      "partial_execution_targets must be strings; integers are rejected with HTTP 400 and leave no history entry"
+    ],
+    "mask_semantics": "LoadImage derives MASK from alpha, so transparent areas become mask=1 and are the areas the composite fills with black"
   }
 }

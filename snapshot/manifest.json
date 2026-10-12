@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-12T12:25:14.074169+00:00",
+  "created_at": "2026-10-12T13:53:43.508588+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -51393,8 +51393,8 @@
     {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-      "sha256": "ceeee13534dfc7677ec1167951b9f28318d51e2f6ca9a066b1ae97505087e2e2",
-      "bytes": 1351602,
+      "sha256": "bb9fd2668f581f2255dc71c19928898d801e557d520a18f268994b6ef7eeb4fa",
+      "bytes": 1351625,
       "kind": "file"
     },
     {
@@ -57670,10 +57670,24 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/connect_krea2_erase_to_control.py",
+      "path": "runtime/production_tools/connect_krea2_erase_to_control.py",
+      "sha256": "06a822ca21ba9b4fbb756043d9488e5b7a05d2502f29de803dc950032f3198a7",
+      "bytes": 4674,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/export_stocking_upstream.py",
       "path": "runtime/production_tools/export_stocking_upstream.py",
       "sha256": "ab9d17acd8efb63bcc5cfb5cf032a644308650ba799f1902a3fb0601be17d246",
       "bytes": 8625,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/fix_krea2_erase_mask.py",
+      "path": "runtime/production_tools/fix_krea2_erase_mask.py",
+      "sha256": "d6cd20b85f9770b56e984dfc4c710796f066d536c0ec92ce88fd168c0913a098",
+      "bytes": 3406,
       "kind": "file"
     },
     {
@@ -57903,8 +57917,8 @@
     {
       "source": "production_tools/templates/UAP统一生产工作台_v2.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v2.json",
-      "sha256": "ceeee13534dfc7677ec1167951b9f28318d51e2f6ca9a066b1ae97505087e2e2",
-      "bytes": 1351602,
+      "sha256": "bb9fd2668f581f2255dc71c19928898d801e557d520a18f268994b6ef7eeb4fa",
+      "bytes": 1351625,
       "kind": "file"
     },
     {
@@ -67913,7 +67927,7 @@
     },
     {
       "path": "inventory/model_sources.json",
-      "sha256": "b7348b459ebad130e6ee2a5ed50d3f9f821483b7a4e09d68e112d2be564a2153",
+      "sha256": "62cc85f9396e9c0691ee3d3c2b9e43d39d3048b62fd60f4f66cb15de8b3c9106",
       "bytes": 1259888
     }
   ],
@@ -68009,11 +68023,12 @@
     }
   ],
   "development_revision": {
-    "note": "Default the Krea2 branch to the non-distilled Krea2-Anime v2.0 base model",
-    "previous_manifest_sha256": "157035a3bddb37d88a085235ca5b427bdfd86aa2f92d3231ed495624b8b9a602",
+    "note": "Repair the K2 erase chain and connect it to the control image",
+    "previous_manifest_sha256": "90b47eb9c2bba33a7ad28d6aa59a7d5bda9458c68391b43bb7922833fd84248c",
     "source_changes": {
       "added": [
-        "production_tools/switch_krea2_base_model.py"
+        "production_tools/connect_krea2_erase_to_control.py",
+        "production_tools/fix_krea2_erase_mask.py"
       ],
       "removed": [],
       "changed": [
