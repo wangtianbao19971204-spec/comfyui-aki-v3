@@ -12946,7 +12946,7 @@
         "uap_layout_group": "CORE-02A 模型与编码器 · K2 Krea2"
       },
       "widgets_values": [
-        "krea2\\图像生成\\Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__CuteDisaster v2 Turbo UC__BF16__cv3151280__f3034252.safetensors",
+        "krea2\\图像生成\\Krea2__Krea2-Anime__v2.0__BF16__cv3357716__f3246945.safetensors",
         "default"
       ],
       "widgets_values_named": {
@@ -14499,10 +14499,10 @@
       "widgets_values": [
         1062315907611667,
         "randomize",
-        8,
-        1,
+        24,
+        3.5,
         "euler",
-        "simple",
+        "normal",
         1
       ],
       "widgets_values_named": {

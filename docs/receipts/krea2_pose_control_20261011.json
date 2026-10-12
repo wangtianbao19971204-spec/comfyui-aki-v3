@@ -2,7 +2,7 @@
   "schema": 1,
   "date": "2026-10-11",
   "scope": "Krea2 (k2) branch: VNCCS pose depth as a selectable control source",
-  "status": "deployed-sampling-and-effectiveness-compared",
+  "status": "deployed-sampling-effect-compared-default-base-switched",
   "evidence_ref": "external-local://validation/krea2-pose-control-20261011-01",
   "problem": "The k2 branch already routed a depth map into the Krea2 depth ControlNet-LoRA, but the VNCCS pose studio output (1172) only fed a preview and a before/after compare node, so the pose reference never reached the model.",
   "change": {
@@ -237,5 +237,56 @@
     ],
     "conclusion": "the Krea2 depth ControlNet-LoRA is effective with the non-distilled Krea2-Anime v2.0 base; the Turbo base is what made the earlier comparison look inert, and LoRA strength 4 breaks the Turbo render entirely",
     "not_changed": "the deployed workflow still has its own base model, strength and sampler settings; the comparison changed them only inside the isolated runtime"
+  },
+  "default_base_switch": {
+    "commit_bytes": true,
+    "changes": [
+      {
+        "node": 1183,
+        "widget": "unet_name",
+        "before": "DaSiWa Krea2 - Turbo - Raw CuteDisaster v2 Turbo UC BF16",
+        "after": "krea2/图像生成/Krea2__Krea2-Anime__v2.0__BF16__cv3357716__f3246945.safetensors"
+      },
+      {
+        "node": 1200,
+        "widget": "steps",
+        "before": 8,
+        "after": 24
+      },
+      {
+        "node": 1200,
+        "widget": "cfg",
+        "before": 1,
+        "after": 3.5
+      },
+      {
+        "node": 1200,
+        "widget": "scheduler",
+        "before": "simple",
+        "after": "normal"
+      }
+    ],
+    "isolation_check": {
+      "control_off": "52947003",
+      "control_on_pose_depth": "98a85dc6",
+      "mean_abs_diff": 89.12,
+      "changed_fraction": 0.973
+    },
+    "deployment": {
+      "new_pid": 15244,
+      "live_sha256": "ceeeee13534dfc767",
+      "files_match_source": true,
+      "queue_at_deploy": "0/0",
+      "database_replaced": false,
+      "rollback_material": "deployment-base/ROLLBACK.json"
+    },
+    "live_acceptance": {
+      "route": "real frontend on the deployed workflow, workflow prompt, fixed seed",
+      "output": "_codex_qa/krea2_default_base_20261011/krea2_00001_.png",
+      "sha256": "b2c7933daeddf1375cc0057741eb769eaa174ee6e9d2bc4728dc7c64ea38f977",
+      "status": "success",
+      "control": "on with pose depth (input_02)"
+    },
+    "user_data_preserved": "prompts, seeds, sizes, LoRA stack, control strength and all other branches keep their values"
   }
 }

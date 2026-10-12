@@ -9,6 +9,8 @@
 
 2026-10-11 Krea2 姿势来源：Krea2 深度来源选择同样只改 UAP 工作流，`workflow_sha256` 随之刷到 `cfae9c35…` 并同步快照清单条目；未新增或移动任何权重，Krea2 深度 ControlNet-LoRA 的加载文件名与来源保持原值。见[Krea2 收据](../../receipts/krea2_pose_control_20261011.json)。
 
+2026-10-11 Krea2 默认底模：K2 分支的默认 UNET 由 `DaSiWa Krea2 - Turbo - Raw …CuteDisaster v2 Turbo UC…BF16` 换为库存中已有的 `krea2\图像生成\Krea2__Krea2-Anime__v2.0__BF16__cv3357716__f3246945.safetensors`，两文件 `workflow_sha256` 刷到 `ceeeee13…` 并同步清单条目。两者都是清单内既有资产，未新增、移动、下载或转换权重，来源清单与资产计数不变；深度 ControlNet-LoRA 仍是 `Krea2 Depth ControlNet LoRA v1.0 FP32`（强度 1）。见[底模变更](../changes/runtime-workflows/2026-10-11-krea2-anime-default-base.md)。
+
 ## 实现与资源
 
 2026-10-11：增量导入昨晚下载的 4 个服装 LoRA（Anima 2 个、Krea2 2 个），现有 313 个用户 LoRA。补齐分类、规范名、来源、触发词与 4 张官方预览，保留全部下载原件；326 条旧缓存身份／个人字段和既有索引保持。整理工具接纳 Civitai LoCon 类型，仍严格核对完整摘要与版本／文件身份，并新增 `--keep-originals`。32 项导入回归、26 项来源回归、47 项命名回归及在线卡片／加载器核验通过；未重启、全库重扫或做 GPU 生图。回滚依赖保留原件与本批路径／摘要日志，不覆盖在线库。见[本批收据](../../receipts/lora_download_import_20261011.json)。

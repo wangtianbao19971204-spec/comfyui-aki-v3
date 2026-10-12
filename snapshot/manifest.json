@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-12T05:56:50.735946+00:00",
+  "created_at": "2026-10-12T12:25:14.074169+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -51393,8 +51393,8 @@
     {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-      "sha256": "cfae9c3560b1d6d38e1c29d75e49ce5b4ff6403a032f740f19660227d1b7a729",
-      "bytes": 1351652,
+      "sha256": "ceeee13534dfc7677ec1167951b9f28318d51e2f6ca9a066b1ae97505087e2e2",
+      "bytes": 1351602,
       "kind": "file"
     },
     {
@@ -57887,6 +57887,13 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/switch_krea2_base_model.py",
+      "path": "runtime/production_tools/switch_krea2_base_model.py",
+      "sha256": "72ee53895a0397731541bac9023cd7bd9c6e0484911ee7543618b6d9422fc057",
+      "bytes": 3661,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/templates/UAP统一生产工作台_v1.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v1.json",
       "sha256": "e235d3335e7aec81aa44a49eb371f73edb7f5c929291fc0d9570b8e1b6e80618",
@@ -57896,8 +57903,8 @@
     {
       "source": "production_tools/templates/UAP统一生产工作台_v2.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v2.json",
-      "sha256": "cfae9c3560b1d6d38e1c29d75e49ce5b4ff6403a032f740f19660227d1b7a729",
-      "bytes": 1351652,
+      "sha256": "ceeee13534dfc7677ec1167951b9f28318d51e2f6ca9a066b1ae97505087e2e2",
+      "bytes": 1351602,
       "kind": "file"
     },
     {
@@ -67906,7 +67913,7 @@
     },
     {
       "path": "inventory/model_sources.json",
-      "sha256": "59d35c203ff9fa7ac93bd49283d0f771c61f3e894812109e8fd17ef823c8a86f",
+      "sha256": "b7348b459ebad130e6ee2a5ed50d3f9f821483b7a4e09d68e112d2be564a2153",
       "bytes": 1259888
     }
   ],
@@ -68002,11 +68009,11 @@
     }
   ],
   "development_revision": {
-    "note": "Add the VNCCS pose depth source to the Krea2 control chain",
-    "previous_manifest_sha256": "d8314c94fb60ba73e7a301d5f6c4a45671401cb1571eae4e3a3e62f3fe1a18c4",
+    "note": "Default the Krea2 branch to the non-distilled Krea2-Anime v2.0 base model",
+    "previous_manifest_sha256": "157035a3bddb37d88a085235ca5b427bdfd86aa2f92d3231ed495624b8b9a602",
     "source_changes": {
       "added": [
-        "production_tools/add_krea2_pose_control.py"
+        "production_tools/switch_krea2_base_model.py"
       ],
       "removed": [],
       "changed": [
