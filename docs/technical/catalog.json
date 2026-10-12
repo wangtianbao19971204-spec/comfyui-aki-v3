@@ -229,7 +229,8 @@
         "docs/receipts/anima_original_control_20261011.json",
         "docs/receipts/anima_original_control_gpu_20261011.json",
         "docs/receipts/anima_original_control_promptpair_20261011.json",
-        "docs/receipts/anima_original_control_merge_20261011.json"
+        "docs/receipts/anima_original_control_merge_20261011.json",
+        "docs/receipts/krea2_pose_control_20261011.json"
       ],
       "acceptance": "historical",
       "watch": [

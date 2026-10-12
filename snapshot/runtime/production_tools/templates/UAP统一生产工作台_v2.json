@@ -11600,7 +11600,7 @@
           "localized_name": "control_image",
           "name": "control_image",
           "type": "IMAGE",
-          "link": 10264
+          "link": 338028
         },
         {
           "localized_name": "vae",
@@ -12380,7 +12380,8 @@
           "type": "IMAGE",
           "links": [
             10235,
-            10237
+            10237,
+            338024
           ]
         },
         {
@@ -13771,7 +13772,7 @@
           "links": [
             10216,
             10219,
-            10264
+            338027
           ]
         }
       ],
@@ -21658,6 +21659,127 @@
       },
       "color": "#496273",
       "bgcolor": "#273A47"
+    },
+    {
+      "id": 130160,
+      "type": "DazzleSwitch",
+      "title": "[05B6] Depth 来源选择（参考图 / VNCCS 姿势）",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        340,
+        150
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "input_01",
+          "type": "*",
+          "link": 338027
+        },
+        {
+          "name": "input_02",
+          "type": "*",
+          "link": 338025
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": [
+            338028
+          ]
+        },
+        {
+          "name": "selected_index",
+          "type": "INT",
+          "links": []
+        }
+      ],
+      "properties": {
+        "uap_compact_widgets": true,
+        "uap_layout_group": "CORE-05 参考预处理与控制图生成 · K2 Krea2"
+      },
+      "widgets_values": [
+        "(none)",
+        "priority",
+        0
+      ]
+    },
+    {
+      "id": 130161,
+      "type": "DepthAnythingV2Preprocessor",
+      "title": "[05B4P] VNCCS 姿势深度",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        340,
+        150
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 338024
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            338025,
+            338026
+          ]
+        }
+      ],
+      "properties": {
+        "uap_compact_widgets": true,
+        "uap_layout_group": "CORE-05 参考预处理与控制图生成 · K2 Krea2"
+      },
+      "widgets_values": [
+        "depth_anything_v2_vitl.pth",
+        1024
+      ]
+    },
+    {
+      "id": 130162,
+      "type": "PreviewImage",
+      "title": "[05V4] VNCCS 姿势深度预览",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        340,
+        150
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 338026
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "uap_compact_widgets": true,
+        "uap_layout_group": "CORE-05 参考预处理与控制图生成 · K2 Krea2"
+      },
+      "widgets_values": []
     }
   ],
   "links": [
@@ -23686,14 +23808,6 @@
       "INT"
     ],
     [
-      10264,
-      1191,
-      0,
-      1159,
-      0,
-      "IMAGE"
-    ],
-    [
       10265,
       1203,
       0,
@@ -24746,6 +24860,46 @@
       1103,
       0,
       1309,
+      0,
+      "IMAGE"
+    ],
+    [
+      338024,
+      1172,
+      0,
+      130161,
+      0,
+      "IMAGE"
+    ],
+    [
+      338025,
+      130161,
+      0,
+      130160,
+      1,
+      "IMAGE"
+    ],
+    [
+      338026,
+      130161,
+      0,
+      130162,
+      0,
+      "IMAGE"
+    ],
+    [
+      338027,
+      1191,
+      0,
+      130160,
+      0,
+      "IMAGE"
+    ],
+    [
+      338028,
+      130160,
+      0,
+      1159,
       0,
       "IMAGE"
     ]
@@ -48167,7 +48321,10 @@
             1229,
             1231,
             1232,
-            1233
+            1233,
+            130160,
+            130161,
+            130162
           ],
           "modes": {
             "1129": 2,

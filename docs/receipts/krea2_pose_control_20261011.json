@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "date": "2026-10-11",
+  "scope": "Krea2 (k2) branch: VNCCS pose depth as a selectable control source",
+  "status": "source-verified-not-deployed",
+  "evidence_ref": "external-local://validation/krea2-pose-control-20261011-01",
+  "problem": "The k2 branch already routed a depth map into the Krea2 depth ControlNet-LoRA, but the VNCCS pose studio output (1172) only fed a preview and a before/after compare node, so the pose reference never reached the model.",
+  "change": {
+    "pattern_alignment": "same shape as the existing line-art source selector 1157",
+    "added_nodes": [
+      {"id": 130160, "type": "DazzleSwitch", "title": "[05B6] Depth 来源选择（参考图 / VNCCS 姿势）",
+       "widgets": ["(none)", "priority", 0]},
+      {"id": 130161, "type": "DepthAnythingV2Preprocessor", "title": "[05B4P] VNCCS 姿势深度",
+       "widgets": ["depth_anything_v2_vitl.pth", 1024]},
+      {"id": 130162, "type": "PreviewImage", "title": "[05V4] VNCCS 姿势深度预览"}
+    ],
+    "wiring": {
+      "input_01": "1191 reference depth",
+      "input_02": "130161 pose depth",
+      "output": "1159 Krea2ControlImageEncode.control_image (previously 1191)",
+      "pose_chain": "1172 VNCCS_PoseStudio -> 130161 -> 130162 preview"
+    },
+    "branch_and_group": "the three nodes are appended to the k2 branch nodeIds and tagged uap_layout_group CORE-05 参考预处理与控制图生成 · K2 Krea2",
+    "default_behaviour": "select=(none) with mode=priority resolves to input_01, so the encoded control and the rendered result stay as they were until the dropdown selects input_02"
+  },
+  "files": [
+    "snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json",
+    "snapshot/runtime/production_tools/add_krea2_pose_control.py"
+  ],
+  "source_preservation": {
+    "other_nodes_and_parameters": "only the three nodes above were added and one link was rerouted; no existing widget, mode, title or prompt changed",
+    "branch_metadata": "k2 nodeIds gained the three new ids only",
+    "encoding_note": "links in this file use the array form [id, origin, origin_slot, target, target_slot, type]"
+  },
+  "verification": {
+    "structural": {
+      "root_nodes": 294,
+      "root_links": 390,
+      "dangling_links": 0,
+      "encoder_control_image_source": 130160,
+      "note": "subgraph boundary ports (-10 / -20) are excluded by design"
+    },
+    "frontend": {
+      "isolated_port": 8220,
+      "branch_activation": {"branch_nodes": 99, "unmuted": 96, "missing": []},
+      "switch_inputs_connected": ["input_01", "input_02"],
+      "encoder_input_connected": true
+    },
+    "depth_source_ab": {
+      "method": "one frontend session, the pose capture pre-uploaded once so both runs use the same pose, then two submissions that differ only in the switch position",
+      "prompt_ids": {"reference": "c3217303-b401-4083-b149-a3b7cb7c11be", "pose": "855c23fe-e9d8-4931-bb87-b6e288e31392"},
+      "history_status": "success",
+      "stable_inputs": {
+        "pose_depth_130162": {"size": [1024, 1497], "same_pixels_across_runs": true},
+        "reference_depth_1189": {"size": [1024, 1498], "same_pixels_across_runs": true}
+      },
+      "encoded_control_1162": {
+        "size": [696, 1024],
+        "same_pixels_across_runs": false,
+        "mean_abs_diff_between_runs": 90.324,
+        "max_abs_diff_between_runs": 220
+      },
+      "attribution": {
+        "select_none": {"vs_reference_depth": 0.9351, "vs_pose_depth": 90.1633},
+        "select_input_02": {"vs_reference_depth": 90.1571, "vs_pose_depth": 0.4585}
+      },
+      "reading": "the encoder output follows whichever depth source the switch selects; the two sources themselves are unchanged between runs"
+    }
+  },
+  "limits": [
+    "No full Krea2 sampling was executed, so pose-control quality on the rendered image is not certified.",
+    "A depth ControlNet-LoRA expects natural-scene depth; a rendered mesh figure is an approximation whose fidelity needs its own image-level acceptance round.",
+    "Two earlier runs in the same runtime varied because the VNCCS pose capture was not held fixed; that variation is recorded, not used as evidence.",
+    "Not deployed to the runtime: the live workflow files still predate this change.",
+    "No prompt, seed, LoRA, strength or default switch was modified."
+  ]
+}

@@ -7,6 +7,8 @@
 
 2026-10-11 原版补充：原版 Anima 控制简化同样只改 UAP 工作流，因此按同一先例把 `model_sources.json` 与 [下载表](../../MODEL_SOURCES.md)的 `workflow_sha256` 刷到当前 UAP 摘要 `2bbde1fc…`，并同步快照清单里该元数据条目的摘要，使来源清单门禁与快照校验恢复一致；资产数、23 项工作流关联、观察存在计数与所有模型身份不变，权重未移动、下载或转换。见[原版实机收据](../../receipts/anima_original_control_gpu_20261011.json)。
 
+2026-10-11 Krea2 姿势来源：Krea2 深度来源选择同样只改 UAP 工作流，`workflow_sha256` 随之刷到 `cfae9c35…` 并同步快照清单条目；未新增或移动任何权重，Krea2 深度 ControlNet-LoRA 的加载文件名与来源保持原值。见[Krea2 收据](../../receipts/krea2_pose_control_20261011.json)。
+
 ## 实现与资源
 
 2026-10-11：增量导入昨晚下载的 4 个服装 LoRA（Anima 2 个、Krea2 2 个），现有 313 个用户 LoRA。补齐分类、规范名、来源、触发词与 4 张官方预览，保留全部下载原件；326 条旧缓存身份／个人字段和既有索引保持。整理工具接纳 Civitai LoCon 类型，仍严格核对完整摘要与版本／文件身份，并新增 `--keep-originals`。32 项导入回归、26 项来源回归、47 项命名回归及在线卡片／加载器核验通过；未重启、全库重扫或做 GPU 生图。回滚依赖保留原件与本批路径／摘要日志，不覆盖在线库。见[本批收据](../../receipts/lora_download_import_20261011.json)。
