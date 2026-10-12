@@ -2,7 +2,7 @@
   "schema": 1,
   "date": "2026-10-11",
   "scope": "Krea2 (k2) branch: VNCCS pose depth as a selectable control source",
-  "status": "deployed-full-sampling-executed",
+  "status": "deployed-sampling-and-effectiveness-compared",
   "evidence_ref": "external-local://validation/krea2-pose-control-20261011-01",
   "problem": "The k2 branch already routed a depth map into the Krea2 depth ControlNet-LoRA, but the VNCCS pose studio output (1172) only fed a preview and a before/after compare node, so the pose reference never reached the model.",
   "change": {
@@ -119,10 +119,10 @@
     }
   },
   "limits": [
-    "One prompt, one seed, one base model and one sampler setting; no strength sweep or base-model comparison.",
-    "Pose fidelity of the produced image is not certified.",
-    "The probes replaced node 1191 with a LoadImage node inside the isolated runtime only; the deployed workflow was not modified by them.",
-    "No conclusion is drawn that the control plugin is defective; the effective-vs-not question is left to a strength or base-model comparison."
+    "One prompt, one seed and one pose; the comparison isolates the base model and LoRA strength, not sampler variety.",
+    "Pose fidelity is judged from rendered images; no landmark or pose-matching metric was computed.",
+    "The Turbo base at LoRA strength 4 is a broken configuration, not evidence about control effectiveness.",
+    "The probes that replaced node 1191 ran only in the isolated runtime."
   ],
   "deployment": {
     "commit": "733c510c833e669a2f8d474eb5f1809a53be3f3c",
@@ -209,5 +209,33 @@
       "reading": "arbitrary control images all change the render, so the chain is wired and injecting; the natural depth map is the case that lands in the same basin as the unconstrained model"
     },
     "interpretation": "Krea2 depth control is wired and can affect sampling, but with this Turbo base model, 8 steps and LoRA strength 1 it is not distinguishable from no control when the control map is the natural depth of the reference image"
+  },
+  "effectiveness_comparison": {
+    "question": "the full sampling showed control-on and control-off rendering identical pixels with the Turbo base; this comparison asks whether the depth control works at all",
+    "method": "fixed prompt, seed, pose capture and workflow; each configuration submitted twice (control off / on) and compared pixel by pixel",
+    "configurations": [
+      {
+        "label": "DaSiWa Turbo, 8 steps, CFG 1, LoRA strength 1",
+        "control_off_final": "1eeb1ffb",
+        "control_on_final": "259d2897",
+        "mean_abs_diff": 17.461,
+        "changed_fraction": 0.5735,
+        "reading": "the render changes, but the pose does not follow the control map"
+      },
+      {
+        "label": "DaSiWa Turbo, 8 steps, CFG 1, LoRA strength 4",
+        "mean_abs_diff": 0.837,
+        "changed_fraction": 0.0061,
+        "reading": "the Turbo render collapses into noise at strength 4 in both arms, so this setting is unusable rather than informative"
+      },
+      {
+        "label": "Krea2-Anime v2.0 (non-distilled), 24 steps, CFG 3.5, LoRA strength 1",
+        "mean_abs_diff": 86.98,
+        "changed_fraction": 0.8421,
+        "reading": "control-off draws a plain standing figure; control-on reproduces the seated forward-leaning pose from the pose depth, with the pond and flower the control map carries"
+      }
+    ],
+    "conclusion": "the Krea2 depth ControlNet-LoRA is effective with the non-distilled Krea2-Anime v2.0 base; the Turbo base is what made the earlier comparison look inert, and LoRA strength 4 breaks the Turbo render entirely",
+    "not_changed": "the deployed workflow still has its own base model, strength and sampler settings; the comparison changed them only inside the isolated runtime"
   }
 }
