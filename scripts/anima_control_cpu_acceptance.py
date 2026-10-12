@@ -43,6 +43,15 @@ for i in range(40):
     if not torch.equal(actual,expected): errors.append(i)
 assert not errors,errors
 assert model.block_count==28 and len(model.module_names)==28
+host.blocks=torch.nn.ModuleList([torch.nn.Identity() for _ in range(28)])
+package.controlnet_patch._maybe_install_remap(wrapper,patcher)
+assert not hasattr(model,'_anima_compat_cnet_remap'), '2.9B remap leaked into original Anima'
+for i in range(28):
+    assert torch.equal(model.apply(x,cond,i,'self_attn_q_proj',0.8),
+                       original_apply(model,x,cond,i,'self_attn_q_proj',0.8)), i
+host.blocks=torch.nn.ModuleList([torch.nn.Identity() for _ in range(40)])
+package.controlnet_patch._maybe_install_remap(wrapper,patcher)
+assert getattr(model,'_anima_compat_cnet_remap')==mapping
 os.environ['ANIMA_COMPAT_CONTROLNET_REMAP']='0'
 try: loader.load(args.checkpoint)
 except RuntimeError: disabled_rejected=True
@@ -59,9 +68,13 @@ assert decision[:3]==('expand',28,40)
 mapped,_,_=package.lora_patch._remap_key_map(key_map,decision[3])
 assert mapped['lora_unet_blocks_2_self_attn_q_proj']=='diffusion_model.blocks.3.self_attn.q_proj.weight'
 assert package.lora_patch._decide({f'lora_unet_blocks_{i}_self_attn_q_proj.lora_down.weight':None for i in range(40)},key_map) is None
+key_map28={key:value for key,value in key_map.items() if key=='adapter' or int(key.split('_')[3])<28}
+assert package.lora_patch._decide(lora28,key_map28) is None
 assert {parameter.device.type for parameter in model.parameters()} == {'cpu'}
 result={'native_actual_checkpoint_loaded':True,'control_blocks':model.block_count,'host_blocks':40,'exact_cpu_routing_cases':40,
         'inherited_blocks':28,'inserted_blocks_passthrough':12,'disabled_patch_rejected':disabled_rejected,
+        'original_anima_28_exact_routing_cases':28,'host_switch_40_to_28_to_40_pass':True,
+        'original_28_lora_passthrough':True,
         'unlisted_paths_rejected':3,'lora_28_to_40_mapping_pass':True,'native_40_lora_passthrough':True,
         'tensor_device':'cpu','cuda_initialized_by_import_probe':torch.cuda.is_initialized(),
         'torch_cuda_memory_allocated':torch.cuda.memory_allocated() if torch.cuda.is_initialized() else 0,'sampling_executed':False}

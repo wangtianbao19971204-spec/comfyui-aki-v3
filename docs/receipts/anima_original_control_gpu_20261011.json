@@ -1,0 +1,256 @@
+{
+  "pass": true,
+  "schema": 1,
+  "date": "2026-10-11",
+  "scope": "Original Anima (a1) simplified pose and VNCCS control: real control-effect verification",
+  "status": "gpu-verified-and-deployed",
+  "deployment": {
+    "pass": true,
+    "scope": "four a1 workflow/template files",
+    "deploy_dir": "external-local://validation/anima-original-control-gpu-20261011-01/deployment-a1",
+    "files": [
+      {
+        "path": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+        "before_sha256": "16484f68b9b9dee7cd9d8cf0b5a948f18756acbd6ab9f3d6bd04161747dd6faa",
+        "candidate_sha256": "2bbde1fc5ea6ac0f2992919a7dcfc9fe72f1aef98d96d8e73d745d588324bf4f",
+        "source_sha256": "2bbde1fc5ea6ac0f2992919a7dcfc9fe72f1aef98d96d8e73d745d588324bf4f",
+        "preservation": {"changed_root_ids": [1004, 1022, 1040], "root_modes_and_parameters_preserved": true, "other_subgraphs_preserved": true}
+      },
+      {
+        "path": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+        "before_sha256": "e92f675608bf2b511ac31004a035514e0ab87e813db2dec3daa06a1dae79184f",
+        "candidate_sha256": "b28113dcecf6dc6f19db07da42b96047d07fa02414888fb86d375eccd8c18190",
+        "source_sha256": "b28113dcecf6dc6f19db07da42b96047d07fa02414888fb86d375eccd8c18190",
+        "preservation": {"changed_root_ids": [552, 553], "root_modes_and_parameters_preserved": true, "other_subgraphs_preserved": true}
+      },
+      {
+        "path": "production_tools/templates/UAP统一生产工作台_v2.json",
+        "before_sha256": "16484f68b9b9dee7cd9d8cf0b5a948f18756acbd6ab9f3d6bd04161747dd6faa",
+        "candidate_sha256": "2bbde1fc5ea6ac0f2992919a7dcfc9fe72f1aef98d96d8e73d745d588324bf4f",
+        "source_sha256": "2bbde1fc5ea6ac0f2992919a7dcfc9fe72f1aef98d96d8e73d745d588324bf4f",
+        "preservation": {"changed_root_ids": [1004, 1022, 1040], "root_modes_and_parameters_preserved": true, "other_subgraphs_preserved": true}
+      },
+      {
+        "path": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+        "before_sha256": "46f5bfaf4639cba62c840689cf1ca0158892c97f5135f2acc0168597d3630bdc",
+        "candidate_sha256": "c97b4cd78782e922a4a4f5ab792fcc8d342e2099c3feead51248bfbffba1da98",
+        "source_sha256": "c97b4cd78782e922a4a4f5ab792fcc8d342e2099c3feead51248bfbffba1da98",
+        "preservation": {"changed_root_ids": [552, 553], "root_modes_and_parameters_preserved": true, "other_subgraphs_preserved": true}
+      }
+    ],
+    "candidate_from_live_bytes": true,
+    "candidate_matches_source_snapshot": true,
+    "consistent_sqlite_backups": 1,
+    "protected_neighbours_unchanged": 47,
+    "old_pid": 11168,
+    "new_pid": 24688,
+    "new_create_time": 1791730706.8266904,
+    "restart_argv": "the saved original command line; AKI_HUISHI_PROFILE=production",
+    "queue": {"queue_running": [], "queue_pending": []},
+    "post_deploy": {
+      "files_match_manifest": true,
+      "pose_subgraph_nodes": 9,
+      "vnccs_subgraph_nodes": 6,
+      "erase_subgraph_nodes": 8,
+      "registered_types_missing": [],
+      "control_owners_default_mode": 2,
+      "live_version": "0.33.0",
+      "object_info_types": 1946
+    },
+    "database_replaced": false,
+    "rollback_ref": "external-local://validation/anima-original-control-gpu-20261011-01/deployment-a1/ROLLBACK.json",
+    "rollback_executed": false,
+    "global_manifest_live_deployed": false
+  },
+  "tests": {
+    "python": ["tests/test_anima_control_workflow.py (8 cases)", "tests/test_vnccs_pose_sync.py (2 cases)"],
+    "frontend": ["test_anima_control.cjs", "test_uap_daily_controls.cjs", "test_uap_navigation.cjs",
+                 "test_uap_compact_widgets.cjs", "test_vnccs_pose_sync.cjs"],
+    "catalog_gate": "scripts/technical_catalog.py check --staged --enforce-changes",
+    "security_gate": "scripts/security_guard.py --staged --cache-staged"
+  },
+  "pull_request": {
+    "number": 20,
+    "url": "https://github.com/wangtianbao19971204-spec/comfyui-aki-v3/pull/20",
+    "state": "open",
+    "draft": true,
+    "head_sha": "1f185acb9d8e1fb8d9910fe7810d0aaa1e5a278a",
+    "remote_branch_sha": "1f185acb9d8e1fb8d9910fe7810d0aaa1e5a278a",
+    "merged": false
+  },
+  "next_step": "user review and merge of PR 20; no further deployment step remains for this round",
+  "evidence_ref": "external-local://validation/anima-original-control-gpu-20261011-01",
+  "source_base_commit": "8e901baefd91e9930c90899050927522d71f5449",
+  "isolated_runtime": {
+    "root": "external-local://validation/anima-original-control-gpu-20261011-01/runtime",
+    "port": 8220,
+    "pid": 6124,
+    "source": "snapshot/runtime at 8e901ba",
+    "plugins": "production profile whitelist",
+    "live_database_copied": false,
+    "live_outputs_or_temp_copied": false,
+    "models": "referenced from the live model directories, never copied",
+    "production_service_untouched": true
+  },
+  "fixed_parameters": {
+    "seed": 845401323336067,
+    "steps": 28,
+    "cfg": 3.5,
+    "sampler": "euler",
+    "scheduler": "sgm_uniform",
+    "denoise": 1,
+    "shift": 3,
+    "batch": 1,
+    "lora_stack": [],
+    "prompt": "A full body illustration of an adult woman wearing a blue raincoat, dark trousers and yellow boots, standing beside a red bicycle on a quiet city street, soft overcast daylight, clear composition, detailed face and hands.",
+    "prompt_note": "Neutral fixed acceptance prompt. The live workflow keeps its own prompt and sampler values; only the QA graphs carry these.",
+    "control_strength": 1,
+    "preprocessor_resolution": 1024,
+    "reference": "06693d11-d952-4b22-b8cd-adc80a4314b8.jpeg",
+    "vnccs_strength": 0.94
+  },
+  "cases": [
+    {
+      "case": "baseline",
+      "pass": true,
+      "prompt_id": "73daf0c6-876d-444c-a85a-bb264a9dd639",
+      "control_path": "control branch absent from the submitted graph; DazzleSwitch input_02 removed so the raw model is sampled",
+      "closure_nodes": 27,
+      "output": "_codex_qa/anima_original_20261011/baseline_00001_.png",
+      "sha256": "3aebc11456bd182cc2365d3f2be6727d9134d1e922d5b52c0c664a7b7c76f614",
+      "size": [1040, 1520],
+      "history_sha256": "a9ed759e6c35592ce68b005a8bd32f4914d7156773d6f852686a762979c5fccb"
+    },
+    {
+      "case": "canny",
+      "pass": true,
+      "prompt_id": "e809962f-8520-47f3-bef7-fa1e7d1406ef",
+      "preprocessor": "PyraCannyPreprocessor",
+      "closure_nodes": 30,
+      "output": "_codex_qa/anima_original_20261011/canny_00001_.png",
+      "sha256": "bf418240ad13a46b004b17ba939c695f95dac8f5d65db49751f5bc7a42e5765a",
+      "size": [1040, 1520],
+      "history_sha256": "1a27a76ebf70b1cb6b6f7c43ad2a304d05e2a67fc4dd8835cf3a07bf72e6c5f8"
+    },
+    {
+      "case": "hed",
+      "pass": true,
+      "prompt_id": "61a6de0d-f93b-4b49-9138-af5a7984c258",
+      "preprocessor": "HEDPreprocessor",
+      "closure_nodes": 30,
+      "output": "_codex_qa/anima_original_20261011/hed_00001_.png",
+      "sha256": "09e5eef6de35de5df2021037d0caff50a74e3ade484030e633f9bf4a0fb1a766",
+      "size": [1040, 1520],
+      "history_sha256": "d3e92ae1de501a5bc7c1afc0baaf968d1ac1c97957b63b25063d2cecad845d70"
+    },
+    {
+      "case": "manga",
+      "pass": true,
+      "prompt_id": "c2284cb2-2beb-4b35-85b3-e297f5d07c34",
+      "preprocessor": "Manga2Anime_LineArt_Preprocessor",
+      "closure_nodes": 30,
+      "output": "_codex_qa/anima_original_20261011/manga_00001_.png",
+      "sha256": "64265b27af8f2a210630a80e57bafb8109f712a4105369e420c61ea83fceb56a",
+      "size": [1040, 1520],
+      "history_sha256": "9f96a5db596cb30a6223b90774ad48f2e22fdacc090ccadd4ae1322c5bb88a8a"
+    },
+    {
+      "case": "depth",
+      "pass": true,
+      "prompt_id": "74e3524d-46b4-4bb0-a5f3-93874071078f",
+      "preprocessor": "DepthAnythingV2Preprocessor",
+      "closure_nodes": 30,
+      "output": "_codex_qa/anima_original_20261011/depth_00001_.png",
+      "sha256": "49f550add86da22cd0948bb55d07669605570fe389fead10e400ba9ada4ce038",
+      "size": [1040, 1520],
+      "history_sha256": "a61c586bd8b608268ce64f6e02be97a06964d46222a355830d69eed55b745d1d"
+    },
+    {
+      "case": "erase",
+      "pass": true,
+      "prompt_id": "da6dd2a4-9c35-4a8e-a896-3397e6a36e64",
+      "preprocessor": "HEDPreprocessor",
+      "erase": "deterministic 1024x1024 RGBA mask, transparent rectangle 90,500-390,1000, sha256 592ef50475958e5e127e75921a8931c98e72afa6ec746b15cccc0eca40475f89",
+      "closure_nodes": 35,
+      "output": "_codex_qa/anima_original_20261011/erase_00003_.png",
+      "sha256": "a40e995dd8b52348f826d60e1fed184fb292f7ee03cab2fc78344457f8a1e539",
+      "size": [1040, 1520],
+      "history_sha256": "3dce71c74857ef89bd36a732fe6380b32026a7875ea7ba7bdcb521bb141bcb73"
+    },
+    {
+      "case": "vnccs",
+      "pass": true,
+      "prompt_id": "14b31fb8-dff8-467f-8094-985d59967ee6",
+      "control_path": "VNCCS_PoseStudio -> AnimaLLLiteApply 0.94 -> DazzleSwitch input_02; pose subgraph sizes removed so the manual size applies",
+      "closure_nodes": 26,
+      "output": "_codex_qa/anima_original_20261011/vnccs_00001_.png",
+      "sha256": "6778ddda74e0bdc0b45995d93be0413a021525f5bf9b5b77c3aa0339fd778b40",
+      "size": [1344, 768],
+      "history_sha256": "dcf668e0248332ac12d81b15ebd291b55a83ad4d171848024083ab68869540eb"
+    }
+  ],
+  "baseline_differences": {
+    "canny": {"comparable": true, "mean_abs_diff": 46.382, "changed_pixels": 1402116, "changed_fraction": 0.88697, "bbox_xyxy": [0, 0, 1039, 1519]},
+    "hed": {"comparable": true, "mean_abs_diff": 46.486, "changed_pixels": 1468662, "changed_fraction": 0.92906, "bbox_xyxy": [0, 0, 1039, 1519]},
+    "manga": {"comparable": true, "mean_abs_diff": 45.707, "changed_pixels": 1503057, "changed_fraction": 0.95082, "bbox_xyxy": [0, 0, 1039, 1519]},
+    "depth": {"comparable": true, "mean_abs_diff": 41.136, "changed_pixels": 1394216, "changed_fraction": 0.88197, "bbox_xyxy": [0, 0, 1039, 1519]},
+    "erase": {"comparable": true, "mean_abs_diff": 37.576, "changed_pixels": 1411492, "changed_fraction": 0.8929, "bbox_xyxy": [0, 0, 1039, 1519]},
+    "vnccs": {"comparable": false, "case_size": [1344, 768], "baseline_size": [1040, 1520]}
+  },
+  "control_images": {
+    "source": "deployed frontend: the shipped workbench controls applied each case, the shipped Export(API) path produced the graph, and the submission used the two preview nodes as partial execution targets so the sampler never ran",
+    "canny": {"size": [1024, 1498], "sha256": "ff531f7b733081187f0b0fbc74fe8694e5ae9bcf1bc61ca657deb74b35323b06", "prompt_id": "3ed583e3-8b70-456e-87fc-06318e92dea5"},
+    "hed": {"size": [1024, 1498], "sha256": "8bae6521bc174ee0854d931a1e0eb49d12509c918f3d2cca5ca00acb8fcd5138", "prompt_id": "dfc83f3a-c82b-45e0-8e53-b8e48ec77f6a"},
+    "manga": {"size": [1024, 1498], "sha256": "0dad53ccbbf40032fec80683ef61b94575a2b68c1c7d23b0de08abec36feddd4", "prompt_id": "6916adb4-0f90-4803-8502-5257756c829c"},
+    "depth": {"size": [1024, 1498], "sha256": "34a19824be313b2080356e8e8b524ea2cf5c4d2ac2120d3d9fbff2033d87506a", "prompt_id": "2d48d27b-6ca1-4832-9cfc-ac577d87c52d"},
+    "erase": {"size": [1024, 1498], "sha256": "f5456ca840b6077fe360342a7523e15a4e2e3511e14c46aa25ce151044d45c4e", "prompt_id": "45433dd4-0d92-4965-804e-3e93b3e5cc23"},
+    "export_node_counts": {"canny": 49, "hed": 49, "manga": 49, "depth": 49, "erase": 49},
+    "export_isolation": "each browser export differs from the others only in the AIO preprocessor value (and the erase switch state for the erase case); strength 1, resolution 1024, weights anima-lllite-any-test-like-v2.safetensors"
+  },
+  "effective_reference_identification": {
+    "method": "the deployed AIO preprocessing run directly on each candidate input compared against the browser-rendered HED control image",
+    "06693d11-d952-4b22-b8cd-adc80a4314b8.jpeg": {"shape_match_after_resample": true, "mean_abs_diff": 3.324},
+    "ComfyUI_temp_oflff_00001_.png": {"mean_abs_diff": 58.937},
+    "gelbooru_5873505.jpg": {"mean_abs_diff": 43.735},
+    "civitai_134722333.jpg": {"mean_abs_diff": 60.217},
+    "conclusion": "the control branch consumes the reference recorded in the workflow (06693d11); the small residual is the 1024x1496 versus 1024x1498 resample difference",
+    "attempted_raw_string_match": "disabled after the first attempt failed; the identification above is content-based"
+  },
+  "erase_verification": {
+    "control_difference": {"changed_pixels": 37029, "max_abs_diff": 255, "identical": false},
+    "changed_bbox_xyxy": [90, 731, 390, 1464],
+    "mask_box_xyxy": [90, 500, 390, 1000],
+    "interpretation": "LoadImage exposes a single channel image as 1 - value, so the white rectangle is the erased region; the changed control pixels stay inside the mask's x range and the erased interior becomes black",
+    "first_attempt": "the first QA mask was RGB, which LoadImage exposes as an all-zero 64x64 mask; that run was replaced rather than reported as erasing (erase_00001 and erase_00002 are the superseded artifacts)"
+  },
+  "vnccs_browser_capture": {
+    "method": "headless Chrome drove the deployed frontend: it loaded the workflow, resolved 1004:101001 through the subgraph path, captured the pose with the viewer, and uploaded through /vnccs/pose_sync/upload_capture and /vnccs/pose_captures_upload (both HTTP 200)",
+    "capture_id": "vnccs_capture_101001",
+    "pose_image": {"size": [832, 1216], "mode": "RGBA", "bytes": 337948, "sha256": "f2abc7c6189364df7bdb35b901fc007b3aa8dd8601414e2d555a6be6ec3709b7"},
+    "execution_log": "[VNCCS Pose Studio] Loaded 1 captures from LRU cache (id=vnccs_capture_101001)",
+    "sync_payload_file": "runtime/ComfyUI/temp/vnccs_debug_1004_101001.json (456277 bytes, browser-to-backend sync during the capture pass)",
+    "python_fallback_rendered": false
+  },
+  "production_route": {
+    "method": "the same headless frontend unmuted the pose subgraph and submitted the deployed workflow with the shipped Export(API) path and no partial targets",
+    "prompt_id": "3d76d48d-aa6d-4304-8351-14137c20513b",
+    "nodes": 49,
+    "history_status": "success",
+    "handled_nodes": ["1039 final SaveImage", "1022:100022 control preview", "1022:130159:100004 erase preview", "1022:130159:100017 temporary lineart save"],
+    "output": {"file": "Production_AnimaBase_LoRA_v2_00001_.png", "bytes": 1393578, "sha256": "56d2c7bf14603f7a6c92f4b68c8dfe1c9b361026591471ba20055eef8f7e434e", "size": [1040, 1520]},
+    "widget_overrides": "seed, steps, cfg, sampler and scheduler only; preprocessor left at the deployed default (DepthAnythingV2) and erase left as saved",
+    "artifact_policy": "the production-prompt render is recorded by hash and path only; it is not reproduced as acceptance media"
+  },
+  "source_state_findings": {
+    "control_branches_default_mode": "both animated control subgraphs (1022, 1004) are saved with mode=2 in snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json, so the QA graphs were built with the branch active and the browser passes unmuted 1022 explicitly",
+    "erase_default": "the shipped workbench keeps 高级 · 擦线与导出 at mode 0 unless the erase switch is toggled, so a control run composites the saved mask; the saved mask file in the live input directory is RGB, which LoadImage exposes as an all-zero mask, so that composite is currently a no-op and erasing needs an alpha-bearing mask to take effect after a reload"
+  },
+  "limits": [
+    "One neutral prompt and one fixed seed per case; not a general image-quality or pose-fidelity certification.",
+    "At the production default strength 1 the control visibly over-constrains the render: the pose follows the reference but faces and limbs degrade. Strength is a user parameter and was not retuned here; the 2.9B acceptance used 0.63 and this round does not certify any strength to be artifact-free.",
+    "Depth control with a black erased region can add spatial structure; the panel already advises disabling erasing for depth.",
+    "VNCCS python fallback rendering and SAM3D image extraction remain uncertified.",
+    "The API-format QA graphs derive from the reviewed a1 browser Export(API) pair; the browser pass in this round re-exported the same graph shapes (49 nodes) for the control cases and confirmed the isolation, but the submitted QA graphs themselves are the reviewed pair with declared values changed.",
+    "No model downloads, no online database replacement, no LoRA certification (the LoRA stack is empty)."
+  ]
+}

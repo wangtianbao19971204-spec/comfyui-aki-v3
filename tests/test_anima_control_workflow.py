@@ -68,16 +68,38 @@ class AnimaControlWorkflowTests(unittest.TestCase):
         self.before['extra']['uap_workbench']={'branches':[{'id':'a29','nodeIds':[]}]}
         self.assertEqual(migration.migrate(self.before),self.before)
 
-    def test_all_four_sources_are_idempotent_and_keep_legacy_anima(self):
+    def test_original_branch_is_explicit_and_preserves_other_branches(self):
+        self.before['extra']['uap_workbench'] = {'branches': [
+            {'id': 'a1', 'nodeIds': [n['id'] for n in self.before['nodes'][:2]]},
+            {'id': 'a29', 'nodeIds': [self.before['nodes'][-1]['id']]},
+        ]}
+        self.assertEqual(migration.migrate(self.before), self.before)
+        after = migration.migrate(self.before, 'a1')
+        self.assertEqual(after['nodes'][-1], self.before['nodes'][-1])
+        self.assertEqual(after['extra'], self.before['extra'])
+        self.assertEqual(len(after['definitions']['subgraphs'][0]['nodes']), 9)
+        self.assertTrue(all(n['properties']['uap_native_lllite'] for n in after['nodes'][:2]))
+        self.assertEqual(migration.migrate(after, 'a1'), after)
+
+    def test_unsupported_branch_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, 'Unsupported Anima branch'):
+            migration.migrate(self.before, 'krea')
+
+    def test_all_six_sources_are_idempotent_and_branches_are_independent(self):
         for base in ('ComfyUI/user/default/workflows','production_tools/templates'):
-            for filename in migration.FILES:
+            for filename in set(sum(migration.BRANCH_FILES.values(), ())):
                 data=json.loads((REPO/'snapshot/runtime'/base/filename).read_text(encoding='utf-8'))
-                self.assertEqual(migration.migrate(data),data)
+                for branch_id, files in migration.BRANCH_FILES.items():
+                    if filename in files:
+                        self.assertEqual(migration.migrate(data, branch_id),data)
                 owners=[n for n in data['nodes'] if n.get('properties',{}).get('uap_native_lllite')]
-                self.assertEqual(len(owners),2)
+                self.assertEqual(len(owners),4 if filename.startswith('UAP') else 2)
                 if filename.startswith('UAP'):
-                    a1=next(b for b in data['extra']['uap_workbench']['branches'] if b['id']=='a1')
-                    self.assertFalse(any(n['id'] in a1['nodeIds'] for n in owners))
+                    for branch_id in ('a1', 'a29'):
+                        branch=next(b for b in data['extra']['uap_workbench']['branches'] if b['id']==branch_id)
+                        branch_owners=[n for n in owners if n['id'] in branch['nodeIds']]
+                        self.assertEqual(len(branch_owners),2)
+                        self.assertEqual(sum(bool(n['properties'].get('uap_anima_control')) for n in branch_owners),1)
 
 
 if __name__ == '__main__': unittest.main()
