@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-13T00:38:11.384920+00:00",
+  "created_at": "2026-10-13T04:45:40.933128+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -51393,8 +51393,8 @@
     {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-      "sha256": "f3af219c1f8403e296aae49a0d4708705298b6544166456de35604ed81173959",
-      "bytes": 850226,
+      "sha256": "05f573dd9122152f5e62a5daf6a51170be2fe444305f6800df36132b6afae3d7",
+      "bytes": 849348,
       "kind": "file"
     },
     {
@@ -57924,8 +57924,8 @@
     {
       "source": "production_tools/templates/UAP统一生产工作台_v2.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v2.json",
-      "sha256": "f3af219c1f8403e296aae49a0d4708705298b6544166456de35604ed81173959",
-      "bytes": 850226,
+      "sha256": "05f573dd9122152f5e62a5daf6a51170be2fe444305f6800df36132b6afae3d7",
+      "bytes": 849348,
       "kind": "file"
     },
     {
@@ -67934,7 +67934,7 @@
     },
     {
       "path": "inventory/model_sources.json",
-      "sha256": "7b35bef8ef3f0da872a7a125ae7bd1c3b503b042c917ad5ac4a1e1d27574a2a4",
+      "sha256": "7e1d2923b082b851e1f5b15f3476b7912b0a0954b1edb4bf700f2b622d31f32e",
       "bytes": 1259888
     }
   ],
@@ -68030,8 +68030,8 @@
     }
   ],
   "development_revision": {
-    "note": "Wrap the Krea2 line-art and control chain into a subgraph",
-    "previous_manifest_sha256": "3211e972c75d62cf4552d029eea1c5f76b6c726db113e4757cda345e1a423515",
+    "note": "Trim the promoted mask widgets off the Krea2 subgraph instance",
+    "previous_manifest_sha256": "11b812005d7dc3e09b07a18a6740103653d3f8035b0bf6a145e5c3c5ec6890d8",
     "source_changes": {
       "added": [],
       "removed": [],

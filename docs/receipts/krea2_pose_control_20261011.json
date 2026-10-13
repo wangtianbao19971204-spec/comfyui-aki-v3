@@ -615,6 +615,39 @@
           "clipspace/clipspace-painted-masked-1782566128506.png"
         ]
       }
+    },
+    "mask_widget_placement": {
+      "problem": "the frontend promoted the definition-internal mask loader widgets onto the instance, showing a file dropdown and an upload button on the node itself, with no image preview there",
+      "resolution": [
+        "removed the upload port on both sides (it does nothing on an instance)",
+        "the mask image dropdown stays inside the subgraph, where the loader keeps its native preview and mask editor",
+        "trimmed the instance to four wiring inputs and three outputs; the node card no longer shows file controls"
+      ],
+      "verification": {
+        "instance_inputs": [
+          "image",
+          "lineart",
+          "vae",
+          "latent"
+        ],
+        "instance_widgets": [],
+        "inner_loader_widgets": [
+          "image",
+          "upload"
+        ],
+        "export_apply": [
+          "130163:1159",
+          0
+        ],
+        "expanded_inner_nodes": 23,
+        "mask": "clipspace/clipspace-painted-masked-1782566128506.png",
+        "render": "success -> _codex_qa/krea2_subgraph_live/krea2_00003_.png"
+      },
+      "deployment": {
+        "new_pid": 39568,
+        "files_match_source": true
+      },
+      "how_to_change_the_mask": "double click the instance and use the [05C2] loader preview/editor, or the [05V6] mask preview inside the subgraph"
     }
   }
 }
