@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-12T14:48:04.364880+00:00",
+  "created_at": "2026-10-13T00:38:11.384920+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -51393,8 +51393,8 @@
     {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-      "sha256": "7f911ea32143587738376d4134a2c0b88d628d7df620d3dd59e25462b6e78b3b",
-      "bytes": 1351655,
+      "sha256": "f3af219c1f8403e296aae49a0d4708705298b6544166456de35604ed81173959",
+      "bytes": 850226,
       "kind": "file"
     },
     {
@@ -57924,8 +57924,8 @@
     {
       "source": "production_tools/templates/UAP统一生产工作台_v2.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v2.json",
-      "sha256": "7f911ea32143587738376d4134a2c0b88d628d7df620d3dd59e25462b6e78b3b",
-      "bytes": 1351655,
+      "sha256": "f3af219c1f8403e296aae49a0d4708705298b6544166456de35604ed81173959",
+      "bytes": 850226,
       "kind": "file"
     },
     {
@@ -67934,7 +67934,7 @@
     },
     {
       "path": "inventory/model_sources.json",
-      "sha256": "e8101269d81b627c597b1864599e939859ca696e2f4483abc866521960a4e8b1",
+      "sha256": "7b35bef8ef3f0da872a7a125ae7bd1c3b503b042c917ad5ac4a1e1d27574a2a4",
       "bytes": 1259888
     }
   ],
@@ -68030,20 +68030,14 @@
     }
   ],
   "development_revision": {
-    "note": "Point the Anima erase subgraph at the editor-saved mask",
-    "previous_manifest_sha256": "25c28449f5e260f193da7b376bd69f743bfcb5afa1f7a8694e7d02437bbd8123",
+    "note": "Wrap the Krea2 line-art and control chain into a subgraph",
+    "previous_manifest_sha256": "3211e972c75d62cf4552d029eea1c5f76b6c726db113e4757cda345e1a423515",
     "source_changes": {
-      "added": [
-        "production_tools/fix_anima_erase_mask.py"
-      ],
+      "added": [],
       "removed": [],
       "changed": [
         "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-        "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
-        "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
-        "production_tools/templates/UAP统一生产工作台_v2.json",
-        "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
-        "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json"
+        "production_tools/templates/UAP统一生产工作台_v2.json"
       ]
     },
     "live_deployed": false,

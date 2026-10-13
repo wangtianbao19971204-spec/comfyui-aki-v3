@@ -409,5 +409,55 @@
       "queue_at_deploy": "0/0",
       "live_acceptance": "k2 render success, 1136 -> _codex_qa/krea2_default_base_20261011/krea2_00002_.png"
     }
+  },
+  "krea2_lineart_subgraph": {
+    "goal": "give the Krea2 branch the same shape as the Anima branches: one subgraph holding the line-art chain (reference preprocessing, line-art source switch, erase, pose depth, source switch, control-image encoder), with a single root-level instance",
+    "method": "Convert to Subgraph executed through the running frontend with a complete selection (reference chain + erase chain + preprocessors previews + pose depth + source switch + encoder + control preview)",
+    "why_earlier_attempts_failed": [
+      "an incomplete selection leaves subgraph-internal nodes needing inputs from outside, which the exporter cannot resolve (InvalidLinkError: No link found in parent graph)",
+      "a hand-written definition lacks the internal state the frontend writes, so the instance output never resolves"
+    ],
+    "definition": {
+      "name": "K2 线稿与控制图",
+      "nodes": 23,
+      "inputs": [
+        "image",
+        "lineart",
+        "vae",
+        "latent"
+      ],
+      "outputs": [
+        "pose_compare",
+        "lineart_preview",
+        "control_latent"
+      ],
+      "instance": 130163
+    },
+    "root_nodes": {
+      "before": 294,
+      "after": 272
+    },
+    "k2_branch_nodes": 77,
+    "verification": {
+      "export_resolution": "1161.control_latent = [\"130163:1159\", 0]",
+      "expanded_inner_nodes": 23,
+      "persisted_after_reload": true,
+      "live_render": {
+        "status": "success",
+        "output": "_codex_qa/krea2_subgraph_20261011/krea2_00001_.png"
+      },
+      "inner_change_reaches_control": "setting the definition-internal [05C4] SolidMask value from 0 to 1 changed the control image (f39f69cd -> 730bf031)",
+      "structural_check": "passed"
+    },
+    "consistency_across_branches": {
+      "a1": "[05] 线稿与姿态控制 subgraph -> 高级 · 擦线与导出 -> AnimaLLLiteApply",
+      "a29": "same as a1",
+      "k2": "K2 线稿与控制图 subgraph -> internal source switch -> Krea2ControlImageApply",
+      "mask": "all three use clipspace/clipspace-painted-masked-1782566128506.png"
+    },
+    "limits": [
+      "no mask-swap A/B on the rendered image: a clipspace mask reference is fixed when the frontend loads the node, so changing the widget at runtime does not change the export; the SolidMask probe was used instead, and the mask file itself was proven in the minimal-chain test",
+      "the intermediate previews now live inside the subgraph and are no longer visible on the root canvas"
+    ]
   }
 }
