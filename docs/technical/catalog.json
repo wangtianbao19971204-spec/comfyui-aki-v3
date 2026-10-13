@@ -235,7 +235,8 @@
         "docs/receipts/anima_original_control_promptpair_20261011.json",
         "docs/receipts/anima_original_control_merge_20261011.json",
         "docs/receipts/krea2_pose_control_20261011.json",
-        "docs/receipts/control_erase_routing_repair_20261013.json"
+        "docs/receipts/control_erase_routing_repair_20261013.json",
+        "docs/receipts/control_erase_deployment_20261013.json"
       ],
       "acceptance": "historical",
       "watch": [

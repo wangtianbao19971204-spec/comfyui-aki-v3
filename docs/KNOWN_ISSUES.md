@@ -29,12 +29,13 @@
 
 对应原始 UI/工作流/推理收据保存在 `snapshot/evidence/`，三个种类的 latest 指针保持独立。
 
-## Krea2 擦线遮罩当前为空操作
+## Krea2 擦线 RGB 遮罩的历史空操作与使用限制
 
-- 现象：K2 分支 `[05C2] 白色擦线遮罩输入`（节点 `1164`）指向 `ComfyUI_temp_oflff_00001_.png`，该文件是 **RGB（无 alpha 通道）**。`LoadImage` 只从 alpha 生成 MASK，无 alpha 即没有透明区，`mask = 1 - alpha` 全为 0，`[05C7] ImageCompositeMasked` 因此不改动任何像素。
+- 2026-10-11 历史现象：K2 分支 `[05C2] 白色擦线遮罩输入`（节点 `1164`）曾指向 `ComfyUI_temp_oflff_00001_.png`，该文件是 **RGB（无 alpha 通道）**。`LoadImage` 只从 alpha 生成 MASK，无 alpha 即没有透明区，`mask = 1 - alpha` 全为 0，`[05C7] ImageCompositeMasked` 因此不改动任何像素。
 - 证据：把该文件与一张带透明矩形的自制遮罩分别送进同一路，控制图 `[05K-PREVIEW]` **逐像素完全相同**（平均差 0、最大 0、变化像素 0）。
 - 修复：在 `[05C2]` 的遮罩编辑器里重画并保存（编辑器保存的 `clipspace-painted-masked-*.png` 会保留 alpha），或直接换一张确实带透明区的 PNG；保存后可用同一 A/B 方法复核控制图是否变化。
 - 注意：`mask = 1 - alpha`，所以**透明的地方才会被擦除**，不透明处保持线稿。
+- 2026-10-13 核对：当前 UAP 的源文件和现用文件已选择编辑器保存的 RGBA 遮罩，实测擦线有效，手绘保存/重载也保持像素；上述“为空操作”不再代表当前 UAP 状态。独立 03 及模板仍保留各自原输入，使用时须选择有效 MASK 并开启擦线；其进入最终采样的接线修复见[本轮记录](technical/changes/runtime-workflows/2026-10-13-standalone-krea2-control-routing.md)。画质、手部和姿态精度限制仍按该记录保留。
 
 ## 姿势/深度控制的「静默回退」与分支模式表漂移
 

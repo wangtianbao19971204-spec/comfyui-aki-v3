@@ -87,7 +87,7 @@ A29 手阶段：原手部 YOLO 检测框已经纳入画面左侧裸脚区，SAM 
 
 ## 更新记录
 
-- 2026-10-13：修复独立 03 与对应模板的控制接线，参考图/VNCCS 经统一来源与可选擦线进入 Encode→Apply，保留原模型、提示词、种子和采样设置。17 项相关回归和实际原生出图核对通过，擦线直接控制图在蒙版支持域外零变化；原 Turbo 的服装与姿态质量限制、配套非 Turbo 的有限改善，以及旧 UAP K2 QA 提示词错误和 A1 高强度模糊分别记录。源码未部署，见[本轮说明](../changes/runtime-workflows/2026-10-13-standalone-krea2-control-routing.md)与[限定收据](../../receipts/control_erase_routing_repair_20261013.json)。
+- 2026-10-13：修复独立 03 与对应模板的控制接线，参考图/VNCCS 经统一来源与可选擦线进入 Encode→Apply，保留原模型、提示词、种子和采样设置。17 项相关回归和实际原生出图核对通过，擦线直接控制图在蒙版支持域外零变化；原 Turbo 的服装与姿态质量限制、配套非 Turbo 的有限改善，以及旧 UAP K2 QA 提示词错误和 A1 高强度模糊分别记录。源验收当时未部署；随后仅两份 03 已部署，中性输入现场两例通过。见[本轮说明](../changes/runtime-workflows/2026-10-13-standalone-krea2-control-routing.md)、[源验收收据](../../receipts/control_erase_routing_repair_20261013.json)与[部署收据](../../receipts/control_erase_deployment_20261013.json)。
 
 - 2026-10-11：原版控制补做「参考图 + 匹配提示词」验收。同一坐姿线稿参考图，只把提示词从"站立骑车女性"改为描述该线稿本身，输出平均绝对差 58.2/50.1/50.7，上一轮观察到的四肢退化消失；仅替换外观描述（金发蓝眼白裙）时姿势与构图保持、只换外观，说明参考图管姿势、提示词管外观。四种预处理在同一匹配提示词下仍互不相同；强度在 1.0/0.8/0.63/0.4 与两个种子上各出四张不同图，强度 0.0 与 1.0 平均绝对差 36.8–38.9，确认强度进入采样（先前一对相同结果不可复现，未按"强度无效"记录）。另查明运行区已保存擦线遮罩完全不透明，`LoadImage` 取 `1 - alpha`，该合成为空操作；透明遮罩轮次已证明擦线本身可用。未改动部署范围，见[变更](../changes/runtime-workflows/2026-10-11-anima-original-prompt-pair.md)与[收据](../../receipts/anima_original_control_promptpair_20261011.json)。同一分支同时按 2.9B 的先例把模型来源清单的 `workflow_sha256` 与 `docs/MODEL_SOURCES.md` 更新到本次 UAP 哈希，并刷新快照清单中该元数据条目的摘要，避免来源清单门禁因工作流变更而失效。
 
