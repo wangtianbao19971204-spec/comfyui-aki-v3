@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-13T05:07:56.184385+00:00",
+  "created_at": "2026-10-13T13:35:30.287541+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -51470,8 +51470,8 @@
     {
       "source": "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
-      "sha256": "bdba0d558eb2ae5a92ac874ffd70cac1502d3a7aad1f4c453da107ac7b41ddc9",
-      "bytes": 242470,
+      "sha256": "30cf66fe43ca785b902aa679373fa6ca4355f88f350ae1a2e65368c9da6d6935",
+      "bytes": 249689,
       "kind": "file"
     },
     {
@@ -57628,13 +57628,6 @@
       "kind": "file"
     },
     {
-      "source": "production_tools/align_krea2_branch_modes.py",
-      "path": "runtime/production_tools/align_krea2_branch_modes.py",
-      "sha256": "c9446485c424dfbacf786fcc8b1939e550218b09963e636bf822e66df2acef3d",
-      "bytes": 2626,
-      "kind": "file"
-    },
-    {
       "source": "production_tools/analyze_workflow_dependencies.py",
       "path": "runtime/production_tools/analyze_workflow_dependencies.py",
       "sha256": "63d80467a3850c56335ea18e347e66022c692bbc2a2332720051bf0784174c7d",
@@ -57681,6 +57674,13 @@
       "path": "runtime/production_tools/connect_krea2_erase_to_control.py",
       "sha256": "06a822ca21ba9b4fbb756043d9488e5b7a05d2502f29de803dc950032f3198a7",
       "bytes": 4674,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/connect_standalone_krea2_control.py",
+      "path": "runtime/production_tools/connect_standalone_krea2_control.py",
+      "sha256": "2f46ad5fa192733c068e3d9205e998aa580d29954a45528a0ef1a7c25c414e55",
+      "bytes": 9296,
       "kind": "file"
     },
     {
@@ -57959,8 +57959,8 @@
     {
       "source": "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
       "path": "runtime/production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
-      "sha256": "eeff35df758d86acc84d7dde864fa64bda5ba0545e2eb85e10592e9ac06ed353",
-      "bytes": 197112,
+      "sha256": "440498398d0d27b796399c3c0d701426d21aed8ed07cbbf508570a3fef881538",
+      "bytes": 204212,
       "kind": "file"
     },
     {
@@ -68044,17 +68044,18 @@
     }
   ],
   "development_revision": {
-    "note": "Keep the Krea2 control and pose chain enabled across branch switches",
-    "previous_manifest_sha256": "05ae98cd09c477a253d0eec247cc6382aa7063cf354b64f40d0d60b95dccccc9",
+    "note": "Repair standalone Krea2 control source and optional erase routing; bounded native QA passed, quality partial, not deployed",
+    "previous_manifest_sha256": "07fa8060fcebe5e8c64a0d3dddb7b81364caec2c4b23e05b734c52e67e078418",
     "source_changes": {
       "added": [
-        "production_tools/align_krea2_branch_modes.py",
-        "production_tools/keep_krea2_control_enabled.py"
+        "production_tools/connect_standalone_krea2_control.py"
       ],
-      "removed": [],
+      "removed": [
+        "production_tools/align_krea2_branch_modes.py"
+      ],
       "changed": [
-        "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-        "production_tools/templates/UAP统一生产工作台_v2.json"
+        "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
+        "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json"
       ]
     },
     "live_deployed": false,
@@ -68062,6 +68063,10 @@
       {
         "source": "ComfyUI/custom_nodes/TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters/models_cache.json",
         "previous_sha256": "256920e0f444fce3358401b72bc1529e32d3954690ec2f1cd397aaf9251df3c6"
+      },
+      {
+        "source": "production_tools/align_krea2_branch_modes.py",
+        "previous_sha256": "c9446485c424dfbacf786fcc8b1939e550218b09963e636bf822e66df2acef3d"
       }
     ]
   },
