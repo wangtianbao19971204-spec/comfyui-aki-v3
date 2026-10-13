@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-13T13:35:30.287541+00:00",
+  "created_at": "2026-10-13T23:23:40.779641+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -23589,8 +23589,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
-      "sha256": "2d2bd132e009a254946c01459c11a9f1651fccab021c699a38481ca827d62057",
-      "bytes": 9548,
+      "sha256": "4c5dcf1031ae572c2f65519e378439898a59eeb05e8df6f7e9acbaeae1e8ca97",
+      "bytes": 7853,
       "kind": "file"
     },
     {
@@ -23734,6 +23734,20 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_panel.js",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_panel.js",
+      "sha256": "ec76cae447b129399eed9ee9852d019c9b3a5095f31ade75f18581532427f99b",
+      "bytes": 2369,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_switches.js",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_switches.js",
+      "sha256": "50f5d30b17cb78c6d7314b72daf2d04c6edcf6cfbdab3aed35a54dcde5c1ab4e",
+      "bytes": 12137,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/daily_library.css",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/daily_library.css",
       "sha256": "d352ed7203c3bdb61f8dac5de3ed25e1b7922e66a5b501f16c9e1e29a1d30a9e",
@@ -23841,8 +23855,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
-      "sha256": "a63b7d75b9e33c9ec38fcfdf25c6836ea60f0d995b975a96f6d5149436e4d36f",
-      "bytes": 12005,
+      "sha256": "8035456d5b36a0375805f125c01c85622167476ffc0812fcee0f2b4cbaf85186",
+      "bytes": 12246,
       "kind": "file"
     },
     {
@@ -58022,8 +58036,8 @@
     {
       "source": "production_tools/test_anima_control.cjs",
       "path": "runtime/production_tools/test_anima_control.cjs",
-      "sha256": "e36d4b76d1376bf7a8ea87a350129b00401ec2191a65bc1e55f0ef8361706fdf",
-      "bytes": 7116,
+      "sha256": "2d526655d14d1d42a270b7754d61aa737bfe40099526f1dbfb7916d887f7c1b5",
+      "bytes": 6362,
       "kind": "file"
     },
     {
@@ -58045,6 +58059,13 @@
       "path": "runtime/production_tools/test_browser_receiver.cjs",
       "sha256": "2258c38a37b87d3e78733c7bb9a048cd9d41c451803cdd6276e3ed1086464568",
       "bytes": 16329,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/test_control_switches.cjs",
+      "path": "runtime/production_tools/test_control_switches.cjs",
+      "sha256": "45628f4ef1daa9d6afa3223ce1ab2e0acb1da5bf0002f41506c27a4656a70b0b",
+      "bytes": 12002,
       "kind": "file"
     },
     {
@@ -68044,18 +68065,19 @@
     }
   ],
   "development_revision": {
-    "note": "Repair standalone Krea2 control source and optional erase routing; bounded native QA passed, quality partial, not deployed",
-    "previous_manifest_sha256": "07fa8060fcebe5e8c64a0d3dddb7b81364caec2c4b23e05b734c52e67e078418",
+    "note": "Add one-click control and erase switches for UAP and standalone workflows; candidate UI/native acceptance passed",
+    "previous_manifest_sha256": "e1489163f4315242db2d9074a8bbf3867d7f2e03266d9038a6d6e5d0d9255faa",
     "source_changes": {
       "added": [
-        "production_tools/connect_standalone_krea2_control.py"
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_panel.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_switches.js",
+        "production_tools/test_control_switches.cjs"
       ],
-      "removed": [
-        "production_tools/align_krea2_branch_modes.py"
-      ],
+      "removed": [],
       "changed": [
-        "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
-        "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json"
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
+        "production_tools/test_anima_control.cjs"
       ]
     },
     "live_deployed": false,

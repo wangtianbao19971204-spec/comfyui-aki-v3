@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "date": "2026-10-14",
+  "status": "candidate-frontend-and-native-export-accepted-not-deployed",
+  "feature": "runtime-workbench",
+  "scope": ["UAP a1", "UAP a29", "UAP k2", "standalone 01", "standalone 02", "standalone 03"],
+  "implementation": [
+    "web/control_switches.js",
+    "web/control_panel.js",
+    "web/anima_control.js",
+    "web/runtime_controls.js"
+  ],
+  "automated_acceptance": {
+    "real_workflow_scopes_including_templates": 12,
+    "passed": [
+      "test_control_switches.cjs: control/source/erase, strict selection, branch persistence, zero rewiring, empty alpha, native editor target, stale nodes, same-graph replacement, effective model state",
+      "test_anima_control.cjs",
+      "test_uap_daily_controls.cjs",
+      "test_uap_navigation.cjs",
+      "test_plugin_fusion.cjs",
+      "test_stocking_workflow.cjs",
+      "test_standalone_krea2_control_workflow.py: 9 tests",
+      "test_anima_control_workflow.py: 8 tests",
+      "node --check: both new frontend modules"
+    ],
+    "known_baseline_failure": {
+      "test": "test_uap_compact_widgets.cjs",
+      "error": "1111 overlaps 130163",
+      "comparison": "main and candidate workflow geometry is identical; independently reproduced on both",
+      "fixed_in_this_change": false
+    }
+  },
+  "browser_acceptance": {
+    "method": "Real ComfyUI frontend through a read-only production proxy with four candidate JavaScript files and isolated mask uploads; no production mutations or GPU submissions.",
+    "workflows": 6,
+    "native_route_exports": 26,
+    "final_code_reference_and_pose_cases": 12,
+    "all_final_control_targets_correct": true,
+    "legacy_mode_only_false_positive_rejected": true,
+    "rgb_or_empty_alpha_blocked": true,
+    "native_editor_opened_without_entering_subgraph": true,
+    "hand_painted_and_saved_rgba": true,
+    "painted_alpha_extrema": [77, 255],
+    "enable_erase_automatically_enables_reference_control": true,
+    "standalone_hand_painted_mask_save_reload_passed": true,
+    "uap_three_branch_roundtrip_and_save_reload_passed": true,
+    "same_root_graph_workflow_replacement_passed": true,
+    "anima_off_on_source_preserved": true,
+    "anima_native_erase_off_bypasses_composite_on_consumes_composite": true,
+    "uap_krea2_native_erase_off_reads_destination_on_reads_composite": true,
+    "evidence_ref": "local-untracked://control-one-click-qa/browser-report.json",
+    "screenshot_ref": "local-untracked://control-one-click-qa/control-switches.jpg"
+  },
+  "deployment": {"performed": false},
+  "limitations": [
+    "No new GPU sampling or image quality acceptance. This change provides UI operations for the already implemented control and erase paths.",
+    "Krea2 erase-off guarantees the final control image bypasses erase; existing preview or mask side branches may still execute.",
+    "Original workflow JSON, prompts, models, LoRAs, seeds, dimensions, samplers, refinement and upscale defaults were not edited.",
+    "Existing Anima blur and Turbo pose quality limits remain."
+  ]
+}

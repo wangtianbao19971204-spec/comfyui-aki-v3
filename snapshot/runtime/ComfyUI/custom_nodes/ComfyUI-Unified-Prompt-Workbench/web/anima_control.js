@@ -1,5 +1,6 @@
 import {api} from '../../../scripts/api.js';
 import {commitWidget} from './prompt_target.js';
+import {mountControlSwitches} from './control_switches.js';
 
 const children = owner => owner?.subgraph?._nodes || owner?.subgraph?.nodes || [];
 const widget = (node, name) => node?.widgets?.find(item => item.name === name);
@@ -12,17 +13,6 @@ export function controlNodes(owner) {
     const roles = owner?.properties?.anima_control_roles || {};
     return Object.fromEntries(Object.entries(roles).map(([role, id]) =>
         [role, children(owner).find(node => String(node.id) === String(id))]));
-}
-
-export function setEraseMode(node, enabled) {
-    const saved = node.properties.anima_erase_modes;
-    if (!enabled && !saved) node.properties.anima_erase_modes =
-        Object.fromEntries(children(node).map(child => [child.id, child.mode]));
-    // Bypassing a subgraph passes its image through, but its output nodes can
-    // still enter a full export. Mute those children until erasing is reenabled.
-    for (const child of children(node)) child.mode = enabled ? (saved?.[child.id] ?? child.mode) : 2;
-    if (enabled) delete node.properties.anima_erase_modes;
-    node.mode = enabled ? 0 : 4;
 }
 
 export function mountAnimaControl(host, app, branch, nodes, isCurrent) {
@@ -40,23 +30,9 @@ export function mountAnimaControl(host, app, branch, nodes, isCurrent) {
     };
     const box = el('section', '', host, {className: 'desk-anima-control'});
     box.dataset.deskArea = 'parameters';
+    const switches = mountControlSwitches(box, app, branch, isCurrent);
     el('h3', '姿态与构图控制', box);
     el('small', '从参考图提取线稿或深度图；只处理选中的方式。', box);
-    const line = el('label', '', box, {className: 'switch'});
-    const enabled = el('input', '', line, {type: 'checkbox'});
-    enabled.setAttribute('aria-label', '启用姿态与构图控制');
-    el('span', '启用控制', line);
-    const setMode = (node, mode) => {
-        graph.beforeChange?.();
-        try {
-            if (node === controls.advanced) setEraseMode(node, mode === 0);
-            else node.mode = mode;
-            if (node === owner && branch.modes) branch.modes[node.id] = mode;
-        }
-        finally { graph.afterChange?.(); graph.setDirtyCanvas?.(true, true); }
-        sync();
-    };
-    enabled.onchange = () => { if (current()) setMode(owner, enabled.checked ? 0 : 2); };
     const grid = el('div', '', box, {className: 'fields'});
     function bind(parent, node, name, label, options) {
         const value = widget(node, name); if (!value) return;
@@ -119,11 +95,7 @@ export function mountAnimaControl(host, app, branch, nodes, isCurrent) {
     preview.style.cssText = 'max-width:100%;max-height:300px;object-fit:contain;margin:8px auto';
     const previewHint = el('small', '执行控制分支后，这里显示最终控制图。', box);
     const details = el('details', '', box);
-    el('summary', '高级 · 擦线、时段与权重', details);
-    const eraseLine = el('label', '', details, {className: 'switch'});
-    const erase = el('input', '', eraseLine, {type: 'checkbox'});
-    erase.setAttribute('aria-label', '使用原擦线遮罩'); el('span', '使用原擦线遮罩', eraseLine);
-    erase.onchange = () => { if (current() && children(owner).includes(controls.advanced)) setMode(controls.advanced, erase.checked ? 0 : 4); };
+    el('summary', '高级 · 时段与权重', details);
     const edit = el('button', '打开擦线与导出子图', details, {type: 'button'});
     edit.onclick = () => { if (current()) app.canvas.openSubgraph(controls.advanced.subgraph); };
     const advancedGrid = el('div', '', details, {className: 'fields'});
@@ -134,8 +106,7 @@ export function mountAnimaControl(host, app, branch, nodes, isCurrent) {
     el('small', '取消勾选会直接使用预处理图，原遮罩与导出设置仍保留。擦线用于线稿；深度图建议关闭，黑色覆盖区域可能生成额外的空间结构。', details);
     function sync() {
         if (disposed) return;
-        enabled.checked = owner.mode === 0; enabled.disabled = !current();
-        erase.checked = controls.advanced?.mode === 0; erase.disabled = !current(); edit.disabled = !current();
+        switches.sync(); edit.disabled = !current();
         uploadButton.disabled = uploading || !imageWidget || !valid(reference, imageWidget);
         rows.forEach(update => update());
         const picture = app.nodeOutputs?.[`${owner.subgraph.id}:${controls.preview?.id}`]?.images?.[0];
@@ -148,5 +119,5 @@ export function mountAnimaControl(host, app, branch, nodes, isCurrent) {
     const completed = () => { if (current()) sync(); };
     api.addEventListener('execution_success', completed);
     sync();
-    return {sync, dispose() {disposed = true; api.removeEventListener('execution_success', completed);}};
+    return {sync, dispose() {disposed = true; switches.dispose(); api.removeEventListener('execution_success', completed);}};
 }
