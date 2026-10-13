@@ -1,7 +1,7 @@
 {
-  "time": "2026-10-13T04:45:50.239479+00:00",
+  "time": "2026-10-13T05:08:03.789906+00:00",
   "pass": true,
-  "entry_count": 9583,
+  "entry_count": 9585,
   "failures": [],
   "reviewed_security_fixtures": [
     {
@@ -19,10 +19,10 @@
     "mode": "local-snapshot-fingerprints",
     "state": "warm",
     "written": true,
-    "hashed_files": 7,
-    "hashed_bytes": 6450685,
+    "hashed_files": 9,
+    "hashed_bytes": 6457105,
     "joined_hashed_bytes": 0,
-    "content_scanned_files": 5,
+    "content_scanned_files": 7,
     "reused_content_scans": 9713,
     "reused_joined_hashes": 19,
     "unchanged_directories": 1496,

@@ -83,3 +83,6 @@ LM Civitai 前后端兼容、插件版本和下载队列是独立边界，不能
 2026-10-11 K2 线稿与控制链子图化：只改工作流结构，UAP 的 `workflow_sha256` 随之刷到 `f3af219c…` 并同步清单条目；未新增、移动、下载或转换任何权重。见[子图化变更](../changes/runtime-workflows/2026-10-11-krea2-lineart-subgraph.md)。
 
 2026-10-11 K2 子图实例遮罩控件整理：只改工作流结构，UAP 的 `workflow_sha256` 刷到 `05f573dd…` 并同步清单条目；未新增或移动任何权重。见[子图化变更](../changes/runtime-workflows/2026-10-11-krea2-lineart-subgraph.md)。
+
+2026-10-11 K2 分支模式表修复：只改工作流模式元数据，UAP 的 \workflow_sha256\ 刷到 b182ca1…\ 并同步清单条目；未新增或移动权重。见[分支模式修复](../changes/runtime-workflows/2026-10-11-krea2-branch-mode-fix.md)。
+

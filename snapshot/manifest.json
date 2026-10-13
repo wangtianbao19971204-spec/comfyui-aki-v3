@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-13T04:45:40.933128+00:00",
+  "created_at": "2026-10-13T05:07:56.184385+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -51393,7 +51393,7 @@
     {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-      "sha256": "05f573dd9122152f5e62a5daf6a51170be2fe444305f6800df36132b6afae3d7",
+      "sha256": "7b182ca195be4f73baf531e23002ebab99100a8770ba6084d6f373dcb5d2fc9c",
       "bytes": 849348,
       "kind": "file"
     },
@@ -57628,6 +57628,13 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/align_krea2_branch_modes.py",
+      "path": "runtime/production_tools/align_krea2_branch_modes.py",
+      "sha256": "c9446485c424dfbacf786fcc8b1939e550218b09963e636bf822e66df2acef3d",
+      "bytes": 2626,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/analyze_workflow_dependencies.py",
       "path": "runtime/production_tools/analyze_workflow_dependencies.py",
       "sha256": "63d80467a3850c56335ea18e347e66022c692bbc2a2332720051bf0784174c7d",
@@ -57824,6 +57831,13 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/keep_krea2_control_enabled.py",
+      "path": "runtime/production_tools/keep_krea2_control_enabled.py",
+      "sha256": "dfaa6dbcff28d94a07ef17bbf1091319be1a8e484ac5720c7486fadac9219a19",
+      "bytes": 3118,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/launch.py",
       "path": "runtime/production_tools/launch.py",
       "sha256": "487b7d819dad15321f9c2fbaa831ab4c404114111ad9fb44d9e665f8754990f8",
@@ -57924,7 +57938,7 @@
     {
       "source": "production_tools/templates/UAP统一生产工作台_v2.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v2.json",
-      "sha256": "05f573dd9122152f5e62a5daf6a51170be2fe444305f6800df36132b6afae3d7",
+      "sha256": "7b182ca195be4f73baf531e23002ebab99100a8770ba6084d6f373dcb5d2fc9c",
       "bytes": 849348,
       "kind": "file"
     },
@@ -67934,7 +67948,7 @@
     },
     {
       "path": "inventory/model_sources.json",
-      "sha256": "7e1d2923b082b851e1f5b15f3476b7912b0a0954b1edb4bf700f2b622d31f32e",
+      "sha256": "b773a3aa1eae2b29532e551e0ef5a4344cca9bf1e97b22401a11ea349651bf8e",
       "bytes": 1259888
     }
   ],
@@ -68030,10 +68044,13 @@
     }
   ],
   "development_revision": {
-    "note": "Trim the promoted mask widgets off the Krea2 subgraph instance",
-    "previous_manifest_sha256": "11b812005d7dc3e09b07a18a6740103653d3f8035b0bf6a145e5c3c5ec6890d8",
+    "note": "Keep the Krea2 control and pose chain enabled across branch switches",
+    "previous_manifest_sha256": "05ae98cd09c477a253d0eec247cc6382aa7063cf354b64f40d0d60b95dccccc9",
     "source_changes": {
-      "added": [],
+      "added": [
+        "production_tools/align_krea2_branch_modes.py",
+        "production_tools/keep_krea2_control_enabled.py"
+      ],
       "removed": [],
       "changed": [
         "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
