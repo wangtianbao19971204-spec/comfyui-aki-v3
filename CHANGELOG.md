@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 2026-10-13：修复独立 Krea2 03 和模板的控制来源／擦线未进入编码器问题，保留用户模型与采样参数。17 项回归、23 次隔离实际执行通过；随后仅两份 03 部署到现用实例，中性输入现场两例通过，擦线在实际蒙版外零变化并改变最终图。Turbo 与 A1 画质限制仍保留。见[修复记录](docs/technical/changes/runtime-workflows/2026-10-13-standalone-krea2-control-routing.md)与[部署收据](docs/receipts/control_erase_deployment_20261013.json)。
+
 - 2026-10-11：原版 Anima 接入简化的姿态与构图控制台，主图 24→9 节点，保持原版参数和其他分支；源码、CPU 路由与实页往返验收通过，原版 GPU 和生产部署待执行。见[原版控制说明](docs/technical/changes/runtime-workflows/2026-10-11-anima-original-control.md)。
 
 - 2026-10-11：丝袜纹理修复入口移到 2× / 4× 放大之后，并同步修复页和模板的操作提示，建议按最终输出尺寸补纹理；见[工作流说明](docs/technical/runtime/workflows.md)。

@@ -1,8 +1,8 @@
 {
   "id": "krea2-img2img-edit-v1-local",
   "revision": 32,
-  "last_node_id": 573,
-  "last_link_id": 662,
+  "last_node_id": 577,
+  "last_link_id": 667,
   "nodes": [
     {
       "id": 139,
@@ -1412,7 +1412,8 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            568
+            568,
+            666
           ]
         }
       ],
@@ -2213,8 +2214,7 @@
           "links": [
             559,
             560,
-            587,
-            588
+            663
           ]
         },
         {
@@ -3024,7 +3024,8 @@
           "type": "IMAGE",
           "links": [
             578,
-            582
+            582,
+            664
           ]
         },
         {
@@ -4442,8 +4443,7 @@
           "type": "IMAGE",
           "links": [
             484,
-            515,
-            627
+            515
           ]
         }
       ],
@@ -6946,6 +6946,269 @@
       ],
       "color": "#A36B34",
       "bgcolor": "#2E2118"
+    },
+    {
+      "id": 574,
+      "type": "DazzleSwitch",
+      "title": "[05R1] 控制来源：参考图 / VNCCS",
+      "pos": [
+        3600,
+        1910
+      ],
+      "size": [
+        340,
+        180
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "input_01",
+          "type": "*",
+          "link": 663,
+          "label": "参考图处理结果",
+          "shape": 7
+        },
+        {
+          "name": "input_02",
+          "type": "*",
+          "link": 665,
+          "label": "VNCCS 姿态深度",
+          "shape": 7
+        },
+        {
+          "name": "input_03",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "select",
+          "type": "COMBO",
+          "link": null,
+          "widget": {
+            "name": "select"
+          }
+        },
+        {
+          "name": "mode",
+          "type": "COMBO",
+          "link": null,
+          "widget": {
+            "name": "mode"
+          }
+        },
+        {
+          "name": "select_override",
+          "type": "INT",
+          "link": null,
+          "widget": {
+            "name": "select_override"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "IMAGE",
+          "links": [
+            587,
+            588,
+            667
+          ]
+        },
+        {
+          "name": "selected_index",
+          "type": "INT",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DazzleSwitch"
+      },
+      "widgets_values": [
+        "input_01",
+        "priority",
+        0
+      ],
+      "widgets_values_named": {
+        "select": "input_01",
+        "mode": "priority",
+        "select_override": 0
+      }
+    },
+    {
+      "id": 575,
+      "type": "DepthAnythingV2Preprocessor",
+      "pos": [
+        7080,
+        3320
+      ],
+      "size": [
+        280,
+        140
+      ],
+      "flags": {},
+      "order": 105,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 664
+        },
+        {
+          "localized_name": "ckpt_name",
+          "name": "ckpt_name",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "ckpt_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "图像",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            665
+          ]
+        }
+      ],
+      "title": "[09R] VNCCS 姿态深度",
+      "properties": {
+        "cnr_id": "comfyui_controlnet_aux",
+        "ver": "e8b689a513c3e6b63edc44066560ca5919c0576e",
+        "Node name for S&R": "DepthAnythingV2Preprocessor"
+      },
+      "widgets_values": [
+        "depth_anything_v2_vitl.pth",
+        1024
+      ]
+    },
+    {
+      "id": 576,
+      "type": "DazzleSwitch",
+      "title": "[05R2] 使用擦线：启用 / 旁路",
+      "pos": [
+        3970,
+        1910
+      ],
+      "size": [
+        340,
+        180
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "input_01",
+          "type": "*",
+          "link": 666,
+          "label": "启用擦线（需要有效遮罩）",
+          "shape": 7
+        },
+        {
+          "name": "input_02",
+          "type": "*",
+          "link": 667,
+          "label": "旁路：保留控制图",
+          "shape": 7
+        },
+        {
+          "name": "input_03",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "select",
+          "type": "COMBO",
+          "link": null,
+          "widget": {
+            "name": "select"
+          }
+        },
+        {
+          "name": "mode",
+          "type": "COMBO",
+          "link": null,
+          "widget": {
+            "name": "mode"
+          }
+        },
+        {
+          "name": "select_override",
+          "type": "INT",
+          "link": null,
+          "widget": {
+            "name": "select_override"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "IMAGE",
+          "links": [
+            627
+          ]
+        },
+        {
+          "name": "selected_index",
+          "type": "INT",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DazzleSwitch"
+      },
+      "widgets_values": [
+        "input_02",
+        "priority",
+        0
+      ],
+      "widgets_values_named": {
+        "select": "input_02",
+        "mode": "priority",
+        "select_override": 0
+      }
+    },
+    {
+      "id": 577,
+      "type": "MarkdownNote",
+      "title": "控制来源与擦线使用说明",
+      "pos": [
+        4370,
+        1650
+      ],
+      "size": [
+        510,
+        520
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "## 控制来源与擦线\n\n先启用原有 Krea2 控制组，再在【控制来源】选择参考图或 VNCCS。参考图使用原【控制图选择】的线稿／深度设置；VNCCS 需先启用原 VNCCS 组，其姿态图会转成深度图后送入同一控制链。\n\n【使用擦线】默认旁路。需要擦除时，在原【擦线遮罩】节点打开蒙版编辑器，绘制并保存有效遮罩，再选择【启用擦线】。原图片与文件名不会被自动替换。普通 RGB 图片没有 alpha，输出为零遮罩，不能擦除；仅把 RGB 白色画黑并不会创建遮罩。在【遮罩预览】确认白色区域：白色 MASK 才是擦除区（保存图的透明处，MASK=1-alpha）。\n\n来源与擦线选择均进入控制编码；最后的编码预览显示实际送入模型的控制图。Turbo 底模、种子、采样、尺寸、提示词、LoRA、细化与二放设置沿用原值。"
+      ]
     }
   ],
   "links": [
@@ -7383,7 +7646,7 @@
     ],
     [
       587,
-      449,
+      574,
       0,
       501,
       0,
@@ -7391,7 +7654,7 @@
     ],
     [
       588,
-      449,
+      574,
       0,
       504,
       0,
@@ -7591,7 +7854,7 @@
     ],
     [
       627,
-      433,
+      576,
       0,
       534,
       0,
@@ -7835,6 +8098,46 @@
       0,
       89,
       0,
+      "IMAGE"
+    ],
+    [
+      663,
+      449,
+      0,
+      574,
+      0,
+      "IMAGE"
+    ],
+    [
+      664,
+      513,
+      0,
+      575,
+      0,
+      "IMAGE"
+    ],
+    [
+      665,
+      575,
+      0,
+      574,
+      1,
+      "IMAGE"
+    ],
+    [
+      666,
+      504,
+      0,
+      576,
+      0,
+      "IMAGE"
+    ],
+    [
+      667,
+      574,
+      0,
+      576,
+      1,
       "IMAGE"
     ]
   ],
@@ -8205,6 +8508,23 @@
       "selected_final_preview_runs_cleanup": true,
       "cleanup_group": "CORE-12 出图后释放模型与缓存",
       "cleanup_manual_bypass_supported": true
+    },
+    "krea2_control_routing": {
+      "revision": 1,
+      "roles": {
+        "reference_selector": 449,
+        "source": 574,
+        "pose": 513,
+        "pose_depth": 575,
+        "erase": 576,
+        "mask": 506,
+        "composite": 504,
+        "encode": 534,
+        "loader": 535,
+        "apply": 536,
+        "note": 577
+      },
+      "mask_semantics": "MASK=1-alpha; RGB input produces zero MASK. Keep user filename; save a mask in the native editor."
     }
   },
   "version": 0.4

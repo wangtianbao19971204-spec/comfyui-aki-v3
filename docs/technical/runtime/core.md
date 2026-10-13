@@ -27,6 +27,22 @@ VNCCS 子图执行同步现按冒号路径定位节点，后端与上传 API 复
 
 ## 更新记录
 
+- 2026-10-11：K2 控制链维护工具整理：保留 `production_tools/keep_krea2_control_enabled.py`（分支模式表修正，用 `--write` 应用），移除仅用于比对的过渡脚本`production_tools/align_krea2_branch_modes.py`；两者都不改变运行逻辑，也不触碰权重。见[分支模式修复](../changes/runtime-workflows/2026-10-11-krea2-branch-mode-fix.md)。
+
+- 2026-10-11：K2 分支模式表漂移修复：ranches[k2].modes 曾把 Depth 控制链与姿势工作室（1160/1161/1172/1149）记为静音，而文件里它们是启用态。前端 ctivateBranch 在切分支时按表写 mode，于是从别的分支切到 Krea2 后 Krea2ControlApply 被静音、DazzleSwitch 1187 在 priority 下静默回退到原始模型——控制消失且无报错。现把该链在表里改为启用（其余节点记录不变，预览类仍保持关闭），并同步节点自身 mode 防止再次漂移。见[分支模式修复](../changes/runtime-workflows/2026-10-11-krea2-branch-mode-fix.md)。
+
+- 2026-10-11：K2 子图实例的遮罩控件整理：`upload` 端口两侧移除，遮罩下拉留在子图内部（保留原生预览与编辑器），实例收敛为 4 个接线输入与 3 个输出，节点卡不再显示文件控件；导出与实页渲染复核通过。见[子图化变更](../changes/runtime-workflows/2026-10-11-krea2-lineart-subgraph.md)。
+
+- 2026-10-11：K2 线稿与控制链子图化：把参考预处理、线稿来源选择、擦除链与预览、姿势深度、来源选择与控制图编码整体放入子图 `K2 线稿与控制图`（23 节点），根级只留实例 `130163`（根节点 294→272）。定义由运行中前端自身的 `Convert to Subgraph` 生成并落地到正式工作流与模板；导出解析为 `1161.control_latent = ["130163:1159", 0]`，存盘重载后仍有效，运行区实页渲染通过。本体、插件与启动参数未动。见[子图化变更](../changes/runtime-workflows/2026-10-11-krea2-lineart-subgraph.md)。
+
+- 2026-10-11：擦线子图化调查未获采用：按前端格式手写子图定义、以及用前端自身的 `convertToSubgraph` 生成定义，两种方式下"子图实例输出喂 `DazzleSwitch`"在导出阶段都解析不出该输入，开关静默回退，实测控制图不随遮罩变化。因此 Krea2 擦除链保持根级平铺，Anima 侧保留 `[05]` 子图内的实现；两个分支互不依赖。同时把 Anima 擦线子图的遮罩指回遮罩编辑器保存的 RGBA 文件（此前后指向无 alpha 的旧文件，是空操作）。六份源码已部署并重启为进程 49600，见[子图化调查](../changes/runtime-workflows/2026-10-11-krea2-erase-subgraph-investigation.md)。
+
+- 2026-10-11：K2 擦线（擦除）修复只改工作流接线与一个节点的静音状态：`[05C7]` 擦线合成此前没有下游消费者，现把深度来源选择 `[05B6]` 的 `input_01` 接到它；`[05C2]` 遮罩输入解除静音并指回遮罩编辑器保存的 RGBA 文件。本体、插件与启动参数未动，未新增依赖。运行区按原命令行重启为进程 51716，注册缺失 0、队列为空，实页验收见[擦线修复](../changes/runtime-workflows/2026-10-11-krea2-erase-repair.md)。
+
+- 2026-10-11：Krea2 默认底模由 Turbo 换为非蒸馏 `Krea2-Anime v2.0`（同批把该底模需要的步数/CFG/scheduler 写入 K2 采样节点），只改工作流与模板，本体、插件白名单与启动参数未动，两个底模都是库存既有资产、无下载或转换。运行区部署后按原命令行重启为进程 15244，注册缺失 0、队列为空。见[底模变更](../changes/runtime-workflows/2026-10-11-krea2-anime-default-base.md)。
+
+- 2026-10-11：Krea2 深度来源选择只改工作流与模板，本体、插件白名单与启动参数未动；新增的 `[05B6]` 深度来源选择器使用已注册的 `DazzleSwitch`，姿势深度复用已安装的 `DepthAnythingV2Preprocessor`，不新增依赖。运行区未部署，隔离实例验证由[Krea2 变更](../changes/runtime-workflows/2026-10-11-krea2-pose-control.md)与[收据](../../receipts/krea2_pose_control_20261011.json)记录。
+
 - 2026-10-11：原版 Anima 控制实机验收复用了同一批已部署插件代码：隔离实例里原生权重加载器按 28 层直接应用，VNCCS 注册与冒号路径同步正常，控制分支无需额外插件改动。该轮只部署四份 a1 工作流／模板并用原命令行重启，白名单、补丁与加载器保持；重启后注册缺失为零、队列为空。见[原版实机变更](../changes/runtime-workflows/2026-10-11-anima-original-gpu.md)。
 
 - 2026-10-09：按用户的生产部署／实测请求，将丝袜纹理节点加入 production 白名单（25→26）；其余配置不变。原 GUI 和项目启动器都在启动时读取该清单，无需改本体或绘世适配。此次部署与真实图片验收以[丝袜纹理档案](stocking-texture.md)的现场收据为准。

@@ -15036,10 +15036,10 @@
               "ver": "0.22.0",
               "Node name for S&R": "LoadImage",
               "label": "载入与 [05C-LINEART-SOURCE-IN] 相同的线稿文件；只在这里 Open in MaskEditor / Image Canvas 画遮罩。注意：这是 MASK，不是图像画笔。白色/灰色遮罩区域会被擦掉；黑色区域保留原线稿。不要在这里追求“黑笔擦线”，MaskEditor 的黑色等于不选中。",
-              "image": "clipspace/clipspace-painted-masked-1782566128506.png [input]"
+              "image": "clipspace/clipspace-painted-masked-1782566128506.png"
             },
             "widgets_values": [
-              "optimization_reference.png",
+              "clipspace/clipspace-painted-masked-1782566128506.png",
               "image"
             ],
             "color": "#607A3B",

@@ -1,0 +1,653 @@
+{
+  "schema": 1,
+  "date": "2026-10-11",
+  "scope": "Krea2 (k2) branch: VNCCS pose depth as a selectable control source",
+  "status": "deployed-sampling-effect-compared-default-base-switched",
+  "evidence_ref": "external-local://validation/krea2-pose-control-20261011-01",
+  "problem": "The k2 branch already routed a depth map into the Krea2 depth ControlNet-LoRA, but the VNCCS pose studio output (1172) only fed a preview and a before/after compare node, so the pose reference never reached the model.",
+  "change": {
+    "pattern_alignment": "same shape as the existing line-art source selector 1157",
+    "added_nodes": [
+      {
+        "id": 130160,
+        "type": "DazzleSwitch",
+        "title": "[05B6] Depth 来源选择（参考图 / VNCCS 姿势）",
+        "widgets": [
+          "(none)",
+          "priority",
+          0
+        ]
+      },
+      {
+        "id": 130161,
+        "type": "DepthAnythingV2Preprocessor",
+        "title": "[05B4P] VNCCS 姿势深度",
+        "widgets": [
+          "depth_anything_v2_vitl.pth",
+          1024
+        ]
+      },
+      {
+        "id": 130162,
+        "type": "PreviewImage",
+        "title": "[05V4] VNCCS 姿势深度预览"
+      }
+    ],
+    "wiring": {
+      "input_01": "1191 reference depth",
+      "input_02": "130161 pose depth",
+      "output": "1159 Krea2ControlImageEncode.control_image (previously 1191)",
+      "pose_chain": "1172 VNCCS_PoseStudio -> 130161 -> 130162 preview"
+    },
+    "branch_and_group": "the three nodes are appended to the k2 branch nodeIds and tagged uap_layout_group CORE-05 参考预处理与控制图生成 · K2 Krea2",
+    "default_behaviour": "select=(none) with mode=priority resolves to input_01, so the encoded control and the rendered result stay as they were until the dropdown selects input_02"
+  },
+  "files": [
+    "snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+    "snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json",
+    "snapshot/runtime/production_tools/add_krea2_pose_control.py"
+  ],
+  "source_preservation": {
+    "other_nodes_and_parameters": "only the three nodes above were added and one link was rerouted; no existing widget, mode, title or prompt changed",
+    "branch_metadata": "k2 nodeIds gained the three new ids only",
+    "encoding_note": "links in this file use the array form [id, origin, origin_slot, target, target_slot, type]"
+  },
+  "verification": {
+    "structural": {
+      "root_nodes": 294,
+      "root_links": 390,
+      "dangling_links": 0,
+      "encoder_control_image_source": 130160,
+      "note": "subgraph boundary ports (-10 / -20) are excluded by design"
+    },
+    "frontend": {
+      "isolated_port": 8220,
+      "branch_activation": {
+        "branch_nodes": 99,
+        "unmuted": 96,
+        "missing": []
+      },
+      "switch_inputs_connected": [
+        "input_01",
+        "input_02"
+      ],
+      "encoder_input_connected": true
+    },
+    "depth_source_ab": {
+      "method": "one frontend session, the pose capture pre-uploaded once so both runs use the same pose, then two submissions that differ only in the switch position",
+      "prompt_ids": {
+        "reference": "c3217303-b401-4083-b149-a3b7cb7c11be",
+        "pose": "855c23fe-e9d8-4931-bb87-b6e288e31392"
+      },
+      "history_status": "success",
+      "stable_inputs": {
+        "pose_depth_130162": {
+          "size": [
+            1024,
+            1497
+          ],
+          "same_pixels_across_runs": true
+        },
+        "reference_depth_1189": {
+          "size": [
+            1024,
+            1498
+          ],
+          "same_pixels_across_runs": true
+        }
+      },
+      "encoded_control_1162": {
+        "size": [
+          696,
+          1024
+        ],
+        "same_pixels_across_runs": false,
+        "mean_abs_diff_between_runs": 90.324,
+        "max_abs_diff_between_runs": 220
+      },
+      "attribution": {
+        "select_none": {
+          "vs_reference_depth": 0.9351,
+          "vs_pose_depth": 90.1633
+        },
+        "select_input_02": {
+          "vs_reference_depth": 90.1571,
+          "vs_pose_depth": 0.4585
+        }
+      },
+      "reading": "the encoder output follows whichever depth source the switch selects; the two sources themselves are unchanged between runs"
+    }
+  },
+  "limits": [
+    "One prompt, one seed and one pose; the comparison isolates the base model and LoRA strength, not sampler variety.",
+    "Pose fidelity is judged from rendered images; no landmark or pose-matching metric was computed.",
+    "The Turbo base at LoRA strength 4 is a broken configuration, not evidence about control effectiveness.",
+    "The probes that replaced node 1191 ran only in the isolated runtime."
+  ],
+  "deployment": {
+    "commit": "733c510c833e669a2f8d474eb5f1809a53be3f3c",
+    "scope": [
+      "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+      "production_tools/templates/UAP统一生产工作台_v2.json"
+    ],
+    "candidates_match_commit": true,
+    "protected_neighbours_unchanged": 42,
+    "consistent_database_backups": 1,
+    "old_pid": 24688,
+    "new_pid": 47972,
+    "restart": "saved original command line with AKI_HUISHI_PROFILE=production",
+    "post_deploy": {
+      "files_match_source": true,
+      "sha256": "cfae9c3560b1d6d38e1c29d75e49ce5b4ff6403a032f740f19660227d1b7a729",
+      "k2_branch_nodes": 99,
+      "added_nodes_present": true,
+      "encoder_control_image_from": 130160,
+      "switch_inputs": [
+        1191,
+        130161
+      ],
+      "registered_missing": [],
+      "queue": {
+        "queue_running": [],
+        "queue_pending": []
+      }
+    },
+    "database_replaced": false,
+    "rollback_executed": false
+  },
+  "full_sampling": {
+    "settings": {
+      "size": [
+        768,
+        1344
+      ],
+      "steps": 8,
+      "cfg": 1,
+      "sampler": "euler",
+      "scheduler": "simple",
+      "seed": 845401323336067,
+      "seed_mode": "fixed",
+      "base_model": "DaSiWa Krea2 - Turbo - Raw",
+      "control_lora_strength": 1,
+      "prompt": "fixed neutral acceptance prompt",
+      "pose_capture_held_fixed": true
+    },
+    "cases": {
+      "baseline (model switch off)": {
+        "sha256": "1eeb1ffb9fea58649bbe3c55e04749ee31c2d1d2b61a353c33230e5006dc2d0f"
+      },
+      "reference-depth (input_01)": {
+        "sha256": "1eeb1ffb9fea58649bbe3c55e04749ee31c2d1d2b61a353c33230e5006dc2d0f",
+        "equals_baseline_pixels": true
+      },
+      "pose-depth (input_02)": {
+        "sha256": "b7a3e2352da7afbc7bf7d084779fa8ba76b9546cca1dc8bffceb2774260914bb"
+      }
+    },
+    "on_off_on": {
+      "off": "1eeb1ffb",
+      "on": "1eeb1ffb",
+      "off_again": "1eeb1ffb",
+      "reading": "switching the depth control on does not change the render, and the off case reproduces"
+    },
+    "probes": {
+      "noise control image": {
+        "sha256": "140886dd",
+        "mean_abs_diff_vs_natural_depth": 64.0586,
+        "max_abs_diff": 254,
+        "reading": "the control path can strongly affect sampling"
+      },
+      "flat grey control image": {
+        "sha256": "bfd71c79"
+      },
+      "black/white split control image": {
+        "sha256": "5de5ff2b"
+      },
+      "natural depth control image": {
+        "sha256": "42ad8d79"
+      },
+      "reading": "arbitrary control images all change the render, so the chain is wired and injecting; the natural depth map is the case that lands in the same basin as the unconstrained model"
+    },
+    "interpretation": "Krea2 depth control is wired and can affect sampling, but with this Turbo base model, 8 steps and LoRA strength 1 it is not distinguishable from no control when the control map is the natural depth of the reference image"
+  },
+  "effectiveness_comparison": {
+    "question": "the full sampling showed control-on and control-off rendering identical pixels with the Turbo base; this comparison asks whether the depth control works at all",
+    "method": "fixed prompt, seed, pose capture and workflow; each configuration submitted twice (control off / on) and compared pixel by pixel",
+    "configurations": [
+      {
+        "label": "DaSiWa Turbo, 8 steps, CFG 1, LoRA strength 1",
+        "control_off_final": "1eeb1ffb",
+        "control_on_final": "259d2897",
+        "mean_abs_diff": 17.461,
+        "changed_fraction": 0.5735,
+        "reading": "the render changes, but the pose does not follow the control map"
+      },
+      {
+        "label": "DaSiWa Turbo, 8 steps, CFG 1, LoRA strength 4",
+        "mean_abs_diff": 0.837,
+        "changed_fraction": 0.0061,
+        "reading": "the Turbo render collapses into noise at strength 4 in both arms, so this setting is unusable rather than informative"
+      },
+      {
+        "label": "Krea2-Anime v2.0 (non-distilled), 24 steps, CFG 3.5, LoRA strength 1",
+        "mean_abs_diff": 86.98,
+        "changed_fraction": 0.8421,
+        "reading": "control-off draws a plain standing figure; control-on reproduces the seated forward-leaning pose from the pose depth, with the pond and flower the control map carries"
+      }
+    ],
+    "conclusion": "the Krea2 depth ControlNet-LoRA is effective with the non-distilled Krea2-Anime v2.0 base; the Turbo base is what made the earlier comparison look inert, and LoRA strength 4 breaks the Turbo render entirely",
+    "not_changed": "the deployed workflow still has its own base model, strength and sampler settings; the comparison changed them only inside the isolated runtime"
+  },
+  "default_base_switch": {
+    "commit_bytes": true,
+    "changes": [
+      {
+        "node": 1183,
+        "widget": "unet_name",
+        "before": "DaSiWa Krea2 - Turbo - Raw CuteDisaster v2 Turbo UC BF16",
+        "after": "krea2/图像生成/Krea2__Krea2-Anime__v2.0__BF16__cv3357716__f3246945.safetensors"
+      },
+      {
+        "node": 1200,
+        "widget": "steps",
+        "before": 8,
+        "after": 24
+      },
+      {
+        "node": 1200,
+        "widget": "cfg",
+        "before": 1,
+        "after": 3.5
+      },
+      {
+        "node": 1200,
+        "widget": "scheduler",
+        "before": "simple",
+        "after": "normal"
+      }
+    ],
+    "isolation_check": {
+      "control_off": "52947003",
+      "control_on_pose_depth": "98a85dc6",
+      "mean_abs_diff": 89.12,
+      "changed_fraction": 0.973
+    },
+    "deployment": {
+      "new_pid": 15244,
+      "live_sha256": "ceeeee13534dfc767",
+      "files_match_source": true,
+      "queue_at_deploy": "0/0",
+      "database_replaced": false,
+      "rollback_material": "deployment-base/ROLLBACK.json"
+    },
+    "live_acceptance": {
+      "route": "real frontend on the deployed workflow, workflow prompt, fixed seed",
+      "output": "_codex_qa/krea2_default_base_20261011/krea2_00001_.png",
+      "sha256": "b2c7933daeddf1375cc0057741eb769eaa174ee6e9d2bc4728dc7c64ea38f977",
+      "status": "success",
+      "control": "on with pose depth (input_02)"
+    },
+    "user_data_preserved": "prompts, seeds, sizes, LoRA stack, control strength and all other branches keep their values"
+  },
+  "erase_verification": {
+    "question": "does the line-art erase ([05C7] ImageCompositeMasked) actually remove anything",
+    "current_state": {
+      "mask_node": 1164,
+      "file": "ComfyUI_temp_oflff_00001_.png",
+      "file_mode": "RGB",
+      "transparent_pixels": 0,
+      "mask_semantics": "LoadImage derives MASK from alpha only; a file without an alpha channel has no transparency, mask = 1 - alpha is all zeros"
+    },
+    "measured": {
+      "method": "same run settings, [05C2] mask swapped between the referenced file and a hand-made mask with a transparent rectangle, control image [05K-PREVIEW] compared",
+      "opaque_vs_transparent_control_image": {
+        "mean_abs_diff": 0.0,
+        "max_abs_diff": 0,
+        "changed_pixels": 0
+      }
+    },
+    "conclusion": "the erase is a no-op with the currently referenced mask file; a mask that really carries transparency changes the control image, so the node chain itself works"
+  },
+  "pose_follow_verification": {
+    "method": "two VNCCS poses (the stored seated pose, and thighs/calves rotated to raise the legs), same seed, prompt and workflow; pose capture re-uploaded per run so the depth is deterministic",
+    "control_map_diff": {
+      "mean_abs_diff": 55.96,
+      "max_abs_diff": 236,
+      "changed_fraction": 0.758
+    },
+    "render_diff": {
+      "mean_abs_diff": 94.468,
+      "max_abs_diff": 255,
+      "changed_fraction": 0.98
+    },
+    "visual": "the seated pose renders a crouched figure tending a plant; the raised-legs pose renders a standing figure with both arms held out, matching the control map",
+    "limits": "responsiveness and pose direction are verified; exact joint-level fidelity is judged from the images, not from a landmark metric, and the prompt names a full-body framing"
+  },
+  "erase_repair": {
+    "causes": [
+      "the erase composite [05C7] had no downstream consumer: its only sink was the preview [05V7], while the control chain read 1191 DepthAnything <- 1153 <- 1190 reference image",
+      "the mask loader [05C2] was muted (mode=2), so its MASK output never reached the composite",
+      "its image widget pointed at ComfyUI_temp_oflff_00001_.png, an ordinary RGB render without alpha, while properties.image still recorded the editor-saved RGBA mask"
+    ],
+    "fixes": [
+      "unmute 1164 and point it at clipspace/clipspace-painted-masked-1782566128506.png",
+      "repoint 130160.input_01 from 1191 to 1147 so the erased line art reaches the control image"
+    ],
+    "minimal_chain_test": {
+      "editor RGBA mask": {
+        "changed_fraction": 0.2017,
+        "bbox": [
+          0,
+          0,
+          767,
+          919
+        ]
+      },
+      "opaque mask": {
+        "changed_fraction": 0.0
+      },
+      "temp rgb image": {
+        "changed_fraction": 0.0
+      }
+    },
+    "isolation_session_ab": {
+      "A vs B (repeat)": {
+        "same_pixels": true
+      },
+      "A/B vs C (pre-repair)": {
+        "mean_abs_diff": 24.6033,
+        "changed_pixels": 104900
+      }
+    },
+    "live_acceptance": {
+      "control_image_1162": {
+        "mean_abs_diff": 24.603,
+        "changed_pixels": 104900
+      },
+      "erased_lineart_1155": {
+        "mean_abs_diff": 24.403,
+        "changed_pixels": 193891
+      }
+    },
+    "deployment": {
+      "new_pid": 51716,
+      "live_sha256": "bb9fd2668f581f22",
+      "files_match_source": true,
+      "queue_at_deploy": "0/0",
+      "database_replaced": false
+    },
+    "notes": [
+      "my earlier reading that unmuting plus swapping the file still changed nothing was an artefact: the test harness unmutes the whole k2 branch during preparation, so the mute variable did not exist in those runs",
+      "partial_execution_targets must be strings; integers are rejected with HTTP 400 and leave no history entry"
+    ],
+    "mask_semantics": "LoadImage derives MASK from alpha, so transparent areas become mask=1 and are the areas the composite fills with black"
+  },
+  "erase_subgraph_investigation": {
+    "goal": "make the Krea2 erase segment a subgraph with its own instance per branch",
+    "attempts": [
+      "hand-written definition in the frontend format (structurally identical to the working one, loaded fine after adding inputNode/outputNode bounding, but the instance output never resolved)",
+      "frontend-side conversion via app.rootGraph.convertToSubgraph() with correct definitions and wiring (verified byte-for-byte between file and live graph)"
+    ],
+    "measurement": "converted in the live page, ran two renders that differ only in the mask file; the control image hash was identical (9eaf73ce), so the subgraph output never reached the encoder",
+    "cause": "the frontend export cannot resolve a subgraph output into a DazzleSwitch (dynamic/wildcard input): the link exists in the graph and survives reload, but graphToPrompt omits that input and the switch falls back to the next available input",
+    "consequence": "the Krea2 erase chain stays flat inside the k2 branch; the Anima branches keep their own copy inside the [05] subgraph, so neither branch depends on the other",
+    "artifacts_removed": [
+      "production_tools/krea2_erase_subgraph.py",
+      "production_tools/consolidate_krea2_erase.py"
+    ],
+    "record": "docs/technical/changes/runtime-workflows/2026-10-11-krea2-erase-subgraph-investigation.md"
+  },
+  "anima_erase_mask_fix": {
+    "what": "the erase subgraph inside 高级 · 擦线与导出 (used by the Anima branches and by both Anima suites) pointed its mask loader at ComfyUI_temp_oflff_00001_.png, an RGB render without alpha, which made the erase a no-op",
+    "fix": "image widget set to clipspace/clipspace-painted-masked-1782566128506.png in all six sources: the UAP workflow and template plus both Anima suite workflows and templates",
+    "evidence": "the minimal chain test showed the RGBA mask changes the composite by 20.17% of pixels while the RGB file changes nothing",
+    "deployment": {
+      "files": 6,
+      "new_pid": 49600,
+      "all_six_match_source": true,
+      "uap_sha256_prefix": "7f911ea32143",
+      "queue_at_deploy": "0/0",
+      "live_acceptance": "k2 render success, 1136 -> _codex_qa/krea2_default_base_20261011/krea2_00002_.png"
+    }
+  },
+  "krea2_lineart_subgraph": {
+    "goal": "give the Krea2 branch the same shape as the Anima branches: one subgraph holding the line-art chain (reference preprocessing, line-art source switch, erase, pose depth, source switch, control-image encoder), with a single root-level instance",
+    "method": "Convert to Subgraph executed through the running frontend with a complete selection (reference chain + erase chain + preprocessors previews + pose depth + source switch + encoder + control preview)",
+    "why_earlier_attempts_failed": [
+      "an incomplete selection leaves subgraph-internal nodes needing inputs from outside, which the exporter cannot resolve (InvalidLinkError: No link found in parent graph)",
+      "a hand-written definition lacks the internal state the frontend writes, so the instance output never resolves"
+    ],
+    "definition": {
+      "name": "K2 线稿与控制图",
+      "nodes": 23,
+      "inputs": [
+        "image",
+        "lineart",
+        "vae",
+        "latent"
+      ],
+      "outputs": [
+        "pose_compare",
+        "lineart_preview",
+        "control_latent"
+      ],
+      "instance": 130163
+    },
+    "root_nodes": {
+      "before": 294,
+      "after": 272
+    },
+    "k2_branch_nodes": 77,
+    "verification": {
+      "export_resolution": "1161.control_latent = [\"130163:1159\", 0]",
+      "expanded_inner_nodes": 23,
+      "persisted_after_reload": true,
+      "live_render": {
+        "status": "success",
+        "output": "_codex_qa/krea2_subgraph_20261011/krea2_00001_.png"
+      },
+      "inner_change_reaches_control": "setting the definition-internal [05C4] SolidMask value from 0 to 1 changed the control image (f39f69cd -> 730bf031)",
+      "structural_check": "passed"
+    },
+    "consistency_across_branches": {
+      "a1": "[05] 线稿与姿态控制 subgraph -> 高级 · 擦线与导出 -> AnimaLLLiteApply",
+      "a29": "same as a1",
+      "k2": "K2 线稿与控制图 subgraph -> internal source switch -> Krea2ControlImageApply",
+      "mask": "all three use clipspace/clipspace-painted-masked-1782566128506.png"
+    },
+    "limits": [
+      "no mask-swap A/B on the rendered image: a clipspace mask reference is fixed when the frontend loads the node, so changing the widget at runtime does not change the export; the SolidMask probe was used instead, and the mask file itself was proven in the minimal-chain test",
+      "the intermediate previews now live inside the subgraph and are no longer visible on the root canvas"
+    ],
+    "deployment": {
+      "files": [
+        "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+        "production_tools/templates/UAP统一生产工作台_v2.json"
+      ],
+      "commit": "9d14c9ca4639ede3479c4fa7f190c0109b7cf33b",
+      "new_pid": 8780,
+      "live_sha256_prefix": "f3af219c1f84",
+      "files_match_source": true,
+      "queue_at_deploy": "0/0",
+      "live_acceptance": {
+        "control_apply_inputs": [
+          "130163:1159",
+          0
+        ],
+        "expanded_inner_nodes": 23,
+        "status": "success",
+        "output": "_codex_qa/krea2_subgraph_live/krea2_00001_.png"
+      }
+    },
+    "branch_consistency": {
+      "uap": {
+        "root_nodes": 272,
+        "control_subgraphs": [
+          {
+            "name": "[05] 线稿与姿态控制",
+            "id": "c064915a",
+            "nodes": 9,
+            "inputs": [
+              "model"
+            ],
+            "outputs": [
+              "MODEL",
+              "LATENT"
+            ]
+          },
+          {
+            "name": "[05] 线稿与姿态控制",
+            "id": "38d947f0",
+            "nodes": 9,
+            "inputs": [
+              "model"
+            ],
+            "outputs": [
+              "MODEL",
+              "LATENT"
+            ]
+          },
+          {
+            "name": "高级 · 擦线与导出",
+            "id": "197cab6b",
+            "nodes": 8,
+            "inputs": [
+              "image"
+            ],
+            "outputs": [
+              "IMAGE"
+            ]
+          },
+          {
+            "name": "高级 · 擦线与导出",
+            "id": "a8a15aa1",
+            "nodes": 8,
+            "inputs": [
+              "image"
+            ],
+            "outputs": [
+              "IMAGE"
+            ]
+          },
+          {
+            "name": "K2 线稿与控制图",
+            "id": "945c8bd5",
+            "nodes": 23,
+            "inputs": [
+              "image",
+              "lineart",
+              "vae",
+              "latent",
+              "image_1",
+              "upload"
+            ],
+            "outputs": [
+              "pose_compare",
+              "lineart_preview",
+              "control_latent"
+            ]
+          }
+        ],
+        "erase_masks": [
+          "clipspace/clipspace-painted-masked-1782566128506.png",
+          "clipspace/clipspace-painted-masked-1782566128506.png"
+        ]
+      },
+      "anima-original": {
+        "root_nodes": 58,
+        "control_subgraphs": [
+          {
+            "name": "[05] 线稿与姿态控制",
+            "id": "b90309d9",
+            "nodes": 9,
+            "inputs": [
+              "model"
+            ],
+            "outputs": [
+              "MODEL",
+              "LATENT"
+            ]
+          },
+          {
+            "name": "高级 · 擦线与导出",
+            "id": "e8bdb6ae",
+            "nodes": 8,
+            "inputs": [
+              "image"
+            ],
+            "outputs": [
+              "IMAGE"
+            ]
+          }
+        ],
+        "erase_masks": [
+          "clipspace/clipspace-painted-masked-1782566128506.png"
+        ]
+      },
+      "anima-2.9b": {
+        "root_nodes": 59,
+        "control_subgraphs": [
+          {
+            "name": "[05] 线稿与姿态控制",
+            "id": "b90309d9",
+            "nodes": 9,
+            "inputs": [
+              "model"
+            ],
+            "outputs": [
+              "MODEL",
+              "LATENT"
+            ]
+          },
+          {
+            "name": "高级 · 擦线与导出",
+            "id": "e8bdb6ae",
+            "nodes": 8,
+            "inputs": [
+              "image"
+            ],
+            "outputs": [
+              "IMAGE"
+            ]
+          }
+        ],
+        "erase_masks": [
+          "clipspace/clipspace-painted-masked-1782566128506.png"
+        ]
+      }
+    },
+    "mask_widget_placement": {
+      "problem": "the frontend promoted the definition-internal mask loader widgets onto the instance, showing a file dropdown and an upload button on the node itself, with no image preview there",
+      "resolution": [
+        "removed the upload port on both sides (it does nothing on an instance)",
+        "the mask image dropdown stays inside the subgraph, where the loader keeps its native preview and mask editor",
+        "trimmed the instance to four wiring inputs and three outputs; the node card no longer shows file controls"
+      ],
+      "verification": {
+        "instance_inputs": [
+          "image",
+          "lineart",
+          "vae",
+          "latent"
+        ],
+        "instance_widgets": [],
+        "inner_loader_widgets": [
+          "image",
+          "upload"
+        ],
+        "export_apply": [
+          "130163:1159",
+          0
+        ],
+        "expanded_inner_nodes": 23,
+        "mask": "clipspace/clipspace-painted-masked-1782566128506.png",
+        "render": "success -> _codex_qa/krea2_subgraph_live/krea2_00003_.png"
+      },
+      "deployment": {
+        "new_pid": 39568,
+        "files_match_source": true
+      },
+      "how_to_change_the_mask": "double click the instance and use the [05C2] loader preview/editor, or the [05V6] mask preview inside the subgraph"
+    }
+  }
+}

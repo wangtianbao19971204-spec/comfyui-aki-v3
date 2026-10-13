@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-11T13:33:26.482615+00:00",
+  "created_at": "2026-10-13T13:35:30.287541+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -51393,8 +51393,8 @@
     {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-      "sha256": "2bbde1fc5ea6ac0f2992919a7dcfc9fe72f1aef98d96d8e73d745d588324bf4f",
-      "bytes": 1348826,
+      "sha256": "7b182ca195be4f73baf531e23002ebab99100a8770ba6084d6f373dcb5d2fc9c",
+      "bytes": 849348,
       "kind": "file"
     },
     {
@@ -51456,22 +51456,22 @@
     {
       "source": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
-      "sha256": "b28113dcecf6dc6f19db07da42b96047d07fa02414888fb86d375eccd8c18190",
-      "bytes": 542596,
+      "sha256": "b78421000e2f826f5e084e96efad48aa3505756ce4109e262cebf872ef427439",
+      "bytes": 542611,
       "kind": "file"
     },
     {
       "source": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
-      "sha256": "37f99da27ae9bdcc92f1cf8e353fea1abaef5fc3174b76b23a9e3ae5d986baeb",
-      "bytes": 411391,
+      "sha256": "432ab427152c2a6db60e3a85f0778f025a59734fbe91207a18c5b9bcc976b7a2",
+      "bytes": 411406,
       "kind": "file"
     },
     {
       "source": "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
-      "sha256": "bdba0d558eb2ae5a92ac874ffd70cac1502d3a7aad1f4c453da107ac7b41ddc9",
-      "bytes": 242470,
+      "sha256": "30cf66fe43ca785b902aa679373fa6ca4355f88f350ae1a2e65368c9da6d6935",
+      "bytes": 249689,
       "kind": "file"
     },
     {
@@ -57621,6 +57621,13 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/add_krea2_pose_control.py",
+      "path": "runtime/production_tools/add_krea2_pose_control.py",
+      "sha256": "21f6aecd184825ac5ce123b90c54e0e0ca11a3085aa8866ea06308e283f949d9",
+      "bytes": 8039,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/analyze_workflow_dependencies.py",
       "path": "runtime/production_tools/analyze_workflow_dependencies.py",
       "sha256": "63d80467a3850c56335ea18e347e66022c692bbc2a2332720051bf0784174c7d",
@@ -57663,10 +57670,38 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/connect_krea2_erase_to_control.py",
+      "path": "runtime/production_tools/connect_krea2_erase_to_control.py",
+      "sha256": "06a822ca21ba9b4fbb756043d9488e5b7a05d2502f29de803dc950032f3198a7",
+      "bytes": 4674,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/connect_standalone_krea2_control.py",
+      "path": "runtime/production_tools/connect_standalone_krea2_control.py",
+      "sha256": "2f46ad5fa192733c068e3d9205e998aa580d29954a45528a0ef1a7c25c414e55",
+      "bytes": 9296,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/export_stocking_upstream.py",
       "path": "runtime/production_tools/export_stocking_upstream.py",
       "sha256": "ab9d17acd8efb63bcc5cfb5cf032a644308650ba799f1902a3fb0601be17d246",
       "bytes": 8625,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/fix_anima_erase_mask.py",
+      "path": "runtime/production_tools/fix_anima_erase_mask.py",
+      "sha256": "93cedbf40c913d4e066ddf789c17596de1035962ca82a1949443f26f799574b3",
+      "bytes": 3522,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/fix_krea2_erase_mask.py",
+      "path": "runtime/production_tools/fix_krea2_erase_mask.py",
+      "sha256": "d6cd20b85f9770b56e984dfc4c710796f066d536c0ec92ce88fd168c0913a098",
+      "bytes": 3406,
       "kind": "file"
     },
     {
@@ -57796,6 +57831,13 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/keep_krea2_control_enabled.py",
+      "path": "runtime/production_tools/keep_krea2_control_enabled.py",
+      "sha256": "dfaa6dbcff28d94a07ef17bbf1091319be1a8e484ac5720c7486fadac9219a19",
+      "bytes": 3118,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/launch.py",
       "path": "runtime/production_tools/launch.py",
       "sha256": "487b7d819dad15321f9c2fbaa831ab4c404114111ad9fb44d9e665f8754990f8",
@@ -57880,6 +57922,13 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/switch_krea2_base_model.py",
+      "path": "runtime/production_tools/switch_krea2_base_model.py",
+      "sha256": "72ee53895a0397731541bac9023cd7bd9c6e0484911ee7543618b6d9422fc057",
+      "bytes": 3661,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/templates/UAP统一生产工作台_v1.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v1.json",
       "sha256": "e235d3335e7aec81aa44a49eb371f73edb7f5c929291fc0d9570b8e1b6e80618",
@@ -57889,29 +57938,29 @@
     {
       "source": "production_tools/templates/UAP统一生产工作台_v2.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v2.json",
-      "sha256": "2bbde1fc5ea6ac0f2992919a7dcfc9fe72f1aef98d96d8e73d745d588324bf4f",
-      "bytes": 1348826,
+      "sha256": "7b182ca195be4f73baf531e23002ebab99100a8770ba6084d6f373dcb5d2fc9c",
+      "bytes": 849348,
       "kind": "file"
     },
     {
       "source": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
       "path": "runtime/production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
-      "sha256": "c97b4cd78782e922a4a4f5ab792fcc8d342e2099c3feead51248bfbffba1da98",
-      "bytes": 490544,
+      "sha256": "08e8b1707f45887967345c7d53c4717d87ea07af448e4d1cecfe220cf95a372c",
+      "bytes": 490562,
       "kind": "file"
     },
     {
       "source": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
       "path": "runtime/production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
-      "sha256": "19af7a3e3307bc237e02a518e9b7bc7edea015fae82b7344116cbd8c1dddb105",
-      "bytes": 408396,
+      "sha256": "2b0e2a566a241ddefbf9968d2858655500179e218298f967db95ac62769c0c31",
+      "bytes": 408414,
       "kind": "file"
     },
     {
       "source": "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
       "path": "runtime/production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
-      "sha256": "eeff35df758d86acc84d7dde864fa64bda5ba0545e2eb85e10592e9ac06ed353",
-      "bytes": 197112,
+      "sha256": "440498398d0d27b796399c3c0d701426d21aed8ed07cbbf508570a3fef881538",
+      "bytes": 204212,
       "kind": "file"
     },
     {
@@ -67899,7 +67948,7 @@
     },
     {
       "path": "inventory/model_sources.json",
-      "sha256": "2caf14dccc4dd60a34fa3ac230992dd4ee71561734b698efafd0464e6fdd28f1",
+      "sha256": "b773a3aa1eae2b29532e551e0ef5a4344cca9bf1e97b22401a11ea349651bf8e",
       "bytes": 1259888
     }
   ],
@@ -67995,17 +68044,18 @@
     }
   ],
   "development_revision": {
-    "note": "Simplify original Anima controls; CPU and browser accepted, GPU and deployment pending",
-    "previous_manifest_sha256": "5775279bf67af6036b09bc33f77bc77795f2e674ad9f1bf7f18d9324d7073a3b",
+    "note": "Repair standalone Krea2 control source and optional erase routing; bounded native QA passed, quality partial, not deployed",
+    "previous_manifest_sha256": "07fa8060fcebe5e8c64a0d3dddb7b81364caec2c4b23e05b734c52e67e078418",
     "source_changes": {
-      "added": [],
-      "removed": [],
+      "added": [
+        "production_tools/connect_standalone_krea2_control.py"
+      ],
+      "removed": [
+        "production_tools/align_krea2_branch_modes.py"
+      ],
       "changed": [
-        "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-        "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
-        "production_tools/simplify_anima_control.py",
-        "production_tools/templates/UAP统一生产工作台_v2.json",
-        "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json"
+        "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
+        "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json"
       ]
     },
     "live_deployed": false,
@@ -68013,6 +68063,10 @@
       {
         "source": "ComfyUI/custom_nodes/TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters/models_cache.json",
         "previous_sha256": "256920e0f444fce3358401b72bc1529e32d3954690ec2f1cd397aaf9251df3c6"
+      },
+      {
+        "source": "production_tools/align_krea2_branch_modes.py",
+        "previous_sha256": "c9446485c424dfbacf786fcc8b1939e550218b09963e636bf822e66df2acef3d"
       }
     ]
   },

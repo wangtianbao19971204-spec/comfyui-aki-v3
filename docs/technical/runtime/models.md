@@ -7,6 +7,14 @@
 
 2026-10-11 原版补充：原版 Anima 控制简化同样只改 UAP 工作流，因此按同一先例把 `model_sources.json` 与 [下载表](../../MODEL_SOURCES.md)的 `workflow_sha256` 刷到当前 UAP 摘要 `2bbde1fc…`，并同步快照清单里该元数据条目的摘要，使来源清单门禁与快照校验恢复一致；资产数、23 项工作流关联、观察存在计数与所有模型身份不变，权重未移动、下载或转换。见[原版实机收据](../../receipts/anima_original_control_gpu_20261011.json)。
 
+2026-10-11 Krea2 姿势来源：Krea2 深度来源选择同样只改 UAP 工作流，`workflow_sha256` 随之刷到 `cfae9c35…` 并同步快照清单条目；未新增或移动任何权重，Krea2 深度 ControlNet-LoRA 的加载文件名与来源保持原值。见[Krea2 收据](../../receipts/krea2_pose_control_20261011.json)。
+
+2026-10-11 Krea2 默认底模：K2 分支的默认 UNET 由 `DaSiWa Krea2 - Turbo - Raw …CuteDisaster v2 Turbo UC…BF16` 换为库存中已有的 `krea2\图像生成\Krea2__Krea2-Anime__v2.0__BF16__cv3357716__f3246945.safetensors`，两文件 `workflow_sha256` 刷到 `ceeeee13…` 并同步清单条目。两者都是清单内既有资产，未新增、移动、下载或转换权重，来源清单与资产计数不变；深度 ControlNet-LoRA 仍是 `Krea2 Depth ControlNet LoRA v1.0 FP32`（强度 1）。见[底模变更](../changes/runtime-workflows/2026-10-11-krea2-anime-default-base.md)。
+
+2026-10-11 K2 擦线修复：只改工作流接线与节点静音状态，`workflow_sha256` 随之刷到 `bb9fd266…` 并同步清单条目；未新增、移动或替换任何权重，遮罩文件是运行区 `input/clipspace/` 下已有的编辑器产物（未进入 Git）。见[擦线修复](../changes/runtime-workflows/2026-10-11-krea2-erase-repair.md)。
+
+2026-10-11 Anima 擦线遮罩：把 `高级 · 擦线与导出` 子图内的遮罩加载器从无 alpha 的 `ComfyUI_temp_oflff_00001_.png` 改为遮罩编辑器保存的 RGBA 文件，六份源码（UAP 工作流与模板、两个 Anima 套件的工作流与模板）随之更新，UAP `workflow_sha256` 刷到 `7f911ea3…` 并同步清单条目；未新增或移动权重，遮罩文件是运行区已有资料。见[子图化调查](../changes/runtime-workflows/2026-10-11-krea2-erase-subgraph-investigation.md)。
+
 ## 实现与资源
 
 2026-10-11：增量导入昨晚下载的 4 个服装 LoRA（Anima 2 个、Krea2 2 个），现有 313 个用户 LoRA。补齐分类、规范名、来源、触发词与 4 张官方预览，保留全部下载原件；326 条旧缓存身份／个人字段和既有索引保持。整理工具接纳 Civitai LoCon 类型，仍严格核对完整摘要与版本／文件身份，并新增 `--keep-originals`。32 项导入回归、26 项来源回归、47 项命名回归及在线卡片／加载器核验通过；未重启、全库重扫或做 GPU 生图。回滚依赖保留原件与本批路径／摘要日志，不覆盖在线库。见[本批收据](../../receipts/lora_download_import_20261011.json)。
@@ -71,3 +79,10 @@ LM Civitai 前后端兼容、插件版本和下载队列是独立边界，不能
 - 2026-10-05：登记统一管理实现、模型清单与仓外资源边界；将维护包版本与插件/模型版本分开。
 
 - 2026-10-09：增加[新下载快速整理](lora-quick-import.md)，只处理本批新增，复用现行命名与单卡片登记；本批 3 新增、12 重复原件保持，当前 309 用户 LoRA。完整摘要、来源、在线卡片／加载器和旧缓存身份／个人字段保持均已验证；插件持久化将 6 项空触发词从空列表编码为 NULL，内容仍为空。不重启，不测试 GPU；三项补图报告下载器离线，未取到预览。见[收据](../../receipts/lora_quick_import_20261009.json)。
+
+2026-10-11 K2 线稿与控制链子图化：只改工作流结构，UAP 的 `workflow_sha256` 随之刷到 `f3af219c…` 并同步清单条目；未新增、移动、下载或转换任何权重。见[子图化变更](../changes/runtime-workflows/2026-10-11-krea2-lineart-subgraph.md)。
+
+2026-10-11 K2 子图实例遮罩控件整理：只改工作流结构，UAP 的 `workflow_sha256` 刷到 `05f573dd…` 并同步清单条目；未新增或移动任何权重。见[子图化变更](../changes/runtime-workflows/2026-10-11-krea2-lineart-subgraph.md)。
+
+2026-10-11 K2 分支模式表修复：只改工作流模式元数据，UAP 的 \workflow_sha256\ 刷到 b182ca1…\ 并同步清单条目；未新增或移动权重。见[分支模式修复](../changes/runtime-workflows/2026-10-11-krea2-branch-mode-fix.md)。
+

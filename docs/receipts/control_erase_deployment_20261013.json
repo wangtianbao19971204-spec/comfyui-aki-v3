@@ -1,0 +1,257 @@
+{
+  "schema": 1,
+  "date": "2026-10-13",
+  "status": "deployed-two-workflows-neutral-functional-acceptance-passed-quality-limited",
+  "source_commit": "844d88fd577444e7cefc65eec2093a323fd8696a",
+  "user_authorization": "Deploy to current instance and merge PR #22 after checks pass.",
+  "evidence_ref": "external-local://validation/control-erase-deployment-20261013-01",
+  "files": [
+    {
+      "path": "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
+      "before_sha256": "bdba0d558eb2ae5a92ac874ffd70cac1502d3a7aad1f4c453da107ac7b41ddc9",
+      "after_sha256": "30cf66fe43ca785b902aa679373fa6ca4355f88f350ae1a2e65368c9da6d6935"
+    },
+    {
+      "path": "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
+      "before_sha256": "eeff35df758d86acc84d7dde864fa64bda5ba0545e2eb85e10592e9ac06ed353",
+      "after_sha256": "440498398d0d27b796399c3c0d701426d21aed8ed07cbbf508570a3fef881538"
+    }
+  ],
+  "deployment": {
+    "prepared_at": "2026-10-13T14:43:44.017703+00:00",
+    "deployed_at": "2026-10-13T14:44:12.722736+00:00",
+    "final_checked_at": "2026-10-13T14:59:14.059919+00:00",
+    "candidate_bytes_equal_committed_source": true,
+    "original_runtime_hashes_matched_reviewed_baseline": true,
+    "atomic_file_replacements": 2,
+    "protected_runtime_files": 50,
+    "protected_runtime_files_unchanged": true,
+    "service_identity_unchanged": true,
+    "queue_after": {
+      "queue_running": [],
+      "queue_pending": []
+    },
+    "restart_performed": false,
+    "queue_cleared": false,
+    "online_databases_replaced": false,
+    "consistent_sqlite_backups": 5,
+    "all_backup_quick_checks_passed": true
+  },
+  "frontend": {
+    "loaded_from_current_saved_formal_workflow": true,
+    "formal_file_sha256": "30cf66fe43ca785b902aa679373fa6ca4355f88f350ae1a2e65368c9da6d6935",
+    "nodes": 103,
+    "links": 116,
+    "encoder_reads_576": true,
+    "default_erase_bypass_preserved": true,
+    "temporary_qa_changes_only": true,
+    "formal_prompt_model_lora_seed_sampler_and_input_names_preserved": true,
+    "screenshot_ref": "external-local://validation/control-erase-deployment-20261013-01/browser_deployed_routing.png"
+  },
+  "acceptance": {
+    "cases": [
+      {
+        "case": "neutral-depth-bypass",
+        "prompt_id": "590638e3-5045-43ed-9b66-23b1bab9fcd6",
+        "native_contract_pass": true,
+        "native_export_sha256": "58b9f658bac09d2e486869fa1770fb350a474f9e920933744168484c7f1d886d",
+        "history_sha256": "ce149582f94e6a8abaafeb02608775a2a070fe74ec5f8efeea162bc498476188",
+        "closure_nodes": 56,
+        "output_images": 5,
+        "cached_nodes": [],
+        "outputs": [
+          {
+            "node_id": "581",
+            "relative_path": "_codex_qa/control_erase_deployment_20261013/mask_00003_.png",
+            "sha256": "cf789793f33c326e55451ccef118b74ca19773ee6f0c62ec31ad5bb3557b7f74",
+            "size": [
+              1024,
+              1497
+            ]
+          },
+          {
+            "node_id": "578",
+            "relative_path": "_codex_qa/control_erase_deployment_20261013/source_00003_.png",
+            "sha256": "fbbe5003a61113569c3d726af29eda0e0338ca1702f1d7cf8042e0ec6ee0da76",
+            "size": [
+              1024,
+              1365
+            ]
+          },
+          {
+            "node_id": "579",
+            "relative_path": "_codex_qa/control_erase_deployment_20261013/control_00003_.png",
+            "sha256": "fbbe5003a61113569c3d726af29eda0e0338ca1702f1d7cf8042e0ec6ee0da76",
+            "size": [
+              1024,
+              1365
+            ]
+          },
+          {
+            "node_id": "580",
+            "relative_path": "_codex_qa/control_erase_deployment_20261013/encoded_00003_.png",
+            "sha256": "1461ad25e740498701191230d5d7b34dace9954682f091852d3d0bc2f0f5ae48",
+            "size": [
+              768,
+              1024
+            ]
+          },
+          {
+            "node_id": "89",
+            "relative_path": "_codex_qa/control_erase_deployment_20261013/final_00003_.png",
+            "sha256": "499fcf0681f1d50fbf395b5125e3a7e6d424e3766058c7a1fa7358ab1e9dd3c7",
+            "size": [
+              768,
+              1344
+            ]
+          }
+        ]
+      },
+      {
+        "case": "neutral-depth-erase",
+        "prompt_id": "eb7918af-0829-4ff3-8508-bb0753f174e3",
+        "native_contract_pass": true,
+        "native_export_sha256": "5860f3be91129f82eb32f3cae2123ecfae5a652935e77abc7dea688b87e5d5b2",
+        "history_sha256": "5178741b2ddf7c0e96537a93a962b2a05998dc6789bc6cdbea1b52bb04dffdbc",
+        "closure_nodes": 56,
+        "output_images": 5,
+        "cached_nodes": [],
+        "outputs": [
+          {
+            "node_id": "581",
+            "relative_path": "_codex_qa/control_erase_deployment_20261013/mask_00004_.png",
+            "sha256": "18dd6fedb2b1bf871306b381d27c9c0b9fd2eb5bf868d82c2adc54b28d471926",
+            "size": [
+              1024,
+              1497
+            ]
+          },
+          {
+            "node_id": "578",
+            "relative_path": "_codex_qa/control_erase_deployment_20261013/source_00004_.png",
+            "sha256": "c654ed0ceaf788c3aae78ade152e5b869752237b02b6486aa087d4caf1cfb766",
+            "size": [
+              1024,
+              1365
+            ]
+          },
+          {
+            "node_id": "579",
+            "relative_path": "_codex_qa/control_erase_deployment_20261013/control_00004_.png",
+            "sha256": "1eb2b6015eabfe01c4fd1d56c057114c5d94c8aaf53e365ba9c54435b14727a8",
+            "size": [
+              1024,
+              1365
+            ]
+          },
+          {
+            "node_id": "580",
+            "relative_path": "_codex_qa/control_erase_deployment_20261013/encoded_00004_.png",
+            "sha256": "ddc75721cfee19621ea168cd7e47cd92a595f7b923afdf123840a453bd0888b8",
+            "size": [
+              768,
+              1024
+            ]
+          },
+          {
+            "node_id": "89",
+            "relative_path": "_codex_qa/control_erase_deployment_20261013/final_00004_.png",
+            "sha256": "85d5b383bb4a987317c135f5bbfc8b2031e59f8b0f77d9a310bf80f830026ea3",
+            "size": [
+              768,
+              1344
+            ]
+          }
+        ]
+      }
+    ],
+    "case_count": 2,
+    "output_images": 10,
+    "all_native_contracts_pass": true,
+    "all_cached_node_lists_empty": true,
+    "single_variable_diff": [
+      {
+        "path": "/576/inputs/select",
+        "before": "input_02",
+        "after": "input_01"
+      }
+    ],
+    "metrics": {
+      "source": {
+        "size": [
+          1024,
+          1365
+        ],
+        "mean_absolute_rgb_difference": 0.0,
+        "max_channel_difference": 0,
+        "changed_pixels": 0
+      },
+      "control": {
+        "size": [
+          1024,
+          1365
+        ],
+        "mean_absolute_rgb_difference": 15.011143543956043,
+        "max_channel_difference": 209,
+        "changed_pixels": 283465,
+        "changed_outside_resized_mask": 0,
+        "mask_support_pixels": 291330
+      },
+      "encoded": {
+        "size": [
+          768,
+          1024
+        ],
+        "mean_absolute_rgb_difference": 15.01077143351237,
+        "max_channel_difference": 209,
+        "changed_pixels": 160863
+      },
+      "final": {
+        "size": [
+          768,
+          1344
+        ],
+        "mean_absolute_rgb_difference": 30.915697531725364,
+        "max_channel_difference": 255,
+        "changed_pixels": 1030718
+      },
+      "mask": {
+        "size": [
+          1024,
+          1497
+        ],
+        "mean_absolute_rgb_difference": 0.0,
+        "max_channel_difference": 0,
+        "changed_pixels": 0
+      }
+    },
+    "neutral_adult_input_and_reference_reviewed": true,
+    "original_prompt_exploratory_cases_excluded": 2,
+    "excluded_final_media_recycled": true,
+    "qa_prefix": "_codex_qa/control_erase_deployment_20261013/",
+    "free_requested_before_and_after_each_job": true,
+    "parameters": "Temporary prompt, ordinary street reference and RGBA mask; fixed original seed, Turbo, 8 steps, CFG1, Euler/simple and saved postprocessing."
+  },
+  "visual_review": {
+    "reviewed_neutral_final_pair": true,
+    "observed": "Both images preserve one clothed adult, blue raincoat, navy trousers, yellow boots and a red bicycle. Erase changes hand placement and generated details.",
+    "limits": [
+      "One neutral reference and fixed seed only; not broad quality certification.",
+      "Final sampling changes are not guaranteed mask-local.",
+      "Existing Turbo clothing/person-count/pose limits and A1 gray-blur remain unresolved.",
+      "Template pixel identity with the reviewed source was verified; its full GPU acceptance is the preceding source-candidate receipt, not a second deployed-template GPU run."
+    ]
+  },
+  "rollback": {
+    "status": "prepared_not_executed",
+    "reference": "external-local://validation/control-erase-deployment-20261013-01/ROLLBACK.json",
+    "originals_reference": "external-local://validation/control-erase-deployment-20261013-01/before",
+    "database_policy": "Consistent backups retained; no online DB/WAL/SHM overwrite."
+  },
+  "previous_evidence": "docs/receipts/control_erase_routing_repair_20261013.json",
+  "pr": {
+    "number": 22,
+    "url": "https://github.com/wangtianbao19971204-spec/comfyui-aki-v3/pull/22",
+    "merge_state_at_this_receipt": "pending-final-head-ci"
+  }
+}
