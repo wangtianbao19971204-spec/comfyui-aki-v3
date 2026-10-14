@@ -138,6 +138,124 @@ class ColabTrialTests(unittest.TestCase):
         config["qwen_image_vae_2d"] = True
         self.assertIn("--qwen_image_vae_2d", trial.build_training_args(Path("/content/trial"), config))
 
+    def extract_package(self, **kwargs):
+        receipt = self.build(**kwargs)
+        workspace = self.root / receipt["run_id"]
+        trial.safe_extract_payload(self.root / "package" / receipt["payload"], workspace, receipt["payload_sha256"])
+        return workspace, receipt
+
+    def fake_prepare_output(self, workspace, config):
+        output = workspace / "output"
+        output.mkdir()
+        trial.write_json(output / "trial_config.json", config)
+        (workspace / "dataset.toml").write_text("# prepared dataset", encoding="utf-8")
+        (output / "dataset.toml").write_bytes((workspace / "dataset.toml").read_bytes())
+        trial.write_json(output / "prepare_timing.json", {"dataset_config_sha256": trial.sha256(workspace / "dataset.toml")})
+        return output
+
+    def test_calibration_package_freezes400_save100_and_notebook_purpose(self):
+        workspace, receipt = self.extract_package(mode="calibration", steps=400, seed=261012)
+        config = trial.load_frozen_config(workspace)
+        self.assertEqual(config["mode"], "calibration")
+        self.assertEqual(config["scope"], "calibration-not-release")
+        self.assertEqual(receipt["save_every_n_steps"], 100)
+        command = trial.build_training_args(workspace, config)
+        self.assertEqual(command[command.index("--max_train_steps") + 1], "400")
+        self.assertEqual(command[command.index("--save_every_n_steps") + 1], "100")
+        notebook = json.loads((self.root / "package" / receipt["notebook"]).read_text(encoding="utf-8"))
+        self.assertIn("100/200/300/400", json.dumps(notebook, ensure_ascii=False))
+        for cell in notebook["cells"]:
+            if cell["cell_type"] == "code":
+                compile("".join(cell["source"]), "calibration_cell", "exec")
+
+    def test_invalid_mode_step_combinations_stop_before_creating_package(self):
+        for mode, steps in (("trial", 400), ("calibration", 50), ("calibration", 75), ("formal", 400)):
+            with self.subTest(mode=mode, steps=steps):
+                with self.assertRaises(ValueError):
+                    self.build(mode=mode, steps=steps)
+                self.assertFalse((self.root / "package").exists())
+
+    def test_legacy_trial_policy_keeps_scope_and_save25(self):
+        legacy = {"steps": 75, "scope": "pipeline-trial-not-release"}
+        self.assertEqual(trial.validate_training_policy(legacy)["save_every_n_steps"], 25)
+        with self.assertRaises(ValueError):
+            trial.validate_training_policy({"mode": "calibration", "steps": 400})
+        with self.assertRaises(ValueError):
+            trial.validate_training_policy({"mode": "calibration", "steps": 400, "scope": "calibration-not-release", "save_every_n_steps": 25})
+
+    def test_changed_frozen_config_cannot_convert_trial_to_calibration(self):
+        workspace, receipt = self.extract_package()
+        config_path = workspace / "trial_config.json"
+        config = json.loads(config_path.read_text())
+        config.update(mode="calibration", steps=400, save_every_n_steps=100, scope="calibration-not-release")
+        trial.write_json(config_path, config)
+        with self.assertRaisesRegex(ValueError, "Frozen payload input changed"):
+            trial.load_frozen_config(workspace)
+
+    def test_changed_dataset_or_run_id_is_rejected(self):
+        workspace, receipt = self.extract_package()
+        caption = workspace / "dataset/approved.txt"
+        caption.write_text("ni9x26char, changed caption", encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "Frozen payload input changed"):
+            trial.load_frozen_config(workspace)
+        caption.write_bytes((self.dataset / "approved.txt").read_bytes())
+        wrong_workspace = self.root / "different_run_id"
+        workspace.rename(wrong_workspace)
+        with self.assertRaisesRegex(ValueError, "run IDs differ"):
+            trial.load_frozen_config(wrong_workspace)
+
+    def test_prepared_config_change_stops_before_spawning_training(self):
+        workspace, receipt = self.extract_package(mode="calibration", steps=400)
+        config = trial.load_frozen_config(workspace)
+        self.fake_prepare_output(workspace, {**config, "seed": 99})
+        with mock.patch.object(trial, "require_colab", side_effect=lambda path: path), mock.patch("subprocess.Popen") as process:
+            with self.assertRaisesRegex(ValueError, "Prepared config differs"):
+                trial.remote_run(workspace)
+        process.assert_not_called()
+
+    def test_prepared_dataset_change_stops_before_spawning_training(self):
+        workspace, receipt = self.extract_package(mode="calibration", steps=400)
+        self.fake_prepare_output(workspace, trial.load_frozen_config(workspace))
+        (workspace / "dataset.toml").write_text("# changed settings", encoding="utf-8")
+        with mock.patch.object(trial, "require_colab", side_effect=lambda path: path), mock.patch("subprocess.Popen") as process:
+            with self.assertRaisesRegex(ValueError, "dataset configuration changed"):
+                trial.remote_run(workspace)
+        process.assert_not_called()
+
+    def run_fake_completed_calibration(self, omit_checkpoint=None):
+        workspace, receipt = self.extract_package(mode="calibration", steps=400)
+        output = self.fake_prepare_output(workspace, trial.load_frozen_config(workspace))
+        weights = output / "weights"
+        weights.mkdir()
+        names = [f"ni_colab_trial-step{step:08d}.safetensors" for step in (100, 200, 300, 400)] + ["ni_colab_trial.safetensors"]
+        header = json.dumps({"tensor": {"dtype": "BF16", "shape": [1], "data_offsets": [0, 2]}}).encode()
+        for name in names:
+            if name != omit_checkpoint:
+                (weights / name).write_bytes(struct.pack("<Q", len(header)) + header + b"\x00\x00")
+        events = []
+        for step in range(1, 401):
+            events.extend(({"event": "step", "step": step, "loss": 0.25}, {"event": "gradient_update", "seconds": 0.5}))
+        events.append({"event": "entry_end", "training_seconds": 210, "peak_allocated_vram_bytes": 100})
+        (output / "telemetry.jsonl").write_text("\n".join(json.dumps(event) for event in events), encoding="utf-8")
+        process = types.SimpleNamespace(stdout=[], wait=lambda: 0)
+        with mock.patch.object(trial, "require_colab", side_effect=lambda path: path), mock.patch("subprocess.Popen", return_value=process), mock.patch("builtins.print"):
+            result = trial.remote_run(workspace)
+        return result, json.loads((output / "training_receipt.json").read_text())
+
+    def test_calibration_receipt_requires_all_saved_checkpoints(self):
+        result, receipt = self.run_fake_completed_calibration("ni_colab_trial-step00000200.safetensors")
+        self.assertEqual(result, 2)
+        self.assertEqual(receipt["completed_steps"], 400)
+        self.assertEqual(receipt["missing_checkpoints"], ["ni_colab_trial-step00000200.safetensors"])
+
+    def test_completed_calibration_retains_quality_gate_and_mode_in_receipt(self):
+        result, receipt = self.run_fake_completed_calibration()
+        self.assertEqual(result, 0)
+        self.assertEqual(receipt["mode"], "calibration")
+        self.assertEqual(receipt["save_every_n_steps"], 100)
+        self.assertEqual(receipt["checkpoint_count"], 5)
+        self.assertEqual(receipt["quality_status"], "not-evaluated-calibration-only")
+
     def test_model_depth_is_explicit_for_original_and_29(self):
         for blocks in (28, 40):
             self.assertEqual(trial.validate_model_manifest(model_manifest(blocks))["expected_num_blocks"], blocks)
@@ -271,20 +389,25 @@ class ColabTrialTests(unittest.TestCase):
         fake_library.train_util = types.SimpleNamespace(DatasetGroup=Dataset, verify_command_line_training_args=lambda args: None,
                                                         read_config_from_file=lambda args, parser: args)
         config = {"run_id": "ni_colab_trial", "steps": 50, "seed": 261012, "qwen_image_vae_2d": False, "models": model_manifest()}
-        (self.root / "trial_config.json").write_text(json.dumps(config), encoding="utf-8")
-        (self.root / "output").mkdir()
+        workspace = self.root / "ni_colab_trial"
+        workspace.mkdir()
+        config_path = workspace / "trial_config.json"
+        config_path.write_text(json.dumps(config), encoding="utf-8")
+        (workspace / "output").mkdir()
+        trial.write_json(workspace / "payload_manifest.json", {"schema": 1, "run_id": "ni_colab_trial", "files": [
+            {"path": "trial_config.json", "bytes": config_path.stat().st_size, "sha256": trial.sha256(config_path)}]})
         with mock.patch.object(trial, "require_colab", side_effect=lambda path: path), mock.patch.dict(
                 "sys.modules", {"torch": fake_torch, "anima_train_network": fake_entry, "library": fake_library}):
             old_path = list(__import__("sys").path)
             try:
                 if finite:
-                    trial.remote_entry(self.root)
+                    trial.remote_entry(workspace)
                 else:
                     with self.assertRaisesRegex(RuntimeError, "Non-finite"):
-                        trial.remote_entry(self.root)
+                        trial.remote_entry(workspace)
             finally:
                 __import__("sys").path[:] = old_path
-        events = [json.loads(line) for line in (self.root / "output/telemetry.jsonl").read_text().splitlines()]
+        events = [json.loads(line) for line in (workspace / "output/telemetry.jsonl").read_text().splitlines()]
         return counters, events
 
     def test_gradient_timer_preserves_original_calls_and_records_updates(self):

@@ -1,4 +1,4 @@
-"""Build a reviewed, private-data-minimal Colab Anima trial; never run locally.
+"""Build a reviewed Colab Anima trial or calibration; never run locally.
 
 Only ``build`` reads a local dataset. The ``remote-*`` commands are Linux/Colab
 execution entrypoints contained in the generated, hash-pinned payload.
@@ -204,7 +204,57 @@ def dataset_files(dataset_dir: Path, trigger_token: str) -> tuple[list[Path], li
     return files, records
 
 
+def training_policy(mode: str, steps: int) -> dict:
+    if mode == "trial" and steps in {50, 75}:
+        return {"mode": mode, "steps": steps, "save_every_n_steps": 25, "scope": "pipeline-trial-not-release"}
+    if mode == "calibration" and steps == 400:
+        return {"mode": mode, "steps": steps, "save_every_n_steps": 100, "scope": "calibration-not-release"}
+    raise ValueError("Trial requires 50/75 steps; explicit calibration requires 400 steps")
+
+
+def validate_training_policy(config: dict) -> dict:
+    policy = training_policy(config.get("mode", "trial"), config["steps"])
+    for name in ("save_every_n_steps", "scope"):
+        if config.get(name, policy[name]) != policy[name] or (policy["mode"] == "calibration" and name not in config):
+            raise ValueError("Frozen training mode/save/scope mismatch")
+    return policy
+
+
+def load_frozen_config(workspace: Path) -> dict:
+    """Recheck approved package inputs; generated caches/output are separate."""
+    workspace = workspace.resolve()
+    manifest_path = workspace / "payload_manifest.json"
+    if manifest_path.is_symlink():
+        raise ValueError("Payload manifest must be a regular file")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("schema") != 1:
+        raise ValueError("Unsupported payload manifest schema")
+    entries = manifest["files"]
+    names = [entry["path"] for entry in entries]
+    if (len(entries) > 4000 or len(set(name.casefold() for name in names)) != len(names)
+            or names.count("trial_config.json") != 1):
+        raise ValueError("Invalid frozen input manifest")
+    for entry in entries:
+        relative = entry["path"]
+        if (relative.startswith("/") or "\\" in relative or ":" in relative
+                or any(part in {"", ".", ".."} for part in relative.split("/"))):
+            raise ValueError("Unsafe frozen input path")
+        path = workspace.joinpath(*PurePosixPath(relative).parts)
+        if (not path.resolve().is_relative_to(workspace) or path.is_symlink()
+                or any(parent.is_symlink() for parent in path.parents if parent != workspace and parent.is_relative_to(workspace))
+                or not path.is_file() or path.stat().st_size != entry["bytes"]
+                or sha256(path) != entry["sha256"]):
+            raise ValueError("Frozen payload input changed: " + relative)
+    config = json.loads((workspace / "trial_config.json").read_text(encoding="utf-8"))
+    if config["run_id"] != manifest["run_id"] or config["run_id"] != workspace.name:
+        raise ValueError("Workspace/config/manifest run IDs differ")
+    validate_training_policy(config)
+    validate_model_manifest(config["models"])
+    return config
+
+
 def build_training_args(workspace: Path, config: dict) -> list[str]:
+    policy = validate_training_policy(config)
     models = {entry["role"]: str(workspace / entry["path"]) for entry in config["models"]["files"] if entry["role"] != "tokenizer"}
     command = [
         "--pretrained_model_name_or_path", models["dit"], "--vae", models["vae"], "--qwen3", models["qwen3"],
@@ -212,7 +262,7 @@ def build_training_args(workspace: Path, config: dict) -> list[str]:
         "--output_name", config["run_id"], "--network_module", "networks.lora_anima", "--network_dim", "32",
         "--network_alpha", "16", "--learning_rate", "2e-5", "--optimizer_type", "AdamW",
         "--lr_scheduler", "constant", "--timestep_sampling", "sigmoid", "--discrete_flow_shift", "1.0",
-        "--max_train_steps", str(config["steps"]), "--save_every_n_steps", "25", "--mixed_precision", "bf16",
+        "--max_train_steps", str(policy["steps"]), "--save_every_n_steps", str(policy["save_every_n_steps"]), "--mixed_precision", "bf16",
         "--save_precision", "bf16", "--save_model_as", "safetensors", "--seed", str(config["seed"]),
         "--max_data_loader_n_workers", "0", "--cache_latents", "--cache_latents_to_disk",
         "--cache_text_encoder_outputs", "--cache_text_encoder_outputs_to_disk", "--gradient_checkpointing",
@@ -247,7 +297,12 @@ def create_colab_venv(host_python, venv):
     return python, used_host_pip
 
 
-def make_notebook(run_id: str, payload_name: str, payload_digest: str) -> dict:
+def make_notebook(run_id: str, payload_name: str, payload_digest: str, mode: str = "trial", steps: int = 50) -> dict:
+    policy = training_policy(mode, steps)
+    run_label = "400 步校准" if mode == "calibration" else str(steps) + " 步短训"
+    purpose = "完成后须比较 100/200/300/400 步检查点的角色质量" if mode == "calibration" else "只验证训练管线和速度"
+    start_message = f"开始{run_label}：Rank 32 / Alpha 16 / BF16 / Batch 1；每 {policy['save_every_n_steps']} 步保留权重和续训状态"
+    finish_message = f"{run_label}完成；{purpose}，此时还不是通过质量验收的成品 LoRA"
     verifier = inspect.getsource(safe_extract_payload)
     bootstrap = "import sys, subprocess, time\nfrom pathlib import Path\nfrom google.colab import files\n" + verifier + f'''
 if not (3, 10) <= sys.version_info[:2] <= (3, 12):
@@ -270,12 +325,12 @@ subprocess.run([str(PYTHON), "-m", "pip", "--isolated", "install", "--index-url"
 (ROOT / "dependency_install_timing.json").write_text(json.dumps({"dependency_install_seconds": time.perf_counter() - started, "used_host_pip_for_venv_bootstrap": USED_HOST_PIP}), encoding="utf-8")
 print("独立训练环境已安装，下一步下载经过 SHA-256 固定的公开底模")
 '''
-    prepare = '''
+    prepare = f'''
 subprocess.run([str(PYTHON), str(ROOT / "colab_trial.py"), "remote-prepare", "--workspace", str(ROOT)], check=True)
-print("底模、tokenizer 和 BF16 GPU 检查通过，可进行 50/75 步管线测试")
+print({("底模、tokenizer 和 BF16 GPU 检查通过，可进行" + run_label)!r})
 '''
-    training = '''
-print("开始短训：Rank 32 / Alpha 16 / BF16 / Batch 1；每 25 步保留权重和续训状态")
+    training = f'''
+print({start_message!r})
 result = subprocess.run([str(PYTHON), "-u", str(ROOT / "colab_trial.py"), "remote-run", "--workspace", str(ROOT)])
 OUTPUT = ROOT / "output"
 RESULT_ZIP = ROOT.parent / (ROOT.name + "_results.zip")
@@ -286,8 +341,8 @@ with __import__("zipfile").ZipFile(RESULT_ZIP, "w", compression=__import__("zipf
 print("结果包含日志、耗时、GPU 证据、检查点哈希及续训状态，请保存到自己的电脑")
 files.download(str(RESULT_ZIP))
 if result.returncode:
-    raise RuntimeError("短训未通过，失败日志已保留并提供下载")
-print("短训完成；这只能证明远端训练管线和速度，角色质量需要后续出图比较")
+    raise RuntimeError({(run_label + "未通过，失败日志已保留并提供下载")!r})
+print({finish_message!r})
 '''
     def cell(kind, text):
         result = {"cell_type": kind, "metadata": {}, "source": text.strip().splitlines(keepends=True)}
@@ -298,11 +353,11 @@ print("短训完成；这只能证明远端训练管线和速度，角色质量�
         "nbformat": 4, "nbformat_minor": 5,
         "metadata": {"colab": {"name": run_id + ".ipynb", "provenance": []}, "kernelspec": {"name": "python3", "display_name": "Python 3"}, "language_info": {"name": "python"}, "accelerator": "GPU"},
         "cells": [
-            cell("markdown", "# Anima 远端短训\n先在「运行时 → 更改运行时类型」选 A100（或 L4 / H100 等支持 BF16 的 GPU）。这是 50/75 步管线测试，不是成品 LoRA。GPU 连接、安装、缓存和训练都可能消耗 Colab 额度。运行会下载公开底模，上传所选图文数据；无需授权 Google Drive。连接断开时未下载的临时文件可能丢失。"),
+            cell("markdown", f"# Anima 远端{run_label}\n先在「运行时 → 更改运行时类型」选 A100（或 L4 / H100 等支持 BF16 的 GPU）。本次{purpose}，不是成品 LoRA。GPU 连接、安装、缓存和训练都可能消耗 Colab 额度。运行会下载公开底模，上传所选图文数据；无需授权 Google Drive。连接断开时未下载的临时文件可能丢失。"),
             cell("markdown", "## 1 · 上传本次资料包并核对文件"), cell("code", bootstrap),
             cell("markdown", "## 2 · 安装独立训练环境（首次较慢）"), cell("code", installation),
             cell("markdown", "## 3 · 下载底模并检查 GPU"), cell("code", prepare),
-            cell("markdown", "## 4 · 运行短训并下载证据\n训练与缓存耗时会分别记录。此次关闭训练预览，比较本地速度时应比较梯度更新段，不能把不同设置的总时长当成严格对照。请保留结果 ZIP；短训完成后及时断开并删除 Colab 运行时。"), cell("code", training),
+            cell("markdown", f"## 4 · 运行{run_label}并下载证据\n训练与缓存耗时会分别记录。此次关闭训练预览，比较本地速度时应比较梯度更新段，不能把不同设置的总时长当成严格对照。请保留结果 ZIP；{run_label}完成后及时断开并删除 Colab 运行时。"), cell("code", training),
         ],
     }
 
@@ -310,13 +365,12 @@ print("短训完成；这只能证明远端训练管线和速度，角色质量�
 def build_package(dataset_dir: Path, trigger_token: str, output_dir: Path, run_id: str,
                   model_manifest: dict, steps: int = 50, source_root: Path = SOURCE_ROOT,
                   tokenizer_files: dict[str, Path] | None = None, seed: int = 42,
-                  qwen_image_vae_2d: bool = False) -> dict:
+                  qwen_image_vae_2d: bool = False, mode: str = "trial") -> dict:
     if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_-]{1,79}", run_id):
         raise ValueError("Use a portable, unique run ID")
     if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]{1,79}", trigger_token):
         raise ValueError("Trigger token must be portable ASCII")
-    if steps not in {50, 75}:
-        raise ValueError("Trial steps must be 50 or 75")
+    policy = training_policy(mode, steps)
     models = validate_model_manifest(model_manifest)
     source_root = Path(source_root).resolve()
     sources = reviewed_source_files(source_root)
@@ -336,9 +390,9 @@ def build_package(dataset_dir: Path, trigger_token: str, output_dir: Path, run_i
         raise ValueError("Required pure tokenizer/config files are missing from source and download manifest")
     output_dir = Path(output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=False)
-    config = {"run_id": run_id, "trigger_token": trigger_token, "steps": steps, "seed": seed,
+    config = {"run_id": run_id, "trigger_token": trigger_token, **policy, "seed": seed,
               "qwen_image_vae_2d": qwen_image_vae_2d, "resolution": 1024, "batch_size": 1,
-              "models": models, "dataset": records, "scope": "pipeline-trial-not-release"}
+              "models": models, "dataset": records}
     content = [("trainer/" + path.relative_to(source_root).as_posix(), path.read_bytes()) for path in sources]
     content.extend(extra_tokenizers)
     content.extend(("dataset/" + path.name, path.read_bytes()) for path in dataset)
@@ -358,9 +412,9 @@ def build_package(dataset_dir: Path, trigger_token: str, output_dir: Path, run_i
         bundle.writestr("payload_manifest.json", manifest_bytes)
     digest = sha256(payload)
     notebook = output_dir / (run_id + ".ipynb")
-    notebook.write_text(json.dumps(make_notebook(run_id, payload.name, digest), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    notebook.write_text(json.dumps(make_notebook(run_id, payload.name, digest, mode, steps), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (output_dir / "payload_manifest.json").write_bytes(manifest_bytes)
-    receipt = {"run_id": run_id, "image_count": len(records), "steps": steps, "payload": payload.name,
+    receipt = {"run_id": run_id, "image_count": len(records), **policy, "payload": payload.name,
                "payload_sha256": digest, "payload_bytes": payload.stat().st_size, "notebook": notebook.name,
                "notebook_sha256": sha256(notebook), "local_training_started": False, "network_upload_started": False}
     (output_dir / "package_receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
@@ -381,12 +435,12 @@ def write_json(path: Path, value) -> None:
 
 
 def remote_prepare(workspace: Path) -> None:
+    workspace = require_colab(workspace)
+    config = load_frozen_config(workspace)
     import urllib.request
     import torch
-    workspace = require_colab(workspace)
     output = workspace / "output"
     output.mkdir(exist_ok=False)
-    config = json.loads((workspace / "trial_config.json").read_text(encoding="utf-8"))
     models = validate_model_manifest(config["models"])
     started = time.perf_counter()
     if not torch.cuda.is_available() or not torch.cuda.is_bf16_supported():
@@ -447,20 +501,21 @@ num_repeats = 1
     (workspace / "dataset.toml").write_text(dataset_config, encoding="utf-8")
     (output / "dataset.toml").write_text(dataset_config, encoding="utf-8")
     write_json(output / "trial_config.json", config)
-    write_json(output / "prepare_timing.json", {"model_download_and_preflight_seconds": time.perf_counter() - started, "anima_blocks": blocks})
+    write_json(output / "prepare_timing.json", {"model_download_and_preflight_seconds": time.perf_counter() - started,
+                                               "anima_blocks": blocks, "dataset_config_sha256": sha256(workspace / "dataset.toml")})
     timing = workspace / "dependency_install_timing.json"
     if timing.exists():
         write_json(output / timing.name, json.loads(timing.read_text()))
 
 
 def remote_entry(workspace: Path) -> None:
+    workspace = require_colab(workspace)
+    config = load_frozen_config(workspace)
     import math
     import torch
-    workspace = require_colab(workspace)
     sys.path.insert(0, str(workspace / "trainer"))
     import anima_train_network as entry
     from library import train_util
-    config = json.loads((workspace / "trial_config.json").read_text(encoding="utf-8"))
     telemetry = workspace / "output/telemetry.jsonl"
     started, first_step, batch_started = time.perf_counter(), None, None
     torch.set_num_threads(2)
@@ -550,6 +605,15 @@ def remote_run(workspace: Path) -> int:
         raise RuntimeError("Complete remote-prepare before training")
     if (output / "training_receipt.json").exists():
         raise RuntimeError("Use a new run ID instead of overwriting trial evidence")
+    config = load_frozen_config(workspace)
+    prepared_config = json.loads((output / "trial_config.json").read_text(encoding="utf-8"))
+    if prepared_config != config:
+        raise ValueError("Prepared config differs from frozen payload; use a new run ID")
+    preparation = json.loads((output / "prepare_timing.json").read_text(encoding="utf-8"))
+    dataset_config = workspace / "dataset.toml"
+    if (dataset_config.is_symlink() or sha256(dataset_config) != preparation.get("dataset_config_sha256")
+            or dataset_config.read_bytes() != (output / "dataset.toml").read_bytes()):
+        raise ValueError("Prepared dataset configuration changed; use a new run ID")
     started = time.perf_counter()
     command = [sys.executable, "-u", str(workspace / "colab_trial.py"), "remote-entry", "--workspace", str(workspace)]
     env = os.environ.copy()
@@ -573,17 +637,22 @@ def remote_run(workspace: Path) -> int:
             weights.append(checkpoint_record(path, output))
         except (ValueError, KeyError, json.JSONDecodeError) as error:
             failures.append({"path": path.name, "error": str(error)})
-    config = json.loads((workspace / "trial_config.json").read_text())
     completed_steps = max((event["step"] or 0 for event in steps), default=0)
-    if result == 0 and (not weights or failures or completed_steps < config["steps"]):
+    policy = validate_training_policy(config)
+    required_weights = {f"{config['run_id']}-step{step:08d}.safetensors"
+                        for step in range(policy["save_every_n_steps"], config["steps"] + 1, policy["save_every_n_steps"])}
+    required_weights.add(config["run_id"] + ".safetensors")
+    missing_weights = sorted(required_weights - {Path(weight["path"]).name for weight in weights})
+    gradient_updates = [event for event in events if event["event"] == "gradient_update"]
+    if result == 0 and (failures or missing_weights or completed_steps != config["steps"]
+                        or len(steps) != config["steps"] or len(gradient_updates) != config["steps"]):
         result = 2
     elapsed = time.perf_counter() - started
     caches = {name: sum(event["seconds"] for event in events if event["event"] == label)
               for name, label in (("latent_cache_seconds", "latent_cache"), ("text_cache_seconds", "text_cache"))}
     training_seconds = ending.get("training_seconds")
-    gradient_updates = [event for event in events if event["event"] == "gradient_update"]
     gradient_seconds = sum(event["seconds"] for event in gradient_updates)
-    receipt = {"run_id": config["run_id"], "return_code": result, "completed_steps": completed_steps,
+    receipt = {"run_id": config["run_id"], **validate_training_policy(config), "return_code": result, "completed_steps": completed_steps,
                "trainer_process_seconds": elapsed, **caches, "training_loop_and_saves_seconds": training_seconds,
                "model_and_trainer_setup_seconds": None if training_seconds is None else max(0, elapsed - training_seconds - sum(caches.values())),
                "steps_per_second_including_saves": None if not training_seconds else completed_steps / training_seconds,
@@ -592,7 +661,8 @@ def remote_run(workspace: Path) -> int:
                "gradient_timing_scope": "process_batch forward/backward/AdamW; CUDA synchronized; excludes fetch, setup, cache and saves",
                "peak_allocated_vram_bytes": ending.get("peak_allocated_vram_bytes"), "checkpoint_count": len(weights),
                "checkpoints": weights, "checkpoint_errors": failures, "loss_observations": len(steps),
-               "quality_status": "not-evaluated-pipeline-trial-only"}
+               "missing_checkpoints": missing_weights,
+               "quality_status": "not-evaluated-calibration-only" if config.get("mode") == "calibration" else "not-evaluated-pipeline-trial-only"}
     write_json(output / "training_receipt.json", receipt)
     print(json.dumps({key: value for key, value in receipt.items() if key != "checkpoints"}, indent=2), flush=True)
     return result
@@ -604,7 +674,9 @@ def main() -> None:
     build = subparsers.add_parser("build")
     for name in ("dataset-dir", "trigger-token", "output-dir", "run-id", "model-manifest"):
         build.add_argument("--" + name, required=True)
-    build.add_argument("--steps", type=int, choices=(50, 75), default=50)
+    build.add_argument("--mode", choices=("trial", "calibration"), default="trial")
+    build.add_argument("--steps", type=int, choices=(50, 75, 400), default=50,
+                       help="Trial: 50/75; explicit --mode calibration: 400, saving every 100 steps")
     build.add_argument("--source-root", type=Path, default=SOURCE_ROOT)
     build.add_argument("--t5-spiece", type=Path, help="Optional reviewed pure T5 spiece.model outside Git")
     build.add_argument("--seed", type=int, default=42)
@@ -616,7 +688,7 @@ def main() -> None:
         result = build_package(Path(args.dataset_dir), args.trigger_token, Path(args.output_dir), args.run_id,
                                json.loads(Path(args.model_manifest).read_text(encoding="utf-8-sig")), args.steps, args.source_root,
                                {"configs/t5_old/spiece.model": args.t5_spiece} if args.t5_spiece else None,
-                               args.seed, args.qwen_image_vae_2d)
+                               args.seed, args.qwen_image_vae_2d, args.mode)
         print(json.dumps(result, ensure_ascii=False, indent=2))
     elif args.action == "remote-prepare":
         remote_prepare(args.workspace)

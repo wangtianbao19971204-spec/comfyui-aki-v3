@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-14T11:04:28.688256+00:00",
+  "created_at": "2026-10-14T12:11:40.733625+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -51764,8 +51764,8 @@
     {
       "source": "anima_lora_forge/tests/test_colab_trial.py",
       "path": "runtime/anima_lora_forge/tests/test_colab_trial.py",
-      "sha256": "0cc03ddb66ed4b1e3c8db40f07454fa878ee8daf8b73e4b0d01df470765a814e",
-      "bytes": 17428,
+      "sha256": "55e9e22bcac177877a6b5e2d30227acfb720cb03125a1002ecfc84ac7b90091d",
+      "bytes": 25160,
       "kind": "file"
     },
     {
@@ -51792,8 +51792,8 @@
     {
       "source": "anima_lora_forge/tools/colab_trial.py",
       "path": "runtime/anima_lora_forge/tools/colab_trial.py",
-      "sha256": "35e809d0ed1bce77213ab022b0a01844480a3f514f3e66706e0aa3b9b464ec6e",
-      "bytes": 35604,
+      "sha256": "fbfab62b8408712bce8b264f137b7114f1427128e52e04149c8715264f745627",
+      "bytes": 40257,
       "kind": "file"
     },
     {
@@ -68219,8 +68219,8 @@
     }
   ],
   "development_revision": {
-    "note": "Add isolated Colab Anima trial packaging and ensurepip compatibility fallback; no runtime deployment",
-    "previous_manifest_sha256": "f19ea36cfc918df90dc64179884a73c0985d2a1db18032890e91a85ed79beda2",
+    "note": "Add isolated 400-step Colab calibration with frozen inputs and checkpoint gates",
+    "previous_manifest_sha256": "e5053592a12f296a4295dd9b8543c9b9d6b066acb5a7f8764016b38d9b431cdd",
     "source_changes": {
       "added": [],
       "removed": [],
