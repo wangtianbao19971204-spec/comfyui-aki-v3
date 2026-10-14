@@ -1,0 +1,119 @@
+{
+  "schema": 1,
+  "date": "2026-10-14",
+  "status": "deployed-frontend-and-native-export-accepted-no-new-gpu-sampling",
+  "feature": "runtime-workbench",
+  "scope": [
+    "UAP a1",
+    "UAP a29",
+    "UAP k2",
+    "standalone 01",
+    "standalone 02",
+    "standalone 03"
+  ],
+  "implementation": [
+    "web/control_switches.js",
+    "web/control_panel.js",
+    "web/anima_control.js",
+    "web/runtime_controls.js"
+  ],
+  "automated_acceptance": {
+    "real_workflow_scopes_including_templates": 12,
+    "passed": [
+      "test_control_switches.cjs: control/source/erase, strict selection, branch persistence, zero rewiring, empty alpha, native editor target, stale nodes, same-graph replacement, effective model state",
+      "test_anima_control.cjs",
+      "test_uap_daily_controls.cjs",
+      "test_uap_navigation.cjs",
+      "test_plugin_fusion.cjs",
+      "test_stocking_workflow.cjs",
+      "test_standalone_krea2_control_workflow.py: 9 tests",
+      "test_anima_control_workflow.py: 8 tests",
+      "node --check: both new frontend modules"
+    ],
+    "known_baseline_failure": {
+      "test": "test_uap_compact_widgets.cjs",
+      "error": "1111 overlaps 130163",
+      "comparison": "main and candidate workflow geometry is identical; independently reproduced on both",
+      "fixed_in_this_change": false
+    }
+  },
+  "browser_acceptance": {
+    "method": "Real ComfyUI frontend through a read-only production proxy with four candidate JavaScript files and isolated mask uploads; no production mutations or GPU submissions.",
+    "workflows": 6,
+    "native_route_exports": 26,
+    "final_code_reference_and_pose_cases": 12,
+    "all_final_control_targets_correct": true,
+    "legacy_mode_only_false_positive_rejected": true,
+    "rgb_or_empty_alpha_blocked": true,
+    "native_editor_opened_without_entering_subgraph": true,
+    "hand_painted_and_saved_rgba": true,
+    "painted_alpha_extrema": [
+      77,
+      255
+    ],
+    "enable_erase_automatically_enables_reference_control": true,
+    "standalone_hand_painted_mask_save_reload_passed": true,
+    "uap_three_branch_roundtrip_and_save_reload_passed": true,
+    "same_root_graph_workflow_replacement_passed": true,
+    "anima_off_on_source_preserved": true,
+    "anima_native_erase_off_bypasses_composite_on_consumes_composite": true,
+    "uap_krea2_native_erase_off_reads_destination_on_reads_composite": true,
+    "evidence_ref": "external-local://validation/control-one-click-20261014-01/browser-report.json",
+    "screenshot_ref": "external-local://validation/control-one-click-20261014-01/control-switches-deployed.jpg"
+  },
+  "deployment": {
+    "performed": true,
+    "deployed_at": "2026-10-13T23:28:44.395260+00:00",
+    "final_checked_at": "2026-10-13T23:30:50.896409+00:00",
+    "source_commit": "4fc5202383595dd60b7584db430ec1c49f57f87c",
+    "files": [
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_switches.js",
+        "before_sha256": null,
+        "after_sha256": "50f5d30b17cb78c6d7314b72daf2d04c6edcf6cfbdab3aed35a54dcde5c1ab4e"
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_panel.js",
+        "before_sha256": null,
+        "after_sha256": "ec76cae447b129399eed9ee9852d019c9b3a5095f31ade75f18581532427f99b"
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
+        "before_sha256": "2d2bd132e009a254946c01459c11a9f1651fccab021c699a38481ca827d62057",
+        "after_sha256": "4c5dcf1031ae572c2f65519e378439898a59eeb05e8df6f7e9acbaeae1e8ca97"
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
+        "before_sha256": "a63b7d75b9e33c9ec38fcfdf25c6836ea60f0d995b975a96f6d5149436e4d36f",
+        "after_sha256": "8035456d5b36a0375805f125c01c85622167476ffc0812fcee0f2b4cbaf85186"
+      }
+    ],
+    "service_identity_unchanged": true,
+    "queue_running": 0,
+    "queue_pending": 0,
+    "restarted": false,
+    "queue_cleared": false,
+    "gpu_jobs_submitted": 0,
+    "online_databases_replaced": false,
+    "consistent_sqlite_backups": 5,
+    "backup_quick_checks_passed": true,
+    "protected_files_unchanged": 69,
+    "served_javascript_sha256_matches_source": true,
+    "deployed_extension_and_standalone_panel_loaded": true,
+    "deployed_empty_mask_guard_and_automatic_reference_enable_passed": true,
+    "deployed_uap_a1_a29_k2_pose_routes_and_erase_enable_passed": true,
+    "browser_method": "Read-only proxy of actual deployed HTTP assets and runtime workflow files; QA masks remain isolated; production autosave and prompt writes blocked.",
+    "browser_evidence_ref": "external-local://validation/control-one-click-20261014-01/browser-deployment-report.json",
+    "rollback_ref": "external-local://validation/control-one-click-20261014-01/ROLLBACK.json",
+    "global_manifest_live_deployed": false,
+    "global_manifest_note": "This is a bounded four-frontend-file deployment; global snapshot status is not promoted."
+  },
+  "limitations": [
+    "No new GPU sampling or image quality acceptance. This change provides UI operations for the already implemented control and erase paths.",
+    "Krea2 erase-off guarantees the final control image bypasses erase; existing preview or mask side branches may still execute.",
+    "Original workflow JSON, prompts, models, LoRAs, seeds, dimensions, samplers, refinement and upscale defaults were not edited.",
+    "Existing Anima blur and Turbo pose quality limits remain."
+  ],
+  "source_commit": "4fc5202383595dd60b7584db430ec1c49f57f87c",
+  "evidence_ref": "external-local://validation/control-one-click-20261014-01"
+}
