@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-14T05:06:39.061787+00:00",
+  "created_at": "2026-10-14T18:14:00.961929+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -51762,10 +51762,31 @@
       "kind": "file"
     },
     {
+      "source": "anima_lora_forge/tests/test_colab_trial.py",
+      "path": "runtime/anima_lora_forge/tests/test_colab_trial.py",
+      "sha256": "2f11947774b134e3a62a18cfd598c5aa5740e73d936442b9798062400bcc0cc0",
+      "bytes": 51509,
+      "kind": "file"
+    },
+    {
       "source": "anima_lora_forge/tests/test_core.py",
       "path": "runtime/anima_lora_forge/tests/test_core.py",
       "sha256": "8b96fc1e1e84700036c9351a88a77dbc3e4434d1b1574c8f13e5fcb46cc14ff3",
       "bytes": 5675,
+      "kind": "file"
+    },
+    {
+      "source": "anima_lora_forge/tests/test_evaluate_checkpoint_plan.py",
+      "path": "runtime/anima_lora_forge/tests/test_evaluate_checkpoint_plan.py",
+      "sha256": "6e2a95eaf1c49c3e86c5d7384fa678ec1b0ebaeffb3da1e6891531aaf41cc6d6",
+      "bytes": 7376,
+      "kind": "file"
+    },
+    {
+      "source": "anima_lora_forge/tests/test_trainer_resume_step_accounting.py",
+      "path": "runtime/anima_lora_forge/tests/test_trainer_resume_step_accounting.py",
+      "sha256": "dcdb35e41f700af7de02c89498e32b1fd7c25566412801e6aab96248d25f9fd6",
+      "bytes": 9078,
       "kind": "file"
     },
     {
@@ -51780,6 +51801,20 @@
       "path": "runtime/anima_lora_forge/tools/build_alicia_split_eval_sheet.py",
       "sha256": "1ad893d8bf42ef0665b589318b8e3092d15f12c79be58377d4d3ddae93098a65",
       "bytes": 2010,
+      "kind": "file"
+    },
+    {
+      "source": "anima_lora_forge/tools/colab_trial.py",
+      "path": "runtime/anima_lora_forge/tools/colab_trial.py",
+      "sha256": "1fb8b3eee83820d6583366d3d49029b75cf9a32680e32fecadb6a4689b2eaa18",
+      "bytes": 74613,
+      "kind": "file"
+    },
+    {
+      "source": "anima_lora_forge/tools/evaluate_checkpoint_plan.py",
+      "path": "runtime/anima_lora_forge/tools/evaluate_checkpoint_plan.py",
+      "sha256": "3f40a64873cd69293af39106db91db657b807856fe65f0133591315b2aaa842e",
+      "bytes": 25340,
       "kind": "file"
     },
     {
@@ -57357,8 +57392,8 @@
     {
       "source": "anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/train_network.py",
       "path": "runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/train_network.py",
-      "sha256": "89ee2d7793f99888d2a7b7026b884eb3cb0153e05742dd698f234355159fb56c",
-      "bytes": 96180,
+      "sha256": "6e248c546cbc808d566c6cb69be3fb87c8eb4f2b4c48d76682ba06844d989472",
+      "bytes": 96188,
       "kind": "file"
     },
     {
@@ -68205,31 +68240,18 @@
     }
   ],
   "development_revision": {
-    "note": "Sync stocking e6aeaeb multilayer editor and browser preset exchange with cache and finite-input fixes",
-    "previous_manifest_sha256": "b3adee7b56e96d657a018489fa83bc1eee819b17d8fc38cb138fd38de31f60b1",
+    "note": "Add frozen local Anima checkpoint evaluation and audited partial-rescue continuation preparation; candidate source only, not deployed",
+    "previous_manifest_sha256": "4845a50233047589b73b8693d742fd5513cdf5035825f1d460fcbf29c1a96575",
     "source_changes": {
       "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_rendering.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_studio.py"
+        "anima_lora_forge/tests/test_evaluate_checkpoint_plan.py",
+        "anima_lora_forge/tools/evaluate_checkpoint_plan.py"
       ],
       "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/rendering.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_api.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_assets.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/document.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/look.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/presets.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/server.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/app.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n/en.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/index.html",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/look.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/style.css"
+        "anima_lora_forge/tests/test_colab_trial.py",
+        "anima_lora_forge/tests/test_trainer_resume_step_accounting.py",
+        "anima_lora_forge/tools/colab_trial.py"
       ]
     },
     "live_deployed": false,

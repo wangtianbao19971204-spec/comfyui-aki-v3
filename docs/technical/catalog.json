@@ -636,8 +636,11 @@
       "implementation": [
         "snapshot/runtime/anima_lora_forge/anima_lora.py",
         "snapshot/runtime/anima_lora_forge/anima_lora_forge/core.py",
+        "snapshot/runtime/anima_lora_forge/tools/colab_trial.py",
+        "snapshot/runtime/anima_lora_forge/tools/evaluate_checkpoint_plan.py",
         "snapshot/runtime/anima_lora_forge/templates/new_character.profile.json",
         "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/anima_train_network.py",
+        "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/train_network.py",
         "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/library/anima_models.py",
         "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/library/anima_train_utils.py",
         "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/configs/qwen3_06b/config.json",
@@ -668,7 +671,10 @@
         "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/config/sample_prompts.txt"
       ],
       "tests": [
-        "snapshot/runtime/anima_lora_forge/tests/test_core.py"
+        "snapshot/runtime/anima_lora_forge/tests/test_core.py",
+        "snapshot/runtime/anima_lora_forge/tests/test_colab_trial.py",
+        "snapshot/runtime/anima_lora_forge/tests/test_evaluate_checkpoint_plan.py",
+        "snapshot/runtime/anima_lora_forge/tests/test_trainer_resume_step_accounting.py"
       ],
       "evidence": [
         "docs/technical/archive/anima_lora_forge/releases/rosasha_anima_r32_v1/README.md",

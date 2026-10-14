@@ -1255,6 +1255,7 @@ class NetworkTrainer:
             ), f"max_train_steps should be greater than initial step / max_train_stepsは初期ステップより大きい必要があります: {args.max_train_steps} vs {initial_step}"
 
         epoch_to_start = 0
+        initial_global_step = 0
         if initial_step > 0:
             if args.skip_until_initial_step:
                 # if skip_until_initial_step is specified, load data and discard it to ensure the same data is used
@@ -1263,16 +1264,17 @@ class NetworkTrainer:
                         f"initial_step is specified but not resuming. lr scheduler will be started from the beginning / initial_stepが指定されていますがresumeしていないため、lr schedulerは最初から始まります"
                     )
                 logger.info(f"skipping {initial_step} steps / {initial_step}ステップをスキップします")
-                initial_step *= args.gradient_accumulation_steps
-
-                # set epoch to start to make initial_step less than len(train_dataloader)
-                epoch_to_start = initial_step // math.ceil(len(train_dataloader) / args.gradient_accumulation_steps)
+                # Keep optimizer updates absolute; only the data cursor is epoch-relative.
+                initial_global_step = initial_step
+                updates_per_epoch = math.ceil(len(train_dataloader) / args.gradient_accumulation_steps)
+                epoch_to_start, updates_in_epoch = divmod(initial_global_step, updates_per_epoch)
+                initial_step = updates_in_epoch * args.gradient_accumulation_steps
             else:
                 # if not, only epoch no is skipped for informative purpose
                 epoch_to_start = initial_step // math.ceil(len(train_dataloader) / args.gradient_accumulation_steps)
                 initial_step = 0  # do not skip
 
-        global_step = 0
+        global_step = initial_global_step
 
         noise_scheduler = self.get_noise_scheduler(args, accelerator.device)
 
@@ -1337,11 +1339,7 @@ class NetworkTrainer:
             accelerator.log({}, step=0)
 
         # training loop
-        if initial_step > 0:  # only if skip_until_initial_step is specified
-            for skip_epoch in range(epoch_to_start):  # skip epochs
-                logger.info(f"skipping epoch {skip_epoch+1} because initial_step (multiplied) is {initial_step}")
-                initial_step -= len(train_dataloader)
-            global_step = initial_step
+        # initial_step is now the number of batches to skip in the starting epoch.
 
         # log device and dtype for each model
         logger.info(f"unet dtype: {unet_weight_dtype}, device: {unet.device}")
@@ -1355,7 +1353,7 @@ class NetworkTrainer:
         clean_memory_on_device(accelerator.device)
 
         progress_bar = tqdm(
-            range(args.max_train_steps - initial_step), smoothing=0, disable=not accelerator.is_local_main_process, desc="steps"
+            range(args.max_train_steps - global_step), smoothing=0, disable=not accelerator.is_local_main_process, desc="steps"
         )
 
         validation_steps = (
@@ -1399,6 +1397,8 @@ class NetworkTrainer:
             random.setstate(python_rng_state)
 
         for epoch in range(epoch_to_start, num_train_epochs):
+            if global_step >= args.max_train_steps:
+                break
             accelerator.print(f"\nepoch {epoch+1}/{num_train_epochs}\n")
             current_epoch.value = epoch + 1
 
