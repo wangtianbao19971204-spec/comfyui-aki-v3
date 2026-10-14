@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-14T12:11:40.733625+00:00",
+  "created_at": "2026-10-14T14:52:38.851185+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -51764,8 +51764,8 @@
     {
       "source": "anima_lora_forge/tests/test_colab_trial.py",
       "path": "runtime/anima_lora_forge/tests/test_colab_trial.py",
-      "sha256": "55e9e22bcac177877a6b5e2d30227acfb720cb03125a1002ecfc84ac7b90091d",
-      "bytes": 25160,
+      "sha256": "1688d335b23c3ec38b1e5c178efc3640a39985f3a83f9bd1f9029ed0917e9e93",
+      "bytes": 37762,
       "kind": "file"
     },
     {
@@ -51773,6 +51773,13 @@
       "path": "runtime/anima_lora_forge/tests/test_core.py",
       "sha256": "8b96fc1e1e84700036c9351a88a77dbc3e4434d1b1574c8f13e5fcb46cc14ff3",
       "bytes": 5675,
+      "kind": "file"
+    },
+    {
+      "source": "anima_lora_forge/tests/test_trainer_resume_step_accounting.py",
+      "path": "runtime/anima_lora_forge/tests/test_trainer_resume_step_accounting.py",
+      "sha256": "258eb63a800ef700943be825778617b1f8afccac74abc42ff2840bbc97c98a4e",
+      "bytes": 8418,
       "kind": "file"
     },
     {
@@ -51792,8 +51799,8 @@
     {
       "source": "anima_lora_forge/tools/colab_trial.py",
       "path": "runtime/anima_lora_forge/tools/colab_trial.py",
-      "sha256": "fbfab62b8408712bce8b264f137b7114f1427128e52e04149c8715264f745627",
-      "bytes": 40257,
+      "sha256": "d84bf3cbd5144563ead52d9ac71c736066d73ebe4c77dddecce3687b68722725",
+      "bytes": 58188,
       "kind": "file"
     },
     {
@@ -57371,8 +57378,8 @@
     {
       "source": "anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/train_network.py",
       "path": "runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/train_network.py",
-      "sha256": "89ee2d7793f99888d2a7b7026b884eb3cb0153e05742dd698f234355159fb56c",
-      "bytes": 96180,
+      "sha256": "6e248c546cbc808d566c6cb69be3fb87c8eb4f2b4c48d76682ba06844d989472",
+      "bytes": 96188,
       "kind": "file"
     },
     {
@@ -68219,14 +68226,17 @@
     }
   ],
   "development_revision": {
-    "note": "Add isolated 400-step Colab calibration with frozen inputs and checkpoint gates",
-    "previous_manifest_sha256": "e5053592a12f296a4295dd9b8543c9b9d6b066acb5a7f8764016b38d9b431cdd",
+    "note": "Add explicit verified400-to1000 Colab continuation and fix resume cumulative step accounting",
+    "previous_manifest_sha256": "b92230131063426aaa4c553467874283345786b3072d9ec2385e148299a29d0f",
     "source_changes": {
-      "added": [],
+      "added": [
+        "anima_lora_forge/tests/test_trainer_resume_step_accounting.py"
+      ],
       "removed": [],
       "changed": [
         "anima_lora_forge/tests/test_colab_trial.py",
-        "anima_lora_forge/tools/colab_trial.py"
+        "anima_lora_forge/tools/colab_trial.py",
+        "anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/train_network.py"
       ]
     },
     "live_deployed": false,

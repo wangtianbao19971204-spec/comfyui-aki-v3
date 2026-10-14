@@ -9,6 +9,7 @@ import argparse
 import hashlib
 import inspect
 import json
+import math
 import os
 from pathlib import Path, PurePosixPath
 import re
@@ -209,7 +210,141 @@ def training_policy(mode: str, steps: int) -> dict:
         return {"mode": mode, "steps": steps, "save_every_n_steps": 25, "scope": "pipeline-trial-not-release"}
     if mode == "calibration" and steps == 400:
         return {"mode": mode, "steps": steps, "save_every_n_steps": 100, "scope": "calibration-not-release"}
-    raise ValueError("Trial requires 50/75 steps; explicit calibration requires 400 steps")
+    if mode == "continuation" and steps in {600, 800, 1000}:
+        return {"mode": mode, "steps": steps, "save_every_n_steps": 200, "scope": "continued-calibration-not-release"}
+    raise ValueError("Trial requires 50/75 steps; calibration400; explicit continuation600/800/1000 with verified state")
+
+
+RESUME_STATE_FILES = {"model.safetensors", "optimizer.bin", "scheduler.bin", "random_states_0.pkl", "train_state.json"}
+
+
+def validate_resume_config(config: dict, workspace: Path | None = None) -> int:
+    resume = config.get("resume")
+    if config.get("mode") != "continuation":
+        if resume is not None:
+            raise ValueError("Resume requires explicit continuation mode")
+        return 0
+    if not isinstance(resume, dict) or set(resume) != {
+        "source_run_id", "starting_step", "state_dir", "source_payload_sha256",
+        "source_results_sha256", "parent_checkpoint_sha256", "state_files",
+    }:
+        raise ValueError("Continuation requires a complete immutable resume identity")
+    start, source = resume["starting_step"], resume["source_run_id"]
+    if (type(start) is not int or start not in {400, 600, 800} or start >= config["steps"]
+            or not isinstance(source, str) or not re.fullmatch(r"[A-Za-z][A-Za-z0-9_-]{1,79}", source)
+            or source == config["run_id"]):
+        raise ValueError("Invalid cumulative resume step or source run")
+    expected_dir = f"resume/{source}-step{start:08d}-state"
+    if resume["state_dir"] != expected_dir:
+        raise ValueError("Resume state path must match its source and step")
+    for name in ("source_payload_sha256", "source_results_sha256", "parent_checkpoint_sha256"):
+        if not isinstance(resume[name], str) or not re.fullmatch(r"[a-f0-9]{64}", resume[name]):
+            raise ValueError("Resume source requires exact archive/checkpoint hashes")
+    entries = resume["state_files"]
+    if (not isinstance(entries, list) or len(entries) != len(RESUME_STATE_FILES)
+            or {entry.get("name") for entry in entries} != RESUME_STATE_FILES):
+        raise ValueError("Resume must contain model, AdamW, scheduler, RNG and step state")
+    for entry in entries:
+        if (set(entry) != {"name", "bytes", "sha256"} or type(entry["bytes"]) is not int or entry["bytes"] <= 0
+                or not re.fullmatch(r"[a-f0-9]{64}", entry["sha256"])):
+            raise ValueError("Invalid resume member identity")
+        if workspace is not None:
+            path = workspace / expected_dir / entry["name"]
+            if path.is_symlink() or not path.is_file() or path.stat().st_size != entry["bytes"] or sha256(path) != entry["sha256"]:
+                raise ValueError("Frozen resume state changed: " + entry["name"])
+    if workspace is not None:
+        state = json.loads((workspace / expected_dir / "train_state.json").read_text(encoding="utf-8"))
+        if type(state.get("current_step")) is not int or state["current_step"] != start:
+            raise ValueError("Saved state cumulative step disagrees with continuation")
+    return start
+
+
+def regular_zip_members(bundle: zipfile.ZipFile) -> dict:
+    result = {}
+    folded = set()
+    import stat
+    for item in bundle.infolist():
+        name = item.filename
+        if (not name or name.startswith("/") or "\\" in name or ":" in name or "\x00" in name
+                or any(part in {"", ".", ".."} for part in name.split("/")) or item.is_dir()
+                or stat.S_ISLNK(item.external_attr >> 16) or name.casefold() in folded):
+            raise ValueError("Unsafe or duplicate resume source ZIP member")
+        folded.add(name.casefold())
+        result[name] = item
+    if len(result) > 4000 or sum(item.file_size for item in result.values()) > 8 * 1024**3:
+        raise ValueError("Resume source exceeds limits")
+    return result
+
+
+def collect_resume_inputs(payload: Path, payload_digest: str, results: Path, results_digest: str, step: int) -> tuple:
+    """Read only hash-approved archives; never deserialize optimizer/RNG pickle locally."""
+    for path, digest in ((payload, payload_digest), (results, results_digest)):
+        if (path.is_symlink() or not path.is_file() or not re.fullmatch(r"[a-f0-9]{64}", digest)
+                or sha256(path) != digest):
+            raise ValueError("Resume archive identity mismatch")
+    with zipfile.ZipFile(payload) as bundle:
+        members = regular_zip_members(bundle)
+        manifest = json.loads(bundle.read("payload_manifest.json"))
+        entries = manifest["files"]
+        if (manifest.get("schema") != 1 or len({entry["path"] for entry in entries}) != len(entries)
+                or set(members) != {entry["path"] for entry in entries} | {"payload_manifest.json"}):
+            raise ValueError("Parent payload manifest mismatch")
+        for entry in entries:
+            data = bundle.read(entry["path"])
+            if len(data) != entry["bytes"] or hashlib.sha256(data).hexdigest() != entry["sha256"]:
+                raise ValueError("Parent frozen input changed")
+        old_config = json.loads(bundle.read("trial_config.json"))
+        if old_config["run_id"] != manifest["run_id"]:
+            raise ValueError("Parent payload run mismatch")
+        validate_training_policy(old_config)
+        validate_resume_config(old_config)
+    if old_config.get("mode") not in {"calibration", "continuation"} or step != old_config["steps"]:
+        raise ValueError("Resume only a completed calibration endpoint")
+    source = old_config["run_id"]
+    prefix = f"weights/{source}-step{step:08d}-state/"
+    with zipfile.ZipFile(results) as bundle:
+        members = regular_zip_members(bundle)
+        receipt = json.loads(bundle.read("training_receipt.json"))
+        result_config = json.loads(bundle.read("trial_config.json"))
+        if result_config != old_config:
+            raise ValueError("Parent result configuration differs from its payload")
+        parent_start = validate_resume_config(old_config)
+        expected_updates = step - parent_start
+        if (receipt.get("run_id") != source or receipt.get("return_code") != 0
+                or receipt.get("completed_steps") != step or receipt.get("optimizer_updates") != expected_updates
+                or receipt.get("loss_observations") != expected_updates
+                or receipt.get("checkpoint_errors") or receipt.get("missing_checkpoints")):
+            raise ValueError("Parent training did not pass completion gates")
+        if old_config["mode"] == "continuation" and (
+                receipt.get("resume_verified") is not True or receipt.get("step_sequence_valid") is not True):
+            raise ValueError("Parent continuation lacks positive restore/step sequence evidence")
+        names = {name[len(prefix):] for name in members if name.startswith(prefix)}
+        if names != RESUME_STATE_FILES:
+            raise ValueError("Selected state members are incomplete or unexpected")
+        state_data = {name: bundle.read(prefix + name) for name in sorted(names)}
+        saved = json.loads(state_data["train_state.json"])
+        if type(saved.get("current_step")) is not int or saved["current_step"] != step:
+            raise ValueError("Selected state has wrong cumulative step")
+        checkpoint_name = f"weights/{source}-step{step:08d}.safetensors"
+        checkpoint_data = bundle.read(checkpoint_name)
+        checkpoint_digest = hashlib.sha256(checkpoint_data).hexdigest()
+        matches = [entry for entry in receipt["checkpoints"] if entry["path"] == checkpoint_name]
+        if (len(matches) != 1 or matches[0]["sha256"] != checkpoint_digest
+                or matches[0]["bytes"] != len(checkpoint_data)
+                or matches[0]["metadata"].get("ss_steps") != str(step)):
+            raise ValueError("Parent checkpoint identity/step mismatch")
+    state_dir = f"resume/{source}-step{step:08d}-state"
+    resume = {"source_run_id": source, "starting_step": step, "state_dir": state_dir,
+              "source_payload_sha256": payload_digest, "source_results_sha256": results_digest,
+              "parent_checkpoint_sha256": checkpoint_digest,
+              "state_files": [{"name": name, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
+                              for name, data in state_data.items()]}
+    content = [(state_dir + "/" + name, data) for name, data in state_data.items()]
+    provenance = {"source_config": old_config, "source_training_receipt": receipt,
+                  "source_payload_manifest": manifest, "resume_identity": resume,
+                  "pickle_deserialized_locally": False, "exact_uninterrupted_trajectory_claimed": False}
+    content.append(("resume_provenance.json", (json.dumps(provenance, ensure_ascii=False, indent=2) + "\n").encode()))
+    return old_config, manifest, resume, content
 
 
 def validate_training_policy(config: dict) -> dict:
@@ -250,6 +385,7 @@ def load_frozen_config(workspace: Path) -> dict:
         raise ValueError("Workspace/config/manifest run IDs differ")
     validate_training_policy(config)
     validate_model_manifest(config["models"])
+    validate_resume_config(config, workspace)
     return config
 
 
@@ -271,6 +407,8 @@ def build_training_args(workspace: Path, config: dict) -> list[str]:
     ]
     if config["qwen_image_vae_2d"]:
         command.append("--qwen_image_vae_2d")
+    if validate_resume_config(config):
+        command.extend(("--resume", str(workspace / config["resume"]["state_dir"]), "--skip_until_initial_step"))
     return command
 
 
@@ -297,10 +435,14 @@ def create_colab_venv(host_python, venv):
     return python, used_host_pip
 
 
-def make_notebook(run_id: str, payload_name: str, payload_digest: str, mode: str = "trial", steps: int = 50) -> dict:
+def make_notebook(run_id: str, payload_name: str, payload_digest: str, mode: str = "trial", steps: int = 50,
+                  starting_step: int = 0) -> dict:
     policy = training_policy(mode, steps)
-    run_label = "400 步校准" if mode == "calibration" else str(steps) + " 步短训"
-    purpose = "完成后须比较 100/200/300/400 步检查点的角色质量" if mode == "calibration" else "只验证训练管线和速度"
+    run_label = (f"从{starting_step}续至{steps}步校准" if mode == "continuation" else
+                 "400 步校准" if mode == "calibration" else str(steps) + " 步短训")
+    saved_steps = list(range(starting_step + policy["save_every_n_steps"], steps + 1, policy["save_every_n_steps"]))
+    purpose = ("完成后须比较 " + "/".join(map(str, saved_steps)) + " 步检查点的角色质量"
+               if mode in {"calibration", "continuation"} else "只验证训练管线和速度")
     start_message = f"开始{run_label}：Rank 32 / Alpha 16 / BF16 / Batch 1；每 {policy['save_every_n_steps']} 步保留权重和续训状态"
     finish_message = f"{run_label}完成；{purpose}，此时还不是通过质量验收的成品 LoRA"
     verifier = inspect.getsource(safe_extract_payload)
@@ -365,7 +507,8 @@ print({finish_message!r})
 def build_package(dataset_dir: Path, trigger_token: str, output_dir: Path, run_id: str,
                   model_manifest: dict, steps: int = 50, source_root: Path = SOURCE_ROOT,
                   tokenizer_files: dict[str, Path] | None = None, seed: int = 42,
-                  qwen_image_vae_2d: bool = False, mode: str = "trial") -> dict:
+                  qwen_image_vae_2d: bool = False, mode: str = "trial",
+                  resume_inputs: dict | None = None) -> dict:
     if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_-]{1,79}", run_id):
         raise ValueError("Use a portable, unique run ID")
     if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]{1,79}", trigger_token):
@@ -375,6 +518,27 @@ def build_package(dataset_dir: Path, trigger_token: str, output_dir: Path, run_i
     source_root = Path(source_root).resolve()
     sources = reviewed_source_files(source_root)
     dataset, records = dataset_files(dataset_dir, trigger_token)
+    resume, resume_content = None, []
+    if mode == "continuation":
+        if not resume_inputs:
+            raise ValueError("Explicit continuation requires approved parent payload/results")
+        old_config, old_manifest, resume, resume_content = collect_resume_inputs(**resume_inputs)
+        if (old_config["run_id"] == run_id or old_config["dataset"] != records
+                or old_config["models"] != models or old_config["seed"] != seed
+                or old_config["trigger_token"] != trigger_token or old_config["qwen_image_vae_2d"] != qwen_image_vae_2d
+                or old_config["resolution"] != 1024 or old_config["batch_size"] != 1):
+            raise ValueError("Continuation must preserve source data, model, seed and training contract")
+        validate_resume_config({"run_id": run_id, **policy, "resume": resume})
+        prior_sources = {entry["path"]: entry["sha256"] for entry in old_manifest["files"] if entry["path"].startswith("trainer/")}
+        current_sources = {"trainer/" + path.relative_to(source_root).as_posix(): sha256(path) for path in sources}
+        # The reviewed counter fix is the only trainer-source change permitted.
+        for name, digest in prior_sources.items():
+            if name == "trainer/train_network.py" or name not in current_sources and name.startswith("trainer/configs/"):
+                continue
+            if current_sources.get(name) != digest:
+                raise ValueError("Unreviewed trainer difference for continuation: " + name)
+    elif resume_inputs is not None:
+        raise ValueError("Resume sources require explicit continuation mode")
     extra_tokenizers = []
     for relative, path in (tokenizer_files or {}).items():
         path = Path(path)
@@ -383,6 +547,12 @@ def build_package(dataset_dir: Path, trigger_token: str, output_dir: Path, run_i
         if (source_root / relative) in sources:
             raise ValueError("Extra tokenizer would overwrite reviewed source")
         extra_tokenizers.append(("trainer/" + relative, path.read_bytes()))
+    if resume is not None:
+        current_sources.update({name: hashlib.sha256(data).hexdigest() for name, data in extra_tokenizers})
+        if set(prior_sources) != set(current_sources) or any(
+            current_sources[name] != digest for name, digest in prior_sources.items() if name != "trainer/train_network.py"
+        ):
+            raise ValueError("Continuation trainer/tokenizer files differ beyond the reviewed counter fix")
     available = {"trainer/" + path.relative_to(source_root).as_posix() for path in sources}
     available |= {entry["path"] for entry in models["files"]}
     available |= {name for name, data in extra_tokenizers}
@@ -393,9 +563,12 @@ def build_package(dataset_dir: Path, trigger_token: str, output_dir: Path, run_i
     config = {"run_id": run_id, "trigger_token": trigger_token, **policy, "seed": seed,
               "qwen_image_vae_2d": qwen_image_vae_2d, "resolution": 1024, "batch_size": 1,
               "models": models, "dataset": records}
+    if resume is not None:
+        config["resume"] = resume
     content = [("trainer/" + path.relative_to(source_root).as_posix(), path.read_bytes()) for path in sources]
     content.extend(extra_tokenizers)
     content.extend(("dataset/" + path.name, path.read_bytes()) for path in dataset)
+    content.extend(resume_content)
     content.extend([
         ("colab_trial.py", Path(__file__).read_bytes()),
         ("trial_config.json", (json.dumps(config, ensure_ascii=False, indent=2) + "\n").encode("utf-8")),
@@ -412,11 +585,15 @@ def build_package(dataset_dir: Path, trigger_token: str, output_dir: Path, run_i
         bundle.writestr("payload_manifest.json", manifest_bytes)
     digest = sha256(payload)
     notebook = output_dir / (run_id + ".ipynb")
-    notebook.write_text(json.dumps(make_notebook(run_id, payload.name, digest, mode, steps), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    notebook.write_text(json.dumps(make_notebook(run_id, payload.name, digest, mode, steps,
+                                               resume["starting_step"] if resume else 0), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (output_dir / "payload_manifest.json").write_bytes(manifest_bytes)
     receipt = {"run_id": run_id, "image_count": len(records), **policy, "payload": payload.name,
                "payload_sha256": digest, "payload_bytes": payload.stat().st_size, "notebook": notebook.name,
                "notebook_sha256": sha256(notebook), "local_training_started": False, "network_upload_started": False}
+    if resume is not None:
+        receipt.update(starting_step=resume["starting_step"], expected_new_updates=steps - resume["starting_step"],
+                       source_run_id=resume["source_run_id"], source_results_sha256=resume["source_results_sha256"])
     (output_dir / "package_receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     return receipt
 
@@ -432,6 +609,52 @@ def require_colab(workspace: Path) -> Path:
 
 def write_json(path: Path, value) -> None:
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+
+
+def restore_training_state(accelerator, args, loader, starting_step, torch_api, expected_parameters):
+    """Require real AdamW/scheduler/RNG restoration before any new update."""
+    import logging
+    rng_evidence = []
+    class RNGGuard(logging.Handler):
+        def emit(self, event):
+            message = event.getMessage()
+            if "Could not load random states" in message:
+                raise RuntimeError("Random state restoration failed; continuation stopped")
+            if "All random states loaded successfully" in message:
+                rng_evidence.append(message)
+    logger = logging.getLogger("accelerate.checkpointing")
+    guard, prior_level = RNGGuard(), logger.level
+    logger.addHandler(guard)
+    logger.setLevel(logging.INFO)
+    try:
+        loader(accelerator, args)
+    finally:
+        logger.removeHandler(guard)
+        logger.setLevel(prior_level)
+    if len(rng_evidence) != 1:
+        raise RuntimeError("Random state restoration was not positively verified")
+    optimizer_steps, rates = [], []
+    for optimizer in accelerator._optimizers:
+        rates.extend(float(group["lr"]) for group in optimizer.param_groups)
+        for parameter, state in optimizer.state.items():
+            if "step" not in state:
+                raise RuntimeError("Restored optimizer parameter lacks step state")
+            value = state["step"]
+            optimizer_steps.append(float(value.item() if hasattr(value, "item") else value))
+            for name in ("exp_avg", "exp_avg_sq"):
+                if (name not in state or state[name].shape != parameter.shape
+                        or not bool(torch_api.isfinite(state[name]).all())):
+                    raise RuntimeError("Restored AdamW momentum is missing, nonfinite or has wrong shape")
+    if (len(optimizer_steps) != expected_parameters or any(value != starting_step for value in optimizer_steps)
+            or not rates or any(not math.isfinite(rate) or abs(rate - 2e-5) > 1e-12 for rate in rates)):
+        raise RuntimeError("Restored AdamW count/step/LR does not match the approved continuation")
+    scheduler_epochs = [getattr(scheduler.scheduler, "last_epoch", None) for scheduler in accelerator._schedulers]
+    if len(scheduler_epochs) != 1 or scheduler_epochs[0] != starting_step:
+        raise RuntimeError("Restored scheduler epoch does not match the source step")
+    return {"starting_step": starting_step, "optimizer_state_count": len(optimizer_steps),
+            "optimizer_step_min": min(optimizer_steps), "optimizer_step_max": max(optimizer_steps),
+            "learning_rates": rates, "scheduler_last_epochs": scheduler_epochs,
+            "rng_restore_verified": True, "adamw_momentum_finite": True}
 
 
 def remote_prepare(workspace: Path) -> None:
@@ -532,6 +755,18 @@ def remote_entry(workspace: Path) -> None:
             finally:
                 record(event, seconds=time.perf_counter() - begin)
         setattr(owner, name, wrapped)
+    starting_step = validate_resume_config(config, workspace)
+    if starting_step:
+        original_resume = train_util.resume_from_local_or_hf_if_specified
+        def verified_resume(accelerator, args):
+            if accelerator.num_processes != 1 or args.gradient_accumulation_steps != 1:
+                raise RuntimeError("Continuation requires the verified single-GPU batch1 contract")
+            record("resume_start", source_run_id=config["resume"]["source_run_id"], starting_step=starting_step,
+                   state_dir=config["resume"]["state_dir"])
+            evidence = restore_training_state(accelerator, args, original_resume, starting_step, torch,
+                                              config["models"]["expected_num_blocks"] * 20)
+            record("resume_loaded", **evidence)
+        train_util.resume_from_local_or_hf_if_specified = verified_resume
     timed_method(train_util.DatasetGroup, "new_cache_latents", "latent_cache")
     timed_method(entry.AnimaNetworkTrainer, "cache_text_encoder_outputs_if_needed", "text_cache")
     original_process = entry.AnimaNetworkTrainer.process_batch
@@ -637,15 +872,28 @@ def remote_run(workspace: Path) -> int:
             weights.append(checkpoint_record(path, output))
         except (ValueError, KeyError, json.JSONDecodeError) as error:
             failures.append({"path": path.name, "error": str(error)})
-    completed_steps = max((event["step"] or 0 for event in steps), default=0)
+    starting_step = validate_resume_config(config, workspace)
+    expected_updates = config["steps"] - starting_step
+    completed_steps = max((event["step"] or 0 for event in steps), default=starting_step)
     policy = validate_training_policy(config)
     required_weights = {f"{config['run_id']}-step{step:08d}.safetensors"
-                        for step in range(policy["save_every_n_steps"], config["steps"] + 1, policy["save_every_n_steps"])}
+                        for step in range(starting_step + policy["save_every_n_steps"], config["steps"] + 1, policy["save_every_n_steps"])}
     required_weights.add(config["run_id"] + ".safetensors")
     missing_weights = sorted(required_weights - {Path(weight["path"]).name for weight in weights})
     gradient_updates = [event for event in events if event["event"] == "gradient_update"]
+    actual_step_sequence = [event["step"] for event in steps]
+    sequence_valid = actual_step_sequence == list(range(starting_step + 1, config["steps"] + 1))
+    resume_events = [event for event in events if event["event"] == "resume_loaded"]
+    resume_verified = not starting_step or (len(resume_events) == 1 and resume_events[0].get("starting_step") == starting_step
+                                            and resume_events[0].get("optimizer_step_min") == starting_step
+                                            and resume_events[0].get("optimizer_step_max") == starting_step
+                                            and resume_events[0].get("rng_restore_verified") is True
+                                            and resume_events[0].get("adamw_momentum_finite") is True
+                                            and resume_events[0].get("optimizer_state_count") == config["models"]["expected_num_blocks"] * 20
+                                            and resume_events[0].get("scheduler_last_epochs") == [starting_step])
     if result == 0 and (failures or missing_weights or completed_steps != config["steps"]
-                        or len(steps) != config["steps"] or len(gradient_updates) != config["steps"]):
+                        or len(steps) != expected_updates or len(gradient_updates) != expected_updates
+                        or not sequence_valid or not resume_verified):
         result = 2
     elapsed = time.perf_counter() - started
     caches = {name: sum(event["seconds"] for event in events if event["event"] == label)
@@ -653,16 +901,21 @@ def remote_run(workspace: Path) -> int:
     training_seconds = ending.get("training_seconds")
     gradient_seconds = sum(event["seconds"] for event in gradient_updates)
     receipt = {"run_id": config["run_id"], **validate_training_policy(config), "return_code": result, "completed_steps": completed_steps,
+               "starting_step": starting_step, "expected_new_updates": expected_updates,
+               "step_sequence_valid": sequence_valid, "resume_verified": resume_verified,
                "trainer_process_seconds": elapsed, **caches, "training_loop_and_saves_seconds": training_seconds,
                "model_and_trainer_setup_seconds": None if training_seconds is None else max(0, elapsed - training_seconds - sum(caches.values())),
-               "steps_per_second_including_saves": None if not training_seconds else completed_steps / training_seconds,
+               "steps_per_second_including_saves": None if not training_seconds else len(gradient_updates) / training_seconds,
                "gradient_update_seconds": gradient_seconds, "optimizer_updates": len(gradient_updates),
                "gradient_update_steps_per_second": None if not gradient_seconds else len(gradient_updates) / gradient_seconds,
                "gradient_timing_scope": "process_batch forward/backward/AdamW; CUDA synchronized; excludes fetch, setup, cache and saves",
                "peak_allocated_vram_bytes": ending.get("peak_allocated_vram_bytes"), "checkpoint_count": len(weights),
                "checkpoints": weights, "checkpoint_errors": failures, "loss_observations": len(steps),
                "missing_checkpoints": missing_weights,
-               "quality_status": "not-evaluated-calibration-only" if config.get("mode") == "calibration" else "not-evaluated-pipeline-trial-only"}
+               "quality_status": "not-evaluated-calibration-only" if config.get("mode") in {"calibration", "continuation"} else "not-evaluated-pipeline-trial-only"}
+    if starting_step:
+        receipt["resume_identity"] = config["resume"]
+        receipt["resume_load_evidence"] = resume_events
     write_json(output / "training_receipt.json", receipt)
     print(json.dumps({key: value for key, value in receipt.items() if key != "checkpoints"}, indent=2), flush=True)
     return result
@@ -674,9 +927,14 @@ def main() -> None:
     build = subparsers.add_parser("build")
     for name in ("dataset-dir", "trigger-token", "output-dir", "run-id", "model-manifest"):
         build.add_argument("--" + name, required=True)
-    build.add_argument("--mode", choices=("trial", "calibration"), default="trial")
-    build.add_argument("--steps", type=int, choices=(50, 75, 400), default=50,
-                       help="Trial: 50/75; explicit --mode calibration: 400, saving every 100 steps")
+    build.add_argument("--mode", choices=("trial", "calibration", "continuation"), default="trial")
+    build.add_argument("--steps", type=int, choices=(50, 75, 400, 600, 800, 1000), default=50,
+                       help="Trial50/75; calibration400/save100; verified continuation600/800/1000/save200")
+    build.add_argument("--resume-payload", type=Path)
+    build.add_argument("--resume-payload-sha256")
+    build.add_argument("--resume-results", type=Path)
+    build.add_argument("--resume-results-sha256")
+    build.add_argument("--resume-step", type=int)
     build.add_argument("--source-root", type=Path, default=SOURCE_ROOT)
     build.add_argument("--t5-spiece", type=Path, help="Optional reviewed pure T5 spiece.model outside Git")
     build.add_argument("--seed", type=int, default=42)
@@ -685,10 +943,17 @@ def main() -> None:
         subparsers.add_parser(action).add_argument("--workspace", type=Path, required=True)
     args = parser.parse_args()
     if args.action == "build":
+        resume_values = (args.resume_payload, args.resume_payload_sha256, args.resume_results, args.resume_results_sha256, args.resume_step)
+        resume_inputs = None
+        if any(value is not None for value in resume_values):
+            if not all(value is not None for value in resume_values):
+                parser.error("All five --resume-* identity arguments are required together")
+            resume_inputs = dict(payload=args.resume_payload, payload_digest=args.resume_payload_sha256,
+                                 results=args.resume_results, results_digest=args.resume_results_sha256, step=args.resume_step)
         result = build_package(Path(args.dataset_dir), args.trigger_token, Path(args.output_dir), args.run_id,
                                json.loads(Path(args.model_manifest).read_text(encoding="utf-8-sig")), args.steps, args.source_root,
                                {"configs/t5_old/spiece.model": args.t5_spiece} if args.t5_spiece else None,
-                               args.seed, args.qwen_image_vae_2d, args.mode)
+                               args.seed, args.qwen_image_vae_2d, args.mode, resume_inputs)
         print(json.dumps(result, ensure_ascii=False, indent=2))
     elif args.action == "remote-prepare":
         remote_prepare(args.workspace)

@@ -256,6 +256,204 @@ class ColabTrialTests(unittest.TestCase):
         self.assertEqual(receipt["checkpoint_count"], 5)
         self.assertEqual(receipt["quality_status"], "not-evaluated-calibration-only")
 
+    def parent_resume_fixture(self, missing_state=None, saved_step=400, change_result_config=False):
+        receipt = self.build(name="parent", mode="calibration", steps=400, seed=261012)
+        payload = self.root / "parent" / receipt["payload"]
+        with zipfile.ZipFile(payload) as bundle:
+            config = json.loads(bundle.read("trial_config.json"))
+        checkpoint_name = "weights/ni_colab_trial-step00000400.safetensors"
+        header = json.dumps({"tensor": {"dtype": "BF16", "shape": [1], "data_offsets": [0, 2]},
+                             "__metadata__": {"ss_steps": "400"}}).encode()
+        checkpoint = struct.pack("<Q", len(header)) + header + b"\x00\x00"
+        training = {"run_id": "ni_colab_trial", "return_code": 0, "completed_steps": 400,
+                    "optimizer_updates": 400, "loss_observations": 400, "checkpoint_errors": [], "missing_checkpoints": [],
+                    "checkpoints": [{"path": checkpoint_name, "sha256": hashlib.sha256(checkpoint).hexdigest(),
+                                     "bytes": len(checkpoint), "metadata": {"ss_steps": "400"}}]}
+        result_config = dict(config)
+        if change_result_config:
+            result_config["seed"] += 1
+        results = self.root / "parent_results.zip"
+        with zipfile.ZipFile(results, "x") as bundle:
+            bundle.writestr("trial_config.json", json.dumps(result_config))
+            bundle.writestr("training_receipt.json", json.dumps(training))
+            bundle.writestr(checkpoint_name, checkpoint)
+            for name in sorted(trial.RESUME_STATE_FILES):
+                if name == missing_state:
+                    continue
+                data = json.dumps({"current_epoch": 4, "current_step": saved_step}).encode() if name == "train_state.json" else b"synthetic-owned-state-not-executable"
+                bundle.writestr("weights/ni_colab_trial-step00000400-state/" + name, data)
+        return {"payload": payload, "payload_digest": trial.sha256(payload), "results": results,
+                "results_digest": trial.sha256(results), "step": 400}
+
+    def build_continued(self, inputs, **kwargs):
+        return trial.build_package(self.dataset, "ni9x26char", self.root / "continued", "ni_colab_continued", model_manifest(),
+                                   source_root=self.sources, tokenizer_files={"configs/t5_old/spiece.model": self.spiece},
+                                   mode="continuation", steps=1000, seed=261012, resume_inputs=inputs, **kwargs)
+
+    def test_continuation_freezes_full_state_and_cumulative_target(self):
+        inputs = self.parent_resume_fixture()
+        (self.sources / "train_network.py").write_text("# reviewed counter fix\n", encoding="utf-8")
+        receipt = self.build_continued(inputs)
+        self.assertEqual((receipt["starting_step"], receipt["steps"], receipt["expected_new_updates"]), (400, 1000, 600))
+        self.assertEqual(receipt["save_every_n_steps"], 200)
+        workspace = self.root / "ni_colab_continued"
+        trial.safe_extract_payload(self.root / "continued" / receipt["payload"], workspace, receipt["payload_sha256"])
+        config = trial.load_frozen_config(workspace)
+        command = trial.build_training_args(workspace, config)
+        self.assertIn("--resume", command)
+        self.assertIn("--skip_until_initial_step", command)
+        self.assertNotIn("--initial_step", command)
+        self.assertNotIn("--network_weights", command)
+        self.assertEqual(command[command.index("--max_train_steps") + 1], "1000")
+        self.assertEqual({entry["name"] for entry in config["resume"]["state_files"]}, trial.RESUME_STATE_FILES)
+        notebook = json.loads((self.root / "continued" / receipt["notebook"]).read_text(encoding="utf-8"))
+        self.assertIn("从400续至1000", str(notebook))
+        self.assertIn("600/800/1000", str(notebook))
+        for cell in notebook["cells"]:
+            if cell["cell_type"] == "code":
+                compile("".join(cell["source"]), "continuation_cell", "exec")
+
+    def test_continuation_without_state_stops_before_package_creation(self):
+        with self.assertRaisesRegex(ValueError, "requires approved parent"):
+            self.build_continued(None)
+        self.assertFalse((self.root / "continued").exists())
+
+    def test_continuation_rejects_archive_digest_change(self):
+        inputs = self.parent_resume_fixture()
+        inputs["results_digest"] = "0" * 64
+        with self.assertRaisesRegex(ValueError, "archive identity"):
+            self.build_continued(inputs)
+        self.assertFalse((self.root / "continued").exists())
+
+    def test_continuation_requires_rng_and_saved_step(self):
+        inputs = self.parent_resume_fixture(missing_state="random_states_0.pkl")
+        with self.assertRaisesRegex(ValueError, "incomplete"):
+            self.build_continued(inputs)
+
+    def test_continuation_rejects_wrong_state_step(self):
+        inputs = self.parent_resume_fixture(saved_step=399)
+        with self.assertRaisesRegex(ValueError, "wrong cumulative step"):
+            self.build_continued(inputs)
+
+    def test_continuation_parent_result_config_must_equal_frozen_payload(self):
+        inputs = self.parent_resume_fixture(change_result_config=True)
+        with self.assertRaisesRegex(ValueError, "configuration differs"):
+            self.build_continued(inputs)
+
+    def test_continuation_rejects_changed_caption(self):
+        inputs = self.parent_resume_fixture()
+        (self.dataset / "approved.txt").write_text("ni9x26char, changed outfit", encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "preserve source data"):
+            self.build_continued(inputs)
+
+    def test_continuation_rejects_unrelated_trainer_change(self):
+        inputs = self.parent_resume_fixture()
+        (self.sources / "library/utils.py").write_text("# unrelated mutation", encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "trainer difference"):
+            self.build_continued(inputs)
+
+    def test_continuation_rejects_changed_external_tokenizer(self):
+        inputs = self.parent_resume_fixture()
+        self.spiece.write_bytes(b"different-tokenizer")
+        with self.assertRaisesRegex(ValueError, "tokenizer files differ"):
+            self.build_continued(inputs)
+
+    def test_resume_config_rejects_path_traversal_and_source_reuse(self):
+        inputs = self.parent_resume_fixture()
+        old, manifest, resume, content = trial.collect_resume_inputs(**inputs)
+        config = {"run_id": "new_run", **trial.training_policy("continuation", 1000), "resume": resume}
+        self.assertEqual(trial.validate_resume_config(config), 400)
+        resume["state_dir"] = "resume/../../unrelated"
+        with self.assertRaisesRegex(ValueError, "state path"):
+            trial.validate_resume_config(config)
+
+    def run_fake_completed_continuation(self, bad_sequence=False, missing_restore=False):
+        inputs = self.parent_resume_fixture()
+        package = self.build_continued(inputs)
+        workspace = self.root / "ni_colab_continued"
+        trial.safe_extract_payload(self.root / "continued" / package["payload"], workspace, package["payload_sha256"])
+        output = self.fake_prepare_output(workspace, trial.load_frozen_config(workspace))
+        weights = output / "weights"
+        weights.mkdir()
+        header = json.dumps({"tensor": {"dtype": "BF16", "shape": [1], "data_offsets": [0, 2]}}).encode()
+        names = [f"ni_colab_continued-step{step:08d}.safetensors" for step in (600, 800, 1000)] + ["ni_colab_continued.safetensors"]
+        for name in names:
+            (weights / name).write_bytes(struct.pack("<Q", len(header)) + header + b"\x00\x00")
+        events = [] if missing_restore else [{"event": "resume_loaded", "starting_step": 400, "optimizer_step_min": 400, "optimizer_step_max": 400,
+                                             "rng_restore_verified": True, "adamw_momentum_finite": True,
+                                             "optimizer_state_count": 560, "scheduler_last_epochs": [400]}]
+        sequence = list(range(401, 1001))
+        if bad_sequence:
+            sequence[0] = 402  # Same count and final label, but duplicate402 and missing401.
+        for step in sequence:
+            events.extend(({"event": "step", "step": step, "loss": 0.25}, {"event": "gradient_update", "seconds": 0.5}))
+        events.append({"event": "entry_end", "training_seconds": 310, "peak_allocated_vram_bytes": 100})
+        (output / "telemetry.jsonl").write_text("\n".join(json.dumps(event) for event in events), encoding="utf-8")
+        process = types.SimpleNamespace(stdout=[], wait=lambda: 0)
+        with mock.patch.object(trial, "require_colab", side_effect=lambda path: path), mock.patch("subprocess.Popen", return_value=process), mock.patch("builtins.print"):
+            result = trial.remote_run(workspace)
+        return result, json.loads((output / "training_receipt.json").read_text())
+
+    def test_completed_continuation_counts_only_new_updates(self):
+        result, receipt = self.run_fake_completed_continuation()
+        self.assertEqual(result, 0)
+        self.assertEqual((receipt["completed_steps"], receipt["starting_step"], receipt["optimizer_updates"]), (1000, 400, 600))
+        self.assertEqual(receipt["loss_observations"], 600)
+        self.assertEqual(receipt["checkpoint_count"], 4)
+        self.assertTrue(receipt["resume_verified"])
+        self.assertAlmostEqual(receipt["steps_per_second_including_saves"], 600 / 310)
+
+    def test_continuation_rejects_duplicate_step_with_correct_count_and_final_label(self):
+        result, receipt = self.run_fake_completed_continuation(bad_sequence=True)
+        self.assertEqual(result, 2)
+        self.assertFalse(receipt["step_sequence_valid"])
+
+    def test_continuation_rejects_unverified_optimizer_restore(self):
+        result, receipt = self.run_fake_completed_continuation(missing_restore=True)
+        self.assertEqual(result, 2)
+        self.assertFalse(receipt["resume_verified"])
+
+    def restored_optimizer_fixture(self, bad_momentum=False, scheduler_step=400, optimizer_step=400, learning_rate=2e-5):
+        class Tensor:
+            shape = (2, 3)
+            def __init__(self, finite=True):
+                self.finite = finite
+        parameter = Tensor()
+        state = {"step": optimizer_step, "exp_avg": Tensor(not bad_momentum), "exp_avg_sq": Tensor()}
+        optimizer = types.SimpleNamespace(param_groups=[{"lr": learning_rate}], state={parameter: state})
+        scheduler = types.SimpleNamespace(scheduler=types.SimpleNamespace(last_epoch=scheduler_step))
+        accelerator = types.SimpleNamespace(_optimizers=[optimizer], _schedulers=[scheduler])
+        torch_api = types.SimpleNamespace(isfinite=lambda value: types.SimpleNamespace(all=lambda: value.finite))
+        return accelerator, torch_api
+
+    def test_restore_gate_requires_actual_optimizer_scheduler_and_rng(self):
+        accelerator, torch_api = self.restored_optimizer_fixture()
+        def loader(accelerator, args):
+            import logging
+            logging.getLogger("accelerate.checkpointing").info("All random states loaded successfully")
+        evidence = trial.restore_training_state(accelerator, None, loader, 400, torch_api, 1)
+        self.assertTrue(evidence["rng_restore_verified"])
+        self.assertEqual(evidence["scheduler_last_epochs"], [400])
+
+    def test_restore_gate_rejects_accelerate_swallowed_rng_error(self):
+        accelerator, torch_api = self.restored_optimizer_fixture()
+        def loader(accelerator, args):
+            import logging
+            logging.getLogger("accelerate.checkpointing").info("Could not load random states")
+        with self.assertRaisesRegex(RuntimeError, "Random state restoration failed"):
+            trial.restore_training_state(accelerator, None, loader, 400, torch_api, 1)
+
+    def test_restore_gate_rejects_bad_momentum_step_and_scheduler(self):
+        def loader(accelerator, args):
+            import logging
+            logging.getLogger("accelerate.checkpointing").info("All random states loaded successfully")
+        for options in ({"bad_momentum": True}, {"scheduler_step": 399}, {"optimizer_step": 0},
+                        {"learning_rate": float("nan")}, {"learning_rate": float("inf")}, {"learning_rate": 1e-5}):
+            with self.subTest(options=options):
+                accelerator, torch_api = self.restored_optimizer_fixture(**options)
+                with self.assertRaises(RuntimeError):
+                    trial.restore_training_state(accelerator, None, loader, 400, torch_api, 1)
+
     def test_model_depth_is_explicit_for_original_and_29(self):
         for blocks in (28, 40):
             self.assertEqual(trial.validate_model_manifest(model_manifest(blocks))["expected_num_blocks"], blocks)
