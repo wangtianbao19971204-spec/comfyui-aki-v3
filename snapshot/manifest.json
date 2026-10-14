@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-14T00:26:24.204912+00:00",
+  "created_at": "2026-10-14T05:06:39.061787+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -11297,7 +11297,7 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
-      "sha256": "31d54f5656239ae65205bc30f8664816f7b7c7c11b0c76fbbfe02979c50f36e5",
+      "sha256": "3d279e15fc1f132d506487e0f66313411ccf950b9300f8452618a1e7c3bc3bde",
       "bytes": 4130,
       "kind": "file"
     },
@@ -11339,8 +11339,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/rendering.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/rendering.py",
-      "sha256": "ccc3d6d3d6b06f7e2b736a9ca72b05d86a84ea4a86f3af29b0a0953f48ba2f43",
-      "bytes": 2730,
+      "sha256": "2713311f210189a117473d0330ca45d140178917707fb9f2b8747438ad6b5504",
+      "bytes": 2484,
       "kind": "file"
     },
     {
@@ -11360,22 +11360,22 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py",
-      "sha256": "a416daf93cc8726f0cd30210944e6b7695d75dcf89d5b1e7de2546f3fe3a4899",
-      "bytes": 14058,
+      "sha256": "fd4942bd4d070422c93cc86d91a8a0859f90e88f9c4bb333a0fdac35c233f1d5",
+      "bytes": 14338,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_api.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_api.py",
-      "sha256": "285b381378a5c0eaafdee957e7e22ad43f60d61a8cc6bf30785e301f8c0d4598",
-      "bytes": 27053,
+      "sha256": "2ff9bd898179c6fd243effa8e30fe8e3fc11bc70ea60bbe9a17ec7c1e44d2b75",
+      "bytes": 28680,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_assets.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_assets.py",
-      "sha256": "74c385b04c06d2faa5bb902d561fb66b85f6ab24615c2d329b224a5f53c80cb0",
-      "bytes": 11369,
+      "sha256": "af098397c4835347aa33e346cab79a8f849a2315960213ef56dc69f2d1bbf518",
+      "bytes": 13719,
       "kind": "file"
     },
     {
@@ -11402,8 +11402,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
-      "sha256": "1024e1f15f4171dc0340b12c1ae70b80012faf60afcc27654008de49e119bdad",
-      "bytes": 14789,
+      "sha256": "207413641c8e7fb6431c7f341a31b199122a15f8df12c03a22525a12237abc19",
+      "bytes": 17685,
       "kind": "file"
     },
     {
@@ -11528,8 +11528,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py",
-      "sha256": "1227d19122234128765b1c77917c8aba7634a8607b4fd1970e9e56fd7b11a19c",
-      "bytes": 6324,
+      "sha256": "790540baaca2c01b6365cd771590629386132914fba6e70bdebadaf642403204",
+      "bytes": 6497,
       "kind": "file"
     },
     {
@@ -11558,6 +11558,20 @@
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio_models.py",
       "sha256": "840dc3d725b580d9ef05edeb613e0baa856cab4790453c3e07229f3f6ff205d1",
       "bytes": 15245,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_rendering.py",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_rendering.py",
+      "sha256": "7edb7cb80d4406c37c0c53b2ea40ab43f85ba6d2fe0f759488a91f4ff41f9689",
+      "bytes": 15895,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_studio.py",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_studio.py",
+      "sha256": "9b7d0696916023b5037090f2a6c8f6d2dbac998a68ef4bdf28af4325e74fe29d",
+      "bytes": 21017,
       "kind": "file"
     },
     {
@@ -11605,8 +11619,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/document.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/document.py",
-      "sha256": "3448ae749163fbe188c11b45ff75e3a3c4f90b38dc964e07963f27a8f1d36a6e",
-      "bytes": 56637,
+      "sha256": "3a3c3a2b7be7ba027f4f08dbf4c429c4ff5438a4a3694e006845460a84bd73c3",
+      "bytes": 59314,
       "kind": "file"
     },
     {
@@ -11640,8 +11654,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/look.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/look.py",
-      "sha256": "185112aad60427723869007c0f6065ec56cb865da473fc629c4d9c1e86f321c2",
-      "bytes": 37713,
+      "sha256": "ecd0579bbc05dda2bf10fcd7d8443cb7f197fad900a1784e4c881452692d7cb3",
+      "bytes": 44046,
       "kind": "file"
     },
     {
@@ -11654,8 +11668,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/presets.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/presets.py",
-      "sha256": "07311279fd1a6d2aff0eba6d88b4f09de6d06f20e8dcc45e2d92a683b5a074a6",
-      "bytes": 2764,
+      "sha256": "0cac34a700eb1e5efc57e2f5333021ab7701e93c7a2fb6e6ac3f60dbdc434c57",
+      "bytes": 7281,
       "kind": "file"
     },
     {
@@ -11675,8 +11689,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/server.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/server.py",
-      "sha256": "ef7cfea148fe520545c997e6eed0f53d54bbedc7232f0289fbbe950cc32a32d8",
-      "bytes": 29156,
+      "sha256": "d18d7f78e76671b9c6ee496806e8f7821552d94ec8cbf7486442066a146dd4d9",
+      "bytes": 33377,
       "kind": "file"
     },
     {
@@ -11703,8 +11717,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/app.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/app.js",
-      "sha256": "89114a1c3ac2ba105488440172e05f47327fcf8f44549636d2f3a902f9d1871d",
-      "bytes": 76238,
+      "sha256": "190950aaa6dc168a0ac6913627903239df718ea585d1a20829ce50d64e12ca7d",
+      "bytes": 77335,
       "kind": "file"
     },
     {
@@ -11717,29 +11731,29 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n/en.json",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n/en.json",
-      "sha256": "8de7e198279173f256a249f0f81be457275cc1a4fbc39dbc03cdf340ea649d04",
-      "bytes": 32485,
+      "sha256": "08c1032637cc993685577d308652fa61d42cf1f2a1faded87bfbb3f10489c526",
+      "bytes": 35042,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/index.html",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/index.html",
-      "sha256": "576a56f184e1ba6dc960132a031660636d3c0c075fe9cd056f0625f094cefc7b",
-      "bytes": 22615,
+      "sha256": "f6178ceeade10ba11afbbfc5573f8c4b0bd527436ee37d88f55c44f2dd1d6fb7",
+      "bytes": 24346,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/look.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/look.js",
-      "sha256": "3ff58e244016df9856e702e28f6533c583212f13a56ddff5ca8489ab7b27635d",
-      "bytes": 37669,
+      "sha256": "fbf465f6ea1e2572e2881fc3e8dc06a992906dc1f755eb98f921822d1eb5e1b5",
+      "bytes": 54870,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/style.css",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/style.css",
-      "sha256": "9caf6e566ef44300dbbeeb16ce5a3324bfd1466722e6dc706fb023237df8e1d3",
-      "bytes": 28229,
+      "sha256": "fa9398d92bb91c90d89b3967ae6ffaffa485fc2c40235aa6fde649433a9d3dae",
+      "bytes": 29921,
       "kind": "file"
     },
     {
@@ -68191,96 +68205,31 @@
     }
   ],
   "development_revision": {
-    "note": "Full-suite audit fixes: queue receipts, pending drafts, UAP layout and pinned Stocking source recovery",
-    "previous_manifest_sha256": "7228b3c22d0352fc34a1359fba53d0ed63b8d2701830d470c8ef95e11ab1726a",
+    "note": "Sync stocking e6aeaeb multilayer editor and browser preset exchange with cache and finite-input fixes",
+    "previous_manifest_sha256": "b3adee7b56e96d657a018489fa83bc1eee819b17d8fc38cb138fd38de31f60b1",
     "source_changes": {
       "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/sync_upstream.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_issue3.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_retention.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/LICENSE",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/__init__.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/__main__.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/coverage.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/depth.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/document.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/export.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/guide_fields.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/i18n.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/knit.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/look.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/oily.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/presets.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/psd_io.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/sam.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/server.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/session.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/settings.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/split.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/app.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n/en.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/index.html",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/look.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/style.css",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/symmetry.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/tiles.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/trace.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/version.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/walls.py",
-        "production_tools/stocking_independent_README.md",
-        "production_tools/test_pending_faults.cjs",
-        "production_tools/test_run_controls.cjs"
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_rendering.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_studio.py"
       ],
-      "removed": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/coverage.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/document.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/export.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/guide_fields.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/knit.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/look.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/oily.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/psd_io.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/split.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/static/app.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/static/i18n.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/static/i18n/en.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/static/index.html",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/static/look.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/static/style.css",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/symmetry.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/tiles.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/trace.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/walls.py"
-      ],
+      "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-OpenPose-Studio/tests/test_normalize_pose_json.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/README.md",
         "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
         "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/rendering.py",
         "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py",
         "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_api.py",
         "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_assets.py",
         "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/bend_acceptance.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/feature_acceptance.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/studio_compare.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/__init__.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/i18n.py",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/pending_prompts.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_target.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/run_controls.js",
-        "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-        "production_tools/export_stocking_upstream.py",
-        "production_tools/merge_unified_workflow.py",
-        "production_tools/stocking_upstream_README.md",
-        "production_tools/templates/UAP统一生产工作台_v2.json",
-        "production_tools/test_control_switches.cjs",
-        "production_tools/test_export_stocking_upstream.py",
-        "production_tools/test_stocking_workflow.cjs",
-        "production_tools/test_uap_browser_retirement.py"
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/document.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/look.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/presets.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/server.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/app.js",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n/en.json",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/index.html",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/look.js",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/style.css"
       ]
     },
     "live_deployed": false,

@@ -6,6 +6,7 @@ import os
 import subprocess
 import threading
 import time
+from typing import Literal
 
 import cv2
 import numpy as np
@@ -388,16 +389,17 @@ def remove_wall(doc_id: str, body: PointIn):
 
 
 @app.post('/api/doc/{doc_id}/undo')
-def undo(doc_id: str):
+def undo(doc_id: str, page: Literal['guides', 'look'] = 'guides'):
+    """Take back the last step of the 引导 page's history (guides) or the 纹理 page's (look: its settings and 颜色排除)."""
     d = doc_for(doc_id)
-    d.undo()
+    d.undo(page)
     return state_of(d)
 
 
 @app.post('/api/doc/{doc_id}/redo')
-def redo(doc_id: str):
+def redo(doc_id: str, page: Literal['guides', 'look'] = 'guides'):
     d = doc_for(doc_id)
-    d.redo()
+    d.redo(page)
     return state_of(d)
 
 
@@ -500,6 +502,7 @@ def mirror_region(doc_id: str, rid: int, body: MergeIn):
 _scene = (None, None)               # (render key, Scene) of the open document's current state
 _scene_lock = threading.Lock()
 CROP_MAX = 1024                     # px per side of a live 100% crop; bigger panes would lag behind the sliders
+BLEND_AUTO_KEY = 'blend_auto'       # the user's last choice for Auto 100% (settings.json)
 
 
 def scene_for(d):
@@ -512,12 +515,19 @@ def scene_for(d):
 
 
 def _base_look(d):
-    """The document's saved look; before any is saved, a PSD with a painted 亮点 layer places sparkles by it."""
+    """The document's saved look. Before any is saved a look starts from what the user chose last for Auto 100%, and a
+    PSD with a painted 亮点 layer places sparkles by it."""
     if d.look is not None:
         return dict(d.look)
+    base = {'lock_total': blend_auto()}
     if d.sparkle is not None:
-        return {'sparkle_depth': 0.0, 'sparkle_bright': 0.0, 'sparkle_painted': 100.0}
-    return {}
+        base.update(sparkle_depth=0.0, sparkle_bright=0.0, sparkle_painted=100.0)
+    return base
+
+
+def blend_auto():
+    """Whether Auto 100% (look.lock_total) was last left on; it is, until the user turns it off."""
+    return settings.get(BLEND_AUTO_KEY, True) is not False
 
 
 def _params(request: Request, d):
@@ -576,7 +586,8 @@ def look_info(d, q):
                 untextured=untextured, solving=solving,
                 check={'faded': faded.sum() / n, 'excluded': excluded.sum() / n, 'nostroke': nostroke.sum() / n},
                 textured=int((s.R > 0).sum()), has_sparkle_layer=d.sparkle is not None, depth=dstate,
-                depth_error=depth.service.error or getattr(d, 'depth_error', None))
+                can_undo_look=st['can_undo_look'], can_redo_look=st['can_redo_look'],
+                blend_auto=blend_auto(), depth_error=depth.service.error or getattr(d, 'depth_error', None))
 
 
 @app.get('/api/doc/{doc_id}/look')
@@ -588,12 +599,25 @@ def get_look(doc_id: str, request: Request):
 
 
 @app.put('/api/doc/{doc_id}/look')
-def put_look(doc_id: str, body: dict):
+def put_look(doc_id: str, body: dict, merge: bool = False):
+    """Save the look, as a step of the 纹理 history. merge=1: the change goes on the step the last one made (a drag of
+    a slider is one step). Before any look is saved, the step takes back to what _base_look gives."""
     d = doc_for(doc_id)
     q = look.clean_params(body)
-    d.set_look(q)
+    d.set_look(q, before=look.clean_params(_base_look(d)) if d.look is None else None, merge=merge)
     _want_depth(d, q)
     return look_info(d, q)
+
+
+class BlendAutoIn(BaseModel):
+    on: bool
+
+
+@app.put('/api/look/blend-auto')
+def put_blend_auto(body: BlendAutoIn):
+    """Remember the user's last choice for Auto 100% (per user, not per image): new looks start from it."""
+    settings.update(**{BLEND_AUTO_KEY: body.on})
+    return {'blend_auto': body.on}
 
 
 class PresetIn(BaseModel):
@@ -615,6 +639,75 @@ def put_preset(body: PresetIn):
 @app.delete('/api/look/presets')
 def delete_preset(body: NameIn):
     return {'presets': presets.delete(body.name)}
+
+
+def preset_folder():
+    """The folder the preset save and open dialogs start in: where a preset file last went or came from, else where the
+    last export went."""
+    return settings.get('preset_dir') or settings.get('export_dir') or settings.get('last_dir') or os.path.expanduser('~')
+
+
+def _ask_preset_save(suggested):
+    import tkinter as tk
+    from tkinter import filedialog
+    with _dialog_lock:
+        root = tk.Tk()
+        root.withdraw()
+        root.attributes('-topmost', True)
+        try:
+            # asks before replacing a file that is already there
+            p = filedialog.asksaveasfilename(parent=root, title=tr('导出预设'), initialdir=os.path.dirname(suggested),
+                                             initialfile=os.path.basename(suggested), defaultextension=presets.EXT,
+                                             filetypes=[(tr('预设文件'), f'*{presets.EXT}')])
+        finally:
+            root.destroy()
+    return os.path.normpath(p) if p else None
+
+
+def _ask_preset_open():
+    import tkinter as tk
+    from tkinter import filedialog
+    with _dialog_lock:
+        root = tk.Tk()
+        root.withdraw()
+        root.attributes('-topmost', True)
+        try:
+            p = filedialog.askopenfilename(parent=root, title=tr('导入预设'), initialdir=preset_folder(),
+                                           filetypes=[(tr('预设文件'), f'*{presets.EXT}'), (tr('所有文件'), '*.*')])
+        finally:
+            root.destroy()
+    return os.path.normpath(p) if p else None
+
+
+@app.post('/api/look/presets/export')
+def export_preset(body: NameIn):
+    """Save one preset as a small file in the place the user names in the system's save dialog, for handing to someone
+    else. Returns {'file'} or {'cancelled'}."""
+    text = presets.file_text(body.name)
+    p = _ask_preset_save(os.path.join(preset_folder(), presets.file_name(body.name)))
+    if not p:
+        return {'cancelled': True}
+    if not os.path.isdir(os.path.dirname(p)):
+        raise ValueError(tr('文件夹不存在：{folder}', folder=os.path.dirname(p)))
+    def write(tmp):
+        with open(tmp, 'w', encoding='utf-8', newline='\n') as f:
+            f.write(text)
+
+    export._replace(p, write)
+    settings.update(preset_dir=os.path.dirname(p))
+    return {'file': p}
+
+
+@app.post('/api/look/presets/import')
+def import_preset():
+    """Add the preset in a file the user picks in the system's open dialog. Never replaces one: a taken name gets a number
+    after it. Returns {'presets', 'imported' (the name it went in under), 'renamed'} or {'cancelled'}."""
+    p = _ask_preset_open()
+    if not p:
+        return {'cancelled': True}
+    listing, name, renamed = presets.import_file(p)
+    settings.update(preset_dir=os.path.dirname(p))
+    return {'presets': listing, 'imported': name, 'renamed': renamed}
 
 
 @app.get('/api/doc/{doc_id}/render/crop')

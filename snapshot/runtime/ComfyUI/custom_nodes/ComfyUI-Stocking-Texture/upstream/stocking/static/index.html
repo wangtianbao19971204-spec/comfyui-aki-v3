@@ -16,8 +16,11 @@
   <button id="btn-open" class="btn" title="打开 (Ctrl+O)">打开…</button>
   <div class="modes" role="tablist" aria-label="页面">
     <button class="mode" id="tab-edit" data-mode="edit" role="tab" aria-controls="pane-edit" title="涂部位、画走向线">引导</button>
-    <button class="mode" id="tab-look" data-mode="look" role="tab" aria-controls="pane-look">纹理</button>
+    <button class="mode" id="tab-look" data-mode="look" data-layer="0" role="tab" aria-controls="pane-look">纹理</button>
+    <span id="layer-tabs" class="layer-tabs"></span>
   </div>
+  <button id="btn-layer-add" class="layer-add" type="button" aria-label="加一层纹理"
+          title="加一层纹理，和现在的纹理按比例叠在一起（试验）" disabled>+</button>
   <div class="spacer"></div>
   <button id="btn-undo" class="btn" title="撤销 (Ctrl+Z)" disabled>撤销</button>
   <button id="btn-redo" class="btn" title="重做 (Ctrl+Shift+Z)" disabled>重做</button>
@@ -95,7 +98,11 @@
 
  <div class="side-pane look-only" id="pane-look" role="tabpanel" aria-labelledby="tab-look">
   <section class="group" id="preset-section">
-    <h2 id="preset-title">预设</h2>
+    <div class="group-head preset-head">
+      <h2 id="preset-title">预设</h2>
+      <button id="btn-preset-import" class="text-btn small" type="button" title="读入别人发来的预设文件；重名的不会被覆盖，会加个序号">导入…</button>
+      <button id="btn-preset-export" class="text-btn small" type="button" title="把选中的预设存成一个小文件，发给别人用" disabled>导出…</button>
+    </div>
     <div class="preset-row">
       <select id="preset-select" aria-labelledby="preset-title"></select>
       <button id="btn-preset-save" class="btn small" type="button">保存</button>
@@ -104,8 +111,23 @@
     <p class="sub preset-note"><span id="preset-note"></span> <button id="btn-preset-undo" class="text-btn small" type="button" hidden></button></p>
   </section>
 
+  <section class="group" id="blend-section" hidden>
+    <div class="group-head blend-head">
+      <h2>融合</h2>
+      <button class="info-btn" aria-expanded="false" aria-controls="blend-info" aria-label="融合说明">?</button>
+      <button id="blend-auto" class="btn small toggle" type="button" aria-pressed="true"
+              data-tip="开：各层加起来固定 100%，拖一层，其他层按比例让出。关：每层各调各的，互不影响；加起来超过 100% 纹理更重，不到 100% 会露出原图。开和关各自记着自己的设置。">自动 100%</button>
+    </div>
+    <div id="blend-info" class="info-pop" role="note" hidden>
+      <p>每一层都按同一套走向线画，再叠在一起。亮点和摩尔纹效果在叠好之后加，对所有层都一样。</p>
+      <p>点层的名字，下面的样式、密度、斜度和强度就切到那一层。</p>
+    </div>
+    <div id="blend-rows"></div>
+    <p id="blend-total" class="sub" hidden></p>
+  </section>
+
   <section class="group">
-    <h2>样式</h2>
+    <h2>样式<span id="style-layer" class="style-layer"></span></h2>
     <div class="styles" role="radiogroup" aria-label="样式">
       <button class="opt" data-style="knit" role="radio">细线</button>
       <button class="opt" data-style="loops" role="radio">针织</button>
@@ -221,7 +243,7 @@
       <p>薄丝袜透出肤色的地方（膝盖、脚尖）偏暖，有时会被误当成皮肤排除掉。这时关掉它，部位里每一处都加纹理。点细节上方的“标出问题”可以看到哪里被排除了（蓝色）。</p>
     </div>
     <p id="exclude-note" class="note"></p>
-    <button id="btn-look-reset" class="text-btn" title="样式、密度、斜度、强度、亮点和摩尔纹效果都回到默认值">全部恢复默认</button>
+    <button id="btn-look-reset" class="text-btn" title="纹理层、样式、密度、斜度、强度、亮点和摩尔纹效果都回到默认值">全部恢复默认</button>
   </section>
  </div>
 </aside>
@@ -323,9 +345,9 @@
     <h2 id="confirm-open-title">当前图的部位和走向线还没导出</h2>
     <p id="confirm-open-text"></p>
     <div class="actions">
-      <button class="btn" value="cancel">取消</button>
-      <button class="btn" value="discard">直接打开</button>
       <button class="btn primary" value="export" autofocus>先导出丝袜引导.psd</button>
+      <button class="btn" value="discard">直接打开</button>
+      <button class="btn" value="cancel">取消</button>
     </div>
   </form>
 </dialog>
@@ -339,8 +361,8 @@
     </label>
     <p id="preset-dialog-note" class="dialog-note" role="status"></p>
     <div class="actions">
-      <button id="btn-preset-cancel" class="btn" type="button">取消</button>
       <button id="btn-preset-ok" class="btn primary" type="submit">保存</button>
+      <button id="btn-preset-cancel" class="btn" type="button">取消</button>
     </div>
   </form>
 </dialog>
@@ -350,8 +372,8 @@
     <h2 id="preset-delete-title">删除预设</h2>
     <p id="preset-delete-text"></p>
     <div class="actions">
-      <button class="btn" value="cancel" autofocus>取消</button>
       <button class="btn" value="delete">删除</button>
+      <button class="btn" value="cancel" autofocus>取消</button>
     </div>
   </form>
 </dialog>

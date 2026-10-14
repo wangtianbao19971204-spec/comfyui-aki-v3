@@ -1024,7 +1024,9 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/visual_review.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_issue3.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_retention.py"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_retention.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_rendering.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_studio.py"
       ],
       "evidence": [
         "docs/receipts/stocking_texture_20261009.json",
@@ -1040,7 +1042,8 @@
         "docs/receipts/stocking_fork_showcase_20261010.json",
         "docs/receipts/stocking_gpu_guides_20261011.json",
         "docs/receipts/stocking_gpu_production_20261011.json",
-        "docs/receipts/full_suite_audit_20261014.json"
+        "docs/receipts/full_suite_audit_20261014.json",
+        "docs/receipts/stocking_upstream_sync_20261014.json"
       ],
       "acceptance": "checked-source",
       "watch": [

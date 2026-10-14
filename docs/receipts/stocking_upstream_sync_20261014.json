@@ -1,0 +1,112 @@
+{
+  "schema": 1,
+  "date": "2026-10-14",
+  "feature": "runtime-stocking-texture",
+  "upstream_repository": "https://github.com/silvermoong/stocking-texture-tool",
+  "old_pin": "e72a262bd917924bc82d45f19992344f2680a303",
+  "pin": "e6aeaebd0410301f4db61034db1b1c592eeb57d4",
+  "commits_ahead": 11,
+  "raw_dependency_files": 29,
+  "raw_git_blobs_equal_new_pin": true,
+  "license": "MIT",
+  "tests": {
+    "plugin_passed": 107,
+    "plugin_skipped": 0,
+    "includes_real_cuda": 2,
+    "new_rendering": 12,
+    "new_http_storage": 17,
+    "new_tests_included_in_plugin_total": true,
+    "maintenance_passed": 703,
+    "frontend_passed": 17,
+    "export_contracts_passed": 6,
+    "repair_workflow_cjs": true,
+    "author_pristine_passed": 369,
+    "author_private_fixture_skips": 52
+  },
+  "acceptance": {
+    "single_layer_upstream_pixel_equal_cases": 18,
+    "includes_full_crop_check_preview": true,
+    "real_gpu_guides": true,
+    "http_render_cases": 6,
+    "multilayer_http_renders": 5,
+    "amount_roundtrip_equal": true,
+    "amount_changes_pixels": true,
+    "dark_switch_changes_pixels": true,
+    "visual_review": "Full compositions and fixed leg crops reviewed; texture follows guides with no visible out-of-mask spill in this fixture.",
+    "browser": [
+      "four-layer limit",
+      "layer switch and independent density",
+      "delete and add",
+      "auto100 off and on retains both value sets",
+      "look undo and redo",
+      "save preset",
+      "download JSON",
+      "import downloaded JSON",
+      "same-name gets (2) without overwrite"
+    ]
+  },
+  "deployment": {
+    "identity": {
+      "pid": 51064,
+      "create_time": 1791954262.649892,
+      "executable": "G:\\ComfyUI-aki-v3\\python\\python.exe",
+      "cwd": "G:\\ComfyUI-aki-v3\\ComfyUI",
+      "listener_pids": [
+        51064
+      ]
+    },
+    "queue": {
+      "queue_running": [],
+      "queue_pending": []
+    },
+    "gui_parent": {
+      "pid": 3712,
+      "create_time": 1791542179.887754,
+      "executable": "G:\\ComfyUI-aki-v3\\.launcher\\StableDiffusionWebUILauncher.exe"
+    },
+    "argv_equal": true,
+    "plugin_files_equal": 80,
+    "deployed_files": 18,
+    "protected_files_unchanged": 63,
+    "database_replaced": false,
+    "node_types": 1946
+  },
+  "database_consistent_backups": 5,
+  "workflows_protected": 44,
+  "production_acceptance": {
+    "real_http_four_layer_render": true,
+    "render_equal_isolation": true,
+    "render_sha256": "0e6c144fc8e58030ede17b6896d24e77dd7f80681cf62f87f8e749ca726866d1",
+    "browser_four_layer_preview_reviewed": true,
+    "existing_preset_retained": true,
+    "test_session_closed": true,
+    "new_test_draft_archived": true,
+    "user_drafts_touched": false
+  },
+  "rollback": "Restore exact before files only after idle identity and deployed hash checks. User data and online databases are not replaced.",
+  "limitations": [
+    "52 author private fixtures unavailable; skipped tests are not passes.",
+    "Fixed existing artwork and tested browser paths only; no universal quality claim.",
+    "SAM/depth algorithms and dependencies unchanged; their full model quality audit not repeated.",
+    "PSD texture settings were reverted upstream and are not included."
+  ],
+  "evidence_id": "stocking-upstream-sync-20261014-01",
+  "evidence_sha256": {
+    "BASELINE.json": "91d6000a413e53c0db7d2200cdf84d975729c42e6506b049967700d62a55bacd",
+    "DEPLOY_PLAN.json": "28af5c10b72249c2e9f7ff049ceed1845608e1fa9da7ed956d773b2dd9db4e13",
+    "FILES_DEPLOYED.json": "3bd993b6ea10921c8d0a4a0ba0c7f91017ca554e5ad59f6645b1ee61e3c4f614",
+    "PRODUCTION_VERIFIED.json": "566dc9b8aaf81864da04bec32a3cda090fbbe3c488ebaa103c3fbfa3bac8eb0e",
+    "python-final-cuda.log": "ccbf28028f7feabec4eebe86d487bf54e4964ed2cca9fba4c53d84ed96a7dd27",
+    "frontend-tests.log": "89f7ad7ef7db33c63828651aa3fe54c61f798d7216c3831d9d706351d1fcc59a",
+    "upstream-raw-tests.log": "24e7f6431cff839c35b529cd9dd1105988bd33c0b5163d3a2cc193500323ebf4",
+    "real-parity-raw/ACCEPTANCE.json": "e67e9c3460ef84b9b4d866caee7dff5c417f91062ea44ce7f597f4029a61cc2d",
+    "HTTP_RENDER.json": "a821957cfbf7ea9a01c25eb13c2487f02911b9c5623d9916fa75ab680d80b9b9",
+    "four-layer-editor.png": "591c8c5e2e6a05987ba288c57a80619db1422d863da27b195bf5d5f78239fa97",
+    "PRODUCTION_HTTP.json": "fed240923540a4bc3744b6737d3561935c0aee3d039d07325d606e42527a53a1",
+    "production-editor.png": "e3b17c8ca1142ae09f4eb453ada32a2da916af155d97bf3180172c19ac8b45a2",
+    "PRODUCTION_CLEANUP.json": "6b03db81c5116ef7dedc49d0d3728e126ef0a270b61951918f9ecc8e746daa12",
+    "maintenance-tests.log": "2b3c78ace628a4b94f1c9fbc79a3b78eee4cbcb85caa0095ae66763a4bd21517",
+    "seal.log": "3892ab68f3a2500fea692166e4efe5f7509053c15f2a437d90693ace2ef8133a",
+    "export-tests.log": "6a00c5d0f82dd0c58cce73bc32e5c0503849a4927008b3dbeef9021f5146fe2c"
+  }
+}

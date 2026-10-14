@@ -155,19 +155,19 @@ class Studio:
 
     def params(self, overrides=None):
         p = base_params(self.doc)
+        if self.doc.look is None:
+            p["lock_total"] = self.preferences.read().get("blend_auto", True) is not False
         if overrides:
             p.update({k: v for k, v in overrides.items() if k in look.DEFAULTS})
-        return look.clean_params(p)
+        return store.clean_look(p)
 
     def render(self, params=None, rect=None):
         q = self.params(params)
         scene = self.scene()
-        if not self.dark_adapt:
-            return scene.render(q, rect)
-        key = (self._scene[0], tuple(sorted(q.items())))
+        key = (self._scene[0], store.dumps(q), self.dark_adapt)
         with self.lock:
             if self._adapted[0] != key:
-                self._adapted = (key, render_scene(scene, q, True))
+                self._adapted = (key, render_scene(scene, q, self.dark_adapt))
             out, info = self._adapted[1]
         if rect is not None:
             x0, y0, x1, y1 = rect
@@ -180,7 +180,8 @@ class Studio:
         g = look.geometry(q["density"], doc.w, doc.h)
         faded, excluded, nostroke, painted = check_maps(doc, scene, q)
         n = max(int(painted.sum()), 1)
-        regions = doc.state()["regions"]
+        state = doc.state()
+        regions = state["regions"]
         untextured = [r["name"] for r in regions if r["status"] in ("nostroke", "error")]
         untextured += [r["name"] + "分开的一块" for r in regions if r["status"] == "ok" and r["unguided"]]
         depth, depth_error = self.depth_status, self.depth_error
@@ -191,7 +192,9 @@ class Studio:
                     check={"faded": float(faded.sum() / n), "excluded": float(excluded.sum() / n),
                            "nostroke": float(nostroke.sum() / n)},
                     textured=int((scene.R > 0).sum()), has_sparkle_layer=doc.sparkle is not None,
-                    depth=depth, depth_error=depth_error)
+                    depth=depth, depth_error=depth_error,
+                    can_undo_look=state["can_undo_look"], can_redo_look=state["can_redo_look"],
+                    blend_auto=self.preferences.read().get("blend_auto", True) is not False)
 
     def start_depth(self):
         with self.lock:

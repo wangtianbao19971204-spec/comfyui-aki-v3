@@ -32,6 +32,14 @@ def boolean(value, *, nullable=False):
     return value
 
 
+def query_boolean(value):
+    if value in ("1", "true", "on", "yes"):
+        return True
+    if value in ("0", "false", "off", "no"):
+        return False
+    raise ValueError("查询开关值无效")
+
+
 def snap_radius(value, width, height):
     if type(value) not in (int, float) or not np.isfinite(value) or not 0 <= value <= max(width, height):
         raise ValueError("吸附半径无效")
@@ -75,6 +83,7 @@ class EditorSession:
         self.studio, self.loop = studio, loop
         self.queues = set()
         self.downloads = {}
+        self.preset_downloads = {}
         self.pending_apply = None
         self.operation = asyncio.Lock()
         self.clients = {}
@@ -259,6 +268,10 @@ class StudioServer:
                 return json_response({"active": entry.studio.active, "cache": models.cache_state()})
             if path.startswith("api/download/") and request.method == "GET":
                 key = path.split("/")[-1]
+                if key in entry.preset_downloads:
+                    filename, data = entry.preset_downloads[key]
+                    return web.Response(body=data, content_type="application/json", headers={
+                        **NO_STORE, "Content-Disposition": "attachment; filename*=UTF-8''" + quote(filename)})
                 if key not in entry.downloads:
                     raise web.HTTPNotFound()
                 file = entry.downloads[key]
@@ -307,6 +320,19 @@ class StudioServer:
                 raise web.HTTPMethodNotAllowed(method, ["GET", "POST"])
             lang = studio.preferences.read().get("lang", "zh")
             return {"lang": lang, "chosen": lang, "system": "zh"}
+        if path == "api/look/blend-auto" and method == "PUT":
+            on = boolean(body.get("on"))
+            studio.preferences.update(blend_auto=on)
+            return {"blend_auto": on}
+        if path == "api/look/presets/export" and method == "POST":
+            filename, text = studio.preferences.export_preset(body.get("name"))
+            key = uuid.uuid4().hex
+            while len(entry.preset_downloads) >= 16:
+                entry.preset_downloads.pop(next(iter(entry.preset_downloads)))
+            entry.preset_downloads[key] = (filename, text.encode("utf8"))
+            return {"file": filename, "url": base + "/api/download/" + key}
+        if path == "api/look/presets/import" and method == "POST":
+            return studio.preferences.import_preset(body.get("text"), body.get("filename"))
         if path == "api/look/presets":
             if method == "GET":
                 result = studio.preferences.presets()
@@ -369,7 +395,7 @@ class StudioServer:
         action = match[2]
         if method == "GET":
             return self.read_document(entry, action, query, base)
-        result = self.edit_document(entry, method, action, body, base)
+        result = self.edit_document(entry, method, action, body, base, query)
         studio.save_draft()
         return result
 
@@ -416,11 +442,14 @@ class StudioServer:
             return png(image, extra)
         raise web.HTTPNotFound()
 
-    def edit_document(self, entry, method, action, body, base):
+    def edit_document(self, entry, method, action, body, base, query=None):
         s, d = entry.studio, entry.studio.doc
+        query = query or {}
         created = {}
         if action == "look" and method == "PUT":
-            d.set_look(look.clean_params(body))
+            params = store.clean_look(body)
+            merge = query_boolean(query.get("merge", "false"))
+            d.set_look(params, before=s.params() if d.look is None else None, merge=merge)
             return s.look_info()
         if action == "coverage/exclude" and method == "PUT":
             if type(body.get("on")) is not bool:
@@ -445,9 +474,9 @@ class StudioServer:
             xy = store.points([body.get("x"), body.get("y")], d.w, d.h, 1)[0]
             created["removed"] = d.remove_wall_at(*xy, max(1., min(float(body.get("tol", 8)), 60.)))
         elif action == "undo" and method == "POST":
-            d.undo()
+            d.undo(query.get("page", "guides"))
         elif action == "redo" and method == "POST":
-            d.redo()
+            d.redo(query.get("page", "guides"))
         elif action == "segment/cycle" and method == "POST":
             d.cycle_segment(int(body.get("step", 1)))
         elif action == "segment/select" and method == "POST":

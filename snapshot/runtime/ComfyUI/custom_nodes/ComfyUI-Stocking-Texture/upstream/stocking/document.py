@@ -238,6 +238,11 @@ class Document:
         self._ids = itertools.count(1)
         self._versions = itertools.count(1)
         self._undo, self._redo = [], []
+        # The 纹理 page has a history of its own: the look settings and 颜色排除 (undo(page='look')); the 引导 page's
+        # is _undo, _redo above. look_rev counts the undos and redos of the look, so a page can tell its settings were
+        # changed under it and read them again.
+        self._undo_look, self._redo_look = [], []
+        self.look_rev = 0
         self._epoch, self._prep_epoch, self._prep = 0, -1, None
         self._changed_at = {}           # region id -> time its solver inputs last changed
         self._last_sig = {}
@@ -349,19 +354,37 @@ class Document:
                     'color_exclude': self.color_exclude,
                     'sparkle': self.sparkle, 'look': self.look, 'guides_saved': not self.unsaved_guides()}
 
-    def set_look(self, params):
+    def set_look(self, params, before=None, merge=False):
+        """Make params (look.clean_params) the look, as a step of the 纹理 history. `before` is the look it replaces
+        when none is saved yet (the caller knows what the look is then: defaults, or the user's last choice for Auto
+        100%). merge=True folds the change into the step on top of that history when that is a look step too, so one
+        drag of a slider is one step; a change that brings the look back to where that step began takes the step away."""
         with self.lock:
-            if params != self.look:
-                self.look = params
-                self.edits += 1
+            if params == self.look:
+                return
+            prev = self.look if self.look is not None else before
+            self.look = params
+            self.edits += 1
+            if prev is None or prev == params:
+                return
+            top = self._undo_look[-1] if self._undo_look else None
+            if merge and top is not None and top[0] == 'look' and top[2] == prev:
+                if top[1] == params:
+                    self._undo_look.pop()
+                else:
+                    self._undo_look[-1] = ('look', top[1], params)
+                self._redo_look.clear()
+            else:
+                self._push(('look', prev, params), page='look')
 
     def set_color_exclude(self, on):
-        """颜色排除 on or off (undoable): off textures every pixel of every region, whatever its colour."""
+        """颜色排除 on or off (undoable, on the 纹理 page's history): off textures every pixel of every region, whatever
+        its colour."""
         with self.lock:
             on = bool(on)
             if on == self.color_exclude:
                 return
-            self._push(('exclude', self.color_exclude, on))
+            self._push(('exclude', self.color_exclude, on), page='look')
             self.color_exclude = on
             self._touch()
 
@@ -464,11 +487,21 @@ class Document:
         W = W & ~np.isin(lab, list(gone))
         return W if W.any() else None
 
-    def _push(self, op):
-        self._undo.append(op)
-        del self._undo[:-UNDO_LIMIT]
-        self._redo.clear()
-        self.dirty = True
+    def _stacks(self, page):
+        """The (undo, redo) lists of a page's history: 'guides' (引导) or 'look' (纹理)."""
+        if page == 'look':
+            return self._undo_look, self._redo_look
+        if page == 'guides':
+            return self._undo, self._redo
+        raise ValueError(f'no such history: {page}')               # the server only asks for the two above
+
+    def _push(self, op, page='guides'):
+        undo, redo = self._stacks(page)
+        undo.append(op)
+        del undo[:-UNDO_LIMIT]
+        redo.clear()
+        if op[0] != 'look':                                         # a look change is no edit of the guides
+            self.dirty = True
         self.edits += 1
 
     def add_region(self, name):
@@ -869,30 +902,39 @@ class Document:
                 self.erased.pop(i)
         elif kind == 'exclude':
             self.color_exclude = op[2] if forward else op[1]
+        elif kind == 'look':
+            self.look = dict(op[2] if forward else op[1])
+            self.look_rev += 1
+            return                                      # nothing a solve or a coverage depends on changed
         elif kind == 'rename':
             _, rid, old, new = op
             self._known[rid].name = new if forward else old
         self._touch()
 
-    def undo(self):
+    def undo(self, page='guides'):
+        """Take back the last step of a page's history ('guides' or 'look'). False when there is none."""
         with self.lock:
-            if not self._undo:
+            undo, redo = self._stacks(page)
+            if not undo:
                 return False
-            op = self._undo.pop()
+            op = undo.pop()
             self._apply(op, False)
-            self._redo.append(op)
-            self.dirty = True
+            redo.append(op)
+            if op[0] != 'look':
+                self.dirty = True
             self.edits += 1
             return True
 
-    def redo(self):
+    def redo(self, page='guides'):
         with self.lock:
-            if not self._redo:
+            undo, redo = self._stacks(page)
+            if not redo:
                 return False
-            op = self._redo.pop()
+            op = redo.pop()
             self._apply(op, True)
-            self._undo.append(op)
-            self.dirty = True
+            undo.append(op)
+            if op[0] != 'look':
+                self.dirty = True
             self.edits += 1
             return True
 
@@ -1079,6 +1121,8 @@ class Document:
                     'course_step': self.course_step, 'regions': regions, 'strokes': strokes, 'dividers': dividers,
                     'has_depth': self._disparity is not None, 'color_exclude': self.color_exclude,
                     'can_undo': bool(self._undo), 'can_redo': bool(self._redo), 'dirty': self.dirty,
+                    'can_undo_look': bool(self._undo_look), 'can_redo_look': bool(self._redo_look),
+                    'look_rev': self.look_rev,
                     'unsaved_guides': self.unsaved_guides(),
                     'coverage_v': self._coverage_key()[1], 'segment_cycle': cycle,
                     'has_sparkle_layer': self.sparkle is not None,

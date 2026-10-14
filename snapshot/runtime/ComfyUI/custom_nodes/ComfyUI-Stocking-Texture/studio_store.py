@@ -18,7 +18,7 @@ import zlib
 import numpy as np
 from PIL import Image
 
-from .vendor import look
+from .vendor import look, presets as preset_codec
 from .vendor.document import PALETTE
 from .studio_document import Document
 
@@ -83,6 +83,29 @@ def cleanup_transient(root, protected=(), *, days=7, now=None):
 
 def dumps(value):
     return json.dumps(value, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
+
+
+def clean_look(value):
+    # Validate before upstream clipping can turn infinity into a finite bound.
+    dumps(value)
+    def finite_fields(item):
+        for key, raw in item.items():
+            if key in look.DEFAULTS and key not in ("style", "strength_auto", "sparkle_link", "moire_on", "lock_total", "layers"):
+                if raw not in (None, "", "null") and not math.isfinite(float(raw)):
+                    raise ValueError("纹理参数必须为有限数值")
+    if isinstance(value, dict):
+        finite_fields(value)
+        layers = value.get("layers", [])
+        if isinstance(layers, str):
+            layers = json.loads(layers) if layers.strip() else []
+        dumps(layers)
+        if isinstance(layers, list):
+            for layer in layers:
+                if isinstance(layer, dict):
+                    finite_fields(layer)
+    params = look.clean_params(value)
+    dumps(params)  # Reject nonfinite nested layer values before changing a document.
+    return params
 
 
 def project_digest(value):
@@ -242,7 +265,6 @@ def restore(value, assets, art=None, *, preferred="gpu"):
         doc = document_type(np.asarray(art, np.uint8), "ComfyUI.png")
         for name in ("左腿", "右腿"):
             doc.add_region(name)
-        doc.look = dict(look.DEFAULTS)
         return doc
     if art is None:
         with Image.open(io.BytesIO(checked_asset(assets, p.get("asset"), "png"))) as im:
@@ -272,7 +294,7 @@ def restore(value, assets, art=None, *, preferred="gpu"):
     if erased:
         erased = points(np.asarray(erased).ravel().tolist(), w, h, 1).tolist()
     sparkle = unpack(p["sparkle"], w, h, False) if p.get("sparkle") is not None else None
-    params = look.clean_params(p["look"]) if p.get("look") is not None else None
+    params = clean_look(p["look"]) if p.get("look") is not None else None
     doc = document_type.from_snapshot(np.asarray(art, np.uint8), str(p.get("name", "ComfyUI.png"))[:180], None,
                                  regions, strokes, sparkle, params, dividers, erased,
                                  p.get("color_exclude", True), p.get("guides_saved", False))
@@ -310,7 +332,7 @@ class Preferences:
         out = []
         for name, p in self.read().get("presets", {}).items():
             try:
-                p = look.clean_params(p)
+                p = clean_look(p)
             except (ValueError, TypeError):
                 p = None
             out.append({"name": name, "params": p})
@@ -320,9 +342,7 @@ class Preferences:
         name = name.strip() if isinstance(name, str) else ""
         if not 1 <= len(name) <= 40 or not name.isprintable():
             raise ValueError("预设名称需为 1–40 个可显示字符")
-        params = look.clean_params(params)
-        if params["strength_auto"]:
-            params["strength"] = look.DEFAULTS["strength"]
+        params = preset_codec.snapshot(clean_look(params))
         with _settings_lock:
             data = self.read()
             presets = dict(data.get("presets", {}))
@@ -332,6 +352,42 @@ class Preferences:
             data["presets"] = presets
             atomic_json(self.path, data)
         return self.presets()
+
+    def export_preset(self, name):
+        for item in self.presets():
+            if item["name"] == name:
+                if item["params"] is None:
+                    raise ValueError("这个预设读不了，请保留原记录")
+                data = {"format": preset_codec.FORMAT, "version": preset_codec.VERSION,
+                        "name": name, "params": preset_codec.snapshot(item["params"])}
+                return preset_codec.file_name(name), dumps(data) + "\n"
+        raise ValueError("找不到这个预设")
+
+    def import_preset(self, text, filename):
+        if not isinstance(text, str) or len(text.encode('utf8')) > preset_codec.MAX_FILE:
+            raise ValueError("预设文件须为不超过 256 KiB 的 UTF-8 JSON")
+        data = json.loads(text.removeprefix('\ufeff'))
+        if (not isinstance(data, dict) or data.get("format") != preset_codec.FORMAT
+                or not isinstance(data.get("params"), dict)):
+            raise ValueError("这不是预设文件")
+        version = data.get("version")
+        if type(version) is not int or not 1 <= version <= preset_codec.VERSION:
+            raise ValueError("预设格式版本无效或来自更新版本")
+        if not isinstance(filename, str) or not filename or len(filename) > 255:
+            raise ValueError("预设文件名无效")
+        filename = re.split(r"[/\\]", filename)[-1]
+        name = preset_codec._imported_name(data.get("name"), filename)
+        params = preset_codec.snapshot(clean_look(data["params"]))
+        with _settings_lock:
+            stored = self.read()
+            entries = dict(stored.get("presets", {}))
+            if len(entries) >= 256:
+                raise ValueError("预设最多 256 个")
+            final = preset_codec._free_name(name, entries)
+            entries[final] = params
+            stored["presets"] = entries
+            atomic_json(self.path, stored)
+        return {"presets": self.presets(), "imported": final, "renamed": final != name}
 
     def delete_preset(self, name):
         with _settings_lock:
