@@ -1,10 +1,10 @@
 """Request-local translation without the standalone application's settings files."""
 import contextvars
 import json
-from pathlib import Path
+from . import SOURCE_ROOT
 
 language = contextvars.ContextVar("stocking_language", default="zh")
-EN = json.loads((Path(__file__).parent / "static/i18n/en.json").read_text(encoding="utf-8"))
+EN = json.loads((SOURCE_ROOT / "static/i18n/en.json").read_text(encoding="utf-8"))
 
 
 def tr(text, **params):

@@ -93,6 +93,7 @@ export function createTextInserter(adapter) {
         try {
             await Promise.resolve(); ensure();
             const spec = typeof request === 'string' ? {text:request} : request || {};
+            spec.validateCurrent?.();
             const text = String(spec.text ?? '');
             if (!text.trim()) return {status:'empty'};
             const current = String(read() ?? ''), action = spec.action || 'append_end';

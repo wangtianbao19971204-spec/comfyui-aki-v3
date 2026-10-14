@@ -17,7 +17,9 @@
 
 选区完成后在 100% 检查完整袜体、袜口、足部和交叉遮挡处，分别标注两腿并修掉衣物／背景误选。局部多边形只能用来检查算法，不能当作完整成品。油光尤其依赖真实轮廓与走向，错误的直线分区会形成不自然接缝。
 
-当前来源为上游 `f74c8ac`，包含作者新增的摩尔纹和新版油光。摩尔纹默认关闭；开启后可调强度和面积，需要内置或外接深度，缺深度时会明确提示并阻止导出／执行。旧工作流未保存这些参数时保持关闭。新版油光沿求解器识别的遮挡连接延续高光。
+当前来源为上游 `e72a262`，包含作者新增的摩尔纹和新版油光。摩尔纹默认关闭；开启后可调强度和面积，需要内置或外接深度，缺深度时会明确提示并阻止导出／执行。旧工作流未保存这些参数时保持关闭。新版油光沿求解器识别的遮挡连接延续高光。
+
+2026-10-11 独立包整合验证：78 项 Python（含实际 CUDA）、17 项前端、51 项 CPU HTTP 对照通过；三张真实图六样式的 CPU 像素与求解字段均与固定上游一致。GPU 样例最大单通道差异 9/255，局部检查未见明显结构变化；要求精确对照时选择 CPU。隔离实页已验证设备切换、真实点选／深度、关闭重开及导航离开后的缓存清空，草稿和计算完成的深度保留。
 
 导出通过浏览器下载成品 PNG、仅丝袜透明 PNG、丝袜引导 PSD。重开 PSD 可恢复原图、部位、走向、隔开线和手绘“亮点”层；纹理参数另存预设／工作流。支持中英切换。完整编辑器单图处理，最多 2400 万像素、32 部位、24 MiB 编辑数据，同时最多 4 个编辑器。改变输入或工作流后，旧编辑器会阻止过期数据覆盖。
 
@@ -60,3 +62,12 @@
 白色屈腿、黑色交叉腿、近黑站姿已用现有图片对照；红／蓝／紫和遮挡／折叠另有合成控制。纯黑无织纹、过密淡出和小图深度墙漏检仍是边界，颜色控制通过不等于所有真实彩丝图片已验收。完整功能表与验收范围见技术说明。
 
 本仓唯一源码位置为 `snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/`。测试、数据契约、隔离验收及部署状态见[技术说明](../../../../../docs/technical/runtime/stocking-texture.md)。插件源码入库不等于生产启用。
+
+
+## Storage and retention
+
+`ComfyUI/user/<current-user>/stocking_texture/exports/` and `drafts/` are temporary storage. Creating an editor session removes adapter-owned files older than 7 days unless any open session references them. Recently written files and a draft currently being reopened are retained. Set `STOCKING_STUDIO_RETENTION_DAYS` before starting ComfyUI to change the number of days; `0` disables cleanup. Only direct PNG/PSD exports and JSON drafts are considered; unknown files and subdirectories are preserved. Preferences/presets are never expired.
+
+`ComfyUI/input/stocking_studio/assets/` contains SHA256-named original images and depth arrays referenced by saved workflow JSON. **Assets are never deleted automatically.** Back up this directory together with workflows, and use the folder's Properties to inspect its size. For manual cleanup, first close the editors, retain a backup, and check every workflow and draft you intend to keep for `asset` and `depth_asset` references. Move only confirmed unreferenced files to a recoverable archive; do not clear the folder merely because an editor session ended. Guide PSD is an additional portable export, not a replacement for all workflow settings.
+
+编辑器 iframe 同时允许 scripts 与 same-origin，承载同源自有代码；它不构成不可信代码的安全沙箱。

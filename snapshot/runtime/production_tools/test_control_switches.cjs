@@ -31,7 +31,7 @@ const selected = node => {
 };
 const mode = (node, name) => node.widgets.find(widget => widget.name === name).value;
 const files = ['UAP统一生产工作台_v2.json', '生产套件_01_Anima原版_LoRA生产_v2.json', '生产套件_02_Anima2.9B_动漫生产_v2.json', '生产套件_03_Krea2_一体化生产_v2.json'];
-let cases = 0;
+let cases = 0, eraseCycles = 0;
 for (const folder of ['ComfyUI/user/default/workflows', 'production_tools/templates']) for (const file of files) {
     const data = read(path.join(runtime, folder, file));
     for (const id of file.startsWith('UAP') ? ['a1', 'a29', 'k2'] : [null]) {
@@ -95,6 +95,21 @@ for (const folder of ['ComfyUI/user/default/workflows', 'production_tools/templa
         if (branch) for (const node of scope.nodes.filter(node => [scope.owner, scope.pose, scope.model, scope.apply, scope.loader, scope.compact].includes(node)))
             assert.equal(branch.modes[node.id], node.mode, 'Branch round-trip restores current modes, including string IDs');
         assert.equal(JSON.stringify([graph.links, ...graph._nodes.filter(node => node.subgraph).map(node => node.subgraph.links)]), links, 'Buttons never rewire graphs');
+        const protectedValues = () => {
+            const flatten = graph => graph._nodes.flatMap(node => [[node.id, node.type, node.inputs, node.outputs, node.widgets_values,
+                node.widgets.filter(widget => !['select', 'mode', 'select_override'].includes(widget.name))], ...(node.subgraph ? flatten(node.subgraph) : [])]);
+            return JSON.stringify([graph.links, flatten(graph)]);
+        };
+        const originalValues = protectedValues();
+        for (let round = 0; round < 100; round++) {
+            context.setErase(app, scope, true);
+            assert.equal(context.controlState(scope).erase, true);
+            context.setErase(app, scope, false);
+            assert.equal(context.controlState(scope).erase, false);
+            assert.equal(context.controlState(scope).enabled, true, 'Erasing off keeps reference control enabled');
+            eraseCycles++;
+        }
+        assert.equal(protectedValues(), originalValues, 'Repeated erasing never changes links, prompts, models, inputs or mask files');
         // A linked selector is rejected before any mode or widget is changed.
         scope.model.inputs.push({name: 'select_override', link: 999});
         const snapshot = scope.nodes.map(node => [node.mode, node.widgets.map(widget => widget.value)]);
@@ -104,7 +119,7 @@ for (const folder of ['ComfyUI/user/default/workflows', 'production_tools/templa
     }
 }
 assert.equal(context.controlScope({_nodes: [], getNodeById() {}}), null);
-console.log(`PASS: ${cases} real workflow scopes; control/source/erase, branch persistence, strict routing, linked selectors and zero rewiring.`);
+console.log(`PASS: ${cases} real workflow scopes; control/source/erase, branch persistence, strict routing, linked selectors, zero rewiring and ${eraseCycles} erase on/off cycles.`);
 
 class Element {
     constructor(tag) {this.tagName = tag; this.children = []; this.attributes = {}; this.dataset = {}; this.style = {};}
@@ -113,33 +128,83 @@ class Element {
     remove() {this.removed = true;}
 }
 const all = node => [node, ...node.children.flatMap(all)];
-async function ui() {
-    let alpha = 255, decode;
-    const document = {createElement: tag => tag === 'canvas' ? {getContext: () => ({drawImage() {}, getImageData: () => ({data: [0, 0, 0, alpha]})})} : new Element(tag)};
-    const dom = vm.createContext({document, URLSearchParams, api: {apiURL: value => value}, Image: class {constructor() {this.naturalWidth = this.naturalHeight = 1;} decode() {return decode ? new Promise(resolve => {decode = resolve;}) : Promise.resolve();}}, commitWidget: (_, node, widget, value) => {widget.value = value;}});
+function controlUi(uap = false) {
+    const image = {alpha: 255, delayed: false, decodes: 0};
+    const document = {createElement: tag => tag === 'canvas' ? {getContext: () => ({drawImage() {}, getImageData: () => ({data: [0, 0, 0, image.alpha]})})} : new Element(tag)};
+    const dom = vm.createContext({document, URLSearchParams, api: {apiURL: value => value}, Image: class {constructor() {this.naturalWidth = this.naturalHeight = 1;} decode() {image.decodes++; return image.delayed ? new Promise((resolve, reject) => {image.resolve = resolve; image.reject = reject;}) : Promise.resolve();}}, commitWidget: (_, node, widget, value) => {widget.value = value;}});
     vm.runInContext(source, dom);
-    const graph = load(read(path.join(runtime, 'ComfyUI/user/default/workflows', files[1])));
-    let selected, command;
-    const app = {graph, canvas: {deselectAllNodes() {}, selectNode(node) {selected = node;}}, extensionManager: {command: {async execute(name) {command = name;}}}};
-    const host = new Element('div'), panel = dom.mountControlSwitches(host, app), scope = dom.controlScope(graph);
+    const graph = load(read(path.join(runtime, 'ComfyUI/user/default/workflows', files[uap ? 0 : 1])));
+    const branch = uap ? graph.extra.uap_workbench.branches.find(branch => branch.id === 'a1') : null;
+    if (branch) graph.extra.uap_workbench.activeBranch = branch.id;
+    const editor = {};
+    const app = {graph, canvas: {deselectAllNodes() {}, selectNode(node) {editor.selected = node;}}, extensionManager: {command: {async execute(name) {editor.command = name;}}}};
+    const host = new Element('div'), panel = dom.mountControlSwitches(host, app, branch), scope = dom.controlScope(graph, branch);
     const input = label => all(host).find(node => node.attributes['aria-label'] === label);
     const erase = input('启用擦线'), enabled = input('启用控制');
+    const status = () => all(host).find(node => node.attributes.role === 'status').textContent || '';
+    return {image, dom, graph, branch, editor, app, host, panel, scope, input, erase, enabled, status};
+}
+async function ui() {
+    const {image, editor, host, panel, scope, erase, enabled, status} = controlUi();
     assert.equal(erase.checked, false, 'Disabled control does not show erasing as active');
     erase.checked = true; await erase.onchange();
     assert.equal(scope.owner.mode, 2, 'RGB/no selection cannot enable control through erasing');
-    assert.match(all(host).find(node => node.attributes.role === 'status').textContent, /还没有擦线区域/);
-    alpha = 0; erase.checked = true; await erase.onchange();
+    assert.match(status(), /还没有擦线区域/);
+    image.alpha = 0; erase.checked = true; await erase.onchange();
     assert.equal(scope.owner.mode, 0); assert.equal(erase.checked, true);
     enabled.checked = false; enabled.onchange(); assert.equal(erase.checked, false);
     const edit = all(host).find(node => node.textContent === '画擦线区域'); await edit.onclick();
-    assert.equal(selected, scope.mask); assert.equal(command, 'Comfy.MaskEditor.OpenMaskEditor');
+    assert.equal(editor.selected, scope.mask); assert.equal(editor.command, 'Comfy.MaskEditor.OpenMaskEditor');
     // A real LGraph removal clears node.graph. It must invalidate even an in-flight mask check.
-    decode = true; erase.checked = true; const pending = erase.onchange();
+    image.delayed = true; erase.checked = true; const pending = erase.onchange();
     scope.mask.graph._nodes = scope.mask.graph._nodes.filter(node => node !== scope.mask); scope.mask.graph = null;
-    decode(); await pending; panel.sync();
+    image.resolve(); await pending; panel.sync();
     assert.equal(scope.owner.mode, 2); assert.equal(edit.disabled, true); assert.equal(erase.disabled, true);
     panel.dispose(); assert.equal(host.children[0].removed, true);
     console.log('PASS: empty alpha guard, automatic control enable, direct editor, deleted mask during async check and disposal.');
+
+    for (const kind of ['empty', 'linked', 'unreadable']) {
+        const h = controlUi();
+        if (kind === 'empty') h.scope.mask.widgets[0].value = '';
+        if (kind === 'linked') h.scope.mask.inputs.push({name: 'image', link: 999});
+        if (kind === 'unreadable') h.image.delayed = true;
+        h.erase.checked = true; const pending = h.erase.onchange();
+        if (kind === 'unreadable') h.image.reject(new Error('Fixture missing image'));
+        await pending;
+        assert.equal(h.scope.owner.mode, 2, `${kind}: failed input cannot enable control`);
+        assert.equal(h.erase.checked, false); assert.equal(h.erase.disabled, false);
+        assert.match(h.status(), kind === 'empty' ? /先画/ : kind === 'linked' ? /其他输入/ : /无法读取/);
+        if (kind !== 'unreadable') assert.equal(h.image.decodes, 0);
+    }
+    {
+        const h = controlUi(); h.image.alpha = 0; h.image.delayed = true;
+        h.erase.checked = true; const pending = h.erase.onchange();
+        h.erase.checked = true; await h.erase.onchange();
+        assert.equal(h.image.decodes, 1, 'Repeated clicks do not launch competing image reads');
+        h.image.resolve(); await pending; assert.equal(h.scope.owner.mode, 0); assert.equal(h.erase.checked, true);
+    }
+    for (const kind of ['mask-value', 'branch', 'root-graph', 'dispose', 'deleted-model']) {
+        const h = controlUi(kind === 'branch'); h.image.alpha = 0; h.image.delayed = true;
+        h.erase.checked = true; const pending = h.erase.onchange();
+        if (kind === 'mask-value') h.scope.mask.widgets[0].value = 'different mask.png';
+        if (kind === 'branch') h.graph.extra.uap_workbench.activeBranch = 'a29';
+        if (kind === 'root-graph') h.app.graph = {_nodes: []};
+        if (kind === 'dispose') h.panel.dispose();
+        if (kind === 'deleted-model') {h.graph._nodes = h.graph._nodes.filter(node => node !== h.scope.model); h.scope.model.graph = null;}
+        h.image.resolve(); await pending;
+        assert.equal(h.scope.owner.mode, 2, `${kind}: old async result cannot change the workflow`);
+        if (kind === 'dispose') {
+            h.enabled.checked = true; h.enabled.onchange();
+            h.input('控制来源').value = 'pose'; h.input('控制来源').onchange();
+            assert.equal(h.scope.owner.mode, 2); assert.equal(h.scope.pose.mode, 2);
+        } else assert.equal(h.erase.disabled, kind !== 'mask-value');
+    }
+    for (const role of ['reference', 'preprocessor', 'apply', 'loader', 'advanced']) {
+        const h = controlUi(), id = h.scope.owner.properties.anima_control_roles[role];
+        h.scope.owner.subgraph._nodes = h.scope.owner.subgraph._nodes.filter(node => String(node.id) !== String(id));
+        assert.equal(h.dom.controlScope(h.graph), null, `Missing required ${role} cannot mount a partial panel`);
+    }
+    console.log('PASS: empty/linked/unreadable masks, duplicate clicks, stale filename/branch/graph/model, disposed handlers and missing roles.');
 }
 ui().catch(error => {console.error(error); process.exitCode = 1;});
 

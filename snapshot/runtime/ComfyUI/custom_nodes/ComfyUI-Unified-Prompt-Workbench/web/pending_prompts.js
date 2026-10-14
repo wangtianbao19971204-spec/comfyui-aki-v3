@@ -64,13 +64,29 @@ export function validateBrowserPendingResource(resource){return browserParts(res
 
 export function createPendingPrompts({element,button,insertionOptions,report,onCount,openSource,draft=[]}) {
     const items=draft;
-    let host=null,controls=null,actions=null,targetNote=null,fullPreview=null,scope='all',generation=0,previewVersion=0,previewWriter=null,previewDirection='',previewBefore=null;
+    let host=null,controls=null,actions=null,targetNote=null,fullPreview=null,scope='all',generation=0,viewVersion=0,previewVersion=0,previewWriter=null,previewDirection='',previewBefore=null;
+    const capturePanel=()=>{
+        const current=host,version=viewVersion;
+        return ()=>{if(current&&(host!==current||!current.isConnected||version!==viewVersion))throw new Error('待用面板已关闭或切换，请从当前页面重新应用。');};
+    };
     const providers=['library','tag','loras','embeddings','gallery','anima','browser'];
-    if(!items.length)try{const saved=JSON.parse(sessionStorage.getItem('uw-pending-draft')||'[]');if(Array.isArray(saved))items.push(...saved.filter(item=>providers.includes(item.provider)&&item.id));}catch{}
+    if(!items.length)try{const saved=JSON.parse(sessionStorage.getItem('uw-pending-draft')||'[]');if(Array.isArray(saved))items.push(...saved);else report('无效的待用草稿未载入，请从原资料重新加入。');}catch{report('会话草稿无法读取，请从原资料重新加入；当前页面仍可使用。');}
     const browserSeen=new Set();
-    for(let index=0;index<items.length;index++)if(items[index].provider==='browser'){
-        try{const item=browserItem(items[index],true),key=item.id+':'+item.usage;if(browserSeen.has(key)){items.splice(index--,1);continue;}browserSeen.add(key);items[index]=item;}
-        catch{items.splice(index--,1);report('无效的网页待用草稿未载入，请重新发送原网页提示词。');}
+    for(let index=0;index<items.length;index++){
+        const item=items[index];
+        try{
+            if(!item||typeof item!=='object'||Array.isArray(item)||!providers.includes(item.provider)||!item.id)throw new Error('draft');
+            if(item.provider==='browser'){
+                const restored=browserItem(item,true),key=restored.id+':'+restored.usage;if(browserSeen.has(key)){items.splice(index--,1);continue;}browserSeen.add(key);items[index]=restored;
+            }else{
+                const weight=Object.hasOwn(item,'weight')?item.weight:1;
+                if(!['string','number'].includes(typeof item.id)||(typeof item.id==='number'&&!Number.isFinite(item.id))||typeof item.text!=='string'||
+                    !Number.isFinite(weight)||weight<0||weight>3||(item.usage!=null&&typeof item.usage!=='string')||
+                    (item.sourceText!=null&&typeof item.sourceText!=='string')||
+                    (item.splitDraft!=null&&(!item.splitDraft||typeof item.splitDraft!=='object'||Array.isArray(item.splitDraft)||typeof item.splitDraft.positive!=='string'||typeof item.splitDraft.negative!=='string')))throw new Error('draft');
+                items[index]={...item,weight,usage:item.usage||'target',enabled:item.enabled!==false,modified:item.modified===true};
+            }
+        }catch{items.splice(index--,1);report(item?.provider==='browser'?'无效的网页待用草稿未载入，请重新发送原网页提示词。':'无效的待用草稿未载入，请从原资料重新加入。');}
     }
     const persist=()=>{generation++;onCount(items.length);try{sessionStorage.setItem('uw-pending-draft',JSON.stringify(items));}catch{report('浏览器无法保存会话草稿；当前页面内的内容仍然保留。');}};
     onCount(items.length);
@@ -151,7 +167,7 @@ export function createPendingPrompts({element,button,insertionOptions,report,onC
         report(added?`已加入 ${added} 条待用${duplicate?`；${duplicate} 条已存在，未重复加入`:''}。`:`${duplicate} 条资料已在待用列表，未重复加入。`);
         return {added,duplicate};
     };
-    let preparedItems=[];
+    let preparedItems=[],preparedGuard=null;
     async function recordApplied(){
         const ids=[...new Set(preparedItems.filter(item=>item.provider==='library').map(item=>item.id))];
         if(!ids.length)return;
@@ -178,14 +194,17 @@ export function createPendingPrompts({element,button,insertionOptions,report,onC
         if(failed)report('已应用到目标，但部分最近使用记录未保存。请检查服务连接；无需重复插入正文。');
     }
     async function prepare(direction){
-        preparedItems=[];
+        preparedItems=[];preparedGuard=null;
         if(!items.length)throw new Error('待用列表为空，请从资料卡片加入。');
-        const selected=items.filter(included),version=generation;
+        const selected=items.filter(included),version=generation,validatePanel=capturePanel();
+        validatePanel();
         if(!selected.length)throw new Error('这个方向没有待用内容。');
         if(selected.some(item=>item.splitDraft))throw new Error('请先保留或取消正在编辑的拆分，再应用待用内容。');
         if(selected.some(item=>!item.text.trim()))throw new Error('待用内容中有空白正文，请填写或移除后再应用。');
         const sharedReads=new Map(),latest=await Promise.all(selected.map(item=>read(item,sharedReads,selected)));let changed=false;
+        validatePanel();
         if(version!==generation)throw new Error('待用内容或方向已变化，请核对预览后重新应用。');
+        if(latest.some(value=>!value||typeof value.text!=='string'||typeof value.usage!=='string'))throw new Error('原资料返回格式异常，待用草稿已保留；请检查服务后重试。');
         latest.forEach((value,i)=>{
             const item=selected[i];
             if(item.provider!=='browser'&&!item.modified && value.text!==item.text){item.text=value.text;changed=true;}
@@ -196,6 +215,7 @@ export function createPendingPrompts({element,button,insertionOptions,report,onC
         if(changed){persist();render(host);throw new Error('原资料已更新，请核对预览；手动拆分和临时编辑的内容保留，再次应用前请检查。');}
         if(selected.some(item=>item.usage!=='target'&&item.usage!==direction))throw new Error('待用资料的正负向与目标不同，请选择对应方向分开应用；混合正文需要先拆分。');
         preparedItems=selected.map(item=>({provider:item.provider,id:item.id}));
+        preparedGuard=()=>{validatePanel();if(version!==generation)throw new Error('待用内容或方向已变化，请核对预览后重新应用。');};
         return compose();
     }
     async function updateFullPreview(){
@@ -220,12 +240,22 @@ export function createPendingPrompts({element,button,insertionOptions,report,onC
     }
     function refreshTarget(action=null){
         if(!actions?.isConnected)return;
+        viewVersion++;
         actions.replaceChildren();controls=null;previewBefore=null;
         const options=insertionOptions();
-        previewWriter=options.onInsert||null;previewDirection=options.targetDirection||'';
+        const validatePanel=capturePanel(),onInsert=options.onInsert&&Object.assign(request=>{
+            const validatePrepared=preparedGuard,validateCurrent=()=>{validatePanel();validatePrepared?.();};
+            validateCurrent();return options.onInsert({...request,validateCurrent});
+        },{supportsActions:options.onInsert.supportsActions,defaultAction:options.onInsert.defaultAction});
+        if(onInsert){
+            if(options.onInsert.preview)onInsert.preview=request=>{validatePanel();return options.onInsert.preview({...request,validateCurrent:validatePanel});};
+            if(options.onInsert.undoLast)onInsert.undoLast=()=>{try{validatePanel();return options.onInsert.undoLast();}catch{return false;}};
+            Object.defineProperty(onInsert,'onUndoInvalidated',{set:value=>{options.onInsert.onUndoInvalidated=value;}});
+        }
+        previewWriter=onInsert||null;previewDirection=options.targetDirection||'';
         targetNote.textContent=options.onInsert?'将应用到：'+options.targetLabel+(options.targetDirection==='negative'?' · 负向':' · 正向'):'请在底栏选择目标并确认正负向。';
         if(options.onInsert){
-            controls=mountInsertionActions(actions,options.onInsert,()=>prepare(options.targetDirection),report,recordApplied,()=>previewBefore);
+            controls=mountInsertionActions(actions,onInsert,()=>prepare(options.targetDirection),report,recordApplied,()=>previewBefore);
             if(options.onInsert.supportsActions?.includes(action)){
                 controls.picker.value=action;
                 controls.picker.dispatchEvent(new Event('change'));
@@ -242,6 +272,7 @@ export function createPendingPrompts({element,button,insertionOptions,report,onC
     }
     function render(parent,focus=null){
         const action=parent===host&&host?.isConnected?controls?.picker.value:null;
+        viewVersion++;
         host=parent;if(!host?.isConnected)return;host.replaceChildren();controls=null;actions=null;targetNote=null;fullPreview=null;
         element('p','会话草稿自动保留，重新打开工作台可继续。排序、权重与正文编辑只影响本次使用。',host);
         element('small','权重会写为 (内容:数值)；不同分支的编码器可能按原文处理，请在应用前核对完整字段。',host);

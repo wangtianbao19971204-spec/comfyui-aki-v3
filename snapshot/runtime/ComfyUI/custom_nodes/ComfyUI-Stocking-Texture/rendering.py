@@ -23,7 +23,7 @@ def render_scene(scene, params, dark_adapt):
         if q["style"] in ("knit", "loops"):
             draw = knit.render_thread if q["style"] == "knit" else knit.render_loops
             out, _ = draw(scene.src, scene.R, scene.V / p + 0.37 * scene.R,
-                          scene.A / (p * info["wale_ratio"]), scene.alpha, scene.wide_luma(),
+                          scene.A / (p * info["wale_ratio"]), scene.alpha, scene.region_tone(),
                           amp=(0.10 if q["style"] == "knit" else 0.12) * strength, **common)
         else:
             theta = np.deg2rad(q["tilt"])

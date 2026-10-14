@@ -1,0 +1,822 @@
+{
+  "schema": 1,
+  "generated_at": "2026-10-14T00:45:56.096248+00:00",
+  "public_state": "pre_merge_snapshot",
+  "title": "ComfyUI 工作流优化与验收审计摘要",
+  "scope_counts": {
+    "workflow_files": 44,
+    "production_files": 25,
+    "historical_or_metadata_files": 19,
+    "unique_production_filenames": 13,
+    "technical_features": 20,
+    "configured_production_plugins": 26,
+    "configured_workbench_modules": 5,
+    "registered_node_types_observed": 1946
+  },
+  "counting_rule": "各测试批次与方法／脚本组／场景／往返单位分开，交叠项不相加。工作流及预处理按唯一用例 ID 去重。",
+  "native_closures": {
+    "planned": 51,
+    "executed": 49,
+    "passed": 49,
+    "controlmap_passed": 6,
+    "other_closures_passed": 43,
+    "dedicated_entry_count": 2,
+    "failed": 0,
+    "unverified": 0,
+    "diffusion_sampling_count_claimed": false
+  },
+  "dedicated_entries": [
+    {
+      "case": "v2-standalone-12",
+      "tool": "丝袜纹理编辑工具",
+      "classification": "dedicated_entry",
+      "execution_failed": false,
+      "boundary": "通用 SaveImage 执行器不适用，使用独立专项入口。"
+    },
+    {
+      "case": "v2-standalone-4",
+      "tool": "模型显存释放工具",
+      "classification": "dedicated_entry",
+      "execution_failed": false,
+      "boundary": "通用 SaveImage 执行器不适用，使用独立专项入口。"
+    }
+  ],
+  "native_non_sampling_saves": {
+    "case_count": 1,
+    "executions_observed": 2,
+    "included_in_workflow_closure_count": false
+  },
+  "test_batches": [
+    {
+      "id": "maintenance-tests.external-temp.log",
+      "title": "维护主测试集",
+      "status": "passed",
+      "collected": 703,
+      "passed": 703,
+      "skipped": 0
+    },
+    {
+      "id": "workspace-tests.external-temp.log",
+      "title": "工作区模块复核",
+      "status": "passed",
+      "collected": 20,
+      "passed": 20,
+      "skipped": 0
+    },
+    {
+      "id": "frontend-13",
+      "title": "既有前端／工作流脚本",
+      "status": "passed",
+      "collected": 13,
+      "passed": 13,
+      "unit": "脚本组"
+    },
+    {
+      "id": "new-fault-scenarios",
+      "title": "新增提交／待用异常场景",
+      "status": "passed",
+      "collected": 29,
+      "unit": "场景"
+    },
+    {
+      "id": "erase-cycles",
+      "title": "擦线开关往返",
+      "status": "passed",
+      "collected": 1200,
+      "unit": "往返"
+    },
+    {
+      "id": "stocking-pinned-cpu.root.log",
+      "title": "Stocking 恢复后 CPU 补测",
+      "status": "passed",
+      "collected": 78,
+      "passed": 76,
+      "skipped": 2
+    },
+    {
+      "id": "stocking-cuda.root.log",
+      "title": "Stocking 单独 CUDA 补测",
+      "status": "passed",
+      "collected": 2,
+      "passed": 2,
+      "skipped": 0
+    },
+    {
+      "id": "stocking-pinned-js.root.log",
+      "title": "Stocking 恢复后前端补测",
+      "status": "passed",
+      "collected": 17,
+      "passed": 17,
+      "skipped": 0
+    },
+    {
+      "id": "stocking-exporter.root.log",
+      "title": "Stocking 导出合同",
+      "status": "passed",
+      "collected": 6,
+      "passed": 6,
+      "skipped": 0
+    },
+    {
+      "id": "plugin-groups",
+      "title": "初检插件 CPU／接口夹具组",
+      "status": "passed",
+      "collected": 13,
+      "unit": "组"
+    }
+  ],
+  "repairs": [
+    {
+      "id": "layout",
+      "title": "Krea2 控制节点布局归属",
+      "status": "fixed"
+    },
+    {
+      "id": "mixed-id",
+      "title": "合并／导出把字符串 ID 误报为缺失",
+      "status": "fixed"
+    },
+    {
+      "id": "queue",
+      "title": "原生缓冲提交与回执归属",
+      "status": "fixed"
+    },
+    {
+      "id": "pending",
+      "title": "坏缓存、异步资料与目标隔离",
+      "status": "fixed"
+    },
+    {
+      "id": "source-recovery",
+      "title": "Stocking 固定源码与导出器恢复",
+      "status": "fixed"
+    }
+  ],
+  "stocking": [
+    {
+      "kind": "browser",
+      "status": "passed",
+      "checks_total": 8,
+      "checks_passed": 8,
+      "real_browser_verified": true,
+      "observations": {}
+    },
+    {
+      "kind": "gpu_http",
+      "status": "passed",
+      "checks_total": 30,
+      "checks_passed": 30,
+      "real_browser_verified": false,
+      "observations": {
+        "real_sam_and_depth": true,
+        "embedding_cache_reused": true,
+        "last_editor_plugin_cache_release": true,
+        "model_downloads": false,
+        "prompt_submissions": false,
+        "author_demo_visual_quality_verified": false
+      }
+    },
+    {
+      "kind": "prepare_http",
+      "status": "passed",
+      "checks_total": 59,
+      "checks_passed": 59,
+      "real_browser_verified": false,
+      "observations": {
+        "models_executed": false,
+        "model_downloads": false,
+        "prompt_submissions": false,
+        "author_demo_visual_quality_verified": false
+      }
+    },
+    {
+      "kind": "queue_http",
+      "status": "passed",
+      "checks_total": 0,
+      "checks_passed": 0,
+      "real_browser_verified": false,
+      "observations": {
+        "candidate_cycle_undo_redo": true,
+        "apply_ack_reopen": true
+      }
+    }
+  ],
+  "control_map_contracts": [
+    {
+      "family": "a1",
+      "status": "passed",
+      "metrics": {
+        "output_wh": [
+          1024,
+          1365
+        ],
+        "effective_mask": {
+          "source_wh": [
+            768,
+            1024
+          ],
+          "effective_wh": [
+            1024,
+            1365
+          ],
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "zero_pixels": 1326208,
+          "one_pixels": 69905,
+          "partial_pixels": 1647,
+          "positive_pixels": 71552,
+          "positive_bbox_xyxy_exclusive": [
+            203,
+            750,
+            411,
+            1094
+          ]
+        },
+        "domains": {
+          "outside_mask_zero": {
+            "pixels": 1326208,
+            "changed_pixels": 0,
+            "unchanged_pixels": 1326208,
+            "maximum_channel_difference_255": 0,
+            "mean_absolute_channel_difference_255": 0.0,
+            "after_black_pixels": 45653,
+            "before_black_pixels": 45653
+          },
+          "inside_mask_positive": {
+            "pixels": 71552,
+            "changed_pixels": 71552,
+            "unchanged_pixels": 0,
+            "maximum_channel_difference_255": 231,
+            "mean_absolute_channel_difference_255": 173.18557133273703,
+            "after_black_pixels": 69905,
+            "before_black_pixels": 0,
+            "changed_bbox_xyxy_exclusive": [
+              203,
+              750,
+              411,
+              1094
+            ]
+          },
+          "fully_erased_mask_one": {
+            "pixels": 69905,
+            "changed_pixels": 69905,
+            "unchanged_pixels": 0,
+            "maximum_channel_difference_255": 231,
+            "mean_absolute_channel_difference_255": 175.16458050211,
+            "after_black_pixels": 69905,
+            "before_black_pixels": 0,
+            "changed_bbox_xyxy_exclusive": [
+              205,
+              751,
+              410,
+              1092
+            ]
+          },
+          "bilinear_boundary": {
+            "pixels": 1647,
+            "changed_pixels": 1647,
+            "unchanged_pixels": 0,
+            "maximum_channel_difference_255": 205,
+            "mean_absolute_channel_difference_255": 89.18882817243473,
+            "after_black_pixels": 0,
+            "before_black_pixels": 0,
+            "changed_bbox_xyxy_exclusive": [
+              203,
+              750,
+              411,
+              1094
+            ]
+          }
+        },
+        "checks": {
+          "same_preprocessing": true,
+          "outside_unchanged": true,
+          "inside_has_real_changes": true,
+          "full_mask_is_black": true,
+          "active_channels_never_brighter": true
+        }
+      }
+    },
+    {
+      "family": "a29",
+      "status": "passed",
+      "metrics": {
+        "output_wh": [
+          1024,
+          1365
+        ],
+        "effective_mask": {
+          "source_wh": [
+            768,
+            1024
+          ],
+          "effective_wh": [
+            1024,
+            1365
+          ],
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "zero_pixels": 1326208,
+          "one_pixels": 69905,
+          "partial_pixels": 1647,
+          "positive_pixels": 71552,
+          "positive_bbox_xyxy_exclusive": [
+            203,
+            750,
+            411,
+            1094
+          ]
+        },
+        "domains": {
+          "outside_mask_zero": {
+            "pixels": 1326208,
+            "changed_pixels": 0,
+            "unchanged_pixels": 1326208,
+            "maximum_channel_difference_255": 0,
+            "mean_absolute_channel_difference_255": 0.0,
+            "after_black_pixels": 45653,
+            "before_black_pixels": 45653
+          },
+          "inside_mask_positive": {
+            "pixels": 71552,
+            "changed_pixels": 71552,
+            "unchanged_pixels": 0,
+            "maximum_channel_difference_255": 231,
+            "mean_absolute_channel_difference_255": 173.18557133273703,
+            "after_black_pixels": 69905,
+            "before_black_pixels": 0,
+            "changed_bbox_xyxy_exclusive": [
+              203,
+              750,
+              411,
+              1094
+            ]
+          },
+          "fully_erased_mask_one": {
+            "pixels": 69905,
+            "changed_pixels": 69905,
+            "unchanged_pixels": 0,
+            "maximum_channel_difference_255": 231,
+            "mean_absolute_channel_difference_255": 175.16458050211,
+            "after_black_pixels": 69905,
+            "before_black_pixels": 0,
+            "changed_bbox_xyxy_exclusive": [
+              205,
+              751,
+              410,
+              1092
+            ]
+          },
+          "bilinear_boundary": {
+            "pixels": 1647,
+            "changed_pixels": 1647,
+            "unchanged_pixels": 0,
+            "maximum_channel_difference_255": 205,
+            "mean_absolute_channel_difference_255": 89.18882817243473,
+            "after_black_pixels": 0,
+            "before_black_pixels": 0,
+            "changed_bbox_xyxy_exclusive": [
+              203,
+              750,
+              411,
+              1094
+            ]
+          }
+        },
+        "checks": {
+          "same_preprocessing": true,
+          "outside_unchanged": true,
+          "inside_has_real_changes": true,
+          "full_mask_is_black": true,
+          "active_channels_never_brighter": true
+        }
+      }
+    },
+    {
+      "family": "k2",
+      "status": "passed",
+      "metrics": {
+        "output_wh": [
+          1024,
+          1365
+        ],
+        "effective_mask": {
+          "source_wh": [
+            768,
+            1024
+          ],
+          "effective_wh": [
+            1024,
+            1365
+          ],
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "zero_pixels": 1326208,
+          "one_pixels": 69905,
+          "partial_pixels": 1647,
+          "positive_pixels": 71552,
+          "positive_bbox_xyxy_exclusive": [
+            203,
+            750,
+            411,
+            1094
+          ]
+        },
+        "domains": {
+          "outside_mask_zero": {
+            "pixels": 1326208,
+            "changed_pixels": 0,
+            "unchanged_pixels": 1326208,
+            "maximum_channel_difference_255": 0,
+            "mean_absolute_channel_difference_255": 0.0,
+            "after_black_pixels": 405596,
+            "before_black_pixels": 405596
+          },
+          "inside_mask_positive": {
+            "pixels": 71552,
+            "changed_pixels": 65014,
+            "unchanged_pixels": 6538,
+            "maximum_channel_difference_255": 255,
+            "mean_absolute_channel_difference_255": 63.08384112254025,
+            "after_black_pixels": 70283,
+            "before_black_pixels": 6538,
+            "changed_bbox_xyxy_exclusive": [
+              203,
+              750,
+              411,
+              1094
+            ]
+          },
+          "fully_erased_mask_one": {
+            "pixels": 69905,
+            "changed_pixels": 63680,
+            "unchanged_pixels": 6225,
+            "maximum_channel_difference_255": 255,
+            "mean_absolute_channel_difference_255": 63.841441956941566,
+            "after_black_pixels": 69905,
+            "before_black_pixels": 6225,
+            "changed_bbox_xyxy_exclusive": [
+              205,
+              751,
+              410,
+              1092
+            ]
+          },
+          "bilinear_boundary": {
+            "pixels": 1647,
+            "changed_pixels": 1334,
+            "unchanged_pixels": 313,
+            "maximum_channel_difference_255": 236,
+            "mean_absolute_channel_difference_255": 30.92835458409229,
+            "after_black_pixels": 378,
+            "before_black_pixels": 313,
+            "changed_bbox_xyxy_exclusive": [
+              203,
+              750,
+              411,
+              1094
+            ]
+          }
+        },
+        "checks": {
+          "same_preprocessing": true,
+          "outside_unchanged": true,
+          "inside_has_real_changes": true,
+          "full_mask_is_black": true,
+          "active_channels_never_brighter": true
+        }
+      }
+    }
+  ],
+  "ui": [
+    {
+      "case": "buffered-accepted",
+      "status": "passed",
+      "execution_kind": "native_non_sampling",
+      "executions_observed": 2,
+      "workflow_saved": false,
+      "checks": {
+        "exactlyTwoQueueing": true,
+        "exactlyTwoPositiveReceipts": true,
+        "secondQueuedWhileProcessing": true,
+        "observedBufferedWait": true,
+        "onSubmittedOnce": true,
+        "callbackAfterOwnReceipt": true,
+        "bothActionsSettled": true,
+        "nativeDrained": true,
+        "backendDrained": true,
+        "noActionErrors": true,
+        "noObservedExecutionErrors": true
+      }
+    },
+    {
+      "case": "buffered-rejection",
+      "status": "passed",
+      "checks": {}
+    },
+    {
+      "case": "mixed-cache-v2",
+      "status": "passed",
+      "checks": {}
+    },
+    {
+      "case": "mixed-cache",
+      "status": "passed",
+      "checks": {}
+    }
+  ],
+  "strict_backend_negatives": {
+    "collected": 4,
+    "passed": 4,
+    "excluded_harness_attempts": 2
+  },
+  "visual_review": [
+    {
+      "case": "v2-refine-eye-hit",
+      "status": "reviewed_limited",
+      "codes": [
+        "subtle_eye_refinement"
+      ]
+    },
+    {
+      "case": "v2-refine-eye-nohit",
+      "status": "reviewed_limited",
+      "codes": [
+        "nohit_preserved"
+      ]
+    },
+    {
+      "case": "v2-refine-face-hit",
+      "status": "reviewed_limited",
+      "codes": [
+        "localized_refinement"
+      ]
+    },
+    {
+      "case": "v2-refine-face-nohit",
+      "status": "reviewed_limited",
+      "codes": [
+        "nohit_preserved"
+      ]
+    },
+    {
+      "case": "v2-refine-hand-hit",
+      "status": "reviewed_limited",
+      "codes": [
+        "localized_refinement"
+      ]
+    },
+    {
+      "case": "v2-refine-hand-nohit",
+      "status": "reviewed_limited",
+      "codes": [
+        "nohit_preserved"
+      ]
+    },
+    {
+      "case": "v2-uap-a1-erase",
+      "status": "quality_issue",
+      "codes": [
+        "control_erase_artifact"
+      ]
+    },
+    {
+      "case": "v2-uap-a29-erase",
+      "status": "quality_issue",
+      "codes": [
+        "control_erase_artifact"
+      ]
+    },
+    {
+      "case": "v2-uap-ext04-off",
+      "status": "quality_issue",
+      "codes": [
+        "overexposure"
+      ]
+    },
+    {
+      "case": "v2-uap-ext05-off",
+      "status": "quality_issue",
+      "codes": [
+        "blend_boundary"
+      ]
+    },
+    {
+      "case": "v2-uap-ext07-off",
+      "status": "quality_issue",
+      "codes": [
+        "outpaint_seam"
+      ]
+    }
+  ],
+  "limits": [
+    "ext04 编辑图偏亮、ext05 回贴边缘、ext07 扩图接缝、A1/A29 擦线自行车局部伪影仍是遗留质量问题。",
+    "六个细化固定 QA 的局部功能复核通过，不推广为跨输入、解剖正确或普遍更美。眼部改变较轻。",
+    "Stocking 作者完整演示矩阵、真实丝袜材质画质、任意 PSD/PSB 及物理指针／输入法未完成认证。",
+    "历史作者私有样图夹具的 52 项跳过仍不算通过；CPU 批次两项 CUDA 跳过与后续真实 CUDA 通过分别记账。",
+    "1946 仅是观察到的节点类型注册数，未逐个认证全部节点功能。",
+    "短时队列／显存证据不等于长期无泄漏、全部 OOM 恢复或全模型／LoRA 组合稳定。",
+    "最终 HTML 的 PR、部署与整体验收读取 FINAL-STATE.json；本公开提交快照可单列已通过的部署及部署后回执，未创建 PR 与未完成状态保留。"
+  ],
+  "final_state": {
+    "present": false,
+    "pr": {
+      "status": "incomplete"
+    },
+    "deployment": {
+      "status": "deployed",
+      "origin": "deployment_receipts_submission_snapshot"
+    },
+    "final": {
+      "status": "in_progress",
+      "functional_acceptance": "complete",
+      "final_merge_gate": "in_progress"
+    },
+    "gates": {}
+  },
+  "deployment_evidence": {
+    "status": "deployed",
+    "post_deployment_pass": true,
+    "final_state_is_authoritative": true
+  },
+  "evidence": [
+    {
+      "file": "AUDIT/control-fault-tests.json",
+      "sha256": "82352cca6093979df759ef3de0cf2a73a998e31f518f92e1159ab57b16699763",
+      "bytes": 1331
+    },
+    {
+      "file": "AUDIT/controlmap-metrics.json",
+      "sha256": "952f33f6e3e1a4e08a115bb9cbe2c3c416ac0097c292136a35705eaf76cc06d0",
+      "bytes": 18630
+    },
+    {
+      "file": "AUDIT/final-source-review.json",
+      "sha256": "040c72972c46c1326a1b2fe42a2d4624d5857fb45ea87630cb612c05a93a676d",
+      "bytes": 9068
+    },
+    {
+      "file": "AUDIT/frontend-tests.json",
+      "sha256": "5f9649508e353992b6c26646b45b66ce88283ef41b602837aa81732f9ebf604c",
+      "bytes": 3903
+    },
+    {
+      "file": "AUDIT/gpu-pixel-analysis.json",
+      "sha256": "6deb24cbd463926d0be6be204630261c556da94fde8095d78492cd67cbc9f206",
+      "bytes": 57230
+    },
+    {
+      "file": "AUDIT/maintenance-tests.external-temp.log",
+      "sha256": "36c16909076f945c5f6feef42d857facc3dad796205189800bb2f8516e680c5e",
+      "bytes": 111209
+    },
+    {
+      "file": "AUDIT/queue-pending/results.json",
+      "sha256": "387d10700cb4216d312fbfb0dcac0c73b07442d81881dd04929cb1d69da53bfc",
+      "bytes": 4154
+    },
+    {
+      "file": "AUDIT/stocking-cuda.root.log",
+      "sha256": "a46b19f654b117a58fff1752bbb17347f10e8f139c0db8439768f4126963e2ef",
+      "bytes": 439
+    },
+    {
+      "file": "AUDIT/stocking-exporter.root.log",
+      "sha256": "9e204bca22137f63282f4e30be1adae97371390e2bc6c49ea6e6a52f3ed0f185",
+      "bytes": 1063
+    },
+    {
+      "file": "AUDIT/stocking-pinned-cpu.root.log",
+      "sha256": "b9c727b5a88d7bf91af5f12b75ac9e9b32f853120fbed481009a162c3a52a5c6",
+      "bytes": 13830
+    },
+    {
+      "file": "AUDIT/stocking-pinned-js.root.log",
+      "sha256": "97f38df4145c8ceeff919b90d5b12d8f988cd7b20f12413128bb2ed99883d363",
+      "bytes": 1664
+    },
+    {
+      "file": "AUDIT/stocking-pinned-source-recovery.json",
+      "sha256": "362ec8d85bf462dfe7e3a85d2163f95c94851c5a277abcfdd9191a15de00cbcc",
+      "bytes": 38586
+    },
+    {
+      "file": "AUDIT/workflow-preservation.json",
+      "sha256": "72518ac31b77124a3a0e04a4db43f14356a9881517bc9584b4a319f13b7815bd",
+      "bytes": 1215
+    },
+    {
+      "file": "ROOT/ERROR-RESULTS.json",
+      "sha256": "fc6a244f595963e4fc428c4581d3ff67e31907cbc1f74a635d9209f880068e89",
+      "bytes": 665
+    },
+    {
+      "file": "ROOT/deployment/DEPLOYMENT.json",
+      "sha256": "6fd0b5885501c7e8df7d74a50ca30a282424ddb0186740dae108c8008a8fcea4",
+      "bytes": 2569
+    },
+    {
+      "file": "ROOT/deployment/POST-DEPLOYMENT.json",
+      "sha256": "5a9dca3a8340d5615d105a9918e0e71ba1a5c19a27179eb20aad7c24a8fb9777",
+      "bytes": 1617
+    },
+    {
+      "file": "ROOT/stocking-browser-acceptance.json",
+      "sha256": "77d32ed8c39c8c1073e660928d74361d5d8e85cabfcdbe522172619904bf80c5",
+      "bytes": 820
+    },
+    {
+      "file": "ROOT/stocking-gpu-http/ACCEPTANCE.json",
+      "sha256": "68bdd47633f9c4efa066cb5048afc253652d1a6b790316393593383a6a0817a4",
+      "bytes": 6780
+    },
+    {
+      "file": "ROOT/stocking-http-prepare/ACCEPTANCE.json",
+      "sha256": "e29d0261713dbbf19e37fd7b2c96bba3a1138454c61f41cf12b50d40f6f0d7e3",
+      "bytes": 6324
+    },
+    {
+      "file": "ROOT/stocking-queue-http/ACCEPTANCE.json",
+      "sha256": "57a5d7a296bef7e2cedd37289fdcf70b4a1572c802577519061b52ff546a1a76",
+      "bytes": 2966
+    },
+    {
+      "file": "ROOT/ui/buffered-accepted.json",
+      "sha256": "14cbe63e2914ad15f2b11aa52fe6dad22e6749d12f0c322b3deb661a2c5ffdb3",
+      "bytes": 4309
+    }
+  ],
+  "privacy": {
+    "private_media_included": false,
+    "thumbnails_included": false,
+    "absolute_paths_included": false,
+    "prompt_literals_included": false,
+    "raw_logs_or_requests_included": false,
+    "credentials_included": false
+  },
+  "bounded_deployment": {
+    "status": "deployed",
+    "files": [
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/run_controls.js",
+        "sha256": "f573c69a49afbe013b0ba4a182c13c565ad0fe0fe5286958511958864e24f72f",
+        "source_runtime_equal": true,
+        "http_bytes_equal": true
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/pending_prompts.js",
+        "sha256": "fda14ea66db02b68a76f5407524fb7cc71924bf06cdb1e13e63d132f72d0bc89",
+        "source_runtime_equal": true,
+        "http_bytes_equal": true
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_target.js",
+        "sha256": "ea052b623a3939a342b5a152af033d85ac6bf40d24e1c67dda5f160df37bcba3",
+        "source_runtime_equal": true,
+        "http_bytes_equal": true
+      },
+      {
+        "path": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+        "sha256": "c4eb1072b8742afb55675e1bb0f9136a10a01c99921bb53d6e9fd1173ad80267",
+        "source_runtime_equal": true
+      },
+      {
+        "path": "production_tools/templates/UAP统一生产工作台_v2.json",
+        "sha256": "c4eb1072b8742afb55675e1bb0f9136a10a01c99921bb53d6e9fd1173ad80267",
+        "source_runtime_equal": true
+      }
+    ],
+    "server_restarted": false,
+    "database_replaced": false,
+    "whole_snapshot_deployed": false,
+    "consistent_database_backups": 5
+  },
+  "cleanup": {
+    "status": "archived",
+    "file_count": 70,
+    "bytes": 83998091,
+    "all_files_sha256_verified": true,
+    "recoverable": true,
+    "user_media_removed": false,
+    "empty_qa_directories_removed": true
+  },
+  "source_review": {
+    "confirmed_regressions": 0,
+    "source_blockers": 0,
+    "receipt_sha256": "040c72972c46c1326a1b2fe42a2d4624d5857fb45ea87630cb612c05a93a676d"
+  },
+  "precommit_full_history_security": {
+    "pass": true,
+    "objects": 83084,
+    "blobs": 60394,
+    "bytes": 7877988652,
+    "findings": 0,
+    "receipt_sha256": "39c6cdbe7d1aa54c0691498f445c099dd4b83564d48447d17aca0dae288e205a"
+  },
+  "private_evidence_digests": {
+    "controlmap-metrics": "952f33f6e3e1a4e08a115bb9cbe2c3c416ac0097c292136a35705eaf76cc06d0",
+    "post-deployment": "5a9dca3a8340d5615d105a9918e0e71ba1a5c19a27179eb20aad7c24a8fb9777",
+    "cleanup": "eef9fb84158df4dc67ed163c375945e8405608d196d1609d5a18c433eaeb1c0e",
+    "strict-errors": "fc6a244f595963e4fc428c4581d3ff67e31907cbc1f74a635d9209f880068e89"
+  }
+}
