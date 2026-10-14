@@ -367,6 +367,210 @@ class ColabTrialTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "state path"):
             trial.validate_resume_config(config)
 
+    def rescued_resume_fixture(self):
+        """Real restricted CPU serialization, small tensors with the full28-block contract."""
+        import random
+        import numpy as np
+        import torch
+        from safetensors.torch import save_file
+        parent = self.build_continued(self.parent_resume_fixture())
+        payload = self.root / "continued" / parent["payload"]
+        with zipfile.ZipFile(payload) as bundle:
+            config = json.loads(bundle.read("trial_config.json"))
+        source = config["run_id"]
+        state_dir = self.root / (source + "-state")
+        state_dir.mkdir()
+        tensors, states = {}, {}
+        for block in range(28):
+            for module in range(10):
+                prefix = f"lora_unet_blocks_{block}_test{module}"
+                tensors[prefix + ".alpha"] = torch.tensor(16.0)
+                for suffix, shape in (("lora_down.weight", (32, 2)), ("lora_up.weight", (2, 32))):
+                    tensors[prefix + "." + suffix] = torch.zeros(shape)
+                    states[len(states)] = {"step": torch.tensor(1000.0), "exp_avg": torch.zeros(shape),
+                                          "exp_avg_sq": torch.zeros(shape)}
+        save_file(tensors, str(state_dir / "model.safetensors"))
+        torch.save({"state": states, "param_groups": [{"params": list(states), "lr": 2e-5,
+                   "betas": (0.9, 0.999), "eps": 1e-8, "weight_decay": 0.01}]}, state_dir / "optimizer.bin")
+        torch.save({"last_epoch": 1000, "_step_count": 1001, "base_lrs": [2e-5], "_last_lr": [2e-5],
+                    "lr_lambdas": [None]}, state_dir / "scheduler.bin")
+        torch.save({"step": 1, "random_state": random.Random(1).getstate(),
+                    "numpy_random_seed": np.random.RandomState(1).get_state(),
+                    "torch_manual_seed": torch.Generator(device="cpu").get_state(),
+                    "torch_cuda_manual_seed": [torch.zeros(16, dtype=torch.uint8)]}, state_dir / "random_states_0.pkl")
+        trial.write_json(state_dir / "train_state.json", {"current_step": 1000, "current_epoch": 9})
+        receipt = {"run_id": source, "return_code": 0, "completed_steps": 1000, "optimizer_updates": 600,
+                   "loss_observations": 600, "checkpoint_errors": [], "missing_checkpoints": [],
+                   "resume_verified": True, "step_sequence_valid": True,
+                   "checkpoints": [{"path": f"weights/{source}-step00001000.safetensors",
+                                    "sha256": "a" * 64, "metadata": {"ss_steps": "1000"}}]}
+        receipt_utf8 = json.dumps(receipt) + "\n"
+        binding = {"schema": 1, "source_kind": "partial-rescue", "source_run_id": source,
+                   "starting_step": 1000, "starting_epoch": 9, "source_payload_sha256": trial.sha256(payload),
+                   "source_results_claimed_sha256": "c" * 64, "source_rescue_receipt_sha256": "b" * 64,
+                   "full_source_archive_verified": False, "source_config": config,
+                   "source_training_receipt_utf8": receipt_utf8,
+                   "source_training_receipt_sha256": hashlib.sha256(receipt_utf8.encode()).hexdigest(),
+                   "parent_checkpoint_sha256": "a" * 64, "state_sha_origin": "verified-prefix-crc-local-sha",
+                   "state_files": [{"name": name, "bytes": (state_dir / name).stat().st_size,
+                                    "sha256": trial.sha256(state_dir / name)} for name in sorted(trial.RESUME_STATE_FILES)]}
+        state_manifest = self.root / "rescued_binding.json"
+        trial.write_json(state_manifest, binding)
+        return {"payload": payload, "payload_digest": trial.sha256(payload), "state_dir": state_dir,
+                "state_manifest": state_manifest, "state_manifest_digest": trial.sha256(state_manifest), "step": 1000}
+
+    def build_rescued(self, inputs, steps=1500):
+        return trial.build_package(self.dataset, "ni9x26char", self.root / "resumed1500", "ni_colab_resumed1500",
+                                   model_manifest(), source_root=self.sources,
+                                   tokenizer_files={"configs/t5_old/spiece.model": self.spiece},
+                                   mode="continuation", steps=steps, seed=261012, resume_inputs=inputs)
+
+    def rewrite_rescue_binding(self, inputs, mutation):
+        binding = json.loads(inputs["state_manifest"].read_text(encoding="utf-8"))
+        mutation(binding)
+        trial.write_json(inputs["state_manifest"], binding)
+        inputs["state_manifest_digest"] = trial.sha256(inputs["state_manifest"])
+
+    def test_partial_rescue1500_packages_cpu_verified_state_without_full_zip_claim(self):
+        inputs = self.rescued_resume_fixture()
+        before = {path.name: trial.sha256(path) for path in inputs["state_dir"].iterdir()}
+        receipt = self.build_rescued(inputs)
+        self.assertEqual((receipt["starting_step"], receipt["steps"], receipt["expected_new_updates"]), (1000, 1500, 500))
+        self.assertEqual(receipt["save_every_n_steps"], 250)
+        self.assertEqual(receipt["source_kind"], "partial-rescue")
+        self.assertNotIn("source_results_sha256", receipt)
+        self.assertFalse(receipt["full_source_archive_verified"])
+        self.assertFalse(receipt["actual_resume_verified"])
+        with zipfile.ZipFile(self.root / "resumed1500" / receipt["payload"]) as bundle:
+            config = json.loads(bundle.read("trial_config.json"))
+            provenance = json.loads(bundle.read("resume_provenance.json"))
+            self.assertNotIn(str(self.root), json.dumps(provenance))
+            self.assertNotIn("source_results_sha256", config["resume"])
+            self.assertEqual(provenance["cpu_state_preflight"]["optimizer_state_count"], 560)
+            self.assertFalse(provenance["actual_resume_verified"])
+        self.assertEqual(before, {path.name: trial.sha256(path) for path in inputs["state_dir"].iterdir()})
+        notebook = json.loads((self.root / "resumed1500" / receipt["notebook"]).read_text(encoding="utf-8"))
+        self.assertIn("1250/1500", str(notebook))
+        for cell in notebook["cells"]:
+            if cell["cell_type"] == "code":
+                compile("".join(cell["source"]), "rescued_notebook_cell", "exec")
+        workspace = self.root / receipt["run_id"]
+        trial.safe_extract_payload(self.root / "resumed1500" / receipt["payload"], workspace, receipt["payload_sha256"])
+        command = trial.build_training_args(workspace, trial.load_frozen_config(workspace))
+        self.assertEqual(command[command.index("--max_train_steps") + 1], "1500")
+        self.assertEqual(command[command.index("--save_every_n_steps") + 1], "250")
+        self.assertIn("--skip_until_initial_step", command)
+
+    def test_partial_rescue_rejects_hash_mismatch_before_loading_pickle(self):
+        inputs = self.rescued_resume_fixture()
+        (inputs["state_dir"] / "optimizer.bin").write_bytes(b"changed")
+        with mock.patch.object(trial, "inspect_rescued_state_cpu") as inspect_state:
+            with self.assertRaisesRegex(ValueError, "state file identity"):
+                self.build_rescued(inputs)
+        inspect_state.assert_not_called()
+        self.assertFalse((self.root / "resumed1500").exists())
+
+    def test_partial_rescue_rejects_false_full_archive_claim(self):
+        inputs = self.rescued_resume_fixture()
+        self.rewrite_rescue_binding(inputs, lambda binding: binding.update(full_source_archive_verified=True))
+        with self.assertRaisesRegex(ValueError, "completed parent endpoint"):
+            self.build_rescued(inputs)
+
+    def test_partial_rescue_rejects_unexpected_file_and_misnamed_path(self):
+        inputs = self.rescued_resume_fixture()
+        unexpected = inputs["state_dir"] / "extra.bin"
+        unexpected.write_bytes(b"extra")
+        with self.assertRaisesRegex(ValueError, "directory"):
+            self.build_rescued(inputs)
+        unexpected.unlink()
+        wrong = self.root / "other-state"
+        inputs["state_dir"].rename(wrong)
+        inputs["state_dir"] = wrong
+        with self.assertRaisesRegex(ValueError, "directory"):
+            self.build_rescued(inputs)
+
+    def test_partial_rescue_rejects_changed_step_epoch_and_scheduler(self):
+        import torch
+        inputs = self.rescued_resume_fixture()
+        state_dir = inputs["state_dir"]
+        for name, mutate in (("train_state.json", lambda: trial.write_json(state_dir / "train_state.json", {"current_step": 999, "current_epoch": 9})),
+                             ("train_state.json", lambda: trial.write_json(state_dir / "train_state.json", {"current_step": 1000, "current_epoch": 8})),
+                             ("scheduler.bin", lambda: torch.save({"last_epoch": 999}, state_dir / "scheduler.bin"))):
+            with self.subTest(name=name):
+                original = (state_dir / name).read_bytes()
+                mutate()
+                def rebind(binding):
+                    for entry in binding["state_files"]:
+                        if entry["name"] == name:
+                            entry.update(bytes=(state_dir / name).stat().st_size, sha256=trial.sha256(state_dir / name))
+                self.rewrite_rescue_binding(inputs, rebind)
+                with self.assertRaises(ValueError):
+                    self.build_rescued(inputs)
+                (state_dir / name).write_bytes(original)
+                self.rewrite_rescue_binding(inputs, rebind)
+        self.assertFalse((self.root / "resumed1500").exists())
+
+    def test_partial_rescue_rejects_nonfinite_momentum_and_custom_rng_global(self):
+        import pickle
+        import torch
+        inputs = self.rescued_resume_fixture()
+        path = inputs["state_dir"] / "optimizer.bin"
+        original = path.read_bytes()
+        optimizer = torch.load(path, map_location="cpu", weights_only=True)
+        next(iter(optimizer["state"].values()))["exp_avg"].flatten()[0] = float("nan")
+        torch.save(optimizer, path)
+        def rebind(binding):
+            for entry in binding["state_files"]:
+                entry.update(bytes=(inputs["state_dir"] / entry["name"]).stat().st_size,
+                             sha256=trial.sha256(inputs["state_dir"] / entry["name"]))
+        self.rewrite_rescue_binding(inputs, rebind)
+        with self.assertRaisesRegex(ValueError, "momentum"):
+            self.build_rescued(inputs)
+        path.write_bytes(original)
+        torch.save({"unexpected": Path("synthetic-untrusted-object")}, inputs["state_dir"] / "random_states_0.pkl")
+        self.rewrite_rescue_binding(inputs, rebind)
+        with self.assertRaisesRegex(pickle.UnpicklingError, "Unsupported global"):
+            self.build_rescued(inputs)
+        self.assertFalse((self.root / "resumed1500").exists())
+
+    def test_long_continuation2000_preserves_save250_and_requires_parent_state(self):
+        self.assertEqual(trial.training_policy("continuation", 2000)["save_every_n_steps"], 250)
+        with self.assertRaisesRegex(ValueError, "requires approved parent"):
+            self.build_rescued(None, steps=2000)
+        receipt = self.build_rescued(self.rescued_resume_fixture(), steps=2000)
+        self.assertEqual((receipt["starting_step"], receipt["expected_new_updates"]), (1000, 1000))
+        notebook = json.loads((self.root / "resumed1500" / receipt["notebook"]).read_text(encoding="utf-8"))
+        self.assertIn("1250/1500/1750/2000", str(notebook))
+
+    def test_completed_rescued1500_requires500_updates_and_remote_restore_gate(self):
+        receipt = self.build_rescued(self.rescued_resume_fixture())
+        workspace = self.root / receipt["run_id"]
+        trial.safe_extract_payload(self.root / "resumed1500" / receipt["payload"], workspace, receipt["payload_sha256"])
+        output = self.fake_prepare_output(workspace, trial.load_frozen_config(workspace))
+        weights = output / "weights"
+        weights.mkdir()
+        header = json.dumps({"tensor": {"dtype": "BF16", "shape": [1], "data_offsets": [0, 2]}}).encode()
+        names = [receipt["run_id"] + f"-step{step:08d}.safetensors" for step in (1250, 1500)] + [receipt["run_id"] + ".safetensors"]
+        for name in names:
+            (weights / name).write_bytes(struct.pack("<Q", len(header)) + header + b"\x00\x00")
+        events = [{"event": "resume_loaded", "starting_step": 1000, "optimizer_step_min": 1000, "optimizer_step_max": 1000,
+                   "rng_restore_verified": True, "adamw_momentum_finite": True,
+                   "optimizer_state_count": 560, "scheduler_last_epochs": [1000]}]
+        for step in range(1001, 1501):
+            events.extend(({"event": "step", "step": step, "loss": 0.25}, {"event": "gradient_update", "seconds": 0.5}))
+        events.append({"event": "entry_end", "training_seconds": 260, "peak_allocated_vram_bytes": 100})
+        (output / "telemetry.jsonl").write_text("\n".join(json.dumps(event) for event in events), encoding="utf-8")
+        process = types.SimpleNamespace(stdout=[], wait=lambda: 0)
+        with mock.patch.object(trial, "require_colab", side_effect=lambda path: path), mock.patch("subprocess.Popen", return_value=process), mock.patch("builtins.print"):
+            result = trial.remote_run(workspace)
+        training = json.loads((output / "training_receipt.json").read_text(encoding="utf-8"))
+        self.assertEqual(result, 0)
+        self.assertEqual((training["completed_steps"], training["starting_step"], training["optimizer_updates"]), (1500, 1000, 500))
+        self.assertEqual(training["checkpoint_count"], 3)
+        self.assertTrue(training["resume_verified"])
+        self.assertEqual(training["resume_identity"]["source_kind"], "partial-rescue")
+        self.assertFalse(training["resume_identity"]["full_source_archive_verified"])
+
     def run_fake_completed_continuation(self, bad_sequence=False, missing_restore=False):
         inputs = self.parent_resume_fixture()
         package = self.build_continued(inputs)

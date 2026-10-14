@@ -212,7 +212,9 @@ def training_policy(mode: str, steps: int) -> dict:
         return {"mode": mode, "steps": steps, "save_every_n_steps": 100, "scope": "calibration-not-release"}
     if mode == "continuation" and steps in {600, 800, 1000}:
         return {"mode": mode, "steps": steps, "save_every_n_steps": 200, "scope": "continued-calibration-not-release"}
-    raise ValueError("Trial requires 50/75 steps; calibration400; explicit continuation600/800/1000 with verified state")
+    if mode == "continuation" and steps in {1500, 2000}:
+        return {"mode": mode, "steps": steps, "save_every_n_steps": 250, "scope": "continued-calibration-not-release"}
+    raise ValueError("Trial requires 50/75 steps; calibration400; explicit continuation600/800/1000/1500/2000 with verified state")
 
 
 RESUME_STATE_FILES = {"model.safetensors", "optimizer.bin", "scheduler.bin", "random_states_0.pkl", "train_state.json"}
@@ -224,20 +226,28 @@ def validate_resume_config(config: dict, workspace: Path | None = None) -> int:
         if resume is not None:
             raise ValueError("Resume requires explicit continuation mode")
         return 0
-    if not isinstance(resume, dict) or set(resume) != {
+    common = {
         "source_run_id", "starting_step", "state_dir", "source_payload_sha256",
-        "source_results_sha256", "parent_checkpoint_sha256", "state_files",
-    }:
+        "parent_checkpoint_sha256", "state_files",
+    }
+    rescue_fields = {"source_kind", "source_state_manifest_sha256", "source_rescue_receipt_sha256",
+                     "source_results_claimed_sha256", "full_source_archive_verified"}
+    rescued = isinstance(resume, dict) and resume.get("source_kind") == "partial-rescue"
+    if not isinstance(resume, dict) or set(resume) != common | (rescue_fields if rescued else {"source_results_sha256"}):
         raise ValueError("Continuation requires a complete immutable resume identity")
+    if rescued and resume["full_source_archive_verified"] is not False:
+        raise ValueError("Partial rescue must not claim full source archive verification")
     start, source = resume["starting_step"], resume["source_run_id"]
-    if (type(start) is not int or start not in {400, 600, 800} or start >= config["steps"]
+    if (type(start) is not int or start not in {400, 600, 800, 1000, 1500} or start >= config["steps"]
             or not isinstance(source, str) or not re.fullmatch(r"[A-Za-z][A-Za-z0-9_-]{1,79}", source)
             or source == config["run_id"]):
         raise ValueError("Invalid cumulative resume step or source run")
     expected_dir = f"resume/{source}-step{start:08d}-state"
     if resume["state_dir"] != expected_dir:
         raise ValueError("Resume state path must match its source and step")
-    for name in ("source_payload_sha256", "source_results_sha256", "parent_checkpoint_sha256"):
+    hash_names = {"source_payload_sha256", "parent_checkpoint_sha256"} | (
+        rescue_fields - {"source_kind", "full_source_archive_verified"} if rescued else {"source_results_sha256"})
+    for name in hash_names:
         if not isinstance(resume[name], str) or not re.fullmatch(r"[a-f0-9]{64}", resume[name]):
             raise ValueError("Resume source requires exact archive/checkpoint hashes")
     entries = resume["state_files"]
@@ -257,6 +267,95 @@ def validate_resume_config(config: dict, workspace: Path | None = None) -> int:
         if type(state.get("current_step")) is not int or state["current_step"] != start:
             raise ValueError("Saved state cumulative step disagrees with continuation")
     return start
+
+
+def inspect_rescued_state_cpu(state_dir: Path, step: int, epoch: int, blocks: int) -> dict:
+    """Read hash-bound owned state with restricted CPU loaders, without restoring RNG or using CUDA."""
+    import random
+    import numpy as np
+    import torch
+    from safetensors.torch import load_file
+
+    saved = json.loads((state_dir / "train_state.json").read_text(encoding="utf-8"))
+    if (set(saved) != {"current_step", "current_epoch"} or type(saved["current_step"]) is not int
+            or type(saved["current_epoch"]) is not int or saved["current_step"] != step or saved["current_epoch"] != epoch):
+        raise ValueError("Rescued JSON step/epoch differs from the bound manifest")
+    checkpoint_record(state_dir / "model.safetensors", state_dir)
+    model = load_file(str(state_dir / "model.safetensors"), device="cpu")
+    groups, weight_shapes = {}, []
+    for name, tensor in model.items():
+        match = re.fullmatch(r"(lora_unet_blocks_(\d+)_.+)\.(alpha|lora_down\.weight|lora_up\.weight)", name)
+        if (not match or tensor.dtype != torch.float32 or not bool(torch.isfinite(tensor).all())
+                or int(match[2]) >= blocks):
+            raise ValueError("Rescued F32 model has invalid identity, dtype, depth or values")
+        group = groups.setdefault(match[1], set())
+        group.add(match[3])
+        if match[3] == "alpha":
+            if tensor.numel() != 1 or float(tensor.item()) != 16:
+                raise ValueError("Rescued model alpha differs from16")
+        else:
+            if tensor.ndim != 2 or tensor.shape[0 if match[3] == "lora_down.weight" else 1] != 32:
+                raise ValueError("Rescued model rank differs from32")
+            weight_shapes.append(tuple(tensor.shape))
+    if (len(model) != blocks * 30 or len(groups) != blocks * 10
+            or any(value != {"alpha", "lora_down.weight", "lora_up.weight"} for value in groups.values())
+            or {int(re.search(r"blocks_(\d+)_", name)[1]) for name in groups} != set(range(blocks))):
+        raise ValueError("Rescued model tensor/module/depth coverage differs from the parent")
+    del model
+    optimizer = torch.load(state_dir / "optimizer.bin", map_location="cpu", weights_only=True)
+    if not isinstance(optimizer, dict) or set(optimizer) != {"state", "param_groups"}:
+        raise ValueError("Rescued optimizer is not a plain AdamW state dictionary")
+    states, parameter_ids, momentum_shapes = optimizer["state"], [], []
+    for group in optimizer["param_groups"]:
+        if (float(group["lr"]) != 2e-5 or tuple(group["betas"]) != (0.9, 0.999)
+                or float(group["eps"]) != 1e-8 or float(group["weight_decay"]) != 0.01):
+            raise ValueError("Rescued AdamW hyperparameters differ from the baseline")
+        parameter_ids.extend(group["params"])
+    if len(states) != blocks * 20 or len(set(parameter_ids)) != len(parameter_ids) or set(parameter_ids) != set(states):
+        raise ValueError("Rescued AdamW parameter coverage differs from the model")
+    for state in states.values():
+        if set(state) != {"step", "exp_avg", "exp_avg_sq"} or float(state["step"].item()) != step:
+            raise ValueError("Rescued AdamW step differs from the selected endpoint")
+        first, second = state["exp_avg"], state["exp_avg_sq"]
+        if (first.dtype != torch.float32 or second.dtype != torch.float32 or first.shape != second.shape
+                or not bool(torch.isfinite(first).all()) or not bool(torch.isfinite(second).all())):
+            raise ValueError("Rescued AdamW momentum dtype/shape/values are invalid")
+        momentum_shapes.append(tuple(first.shape))
+    if sorted(momentum_shapes) != sorted(weight_shapes):
+        raise ValueError("Rescued AdamW momentum shapes differ from the LoRA weights")
+    del optimizer, states
+    scheduler = torch.load(state_dir / "scheduler.bin", map_location="cpu", weights_only=True)
+    if (scheduler.get("last_epoch") != step or scheduler.get("_step_count") != step + 1
+            or scheduler.get("base_lrs") != [2e-5] or scheduler.get("_last_lr") != [2e-5]
+            or scheduler.get("lr_lambdas") != [None]):
+        raise ValueError("Rescued constant scheduler step/LR differs from the endpoint")
+    # Only the fixed NumPy array constructors used by Accelerate's MT19937
+    # state are allowed in addition to PyTorch's restricted default globals.
+    with torch.serialization.safe_globals([np.core.multiarray._reconstruct, np.ndarray,
+                                           np.dtype, type(np.dtype(np.uint32))]):
+        rng = torch.load(state_dir / "random_states_0.pkl", map_location="cpu", weights_only=True)
+    if set(rng) != {"step", "random_state", "numpy_random_seed", "torch_manual_seed", "torch_cuda_manual_seed"}:
+        raise ValueError("Rescued RNG contains unexpected state families")
+    random.Random().setstate(rng["random_state"])
+    numpy_state = rng["numpy_random_seed"]
+    if (len(numpy_state) != 5 or numpy_state[0] != "MT19937" or numpy_state[1].dtype != np.uint32
+            or numpy_state[1].shape != (624,) or not 0 <= numpy_state[2] <= 624
+            or numpy_state[3] not in (0, 1) or not math.isfinite(float(numpy_state[4]))):
+        raise ValueError("Rescued NumPy RNG state is invalid")
+    np.random.RandomState().set_state(numpy_state)
+    cpu_rng = rng["torch_manual_seed"]
+    if cpu_rng.dtype != torch.uint8 or cpu_rng.ndim != 1:
+        raise ValueError("Rescued Torch CPU RNG byte state is invalid")
+    torch.Generator(device="cpu").set_state(cpu_rng)
+    cuda_rngs = rng["torch_cuda_manual_seed"]
+    if (not isinstance(cuda_rngs, list) or len(cuda_rngs) != 1
+            or any(value.dtype != torch.uint8 or value.ndim != 1 or value.numel() != 16 for value in cuda_rngs)):
+        raise ValueError("Rescued single-GPU CUDA RNG byte structure is invalid")
+    return {"cpu_restricted_state_preflight": True, "model_tensor_count": blocks * 30,
+            "optimizer_state_count": blocks * 20, "optimizer_step_min": step, "optimizer_step_max": step,
+            "adamw_momentum_finite": True, "scheduler_last_epoch": step, "learning_rate": 2e-5,
+            "rng_cpu_structure_checked": True, "cuda_rng_structure_checked_only": True,
+            "torch_version": torch.__version__, "gpu_used": False, "actual_accelerate_resume_verified": False}
 
 
 def regular_zip_members(bundle: zipfile.ZipFile) -> dict:
@@ -345,6 +444,105 @@ def collect_resume_inputs(payload: Path, payload_digest: str, results: Path, res
                   "pickle_deserialized_locally": False, "exact_uninterrupted_trajectory_claimed": False}
     content.append(("resume_provenance.json", (json.dumps(provenance, ensure_ascii=False, indent=2) + "\n").encode()))
     return old_config, manifest, resume, content
+
+
+def collect_rescued_resume_inputs(payload: Path, payload_digest: str, state_dir: Path,
+                                 state_manifest: Path, state_manifest_digest: str, step: int) -> tuple:
+    """Accept an explicitly partial, hash-bound rescue without impersonating a complete results ZIP."""
+    for path, digest in ((payload, payload_digest), (state_manifest, state_manifest_digest)):
+        if (path.is_symlink() or not path.is_file() or not re.fullmatch(r"[a-f0-9]{64}", digest)
+                or sha256(path) != digest):
+            raise ValueError("Rescued source archive/manifest identity mismatch")
+    if state_manifest.stat().st_size > 1024 * 1024:
+        raise ValueError("Rescued state manifest exceeds limits")
+    with zipfile.ZipFile(payload) as bundle:
+        members = regular_zip_members(bundle)
+        manifest = json.loads(bundle.read("payload_manifest.json"))
+        entries = manifest["files"]
+        if (manifest.get("schema") != 1 or len({entry["path"] for entry in entries}) != len(entries)
+                or set(members) != {entry["path"] for entry in entries} | {"payload_manifest.json"}):
+            raise ValueError("Parent payload manifest mismatch")
+        for entry in entries:
+            data = bundle.read(entry["path"])
+            if len(data) != entry["bytes"] or hashlib.sha256(data).hexdigest() != entry["sha256"]:
+                raise ValueError("Parent frozen input changed")
+        old_config = json.loads(bundle.read("trial_config.json"))
+        if old_config["run_id"] != manifest["run_id"]:
+            raise ValueError("Parent payload run mismatch")
+        validate_training_policy(old_config)
+        parent_start = validate_resume_config(old_config)
+    binding = json.loads(state_manifest.read_text(encoding="utf-8"))
+    required = {"schema", "source_kind", "source_run_id", "starting_step", "starting_epoch",
+                "source_payload_sha256", "source_results_claimed_sha256", "source_rescue_receipt_sha256",
+                "full_source_archive_verified", "source_config", "source_training_receipt_utf8",
+                "source_training_receipt_sha256", "parent_checkpoint_sha256", "state_files", "state_sha_origin"}
+    source = old_config["run_id"]
+    if (set(binding) != required or binding["schema"] != 1 or binding["source_kind"] != "partial-rescue"
+            or binding["full_source_archive_verified"] is not False
+            or binding["state_sha_origin"] != "verified-prefix-crc-local-sha"
+            or binding["source_run_id"] != source or binding["starting_step"] != step
+            or type(binding["starting_step"]) is not int or type(binding["starting_epoch"]) is not int
+            or binding["starting_epoch"] < 1 or binding["source_config"] != old_config
+            or binding["source_payload_sha256"] != payload_digest
+            or old_config.get("mode") not in {"calibration", "continuation"} or step != old_config["steps"]):
+        raise ValueError("Rescued manifest does not bind a completed parent endpoint")
+    for name in ("source_results_claimed_sha256", "source_rescue_receipt_sha256", "source_training_receipt_sha256",
+                 "parent_checkpoint_sha256"):
+        if not isinstance(binding[name], str) or not re.fullmatch(r"[a-f0-9]{64}", binding[name]):
+            raise ValueError("Rescued provenance requires exact hashes")
+    receipt_bytes = binding["source_training_receipt_utf8"].encode("utf-8")
+    if hashlib.sha256(receipt_bytes).hexdigest() != binding["source_training_receipt_sha256"]:
+        raise ValueError("Rescued parent training receipt hash differs")
+    receipt = json.loads(receipt_bytes)
+    expected_updates = step - parent_start
+    if (receipt.get("run_id") != source or receipt.get("return_code") != 0
+            or receipt.get("completed_steps") != step or receipt.get("optimizer_updates") != expected_updates
+            or receipt.get("loss_observations") != expected_updates or receipt.get("checkpoint_errors")
+            or receipt.get("missing_checkpoints") or (parent_start and
+            (receipt.get("resume_verified") is not True or receipt.get("step_sequence_valid") is not True))):
+        raise ValueError("Rescued parent training did not pass completion gates")
+    selected = [entry for entry in receipt["checkpoints"]
+                if entry["path"] == f"weights/{source}-step{step:08d}.safetensors"]
+    if (len(selected) != 1 or selected[0]["sha256"] != binding["parent_checkpoint_sha256"]
+            or selected[0]["metadata"].get("ss_steps") != str(step)):
+        raise ValueError("Rescued parent checkpoint identity/step mismatch")
+    state_dir = Path(state_dir)
+    if (not state_dir.is_dir() or state_dir.is_symlink()
+            or any(parent.is_symlink() for parent in state_dir.parents)
+            or state_dir.name not in {source + "-state", f"{source}-step{step:08d}-state"}
+            or {path.name for path in state_dir.iterdir()} != RESUME_STATE_FILES):
+        raise ValueError("Rescued state directory is linked, misnamed or incomplete")
+    state_entries = binding["state_files"]
+    identity = {"source_run_id": source, "starting_step": step,
+                "state_dir": f"resume/{source}-step{step:08d}-state", "source_payload_sha256": payload_digest,
+                "parent_checkpoint_sha256": binding["parent_checkpoint_sha256"], "state_files": state_entries,
+                "source_kind": "partial-rescue", "source_state_manifest_sha256": state_manifest_digest,
+                "source_rescue_receipt_sha256": binding["source_rescue_receipt_sha256"],
+                "source_results_claimed_sha256": binding["source_results_claimed_sha256"],
+                "full_source_archive_verified": False}
+    validate_resume_config({"run_id": source + "_preflight", "mode": "continuation", "steps": step + 500, "resume": identity})
+    if sum(entry["bytes"] for entry in state_entries) > 1024**3:
+        raise ValueError("Rescued state exceeds limits")
+    for entry in state_entries:
+        path = state_dir / entry["name"]
+        if path.is_symlink() or not path.is_file() or path.stat().st_size != entry["bytes"] or sha256(path) != entry["sha256"]:
+            raise ValueError("Rescued state file identity mismatch: " + entry["name"])
+    cpu_evidence = inspect_rescued_state_cpu(state_dir, step, binding["starting_epoch"],
+                                           old_config["models"]["expected_num_blocks"])
+    content = []
+    for entry in state_entries:
+        data = (state_dir / entry["name"]).read_bytes()
+        if len(data) != entry["bytes"] or hashlib.sha256(data).hexdigest() != entry["sha256"]:
+            raise ValueError("Rescued state changed during CPU preflight")
+        content.append((identity["state_dir"] + "/" + entry["name"], data))
+    provenance = {"source_config": old_config, "source_training_receipt": receipt,
+                  "source_payload_manifest": manifest, "resume_identity": identity,
+                  "source_state_manifest": binding, "cpu_state_preflight": cpu_evidence,
+                  "pickle_loading_mode": "weights_only_cpu_with_fixed_numpy_rng_allowlist",
+                  "full_source_archive_verified": False, "actual_resume_verified": False,
+                  "exact_uninterrupted_trajectory_claimed": False}
+    content.append(("resume_provenance.json", (json.dumps(provenance, ensure_ascii=False, indent=2) + "\n").encode()))
+    return old_config, manifest, identity, content
 
 
 def validate_training_policy(config: dict) -> dict:
@@ -440,7 +638,8 @@ def make_notebook(run_id: str, payload_name: str, payload_digest: str, mode: str
     policy = training_policy(mode, steps)
     run_label = (f"从{starting_step}续至{steps}步校准" if mode == "continuation" else
                  "400 步校准" if mode == "calibration" else str(steps) + " 步短训")
-    saved_steps = list(range(starting_step + policy["save_every_n_steps"], steps + 1, policy["save_every_n_steps"]))
+    saved_steps = [step for step in range(policy["save_every_n_steps"], steps + 1, policy["save_every_n_steps"])
+                   if step > starting_step]
     purpose = ("完成后须比较 " + "/".join(map(str, saved_steps)) + " 步检查点的角色质量"
                if mode in {"calibration", "continuation"} else "只验证训练管线和速度")
     start_message = f"开始{run_label}：Rank 32 / Alpha 16 / BF16 / Batch 1；每 {policy['save_every_n_steps']} 步保留权重和续训状态"
@@ -522,7 +721,8 @@ def build_package(dataset_dir: Path, trigger_token: str, output_dir: Path, run_i
     if mode == "continuation":
         if not resume_inputs:
             raise ValueError("Explicit continuation requires approved parent payload/results")
-        old_config, old_manifest, resume, resume_content = collect_resume_inputs(**resume_inputs)
+        collector = collect_rescued_resume_inputs if "state_dir" in resume_inputs else collect_resume_inputs
+        old_config, old_manifest, resume, resume_content = collector(**resume_inputs)
         if (old_config["run_id"] == run_id or old_config["dataset"] != records
                 or old_config["models"] != models or old_config["seed"] != seed
                 or old_config["trigger_token"] != trigger_token or old_config["qwen_image_vae_2d"] != qwen_image_vae_2d
@@ -593,7 +793,12 @@ def build_package(dataset_dir: Path, trigger_token: str, output_dir: Path, run_i
                "notebook_sha256": sha256(notebook), "local_training_started": False, "network_upload_started": False}
     if resume is not None:
         receipt.update(starting_step=resume["starting_step"], expected_new_updates=steps - resume["starting_step"],
-                       source_run_id=resume["source_run_id"], source_results_sha256=resume["source_results_sha256"])
+                       source_run_id=resume["source_run_id"])
+        if resume.get("source_kind") == "partial-rescue":
+            receipt.update(source_kind="partial-rescue", source_state_manifest_sha256=resume["source_state_manifest_sha256"],
+                           full_source_archive_verified=False, actual_resume_verified=False)
+        else:
+            receipt["source_results_sha256"] = resume["source_results_sha256"]
     (output_dir / "package_receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     return receipt
 
@@ -877,7 +1082,8 @@ def remote_run(workspace: Path) -> int:
     completed_steps = max((event["step"] or 0 for event in steps), default=starting_step)
     policy = validate_training_policy(config)
     required_weights = {f"{config['run_id']}-step{step:08d}.safetensors"
-                        for step in range(starting_step + policy["save_every_n_steps"], config["steps"] + 1, policy["save_every_n_steps"])}
+                        for step in range(policy["save_every_n_steps"], config["steps"] + 1, policy["save_every_n_steps"])
+                        if step > starting_step}
     required_weights.add(config["run_id"] + ".safetensors")
     missing_weights = sorted(required_weights - {Path(weight["path"]).name for weight in weights})
     gradient_updates = [event for event in events if event["event"] == "gradient_update"]
@@ -928,12 +1134,15 @@ def main() -> None:
     for name in ("dataset-dir", "trigger-token", "output-dir", "run-id", "model-manifest"):
         build.add_argument("--" + name, required=True)
     build.add_argument("--mode", choices=("trial", "calibration", "continuation"), default="trial")
-    build.add_argument("--steps", type=int, choices=(50, 75, 400, 600, 800, 1000), default=50,
-                       help="Trial50/75; calibration400/save100; verified continuation600/800/1000/save200")
+    build.add_argument("--steps", type=int, choices=(50, 75, 400, 600, 800, 1000, 1500, 2000), default=50,
+                       help="Trial50/75; calibration400/save100; continuation600/800/1000/save200 or1500/2000/save250")
     build.add_argument("--resume-payload", type=Path)
     build.add_argument("--resume-payload-sha256")
     build.add_argument("--resume-results", type=Path)
     build.add_argument("--resume-results-sha256")
+    build.add_argument("--resume-state-dir", type=Path)
+    build.add_argument("--resume-state-manifest", type=Path)
+    build.add_argument("--resume-state-manifest-sha256")
     build.add_argument("--resume-step", type=int)
     build.add_argument("--source-root", type=Path, default=SOURCE_ROOT)
     build.add_argument("--t5-spiece", type=Path, help="Optional reviewed pure T5 spiece.model outside Git")
@@ -943,13 +1152,26 @@ def main() -> None:
         subparsers.add_parser(action).add_argument("--workspace", type=Path, required=True)
     args = parser.parse_args()
     if args.action == "build":
-        resume_values = (args.resume_payload, args.resume_payload_sha256, args.resume_results, args.resume_results_sha256, args.resume_step)
+        resume_values = (args.resume_payload, args.resume_payload_sha256, args.resume_results, args.resume_results_sha256,
+                         args.resume_step, args.resume_state_dir, args.resume_state_manifest, args.resume_state_manifest_sha256)
         resume_inputs = None
         if any(value is not None for value in resume_values):
-            if not all(value is not None for value in resume_values):
-                parser.error("All five --resume-* identity arguments are required together")
-            resume_inputs = dict(payload=args.resume_payload, payload_digest=args.resume_payload_sha256,
-                                 results=args.resume_results, results_digest=args.resume_results_sha256, step=args.resume_step)
+            common = (args.resume_payload, args.resume_payload_sha256, args.resume_step)
+            rescued = (args.resume_state_dir, args.resume_state_manifest, args.resume_state_manifest_sha256)
+            full = (args.resume_results, args.resume_results_sha256)
+            if not all(value is not None for value in common):
+                parser.error("Parent payload, payload SHA and resume step are required together")
+            if any(value is not None for value in rescued):
+                if not all(value is not None for value in rescued) or any(value is not None for value in full):
+                    parser.error("Provide all three rescued-state arguments without full-results arguments")
+                resume_inputs = dict(payload=args.resume_payload, payload_digest=args.resume_payload_sha256,
+                                     state_dir=args.resume_state_dir, state_manifest=args.resume_state_manifest,
+                                     state_manifest_digest=args.resume_state_manifest_sha256, step=args.resume_step)
+            else:
+                if not all(value is not None for value in full):
+                    parser.error("Full results ZIP and SHA are required together")
+                resume_inputs = dict(payload=args.resume_payload, payload_digest=args.resume_payload_sha256,
+                                     results=args.resume_results, results_digest=args.resume_results_sha256, step=args.resume_step)
         result = build_package(Path(args.dataset_dir), args.trigger_token, Path(args.output_dir), args.run_id,
                                json.loads(Path(args.model_manifest).read_text(encoding="utf-8-sig")), args.steps, args.source_root,
                                {"configs/t5_old/spiece.model": args.t5_spiece} if args.t5_spiece else None,

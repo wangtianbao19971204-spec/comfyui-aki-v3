@@ -1,6 +1,6 @@
 # Anima LoRA 训练与候选发布
 
-文档修订：2026-10-15.3。
+文档修订：2026-10-15.4。
 
 ## 入口和实现
 
@@ -17,6 +17,8 @@
 先检查触发词、图文配对、形态/服装分布和精确重复，再做冒烟/校准。模型架构、训练对象、rank/alpha、学习率、步数、timestep/flow shift、面积桶、精度与 caption 策略都进入 profile 快照。
 
 按固定 prompt/seed、服装、风格、权重矩阵比较多个检查点，选择有证据的候选，不默认发布末轮。历史项目包含 Rosasha、Alicia 普通/晨星及 2.9B 版本；具体参数与评价以对应 profile、运行/评估/发布记录为准，不用旧 README 中单一角色基线代替所有训练。
+
+[evaluate_checkpoint_plan.py](../../../snapshot/runtime/anima_lora_forge/tools/evaluate_checkpoint_plan.py)将仓外 JSON 评估计划变成独立的 ComfyUI API 闭包，冻结底模、CLIP、VAE、LoRA 文件哈希及每份完整 graph。`prepare` 只读 API/核验文件并建立清单记录的临时 LoRA 硬链接；`execute` 才串行提交 GPU，每张图保留请求、回应、history、PNG 与 SHA。开始及每次提交前拒绝非空队列；失败不清理或中断用户队列，结果不明的提交不自动重试。`cleanup` 只移除清单中来源/哈希仍一致的临时硬链接，发现额外文件即保留全部现场。候选输入不等同安装；使用方法、计划契约及验收边界见[本机检查点比较入口](../changes/training-lora-forge/2026-10-15-local-checkpoint-evaluation.md)。
 
 ## 仓内与仓外
 
@@ -60,19 +62,27 @@ python tools/colab_trial.py build --dataset-dir <approved-images> --trigger-toke
 
 校准每 100 步保存，范围为 `calibration-not-release`；模式、步数、保存间隔和范围同时冻结在配置、Notebook 与打包收据中。校准沿用试跑的依赖、负载允许清单和基线参数，仍无采样预览。100/200/300/400 步和最终权重留给独立出图比较，校准完成本身不代表角色质量或发布验收通过。
 
-`--mode continuation` 显式恢复已完成校准端点，`--steps` 只允许累计目标 600/800/1000，每 200 步保存，范围为 `continued-calibration-not-release`。`--resume-step` 可为已完成的 400/600/800，且必须小于新目标。以下从 400 续至 1000，只新增 600 次更新，要求保存 600/800/1000 步与最终权重：
+`--mode continuation` 显式恢复已完成校准端点。累计目标 600/800/1000 每 200 步保存，1500/2000 每 250 步保存，范围均为 `continued-calibration-not-release`。`--resume-step` 可为已完成的 400/600/800/1000/1500，且必须小于新目标；保存点按累计步数倍数计算。以下从 400 续至 1000，只新增 600 次更新，要求保存 600/800/1000 步与最终权重：
 
 ```text
 python tools/colab_trial.py build --dataset-dir <same-approved-images> --trigger-token <same-token> --output-dir <new-continuation-directory> --run-id <new-continuation-run-id> --model-manifest <same-model-manifest.json> --t5-spiece <same-spiece.model> --mode continuation --steps 1000 --seed 261012 --resume-payload <approved-parent-payload.zip> --resume-payload-sha256 <exact-parent-payload-sha256> --resume-results <approved-parent-results.zip> --resume-results-sha256 <exact-parent-results-sha256> --resume-step 400
 ```
 
-五个 `--resume-*` 身份参数必须同时提供。打包先核对父资料包和完整结果 ZIP 的外部哈希、安全成员、不可变输入、配置一致性、完成收据和选定端点权重身份；只恢复校准或续训已完成的端点。新运行必须保持相同图文哈希、触发词、底模、种子与训练参数，trainer 只允许此次受审查的累计步数修复差异。状态目录精确包含 `model.safetensors`、`optimizer.bin`、`scheduler.bin`、`random_states_0.pkl`、`train_state.json`，大小和哈希写入新配置；本机打包阶段不反序列化 optimizer/RNG pickle。
+完整结果 ZIP 路线的五个 `--resume-*` 身份参数必须同时提供。打包先核对父资料包和完整结果 ZIP 的外部哈希、安全成员、不可变输入、配置一致性、完成收据和选定端点权重身份；只恢复校准或续训已完成的端点。新运行必须保持相同图文哈希、触发词、底模、种子与训练参数，trainer 只允许此次受审查的累计步数修复差异。状态目录精确包含 `model.safetensors`、`optimizer.bin`、`scheduler.bin`、`random_states_0.pkl`、`train_state.json`，大小和哈希写入新配置；完整 ZIP 路线在本机只复制原始状态字节，不反序列化 optimizer/RNG pickle。
+
+完整结果 ZIP 未收齐但已保全原始五件状态时，可另用显式 `partial-rescue` 路线，不能冒称完整 ZIP 审计通过。它要求父资料包及其 SHA、恢复起点，以及绑定的状态目录、救援 manifest 和 manifest SHA；三个救援参数不能与完整结果 ZIP 参数混用。manifest 必须绑定原救援回执、父完成收据、端点权重、五件大小/SHA和 `verified-prefix-crc-local-sha` 来源，保留 `full_source_archive_verified: false`。这一例外在核验五件身份后进行受限 CPU 预检：optimizer/scheduler 采用 `weights_only=True`，RNG仅增加固定 NumPy 构造类型，拒绝自定义 pickle 对象；不初始化 CUDA或开始训练。1000→1500只新增500次更新，保存1250/1500和最终权重。契约、CPU测试与边界见[救援状态续训说明](../changes/training-lora-forge/2026-10-15-rescued-state-continuation.md)。
+
+```text
+python tools/colab_trial.py build --dataset-dir <same-approved-images> --trigger-token <same-token> --output-dir <new-external-directory> --run-id <new-run-id> --model-manifest <same-model-manifest.json> --t5-spiece <same-spiece.model> --mode continuation --steps 1500 --seed 261012 --resume-payload <approved-parent-payload.zip> --resume-payload-sha256 <exact-parent-payload-sha256> --resume-state-dir <bound-original-five-state-files> --resume-state-manifest <approved-partial-rescue-manifest.json> --resume-state-manifest-sha256 <exact-manifest-sha256> --resume-step 1000
+```
+
+CPU预检的optimizer↔模型对应只检查形状集合，CUDA RNG只检查字节结构；来源状态尚无原云端 SHA 对照时必须保留这一事实。`actual_resume_verified: false` 直到远端首更新前的真实恢复门禁通过，不能由CPU可读、状态文件完整或权重哈希匹配改成已恢复。
 
 远端在第一次数值更新前必须获得 RNG 恢复成功的明确证据；恢复日志缺失或报错即中止。AdamW 各参数状态数量须匹配模型深度，每个参数的累计 step 须等于起点，两个动量张量须形状匹配且有限，学习率须保持 `2e-5`，scheduler 的 `last_epoch` 须等于起点。恢复证据进入遥测和收据，不能仅以状态文件存在或加载函数返回来宣称恢复成功。
 
 [train_network.py](../../../snapshot/runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/train_network.py)将累计 `global_step` 与起始 epoch 内的批次游标分开，修复恢复 400 步后把计数误设为 epoch 内余数的问题；保留 epoch 边界、梯度累积和末尾不足整组批次的计数，并在外层 epoch 到达目标后停止，防止额外更新。续训命令固定携带 `--resume` 与 `--skip_until_initial_step`。重新建立数据加载器和跳过批次后的采样/打乱顺序不保证等同从头连续训练；RNG、优化器和累计计数门禁不构成逐步数值轨迹一致的证明。
 
-Notebook 先上传对应 ZIP，核对 ZIP 哈希和全部成员清单，再安全解压到新的 `/content/anima_trial/<run-id>`。解压拒绝路径越界、链接、大小写重名、额外成员与篡改。终端路线可选择先手动解压再执行准备/训练，或由完整驱动从 ZIP 开始；完整驱动必须配合新资料包和新运行 ID，不能重新解压到已有工作目录。训练环境使用独立 Linux venv 和官方 PyPI，依赖按现行受审查 trainer 版本固定；当前支持 Python 3.10–3.12 和 BF16 CUDA GPU。标准 venv 的 ensurepip 失败时，在同一目录使用 `--without-pip`，再由宿主 pip 的 `--python` 明确向 venv 安装固定 pip/setuptools/wheel；不向宿主安装训练依赖，安装计时记录回退状态。Colab 2025.10 / Python 3.12 的真实会话已验证此安装方式；更新的 Python 3.13 运行时暂不支持。采用 r32 / alpha16 / LR `2e-5` / AdamW/constant / batch1 / BF16、DiT-only、gradient checkpointing、workers0；试跑为 50 或 75 步，每 25 步保存，校准为 400 步，每 100 步保存，显式续训为累计 600/800/1000 步，每 200 步保存；各模式都保存权重及续训状态且无采样预览。`qwen_image_vae_2d` 默认省略，只有显式选项才加入。面积桶为 1024、no-upscale、512–1536、步长 64。数据集、随机种子和模型选择进入不可变配置。
+Notebook 先上传对应 ZIP，核对 ZIP 哈希和全部成员清单，再安全解压到新的 `/content/anima_trial/<run-id>`。解压拒绝路径越界、链接、大小写重名、额外成员与篡改。终端路线可选择先手动解压再执行准备/训练，或由完整驱动从 ZIP 开始；完整驱动必须配合新资料包和新运行 ID，不能重新解压到已有工作目录。训练环境使用独立 Linux venv 和官方 PyPI，依赖按现行受审查 trainer 版本固定；当前支持 Python 3.10–3.12 和 BF16 CUDA GPU。标准 venv 的 ensurepip 失败时，在同一目录使用 `--without-pip`，再由宿主 pip 的 `--python` 明确向 venv 安装固定 pip/setuptools/wheel；不向宿主安装训练依赖，安装计时记录回退状态。Colab 2025.10 / Python 3.12 的真实会话已验证此安装方式；更新的 Python 3.13 运行时暂不支持。采用 r32 / alpha16 / LR `2e-5` / AdamW/constant / batch1 / BF16、DiT-only、gradient checkpointing、workers0；试跑为 50 或 75 步，每 25 步保存，校准为 400 步，每 100 步保存，累计 600/800/1000 步续训每 200 步保存，累计 1500/2000 步续训每 250 步保存；各模式都保存权重及续训状态且无采样预览。`qwen_image_vae_2d` 默认省略，只有显式选项才加入。面积桶为 1024、no-upscale、512–1536、步长 64。数据集、随机种子和模型选择进入不可变配置。
 
 远端 prepare/run/entry 再核对初始负载文件的大小、SHA-256、目录与运行 ID；生成配置及 dataset TOML 也须与 prepare 时记录的冻结配置和哈希一致。已有训练收据拒绝覆盖，续训必须另建显式冻结运行。这些目录内核验不能替代解压前的外部 ZIP 哈希核对。成功收据要求累计步数达到目标、实际 Loss 与优化器更新次数精确等于“目标减起点”、Loss 的累计 step 序列连续，并且全部计划保存点和最终 safetensors 都存在、header 合法；400 步校准必须具备 100/200/300/400 步及最终权重五份，400→1000 则必须具备 401–1000 的 600 条 Loss/更新、通过恢复门禁及四份新权重。
 
@@ -99,6 +109,10 @@ Notebook 先上传对应 ZIP，核对 ZIP 哈希和全部成员清单，再安�
 后续新会话优先回收轻量证据、各候选权重小包，再回收optimizer/RNG等大状态包，每份落盘核验后才推进。该顺序是此次中断形成的流程建议，尚未作为新会话流程实测；不得自动挂载Drive或把尚未审计的状态当作已验证续训入口。
 
 ## 更新记录
+
+- 2026-10-15：新增本机参数化检查点评估入口与显式 `partial-rescue` 续训契约，补累计1500/2000、save250及1000→1500只新增500次更新的说明。救援状态先核身份再进行受限CPU预检；完整旧ZIP未验证、CPU形状集合/CUDA结构及实际远端恢复的边界分别保留。打包/CPU测试不构成续训执行或成品选择，详见对应短说明。
+
+- 2026-10-15：原版28层Anima的本机实测完成57张新图：四检查点×三强度×两seed共24张，800/1000服装、配饰、画风及补充seed控制30张，无LoRA诊断3张；原图、graph、history和三组独立审计保存在仓外。目视选择1000步/0.8为本次最佳动漫候选、800为回退；金花细节与水彩/3D仍有限制，未达全轴成品发布，暂不执行已准备的1500或2000。本机近景侧别和灰发带响应修正了旧云端20图结论，不能混淆两种采样器。完整旧ZIP仍未收齐，精确SHA重建权重、CPU状态预检及真实恢复分别记录。临时评估输入清理保留来源权重和图片；输出目录保护补至整个主仓，7项CPU安全测试通过，无生产安装或部署。
 
 - 2026-10-15：补记47块独立保全、11件原始状态字节救援与CPU重建四份BF16权重。600先精确匹配原件header/全部张量/payload/整文件SHA，再处理800/1000/final；四份均与冻结云端文件大小及完整SHA一致，另经主代理与独立审核者实读复核。未加载pickle/bin、Torch/GPU或实际恢复训练；完整ZIP及全部状态审计仍pending。训练和画质结论不变，无成品发布。
 

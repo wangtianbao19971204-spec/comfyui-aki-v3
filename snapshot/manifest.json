@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-14T14:52:38.851185+00:00",
+  "created_at": "2026-10-14T18:14:00.961929+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -51764,8 +51764,8 @@
     {
       "source": "anima_lora_forge/tests/test_colab_trial.py",
       "path": "runtime/anima_lora_forge/tests/test_colab_trial.py",
-      "sha256": "1688d335b23c3ec38b1e5c178efc3640a39985f3a83f9bd1f9029ed0917e9e93",
-      "bytes": 37762,
+      "sha256": "2f11947774b134e3a62a18cfd598c5aa5740e73d936442b9798062400bcc0cc0",
+      "bytes": 51509,
       "kind": "file"
     },
     {
@@ -51776,10 +51776,17 @@
       "kind": "file"
     },
     {
+      "source": "anima_lora_forge/tests/test_evaluate_checkpoint_plan.py",
+      "path": "runtime/anima_lora_forge/tests/test_evaluate_checkpoint_plan.py",
+      "sha256": "6e2a95eaf1c49c3e86c5d7384fa678ec1b0ebaeffb3da1e6891531aaf41cc6d6",
+      "bytes": 7376,
+      "kind": "file"
+    },
+    {
       "source": "anima_lora_forge/tests/test_trainer_resume_step_accounting.py",
       "path": "runtime/anima_lora_forge/tests/test_trainer_resume_step_accounting.py",
-      "sha256": "258eb63a800ef700943be825778617b1f8afccac74abc42ff2840bbc97c98a4e",
-      "bytes": 8418,
+      "sha256": "dcdb35e41f700af7de02c89498e32b1fd7c25566412801e6aab96248d25f9fd6",
+      "bytes": 9078,
       "kind": "file"
     },
     {
@@ -51799,8 +51806,15 @@
     {
       "source": "anima_lora_forge/tools/colab_trial.py",
       "path": "runtime/anima_lora_forge/tools/colab_trial.py",
-      "sha256": "d84bf3cbd5144563ead52d9ac71c736066d73ebe4c77dddecce3687b68722725",
-      "bytes": 58188,
+      "sha256": "1fb8b3eee83820d6583366d3d49029b75cf9a32680e32fecadb6a4689b2eaa18",
+      "bytes": 74613,
+      "kind": "file"
+    },
+    {
+      "source": "anima_lora_forge/tools/evaluate_checkpoint_plan.py",
+      "path": "runtime/anima_lora_forge/tools/evaluate_checkpoint_plan.py",
+      "sha256": "3f40a64873cd69293af39106db91db657b807856fe65f0133591315b2aaa842e",
+      "bytes": 25340,
       "kind": "file"
     },
     {
@@ -68226,17 +68240,18 @@
     }
   ],
   "development_revision": {
-    "note": "Add explicit verified400-to1000 Colab continuation and fix resume cumulative step accounting",
-    "previous_manifest_sha256": "b92230131063426aaa4c553467874283345786b3072d9ec2385e148299a29d0f",
+    "note": "Add frozen local Anima checkpoint evaluation and audited partial-rescue continuation preparation; candidate source only, not deployed",
+    "previous_manifest_sha256": "4845a50233047589b73b8693d742fd5513cdf5035825f1d460fcbf29c1a96575",
     "source_changes": {
       "added": [
-        "anima_lora_forge/tests/test_trainer_resume_step_accounting.py"
+        "anima_lora_forge/tests/test_evaluate_checkpoint_plan.py",
+        "anima_lora_forge/tools/evaluate_checkpoint_plan.py"
       ],
       "removed": [],
       "changed": [
         "anima_lora_forge/tests/test_colab_trial.py",
-        "anima_lora_forge/tools/colab_trial.py",
-        "anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/train_network.py"
+        "anima_lora_forge/tests/test_trainer_resume_step_accounting.py",
+        "anima_lora_forge/tools/colab_trial.py"
       ]
     },
     "live_deployed": false,

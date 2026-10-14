@@ -108,6 +108,15 @@ class TrainerResumeStepAccountingTests(unittest.TestCase):
         self.assertEqual(values["global_step"], 1000)
         self.assertEqual([step for step in values["logged_steps"] if step % 200 == 0], [600, 800, 1000])
 
+    def test_1000_to_1500_and_1500_to_2000_preserve_absolute_steps_and_save250(self):
+        for start, target, saves in ((1000, 1500, [1250, 1500]), (1500, 2000, [1750, 2000])):
+            with self.subTest(start=start, target=target):
+                values = simulate(start, target=target, extra_epochs=2)
+                self.assertEqual(values["physical_updates"], list(range(start, target)))
+                self.assertEqual(values["logged_steps"], list(range(start + 1, target + 1)))
+                self.assertEqual(values["global_step"], target)
+                self.assertEqual([step for step in values["logged_steps"] if step % 250 == 0], saves)
+
     def test_exact_epoch_boundary_does_not_reset_to_zero(self):
         values = position(360)
         self.assertEqual((values["global_step"], values["epoch_to_start"], values["initial_step"]), (360, 3, 0))

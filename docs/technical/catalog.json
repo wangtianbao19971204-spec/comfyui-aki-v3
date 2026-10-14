@@ -637,6 +637,7 @@
         "snapshot/runtime/anima_lora_forge/anima_lora.py",
         "snapshot/runtime/anima_lora_forge/anima_lora_forge/core.py",
         "snapshot/runtime/anima_lora_forge/tools/colab_trial.py",
+        "snapshot/runtime/anima_lora_forge/tools/evaluate_checkpoint_plan.py",
         "snapshot/runtime/anima_lora_forge/templates/new_character.profile.json",
         "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/anima_train_network.py",
         "snapshot/runtime/anima_lora_forge/vendor/sd-trainer/SD-Trainer/vendor/sd-scripts/train_network.py",
@@ -672,6 +673,7 @@
       "tests": [
         "snapshot/runtime/anima_lora_forge/tests/test_core.py",
         "snapshot/runtime/anima_lora_forge/tests/test_colab_trial.py",
+        "snapshot/runtime/anima_lora_forge/tests/test_evaluate_checkpoint_plan.py",
         "snapshot/runtime/anima_lora_forge/tests/test_trainer_resume_step_accounting.py"
       ],
       "evidence": [
