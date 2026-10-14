@@ -1,12 +1,24 @@
 # 丝袜纹理节点与引导编辑
 
-文档修订：2026-10-11。
+文档修订：2026-10-14。
+
+## 当前维护源码与本轮边界（2026-10-14）
+
+当前维护源码固定上游为 `e72a262bd917924bc82d45f19992344f2680a303`，来源与逐文件 SHA256 见 [UPSTREAM.json](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json)。29 份原始依赖置于 `upstream/stocking/`，MIT 许可原件保存在 [upstream/LICENSE](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/LICENSE)；`vendor/` 现仅保留本地命名空间与 i18n 适配。原始 `server.py` 随固定来源保存，但不启动上游服务器。后续固定来源核对使用 [sync_upstream.py](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/sync_upstream.py)，不使用旧历史脚本覆盖运行区。
+
+本轮从主维护仓固定提交 `e29e7741eabe9b235ba907483969a073de3f9a8d` 接纳插件 78 个文件 blob；来源为[维护 PR #16](https://github.com/wangtianbao19971204-spec/comfyui-aki-v3/pull/16)，本轮核验时仍为 open、未合并。恢复范围为 13 份修改、34 份新增及 19 份旧 vendor 文件退休，旧来源保留在主 Git 历史。该版本包含 Issue #3 的 `seams`／`snap` 校验和透传、ping 派生版本与草稿／导出保留保护，详见 [Issue #3 固定源码接纳与漂移修复](../changes/runtime-stocking-texture/2026-10-14-issue3-source-recovery.md)。
+
+新增合同入口为 [test_issue3.py](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_issue3.py)、[test_request_contract.py](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py) 和 [test_retention.py](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_retention.py)。本轮 CPU 完整集收集 78 项，其中 76 项通过、2 项显式 CUDA 验收跳过；前端 17 项通过，导出合同 6 项通过，独立修复工作流 CJS 回归通过。原作者另有 52 项依赖私有样图的测试跳过，不能计为通过；作者演示逐项页面及图片矩阵仍须独立验收。
+
+独立插件导出使用 [导出说明模板](../../../snapshot/runtime/production_tools/stocking_independent_README.md)，上游投稿沿用 [投稿模板](../../../snapshot/runtime/production_tools/stocking_upstream_README.md)。导出器核对原始依赖与许可，并分别记录当前依赖 pin 和既有 `f74c8ac` 展示素材来源；工作流继续保持“先放大、后纹理修复”。本次仅接纳维护源码并同步目录／文档，没有写运行区、重启或生图；历史部署、GPU 与页面收据不替代本轮验收。以下各节保留历史功能与部署范围，不能据此宣称当前整插件已完成新的 GPU、作者演示或生产验收。
+
+## 既有设备与效果记录（2026-10-10—11）
 
 完整编辑器新增默认 GPU 的 CPU/GPU 设置，覆盖 SAM、深度和走向求解；离开或关闭最后一个活跃编辑器后清空专用模型与图像特征缓存，推理中离开则在本轮结束后回收。GPU 求解保留作者算法与 CPU 回退，使用独立显存池。依赖、调度、内存回收与验收边界见 [设备设置与模型释放](../changes/runtime-stocking-texture/2026-10-11-device-and-release.md)。
 
 此前 SAM 点选与内置深度的 GPU 优化已于 2026-10-11 合并并部署到正式 8188 实例，完成真实页面点选与深度检查；仍沿用完整 FP32、CPU 模型缓存和最多四份图像特征缓存。历史速度、误差和调度边界见 [GPU 点选优化](../changes/runtime-stocking-texture/2026-10-10-gpu-selection.md)。本轮设备选择及离开卸载的生产状态单独记录。
 
-当前维护源码固定上游为 `f74c8ac0190ec43b2cdfcb13db86f35a83283311`，接入作者新增摩尔纹和新版油光。旧工作流默认关闭摩尔纹；开启且强度非零时需要深度，导出与节点执行均检查就绪状态。旧渲染节点新增三个末尾可选输入，油光传递求解器的遮挡连接；完整编辑器继续复用原版界面。见[新版效果与展示复核](../changes/runtime-stocking-texture/2026-10-10-upstream-effects.md)及[本轮收据](../../receipts/stocking_texture_upstream_refresh_20261010.json)。**本轮未部署生产。**
+2026-10-10 效果更新时固定上游为 `f74c8ac0190ec43b2cdfcb13db86f35a83283311`，接入作者新增摩尔纹和新版油光。旧工作流默认关闭摩尔纹；开启且强度非零时需要深度，导出与节点执行均检查就绪状态。旧渲染节点新增三个末尾可选输入，油光传递求解器的遮挡连接；完整编辑器继续复用原版界面。见[新版效果与展示复核](../changes/runtime-stocking-texture/2026-10-10-upstream-effects.md)及[本轮收据](../../receipts/stocking_texture_upstream_refresh_20261010.json)。**该次效果更新未部署生产。**
 
 展示复核纠正了旧局部选区不完整、交叉处分区过直的问题；这些旧图仅保留为功能回归输入，不作为 fork 展示成果。用户随后要求更新公开图片，三张完整选区对照经再次复核后纳入精确发布清单；维护仓只保存摘要与导出规则，实际图片留在仓外并作为 fork 展示制品导出。见[展示发布说明](../changes/runtime-stocking-texture/2026-10-10-reviewed-showcase.md)。像素与原版一致不代表选区正确或视觉效果合格。
 
@@ -18,7 +30,7 @@
 
 ## 完整编辑器扩展（2026-10-10）
 
-新增 `StockingTextureStudio`（丝袜纹理 · 完整编辑器），保留原有引导／渲染节点和工作流。固定上游更新至 `6c0c620d1bfa6a2c2691cb2313e928d9c7244ee5`，新“线圈”也加入原渲染节点。完整编辑器复用该提交的 Document、PSD 与静态界面，独立文档实例通过 ComfyUI 的同源 `/stocking_texture/studio` 路由接入，不启动原桌面服务器或安装器。
+以下记录 2026-10-10 的扩展与限定验收。当时新增 `StockingTextureStudio`（丝袜纹理 · 完整编辑器），保留原有引导／渲染节点和工作流；当时固定上游更新至 `6c0c620d1bfa6a2c2691cb2313e928d9c7244ee5`，新“线圈”也加入原渲染节点。完整编辑器复用该提交的 Document、PSD 与静态界面，独立文档实例通过 ComfyUI 的同源 `/stocking_texture/studio` 路由接入，不启动原桌面服务器或安装器。
 
 唯一适配实现为插件内 `studio.py`、`studio_api.py`、`studio_assets.py`、`studio_store.py`、`studio_models.py`、`studio_nodes.py` 和 `web/stocking_studio.js`。原版代码和静态资产逐文件 SHA 保存于 `UPSTREAM.json`。本地 i18n 适配改为请求作用域，PSD 同时识别中英文层名。新增范围涵盖线圈、预设保存／覆盖／删除／撤销载入、SAM 小中大、画笔／橡皮、拆分／合并／贴线、镜像、擦除自动墙、PSD 合成图及引导往返／手绘亮点层、内置深度、实时整体／分屏／100%／200%／问题图及求解横纹、双语和草稿恢复。
 
@@ -30,7 +42,7 @@ SAM 使用现有 ViT-B；深度固定为官方 Depth Anything V2 Small HF 的 `5
 
 在成图上求解受用户引导的织物坐标并叠加纹理，与底模无关。唯一实现为 [插件目录](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/)，[nodes.py](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/nodes.py) 负责节点／张量与临时预览，[engine.py](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/engine.py) 负责 JSON、区域、同步求解和渲染，[前端](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_texture.js) 负责各节点独立的模态编辑器。
 
-初版上游提交为 `ad4cc92de86021f20bedcf9de5b27ec0ae574184`，当时八个 `vendor/*.py` 原样保存；本轮来源升级见上节，来源及哈希见 [UPSTREAM.json](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json)。`vendor/i18n.py` 是本地无状态格式化适配，非上游原件。保留 MIT 版权／许可，不携带作者示例图、模型或安装器。
+初版上游提交为 `ad4cc92de86021f20bedcf9de5b27ec0ae574184`，当时八个 `vendor/*.py` 原样保存；当前已迁移到文首所述 `upstream/stocking/` 布局，来源及哈希见 [UPSTREAM.json](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json)。`vendor/i18n.py` 是本地无状态格式化适配，非上游原件。保留 MIT 版权／许可，不携带作者示例图、模型或安装器。
 
 ## 节点与数据契约
 

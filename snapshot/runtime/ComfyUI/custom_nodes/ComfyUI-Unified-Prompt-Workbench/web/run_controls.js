@@ -2,7 +2,7 @@ import {api} from '../../scripts/api.js';
 
 export function mountRunControls(host,{app,element,button,report,prepareTask,onSubmitted,historyHost=host}){
     const bar=element('div',null,host,{className:'uw-toolbar uw-run-actions'}),status=element('span','',bar);status.setAttribute('role','status');
-    let submitting=false,currentTask=null,activeService=null,serviceStatus='';
+    let submitting=false,currentTask=null,activeService=null,serviceStatus='',pendingQueueCleanup=null;
     const run=button(prepareTask?'选择任务':'运行一次','run',async()=>{
         if(submitting||disposed)return;
         submitting=true;run.disabled=true;status.textContent='正在检查并提交任务…';
@@ -15,18 +15,39 @@ export function mountRunControls(host,{app,element,button,report,prepareTask,onS
                 serviceStatus=result===false?'本次优化已取消。':'优化完成，请检查右侧结果。';
                 if(!disposed)status.textContent=serviceStatus;
             }else{
-                let requestId=null,queued=false,result;
-                const queueing=event=>{if(requestId===null&&event.detail?.requestId!=null)requestId=event.detail.requestId;};
-                const accepted=event=>{if(requestId!==null&&event.detail?.requestId===requestId&&event.detail.batchCount>0)queued=true;};
+                const graph=app.rootGraph||app.graph,graphId=graph?.id,nodes=graph?._nodes,branch=graph?.extra?.uap_workbench?.activeBranch;
+                const sameGraph=()=>{const current=app.rootGraph||app.graph;return current===graph&&current?.id===graphId&&current?._nodes===nodes&&current?.extra?.uap_workbench?.activeBranch===branch;};
+                let requestId=Number.isInteger(app.nextQueueRequestId)?app.nextQueueRequestId:null,requested=false,queued=false,result,timer,wake;
+                const stopWaiting=()=>{clearTimeout(timer);timer=null;const resolve=wake;wake=null;resolve?.();};
+                const queueing=event=>{if(requestId===null&&event.detail?.requestId!=null)requestId=event.detail.requestId;if(event.detail?.requestId===requestId)requested=true;};
+                const accepted=event=>{if(requested&&sameGraph()&&event.detail?.requestId===requestId&&event.detail.batchCount>0){queued=true;stopWaiting();}};
+                const cleanup=()=>{api.removeEventListener('promptQueueing',queueing);api.removeEventListener('promptQueued',accepted);stopWaiting();if(pendingQueueCleanup===cleanup)pendingQueueCleanup=null;};
+                const waitForReceipt=()=>new Promise(resolve=>{
+                    wake=resolve;
+                    const check=()=>{if(disposed||queued||!sameGraph()||!app.processingQueue)stopWaiting();else timer=setTimeout(check,50);};
+                    check();
+                });
                 api.addEventListener('promptQueueing',queueing);api.addEventListener('promptQueued',accepted);
-                try{result=task?await app.queuePrompt(0,1,{queueNodeIds:task.queueNodeIds}):await app.queuePrompt(0,1);}
-                finally{api.removeEventListener('promptQueueing',queueing);api.removeEventListener('promptQueued',accepted);}
-                if(result===false||!queued)throw new Error('任务未提交，请查看节点或运行错误提示。');
+                pendingQueueCleanup=cleanup;
+                try{
+                    result=task?await app.queuePrompt(0,1,{queueNodeIds:task.queueNodeIds}):await app.queuePrompt(0,1);
+                    // Native queuePrompt returns false when it buffers behind an
+                    // existing submission. Only its matching receipt proves acceptance.
+                    if(!disposed&&result===false&&requested&&!queued&&app.processingQueue&&sameGraph()){
+                        status.textContent='已进入本地提交队列，正在等待此任务的回执…';
+                        await waitForReceipt();
+                    }
+                }finally{cleanup();}
+                if(disposed)return;
+                if(requested&&!sameGraph()){
+                    const error=new Error('工作流已切换，已停止等待旧请求；请到队列核对此任务是否提交。');error.pendingRequest=true;throw error;
+                }
+                if(!queued)throw new Error('任务未提交，请查看节点或运行错误提示。');
                 if(!disposed){report.clear?.('run-controls');onSubmitted?.(task);await refresh();}
             }
         }catch(error){
             if(activeService)serviceStatus='优化失败，请按提示调整后重试。';
-            if(!disposed)status.textContent=activeService?serviceStatus:'任务未提交，请按提示调整后重试。';
+            if(!disposed)status.textContent=activeService?serviceStatus:error.pendingRequest?error.message:'任务未提交，请按提示调整后重试。';
             throw error;
         }finally{activeService=null;submitting=false;if(!disposed){run.disabled=Boolean(currentTask?.reason);updateStop();}}
     },bar);
@@ -75,5 +96,5 @@ export function mountRunControls(host,{app,element,button,report,prepareTask,onS
         }catch(error){if(!disposed&&token===version&&!activeService){status.textContent='状态读取失败；可重试。';report(error);}}
     }
     const update=()=>void refresh();history.ontoggle=update;api.addEventListener('status',update);api.addEventListener('execution_success',update);api.addEventListener('execution_error',update);void refresh();
-    return {setTask(task){currentTask=task;run.textContent=task.label;run.title=task.reason||task.label;run.disabled=submitting||Boolean(task.reason);updateStop();},dispose(){disposed=true;version++;if(activeService)void Promise.resolve(activeService.cancel?.()).catch(()=>{});for(const event of ['status','execution_success','execution_error'])api.removeEventListener(event,update);}};
+    return {setTask(task){currentTask=task;run.textContent=task.label;run.title=task.reason||task.label;run.disabled=submitting||Boolean(task.reason);updateStop();},dispose(){disposed=true;version++;pendingQueueCleanup?.();if(activeService)void Promise.resolve(activeService.cancel?.()).catch(()=>{});for(const event of ['status','execution_success','execution_error'])api.removeEventListener(event,update);}};
 }

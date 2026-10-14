@@ -720,8 +720,10 @@ def validate(data: dict[str, Any], *, forbid_browser_receiver: bool = False) -> 
                         if (endpoint[:2] if direction == "input" else endpoint[2:]) != expected:
                             errors.append(f"graph {graph_index} virtual {direction} {slot} has inconsistent link")
         for branch in data.get("extra", {}).get("uap_workbench", {}).get("branches", []):
-            branch_ids = set(branch.get("nodeIds", []))
-            if not branch_ids <= node_set:
+            # Native subgraph serialization can retain a string node ID in
+            # branch metadata while the root node itself uses an integer ID.
+            branch_ids = {str(node_id) for node_id in branch.get("nodeIds", [])}
+            if not branch_ids <= {str(node_id) for node_id in node_set}:
                 errors.append(f"branch {branch.get('id')} refers to missing node")
             if not set(branch.get("modes", {})) <= {str(node_id) for node_id in branch_ids}:
                 errors.append(f"branch {branch.get('id')} has obsolete saved mode")

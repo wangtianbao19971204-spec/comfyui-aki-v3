@@ -13,6 +13,7 @@ assert.equal(JSON.stringify(choices),original);
 const workflow=JSON.parse(fs.readFileSync(path.join(__dirname,'templates/生产扩展_丝袜纹理修复.json'),'utf8'));
 assert.deepEqual(workflow.nodes.map(n=>n.type),['StockingTextureStudio','SaveImage','SaveImage','Note']);
 assert.equal(workflow.nodes[0].widgets_values[0],'{}');
+assert.match(workflow.nodes.find(n=>n.type==='Note').widgets_values[0],/先完成 2× \/ 4× 放大，再导入最终尺寸图片修复纹理/);
 assert(workflow.nodes[0].inputs.every(i=>i.link==null));
 assert.equal(workflow.links.length,2);
 for(const link of workflow.links){

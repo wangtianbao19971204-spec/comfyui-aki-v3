@@ -12,7 +12,7 @@
 
 原清单 SHA-256：`d526702803eb2be7ae500563c0e416ee10d89fc0243b0483d8008a63932820ab`。
 
-正式 v2 SHA-256：`7b182ca195be4f73baf531e23002ebab99100a8770ba6084d6f373dcb5d2fc9c`。
+正式 v2 SHA-256：`c4eb1072b8742afb55675e1bb0f9136a10a01c99921bb53d6e9fd1173ad80267`。
 
 - 本清单覆盖捕获时全部 384 权重和 runtime-support 的 11 个辅助文件；全部路径相对运行根。
 - Civitai 记录来自已存的公开元数据，站点匿名请求本轮连接超时；不宣称它们当前可下载。
@@ -24,6 +24,7 @@
 - 2026-10-07：286 LoRA、19 生成底模及 1 SAM 工具按家族／用途规范命名；实际源文件名称与精度独立保留，目录大小写与加载器枚举严格一致。权重仍在仓外，旧 inventory 和已删评估条目不重写。
 - 2026-10-07：另导入 9 个公开来源 LoRA（8 Anima、1 Anima 2.9B），原捕获清单保持；新增 captured&#95;in&#95;inventory=false，当前合计 295 用户 LoRA。导入与公开来源核验见 docs/receipts/lora&#95;download&#95;import&#95;20261007.json。
 - 2026-10-08：检查12个新下载，11项新增（7 Krea2、4 Anima），ABP&#95;ART同摘要重复未重复导入。当前306用户LoRA；服务关闭时完成离线登记与加载器枚举，在线UI未测试。见 docs/receipts/lora&#95;download&#95;import&#95;20261008.json。
+- 2026-10-14：正式 UAP v2 与 production&#95;tools 同名模板的字节摘要同步为 c4eb1072b8742afb55675e1bb0f9136a10a01c99921bb53d6e9fd1173ad80267；本次仅调整 Krea2 节点 130163 的布局位置与 uap&#95;layout&#95;group，参数、连接和模型身份未改，捕获时间及既有模型观测保持。
 
 ## 正式 v2 所需（23 项）
 

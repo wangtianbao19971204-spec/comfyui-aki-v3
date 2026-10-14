@@ -2,8 +2,10 @@
 import hashlib
 import json
 from pathlib import Path
+import re
 import tempfile
 import unittest
+from urllib.parse import unquote, urlsplit
 from unittest import mock
 
 import export_stocking_upstream as exporter
@@ -19,7 +21,8 @@ class ExportContracts(unittest.TestCase):
         for row in self.provenance['files']:
             target=self.upstream/'stocking'/row['file']
             target.parent.mkdir(parents=True,exist_ok=True)
-            target.write_bytes((exporter.PLUGIN/'vendor'/row['file']).read_bytes())
+            target.write_bytes((exporter.PLUGIN/'upstream/stocking'/row['file']).read_bytes())
+        (self.upstream/'LICENSE').write_bytes((exporter.PLUGIN/'upstream/LICENSE').read_bytes())
         for name in ('README.md','README.en.md'):
             (self.upstream/name).write_text('Original README\n',encoding='utf-8')
         self.showcase = self.root / 'showcase'
@@ -27,7 +30,7 @@ class ExportContracts(unittest.TestCase):
         self.panel = self.showcase / 'reviewed-panel.png'
         self.panel.write_bytes(b'reviewed display asset fixture')
         self.manifest = self.root / 'showcase.json'
-        self.manifest.write_text(json.dumps({'files': [{
+        self.manifest.write_text(json.dumps({'upstream_commit': 'f74c8ac0190ec43b2cdfcb13db86f35a83283311', 'files': [{
             'name': self.panel.name, 'bytes': self.panel.stat().st_size,
             'sha256': hashlib.sha256(self.panel.read_bytes()).hexdigest(),
         }]}), encoding='utf-8')
@@ -46,6 +49,18 @@ class ExportContracts(unittest.TestCase):
         self.assertEqual(actual,{r['path'] for r in result['files']})
         self.assertEqual({p.name for p in (out/'integrations/comfyui/vendor').iterdir()},{'__init__.py','i18n.py'})
         self.assertFalse(any(p.startswith('stocking/') or '/assets/' in p or '/input/' in p for p in actual))
+        for row in self.provenance['files']:
+            self.assertEqual((out/'integrations/comfyui/upstream/stocking'/row['file']).read_bytes(),
+                             (self.upstream/'stocking'/row['file']).read_bytes())
+        self.assertEqual(result['dependency_mode'], 'fixed-raw-blob-copy')
+        self.assertEqual(result['showcase_upstream_commit'], 'f74c8ac0190ec43b2cdfcb13db86f35a83283311')
+        self.assertEqual(result['upstream_commit'], self.provenance['commit'])
+        for name in ('studio_document.py', 'guide_solver.py', 'gpu_contours.py',
+                     'requirements-cuda13.txt', 'tests/test_guide_solver.py',
+                     'tests/test_gpu_contours.py', 'tests/test_request_contract.py',
+                     'tests/test_issue3.py', 'tests/test_retention.py'):
+            self.assertIn('integrations/comfyui/' + name, actual)
+        self.assertFalse(result['upstream_files_modified'])
         self.assertEqual([p for p in actual if p.endswith('.png')],
                          ['integrations/comfyui/docs/images/reviewed-panel.png'])
         self.assertFalse(any('private-project' in p for p in actual))
@@ -54,13 +69,28 @@ class ExportContracts(unittest.TestCase):
         flow=json.loads((out/'integrations/comfyui/examples/stocking-repair.json').read_text(encoding='utf-8'))
         self.assertEqual([n['type'] for n in flow['nodes']],['StockingTextureStudio','SaveImage','SaveImage','Note'])
         self.assertEqual(flow['nodes'][0]['widgets_values'],['{}'])
+        self.assertIn('Finish any upscaling before importing the final-size image', flow['nodes'][-1]['widgets_values'][0])
         self.assertNotIn('uap_',json.dumps(flow))
         self.assertTrue((out/'integrations/comfyui/README.md').read_text(encoding='utf-8').startswith('> **AI disclosure'))
         self.assertIn('self.project.get("dark_adapt", False)',(out/'integrations/comfyui/studio.py').read_text(encoding='utf-8'))
         self.assertEqual((self.upstream/'README.md').read_text(),'Original README\n')
-        for name in ('README.md', 'README.en.md'):
-            # Public presentation must preserve the complete original README.
-            self.assertTrue((out/name).read_text(encoding='utf-8').endswith('Original README\n'))
+        self.assertIn(self.provenance['commit'], (out/'README.md').read_text(encoding='utf-8'))
+        self.assertFalse((out/'stocking').exists())
+        self.assertFalse((out/'.git').exists())
+        for relative in ('README.md', 'integrations/comfyui/README.md'):
+            readme = out/relative
+            text = readme.read_text(encoding='utf-8')
+            self.assertIn(self.provenance['commit'], text)
+            self.assertNotIn('{{UPSTREAM_COMMIT}}', text)
+            self.assertNotIn('feat/comfyui-integration', text)
+            self.assertNotIn('wangtianbao19971204-spec/stocking-texture-tool', text)
+            for href in re.findall(r'\[[^\]]*\]\(([^)]+)\)', text):
+                link = urlsplit(href)
+                if link.scheme or not link.path:
+                    continue
+                target = (readme.parent/unquote(link.path)).resolve()
+                self.assertTrue(out.resolve() in target.parents, (relative, href))
+                self.assertTrue(target.exists(), (relative, href))
 
     def test_existing_destination_is_preserved(self):
         out=self.root/'export';out.mkdir()
@@ -73,6 +103,12 @@ class ExportContracts(unittest.TestCase):
         (self.upstream/'stocking/knit.py').write_text('different')
         with self.assertRaisesRegex(ValueError,'Upstream changed'):
             exporter.export(self.upstream,self.root/'export',self.showcase)
+        self.assertFalse((self.root/'export').exists())
+
+    def test_changed_upstream_license_is_rejected_before_export(self):
+        (self.upstream/'LICENSE').write_text('different license')
+        with self.assertRaisesRegex(ValueError, 'Upstream license changed'):
+            exporter.export(self.upstream, self.root/'export', self.showcase)
         self.assertFalse((self.root/'export').exists())
 
     def test_changed_panel_is_rejected_before_any_output(self):

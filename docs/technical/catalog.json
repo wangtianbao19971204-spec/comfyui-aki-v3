@@ -106,7 +106,8 @@
       "evidence": [
         "docs/receipts/browser_live_deployment_20261006.json",
         "docs/receipts/final_workflow_acceptance_20261007.json",
-        "docs/receipts/anima_control_gpu_deployment_20261011.json"
+        "docs/receipts/anima_control_gpu_deployment_20261011.json",
+        "docs/receipts/full_suite_audit_20261014.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -169,7 +170,8 @@
         "docs/receipts/stocking_workflow_refresh_20261010.json",
         "docs/receipts/anima_control_simple_20261011.json",
         "docs/receipts/anima_control_gpu_deployment_20261011.json",
-        "docs/receipts/control_one_click_20261014.json"
+        "docs/receipts/control_one_click_20261014.json",
+        "docs/receipts/full_suite_audit_20261014.json"
       ],
       "acceptance": "historical",
       "watch": [
@@ -241,7 +243,8 @@
         "docs/receipts/anima_original_control_merge_20261011.json",
         "docs/receipts/krea2_pose_control_20261011.json",
         "docs/receipts/control_erase_routing_repair_20261013.json",
-        "docs/receipts/control_erase_deployment_20261013.json"
+        "docs/receipts/control_erase_deployment_20261013.json",
+        "docs/receipts/full_suite_audit_20261014.json"
       ],
       "acceptance": "historical",
       "watch": [
@@ -786,7 +789,8 @@
         "docs/receipts/github_content_reconciliation_20261007.json",
         "docs/receipts/privacy_completeness_recheck_20261007.json",
         "docs/receipts/incremental_security_20261011.json",
-        "docs/receipts/snapshot_fingerprints_20261011.json"
+        "docs/receipts/snapshot_fingerprints_20261011.json",
+        "docs/receipts/full_suite_audit_20261014.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -962,7 +966,40 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_nodes.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/web/stocking_studio.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/MODEL_SOURCES.json",
-        "snapshot/runtime/production_tools/export_stocking_upstream.py"
+        "snapshot/runtime/production_tools/export_stocking_upstream.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/sync_upstream.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/__init__.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/vendor/i18n.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/LICENSE",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/__init__.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/__main__.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/coverage.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/depth.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/document.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/export.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/guide_fields.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/i18n.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/knit.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/look.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/oily.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/presets.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/psd_io.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/sam.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/server.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/session.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/settings.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/split.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/app.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n/en.json",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/index.html",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/look.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/style.css",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/symmetry.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/tiles.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/trace.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/version.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/walls.py"
       ],
       "tests": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py",
@@ -984,7 +1021,10 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/feature_acceptance.py",
         "snapshot/runtime/production_tools/test_export_stocking_upstream.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/bend_acceptance.py",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/visual_review.py"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/visual_review.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_issue3.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_retention.py"
       ],
       "evidence": [
         "docs/receipts/stocking_texture_20261009.json",
@@ -999,7 +1039,8 @@
         "docs/receipts/stocking_texture_upstream_refresh_20261010.json",
         "docs/receipts/stocking_fork_showcase_20261010.json",
         "docs/receipts/stocking_gpu_guides_20261011.json",
-        "docs/receipts/stocking_gpu_production_20261011.json"
+        "docs/receipts/stocking_gpu_production_20261011.json",
+        "docs/receipts/full_suite_audit_20261014.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -1008,6 +1049,7 @@
         "snapshot/runtime/production_tools/export_stocking_upstream.py",
         "snapshot/runtime/production_tools/test_export_stocking_upstream.py",
         "snapshot/runtime/production_tools/stocking_upstream_README.md",
+        "snapshot/runtime/production_tools/stocking_independent_README.md",
         "snapshot/runtime/production_tools/stocking_fork_intro.md",
         "snapshot/runtime/production_tools/stocking_fork_intro.en.md",
         "snapshot/runtime/production_tools/stocking_showcase.json",
@@ -1019,6 +1061,7 @@
         "examples/stocking-texture/workflow_api.example.json",
         "examples/stocking-texture/studio.workflow.json",
         "snapshot/runtime/production_tools/stocking_upstream_README.md",
+        "snapshot/runtime/production_tools/stocking_independent_README.md",
         "snapshot/runtime/production_tools/stocking_fork_intro.md",
         "snapshot/runtime/production_tools/stocking_fork_intro.en.md",
         "snapshot/runtime/production_tools/stocking_showcase.json",

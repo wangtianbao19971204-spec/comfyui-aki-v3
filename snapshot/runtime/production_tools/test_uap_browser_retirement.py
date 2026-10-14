@@ -195,9 +195,20 @@ class BrowserRetirementAcceptance(unittest.TestCase):
         self.assert_rejected(data, "has obsolete saved mode")
 
     def test_11_obsolete_branch_node_id_is_rejected(self):
-        data = self.candidate()
-        data["extra"]["uap_workbench"]["branches"][0]["nodeIds"].append(FIXTURE_ID)
-        self.assert_rejected(data, "refers to missing node")
+        for missing_id in (FIXTURE_ID, str(FIXTURE_ID)):
+            with self.subTest(node_id=missing_id):
+                data = self.candidate()
+                data["extra"]["uap_workbench"]["branches"][0]["nodeIds"].append(missing_id)
+                self.assert_rejected(data, "refers to missing node")
+
+    def test_11b_mixed_string_and_integer_branch_ids_are_valid(self):
+        for source_name, source in self.sources.items():
+            with self.subTest(source=source_name):
+                data = copy.deepcopy(source)
+                branch = data["extra"]["uap_workbench"]["branches"][0]
+                branch["nodeIds"] = [str(node_id) if index % 2 else int(node_id)
+                                     for index, node_id in enumerate(branch["nodeIds"])]
+                self.assertEqual(self.strict_errors(data), [])
 
     def test_12_obsolete_stage_group_is_rejected(self):
         data = self.candidate()

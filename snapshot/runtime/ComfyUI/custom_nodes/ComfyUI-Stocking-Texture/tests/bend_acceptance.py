@@ -73,7 +73,9 @@ def run(args):
         doc, art, regions = original_doc(project, args.assets, document)
         own = None
         try:
-            own = studio.Studio(args.assets, store.Preferences(args.out / "user"),
+            preferences = store.Preferences(args.out / "user")
+            preferences.update(compute_device="cpu")  # GPU numerical tolerance has separate checks.
+            own = studio.Studio(args.assets, preferences,
                                 {"sam": Path("missing"), "depth": Path("missing")}, project)
             assert doc.wait_idle(120), "Upstream solver timed out"
             own.wait_ready()
