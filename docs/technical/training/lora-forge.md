@@ -1,6 +1,6 @@
 # Anima LoRA 训练与候选发布
 
-文档修订：2026-10-07.1。
+文档修订：2026-10-14.2。
 
 ## 入口和实现
 
@@ -42,7 +42,27 @@
 
 [test_core.py](../../../snapshot/runtime/anima_lora_forge/tests/test_core.py)验证可复用工具逻辑；真实训练需独立 GPU 日志、模型/数据哈希与逐图评估。训练监控端口、进程及 Loss 是运行时事实，不写成永远有效的版本状态。
 
+## Colab 短训
+
+[colab_trial.py](../../../snapshot/runtime/anima_lora_forge/tools/colab_trial.py)从已审查的 `vendor/sd-trainer/SD-Trainer/vendor/sd-scripts` 打包纯 Python 源码、许可证、精确允许的 Qwen3/T5 架构与 tokenizer 文件，以及用户选定目录中的同名图片/caption。它排除 `.git`、环境、缓存、GUI 私人配置、权重和预览；模型只通过显式公开 HTTPS 地址、大小和 SHA-256 的 manifest 获取。打包不会启动本机训练、上传文件、挂载 Drive 或修改来源数据。输出 ZIP、逐文件哈希清单、干净的 `.ipynb` 和打包收据应保存到仓外新目录，真实训练图片和权重不进入 Git。
+
+manifest 顶层为 `expected_num_blocks`（原版 28、2.9B 为 40）和 `files` 列表。每项包含 `role`（`dit` / `vae` / `qwen3` / `tokenizer`）、相对 `path`、`url`、`sha256`，可加 `bytes`。权重相对目标只允许 `models/<name>.safetensors`；tokenizer 只允许精确列出的 `trainer/configs/qwen3_06b/` 与 `trainer/configs/t5_old/` 纯文件。缺失的 T5 `spiece.model` 可从用户审核的仓外纯文件通过 `--t5-spiece` 注入，不公开本机源路径。既有 `infer_anima_num_blocks` 补丁随源码保留，远端以真实模型 header 探测结果与 manifest 核对，不能默默套用另一底模深度。
+
+```text
+python tools/colab_trial.py build --dataset-dir <approved-images> --trigger-token <unique-token> --output-dir <new-external-directory> --run-id <unique-run-id> --model-manifest <public-model-manifest.json> --t5-spiece <reviewed-spiece.model> --steps 75 --seed 261012
+```
+
+Notebook 先上传对应 ZIP，核对 ZIP 哈希和全部成员清单，再安全解压到新的 `/content/anima_trial/<run-id>`。解压拒绝路径越界、链接、大小写重名、额外成员与篡改。训练环境使用独立 Linux venv 和官方 PyPI，依赖按现行受审查 trainer 版本固定；当前支持 Python 3.10–3.12 和 BF16 CUDA GPU。标准 venv 的 ensurepip 失败时，在同一目录使用 `--without-pip`，再由宿主 pip 的 `--python` 明确向 venv 安装固定 pip/setuptools/wheel；不向宿主安装训练依赖，安装计时记录回退状态。Colab 2025.10 / Python 3.12 的真实会话已验证此安装方式；更新的 Python 3.13 运行时暂不支持。采用 r32 / alpha16 / LR `2e-5` / batch1 / BF16、DiT-only、gradient checkpointing、workers0、50 或 75 步，每 25 步保存权重及续训状态，无采样预览；`qwen_image_vae_2d` 默认省略，只有显式选项才加入。面积桶为 1024、no-upscale、512–1536、步长 64。数据集变更、随机种子和模型选择进入不可变 trial 配置。
+
+输出分别记录依赖安装、模型下载/预检、模型/训练器准备、latent/text 缓存、训练循环（含保存）、有限 Loss、VRAM、每步吞吐以及每个候选 safetensors 的 header/哈希。净更新测量从 `process_batch` 到 AdamW 完成并同步 CUDA，覆盖前向/反向/优化器，排除数据获取、缓存、模型装载和保存；同步本身有少量测量开销。缓存显式写入临时磁盘，与部分本机历史任务的内存缓存不同，且本次无预览，总耗时不能冒称严格同参数 A/B。失败日志同样保留下载；不自动续训、不自动释放其他会话、不自动挂载或授权 Drive。50/75 步只检验管线和速度，角色质量仍须本地固定参数出图及多个检查点评估。
+
+[test_colab_trial.py](../../../snapshot/runtime/anima_lora_forge/tests/test_colab_trial.py)覆盖 CPU 打包、来源数据不改写、纯文件隐私边界、Notebook 代码编译、28/40 架构契约、命令与缺项拒绝、安全解压及检查点 header/哈希。CPU 测试通过不代表 Colab GPU、网络下载或模型质量验收通过；实际短训记录和包应独立保存在仓外。
+
+2026-10-14 已在 Chrome 的 Colab 2025.10 / Python 3.12.12 / Torch 2.6.0 CUDA 12.4 会话上，用批准的 120 对图文数据完成原版 Anima 28 层的 75 步试验。实际 GPU 为 NVIDIA A100-SXM4-40GB；由于 Notebook 输出 iframe 无法稳定加载，本次通过 Colab 文件侧栏上传和内置终端执行冻结资料包，不把此结果视为 Notebook 全部交互已验收。依赖安装 132.54 秒、模型下载与预检 84.22 秒、训练器进程 143.54 秒，其中 latent 缓存 32.99 秒、文本缓存 7.46 秒、模型/训练器准备 37.18 秒、训练及保存 65.91 秒；75 次净更新合计 59.02 秒。退出码 0，75 个有限 Loss 记录，4 份 BF16 LoRA header/哈希通过，CUDA 峰值已分配显存 6,186,939,392 字节。完整权重/续训状态 ZIP 已在远端生成，浏览器下载暂未核验；仅从可见终端保存了摘要收据，不冒称权重已落地。角色质量、正式长训、自动续训和本机部署均未验收。
+
 ## 更新记录
+
+- 2026-10-14：新增参数化 Colab 50/75 步短训打包器，保留原版/2.9B 动态深度探测；只携带审查源码、纯 tokenizer 与选定图文资料，公开底模地址通过精确哈希 manifest 注入。CPU 回归 26 项通过，补打包/隐私边界/Notebook/训练参数/恶意 ZIP/检查点及 ensurepip 回退；Colab 2025.10 / Python 3.12 的 A100 终端短训 75 步通过，Notebook 输出/浏览器下载仍有交互限制。真实 GPU、外部上传、耗时与角色质量分开验收，源码变更不部署到生产。
 
 - 2026-10-07：补旧 CLI 引用的公共 `config/sample_prompts.txt`，另以空状态示例说明可变 GUI 配置；不导入本机 `assets/config.json`，不改变现行 Forge 采样提示词或启动训练。原字节与精确路径门禁纳入[完整性复核](../changes/operations-source-of-truth/2026-10-07-completeness-recheck.md)。
 

@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-14T05:06:39.061787+00:00",
+  "created_at": "2026-10-14T11:04:28.688256+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -51762,6 +51762,13 @@
       "kind": "file"
     },
     {
+      "source": "anima_lora_forge/tests/test_colab_trial.py",
+      "path": "runtime/anima_lora_forge/tests/test_colab_trial.py",
+      "sha256": "0cc03ddb66ed4b1e3c8db40f07454fa878ee8daf8b73e4b0d01df470765a814e",
+      "bytes": 17428,
+      "kind": "file"
+    },
+    {
       "source": "anima_lora_forge/tests/test_core.py",
       "path": "runtime/anima_lora_forge/tests/test_core.py",
       "sha256": "8b96fc1e1e84700036c9351a88a77dbc3e4434d1b1574c8f13e5fcb46cc14ff3",
@@ -51780,6 +51787,13 @@
       "path": "runtime/anima_lora_forge/tools/build_alicia_split_eval_sheet.py",
       "sha256": "1ad893d8bf42ef0665b589318b8e3092d15f12c79be58377d4d3ddae93098a65",
       "bytes": 2010,
+      "kind": "file"
+    },
+    {
+      "source": "anima_lora_forge/tools/colab_trial.py",
+      "path": "runtime/anima_lora_forge/tools/colab_trial.py",
+      "sha256": "35e809d0ed1bce77213ab022b0a01844480a3f514f3e66706e0aa3b9b464ec6e",
+      "bytes": 35604,
       "kind": "file"
     },
     {
@@ -68205,31 +68219,14 @@
     }
   ],
   "development_revision": {
-    "note": "Sync stocking e6aeaeb multilayer editor and browser preset exchange with cache and finite-input fixes",
-    "previous_manifest_sha256": "b3adee7b56e96d657a018489fa83bc1eee819b17d8fc38cb138fd38de31f60b1",
+    "note": "Add isolated Colab Anima trial packaging and ensurepip compatibility fallback; no runtime deployment",
+    "previous_manifest_sha256": "f19ea36cfc918df90dc64179884a73c0985d2a1db18032890e91a85ed79beda2",
     "source_changes": {
-      "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_rendering.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_studio.py"
-      ],
+      "added": [],
       "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/rendering.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_api.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_assets.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/document.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/look.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/presets.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/server.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/app.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n/en.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/index.html",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/look.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/style.css"
+        "anima_lora_forge/tests/test_colab_trial.py",
+        "anima_lora_forge/tools/colab_trial.py"
       ]
     },
     "live_deployed": false,
