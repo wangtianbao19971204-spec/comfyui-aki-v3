@@ -2,15 +2,21 @@
 
 文档修订：2026-10-14。
 
-## 当前维护源码与本轮边界（2026-10-14）
+## 当前上游同步（2026-10-14）
 
-当前维护源码固定上游为 `e72a262bd917924bc82d45f19992344f2680a303`，来源与逐文件 SHA256 见 [UPSTREAM.json](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json)。29 份原始依赖置于 `upstream/stocking/`，MIT 许可原件保存在 [upstream/LICENSE](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/LICENSE)；`vendor/` 现仅保留本地命名空间与 i18n 适配。原始 `server.py` 随固定来源保存，但不启动上游服务器。后续固定来源核对使用 [sync_upstream.py](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/sync_upstream.py)，不使用旧历史脚本覆盖运行区。
+当前 pin 为 `e6aeaebd0410301f4db61034db1b1c592eeb57d4`，相对上一 pin 前进 11 个提交。完整编辑器接入最多四层纹理、每层独立参数、自动 100%／独立份额、浏览器预设文件导入导出及独立纹理撤销历史。29 份上游依赖仍按 Git 原始 blob 保存，MIT 原件不变；本地适配继续独立维护。使用与本轮实际验收见[多层纹理同步](../changes/runtime-stocking-texture/2026-10-14-upstream-multilayer.md)及[收据](../../receipts/stocking_upstream_sync_20261014.json)。
 
-本轮从主维护仓固定提交 `e29e7741eabe9b235ba907483969a073de3f9a8d` 接纳插件 78 个文件 blob；来源为[维护 PR #16](https://github.com/wangtianbao19971204-spec/comfyui-aki-v3/pull/16)，本轮核验时仍为 open、未合并。恢复范围为 13 份修改、34 份新增及 19 份旧 vendor 文件退休，旧来源保留在主 Git 历史。该版本包含 Issue #3 的 `seams`／`snap` 校验和透传、ping 派生版本与草稿／导出保留保护，详见 [Issue #3 固定源码接纳与漂移修复](../changes/runtime-stocking-texture/2026-10-14-issue3-source-recovery.md)。
+新回归入口为 `tests/test_upstream_rendering.py` 和 `tests/test_upstream_studio.py`。本地额外修复首层独立份额的上游缓存遗漏，并在参数裁剪前拒绝非有限值；旧 schema 2、现有素材与用户预设保持。此更新没有新增 PSD 纹理参数保存，上游相关尝试已撤回。
 
-新增合同入口为 [test_issue3.py](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_issue3.py)、[test_request_contract.py](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py) 和 [test_retention.py](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_retention.py)。本轮 CPU 完整集收集 78 项，其中 76 项通过、2 项显式 CUDA 验收跳过；前端 17 项通过，导出合同 6 项通过，独立修复工作流 CJS 回归通过。原作者另有 52 项依赖私有样图的测试跳过，不能计为通过；作者演示逐项页面及图片矩阵仍须独立验收。
+## 上一轮固定来源恢复与边界（2026-10-14）
 
-独立插件导出使用 [导出说明模板](../../../snapshot/runtime/production_tools/stocking_independent_README.md)，上游投稿沿用 [投稿模板](../../../snapshot/runtime/production_tools/stocking_upstream_README.md)。导出器核对原始依赖与许可，并分别记录当前依赖 pin 和既有 `f74c8ac` 展示素材来源；工作流继续保持“先放大、后纹理修复”。本次仅接纳维护源码并同步目录／文档，没有写运行区、重启或生图；历史部署、GPU 与页面收据不替代本轮验收。以下各节保留历史功能与部署范围，不能据此宣称当前整插件已完成新的 GPU、作者演示或生产验收。
+该轮恢复的上游固定为 `e72a262bd917924bc82d45f19992344f2680a303`，恢复来源见该轮变更说明；[UPSTREAM.json](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json) 已随该轮同步更新为文首的新 pin 与逐文件 SHA256。29 份原始依赖置于 `upstream/stocking/`，MIT 许可原件保存在 [upstream/LICENSE](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/LICENSE)；`vendor/` 现仅保留本地命名空间与 i18n 适配。原始 `server.py` 随固定来源保存，但不启动上游服务器。后续固定来源核对使用 [sync_upstream.py](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/sync_upstream.py)，不使用旧历史脚本覆盖运行区。
+
+该轮从主维护仓固定提交 `e29e7741eabe9b235ba907483969a073de3f9a8d` 接纳插件 78 个文件 blob；来源为[维护 PR #16](https://github.com/wangtianbao19971204-spec/comfyui-aki-v3/pull/16)，该轮核验时仍为 open、未合并。恢复范围为 13 份修改、34 份新增及 19 份旧 vendor 文件退休，旧来源保留在主 Git 历史。该版本包含 Issue #3 的 `seams`／`snap` 校验和透传、ping 派生版本与草稿／导出保留保护，详见 [Issue #3 固定源码接纳与漂移修复](../changes/runtime-stocking-texture/2026-10-14-issue3-source-recovery.md)。
+
+新增合同入口为 [test_issue3.py](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_issue3.py)、[test_request_contract.py](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py) 和 [test_retention.py](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_retention.py)。该轮 CPU 完整集收集 78 项，其中 76 项通过、2 项显式 CUDA 验收跳过；前端 17 项通过，导出合同 6 项通过，独立修复工作流 CJS 回归通过。原作者另有 52 项依赖私有样图的测试跳过，不能计为通过；作者演示逐项页面及图片矩阵仍须独立验收。
+
+独立插件导出使用 [导出说明模板](../../../snapshot/runtime/production_tools/stocking_independent_README.md)，上游投稿沿用 [投稿模板](../../../snapshot/runtime/production_tools/stocking_upstream_README.md)。导出器核对原始依赖与许可，并分别记录当前依赖 pin 和既有 `f74c8ac` 展示素材来源；工作流继续保持“先放大、后纹理修复”。该次源码恢复阶段仅接纳维护源码并同步目录／文档，没有写运行区、重启或生图；历史部署、GPU 与页面收据不替代该阶段验收。当前多层同步的 GPU、实页及生产验收以文首链接和该轮收据为准。
 
 ## 既有设备与效果记录（2026-10-10—11）
 
@@ -78,7 +84,7 @@ IMAGE 为 `[B,H,W,3/4]`、MASK 为 `[B,H,W]`，float 0–1。外接 MASK 与 dep
 node snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_editor.cjs
 ```
 
-隔离验收从 seal 后快照物化新树，运行区 Python 以 CPU、独立端口、独立 user/temp/数据库和仅本插件白名单启动；使用合成布料区域，不访问真实提示词库或加载模型。实页需要检查打开／圈选／走向／保存、工作流保存往返和执行结果；登记实际收据后才报告通过。
+2026-10-09 初版隔离验收从 seal 后快照物化新树，运行区 Python 以 CPU、独立端口、独立 user/temp/数据库和仅本插件白名单启动；使用合成布料区域，不访问真实提示词库或加载模型。实页需要检查打开／圈选／走向／保存、工作流保存往返和执行结果；登记实际收据后才报告通过。
 
 2026-10-09 实际收据见 [stocking_texture_20261009.json](../../receipts/stocking_texture_20261009.json)：13 项 Python 合同与 10 项前端回归通过；ComfyUI 0.33.0／前端 1.49.6 的隔离 CPU API 跑通五样式，区域外变化为零，RGBA 图层保存正确，PNG 复合最大误差 0.9922/255，重复结果相同。真实页面验证新增／改名部位、圈选、手画走向、撤销重做、缩放、保存和取消；工作流保存、关闭、重新加载后两个部位及走向仍在，编辑后的引导多次执行成功。最终前端保存使用 `widget.element`，保留旧版本兼容；刷新后再验保存且没有新增控制台错误。
 
@@ -88,7 +94,7 @@ node snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_e
 
 初版已按用户“部署生产后实测验收”的授权部署到运行区及 production 白名单。随后 24 例 API 与实页复测发现近黑袜默认三种织纹逐像素无变化，故初版画质验收失败，不能用接口成功代替有效纹理。2026-10-10 修复已完成限定部署，见 [修复验收收据](../../receipts/stocking_texture_fix_20261010.json)：9 个插件文件更新、26 文件与主仓哈希一致，77 个范围外受保护文件未改，保留 5 个数据库一致副本。通过原绘世启动器重新加载，启动参数值和父进程关系保持；生产工作台 5 模块／76 节点就绪。回滚仅处理同批明确插件源码，不覆盖用户引导、工作流、输出或数据库。
 
-用户随后明确要求“部署生产后实测验收”，本次部署候选限定为本插件 23 文件及 production_tools/profiles.json 的 production 新增项。原绘世启动器停止／启动用于保持进程管理关系；部署前保留当前哈希、队列／服务身份、一致数据库备份及同批回滚材料，真实验收完成后另登记现场结果。原图和已有工作流不覆盖，媒体留在仓外。
+2026-10-10 用户随后明确要求“部署生产后实测验收”，当时部署候选限定为本插件 23 文件及 production_tools/profiles.json 的 production 新增项。原绘世启动器停止／启动用于保持进程管理关系；部署前保留当前哈希、队列／服务身份、一致数据库备份及同批回滚材料，真实验收完成后另登记现场结果。原图和已有工作流不覆盖，媒体留在仓外。
 
 油光保持试验标识；抗摩尔纹是局部频率减弱与多级贴图过滤，不保证任意输入或后续缩放零摩尔纹。合成样例／接口成功不代表真实插画跨姿态画质通过。
 

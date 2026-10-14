@@ -16,6 +16,8 @@ DOC = "/api/doc/{doc_id}/"
 # selected if-body, not its elif/else siblings, so another route cannot cover it.
 HANDLERS = {
     ("POST", "/api/lang"): ("action", ("path", "api/lang"), ("method", "POST")),
+    ("PUT", "/api/look/blend-auto"): ("action", ("path", "api/look/blend-auto")),
+    ("POST", "/api/look/presets/export"): ("action", ("path", "api/look/presets/export")),
     ("PUT", "/api/look/presets"): ("action", ("path", "api/look/presets"), ("method", "PUT")),
     ("DELETE", "/api/look/presets"): ("action", ("path", "api/look/presets"), ("method", "DELETE")),
     ("POST", DOC + "regions"): ("edit_document", ("action", "regions")),

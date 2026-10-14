@@ -134,6 +134,21 @@ input[type="checkbox"] { margin: 0; accent-color: var(--chalk); }
 .mode:hover:not([aria-disabled="true"]):not([aria-selected="true"]) { color: var(--text); }
 .mode[aria-selected="true"] { background: var(--chalk); color: var(--on-chalk); font-weight: 700; }
 .mode[aria-disabled="true"] { color: var(--faint); cursor: default; }
+.layer-tabs { display: contents; }
+/* × on a 纹理层's tab (with more than one layer, on the 纹理 page): deletes that layer */
+.tab-x {
+  display: inline-block; margin: 0 -6px 0 8px; padding: 0 5px; border-radius: 3px; font-size: 14px; line-height: 18px;
+  font-weight: 400; vertical-align: top; opacity: .6;
+}
+.tab-x:hover { opacity: 1; background: color-mix(in srgb, currentColor 18%, transparent); }
+body[data-mode="edit"] .tab-x { display: none; }
+/* + beside the page tabs: one more 纹理层 */
+.layer-add {
+  width: 30px; height: 30px; padding: 0; border-radius: 4px; background: var(--float); color: var(--muted);
+  font-size: 18px; line-height: 1;
+}
+.layer-add:hover:not(:disabled) { color: var(--text); background: var(--hover); }
+.layer-add:disabled { color: var(--faint); cursor: default; }
 .tip {
   position: absolute; z-index: 20; left: 0; top: 36px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 4px;
   background: var(--float); box-shadow: var(--elev); font-size: 12px; white-space: nowrap; pointer-events: none;
@@ -362,6 +377,20 @@ body[data-mode="edit"] .look-only, body[data-mode="look"] .edit-only { display: 
 .preset-row select:hover:not(:disabled) { background: var(--hover); }
 .preset-row select:disabled { color: var(--faint); cursor: default; }
 .preset-note { overflow-wrap: anywhere; }
+.preset-head #btn-preset-import { margin-left: auto; }
+.preset-head .text-btn:disabled { color: var(--faint); text-decoration: none; cursor: default; }
+/* 融合: one slider for each 纹理层, the layer shown in bold; 自动 100% on the right of the title */
+.blend-head { height: 26px; }
+.blend-head .btn { margin-left: auto; }
+.blend-row { display: grid; grid-template-columns: 56px minmax(0, 1fr) 38px; align-items: center; gap: 8px; margin-bottom: 4px; }
+.blend-name {
+  min-width: 0; padding: 0; overflow: hidden; background: none; color: var(--muted); font-size: 12px; text-align: left;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+.blend-name:hover { color: var(--text); }
+.blend-row.on .blend-name { color: var(--text); font-weight: 700; }
+.blend-row .val { font-size: 13px; text-align: right; }
+.style-layer { margin-left: 6px; font-weight: 400; color: var(--muted); }
 .opt { height: 32px; border-radius: 3px; background: var(--raised); font-size: 13px; white-space: nowrap; }
 .opt:hover { background: var(--hover); }
 .opt[aria-checked="true"] { background: var(--chalk); color: var(--on-chalk); font-weight: 700; }

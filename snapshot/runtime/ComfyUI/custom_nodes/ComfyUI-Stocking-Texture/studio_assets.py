@@ -82,9 +82,56 @@ def static_asset(name, base):
         text = replace_once(text, "const es = new EventSource('/api/events');",
             "const es = new EventSource('/api/events');\n  window.addEventListener('stocking-studio-dispose', () => es.close(), { once:true });")
         text += BRIDGE_JS
+    if name == "look.js":
+        text = replace_once(text,
+            "const res = await request('POST', '/api/look/presets/export', { name });",
+            "const res = await browserExportPreset(request, name);")
+        text = replace_once(text,
+            "const res = await request('POST', '/api/look/presets/import');",
+            "const res = await browserImportPreset(request);")
+        text += PRESET_BROWSER_JS
     if name in ("app.js", "look.js"):
         text = text.replace("/api/", base + "/api/")
     return text, FILES[name]
+
+
+PRESET_BROWSER_JS = r'''
+// Module-local browser file handling; the upstream preset UI keeps its state and messages.
+function browserPresetFile() {
+  return new Promise((resolve, reject) => {
+    const input = document.createElement('input');
+    input.type = 'file'; input.accept = '.json,application/json'; input.hidden = true;
+    const finish = file => { input.remove(); resolve(file); };
+    input.addEventListener('change', () => finish(input.files?.[0] || null), { once:true });
+    input.addEventListener('cancel', () => finish(null), { once:true });
+    document.body.append(input);
+    try { input.click(); } catch (error) { input.remove(); reject(error); }
+  });
+}
+async function browserImportPreset(request) {
+  const file = await browserPresetFile();
+  if (!file) return { cancelled:true };
+  if (file.size > 256 * 1024) throw new Error(t('这不是预设文件：{file}', { file:file.name }));
+  let text;
+  try { text = new TextDecoder('utf-8', { fatal:true }).decode(await file.arrayBuffer()); }
+  catch { throw new Error(t('读不了这个文件：{name}', { name:file.name })); }
+  return request('POST', '/api/look/presets/import', { text, filename:file.name });
+}
+async function browserExportPreset(request, name) {
+  const res = await request('POST', '/api/look/presets/export', { name });
+  if (res.cancelled) return res;
+  const url = new URL(res.url, location.href);
+  if (typeof res.url !== 'string' || !res.url || typeof res.file !== 'string' || !res.file || url.origin !== location.origin) {
+    throw new Error(document.documentElement.lang.startsWith('en')
+      ? 'The preset download is unavailable. Please try again.' : '预设下载地址不可用，请重试。');
+  }
+  const download = document.createElement('a');
+  download.href = url.href; download.download = res.file;
+  document.body.append(download);
+  try { download.click(); } finally { download.remove(); }
+  return res;
+}
+'''
 
 
 BRIDGE_JS = r'''
