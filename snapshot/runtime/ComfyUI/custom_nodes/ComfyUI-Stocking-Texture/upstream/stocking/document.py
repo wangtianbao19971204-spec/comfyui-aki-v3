@@ -19,6 +19,7 @@ import numpy as np
 
 from . import coverage, split
 from . import guide_fields as gf
+from . import look as look_mod
 from . import psd_io, symmetry, trace
 from . import walls as walls_mod
 from .i18n import tr
@@ -305,6 +306,11 @@ class Document:
         dividers: [points] (隔开 lines); erased: [(x, y)] (deleted found walls); color_exclude: 颜色排除 on;
         guides_saved: the guides were in a file when the snapshot was taken."""
         doc = cls(art_rgb, name, path)
+        if look is not None:
+            try:
+                look = look_mod.clean_params(look)
+            except (ValueError, TypeError):
+                look = None
         doc.sparkle, doc.look = sparkle, look
         doc.color_exclude = bool(color_exclude)
         with doc.lock:

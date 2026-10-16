@@ -434,6 +434,7 @@ body[data-mode="edit"] .look-only, body[data-mode="look"] .edit-only { display: 
 .unlinked { margin-right: 28px; }
 .exclude { padding-top: 14px; border-top: 1px solid var(--line); margin: 0 -16px; padding-left: 16px; padding-right: 16px; }
 .exclude .field-head { align-items: center; }
+.exclude .note + .field-head { margin-top: 14px; }
 .exclude .note { margin-top: 4px; }
 #btn-look-reset { margin-top: 18px; }
 

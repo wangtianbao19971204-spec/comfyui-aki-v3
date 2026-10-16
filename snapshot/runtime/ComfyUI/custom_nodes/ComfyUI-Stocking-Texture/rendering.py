@@ -24,12 +24,12 @@ class _Renderer:
     def __getattr__(self, name):
         return getattr(self.scene, name)
 
-    def _draw_layer(self, layer, sl, src, R, V, A, alpha):
+    def _draw_layer(self, layer, sl, src, R, V, A, alpha, fade=True):
         if not self.dark_adapt or layer["style"] not in ("knit", "loops", "lines"):
-            return self.scene._draw_layer(layer, sl, src, R, V, A, alpha)
+            return self.scene._draw_layer(layer, sl, src, R, V, A, alpha, fade=fade)
         g = look.geometry(layer["density"], self.w, self.h)
         p, strength = g["period"], layer["strength"] / 100.0
-        common = dict(f_lo=g["f_lo"], f_hi=g["f_hi"], dark=(0.0, 0.12))
+        common = dict(f_lo=g["f_lo"], f_hi=g["f_hi"], dark=(0.0, 0.12), fade=fade)
         if layer["style"] in ("knit", "loops"):
             draw = knit.render_thread if layer["style"] == "knit" else knit.render_loops
             out, _ = draw(src, R, V / p + 0.37 * R, A / (p * g["wale_ratio"]), alpha,

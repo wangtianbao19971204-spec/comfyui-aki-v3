@@ -39,6 +39,12 @@ def centre_lines(stroke_alpha, region):
     """Each stroke inside `region` as a smoothed centre-line polyline (N, 2) in xy.
 
     A stroke is several px thick; pinning that whole band would pin a range of values and bend the field around it.
+
+    The stroke is walked along its own skeleton and then smoothed, rather than binned against a straight axis. A
+    mouse user cannot draw a straight line, and the course direction is read from these points' tangents, so the
+    tremor has to come out here: binning along the PCA axis averaged together pixels that sit far apart along a
+    bend (an arc came back flattened onto its chord) and stepped from bin to bin, leaving the centre line rougher
+    than the hand path it was drawn from. Resampling by arc length and filtering along the walk keeps a bend.
     """
     m = (stroke_alpha > 64) & region
     n, lab = cv2.connectedComponents(m.astype(np.uint8), connectivity=8)
@@ -47,17 +53,128 @@ def centre_lines(stroke_alpha, region):
         ys, xs = np.nonzero(lab == i)
         if len(xs) < MIN_STROKE_PX:
             continue
-        P = np.stack([xs, ys], 1).astype(float)
-        c = P.mean(0)
-        e = np.linalg.eigh((P - c).T @ (P - c))[1][:, -1]
-        e = e if e[0] >= 0 else -e
-        bins = np.round((P - c) @ e).astype(int)
-        u = np.unique(bins)
-        Q = np.stack([[P[bins == b, 0].mean() for b in u], [P[bins == b, 1].mean() for b in u]], 1)
-        Q = np.stack([ndi.gaussian_filter1d(Q[:, 0], 3, mode='nearest'),
-                      ndi.gaussian_filter1d(Q[:, 1], 3, mode='nearest')], 1)
-        out.append(Q)
+        P = _walk_centre(np.stack([xs, ys], 1))
+        if P is None:
+            continue
+        out.append(P)
     return out
+
+
+# 8 neighbours clockwise from north: (dy, dx)
+_NB8 = [(-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1)]
+
+SAMPLE_STEP = 4.0       # px between the points handed to the solver
+SMOOTH_SIGMA = 20.0     # px; a mouse's tremor is a few px wide and a 走向 stroke's own bend is tens of px, so this
+                        # radius removes the tremor and keeps the bend (a 150 px knee arc keeps 95% of its depth)
+
+
+def _walk_centre(pix, sigma=None, step=None, reach=4.0, look=6):
+    """One stroke's pixels -> a smoothed centre line walked end to end, or None if it is not a line.
+
+    Thinned to one pixel first so the walk follows the stroke's own path through a bend instead of averaging
+    across it; that also makes the result independent of how thick the stroke was drawn.
+
+    pix: (N, 2) int xy pixel coordinates of one connected stroke.
+    """
+    sigma = SMOOTH_SIGMA if sigma is None else sigma
+    step = SAMPLE_STEP if step is None else step
+    from .trace import thin, _extend
+    lo = pix.min(0) - 1                      # xy
+    x0, y0 = int(lo[0]), int(lo[1])
+    h, w = int(pix[:, 1].max() - y0 + 2), int(pix[:, 0].max() - x0 + 2)
+    m = np.zeros((h, w), bool)
+    m[pix[:, 1] - y0, pix[:, 0] - x0] = True
+    P = _trunk(thin(m))
+    if P is None:
+        return None
+    # The walk takes 8-connected steps, so its spacing jumps between 1 px and sqrt(2) px, and the skeleton of a
+    # hand-drawn stroke is a pixel staircase: resampling it at 1 px just re-states the staircase point by point.
+    # Sample at SAMPLE_STEP and filter over SIGMA, both in px, so the staircase and the hand's own tremor go
+    # and the stroke's real shape (a knee's ∩, a thigh's arc) stays. Even spacing matters twice over: a gaussian
+    # filter assumes it, and the solver reads tangents from finite differences.
+    Q = _resample(np.asarray(P, np.float64) + [x0, y0], step)
+    ends = Q[[0, -1]].copy()
+    sig = sigma / max(step, 1e-6)
+    Q = np.stack([ndi.gaussian_filter1d(Q[:, 0], sig, mode='nearest'),
+                  ndi.gaussian_filter1d(Q[:, 1], sig, mode='nearest')], 1)
+    # Smoothing pulls both ends inward (over a sigma-sized run the stroke's own direction is averaged with the
+    # stub beyond it), and a 走向 stroke is meant to span about 80% of its region's width: put the ends back on
+    # the line the stroke actually reached, then let the direction taper into them instead of shifting them.
+    Q = _reanchor(Q, ends, sigma, step)
+    Q = _resample(Q, step)
+    return _extend(Q, reach, look)
+
+
+def _trunk(sk):
+    """Longest simple path along 8-connected skeleton `sk` (bool), or None if shorter than 3 px.
+
+    Two breadth-first walks find the skeleton's diameter, so a 1-2 px spur on a wobbly stroke is ignored instead
+    of splitting the walk in two.
+    """
+    from collections import deque
+    ys, xs = np.nonzero(sk)
+    if len(xs) < 3:
+        return None
+    idx = -np.ones(sk.shape, np.int32)
+    idx[ys, xs] = np.arange(len(xs))
+    adj = [[] for _ in range(len(xs))]
+    for k in (0, 2, 4, 6, 1, 3, 5, 7):          # straight neighbours before diagonal ones
+        dy, dx = _NB8[k]
+        nb = idx[ys + dy, xs + dx]
+        for u, v in zip(np.flatnonzero(nb >= 0), nb[nb >= 0]):
+            adj[int(u)].append(int(v))
+
+    def bfs(start):
+        dist = [-1] * len(xs)
+        pred = [-1] * len(xs)
+        dist[start] = 0
+        q = deque([start])
+        far = start
+        while q:
+            u = q.popleft()
+            far = u
+            for v in adj[u]:
+                if dist[v] < 0:
+                    dist[v] = dist[u] + 1
+                    pred[v] = u
+                    q.append(v)
+        return far, pred
+
+    deg1 = [u for u, a in enumerate(adj) if len(a) == 1]
+    a, _ = bfs(deg1[0] if deg1 else 0)
+    b, pred = bfs(a)
+    path = []
+    cur = b
+    while cur >= 0:
+        path.append((int(xs[cur]), int(ys[cur])))
+        cur = pred[cur]
+    return path if len(path) >= 3 else None
+
+
+def _reanchor(Q, ends, sigma, step=SAMPLE_STEP):
+    """Move Q's ends back onto `ends`, spreading each correction over about `sigma` of the curve.
+
+    Without it the filter shortens the stroke by roughly a sigma at each end, and 走向 strokes are specified to
+    span about 80% of their region's width (README), so the courses would stop short of the outline.
+    """
+    n = len(Q)
+    if n < 3:
+        return Q
+    k = max(int(round(sigma / max(step, 1e-6))), 1)
+    # ramp: 1 at each end, falling to 0 over k samples
+    i = np.arange(n)
+    w0 = np.clip(1 - i / k, 0, 1)
+    w1 = np.clip(1 - (n - 1 - i) / k, 0, 1)
+    return Q + w0[:, None] * (ends[0] - Q[0]) + w1[:, None] * (ends[1] - Q[-1])
+
+
+def _resample(P, step):
+    """Polyline (N, 2) redrawn at even `step` px spacing along its own arc length."""
+    d = np.r_[0, np.cumsum(np.hypot(*np.diff(P, axis=0).T))]
+    if d[-1] < step:
+        return P
+    s = np.arange(0, d[-1] + 1e-9, step)
+    return np.stack([np.interp(s, d, P[:, 0]), np.interp(s, d, P[:, 1])], 1)
 
 
 class Grid:

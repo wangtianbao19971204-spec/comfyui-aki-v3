@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 2026-10-16：丝袜纹理同步作者 `bcc4e89`，接入高光粒子、纹理减弱开关、走向线平滑和新版摩尔纹面积；适配暗部渲染与带种子粒子随机场，保留工作流和用户资料。见[适配与验收](docs/technical/changes/runtime-stocking-texture/2026-10-16-highlights-and-guides.md)。
+
 - 2026-10-14：丝袜纹理同步作者 `e6aeaeb`，新增四层融合、自动 100%／独立份额、浏览器预设文件交换和独立纹理撤销；修复首层份额缓存与非有限值输入，保留旧工作流及用户资料。见[同步与验收](docs/technical/changes/runtime-stocking-texture/2026-10-14-upstream-multilayer.md)。
 
 - 2026-10-14：UAP 三种生产分支与独立 01/02/03 增加「控制与擦线」按钮，自动接通控制来源并检查实际擦线选区，无需换线；详见[操作与验收](docs/technical/changes/runtime-workbench/2026-10-14-control-one-click.md)。

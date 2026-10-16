@@ -207,6 +207,24 @@
     <p id="sparkle-note" class="note"></p>
   </section>
 
+  <section class="group" id="particle-section">
+    <div class="group-head">
+      <h2><label class="switch-label" for="particle-on">高光粒子<span class="exp-tag">试验</span></label></h2>
+      <button class="info-btn" aria-expanded="false" aria-controls="particle-info" aria-label="高光粒子说明">?</button>
+      <span class="switch"><input type="checkbox" role="switch" id="particle-on"><span class="switch-track"></span></span>
+    </div>
+    <div id="particle-info" class="info-pop" role="note" hidden>
+      <p>像油光那样顺着画面里的受光处找出高光带（深色丝袜上同样会延续到整条腿），但把高光画成细密的粒子，中间密、往两侧渐渐散开。默认关，打开开关才有，可以叠加在任何样式上。</p>
+      <p><b>强度</b>：高光粒子有多亮、多明显。</p>
+    </div>
+    <div id="particle-fields" hidden>
+      <div class="field">
+        <div class="field-head"><label for="particle">强度</label><span id="particle-val" class="val num"></span></div>
+        <input id="particle" type="range" min="0" max="100" step="1" value="100">
+      </div>
+    </div>
+  </section>
+
   <section class="group" id="moire-section">
     <div class="group-head">
       <h2><label class="switch-label" for="moire-on">摩尔纹效果<span class="exp-tag">试验</span></label></h2>
@@ -234,6 +252,15 @@
   </section>
 
   <section class="group exclude">
+    <div class="field-head">
+      <label class="check"><input type="checkbox" id="fade" checked>纹理减弱</label>
+      <button class="info-btn" aria-expanded="false" aria-controls="fade-info" aria-label="纹理减弱说明">?</button>
+    </div>
+    <div id="fade-info" class="info-pop" role="note" hidden>
+      <p>打开时，横纹挤得太近、间距接近像素大小的地方会自动把纹理减弱，避免挤出细碎的摩尔纹。</p>
+      <p>关掉后，无论横纹多密都照常画满纹理。点细节上方的“标出问题”可以看到哪里被减弱了（红色）。</p>
+    </div>
+    <p id="fade-note" class="note"></p>
     <div class="field-head">
       <label class="check"><input type="checkbox" id="exclude" checked>颜色排除</label>
       <button class="info-btn" aria-expanded="false" aria-controls="exclude-info" aria-label="颜色排除说明">?</button>
