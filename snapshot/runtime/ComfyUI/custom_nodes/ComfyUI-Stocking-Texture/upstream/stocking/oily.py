@@ -1349,7 +1349,7 @@ def oily_maps(src, R, alpha, A, V, scale=1.0, cut=None, REG=None, core_half=1.5,
     return tone, core, band, tail, facing, centre, zone
 
 
-def render_oily(src, R, V, A, alpha, g, s, tone, core, band, tail, facing, centre, zone, noise):
+def render_oily(src, R, V, A, alpha, g, s, tone, core, band, tail, facing, centre, zone, noise, fade=True):
     """BGR uint8 of the (margined) crop. g: look.geometry; s: strength (1 = 100%); tone .. zone: oily_maps()
     cropped like src; noise: the scene's grain fields (knit.grain_noise), cropped like src."""
     p = g['period']
@@ -1357,7 +1357,7 @@ def render_oily(src, R, V, A, alpha, g, s, tone, core, band, tail, facing, centr
     phi = V / p + 0.37 * R
     base, _ = knit.render_grain(src, R, phi, A / (p * g['wale_ratio']), alpha, None, knit_amp=0.025 * s,
                                 grain=0.010 * s, grain_dark=0.005 * s, chroma=0.15, f_lo=g['f_lo'], f_hi=g['f_hi'],
-                                noise=(gn, gc))
+                                noise=(gn, gc), fade=fade)
     out = base.astype(np.float32)
     a3 = alpha[..., None]
     z3 = zone[..., None]
@@ -1372,7 +1372,7 @@ def render_oily(src, R, V, A, alpha, g, s, tone, core, band, tail, facing, centr
     out *= (1 - 0.30 * s * sink * alpha)[..., None]
     # what the glint reflects: the courses (faded where they would alias) and a little grain, 0..1
     same = knit._same_region(R)
-    keep = (1 - knit.sstep(g['f_lo'], g['f_hi'], _footprint(V / p, same))) * same
+    keep = same if not fade else (1 - knit.sstep(g['f_lo'], g['f_hi'], _footprint(V / p, same))) * same
     tex = 0.5 + 0.5 * np.clip(0.6 * np.cos(2 * np.pi * phi) * keep + 0.25 * gn, -1, 1)
     sheen = 0.20 * s * np.clip(tone, 0, 1) ** 1.6
     # texture shows on the flanks of the glint and fades out toward its centre, which stays clean

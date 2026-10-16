@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/silvermoong/stocking-texture-tool",
-  "commit": "e6aeaebd0410301f4db61034db1b1c592eeb57d4",
+  "commit": "bcc4e89d7319ca59f521dd1c5557db457cde6d92",
   "license": "MIT",
   "snapshot_format": 2,
   "license_sha256": "12b3a43416cfda4d524b8d781639e33ea3c7862cc2200d7f61300f98bbfa91fe",
@@ -23,7 +23,7 @@
     },
     {
       "file": "document.py",
-      "sha256": "3a3c3a2b7be7ba027f4f08dbf4c429c4ff5438a4a3694e006845460a84bd73c3"
+      "sha256": "c513d1669f5101ddcdfea00a133fd188c390c375cdfce6824efa6afd3a66ba54"
     },
     {
       "file": "export.py",
@@ -31,7 +31,7 @@
     },
     {
       "file": "guide_fields.py",
-      "sha256": "2cfa01559b78e3a2f8ea006243722e2c0722fc026c0f72776c0ed73945a3e340"
+      "sha256": "9df96e33935a148c9dd0cad189a299f007fe554d96eceaaf9ef888cfff9bd864"
     },
     {
       "file": "i18n.py",
@@ -39,15 +39,15 @@
     },
     {
       "file": "knit.py",
-      "sha256": "e58dce4fd55c8c44f0c71ed6391e5a1f6b920c8fd5392707af74b1da569d794a"
+      "sha256": "b320a31173855eba985aab98310d1d2f148b89859a4c43f7b54b9bcac44d13a6"
     },
     {
       "file": "look.py",
-      "sha256": "ecd0579bbc05dda2bf10fcd7d8443cb7f197fad900a1784e4c881452692d7cb3"
+      "sha256": "ec3212cde68791e8db8e6a4fe3a6adcfe61ede11d7bed104f415c90c9eab8fcb"
     },
     {
       "file": "oily.py",
-      "sha256": "9bfbbbe0787305fb93ec243df6173cc5f6140a9f50bdcc54f4944f9c1225eecc"
+      "sha256": "ec1b0bc1759dce2643d9306b023aed717c776e0848516c89915694aaec5065a1"
     },
     {
       "file": "presets.py",
@@ -87,19 +87,19 @@
     },
     {
       "file": "static/i18n/en.json",
-      "sha256": "08c1032637cc993685577d308652fa61d42cf1f2a1faded87bfbb3f10489c526"
+      "sha256": "c94e4585ccdc26db486bec58554e42071f3ce59d5337956768939be3d5f50a3d"
     },
     {
       "file": "static/index.html",
-      "sha256": "f6178ceeade10ba11afbbfc5573f8c4b0bd527436ee37d88f55c44f2dd1d6fb7"
+      "sha256": "8e12b50a9f82f5eb1d4c12fc937d139ba34c838050a5392021a6206ea7ab9c2c"
     },
     {
       "file": "static/look.js",
-      "sha256": "fbf465f6ea1e2572e2881fc3e8dc06a992906dc1f755eb98f921822d1eb5e1b5"
+      "sha256": "cad2ff4019810af315f3f3cfe57fbb22c03a7fc32799ae87250ece826caf5e39"
     },
     {
       "file": "static/style.css",
-      "sha256": "fa9398d92bb91c90d89b3967ae6ffaffa485fc2c40235aa6fde649433a9d3dae"
+      "sha256": "b6e774dcd476e255553b6fb48030f7c7d203ac5d33e52b81c4aa716f0199cd5c"
     },
     {
       "file": "symmetry.py",

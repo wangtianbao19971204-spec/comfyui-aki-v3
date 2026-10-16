@@ -163,7 +163,8 @@ export function createLook({ getDoc, getArt, request, edit, flash, focusByKeyboa
       layers: JSON.stringify(p.layers || []), lock_total: p.lock_total,
       sparkle_depth: p.sparkle_depth, sparkle_bright: p.sparkle_bright, sparkle_painted: p.sparkle_painted,
       sparkle_even: p.sparkle_even,
-      sparkle_link: p.sparkle_link, moire_on: p.moire_on, moire: p.moire, moire_area: p.moire_area });
+      sparkle_link: p.sparkle_link, particle_on: p.particle_on, particle: p.particle,
+      moire_on: p.moire_on, moire: p.moire, moire_area: p.moire_area, fade: p.fade !== false });
     for (const [k, v] of Object.entries(extra || {})) q.set(k, v);
     return q.toString();
   }
@@ -686,6 +687,10 @@ export function createLook({ getDoc, getArt, request, edit, flash, focusByKeyboa
       setVal($(`#sparkle-${k}-val`), all[`sparkle_${k}`], '%');
     }
     $('#btn-sparkle-link').setAttribute('aria-pressed', String(!!all.sparkle_link));
+    $('#particle-on').checked = !!all.particle_on;
+    $('#particle-fields').hidden = !all.particle_on;
+    $('#particle').value = all.particle;
+    setVal($('#particle-val'), all.particle, '%');
     $('#moire-on').checked = !!all.moire_on;
     $('#moire-fields').hidden = !all.moire_on;
     $('#moire').value = all.moire;
@@ -696,9 +701,21 @@ export function createLook({ getDoc, getArt, request, edit, flash, focusByKeyboa
     $('#check-legend').hidden = !L.showCheck;
     $('#peek-hint').hidden = L.showCheck;
     for (const el of document.querySelectorAll('.look-only input[type="range"]')) fillRange(el);
+    renderFade();
     renderExclude();
     renderReset();
     renderPresetState();
+  }
+
+  function renderFade() {
+    const p = L.params;
+    if (!p) return;
+    const on = p.fade !== false;
+    $('#fade').checked = on;
+    const i = L.info;
+    $('#fade-note').textContent = !on ? t('已关闭：横纹密集处也不减弱纹理。')
+      : !i ? '' : i.solving.length ? t('正在更新…')
+        : i.check.faded > 0 ? t('现在减弱了纹理的 {p}。', { p: pct(i.check.faded) }) : t('这张图没有被减弱的地方。');
   }
 
   // 颜色排除 is a document setting (undoable, saved with the work), not a look parameter
@@ -718,6 +735,7 @@ export function createLook({ getDoc, getArt, request, edit, flash, focusByKeyboa
     if (!i) return;
     $('#check-faded').textContent = pct(i.check.faded);
     $('#check-excluded').textContent = pct(i.check.excluded);
+    renderFade();
     renderExclude();
     const ns = $('#check-nostroke');
     ns.textContent = (i.untextured.length ? pct(i.check.nostroke) : t('没有')) + (i.solving.length ? t('（求解中…）') : '');
@@ -1005,10 +1023,17 @@ export function createLook({ getDoc, getArt, request, edit, flash, focusByKeyboa
   $('#sparkle-bright').addEventListener('input', (e) => setAmount('sparkle_bright', +e.target.value));
   $('#sparkle-painted').addEventListener('input', (e) => set({ sparkle_painted: +e.target.value }, { gesture: 'sparkle_painted' }));
   $('#sparkle-even').addEventListener('input', (e) => set({ sparkle_even: +e.target.value }, { gesture: 'sparkle_even' }));
+  $('#particle-on').addEventListener('change', (e) => set({ particle_on: e.target.checked }));
+  $('#particle').addEventListener('input', (e) => set({ particle: +e.target.value }, { gesture: 'particle' }));
   $('#moire-on').addEventListener('change', (e) => set({ moire_on: e.target.checked }));
   $('#moire').addEventListener('input', (e) => set({ moire: +e.target.value }, { gesture: 'moire' }));
   $('#moire-area').addEventListener('input', (e) => set({ moire_area: +e.target.value }, { gesture: 'moire_area' }));
   $('#btn-sparkle-link').addEventListener('click', toggleLink);
+  $('#fade').addEventListener('change', (e) => {
+    const on = e.target.checked;
+    set({ fade: on });
+    flash(on ? t('已打开纹理减弱，Ctrl+Z 可以撤销') : t('已关闭纹理减弱：横纹密集处也不减弱纹理，Ctrl+Z 可以撤销'));
+  });
   $('#exclude').addEventListener('change', (e) => {
     const doc = getDoc();
     if (!doc) return;
@@ -1067,7 +1092,8 @@ export function createLook({ getDoc, getArt, request, edit, flash, focusByKeyboa
       lock_total: L.info ? L.info.blend_auto : true,         // what a new look starts with: the user's last choice
       sparkle_depth: layer ? 0 : 100,
       sparkle_bright: layer ? 0 : 100, sparkle_painted: layer ? 100 : 0, sparkle_even: 0, sparkle_link: true,
-      moire_on: false, moire: 100, moire_area: 100 });
+      particle_on: false, particle: 100,
+      moire_on: false, moire: 100, moire_area: 100, fade: true });
     L.beforeReset = before;
     renderReset();
     flash(t('已全部恢复默认；想回去，点“撤销恢复默认”'));
