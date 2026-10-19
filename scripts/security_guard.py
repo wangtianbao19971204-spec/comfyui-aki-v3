@@ -714,6 +714,13 @@ def scan_objects(repo, entries, staged=False, content_only=False, cache=None, in
                     path_rules = blocked_path(path) if entry['type'] == 'blob' and not content_only else []
                     if entry['type'] == 'blob' and entry['bytes'] > MAX_BLOB and not content_only:
                         path_rules.append('oversize_git_blob')
+                    historical_review = REVIEWED_HISTORICAL_PATHS.get((path, cached_digest))
+                    if historical_review and path_rules and not staged:
+                        # Same reviewed-alias exception as the reading path; these
+                        # objects themselves are never cached, only reused digests.
+                        reviewed.append({'paths': [path], 'object': oid, 'sha256': cached_digest,
+                                         'rule': historical_review, 'matched_rules': path_rules})
+                        path_rules = []
                     if SENSITIVE_PATH.search(path):
                         sensitive.append({'path': path, 'object': oid, 'bytes': entry['bytes']})
                     for rule in sorted(set(path_rules)):
