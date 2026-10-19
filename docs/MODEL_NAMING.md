@@ -17,6 +17,8 @@
 
 2026-10-11 增量导入 4 个服装 LoRA（Anima 2 个、Krea2 2 个），当前共 **313 个用户 LoRA**，含 2026-10-09 导入的 3 个。新文件均已分类、改名、登记卡片和预览；本批 Downloads 原件保留。见[本批收据](receipts/lora_download_import_20261011.json)。
 
+2026-10-20 增量导入 2 个 Krea2 LoRA，当前共 **315 个用户 LoRA**：Anima 212、Anima 2.9B 2、Krea2 101。用途为画风与画师 1（Line Art Anime Flat Krea2.v3，与既有的 v20 是同模型不同版本，按版本与文件 ID 并存）、概念与效果 1（God Pussy，Krea 2）。两项完整 SHA 均与 Civitai 确切版本文件一致，卡片、加载器枚举与 2 张预览通过；按用户确认在核验后移走下载原件，同批 4 个 2026-10-11 已导入的重复件保留。见[本批收据](receipts/lora_download_import_20261020.json)。
+
 ## 分类
 
 保留 ComfyUI 加载器的目录边界，在其中按“家族／用途”整理：
