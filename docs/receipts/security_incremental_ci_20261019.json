@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "date": "2026-10-19",
+  "scope": "portable incremental history gate: local same-refs comparison of the uncached and incremental modes",
+  "mode": "all-history-incremental",
+  "environment": {
+    "host": "Windows",
+    "python": "3.13.11",
+    "ci_python": "3.11",
+    "note": "The portable cache fingerprint includes the Python version, so the CI cache is built and reused by CI's own interpreter."
+  },
+  "repository": {
+    "reachable_entries": 142003,
+    "scanned_objects": 83218,
+    "scanned_blobs": 60513,
+    "scanned_bytes": 7913476408,
+    "cross_part_boundaries": 120,
+    "reviewed_fixtures": 116,
+    "compressed_objects": 14
+  },
+  "cost_breakdown_seconds": {
+    "rev_list_objects_all": 0.31,
+    "cat_file_batch_check": 0.30,
+    "fsck_connectivity_only": 0.68,
+    "sha256_all_bytes_estimate": 41.4
+  },
+  "cold_scan_seconds": 1012.1,
+  "incremental_warm_seconds": 21.7,
+  "speedup": 46.6,
+  "warm_details": {
+    "state": "warm",
+    "resumed_objects": 82881,
+    "resumed_bytes": 6630205396,
+    "reused_verdicts": 83088,
+    "read_bytes": 1283271012,
+    "content_scanned_objects": 130,
+    "all_object_bytes_rehashed": false,
+    "publication_evidence": false
+  },
+  "portable_cache": {
+    "filename": "comfyui-history-scan-v1.json",
+    "bytes": 11133983,
+    "policy_sha256": "61f3628cc3c9e366d803923bdfc08ef580cf0e5f50daf88937fff4fb2e9dc8d5",
+    "identity": ["remote origin URL", "root commits", "COMFYUI_SCAN_SALT (optional)"],
+    "invalidated_by": ["scanner code", "cache code", "Python version", "rules", "training review registry", "repository or salt change"]
+  },
+  "equivalence": {
+    "findings": 0,
+    "findings_match_uncached": true,
+    "scanned_objects_match_uncached": true,
+    "cross_part_boundaries_match_uncached": true,
+    "reviewed_fixtures_match_uncached": true,
+    "compressed_objects_match_uncached": true
+  },
+  "tests": {
+    "test_history_scan_cache": 25,
+    "test_staged_scan_cache": 20,
+    "test_security_guard": 24,
+    "test_technical_catalog": 36,
+    "test_release": 41,
+    "new_cases": [
+      "cold then warm resumes without reading cached bytes",
+      "new commit scanned and failed run does not save the cache",
+      "cached .part and manifest bytes still read for boundary order",
+      "portable cache rejected for another repository",
+      "corrupted store falls back to a full scan",
+      "salt change invalidates the store",
+      "incremental requires an explicit cache file and refuses mixed modes"
+    ]
+  },
+  "ci_workflow": {
+    "jobs": ["verify", "history"],
+    "incremental_events": ["push", "pull_request"],
+    "full_scan_events": ["schedule (weekly)", "workflow_dispatch with full_history_scan"],
+    "cache_written_by": ["push"],
+    "cache_restored_by": ["push", "pull_request", "workflow_dispatch without full scan"],
+    "concurrency": "cancel superseded pull_request runs"
+  },
+  "limits": [
+    "Local observation of one cold and one warm run; CI runner timings and cross-run cache hits are not measured here and must be confirmed by the post-merge push run.",
+    "Skipped object bytes are trusted through Git content addressing plus git fsck; this is not a defence against an administrator who rewrites the repository or its hooks.",
+    "The portable cache is not a publication attestation: publication_evidence stays false and release, bundle, weekly schedule and explicit --all-history remain uncached full scans.",
+    "Remote branch protection and required status checks are separate platform settings and were not verified."
+  ],
+  "private_evidence": "LOCALAPPDATA/ComfyUI-LoRA-Imports and the interactive session logs; the raw report JSON stays outside Git"
+}

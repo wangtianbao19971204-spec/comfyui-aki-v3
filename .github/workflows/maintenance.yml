@@ -2,13 +2,24 @@ name: Maintenance integrity
 on:
   push:
   pull_request:
+  schedule:
+    # Weekly uncached full-history gate; independent of the portable cache.
+    - cron: '17 18 * * 0'
   workflow_dispatch:
+    inputs:
+      full_history_scan:
+        description: 'Run the uncached full-history credential gate'
+        type: boolean
+        default: false
 permissions:
   contents: read
+concurrency:
+  group: maintenance-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,5 +40,48 @@ jobs:
         run: python -X utf8 -B scripts/technical_catalog.py check --require-tracked
       - name: Portable model source catalogue
         run: python -X utf8 -B scripts/model_sources.py check
-      - name: All reachable history credential gate
-        run: python -X utf8 -B scripts/security_guard.py --all-history
+  history:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Restore portable history scan cache
+        if: github.event_name != 'schedule' && !(github.event_name == 'workflow_dispatch' && inputs.full_history_scan == true)
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/comfyui-history-scan-v1.json
+          key: history-scan-${{ github.repository }}-${{ github.sha }}
+          restore-keys: |
+            history-scan-${{ github.repository }}-
+      - name: All reachable history credential gate (incremental)
+        if: github.event_name != 'schedule' && !(github.event_name == 'workflow_dispatch' && inputs.full_history_scan == true)
+        run: >
+          python -X utf8 -B scripts/security_guard.py --all-history --incremental
+          --cache-file "${{ runner.temp }}/comfyui-history-scan-v1.json"
+          --report "${{ runner.temp }}/security-history.json"
+      - name: All reachable history credential gate (full)
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.full_history_scan == true)
+        run: >
+          python -X utf8 -B scripts/security_guard.py --all-history
+          --report "${{ runner.temp }}/security-history.json"
+      - name: Keep the portable history scan cache
+        if: github.event_name == 'push'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/comfyui-history-scan-v1.json
+          key: history-scan-${{ github.repository }}-${{ github.sha }}
+      - name: Upload the credential gate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-history-${{ github.sha }}
+          path: ${{ runner.temp }}/security-history.json
+          retention-days: 14
+          if-no-files-found: warn
