@@ -18,7 +18,7 @@
 
 本地 pre-commit 对真实 index 检查对应功能说明，pre-push 检查已跟踪目录完整性，然后继续凭证门禁；CI 也检查已跟踪实现与文档链接。新 clone 必须显式启用 hooks；这些本地约定不等于 GitHub 受保护分支，管理员仍可绕过。
 
-pre-commit 与 pre-push 分别启用本机暂存／历史内容扫描缓存，仍读取全部受检对象并验证 SHA-256、全部路径与分片边界；压缩和审核例外不缓存。pre-push 的覆盖范围仍为全部可达历史，只复用同规则下已验证的内容结果。release、bundle、CI 和不带缓存参数的 CLI 保持无缓存扫描。规则和限制见 [SECURITY](../../SECURITY.md)，不以暂存快检 PASS 推导整个历史已检查。
+pre-commit 与 pre-push 分别启用本机暂存／历史内容扫描缓存，仍读取全部受检对象并验证 SHA-256、全部路径与分片边界；压缩和审核例外不缓存。pre-push 的覆盖范围仍为全部可达历史，只复用同规则下已验证的内容结果。release、bundle、每周 CI 定时任务和不带缓存参数的 CLI 保持无缓存扫描；日常推送／PR 的 CI 改用可移植增量门禁，判据是对象身份而非时间，缓存只由成功的推送运行写入，PR 只还原。规则和限制见 [SECURITY](../../SECURITY.md)，不以暂存快检 PASS 推导整个历史已检查。
 
 ## 验证与回退
 
@@ -27,6 +27,8 @@ pre-commit 与 pre-push 分别启用本机暂存／历史内容扫描缓存，�
 回滚记录区分 Git 恢复与生产恢复。引用旧 tag/commit 不授权 hard reset；生产恢复必须匹配同批源哈希、当前队列/服务、数据库状态和原件。未验收并行改动不能混入发布包。
 
 ## 更新记录
+
+- 2026-10-19：CI 拆成快检与历史门禁两个 job，历史门禁改用 `--all-history --cache-file … --incremental`：同一 Git OID 即同一份字节，已核验对象不再重读，新对象仍完整扫描，`.part`／`snapshot/manifest.json` 每次读取以保留跨片检查；缓存只由成功的推送运行写入，PR 只还原，每周定时任务是独立的无缓存全扫。本机实测冷扫 1012 秒、增量热扫 21.7 秒（约 47 倍）。见[技术说明](../changes/operations-source-of-truth/2026-10-19-incremental-history-gate.md)与[收据](../../receipts/security_incremental_ci_20261019.json)。
 
 - 2026-10-10：pre-push 使用独立本机历史内容缓存，减少普通源码上传的重复规则匹配；仍保留技术目录、可达根、完整历史／路径／跨片检查。默认无缓存 API 及正式发布、bundle、CI 调用未改。新增历史风险回归、缓存隔离与冷／热实测，见[增量检查说明](../changes/operations-source-of-truth/2026-10-10-incremental-security.md)。
 

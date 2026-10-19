@@ -22,7 +22,7 @@ Git 源码与文字检查点、图库和权重、Python/CUDA 环境、最新在�
 
 [maintain.py](../../../scripts/maintain.py)集中提供只读状态、first-parent 日常历史、真实暂存快检和备份规则查看。Git 标签与未提交改动独立显示；状态不会访问生产或伪造部署提交。对应 [入口测试](../../../tests/test_maintain.py)检查未提交内容保留、标签语义、索引只读和凭证消息不回显。
 
-本地暂存检查和日常 pre-push 由 [staged_scan_cache.py](../../../scripts/staged_scan_cache.py)分别缓存干净对象的内容扫描结果。上传检查仍覆盖所有可达历史，Git 字节哈希、全部路径与分片边界逐次核对。代码/规则/审核登记/路径变化失效，压缩与审核例外不缓存；正式发布、bundle 和 CI 保持无缓存。[暂存回归](../../../tests/test_staged_scan_cache.py)与[历史回归](../../../tests/test_history_scan_cache.py)覆盖旧密钥删除后仍拦截、元数据、漂移、损坏、别名和跨片风险。缓存只在对应本机 Git 管理目录使用，不能单独当作安全证明。
+本地暂存检查和日常 pre-push 由 [staged_scan_cache.py](../../../scripts/staged_scan_cache.py)分别缓存干净对象的内容扫描结果。上传检查仍覆盖所有可达历史，Git 字节哈希、全部路径与分片边界逐次核对。代码/规则/审核登记/路径变化失效，压缩与审核例外不缓存；正式发布、bundle 与每周定时任务保持无缓存，日常推送／PR 的 CI 使用可移植增量门禁（见[安全说明](../../SECURITY.md)）。[暂存回归](../../../tests/test_staged_scan_cache.py)与[历史回归](../../../tests/test_history_scan_cache.py)覆盖旧密钥删除后仍拦截、元数据、漂移、损坏、别名和跨片风险。缓存只在对应 Git 仓库身份内使用，不能单独当作安全证明。
 
 [保留规则](../../../governance/retention-policy.json)与 [日常维护](../../MAINTENANCE.md)统一数据库/配置/唯一资产的备份目标及历史保留条件，规则不运行备份、计划任务或删除，也不代表现场是否已有手动备份。[backup_status.py](../../../scripts/backup_status.py)通过 repo-local `comfyui.backupIndex` 或显式参数读取仓外验收索引，核对回执链与副本存在/大小，分别显示历史验收、当前提交覆盖和未执行的内容/磁盘/现场资料复检；不解析私密配置、打开数据库或写入备份。详见 [备份状态回归](../../../tests/test_backup_status.py)。
 

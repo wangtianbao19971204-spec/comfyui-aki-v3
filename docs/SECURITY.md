@@ -29,7 +29,7 @@ git config --local core.hooksPath .githooks
 
 少量已人工核对的虚构安全测试和历史无密钥模型名缓存按精确路径、完整 SHA 放行；不豁免整个 tests、插件、历史分支或库目录。新增/变化字节需重新核对。源码 `seal` / `snapshot verify` 以完整性和基础扫描为主，**不能代替这项全历史安全门禁**。
 
-本地 pre-commit 强制 index 门禁，pre-push 强制全历史门禁；bundle 工具也内置全历史门禁。GitHub CI 对新推送/PR 跑工具测试、快照、数据库契约和全部可达历史扫描。新 clone 不会自动启用 hooks，须执行上面的 repo-local 配置。
+本地 pre-commit 强制 index 门禁，pre-push 强制全历史门禁；bundle 工具也内置全历史门禁。GitHub CI 对新推送/PR 跑工具测试、快照、数据库契约，以及可移植增量全历史门禁；每周定时任务与不带缓存参数的显式调用仍是完整重扫。新 clone 不会自动启用 hooks，须执行上面的 repo-local 配置。
 
 ### 本地增量内容检查
 
@@ -39,7 +39,17 @@ pre-commit 使用 `--staged --cache-staged`；日常 pre-push 使用 `--pre-push
 
 缓存内容只有身份／规则／内容摘要，没有文件正文、分片首尾或凭证值。检测器／缓存代码、Python 版本、规则、审核登记或 Git 管理目录身份改变会使整份缓存失效；对象字节、类型、大小或路径别名改变只使相应条目失效。缓存绑定本机 Git 目录的路径与文件系统身份，复制到另一克隆／工作树不予复用。合法临时 `GIT_INDEX_FILE` 仍检查实际选定的 index；历史审核登记从 HEAD 读取。缓存仅在整次扫描成功且 refs/index/规则稳定后原子写入，拒绝链接／硬链接；损坏、摘要不符或容量超限时保留完整扫描能力。
 
-摘要用于发现偶然损坏，不是对本机 Git 管理员的防篡改认证；管理员同样可以改 hooks。缓存不能提交、不能从别人提供的 PASS 报告导入。**正式发布、bundle 和 CI 继续执行不带缓存参数的全历史扫描**；显式 `--all-history` 也是完整重扫入口。`scanned_bytes` 仍是实际读取字节，报告分别列出重新执行和复用的内容扫描量；缓存本身不是一份发布许可。测试与实测见[增量检查说明](technical/changes/operations-source-of-truth/2026-10-10-incremental-security.md)。
+摘要用于发现偶然损坏，不是对本机 Git 管理员的防篡改认证；管理员同样可以改 hooks。缓存不能提交、不能从别人提供的 PASS 报告导入。**正式发布、bundle、每周 CI 定时任务和显式 `--all-history` 继续执行不带缓存参数的全历史扫描**；日常推送／PR 的 CI 使用下一节的可移植增量门禁。`scanned_bytes` 仍是实际读取字节，报告分别列出本次读取、复用判决与跳过的字节量；缓存本身不是一份发布许可。本地缓存测试见[增量检查说明](technical/changes/operations-source-of-truth/2026-10-10-incremental-security.md)，CI 侧见[可移植增量门禁](technical/changes/operations-source-of-truth/2026-10-19-incremental-history-gate.md)。
+
+### CI 的可移植增量门禁
+
+`--all-history --cache-file <文件> --incremental` 让 CI 在干净 clone 之间复用元数据，只读取本机缓存里没有的对象。判据是**对象身份而不是时间**：同一 Git OID 就是同一份字节，内容寻址使「已核验过的对象」可以安全跳过；新出现的对象照旧读取全部字节、重算 SHA-256 并跑全部内容规则。提交时间、工作树 mtime 都不参与判断，因为它们可以伪造、并且在每次 clone 时被重置。
+
+每次运行仍然完整执行：枚举全部可达提交／tag／blob 与历史路径别名（含已删除文件）、ref 名与文件名规则、禁止路径、超限 blob、敏感路径登记、`.part` 与 `snapshot/manifest.json` 的真实字节读取与跨片边界比较。压缩载荷、审核例外和历史路径例外**从不写入缓存**，因此每次都重扫；提交／tag 消息在首次扫描后按同一 OID 复用。
+
+身份绑定是仓库级而非机器级：远端 URL、根提交集合、可选的 `COMFYUI_SCAN_SALT`，再加工具码／缓存码／Python 版本／规则／审核登记的指纹。任一项不符，整份缓存作废并自动退回完整重扫；缓存损坏、超限或缺文件同样退回，不会静默放行。跳过字节后另跑 `git fsck --connectivity-only` 作为独立的对象图检查，仓库损坏仍然失败。
+
+缓存只在整次扫描零发现且 refs／规则稳定时原子写入。CI 仅在 `push` 成功后保存缓存，`pull_request` 只还原、从不写入，避免 PR 侧污染；定时任务使用无缓存全扫，作为与缓存无关的独立复核。缓存不能提交进 Git，也不能当发布许可；`publication_evidence` 始终为 `false`。
 
 ## 历史凭证处理与后续整理
 
