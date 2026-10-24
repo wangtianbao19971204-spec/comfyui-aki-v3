@@ -44,6 +44,37 @@ _STRING_CACHE = {'revision': None, 'layout': None, 'used': 0.0}
 # 闲下来就丢掉，下一次访问从派生表读回来（毫秒级）。
 _STRING_CACHE_IDLE_SECONDS = 600.0
 
+# Tag 面板的首次筛选/搜索原本每次都要整表处理 29.8 万行：形状筛选逐行算逗号数表达式，
+# 主题/收藏组在 9.9 万条 meta JSON 上逐行 json_each，搜索一次要跑 3 次 count + 最多 3 次
+# 排序查询。这里改成“表达式索引 + 派生表 + 单遍排序”，一次性构建放在 server ready 之后的
+# Tag warm 线程里：版本号记在 workbench_tag_read_meta，失败不写版本、下次 warm/请求自动
+# 重试；未构建/构建失败/被禁用时 page() 仍走原 SQL（结果语义一致，只是慢）。
+READ_INDEX_VERSION = 1
+READ_INDEX_DISABLED_LOGGED = False
+READ_SCOPE_INDEX = 'workbench_tag_read_scope'
+READ_SHAPE_INDEX = 'workbench_tag_read_shape'
+READ_THEME_TABLE = 'workbench_tag_themes'
+READ_THEME_INDEX = 'workbench_tag_themes_value'
+READ_COLLECTION_TABLE = 'workbench_tag_collections'
+READ_COLLECTION_INDEX = 'workbench_tag_collections_value'
+READ_META_TABLE = 'workbench_tag_read_meta'
+# 查询与索引必须共用同一段表达式文本，否则 SQLite 不会选中表达式索引。
+SHAPE_COMMAS = ("(length(t.text)-length(replace(t.text,',',''))) + "
+                "(length(t.text)-length(replace(t.text,'，','')))")
+SHAPE_COMMAS_RAW = ("(length(text)-length(replace(text,',',''))) + "
+                    "(length(text)-length(replace(text,'，','')))")
+SCOPE_FOLDER = "COALESCE(t.g_uuid,'')"
+SCOPE_FOLDER_RAW = "COALESCE(g_uuid,'')"
+_READ_INDEX_BUILDING = set()
+_READ_INDEX_BUILDING_LOCK = threading.Lock()
+
+
+def _log_read_index_disabled():
+    global READ_INDEX_DISABLED_LOGGED
+    if not READ_INDEX_DISABLED_LOGGED:
+        READ_INDEX_DISABLED_LOGGED = True
+        logger.info("[Workbench] Tag 读取索引已禁用 (UW_DISABLE_TAG_READ_INDEX=1)")
+
 
 def _category_lock():
     """Lazy so partial-source harnesses that drop module-level calls still work."""
@@ -528,33 +559,147 @@ class TagLibrary:
         LEFT JOIN tag_groups g ON g.p_uuid=s.p_uuid
         LEFT JOIN workbench_tag_meta m ON m.tag_uuid=t.t_uuid'''
 
-    def page(self, query='', subgroup='', group='', offset=0, limit=100, favorite=False, collection='',
-             known_collections=(), shape='', scope='', theme=''):
-        """``scope`` selects which side of the 标签串 split to read.
+    ID_ORDER = 'SELECT t.id_index FROM tag_tags t'
 
-        ``tags`` = the base-tag side (kept folders, at most 6 words per row);
-        ``strings`` = everything the folder rule moved to 「标签 tags 串」.
-        Empty keeps the historical behaviour for callers that do not ask for the split.
+    @staticmethod
+    def _read_index_meta(conn):
+        """Return the built read-index version, or None when the structures are absent/incomplete."""
+        try:
+            row = conn.execute(
+                f'SELECT (SELECT version FROM {READ_META_TABLE} WHERE id=1), '
+                "(SELECT count(*) FROM sqlite_master WHERE type='table' AND name IN (?,?,?)), "
+                "(SELECT count(*) FROM sqlite_master WHERE type='index' AND name IN (?,?,?,?))",
+                (READ_THEME_TABLE, READ_COLLECTION_TABLE, READ_META_TABLE,
+                 READ_SCOPE_INDEX, READ_SHAPE_INDEX, READ_THEME_INDEX, READ_COLLECTION_INDEX)).fetchone()
+        except sqlite3.OperationalError:
+            return None
+        return row[0] if row is not None and row[1] == 3 and row[2] == 4 else None
+
+    def read_index_ready(self, conn):
+        """Cheap per-request check: derived read structures exist and match the current code version."""
+        if os.environ.get('UW_DISABLE_TAG_READ_INDEX') == '1':
+            _log_read_index_disabled()
+            return False
+        return self._read_index_meta(conn) == READ_INDEX_VERSION
+
+    def prepare_read_index(self):
+        """Build the expression indexes and the theme/collection derived tables once.
+
+        Runs from the post-ready Tag warm thread (or from a background retry thread); the whole
+        build is one transaction, so a failure leaves the previous schema version in place and the
+        next request/warm simply tries again.  Tag writes stay untouched: the expression indexes
+        are maintained by SQLite itself and the derived tables only gain three triggers each.
         """
-        offset, limit = max(0, int(offset)), max(1, min(500, int(limit)))
-        query = str(query or '').strip()
-        if not isinstance(theme, str) or len(theme) > 128 or theme != theme.strip():
-            raise ValueError('主题筛选必须是完整的主题名称')
-        forms = [query]
-        alternate = query.replace('_', ' ') if '_' in query else query.replace(' ', '_')
-        if alternate != query:
-            forms.append(alternate)
+        with _SCHEMA_LOCK, self.connection() as conn:
+            if self._read_index_meta(conn) == READ_INDEX_VERSION:
+                return False
+            logger.info("[Workbench] 正在建立 Tag 读取索引（一次性处理 29.8 万行）…")
+            with conn:
+                conn.execute('BEGIN IMMEDIATE')
+                for event in ('insert', 'update', 'delete'):
+                    conn.execute(f'DROP TRIGGER IF EXISTS workbench_tag_themes_{event}')
+                    conn.execute(f'DROP TRIGGER IF EXISTS workbench_tag_collections_{event}')
+                for name in (READ_THEME_TABLE, READ_COLLECTION_TABLE, READ_META_TABLE):
+                    conn.execute(f'DROP TABLE IF EXISTS {name}')
+                for name in (READ_SCOPE_INDEX, READ_SHAPE_INDEX):
+                    conn.execute(f'DROP INDEX IF EXISTS {name}')
+                conn.execute(f'CREATE INDEX {READ_SCOPE_INDEX} ON tag_tags({SCOPE_FOLDER_RAW}, {SHAPE_COMMAS_RAW}, create_time)')
+                conn.execute(f'CREATE INDEX {READ_SHAPE_INDEX} ON tag_tags({SHAPE_COMMAS_RAW})')
+                conn.execute(f'CREATE TABLE {READ_THEME_TABLE} '
+                             '(tag_uuid TEXT NOT NULL, theme TEXT NOT NULL, PRIMARY KEY (tag_uuid, theme))')
+                conn.execute(f'CREATE INDEX {READ_THEME_INDEX} ON {READ_THEME_TABLE}(theme)')
+                conn.execute(f'CREATE TABLE {READ_COLLECTION_TABLE} '
+                             '(tag_uuid TEXT NOT NULL, collection_id TEXT NOT NULL, PRIMARY KEY (tag_uuid, collection_id))')
+                conn.execute(f'CREATE INDEX {READ_COLLECTION_INDEX} ON {READ_COLLECTION_TABLE}(collection_id)')
+                conn.execute(f'CREATE TABLE {READ_META_TABLE} (id INTEGER PRIMARY KEY, version INTEGER NOT NULL)')
+                # GROUP BY 去重：历史 SQL 写入或旧维护工具可能留下重复的 themes/collection_ids，
+                # 同一语句里重复插入会在 upsert 路径下把约束错误抛给调用方，派生表只需要集合。
+                theme_rows = (f'SELECT tag_uuid, value FROM workbench_tag_meta, json_each('
+                              "CASE WHEN json_type(data,'$.themes')='array' THEN json_extract(data,'$.themes') "
+                              "ELSE '[]' END) WHERE type='text' AND value IS NOT NULL GROUP BY tag_uuid, value")
+                collection_rows = (f'SELECT tag_uuid, value FROM workbench_tag_meta, '
+                                   "json_each(json_extract(data,'$.collection_ids')) "
+                                   "WHERE type='text' AND value IS NOT NULL GROUP BY tag_uuid, value")
+                conn.execute(f'INSERT INTO {READ_THEME_TABLE} (tag_uuid, theme) {theme_rows}')
+                conn.execute(f'INSERT INTO {READ_COLLECTION_TABLE} (tag_uuid, collection_id) {collection_rows}')
+                for event, source in (('insert', 'NEW'), ('update', 'NEW'), ('delete', 'OLD')):
+                    theme_insert = '' if event == 'delete' else (
+                        f'INSERT OR IGNORE INTO {READ_THEME_TABLE} (tag_uuid, theme) '
+                        f'SELECT {source}.tag_uuid, value FROM json_each('
+                        f"CASE WHEN json_type({source}.data,'$.themes')='array' "
+                        f"THEN json_extract({source}.data,'$.themes') ELSE '[]' END) "
+                        "WHERE type='text' AND value IS NOT NULL GROUP BY value;")
+                    collection_insert = '' if event == 'delete' else (
+                        f'INSERT OR IGNORE INTO {READ_COLLECTION_TABLE} (tag_uuid, collection_id) '
+                        f'SELECT {source}.tag_uuid, value FROM json_each('
+                        f"json_extract({source}.data,'$.collection_ids')) "
+                        "WHERE type='text' AND value IS NOT NULL GROUP BY value;")
+                    conn.execute(f'''CREATE TRIGGER workbench_tag_themes_{event}
+                        AFTER {event.upper()} ON workbench_tag_meta BEGIN
+                        DELETE FROM {READ_THEME_TABLE} WHERE tag_uuid = {source}.tag_uuid;
+                        {theme_insert}
+                        END''')
+                    conn.execute(f'''CREATE TRIGGER workbench_tag_collections_{event}
+                        AFTER {event.upper()} ON workbench_tag_meta BEGIN
+                        DELETE FROM {READ_COLLECTION_TABLE} WHERE tag_uuid = {source}.tag_uuid;
+                        {collection_insert}
+                        END''')
+                conn.execute(f'INSERT INTO {READ_META_TABLE} VALUES (1, ?)', (READ_INDEX_VERSION,))
+            logger.info("[Workbench] Tag 读取索引已建立（V%d：2 个表达式索引 + 主题/收藏组派生表）。", READ_INDEX_VERSION)
+            return True
+
+    def warm_read_index(self):
+        """Build the read index if needed; never raise (the Tag panel must open regardless)."""
+        if os.environ.get('UW_DISABLE_TAG_READ_INDEX') == '1':
+            _log_read_index_disabled()
+            return False
+        try:
+            self.prepare_read_index()
+        except Exception as error:  # noqa: BLE001 - a failed build only costs speed
+            logger.warning("[Workbench] Tag 读取索引建立失败，继续使用旧查询: %s", error)
+            return False
+        with self.connection() as conn:
+            return self._read_index_meta(conn) == READ_INDEX_VERSION
+
+    def _schedule_read_index_build(self):
+        """Single-flight background build for requests that arrive before the warm-up finished."""
+        if os.environ.get('UW_DISABLE_TAG_READ_INDEX') == '1':
+            _log_read_index_disabled()
+            return
+        key = str(self.path)
+        with _READ_INDEX_BUILDING_LOCK:
+            if key in _READ_INDEX_BUILDING:
+                return
+            _READ_INDEX_BUILDING.add(key)
+
+        def build():
+            try:
+                self.prepare_read_index()
+            except Exception as error:  # noqa: BLE001
+                logger.warning("[Workbench] Tag 读取索引建立失败，继续使用旧查询: %s", error)
+            finally:
+                with _READ_INDEX_BUILDING_LOCK:
+                    _READ_INDEX_BUILDING.discard(key)
+
+        threading.Thread(target=build, name='uw-tag-read-index', daemon=True).start()
+
+    def _page_clauses(self, conn, query, forms, subgroup, group, favorite, collection, known_collections,
+                      shape, scope, theme, indexed):
+        """WHERE clauses shared by the fast path and the original fallback path.
+
+        ``indexed`` switches theme/collection/area to the derived tables and the shape test to
+        the exact expression the indexes were built on; every other clause keeps its historical
+        wording so both paths return the same rows (verified by tests/test_tag_read_speed.py).
+        """
         clauses, args = [], []
         # 正文形状：基础 tag 是单个词，其它是所长法典里的 tags 串（属提示词片段）。
         if shape:
-            commas = ("(length(t.text)-length(replace(t.text,',',''))) + "
-                      "(length(t.text)-length(replace(t.text,'，','')))")
             if shape == 'atomic':
-                clauses.append("instr(t.text, ',')=0 AND instr(t.text,'，')=0")
+                clauses.append(f'{SHAPE_COMMAS}=0')
             elif shape == 'group':
-                clauses.append(f'{commas} BETWEEN 1 AND 2')
+                clauses.append(f'{SHAPE_COMMAS} BETWEEN 1 AND 2')
             elif shape == 'string':
-                clauses.append(f'{commas} >= 3')
+                clauses.append(f'{SHAPE_COMMAS}>=3')
             else:
                 raise ValueError('Unknown tag shape filter')
         if query:
@@ -571,50 +716,192 @@ class TagLibrary:
         # The synthetic 「标签 tags 串」 bucket is not a real 法典区域; its rows come from
         # the scope clause plus whichever entry is selected inside it.
         if group and group != STRING_GROUP_UUID:
-            # Both branches are expressed against t alone: an OR that reaches through the
-            # folder join cannot use a tag_tags index and degrades to a full scan.
-            clauses.append('t.t_uuid IN ('
-                           'SELECT t_uuid FROM tag_tags WHERE g_uuid IN '
-                           '(SELECT g_uuid FROM tag_subgroups WHERE p_uuid=?) '
-                           'UNION SELECT tag_uuid FROM workbench_tag_folder_members WHERE g_uuid IN '
-                           '(SELECT g_uuid FROM tag_subgroups WHERE p_uuid=?))')
-            args.extend([group, group])
+            if indexed:
+                # Resolve the (small) folder list first so the clause can use the folder index;
+                # the historical subquery form could not combine with the scope index.
+                folders = [row[0] for row in conn.execute(
+                    'SELECT g_uuid FROM tag_subgroups WHERE p_uuid=?', (group,)) if row[0] is not None]
+                if folders:
+                    placeholders = ','.join('?' for _ in folders)
+                    clauses.append(f'(t.g_uuid IN ({placeholders}) OR t.t_uuid IN '
+                                   f'(SELECT tag_uuid FROM workbench_tag_folder_members '
+                                   f'WHERE g_uuid IN ({placeholders})))')
+                    args.extend([*folders, *folders])
+                else:
+                    clauses.append('0')
+            else:
+                # Both branches are expressed against t alone: an OR that reaches through the
+                # folder join cannot use a tag_tags index and degrades to a full scan.
+                clauses.append('t.t_uuid IN ('
+                               'SELECT t_uuid FROM tag_tags WHERE g_uuid IN '
+                               '(SELECT g_uuid FROM tag_subgroups WHERE p_uuid=?) '
+                               'UNION SELECT tag_uuid FROM workbench_tag_folder_members WHERE g_uuid IN '
+                               '(SELECT g_uuid FROM tag_subgroups WHERE p_uuid=?))')
+                args.extend([group, group])
         if favorite:
             # Evaluated on the 66k metadata rows (indexed by expression) instead of once
             # per tag row.
             clauses.append("t.t_uuid IN (SELECT tag_uuid FROM workbench_tag_meta "
                            "WHERE json_extract(data,'$.favorite')=1)")
         if theme:
-            clauses.append("t.t_uuid IN (SELECT tag_uuid FROM workbench_tag_meta WHERE EXISTS "
-                           "(SELECT 1 FROM json_each(CASE WHEN json_type(data,'$.themes')='array' "
-                           "THEN json_extract(data,'$.themes') ELSE '[]' END) WHERE value=?))")
-            args.append(theme)
+            if indexed:
+                clauses.append(f'EXISTS (SELECT 1 FROM {READ_THEME_TABLE} '
+                               'WHERE tag_uuid=t.t_uuid AND theme=?)')
+                args.append(theme)
+            else:
+                clauses.append("t.t_uuid IN (SELECT tag_uuid FROM workbench_tag_meta WHERE EXISTS "
+                               "(SELECT 1 FROM json_each(CASE WHEN json_type(data,'$.themes')='array' "
+                               "THEN json_extract(data,'$.themes') ELSE '[]' END) WHERE value=?))")
+                args.append(theme)
         if collection:
             if collection == 'default':
                 placeholders = ','.join('?' for _ in known_collections) or 'NULL'
-                clauses.append("(t.t_uuid IN (SELECT tag_uuid FROM workbench_tag_meta WHERE EXISTS "
-                               "(SELECT 1 FROM json_each(json_extract(data,'$.collection_ids')) WHERE value='default')) "
-                               "OR t.t_uuid NOT IN (SELECT tag_uuid FROM workbench_tag_meta WHERE EXISTS "
-                               "(SELECT 1 FROM json_each(json_extract(data,'$.collection_ids')) "
-                               'WHERE value IN (' + placeholders + '))))')
+                if indexed:
+                    clauses.append(f"(EXISTS (SELECT 1 FROM {READ_COLLECTION_TABLE} "
+                                   "WHERE tag_uuid=t.t_uuid AND collection_id='default') OR NOT EXISTS "
+                                   f'(SELECT 1 FROM {READ_COLLECTION_TABLE} '
+                                   'WHERE tag_uuid=t.t_uuid AND collection_id IN (' + placeholders + ')))')
+                else:
+                    clauses.append("(t.t_uuid IN (SELECT tag_uuid FROM workbench_tag_meta WHERE EXISTS "
+                                   "(SELECT 1 FROM json_each(json_extract(data,'$.collection_ids')) WHERE value='default')) "
+                                   "OR t.t_uuid NOT IN (SELECT tag_uuid FROM workbench_tag_meta WHERE EXISTS "
+                                   "(SELECT 1 FROM json_each(json_extract(data,'$.collection_ids')) "
+                                   'WHERE value IN (' + placeholders + '))))')
                 args.extend(known_collections)
             else:
-                clauses.append("t.t_uuid IN (SELECT tag_uuid FROM workbench_tag_meta WHERE EXISTS "
-                               "(SELECT 1 FROM json_each(json_extract(data,'$.collection_ids')) WHERE value=?))")
+                if indexed:
+                    clauses.append(f'EXISTS (SELECT 1 FROM {READ_COLLECTION_TABLE} '
+                                   'WHERE tag_uuid=t.t_uuid AND collection_id=?)')
+                else:
+                    clauses.append("t.t_uuid IN (SELECT tag_uuid FROM workbench_tag_meta WHERE EXISTS "
+                                   "(SELECT 1 FROM json_each(json_extract(data,'$.collection_ids')) WHERE value=?))")
                 args.append(collection)
-        # Every filter is expressed against tag_tags alone (folders/members/favourites via
-        # subqueries), so the count never has to join the folder or metadata tables —
-        # an unconditional join turned a 2.8 ms count into a 147 ms one.
-        count_from = 'tag_tags t'
+        return clauses, args
+
+    def _ordered_numbers(self, conn, where, args, offset, limit):
+        rows = conn.execute(self.ID_ORDER + where + ' ORDER BY t.create_time DESC,t.id_index LIMIT ? OFFSET ?',
+                            [*args, limit, offset]).fetchall()
+        return array('i', (row[0] for row in rows))
+
+    def _rows_by_numbers(self, conn, row_numbers):
+        if not len(row_numbers):
+            return []
+        placeholders = ','.join('?' for _ in row_numbers)
+        fetched = conn.execute(self.SELECT + f' WHERE t.id_index IN ({placeholders})',
+                               list(row_numbers)).fetchall()
+        by_number = {row['id_index']: row for row in fetched}
+        return [by_number[number] for number in row_numbers if number in by_number]
+
+    def _page_row_numbers(self, conn, query, forms, where, args, cache_key, offset, limit, indexed, fast_text):
+        """Return ``(total, id_index array)`` for one page, honouring the historical slice cache."""
+        cached = _PAGE_CACHE.get(cache_key)
+        if cached is None:
+            if len(_PAGE_CACHE) >= _PAGE_CACHE_LIMIT:
+                _PAGE_CACHE.clear()
+            cached = [None, {}]
+            _PAGE_CACHE[cache_key] = cached
+        total, cached_slices = cached
+        row_numbers = cached_slices.get((offset, limit))
+        if row_numbers is not None:
+            return total, row_numbers
+        if indexed and fast_text and query and all(ord(value[-1]) < 0x10ffff for value in forms):
+            # 单遍：窗口函数顺便给出 total，排序键直接复刻旧的三段（精确/前缀/其余）顺序。
+            # 只有 scope/形状这类可走索引的过滤才划算；无过滤的整库搜索仍用旧的分层查询。
+            row_numbers, window_total = self._indexed_text_numbers(conn, forms, where, args, offset, limit)
+            if total is None:
+                total = cached[0] = (window_total if window_total is not None else
+                                     conn.execute('SELECT count(*) FROM tag_tags t' + where, args).fetchone()[0])
+        else:
+            if total is None:
+                total = cached[0] = conn.execute('SELECT count(*) FROM tag_tags t' + where, args).fetchone()[0]
+            if query:
+                row_numbers = self._legacy_text_numbers(conn, forms, where, args, total, offset, limit)
+            else:
+                row_numbers = self._ordered_numbers(conn, where, args, offset, limit)
+        if len(cached_slices) >= _PAGE_SLICE_LIMIT:
+            cached_slices.clear()
+        cached_slices[(offset, limit)] = row_numbers
+        return total, row_numbers
+
+    def _legacy_text_numbers(self, conn, forms, where, args, total, offset, limit):
+        """Original text-search tiering: exact matches first, then prefix, then the rest."""
+        exact_match = 't.text IN (' + ','.join('?' for _ in forms) + ')'
+        range_condition = '(' + ' OR '.join(['(t.text>=? AND t.text<?)'] * len(forms)) + ')'
+        range_args = [bound for value in forms for bound in (value, value[:-1] + chr(ord(value[-1]) + 1))]
+        tiers = [
+            (exact_match, forms, 't.text,t.id_index'),
+            (range_condition + ' AND NOT ' + exact_match, [*range_args, *forms], 't.text,t.id_index'),
+            ('NOT ' + range_condition, range_args, 't.create_time DESC,t.id_index'),
+        ]
+        exact = conn.execute('SELECT count(*) FROM tag_tags t' + where + ' AND ' + tiers[0][0],
+                             [*args, *tiers[0][1]]).fetchone()[0]
+        prefix = conn.execute('SELECT count(*) FROM tag_tags t' + where + ' AND ' + tiers[1][0],
+                              [*args, *tiers[1][1]]).fetchone()[0]
+        numbers, skip = array('i'), offset
+        for (condition, extra, order), count in zip(tiers, (exact, prefix, total - exact - prefix)):
+            if skip >= count:
+                skip -= count
+                continue
+            rows = conn.execute(self.ID_ORDER + where + ' AND ' + condition +
+                                ' ORDER BY ' + order + ' LIMIT ? OFFSET ?',
+                                [*args, *extra, limit - len(numbers), skip]).fetchall()
+            numbers.extend(row[0] for row in rows)
+            skip = 0
+            if len(numbers) >= limit:
+                break
+        return numbers
+
+    def _indexed_text_numbers(self, conn, forms, where, args, offset, limit):
+        """One scan instead of the old 3 counts + 3 ordered queries.
+
+        The ORDER BY reproduces the historical tier order exactly: exact matches by text,
+        then prefix matches by text, then everything else by create_time.
+        """
+        exact_match = 't.text IN (' + ','.join('?' for _ in forms) + ')'
+        range_condition = '(' + ' OR '.join(['(t.text>=? AND t.text<?)'] * len(forms)) + ')'
+        range_args = [bound for value in forms for bound in (value, value[:-1] + chr(ord(value[-1]) + 1))]
+        tier = f'CASE WHEN {exact_match} THEN 0 WHEN {range_condition} THEN 1 ELSE 2 END'
+        tier_args = [*forms, *range_args]
+        sql = ('SELECT id_index, total FROM (SELECT t.id_index AS id_index, '
+               'count(*) OVER () AS total, t.text AS text_value, t.create_time AS create_time, '
+               f'{tier} AS tier FROM tag_tags t' + where + ') '
+               'ORDER BY tier, CASE WHEN tier<2 THEN text_value END, '
+               'CASE WHEN tier=2 THEN create_time END DESC, id_index LIMIT ? OFFSET ?')
+        rows = conn.execute(sql, [*tier_args, *args, limit, offset]).fetchall()
+        if rows:
+            return array('i', (row['id_index'] for row in rows)), rows[0]['total']
+        return array('i'), None
+
+    def page(self, query='', subgroup='', group='', offset=0, limit=100, favorite=False, collection='',
+             known_collections=(), shape='', scope='', theme=''):
+        """``scope`` selects which side of the 标签串 split to read.
+
+        ``tags`` = the base-tag side (kept folders, at most 6 words per row);
+        ``strings`` = everything the folder rule moved to 「标签 tags 串」.
+        Empty keeps the historical behaviour for callers that do not ask for the split.
+        """
+        offset, limit = max(0, int(offset)), max(1, min(500, int(limit)))
+        query = str(query or '').strip()
+        if not isinstance(theme, str) or len(theme) > 128 or theme != theme.strip():
+            raise ValueError('主题筛选必须是完整的主题名称')
+        forms = [query]
+        alternate = query.replace('_', ' ') if '_' in query else query.replace(' ', '_')
+        if alternate != query:
+            forms.append(alternate)
         with self.connection() as conn:
             conn.execute('BEGIN')
             revision = self.revision_of(conn)
+            indexed = self.read_index_ready(conn)
+            if not indexed:
+                self._schedule_read_index_build()
+            clauses, args = self._page_clauses(conn, query, forms, subgroup, group, favorite, collection,
+                                               known_collections, shape, scope, theme, indexed)
             if scope or subgroup.startswith(STRING_AREA_PREFIX) or subgroup == STRING_LOOSE_UUID:
                 # 分流按"法典最小组（子夹）"整组判定，所以这里用留存子夹名单过滤；
                 # 派生表给出每组的精确词数统计（见 string_layout）。
                 layout = self.string_layout(conn, self.text_revision_of(conn))
                 kept = layout['kept']
-                in_kept = (f"COALESCE(t.g_uuid,'') IN ({','.join('?' for _ in kept)})" if kept else '0')
+                in_kept = (f"{SCOPE_FOLDER} IN ({','.join('?' for _ in kept)})" if kept else '0')
                 if subgroup.startswith(STRING_AREA_PREFIX):
                     clauses.append('t.t_uuid IN (SELECT t_uuid FROM tag_tags WHERE g_uuid IN '
                                    '(SELECT g_uuid FROM tag_subgroups WHERE p_uuid=?))')
@@ -633,59 +920,9 @@ class TagLibrary:
             where = (' WHERE ' + ' AND '.join(clauses)) if clauses else ''
             cache_key = (revision, query, subgroup, group, favorite, collection,
                          tuple(known_collections or ()), shape, scope, theme)
-            cached = _PAGE_CACHE.get(cache_key)
-            if cached is None:
-                total = conn.execute('SELECT count(*) FROM ' + count_from + where, args).fetchone()[0]
-                if len(_PAGE_CACHE) >= _PAGE_CACHE_LIMIT:
-                    _PAGE_CACHE.clear()
-                cached = (total, {})
-                _PAGE_CACHE[cache_key] = cached
-            else:
-                total = cached[0]
-            slices = cached[1]
-            row_numbers = slices.get((offset, limit))
-            if row_numbers is None:
-                if query and all(ord(value[-1]) < 0x10ffff for value in forms):
-                    exact_match = 't.text IN (' + ','.join('?' for _ in forms) + ')'
-                    ranges = ['(t.text>=? AND t.text<?)' for _ in forms]
-                    range_condition = '(' + ' OR '.join(ranges) + ')'
-                    range_args = [bound for value in forms for bound in (value, value[:-1] + chr(ord(value[-1]) + 1))]
-                    tiers = [
-                        (exact_match, forms, 't.text,t.id_index'),
-                        (range_condition + ' AND NOT ' + exact_match,
-                         [*range_args, *forms], 't.text,t.id_index'),
-                        ('NOT ' + range_condition, range_args, 't.create_time DESC,t.id_index'),
-                    ]
-                    exact = conn.execute('SELECT count(*) FROM ' + count_from + where + ' AND ' + tiers[0][0],
-                                         [*args, *tiers[0][1]]).fetchone()[0]
-                    prefix = conn.execute('SELECT count(*) FROM ' + count_from + where + ' AND ' + tiers[1][0],
-                                          [*args, *tiers[1][1]]).fetchone()[0]
-                    rows, skip = [], offset
-                    for (condition, extra, order), count in zip(tiers, (exact, prefix, total - exact - prefix)):
-                        if skip >= count:
-                            skip -= count
-                            continue
-                        rows.extend(conn.execute(self.SELECT + where + ' AND ' + condition +
-                                                 ' ORDER BY ' + order + ' LIMIT ? OFFSET ?',
-                                                 [*args, *extra, limit - len(rows), skip]).fetchall())
-                        skip = 0
-                        if len(rows) >= limit:
-                            break
-                else:
-                    rows = conn.execute(
-                        self.SELECT + where + ' ORDER BY t.create_time DESC,t.id_index LIMIT ? OFFSET ?',
-                        [*args, limit, offset]).fetchall()
-                if len(slices) >= _PAGE_SLICE_LIMIT:
-                    slices.clear()
-                slices[(offset, limit)] = array('i', (row['id_index'] for row in rows))
-            else:
-                rows = []
-                if len(row_numbers):
-                    placeholders = ','.join('?' for _ in row_numbers)
-                    fetched = conn.execute(
-                        self.SELECT + f' WHERE t.id_index IN ({placeholders})', list(row_numbers)).fetchall()
-                    by_number = {row['id_index']: row for row in fetched}
-                    rows = [by_number[number] for number in row_numbers if number in by_number]
+            total, row_numbers = self._page_row_numbers(conn, query, forms, where, args, cache_key,
+                                                        offset, limit, indexed, bool(scope or shape))
+            rows = self._rows_by_numbers(conn, row_numbers)
             items = [self.entry(row) for row in rows]
             if query:
                 for item in items:

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 2026-10-24：工作台交互延迟优化：单条提示词保存 3.9–5.2 s→0.8–0.9 s（复用解析缓存/备份节流/可补丁写跳过整库 warm）；Tag 首次筛选与搜索加表达式索引/派生表并修正默认视图预热（shape 508→6.5 ms、q 189→11.5 ms）；缩略图管线 1.64×、16 张首屏 3.14×；新增离线缩略图预生成维护工具。测试 138 OK/1 skip，见[说明](docs/technical/changes/runtime-workbench/2026-10-24-workbench-interaction-latency.md)。未部署生产。
+
 - 2026-10-24：统一包启动期零重活与派生语义缓存：词库解析与预热移出插件导入期，派生语义按 `id+binding` 持久化、热启动只重算变更行；Tag 目录树按 revision 落盘并删除无效全表预热。单测 99 OK，隔离 A/B 与边界见[本轮说明](docs/technical/changes/runtime-workbench/2026-10-24-startup-warmup-cache.md)。未部署生产。
 
 - 2026-10-14：丝袜纹理同步作者 `e6aeaeb`，新增四层融合、自动 100%／独立份额、浏览器预设文件交换和独立纹理撤销；修复首层份额缓存与非有限值输入，保留旧工作流及用户资料。见[同步与验收](docs/technical/changes/runtime-stocking-texture/2026-10-14-upstream-multilayer.md)。

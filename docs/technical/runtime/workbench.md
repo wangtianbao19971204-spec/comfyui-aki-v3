@@ -25,6 +25,8 @@
 
 ## 更新记录
 
+- 2026-10-24：工作台交互延迟优化：单条提示词编辑保存复用已解析缓存并跳过整库 warm（3.9–5.2 s→0.8–0.9 s，可补丁写后首次 index 0 ms）；Tag 面板加表达式索引/派生表并按真实缓存键预热默认视图（shape 首次 508→6.5 ms、q 搜索 189→11.5 ms）；缩略图管线 1.64×、16 张首屏 3.14×。测试 138 OK/1 skip，完整数据与边界见[交互延迟优化](../changes/runtime-workbench/2026-10-24-workbench-interaction-latency.md)。本轮未部署生产。
+
 - 2026-10-24：词库与 Tag 预热移出插件导入期：派生 `_semantic` 按 `id+binding` 持久化（msgpack+zstd），热启动只重算变更行；Tag 目录树按 revision 缓存落盘，并删除 5 次与真实请求缓存键不符的 `page()` 全表预热。单测与隔离 A/B 见[启动期零重活与派生语义缓存](../changes/runtime-workbench/2026-10-24-startup-warmup-cache.md)。本轮未部署生产。
 
 - 2026-10-14：新增 UAP 与独立 01/02/03 共用的「控制与擦线」开关；自动启用控制来源，直接打开原生蒙版编辑器，空选区提示，并保持切分支/重载状态。操作与验证边界见[本轮说明](../changes/runtime-workbench/2026-10-14-control-one-click.md)。

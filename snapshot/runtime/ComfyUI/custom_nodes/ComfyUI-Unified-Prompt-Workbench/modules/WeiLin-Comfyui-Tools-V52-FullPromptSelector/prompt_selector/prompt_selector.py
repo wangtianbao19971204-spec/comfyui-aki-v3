@@ -3,6 +3,7 @@
 import os
 import json
 import gc
+import math
 from array import array
 from collections import Counter
 from server import PromptServer
@@ -89,7 +90,7 @@ _ROUTE_BRANCH_LAST_BACKUP_AT = 0
 _ROUTE_BRANCH_BACKUP_INTERVAL_SEC = 180
 _PROMPT_DATA_LOCK = asyncio.Lock()
 _PROMPT_FILE_LOCK = threading.RLock()
-_THUMBNAIL_BUILD_SEMAPHORE = asyncio.Semaphore(2)
+_THUMBNAIL_BUILD_SEMAPHORE = asyncio.Semaphore(4)
 _PROMPT_CACHE_LOCK = threading.RLock()
 _PROMPT_DATA_CACHE = None
 _PROMPT_DATA_CACHE_SIGNATURE = None
@@ -325,8 +326,14 @@ def _atomic_save_json_unlocked(file_path, data, create_backup=True, compact=Fals
                 pass
         raise
 
-def _atomic_save_json(file_path, data, create_backup=True, compact=False, sync_to_disk=True, expected_revision=None):
-    """Validate the expected revision, then replace the file atomically."""
+def _atomic_save_json(file_path, data, create_backup=True, compact=False, sync_to_disk=True, expected_revision=None,
+                      schedule_warm=True):
+    """Validate the expected revision, then replace the file atomically.
+
+    ``schedule_warm`` can be turned off by the single-record writers: they patch the
+    derived read model in place after committing and only need a warm-up when that
+    patch has to fall back to a rebuild.
+    """
     with _PROMPT_FILE_LOCK:
         is_library = os.path.normcase(os.path.abspath(file_path)) == os.path.normcase(os.path.abspath(DATA_FILE))
         current = {}
@@ -347,7 +354,7 @@ def _atomic_save_json(file_path, data, create_backup=True, compact=False, sync_t
     # A write invalidated every derived view; rebuild them off the request path so the
     # next 资料库 / Tag / 节点 read is served warm instead of paying the projection pass.
     warm = globals().get("_request_library_warm")
-    if is_library and warm is not None and os.environ.get("UW_SKIP_LIBRARY_WARMUP") != "1":
+    if schedule_warm and is_library and warm is not None and os.environ.get("UW_SKIP_LIBRARY_WARMUP") != "1":
         warm(delay=0.05)
     return result
 
@@ -531,6 +538,10 @@ def _library_signature():
 
 
 _DATA_UPGRADE_CHECKED = False
+# ``_ensure_data_compatibility`` is a full pass over every row. It used to run on
+# every save; once the first read has upgraded the document (or proved it current)
+# the cached object carries the fields, so single-record writes can skip it.
+_DATA_COMPATIBLE = False
 
 # Per-row semantics are the expensive part of the read model: one binding hash,
 # the subcategory rules, the theme ids and the refinement regexes per prompt.
@@ -595,7 +606,7 @@ def _upgrade_data_file_once(data):
     import just for this upgrade. The file identity is re-checked before writing
     so a replacement that landed after this read is never overwritten.
     """
-    global _DATA_UPGRADE_CHECKED, _PROMPT_DATA_CACHE, _PROMPT_DATA_CACHE_SIGNATURE
+    global _DATA_UPGRADE_CHECKED, _DATA_COMPATIBLE, _PROMPT_DATA_CACHE, _PROMPT_DATA_CACHE_SIGNATURE
     if _DATA_UPGRADE_CHECKED:
         return
     _DATA_UPGRADE_CHECKED = True
@@ -612,6 +623,7 @@ def _upgrade_data_file_once(data):
             if needs_upgrade:
                 break
         if not needs_upgrade:
+            _DATA_COMPATIBLE = True
             return
         if _prompt_data_signature() != _PROMPT_DATA_CACHE_SIGNATURE:
             return
@@ -622,6 +634,7 @@ def _upgrade_data_file_once(data):
         logger.info("✅ 数据文件已升级，添加了时间戳字段")
         _PROMPT_DATA_CACHE = upgraded_data
         _PROMPT_DATA_CACHE_SIGNATURE = _prompt_data_signature()
+        _DATA_COMPATIBLE = True
     except Exception as e:
         logger.error(f"⚠️ 升级数据文件失败: {e}")
         # 不影响启动，继续运行
@@ -645,6 +658,22 @@ def _read_prompt_data_cached():
                 _upgrade_data_file_once(data)
                 return _PROMPT_DATA_CACHE
         raise RuntimeError("词库正在更新，请重试读取")
+
+
+def _prompt_data_for_write():
+    """The shared library document, schema-upgraded at most once, for single-record writers.
+
+    The compatibility pass adds missing fields in place, so it must not run again
+    after the cached document already carries them; writers copy the object
+    copy-on-write before touching anything.
+    """
+    global _DATA_COMPATIBLE
+    data = _read_prompt_data_cached()
+    if _DATA_COMPATIBLE:
+        return data
+    upgraded = _ensure_data_compatibility(data)
+    _DATA_COMPATIBLE = True
+    return upgraded
 
 
 def _library_state_reset():
@@ -862,13 +891,31 @@ def _library_entry_in_view(entry, include_pending):
         and semantic.get("manual_search_eligible")))
 
 
-def _patch_derived_caches(state, data, changed_ids):
+def _index_patch_signature(entry):
+    """The row facts the cached index payload aggregates; equal means it stays valid."""
+    semantic = entry.get("_semantic") or {}
+    return (
+        semantic.get("primary_class"),
+        tuple(sorted(semantic.get("alternative_classes") or [])),
+        tuple(sorted(set(semantic.get("themes") or []))),
+        tuple(sorted(set(semantic.get("subcategories") or []))),
+        tuple(sorted(set(semantic.get("count_markers") or []))),
+        tuple(sorted(set(semantic.get("refinements") or []))),
+        tuple(sorted((semantic.get("subcategory_owners") or {}).items())),
+    )
+
+
+def _patch_derived_caches(state, data, changed_ids, refresh_index=False):
     """Keep the cached views and row ordering when the changed rows stayed put.
 
     Only the safe shape is patched: every changed prompt must still exist, keep its
     category, keep its visibility, keep its disposition (so ``_review_counts`` stays
     right) and keep its position. Anything else returns False and the caller falls
     back to a full rebuild, which is always correct.
+
+    ``refresh_index`` additionally keeps the cached index payload when the caller
+    proved that no indexed statistic moved (``_index_patch_signature``); refreshed
+    category summaries and revision fields keep the ETag right.
 
     ``matches`` is dropped either way — it is a list of row positions filtered by
     usage/theme/collection, so a content edit can change it, and recomputing it costs
@@ -928,6 +975,12 @@ def _patch_derived_caches(state, data, changed_ids):
                 return False
             names, body = _search_terms(entry)
             rows[position] = (entry, identity, name, name.casefold(), names, body)
+        # Refresh the category metadata the view copies from the document too, so a
+        # rebuilt index/revision never reads a stale category timestamp.
+        data_categories = data.get("categories", []) or []
+        for position in {location[0] for location in locations.values()}:
+            view_categories[position] = {**data_categories[position],
+                                         "prompts": view_categories[position]["prompts"]}
         for name_of_field, value in data.items():
             if name_of_field not in derived:
                 view[name_of_field] = value
@@ -935,8 +988,48 @@ def _patch_derived_caches(state, data, changed_ids):
     state["matches"].clear()
     state["filter_masks"].clear()
     state["filter_scopes"].clear()
-    state["index"] = None
+    touched_categories = {location[0] for location in locations.values()}
+    if not refresh_index or not _refresh_library_index(state, data, touched_categories):
+        state["index"] = None
     return True
+
+
+def _refresh_library_index(state, data, category_positions):
+    """Refresh the cached index payload after a patch that moved no indexed statistic.
+
+    Returns False when the payload cannot be proven current, so the caller drops it
+    and the next read recomputes the whole index.
+    """
+    index = state["index"]
+    view = state["views"].get(False)
+    if index is None or view is None:
+        return False
+    categories = view.get("categories", []) or []
+    summaries = index.get("categories", [])
+    if len(summaries) != len(categories):
+        return False
+    if index.get("total_prompts") != sum(len(category.get("prompts", []) or [])
+                                          for category in categories):
+        return False
+    for position in sorted(category_positions):
+        category = categories[position]
+        summary = {key: value for key, value in category.items() if key != "prompts"}
+        summary["prompt_count"] = len(category.get("prompts", []) or [])
+        summary["prompts"] = []
+        summaries[position] = summary
+    index["version"] = view.get("version", "1.6")
+    index["settings"] = view.get("settings", {})
+    index["last_modified"] = view.get("last_modified")
+    index["review_counts"] = view["_review_counts"]
+    index["semantic_classes"] = view["_semantic_class_labels"]
+    return True
+
+
+def _same_selector_library(previous, data):
+    """The cached index groups come from the selector library; unchanged means safe."""
+    old = (previous or {}).get("selector_library")
+    new = data.get("selector_library")
+    return old is new or old == new
 
 
 def _cache_prompt_data(data, changed_ids=None):
@@ -945,6 +1038,10 @@ def _cache_prompt_data(data, changed_ids=None):
     ``changed_ids`` names every prompt the caller rewrote, so the derived projection
     is patched instead of dropped: the next read reuses every unchanged binding and
     only recomputes the touched rows. Anything ambiguous falls back to a full rebuild.
+
+    Returns True when the cached read model is already correct for the next request
+    (views patched and the index payload kept); False when a rebuild or a warm-up is
+    still needed.
     """
     global _PROMPT_DATA_CACHE, _PROMPT_DATA_CACHE_SIGNATURE
 
@@ -959,19 +1056,24 @@ def _cache_prompt_data(data, changed_ids=None):
                        has_data=state["data"] is not None, indexed=state["indexed"],
                        projection_changed=state["version"] is not None and state["version"][1] != version[1])
             _library_state_reset()
-            return
+            return False
+        previous_data = state["data"]
         entries = state["entries"]
         document = state["document"]
         cache_enabled = not _semantic_cache_disabled()
         wanted = {str(identity) for identity in changed_ids if identity}
         found = set()
         total = 0
+        index_patchable = True
         for category in data.get("categories", []) or []:
             for prompt in category.get("prompts", []) or []:
                 total += 1
                 identity = prompt.get("id")
                 if identity in wanted:
                     entry = _library_entry(document, category, prompt)
+                    previous = entries.get(identity)
+                    if previous is None or _index_patch_signature(previous) != _index_patch_signature(entry):
+                        index_patchable = False
                     entries[identity] = entry
                     if cache_enabled:
                         _SEMANTIC_ENTRIES[identity] = [semantic_binding(category, prompt), entry["_semantic"]]
@@ -980,11 +1082,12 @@ def _cache_prompt_data(data, changed_ids=None):
             entries.pop(identity, None)
             if cache_enabled:
                 _SEMANTIC_ENTRIES.pop(identity, None)
+            index_patchable = False
         if len(entries) != total:
             # A caller under-reported its change set; rebuild rather than serve a stale view.
             _lib_trace("cache_reset", reason="count", entries=len(entries), total=total)
             _library_state_reset()
-            return
+            return False
         state["data"] = data
         state["version"] = version
         if cache_enabled:
@@ -992,10 +1095,11 @@ def _cache_prompt_data(data, changed_ids=None):
             _schedule_semantic_cache_store()
         # A favourite, a usage stamp, a note or a preview swap keeps its row in place,
         # so the 100k-row ordering can be patched instead of rebuilt (measured 721 ms).
-        if _patch_derived_caches(state, data, found):
+        if _patch_derived_caches(state, data, found,
+                                 refresh_index=index_patchable and _same_selector_library(previous_data, data)):
             _lib_trace("cache_patch", changed=sorted(found), rows="patched",
                        signature=[list(version[0]), list(version[1])])
-            return
+            return state["index"] is not None
         state["views"].clear()
         state["rows"].clear()
         state["ranges"].clear()
@@ -1006,6 +1110,21 @@ def _cache_prompt_data(data, changed_ids=None):
         state["filter_scopes"].clear()
         state["index"] = None
         _lib_trace("cache_patch", changed=sorted(found), signature=[list(version[0]), list(version[1])])
+        return False
+
+
+def _commit_prompt_data(file_data, changed_ids=None):
+    """Install a committed document and warm the read model only when it was dropped.
+
+    Single-record writers pass ``schedule_warm=False`` to ``_atomic_save_json`` and
+    call this instead: a patched view that kept the index payload is already correct
+    for the next request, while a dropped/rebuild-needed model keeps the previous
+    background warm-up so the next read is not the cold one.
+    """
+    patched = _cache_prompt_data(file_data, changed_ids)
+    if not patched and os.environ.get("UW_SKIP_LIBRARY_WARMUP") != "1":
+        _request_library_warm(delay=0.05)
+    return patched
 
 
 def _reviewed_library_data(include_pending=False):
@@ -1486,6 +1605,30 @@ def _safe_preview_source(filename):
     return source_path
 
 
+def _thumbnail_size(size):
+    """Exact size ``Image.thumbnail((480, 360))`` produces, or None when no resize is needed."""
+    box_x, box_y = 480, 360
+    if box_x >= size[0] and box_y >= size[1]:
+        return None
+    aspect = size[0] / size[1]
+
+    def round_aspect(number, key):
+        return max(min(math.floor(number), math.ceil(number), key=key), 1)
+
+    if box_x / box_y >= aspect:
+        box_x = round_aspect(box_y * aspect, lambda value: abs(aspect - value / box_y))
+    else:
+        box_y = round_aspect(box_x / aspect, lambda value: 0 if value == 0 else abs(aspect - box_x / value))
+    return box_x, box_y
+
+
+def _thumbnail_orientation(image):
+    try:
+        return image.getexif().get(274)
+    except Exception:  # noqa: BLE001 - malformed EXIF is treated as upright
+        return None
+
+
 def _ensure_preview_thumbnail(filename):
     source_path = _safe_preview_source(filename)
     if source_path is None:
@@ -1503,13 +1646,26 @@ def _ensure_preview_thumbnail(filename):
     try:
         with Image.open(source_path) as image:
             image.seek(0)
-            image = ImageOps.exif_transpose(image)
+            # AI previews rarely carry EXIF orientation, and exif_transpose copies the
+            # full decoded image; only rotate when the tag actually asks for it.
+            rotated = _thumbnail_orientation(image) not in (None, 0, 1)
+            if rotated:
+                image = ImageOps.exif_transpose(image)
+            original_size = image.size
+            final_size = _thumbnail_size(original_size)
+            if not rotated:
+                # ``Image.thumbnail`` drafts JPEGs to 2x the box, which misses the common
+                # 753x1100 previews; drafting to the final size halves the decoder work.
+                image.draft(None, final_size if final_size is not None else original_size)
             has_alpha = image.mode in ("RGBA", "LA") or (
                 image.mode == "P" and "transparency" in image.info
             )
-            image = image.convert("RGBA" if has_alpha else "RGB")
-            image.thumbnail((480, 360), Image.Resampling.LANCZOS)
-            image.save(temp_path, format="WEBP", quality=82, method=4)
+            mode = "RGBA" if has_alpha else "RGB"
+            if image.mode != mode:
+                image = image.convert(mode)
+            if final_size is not None and image.size != final_size:
+                image = image.resize(final_size, Image.Resampling.LANCZOS, reducing_gap=2.0)
+            image.save(temp_path, format="WEBP", quality=82, method=2)
         os.replace(temp_path, thumbnail_path)
         return thumbnail_path
     finally:
@@ -2672,19 +2828,6 @@ async def batch_delete_prompts(request):
     except Exception as e:
         return web.json_response({"error": str(e)}, status=500)
 
-def _get_or_create_category(categories, category_name, now):
-    for category in categories:
-        if category.get("name") == category_name:
-            return category
-    category = {
-        "id": str(uuid.uuid4()),
-        "name": category_name,
-        "updated_at": now,
-        "prompts": [],
-    }
-    categories.append(category)
-    return category
-
 def _category_summary(category):
     return {
         "id": category.get("id") or category.get("name"),
@@ -2695,33 +2838,48 @@ def _category_summary(category):
     }
 
 
-def _find_category_by_identity(categories, identity):
+def _category_for_write(categories, position):
+    """Copy one category and its prompt list into a locally-owned categories list."""
+    category = categories[position]
+    copied = {**category, "prompts": list(category.get("prompts", []) or [])}
+    categories[position] = copied
+    return copied
+
+
+def _category_position_by_identity(categories, identity):
     identity = str(identity or "")
-    for category in categories:
+    for position, category in enumerate(categories):
         if str(category.get("id") or category.get("name") or "") == identity:
-            return category
-    for category in categories:
+            return position
+    for position, category in enumerate(categories):
         if str(category.get("name") or "") == identity:
-            return category
+            return position
     return None
 
 
-def _apply_create_category(category_name, expected_revision):
-    file_data = _json_load_path(DATA_FILE)
-    _require_revision({"base_revision": expected_revision}, file_data)
-    file_data = _ensure_data_compatibility(file_data)
-    categories = file_data.get("categories", [])
-    now = datetime.now().isoformat()
-    existing = next(
-        (category for category in categories if category.get("name") == category_name),
-        None,
-    )
-    if existing is not None:
-        return {"success": True, "created": False, "category": _category_summary(existing),
-                "revision": _revision(file_data)}
+def _category_position_by_name(categories, category_name):
+    return next((position for position, category in enumerate(categories)
+                 if category.get("name") == category_name), None)
 
-    category = _get_or_create_category(categories, category_name, now)
-    file_data["last_modified"] = now
+
+def _apply_create_category(category_name, expected_revision):
+    current = _prompt_data_for_write()
+    _require_revision({"base_revision": expected_revision}, current)
+    categories = list(current.get("categories", []) or [])
+    now = datetime.now().isoformat()
+    position = _category_position_by_name(categories, category_name)
+    if position is not None:
+        return {"success": True, "created": False, "category": _category_summary(categories[position]),
+                "revision": _revision(current)}
+
+    category = {
+        "id": str(uuid.uuid4()),
+        "name": category_name,
+        "updated_at": now,
+        "prompts": [],
+    }
+    categories.append(category)
+    file_data = {**current, "categories": categories, "last_modified": now}
     _atomic_save_json(
         DATA_FILE,
         file_data,
@@ -2729,26 +2887,25 @@ def _apply_create_category(category_name, expected_revision):
         compact=True,
         sync_to_disk=False,
         expected_revision=expected_revision,
+        schedule_warm=False,
     )
-    _cache_prompt_data(file_data, [])
+    _commit_prompt_data(file_data, [])
     return {"success": True, "created": True, "category": _category_summary(category), "revision": _revision(file_data)}
 
 
 def _apply_upsert_prompt(payload):
-    file_data = _json_load_path(DATA_FILE)
-    _require_revision(payload, file_data)
-    file_data = _ensure_data_compatibility(file_data)
-    categories = file_data.get("categories", [])
+    current = _prompt_data_for_write()
+    _require_revision(payload, current)
+    if "selector_group_ids" in payload and "collections" not in (current.get("selector_library") or {}):
+        # The one-time selector-library migration rewrites every prompt record in
+        # place; that single commit keeps the historical parse-then-edit path.
+        current = _ensure_data_compatibility(_json_load_path(DATA_FILE))
+        _require_revision(payload, current)
+    # Only the touched category and row are copied, so a conflict or a validation
+    # error after this point can never leak into the shared parsed document.
+    categories = list(current.get("categories", []) or [])
+    file_data = {**current, "categories": categories}
     now = datetime.now().isoformat()
-
-    new_category_name = str(payload.get("new_category_name") or "").strip()
-    target_identity = payload.get("target_category_id")
-    if new_category_name:
-        target_category = _get_or_create_category(categories, new_category_name, now)
-    else:
-        target_category = _find_category_by_identity(categories, target_identity)
-    if target_category is None:
-        target_category = _get_or_create_category(categories, "默认/其他", now)
 
     raw_prompt = payload.get("prompt") if isinstance(payload.get("prompt"), dict) else {}
     prompt_id = str(raw_prompt.get("id") or "").strip()
@@ -2756,18 +2913,17 @@ def _apply_upsert_prompt(payload):
     if mode not in {"create", "edit"}:
         raise ValueError("Invalid prompt save mode")
     existing_prompt = None
-    source_category = None
+    source_position = None
     source_index = None
 
     if prompt_id:
-        if prompt_id in file_data.get('_source_to_canonical', {}):
+        if prompt_id in current.get('_source_to_canonical', {}):
             raise ValueError('旧资料已合并，请通过原 ID 定位后编辑当前资料')
-        for category in categories:
-            prompts = category.get("prompts", []) or []
-            for index, prompt in enumerate(prompts):
+        for category_position, category in enumerate(categories):
+            for index, prompt in enumerate(category.get("prompts", []) or []):
                 if str(prompt.get("id") or "") == prompt_id:
                     existing_prompt = prompt
-                    source_category = category
+                    source_position = category_position
                     source_index = index
                     break
             if existing_prompt is not None:
@@ -2779,18 +2935,53 @@ def _apply_upsert_prompt(payload):
             for prompt in category.get("prompts", []) or []:
                 if prompt.get("_draft_id") == draft_id:
                     return {"success": True, "created": False, "prompt": prompt,
-                            "category": _category_summary(category), "revision": _revision(file_data)}
+                            "category": _category_summary(category), "revision": _revision(current)}
     if mode == "create" and existing_prompt is not None:
         # An unrelated create must retain the existing identity.
         prompt_id = str(uuid.uuid4())
         existing_prompt = None
-        source_category = None
+        source_position = None
 
     if mode == "edit" and existing_prompt is None:
         raise KeyError(f"Prompt not found: {prompt_id}")
-    if mode == "create" and existing_prompt is None and any(prompt_id in event.get('source_ids', []) for event in file_data.get('_merge_history', [])):
+    if mode == "create" and existing_prompt is None and any(prompt_id in event.get('source_ids', []) for event in current.get('_merge_history', [])):
         raise ValueError('该历史身份已被合并或删除；请另存为新身份')
 
+    # Resolve the destination on the locally-owned list; only touched categories are copied.
+    new_category_name = str(payload.get("new_category_name") or "").strip()
+    if new_category_name:
+        target_position = _category_position_by_name(categories, new_category_name)
+        if target_position is None:
+            target_category = {
+                "id": str(uuid.uuid4()),
+                "name": new_category_name,
+                "updated_at": now,
+                "prompts": [],
+            }
+            categories.append(target_category)
+            target_position = len(categories) - 1
+        else:
+            target_category = _category_for_write(categories, target_position)
+    else:
+        target_position = _category_position_by_identity(categories, payload.get("target_category_id"))
+        if target_position is None:
+            target_position = _category_position_by_name(categories, "默认/其他")
+        if target_position is None:
+            target_category = {
+                "id": str(uuid.uuid4()),
+                "name": "默认/其他",
+                "updated_at": now,
+                "prompts": [],
+            }
+            categories.append(target_category)
+            target_position = len(categories) - 1
+        else:
+            target_category = _category_for_write(categories, target_position)
+
+    source_category = None
+    if source_position is not None:
+        source_category = target_category if source_position == target_position \
+            else _category_for_write(categories, source_position)
     if mode == "edit" and existing_prompt is not None and source_category is not target_category:
         source_category["prompts"].remove(existing_prompt)
 
@@ -2875,8 +3066,9 @@ def _apply_upsert_prompt(payload):
         compact=True,
         sync_to_disk=False,
         expected_revision=payload.get("base_revision"),
+        schedule_warm=False,
     )
-    _cache_prompt_data(file_data, [prompt["id"]])
+    _commit_prompt_data(file_data, [prompt["id"]])
     outcome = {
         "success": True,
         "prompt": prompt,
@@ -2897,20 +3089,18 @@ def _apply_upsert_prompt(payload):
 
 
 def _apply_delete_prompt(prompt_id, expected_revision):
-    file_data = _json_load_path(DATA_FILE)
-    _require_revision({"base_revision": expected_revision}, file_data)
-    file_data = _ensure_data_compatibility(file_data)
-    categories = file_data.get("categories", [])
+    current = _prompt_data_for_write()
+    _require_revision({"base_revision": expected_revision}, current)
+    categories = list(current.get("categories", []) or [])
     now = datetime.now().isoformat()
 
     deleted = None
     source_category = None
-    for category in categories:
-        prompts = category.get("prompts", []) or []
-        for index, prompt in enumerate(prompts):
+    for position, category in enumerate(categories):
+        for index, prompt in enumerate(category.get("prompts", []) or []):
             if str(prompt.get("id") or "") == prompt_id:
-                deleted = prompts.pop(index)
-                source_category = category
+                source_category = _category_for_write(categories, position)
+                deleted = source_category["prompts"].pop(index)
                 break
         if deleted is not None:
             break
@@ -2919,7 +3109,7 @@ def _apply_delete_prompt(prompt_id, expected_revision):
         raise KeyError(f"Prompt not found: {prompt_id}")
 
     source_category["updated_at"] = now
-    file_data["last_modified"] = now
+    file_data = {**current, "categories": categories, "last_modified": now}
     _atomic_save_json(
         DATA_FILE,
         file_data,
@@ -2927,8 +3117,9 @@ def _apply_delete_prompt(prompt_id, expected_revision):
         compact=True,
         sync_to_disk=False,
         expected_revision=expected_revision,
+        schedule_warm=False,
     )
-    _cache_prompt_data(file_data, [prompt_id])
+    _commit_prompt_data(file_data, [prompt_id])
     return {
         "success": True,
         "deleted_id": prompt_id,
@@ -2955,13 +3146,14 @@ async def create_prompt_category(request):
 
 
 def _apply_plan_flag(payload):
-    data = _json_load_path(DATA_FILE)
-    _require_revision(payload, data)
+    current = _prompt_data_for_write()
+    _require_revision(payload, current)
     value = payload.get('is_user_plan')
     if type(value) is not bool:
         raise ValueError('方案标记必须为明确的是或否')
-    for category in data.get('categories', []):
-        for prompt in category.get('prompts', []):
+    categories = list(current.get('categories', []) or [])
+    for category_position, category in enumerate(categories):
+        for index, prompt in enumerate(category.get('prompts', [])):
             if prompt.get('id') != payload.get('prompt_id'):
                 continue
             if value:
@@ -2969,14 +3161,16 @@ def _apply_plan_flag(payload):
                 semantic = decision_for(projection, category, prompt)
                 if semantic.get('manual_search_eligible') is not True:
                     raise ValueError('请先编辑并确认资料主题，再保存为方案')
-            prompt['is_user_plan'] = value
-            prompt['updated_at'] = datetime.now().isoformat()
-            data['last_modified'] = prompt['updated_at']
-            _atomic_save_json(DATA_FILE, data, create_backup=_should_create_route_branch_backup(), compact=True,
-                             expected_revision=payload.get('base_revision'))
-            _cache_prompt_data(data, [prompt['id']])
-            return {'success': True, 'prompt_id': prompt['id'], 'is_user_plan': value,
-                    'revision': _revision(data)}
+            now = datetime.now().isoformat()
+            updated_prompt = {**prompt, 'is_user_plan': value, 'updated_at': now}
+            updated_category = _category_for_write(categories, category_position)
+            updated_category['prompts'][index] = updated_prompt
+            file_data = {**current, 'categories': categories, 'last_modified': now}
+            _atomic_save_json(DATA_FILE, file_data, create_backup=_should_create_route_branch_backup(), compact=True,
+                              expected_revision=payload.get('base_revision'), schedule_warm=False)
+            _commit_prompt_data(file_data, [updated_prompt['id']])
+            return {'success': True, 'prompt_id': updated_prompt['id'], 'is_user_plan': value,
+                    'revision': _revision(file_data)}
     raise KeyError('资料已不存在，请刷新列表')
 
 
@@ -3081,18 +3275,20 @@ async def update_prompt_order(request):
         if not category_name or not ordered_ids:
             return web.json_response({"error": "Missing parameters"}, status=400)
             
-        file_data = _json_load_path(DATA_FILE)
-        _require_revision(data, file_data)
+        current = _prompt_data_for_write()
+        _require_revision(data, current)
+        categories = list(current.get("categories", []) or [])
+        file_data = None
             
         # 查找分类并重新排序
-        for category in file_data["categories"]:
+        for category_position, category in enumerate(categories):
             if category["name"] == category_name:
-                prompts = category["prompts"]
+                prompts = list(category.get("prompts", []) or [])
                 if not isinstance(ordered_ids, list) or any(not isinstance(pid, str) for pid in ordered_ids):
                     return web.json_response({"error": "Invalid prompt IDs"}, status=400)
                 # A merged-away source id still resolves to its current canonical slot, so a page
                 # loaded before the merge can still reorder without dropping or duplicating records.
-                source_map = file_data.get("_source_to_canonical") or {}
+                source_map = current.get("_source_to_canonical") or {}
                 resolved_ids = []
                 for pid in ordered_ids:
                     record = source_map.get(pid)
@@ -3105,20 +3301,23 @@ async def update_prompt_order(request):
                     return web.json_response({"error": "Prompt IDs no longer belong to this category"}, status=409)
                 requested = set(resolved_ids)
                 ordered = iter(prompt_map[pid] for pid in resolved_ids)
-                category["prompts"] = [next(ordered) if p.get("id") in requested else p for p in prompts]
 
                 # 更新分类和全局时间戳（排序操作）
                 now = datetime.now().isoformat()
-                category["updated_at"] = now
-                file_data["last_modified"] = now
+                categories[category_position] = {
+                    **category,
+                    "prompts": [next(ordered) if p.get("id") in requested else p for p in prompts],
+                    "updated_at": now,
+                }
+                file_data = {**current, "categories": categories, "last_modified": now}
                 break
         else:
             return web.json_response({"error": "Category not found"}, status=404)
 
         # 使用原子保存机制
-        _atomic_save_json(DATA_FILE, file_data, create_backup=True, compact=True,
-                          expected_revision=data.get("base_revision"))
-        _cache_prompt_data(file_data, [])
+        _atomic_save_json(DATA_FILE, file_data, create_backup=_should_create_route_branch_backup(), compact=True,
+                          expected_revision=data.get("base_revision"), schedule_warm=False)
+        _commit_prompt_data(file_data, [])
 
         return _success_response({"success": True, "revision": _revision(file_data)})
     except RevisionConflict as e:
@@ -3143,9 +3342,9 @@ async def toggle_favorite(request):
         # The 217 MB document is already in memory; copy the touched row instead of
         # parsing the file again, and keep the shared document untouched until commit.
         with _PROMPT_FILE_LOCK:
-            current = _read_prompt_data_cached()
+            current = _prompt_data_for_write()
             _require_revision(data, current)
-            categories = current.get("categories", [])
+            categories = list(current.get("categories", []) or [])
             file_data = None
             for index, category in enumerate(categories):
                 if (category.get("id") == category_id if category_id else category.get("name") == category_name):
@@ -3167,9 +3366,9 @@ async def toggle_favorite(request):
                 return web.json_response({"error": "资料已移动或不存在，请刷新后重试"}, status=404)
 
             # 使用原子保存机制
-            _atomic_save_json(DATA_FILE, file_data, create_backup=True, compact=True,
-                              expected_revision=data.get("base_revision"))
-            _cache_prompt_data(file_data, [prompt_id])
+            _atomic_save_json(DATA_FILE, file_data, create_backup=_should_create_route_branch_backup(), compact=True,
+                              expected_revision=data.get("base_revision"), schedule_warm=False)
+            _commit_prompt_data(file_data, [prompt_id])
 
         return _success_response({"success": True, "revision": _revision(file_data)})
     except RevisionConflict as e:
@@ -3190,9 +3389,9 @@ async def mark_prompt_used(request):
             return web.json_response({"error": "Missing prompt_id"}, status=400)
         # Same copy-on-write rule as the favourite toggle: reuse the in-memory document.
         with _PROMPT_FILE_LOCK:
-            current = _read_prompt_data_cached()
+            current = _prompt_data_for_write()
             _require_revision(data, current)
-            categories = current.get("categories", [])
+            categories = list(current.get("categories", []) or [])
             file_data = None
             for index, category in enumerate(categories):
                 category_identity = str(category.get("id") or category.get("name") or "")
@@ -3215,9 +3414,9 @@ async def mark_prompt_used(request):
             if file_data is None:
                 return web.json_response({"error": "Prompt not found"}, status=404)
 
-            _atomic_save_json(DATA_FILE, file_data, create_backup=True, compact=True,
-                              expected_revision=data.get("base_revision"))
-            _cache_prompt_data(file_data, [prompt_id])
+            _atomic_save_json(DATA_FILE, file_data, create_backup=_should_create_route_branch_backup(), compact=True,
+                              expected_revision=data.get("base_revision"), schedule_warm=False)
+            _commit_prompt_data(file_data, [prompt_id])
         return _success_response({"success": True, "prompt_id": prompt_id, "last_used": now, "revision": _revision(file_data)})
     except RevisionConflict as e:
         return web.json_response({"error": str(e), "conflict": True, "expected_revision": e.expected, "current_revision": e.actual, "draft_preserved": True}, status=409)

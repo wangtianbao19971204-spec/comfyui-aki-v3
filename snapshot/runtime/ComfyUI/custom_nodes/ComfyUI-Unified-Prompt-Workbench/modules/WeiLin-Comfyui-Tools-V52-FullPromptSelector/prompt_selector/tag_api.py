@@ -25,17 +25,43 @@ from . import tag_links
 logger = logging.getLogger("weilin.prompt_selector")
 
 
-def _warm_tag_catalog():
-    """Build the folder tree before the first Tag panel opens.
+def _warm_default_tag_views(tag_library):
+    """Prime ``_PAGE_CACHE`` with the exact keys ``/tags/page`` uses for its default views.
 
-    ``categories()`` is the one expensive read (all tag rows grouped by folder plus
-    the 标签串 layout), and TagLibrary persists it, so after the first run this costs
-    almost nothing. The five ``page()`` pre-warms that used to follow it are gone:
-    the real panel calls them with ``known_collections`` filled in, so their cache
-    keys never matched and each warm-up only paid another full-table scan.
+    The old pre-warm ran ``page()`` with ``known_collections=()`` while real requests fill
+    in every 收藏组 id, so their cache keys never matched and each warm-up only paid another
+    full-table scan.  Here the ids come from the same ``catalog()`` call ``/tags/page`` uses.
+    """
+    known = tuple(group['id'] for group in catalog()['collections'])
+    warmed = 0
+    # 列表视图 limit=100、卡片视图 limit=120（web/tag_manager.js pageSize），
+    # 两种首屏都按真实缓存键预热，避免第一次切换视图时再付一次查询。
+    for limit in (100, 120):
+        for scope in ('tags', 'strings'):
+            for shape in ('', 'atomic', 'group', 'string'):
+                tag_library.page('', '', '', 0, limit, False, '', known, shape, scope)
+                warmed += 1
+    return warmed
+
+
+def _warm_tag_catalog():
+    """Build the folder tree, the Tag read indexes and the default pages before first use.
+
+    ``categories()`` is the one expensive read (all tag rows grouped by folder plus the
+    标签串 layout), and TagLibrary persists it, so after the first run this costs almost
+    nothing.  ``warm_read_index()`` builds the expression indexes/derived tables once, then
+    the default views are pre-warmed under the same cache keys the panel will request.
     """
     started = time.perf_counter()
-    library().categories()
+    tag_library = library()
+    tag_library.categories()
+    warm_reads = getattr(tag_library, 'warm_read_index', None)
+    if warm_reads is not None:
+        try:
+            if warm_reads():
+                _warm_default_tag_views(tag_library)
+        except Exception as error:  # noqa: BLE001 - a failed warm-up must not break the panel
+            logger.warning("[Workbench] Tag 读取预热失败，将在首次打开时重试: %s", error)
     logger.info("[Workbench] Tag catalog warmed in %.1f s; the Tag manager opens from cache.",
                 time.perf_counter() - started)
 
