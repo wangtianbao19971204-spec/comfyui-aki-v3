@@ -1,6 +1,10 @@
 # UAP、子图、部位细化与二放
 
-文档修订：2026-10-11。
+文档修订：2026-10-24。
+
+2026-10-24 Anima 全域退役：按用户明确要求移除 Anima 原版与 Anima 2.9B 的独立工作流/模板（生产套件 01/02、生产扩展 05/07/10 及模板）和 UAP v2/权威模板中的 a1、a29、ext05、ext07 分支；正式图与模板只保留 k2/ext04/ext06/ext08/ext09，默认分支为 [03] Krea2 生产。根节点 272→117、连线 363→123、分组 112→45、内嵌子图 25→1、分支 9→5，模型配套清单 17→7（仅 Krea2）。历史版本（Anima 推荐版三份、UAP v1）与插件/训练工具保留；权重与 LoRA 的运行区处置另行记录。见[变更说明](../changes/runtime-workflows/2026-10-24-anima-assets-retirement.md)与[收据](../../receipts/anima_workflow_retirement_20261024.json)。本轮仅主仓，未部署运行区。
+
+2026-10-24 部署更新：16:45–16:48 已完成限定部署（16 文件写入运行区、11 份 Anima 工作流/模板/脚本删除）；运行区 UAP 与模板 SHA-256 均为 `9f547db3…`（240,208 B），workflows 目录保留 8 份 JSON（UAP v2、生产套件 03/99、生产扩展 04/06/08/09、丝袜），模板目录 9 项，五个分支默认 Krea2，服务未启动/未重启、无队列操作。运行区与主仓 HEAD 逐字节一致；证据见仓外部署收据 `anima-workflow-deployment-20261024`（VERIFIED.json SHA-256 `fc18a969…`）。
 
 2026-10-11 Krea2 默认底模：上一轮对照证明深度 ControlNet-LoRA 在非蒸馏底模上生效、在当前 Turbo 底模上不可用（Turbo 强度 4 还会把成图打散成噪声），因此把 K2 分支默认底模换成 `Krea2-Anime v2.0 BF16` 并把该底模需要的采样档位一并写入（步数 8→24、CFG 1→3.5、scheduler simple→normal；sampler 与 denoise 不变）。其余参数、LoRA 栈、提示词、种子、尺寸、控制强度与所有开关默认值保持。隔离验收：新默认配置下"关控制"与"开控制（姿势深度）"平均绝对差 89.12、变化 97.3% 像素；两文件已限定部署并重启（运行区 SHA `ceeeee13…`、进程 15244），运行区实页以默认提示词跑通一次完整生产链路（控制开、姿势档，输出 `_codex_qa/krea2_default_base_20261011/krea2_00001_.png`）。见[底模变更](../changes/runtime-workflows/2026-10-11-krea2-anime-default-base.md)。
 
@@ -21,13 +25,13 @@
 
 [正式 UAP v2](../../../snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json)与 [权威模板](../../../snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json)各自保存并核对哈希。构建/校验用 [merge_unified_workflow.py](../../../snapshot/runtime/production_tools/merge_unified_workflow.py)、[validate_uap_workflow.py](../../../snapshot/runtime/production_tools/validate_uap_workflow.py)。子图内嵌在完整 JSON，不拆成丢失连线/模式的孤立备份。
 
-九分支覆盖两套 Anima、Krea2 生产、Krea2 编辑、裁剪精修、透明抠图、左右扩图和二倍/四倍独立超分。独立旧流是历史快照，不承诺与 UAP 双向同步；构建工具默认权威模板，无参数拒绝写入，导出只允许全新候选。
+五分支覆盖 Krea2 生产、Krea2 指令编辑、透明抠图、二倍交付与四倍素材；Anima 原版与 Anima 2.9B 的独立工作流和 UAP 分支已于 2026-10-24 按用户要求退役，历史版本保留为只读快照。独立旧流是历史快照，不承诺与 UAP 双向同步；构建工具默认权威模板，无参数拒绝写入，导出只允许全新候选。
 
 ## 网页提示词接入
 
 网页提示词经[五站桥接](browser-import.md)进入工作台待采用区，核对后选择正向/负向目标，不需要在生成图中放置接收节点。正式 v2 与权威模板均移除了三处 `DanbooruBrowserImportV05` 及三处专用预览；Krea2 的纯接收分组和开关/导航引用也已清理。
 
-两套 Anima 的 PixAI 图片反推保留：原图片输入、子图 UUID、对外字符串端口及预览节点保持，输出改接本地 PixAI 标签。保留其余提示词、LoRA、种子、参数、模式、位置和子图；历史独立流与 v1 不随本次清理改写，旧接收节点类仍为这些旧图兼容注册。
+Krea2 分支的 PixAI 图片反推与原输入/预览接口保留；Anima 分支及其 PixAI 子图已随本次退役删除。历史独立流与 v1 不随本次清理改写，旧接收节点类仍为这些旧图兼容注册。
 
 常规导出和现行校验递归拒绝旧接收节点，并检查内嵌连接、端口回指及分支/阶段引用。`--legacy-sources` 仅可导出历史实验候选，不能据此覆盖正式图。旧 `layout_uap_workbench.py` 的直接重建/覆盖入口已封闭，避免从旧独立流恢复接收部件与旧参数。
 
@@ -35,7 +39,7 @@
 
 ## 细化与参数链
 
-两套 Anima 次序为手 → 脚 → 区域标准/快速互斥 → 脸 → 眼 → 可选 1.5× 分块二放。细化和二放继续默认关闭，由用户在工作台选择；不新增头发、四肢、人体、服装或独立皮肤支路。
+Krea2 保持自己的细化与 1.5× 分块二放路由（默认关闭、由用户在工作台选择）；Anima 的手→脚→区域标准/快速互斥→脸→眼细化次序随分支退役。不新增头发、四肢、人体、服装或独立皮肤支路。
 
 检测器、分割器、裁剪/回贴、局部采样是不同职责；精确节点类型和参数以保存图为准，不把检测模型当成细化底模。常用 UI 直接映射子图原阈值、上下文、降噪、种子与模式；高级采样和缝补仍保留原控件。独立 08/09 超分不是主流程自动续段。
 
@@ -86,6 +90,10 @@ A29 手阶段：原手部 YOLO 检测框已经纳入画面左侧裸脚区，SAM 
 区域 A1/A29 标准／快速四组通过正规 UI 开关与各自导出实际执行，所选 16 个 child 节点无缓存；四蒙版全空、最终 RGB 与输入相同，仅认证真实 no-hit 检测／透传路径。有命中重绘和画质仍未覆盖。内建手工蒙版编辑器已实际打开、载图并取消；画笔保存往返未测，旧 Impact 自动 SAM 编辑器仍因缺失依赖未修复。各项剩余边界继续在[已知问题](../../KNOWN_ISSUES.md)维护。
 
 ## 更新记录
+
+- 2026-10-24 收尾清理：已退役的 `layout_uap_workbench.py` 默认 `activeBranch`/`viewBranch` 由 `a1` 改为 `k2`，避免重跑生成退役分支 id；技术目录移除已删除的 Anima CPU 验收脚本登记。正式图/模板未改，未部署。
+
+- 2026-10-24：Anima 原版/2.9B 工作流、模板与 UAP 分支退役，UAP 默认分支改为 Krea2；历史工作流与插件保留，未部署运行区。见[变更](../changes/runtime-workflows/2026-10-24-anima-assets-retirement.md)。
 
 - 2026-10-13：修复独立 03 与对应模板的控制接线，参考图/VNCCS 经统一来源与可选擦线进入 Encode→Apply，保留原模型、提示词、种子和采样设置。17 项相关回归和实际原生出图核对通过，擦线直接控制图在蒙版支持域外零变化；原 Turbo 的服装与姿态质量限制、配套非 Turbo 的有限改善，以及旧 UAP K2 QA 提示词错误和 A1 高强度模糊分别记录。源验收当时未部署；随后仅两份 03 已部署，中性输入现场两例通过。见[本轮说明](../changes/runtime-workflows/2026-10-13-standalone-krea2-control-routing.md)、[源验收收据](../../receipts/control_erase_routing_repair_20261013.json)与[部署收据](../../receipts/control_erase_deployment_20261013.json)。
 

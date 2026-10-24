@@ -32,6 +32,12 @@ Git 源码与文字检查点、图库和权重、Python/CUDA 环境、最新在�
 
 ## 更新记录
 
+- 2026-10-24：收尾清理后重新 seal：修订 `repair_workflow.js`、`anime_preview.html`、`layout_uap_workbench.py` 三份源码身份，删除 `scripts/anima_control_cpu_acceptance.py` 并从技术目录移除登记；`model_sources.json` 补正 1 项旧缺失标记后刷新 `metadata_files` 摘要，快照校验通过，未部署。
+
+- 2026-10-24：Anima/Qwen 资产退役后再次 seal：`snapshot/inventory/model_sources.json` 更新 238 项存在状态与工作流引用，`metadata_files` 摘要同步刷新，快照校验通过；历史 `models.json`/`workflow_models.json` 不重写。见[收据](../../receipts/anima_asset_retirement_20261024.json)。
+
+- 2026-10-24：随 Anima 工作流退役重新 seal 源码清单：manifest 移除 9 份工作流/模板与 6 份 Anima 专用工具/测试源并记录 `removed_sources`、`live_deployed=false`，`verification.json` 同步；metadata_files 中 `model_sources.json` 摘要随 UAP 变更刷新，快照校验通过。见[工作流变更](../changes/runtime-workflows/2026-10-24-anima-assets-retirement.md)。
+
 - 2026-10-11：`project.py` 的本地 status/seal/deploy-plan 复用 [snapshot_cache.py](../../../scripts/snapshot_cache.py) 的文件身份与目录指纹。未变文件不再重复读取正文／SHA，分片顺序及内容身份不变时复用拼接验证；运行比较支持 `--scope`。显式全读、CI、恢复、release 与历史上传门禁边界保持独立；见[实现和失效条件](../changes/operations-source-of-truth/2026-10-11-snapshot-fingerprints.md)及[回归](../../../tests/test_snapshot_cache.py)。
 
 - 2026-10-10：日常上传复用已验证的历史对象内容扫描，保留完整历史覆盖与 SHA-256 复核；历史／暂存缓存相互隔离，复制到另一个克隆或工作树会失效。新增历史风险回归和实际冷／热扫描对照，见[增量检查说明](../changes/operations-source-of-truth/2026-10-10-incremental-security.md)。LoRA 等仓外资源整理不触发 Git 上传门禁，部署同哈希文件继续跳过。

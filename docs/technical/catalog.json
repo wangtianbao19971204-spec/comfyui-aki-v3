@@ -144,7 +144,6 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_switches.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_panel.js"
       ],
@@ -156,7 +155,6 @@
         "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/browser_measurement.js",
         "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/lifecycle_collector.js",
         "snapshot/runtime/production_tools/test_stocking_workflow.cjs",
-        "snapshot/runtime/production_tools/test_anima_control.cjs",
         "snapshot/runtime/production_tools/test_control_switches.cjs"
       ],
       "evidence": [
@@ -184,7 +182,6 @@
         "snapshot/runtime/production_tools/test_uap_compact_widgets.cjs",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
-        "snapshot/runtime/production_tools/test_anima_control.cjs",
         "snapshot/runtime/production_tools/test_control_switches.cjs"
       ],
       "examples": [
@@ -207,7 +204,6 @@
         "snapshot/runtime/production_tools/build_stocking_workflow.py",
         "snapshot/runtime/production_tools/templates/生产扩展_丝袜纹理修复.json",
         "snapshot/runtime/ComfyUI/user/default/workflows/生产扩展_丝袜纹理修复.json",
-        "snapshot/runtime/production_tools/simplify_anima_control.py",
         "snapshot/runtime/production_tools/connect_standalone_krea2_control.py",
         "snapshot/runtime/ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
         "snapshot/runtime/production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json"
@@ -220,7 +216,6 @@
         "snapshot/runtime/production_tools/test_uap_browser_retirement.py",
         "tests/test_native_workflow_acceptance.py",
         "snapshot/runtime/production_tools/test_stocking_workflow.cjs",
-        "tests/test_anima_control_workflow.py",
         "tests/test_standalone_krea2_control_workflow.py"
       ],
       "evidence": [
@@ -259,9 +254,6 @@
         "tests/test_native_workflow_acceptance.py",
         "snapshot/runtime/production_tools/build_stocking_workflow.py",
         "snapshot/runtime/production_tools/test_stocking_workflow.cjs",
-        "snapshot/runtime/production_tools/simplify_anima_control.py",
-        "tests/test_anima_control_workflow.py",
-        "tests/fixtures/anima_control_before.json",
         "snapshot/runtime/production_tools/connect_standalone_krea2_control.py",
         "tests/test_standalone_krea2_control_workflow.py",
         "tests/fixtures/krea2_control_before.json"
@@ -704,11 +696,9 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-2.9B-loraPatch/__init__.py",
         "snapshot/runtime/production_tools/profiles.json",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/__init__.py",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/native_loader.py",
-        "scripts/anima_control_cpu_acceptance.py"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/native_loader.py"
       ],
       "tests": [
-        "scripts/anima_control_cpu_acceptance.py"
       ],
       "evidence": [
         "docs/receipts/anima29_lorapatch_20261005.json",
@@ -723,8 +713,7 @@
       "watch": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-2.9B-loraPatch/",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/",
-        "scripts/anima_control_cpu_acceptance.py"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/"
       ],
       "examples": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-2.9B-loraPatch/README.md"

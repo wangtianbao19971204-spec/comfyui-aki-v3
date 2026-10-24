@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- 2026-10-24：Anima/Qwen 权重按用户授权永久删除（809 文件 / 125,367,967,479 B，无归档/备份）后更新模型来源清单：238 项转 `observed_present:false`、清除当前路径/摘要、移除 9 份退役工作流引用并重算汇总（存在 178/缺失 253）；5 个自训 LoRA 由 `anima_lora_forge/releases/` 唯一副本保留，Krea2/通用权重未动；运行区工作流部署已完成（16 文件写入、11 文件删除，UAP `9f547db3…`）。见[资产收据](docs/receipts/anima_asset_retirement_20261024.json)与[清单变更](docs/technical/changes/runtime-models/2026-10-24-anima-asset-retirement.md)。
+
+- 2026-10-24：按用户明确要求退役全部 Anima 模型工作流：删除生产套件 01/02、生产扩展 05/07/10 及其模板，UAP v2 与权威模板只保留 Krea2/图片处理五分支（默认 Krea2），删除 Anima 专用控制台与迁移工具并同步测试、技术说明和目录；先提交主仓，后经用户授权于 2026-10-24 同批部署运行区（见下方资产条目与部署收据），权重/LoRA 处置另行记录。见[变更说明](docs/technical/changes/runtime-workflows/2026-10-24-anima-assets-retirement.md)。
+
 - 2026-10-19：CI 拆成快检与增量历史门禁。`--all-history --cache-file … --incremental` 以 Git 对象身份复用已核验内容判决，新对象仍完整扫描，`.part` 与 `snapshot/manifest.json` 每次读取以保留跨片检查，另跑 `git fsck --connectivity-only`；缓存只由成功的推送运行写入，PR 只还原，每周定时任务与正式发布仍是无缓存全扫。本机同一 refs 冷扫 1012 秒、增量热扫 21.7 秒。见[技术说明](docs/technical/changes/operations-source-of-truth/2026-10-19-incremental-history-gate.md)与[收据](docs/receipts/security_incremental_ci_20261019.json)。
 
 - 2026-10-19：导入 9 个新下载 LoRA（Anima 7、Krea2 2），按已审查用途表落位为画风与画师 3、角色与人物 5、服装与配饰 1，当前 322 个用户 LoRA。9 项完整 SHA 全部匹配 Civitai 确切版本文件，卡片、`LoraLoader` 枚举与 9 张预览通过，原有 329 条缓存行保持；按用户确认在核验后移走下载原件，同批 4 个重复件保留。未做 GPU 推理，见[收据](docs/receipts/lora_download_import_20261019.json)。

@@ -1,0 +1,197 @@
+{
+  "schema": 1,
+  "date": "2026-10-24",
+  "receipt_id": "anima-workflow-retirement-20261024-01",
+  "base_commit": "899541bfba77867abbffe87d7fd2288aaab7bf3e",
+  "branch": "feature/retire-anima-assets-20261024",
+  "status": "reviewed-source-not-deployed",
+  "authorization": "User explicitly requested cleanup of all Anima base-model/LoRA workflows and UAP branches, keeping only the Krea2 series; runtime deployment and model/LoRA disposal are separate authorized tasks.",
+  "scope": [
+    "all Anima-model workflows and frozen templates",
+    "UAP v2 and canonical template Anima branches a1/a29/ext05/ext07",
+    "Anima-only production tools, web controls and tests",
+    "tooling, tests, technical docs, catalog, snapshot manifest and changelog"
+  ],
+  "deleted": [
+    {
+      "path": "snapshot/runtime/ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+      "sha256": "b78421000e2f826f5e084e96efad48aa3505756ce4109e262cebf872ef427439",
+      "bytes": 542611
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "sha256": "432ab427152c2a6db60e3a85f0778f025a59734fbe91207a18c5b9bcc976b7a2",
+      "bytes": 411406
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/user/default/workflows/生产扩展_05_Anima2.9_裁剪精修回贴.json",
+      "sha256": "98dd515382ca711177730b0e5c1f468a2f5a62dabbcfe266c8e2947c307ade02",
+      "bytes": 17184
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/user/default/workflows/生产扩展_07_Anima原版_左右扩图.json",
+      "sha256": "0fa1efe26029ed56216f71a24fa9828316c9145d2f06db9fb734a80e92eee2fe",
+      "bytes": 14396
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
+      "sha256": "af6292aeda10c1c448cb7060dfe11637292897e5808d63745b5e1988514967c4",
+      "bytes": 220653
+    },
+    {
+      "path": "snapshot/runtime/production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+      "sha256": "08e8b1707f45887967345c7d53c4717d87ea07af448e4d1cecfe220cf95a372c",
+      "bytes": 490562
+    },
+    {
+      "path": "snapshot/runtime/production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+      "sha256": "2b0e2a566a241ddefbf9968d2858655500179e218298f967db95ac62769c0c31",
+      "bytes": 408414
+    },
+    {
+      "path": "snapshot/runtime/production_tools/templates/生产扩展_05_Anima2.9_裁剪精修回贴.json",
+      "sha256": "98dd515382ca711177730b0e5c1f468a2f5a62dabbcfe266c8e2947c307ade02",
+      "bytes": 17184
+    },
+    {
+      "path": "snapshot/runtime/production_tools/templates/生产扩展_07_Anima原版_左右扩图.json",
+      "sha256": "0fa1efe26029ed56216f71a24fa9828316c9145d2f06db9fb734a80e92eee2fe",
+      "bytes": 14396
+    }
+  ],
+  "deleted_tooling_and_tests": [
+    {
+      "path": "snapshot/runtime/production_tools/simplify_anima_control.py",
+      "sha256": "5d36098143c9193e4e39c0ebd1644713c384b899489d18df7b1fada716fd875b",
+      "bytes": 11950
+    },
+    {
+      "path": "snapshot/runtime/production_tools/fix_anima_erase_mask.py",
+      "sha256": "93cedbf40c913d4e066ddf789c17596de1035962ca82a1949443f26f799574b3",
+      "bytes": 3522
+    },
+    {
+      "path": "snapshot/runtime/production_tools/test_anima_control.cjs",
+      "sha256": "2d526655d14d1d42a270b7754d61aa737bfe40099526f1dbfb7916d887f7c1b5",
+      "bytes": 6362
+    },
+    {
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
+      "sha256": "4c5dcf1031ae572c2f65519e378439898a59eeb05e8df6f7e9acbaeae1e8ca97",
+      "bytes": 7853
+    },
+    {
+      "path": "tests/test_anima_control_workflow.py",
+      "sha256": "20a2981797c669d9bbbb4512e0f4a7755fdb7c2bf71c622b39aebbf78e5fa447",
+      "bytes": 6277
+    },
+    {
+      "path": "tests/fixtures/anima_control_before.json",
+      "sha256": "ce4b8bac2007f4c964a45d63e5f381ead4f2f3719e99493f3d5aeb27aff27cd3",
+      "bytes": 51545
+    }
+  ],
+  "uap": {
+    "before_sha256": "c4eb1072b8742afb55675e1bb0f9136a10a01c99921bb53d6e9fd1173ad80267",
+    "before_bytes": 849423,
+    "after_sha256": "9f547db3a64e53e214625eab87b7163f3094c0d7994bd91e1f4dee0510d6f31b",
+    "after_bytes": 240208,
+    "template_after_sha256": "9f547db3a64e53e214625eab87b7163f3094c0d7994bd91e1f4dee0510d6f31b",
+    "workflow_template_byte_equal": true,
+    "before": {
+      "root_nodes": 272,
+      "links": 363,
+      "groups": 112,
+      "subgraphs": 25,
+      "branches": 9,
+      "qgn": 11,
+      "model_contracts": 17
+    },
+    "after": {
+      "root_nodes": 117,
+      "links": 123,
+      "groups": 45,
+      "subgraphs": 1,
+      "branches": 5,
+      "qgn": 7,
+      "model_contracts": 7
+    },
+    "removed": {
+      "root_nodes": 155,
+      "links": 240,
+      "groups": 67,
+      "subgraph_definitions": 24
+    },
+    "retained_branches": [
+      "k2",
+      "ext04",
+      "ext06",
+      "ext08",
+      "ext09"
+    ],
+    "default_branch": "[03] Krea2 生产"
+  },
+  "verification": {
+    "merge_unified_workflow_validate": "passed",
+    "validate_uap_workflow": "passed",
+    "validate_uap_workflow_report": "external temp file (not committed)",
+    "test_uap_browser_retirement": "14 tests OK",
+    "test_validate_profiles": "5 tests OK",
+    "node_tests": "test_control_switches.cjs, test_uap_daily_controls.cjs, test_uap_compact_widgets.cjs, test_plugin_fusion.cjs, test_uap_navigation.cjs, test_stocking_workflow.cjs: PASS",
+    "model_sources_check": "pass (workflow_sha256 refreshed; asset identities and observed_present unchanged)",
+    "snapshot_verify": "pass (entries 9595)",
+    "project_status": "clean relative to sealed manifest",
+    "technical_catalog_check": "pass after receipt added",
+    "maintain_check_staged": "included in commit gate output"
+  },
+  "catalog": {
+    "model_sources_workflow_sha256": "9f547db3a64e53e214625eab87b7163f3094c0d7994bd91e1f4dee0510d6f31b",
+    "model_sources_new_sha256": "7d258ea779e740432b19aeab2a802cf5acfd5c82dd2e36c3cff5a1f28b6afdd6",
+    "manifest_metadata_entry_refreshed": true
+  },
+  "preserved": [
+    "Anima_推荐版_*.json x3",
+    "UAP统一生产工作台_v1.json",
+    "docs/technical/archive",
+    "existing receipts",
+    "Anima plugins/profiles/training tools",
+    "all model/LoRA weights and catalogue identity flags"
+  ],
+  "boundaries": [
+    "No runtime deployment, restart, queue clear, model release or generation",
+    "Runtime deployment target not written",
+    "No push, PR, merge, tag or version bump",
+    "Model/LoRA asset disposal and model_sources observed_present updates are separate tasks"
+  ],
+  "rollback": "Source-only rollback to base_commit 899541bfb restores deleted files from Git history; no working-tree copies were created. Runtime rollback is a separate deployment operation.",
+  "deployment_status": {
+    "status": "deployed",
+    "activated_at": "2026-10-24T16:45:55+08:00",
+    "verified_at": "2026-10-24T16:47:54+08:00",
+    "files_installed": 16,
+    "files_deleted_from_runtime": 11,
+    "runtime_uap_sha256": "9f547db3a64e53e214625eab87b7163f3094c0d7994bd91e1f4dee0510d6f31b",
+    "runtime_uap_bytes": 240208,
+    "workflows_retained": 8,
+    "templates_retained": 9,
+    "default_branch": "k2",
+    "runtime_matches_repo_head": true,
+    "service": {
+      "before": "not running",
+      "after": "not running",
+      "no_restart": true,
+      "no_queue_operation": true,
+      "no_generation": true
+    },
+    "external_receipt": "anima-workflow-deployment-20261024",
+    "external_receipt_dir": "external-private-receipts/anima-workflow-deployment-20261024",
+    "external_receipt_sha256": {
+      "VERIFIED.json": "fc18a969539f116699bec95f717cf0a4db9a9fe645f9855d2cadafc1bd7f63dc",
+      "DEPLOY_RESULT.json": "3fd4ae90ad34ea65ea53e7c7f148323d4c884108522de1cf55e02a5f8ac159e1",
+      "BASELINE.json": "b5dbca25de3b15c09af11a44f52acf5dd9237a9232e51e97a3bffb0a2d7b35e7",
+      "PLAN.json": "fdb3f10cf975167092c3d83df50c99097ceaac27e8538225c291fe9fda5829e0",
+      "RECEIPT_HASHES.json": "012f826a02fc314cc5bb954f05ba9e83188d21e5abc653130678e870a18074ed"
+    },
+    "note": "Deployment was completed after the source retirement commit; earlier repo-only statements remain historical and are corrected by this dated field plus doc deployment-update lines."
+  }
+}

@@ -116,3 +116,15 @@ if ($LASTEXITCODE -ne 0) { throw 'Model source catalogue check failed' }
 - 2026-10-07：纠正“19 个自训成品”的计数表述，实际为 4 个成品版本与 15 个评估文件、17 份不同内容；新增逐项训练来源、实际完整 SHA 与重复文件说明。保留全部权重和工作流，原来源审计为历史检查点，本次口径以[复核收据](receipts/model_source_recount_20261007.json)为准。
 - 2026-10-07：补迁移来源、精确文件身份、配套与本机别名，增加离线校验和易读表生成，保留自训／历史转换原件及未实测边界；实际覆盖见[本轮收据](receipts/model_sources_20261007.json)。
 - 2026-10-19：9 个新下载 LoRA（Anima 7、Krea2 2）按同一规范分类命名并导入运行目录，完整 SHA 全部匹配 Civitai 确切版本文件；3 项画风、5 项角色、1 项服装，卡片与加载器枚举、9 张预览通过，原有 329 条缓存行保持。按用户确认在核验后移走下载原件，4 个重复件保留；当前 322 个用户 LoRA。未做 GPU 推理，回滚按本批路径／摘要日志执行，见[收据](receipts/lora_download_import_20261019.json)。
+
+## 2026-10-24 Anima/Qwen 资产退役
+
+按用户明确授权**永久删除、不归档、不备份**：6 个目录与 8 个文件，共 **809 文件 / 125,367,967,479 B（116.76 GiB）**。范围：`models/diffusion_models/{anima,anima-2.9b,qwen-image-2.1}`、`models/loras/{anima,anima-2.9b}`、`_janima_parts`，以及 `anima_baseV10_txt`、`qwen_image_vae`、`qwen_image_2.1_vae_bf16`、`qwen3vl_8b_bf16`、两个 `anima-lllite-*` 控制权重及其预览图。
+
+Krea2 系列与通用工具模型保留（`diffusion_models/krea2`、`loras/krea2`、`qwen3-vl-4b-heretic`、`krea2RealVae_v10`、超分/检测/抠图/SAM/排序器等）。5 个自训 Anima LoRA 在删除前已确认与 `anima_lora_forge/releases/` 副本逐字节一致，**唯一规范副本继续存在于 releases**；训练 runs/datasets 与 `character_lora_forge` 资料未动。
+
+清单处理：被删资产保留历史捕获身份与来源摘要，`observed_present:false`、清除当前 `local_sha256` 并按 `model_sources.py` 规则移除 `current_path`/标准化放置字段，原放置与标准名写入备注；`models.json`/`workflow_models.json` 的捕获身份不重写。恢复只能重新下载并重新核验，`anima-lllite` 权重须匹配对应 LoRA/基模。证据见[收据](receipts/anima_asset_retirement_20261024.json)。
+
+## 2026-10-24 收尾核对
+
+独立核验补正一项早于本轮退役的旧缺失标记：`ComfyUI/models/checkpoints/anima/图像生成/Anima__SilvermoonMix-Anima-Evolved [2.9B-2B]__v2.3__BF16__cv3217855__f3099649.safetensors` 自 2026-10-12 起已不存在（目录仅 `.lm-pending-delete`，不在 809 文件删除清单）；来源清单改设 `observed_present:false` 并保留历史身份/来源摘要。当前汇总：资产 431、观察存在 177、已不存在 254。

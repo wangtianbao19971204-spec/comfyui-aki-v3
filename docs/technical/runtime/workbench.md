@@ -3,7 +3,7 @@
 文档修订：2026-10-05.1。
 
 
-2026-10-11 更新：[anima_control.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js)给 UAP 2.9B 提供参考图、四种控制方式、强度和最终预览；高级区保留擦线、分辨率、时段、权重与子图入口。直接编辑子图原节点，异步上传检查当前图/分支/节点身份。擦线旁路同时静音内部输出节点，保存原 mode 后再恢复，防止不用擦线仍读遮罩/导出图片。原生菜单 API 导出及保存重载已在独立 CPU 页面核验；控件测试见 [test_anima_control.cjs](../../../snapshot/runtime/production_tools/test_anima_control.cjs)，范围与限制见 [收据](../../receipts/anima_control_simple_20261011.json)。后续 GPU 实测补齐最终预览目标与原生输出缓存刷新，已按限定范围部署并重启；见 [GPU/部署收据](../../receipts/anima_control_gpu_deployment_20261011.json)。深度模式建议关闭擦线，原默认值保留。
+2026-10-24 Anima 控制台退役：随 Anima 工作流与 UAP a1/a29 分支一起移除 `web/anima_control.js` 及其挂载；控制台只保留 Krea2 的 `web/control_switches.js`，模型配套、显存释放与细化参数检查仍在 `web/runtime_controls.js`。见[工作流说明](workflows.md)与[变更说明](../changes/runtime-workflows/2026-10-24-anima-assets-retirement.md)。
 
 ## 代码入口
 
@@ -24,6 +24,12 @@
 修改后用全新页面核对实际 served 文件和磁盘 SHA，检查主题、窄屏、键盘、焦点与提示词保持性。模拟 composition/事件不是物理 IME；浏览器拦截入队不等于 GPU 推理，历史测试数量不是今天自动通过的证明。
 
 ## 更新记录
+
+- 2026-10-24 收尾清理：移除独立修复入口的已退役 `@main:ext05` 裁剪精修项，允许值收紧为 `@main:ext08`/`@main:ext09`；静态预览示意分支标签改为 Krea2 生产。K2 工作流与运行参数未改，未部署。
+
+- 2026-10-24 部署更新：Anima 工作流退役已按限定范围部署到运行区（16 文件写入、11 份 Anima 工作流/模板/脚本删除，运行区 UAP `9f547db3…`，服务未重启、无队列操作）；见[工作流说明](workflows.md)与仓外部署收据 `anima-workflow-deployment-20261024`。
+
+- 2026-10-24：随 Anima 工作流退役，删除 Anima 专用控制台（`web/anima_control.js`）及其测试；Krea2 控制与擦线面板、模型配套检查、显存释放与细化参数检查保持。未部署运行区。
 
 - 2026-10-14：新增 UAP 与独立 01/02/03 共用的「控制与擦线」开关；自动启用控制来源，直接打开原生蒙版编辑器，空选区提示，并保持切分支/重载状态。操作与验证边界见[本轮说明](../changes/runtime-workbench/2026-10-14-control-one-click.md)。
 

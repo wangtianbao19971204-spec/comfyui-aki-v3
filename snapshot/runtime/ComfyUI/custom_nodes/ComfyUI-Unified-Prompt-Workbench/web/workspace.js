@@ -79,7 +79,7 @@ export function mountWorkspace(host, {app, element, button, browse, selectTarget
         const nodes=selected?.nodeIds.map(id=>app.graph.getNodeById(id)).filter(Boolean)||[];
         const has=type=>nodes.some(node=>node.type===type);
         const use=has('StockingTextureStudio')?'导入图片 / PSD → 纹理修复 → 成品与透明图层':has('BiRefNetRMBG')?'图片 → 抠图 → 透明素材':has('ImagePadForOutpaint')?'输入图片 → 扩展边缘 → 结果':has('OlmDragCrop')?'输入图片 → 裁剪精修 → 回贴':has('Krea2EditGroundedEncode')?'输入图片 + 编辑指令 → 结果':!has('KSampler')&&has('UpscaleModelLoader')?'输入图片 → 模型放大 → 结果':'提示词 + 模型 + 参数 → 生成图片';
-        const details=has('StockingTextureStudio')?'点击打开修复编辑器；应用到节点后输出。':has('BiRefNetRMBG')?'不需要提示词。':selected?.id==='a29'?'使用 2.9B 模型；原版 Anima 的 LLLite 控制模型不通用。':selected?.id==='a1'?'原版 Anima，使用此分支的 LoRA 与控制组件。':selected?.id==='ext08'?'OmniSR 原生4×，随后缩放0.5×，最终2×；修改后按合成倍率交付。':selected?.id==='ext09'?'预设为四倍素材，使用放大模型的原始输出。':'';
+        const details=has('StockingTextureStudio')?'点击打开修复编辑器；应用到节点后输出。':has('BiRefNetRMBG')?'不需要提示词。':selected?.id==='ext08'?'OmniSR 原生4×，随后缩放0.5×，最终2×；修改后按合成倍率交付。':selected?.id==='ext09'?'预设为四倍素材，使用放大模型的原始输出。':'';
         branchSummary.hidden=selected===active&&!details;
         branchSummary.textContent=(selected===active?'当前流程：':'待切换流程：')+use+'。'+details+(selected===active?'':' 仅选择不会切换运行；点击“启用并切换”后，控制项和运行任务会一起切换。');
     }

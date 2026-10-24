@@ -55,8 +55,7 @@ class ProfileScopeRegression(unittest.TestCase):
         self.assertEqual(len(result["profiles"]["lean"]["workflows"]), 2)
 
     def test_saved_primary_suite_navigation_uses_existing_exact_groups(self):
-        names = ("生产套件_01_Anima原版_LoRA生产_v2.json", "生产套件_02_Anima2.9B_动漫生产_v2.json",
-                 "生产套件_03_Krea2_一体化生产_v2.json")
+        names = ("生产套件_03_Krea2_一体化生产_v2.json",)
         for relative in ("ComfyUI/user/default/workflows", "production_tools/templates"):
             for name in names:
                 with self.subTest(directory=relative, workflow=name):

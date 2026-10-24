@@ -4,7 +4,6 @@ import {commitWidget} from './prompt_target.js';
 const children = node => node?.subgraph?._nodes || [];
 const widget = (node, name) => node?.widgets?.find(item => item.name === name);
 const named = (nodes, prefix) => nodes.find(node => node.title?.startsWith(prefix));
-const byRole = (owner, role) => children(owner).find(node => String(node.id) === String(owner.properties.anima_control_roles?.[role]));
 const selection = node => {
     const value = widget(node, 'select')?.value;
     return node?.inputs?.find(port => port.name.startsWith('input_') && (port.label || port.name) === value)?.name || value;
@@ -14,16 +13,6 @@ export function controlScope(graph, branch) {
     const nodes = branch ? branch.nodeIds.map(id => graph.getNodeById(id)).filter(Boolean) : graph._nodes;
     const model = nodes.find(node => node.type === 'DazzleSwitch' && node.title?.startsWith('[02G'));
     if (!model) return null;
-    const owner = nodes.find(node => node.properties?.uap_anima_control);
-    if (owner) {
-        const advanced = byRole(owner, 'advanced');
-        const pose = nodes.find(node => children(node).some(child => child.type === 'VNCCS_PoseStudio'));
-        const mask = children(advanced).find(node => node.type === 'LoadImage');
-        if (!advanced || !mask || !['reference', 'preprocessor', 'apply', 'loader'].every(role => byRole(owner, role))) return null;
-        return {graph, branch, nodes, model, owner, pose, kind: 'anima', advanced,
-            reference: byRole(owner, 'reference'), preprocessor: byRole(owner, 'preprocessor'),
-            mask};
-    }
     const compact = nodes.find(node => children(node).some(child => child.type === 'Krea2ControlImageEncode'));
     const inside = compact ? children(compact) : nodes;
     const encode = inside.find(node => node.type === 'Krea2ControlImageEncode');
@@ -32,7 +21,7 @@ export function controlScope(graph, branch) {
     const source = named(inside, '[05R1]') || named(inside, '[05B6]');
     const mask = named(inside, '[05C2]');
     if (!encode || !apply || !loader || !source || !mask || !named(inside, '[05C7]')) return null;
-    return {graph, branch, nodes, model, compact, encode, apply, loader, source, mask, kind: 'krea2',
+    return {graph, branch, nodes, model, compact, encode, apply, loader, source, mask,
         pose: nodes.find(node => node.type === 'VNCCS_PoseStudio'),
         poseReference: named(nodes, '[09A]'), poseDepth: named(inside, '[09R]') || named(inside, '[05B4P]'),
         reference: named(nodes, '[05A]'), preprocessor: named(inside, '[05B5]'),
@@ -65,11 +54,6 @@ export function controlState(scope) {
     const modelSelection = selection(scope.model);
     const modelReady = input => scope.model.mode === 0 && Number(widget(scope.model, 'select_override')?.value || 0) === 0 &&
         (modelSelection === input || modelSelection === '(none)' && widget(scope.model, 'mode')?.value === 'priority');
-    if (scope.kind === 'anima') {
-        const source = scope.pose?.mode === 0 ? 'pose' : scope.owner.mode === 0 ? 'reference' : scope.model.properties.control_source || 'reference';
-        return {enabled: (scope.owner.mode === 0 || scope.pose?.mode === 0) && modelReady(source === 'pose' ? 'input_01' : 'input_02'), source,
-            erase: source === 'reference' && scope.advanced.mode === 0};
-    }
     const source = selection(scope.source) === 'input_02' ? 'pose' : 'reference';
     return {enabled: scope.apply.mode === 0 && scope.loader.mode === 0 && (!scope.compact || scope.compact.mode === 0) && modelReady('input_01'), source,
         erase: (source === 'reference' || !!scope.erase) && (scope.erase ? selection(scope.erase) === 'input_01' : scope.composite.mode === 0)};
@@ -78,22 +62,17 @@ export function controlState(scope) {
 export function setControl(app, scope, enabled, source = controlState(scope).source) {
     if (source === 'pose' && !scope.pose) throw new Error('此流程没有姿势工作室。');
     checkSelector(scope.model);
-    if (scope.kind === 'krea2') checkSelector(scope.source);
+    checkSelector(scope.source);
     const graph = scope.graph;
     graph.beforeChange?.();
     try {
-        select(app, scope.model, scope.kind === 'anima' ? enabled ? source === 'pose' ? 'input_01' : 'input_02' : 'input_03' : enabled ? 'input_01' : 'input_02');
+        select(app, scope.model, enabled ? 'input_01' : 'input_02');
         scope.model.properties.control_source = source;
         setMode(scope, scope.model, 0);
-        if (scope.kind === 'anima') {
-            setMode(scope, scope.owner, enabled && source === 'reference' ? 0 : 2);
-            setMode(scope, scope.pose, enabled && source === 'pose' ? 0 : 2);
-        } else {
-            select(app, scope.source, source === 'pose' ? 'input_02' : 'input_01');
-            for (const node of [scope.compact, scope.encode, scope.apply, scope.loader]) setMode(scope, node, enabled ? 0 : 2);
-            for (const node of [scope.pose, scope.poseReference, scope.poseDepth]) setMode(scope, node, enabled && source === 'pose' ? 0 : 2);
-            if (enabled && source === 'reference') setMode(scope, scope.reference, 0);
-        }
+        select(app, scope.source, source === 'pose' ? 'input_02' : 'input_01');
+        for (const node of [scope.compact, scope.encode, scope.apply, scope.loader]) setMode(scope, node, enabled ? 0 : 2);
+        for (const node of [scope.pose, scope.poseReference, scope.poseDepth]) setMode(scope, node, enabled && source === 'pose' ? 0 : 2);
+        if (enabled && source === 'reference') setMode(scope, scope.reference, 0);
     } finally {graph.afterChange?.(); graph.setDirtyCanvas?.(true, true);}
 }
 
@@ -103,20 +82,9 @@ export function setErase(app, scope, enabled) {
     graph.beforeChange?.();
     try {
         if (enabled) setControl(app, scope, true, 'reference');
-        if (scope.kind === 'anima') {
-            setEraseMode(scope.advanced, enabled);
-        } else if (scope.erase) select(app, scope.erase, enabled ? 'input_01' : 'input_02');
+        if (scope.erase) select(app, scope.erase, enabled ? 'input_01' : 'input_02');
         else scope.composite.mode = enabled ? 0 : 4;
     } finally {graph.afterChange?.(); graph.setDirtyCanvas?.(true, true);}
-}
-
-export function setEraseMode(node, enabled) {
-    const saved = node.properties.anima_erase_modes;
-    if (!enabled && !saved) node.properties.anima_erase_modes = Object.fromEntries(children(node).map(child => [child.id, child.mode]));
-    // Native subgraph bypass still exports child output nodes unless muted.
-    for (const child of children(node)) child.mode = enabled ? (saved?.[child.id] ?? child.mode) : 2;
-    if (enabled) delete node.properties.anima_erase_modes;
-    node.mode = enabled ? 0 : 4;
 }
 
 export async function maskHasSelection(node) {

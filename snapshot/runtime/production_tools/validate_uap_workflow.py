@@ -48,22 +48,29 @@ def main() -> int:
     integration = data.get("extra", {}).get("codex_uap_integration", {})
     suite = data.get("extra", {}).get("production_suite", {})
     branch_stats = suite.get("source_stats", [])
-    expected_default = "[01] Anima 原版生产"
+    expected_default = "[03] Krea2 生产"
     if integration.get("default_active_branch") != expected_default:
-        errors.append("default active branch is not [01] Anima 原版生产")
+        errors.append("default active branch is not [03] Krea2 生产")
     if integration.get("branch_policy") != "one_active_model_branch_at_a_time":
         errors.append("UAP branch policy is not one_active_model_branch_at_a_time")
-    for index, stat in enumerate(branch_stats):
-        if not isinstance(stat, dict):
-            errors.append(f"source_stats entry {index} is not an object")
+    retired = {"a1", "a29", "ext05", "ext07"}
+    integration_owner = data.get("extra", {}).get("uap_workbench", {})
+    if retired & {branch.get("id") for branch in integration_owner.get("branches", [])}:
+        errors.append("retired Anima branch is still present in UAP")
+    if integration_owner.get("activeBranch") in retired or integration_owner.get("viewBranch") in retired:
+        errors.append("retired Anima branch is still selected in UAP")
+    node_modes = {int(item["id"]): int(item.get("mode", 0)) for item in data.get("nodes", [])}
+    branches = integration_owner.get("branches", [])
+    default_branch = next((branch for branch in branches if branch.get("id") == "k2"), None)
+    if default_branch is None:
+        errors.append("Krea2 default branch is missing")
+    elif not any(node_modes.get(int(node_id), 0) == 0 for node_id in default_branch.get("nodeIds", [])):
+        errors.append("Krea2 default branch has no active nodes")
+    for branch in branches:
+        if branch is default_branch:
             continue
-        if index == 0 and int(stat.get("active_nodes", 0)) <= 0:
-            errors.append("Anima original branch has no active nodes")
-        if index > 0:
-            if int(stat.get("active_nodes", 0)) != 0:
-                errors.append(f"branch {stat.get('file')} is active by default")
-            if int(stat.get("muted_nodes", 0)) != int(stat.get("nodes", 0)):
-                errors.append(f"branch {stat.get('file')} is not fully muted by default")
+        if any(node_modes.get(int(node_id), 0) not in (2, 4) for node_id in branch.get("nodeIds", [])):
+            errors.append(f"branch {branch.get('id')} is not fully muted by default")
     model_wrappers = [
         group for group in data.get("groups", [])
         if isinstance(group.get("title"), str) and group["title"].startswith(tuple(f"[0{i}]" for i in range(1, 10)))
@@ -91,7 +98,7 @@ def main() -> int:
         if overlap_area(first.get("bounding", [0, 0, 0, 0]), second.get("bounding", [0, 0, 0, 0])) > 0
     )
     inner_overlap_count = 0
-    for suffix in ("· A1 原版", "· A29 2.9B", "· K2 Krea2"):
+    for suffix in ("· K2 Krea2",):
         branch_groups = [
             group for group in data.get("groups", [])
             if isinstance(group.get("title"), str) and group["title"].endswith(suffix)
