@@ -1,5 +1,5 @@
 {
-  "time": "2026-10-24T08:49:57.605981+00:00",
+  "time": "2026-10-24T08:58:02.288669+00:00",
   "pass": true,
   "entry_count": 9595,
   "failures": [],
@@ -20,12 +20,12 @@
     "state": "warm",
     "written": true,
     "hashed_files": 5,
-    "hashed_bytes": 3515632,
+    "hashed_bytes": 4671806,
     "joined_hashed_bytes": 0,
     "content_scanned_files": 3,
     "reused_content_scans": 9727,
     "reused_joined_hashes": 19,
-    "unchanged_directories": 1504,
+    "unchanged_directories": 1505,
     "directory_count": 1507,
     "all_names_and_metadata_checked": true,
     "publication_evidence": false

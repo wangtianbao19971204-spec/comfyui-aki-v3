@@ -163,5 +163,35 @@
     "No push, PR, merge, tag or version bump",
     "Model/LoRA asset disposal and model_sources observed_present updates are separate tasks"
   ],
-  "rollback": "Source-only rollback to base_commit 899541bfb restores deleted files from Git history; no working-tree copies were created. Runtime rollback is a separate deployment operation."
+  "rollback": "Source-only rollback to base_commit 899541bfb restores deleted files from Git history; no working-tree copies were created. Runtime rollback is a separate deployment operation.",
+  "deployment_status": {
+    "status": "deployed",
+    "activated_at": "2026-10-24T16:45:55+08:00",
+    "verified_at": "2026-10-24T16:47:54+08:00",
+    "files_installed": 16,
+    "files_deleted_from_runtime": 11,
+    "runtime_uap_sha256": "9f547db3a64e53e214625eab87b7163f3094c0d7994bd91e1f4dee0510d6f31b",
+    "runtime_uap_bytes": 240208,
+    "workflows_retained": 8,
+    "templates_retained": 9,
+    "default_branch": "k2",
+    "runtime_matches_repo_head": true,
+    "service": {
+      "before": "not running",
+      "after": "not running",
+      "no_restart": true,
+      "no_queue_operation": true,
+      "no_generation": true
+    },
+    "external_receipt": "anima-workflow-deployment-20261024",
+    "external_receipt_dir": "external-private-receipts/anima-workflow-deployment-20261024",
+    "external_receipt_sha256": {
+      "VERIFIED.json": "fc18a969539f116699bec95f717cf0a4db9a9fe645f9855d2cadafc1bd7f63dc",
+      "DEPLOY_RESULT.json": "3fd4ae90ad34ea65ea53e7c7f148323d4c884108522de1cf55e02a5f8ac159e1",
+      "BASELINE.json": "b5dbca25de3b15c09af11a44f52acf5dd9237a9232e51e97a3bffb0a2d7b35e7",
+      "PLAN.json": "fdb3f10cf975167092c3d83df50c99097ceaac27e8538225c291fe9fda5829e0",
+      "RECEIPT_HASHES.json": "012f826a02fc314cc5bb954f05ba9e83188d21e5abc653130678e870a18074ed"
+    },
+    "note": "Deployment was completed after the source retirement commit; earlier repo-only statements remain historical and are corrected by this dated field plus doc deployment-update lines."
+  }
 }

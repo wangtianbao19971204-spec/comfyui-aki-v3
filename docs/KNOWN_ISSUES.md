@@ -59,3 +59,7 @@
 ## 2026-10-24 Anima 工作流退役
 
 - 按用户明确请求，Anima 原版/2.9B 的独立工作流、模板与 UAP 分支已从主仓退役，UAP 默认分支改为 Krea2；上文 2026-10-11/10-14 中 a1/a29 的现场记录保留为历史证据，不再代表当前工作流。本轮仅主仓，未部署运行区；权重与 LoRA 的处置另行记录。
+
+## 2026-10-24 部署更新
+
+- Anima 工作流退役已按限定范围部署到运行区（2026-10-24 16:45–16:48）：16 文件写入、11 份 Anima 工作流/模板/脚本删除，运行区 UAP 与模板 SHA-256 `9f547db3…`，workflows 目录保留 8 份 JSON，五个分支默认 Krea2，服务未重启、无队列或生图操作。见[工作流说明](technical/runtime/workflows.md)、[资产收据](receipts/anima_asset_retirement_20261024.json)与仓外部署收据 `anima-workflow-deployment-20261024`。

@@ -36,3 +36,7 @@
 - 历史版本 `Anima_推荐版_*.json` 三份、`UAP统一生产工作台_v1.json`、既有收据和 `docs/technical/archive` 保持只读，不随本次清理改写。
 - Anima 插件、白名单、训练工具与模型/LoRA 权重的处置不在本轮；`model_sources.json` 的 `observed_present` 与资产身份不变。
 - 代码回滚可回到基线提交 `899541bfb`；被删工作流仍可从此前 Git 历史取回（摘要见[收据](../../receipts/anima_workflow_retirement_20261024.json)），本次不建立工作树副本。
+
+## 部署状态（2026-10-24 更新）
+
+运行区部署已完成（2026-10-24 16:45–16:48，task-3）：16 份文件写入运行区，11 份 Anima 工作流/模板/脚本从运行区删除；运行区 UAP 与模板 SHA-256 `9f547db3…`（240,208 B），workflows 目录保留 8 份 JSON（UAP v2、03、99、04/06/08/09、丝袜），模板目录 9 项，五分支默认 Krea2。服务在部署前后均未运行，未重启、未清队列、未生图。运行区与主仓 HEAD 逐字节一致（16/16）。仓外部署收据 `anima-workflow-deployment-20261024`：VERIFIED.json `fc18a969…`、DEPLOY_RESULT.json `3fd4ae90…`。

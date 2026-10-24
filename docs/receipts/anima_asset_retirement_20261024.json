@@ -1,0 +1,201 @@
+{
+  "schema": 1,
+  "date": "2026-10-24",
+  "receipt_id": "anima-asset-retirement-20261024-01",
+  "status": "permanent_delete_applied_no_backup",
+  "task": "task-2 (runtime deletion) + task-4 (repo catalogue/receipt)",
+  "authorization": {
+    "user_statement_zh": "不仅是123 还有已有的全部lora 全部底模 只保留krea2的系列",
+    "approval": "PERMANENT deletion without archive/backup, explicitly authorized by user (relayed by Lead); overrides default recoverable-move preference.",
+    "scope": "Anima original + Anima 2.9B model assets, Qwen-Image-2.1 series, _janima_parts. Krea2 series and generic tools preserved."
+  },
+  "no_backup_statement": "Permanent deletion per explicit user authorization. No archive, no recycle bin, no copy of the deleted weights was retained. The only surviving copies of self-trained LoRAs are the anima_lora_forge/releases training artifacts. Deletion cannot be rolled back from this receipt.",
+  "deleted": {
+    "file_count": 809,
+    "bytes": 125367967479,
+    "gib": 116.76,
+    "dirs": [
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\diffusion_models\\anima",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\diffusion_models\\anima-2.9b",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\diffusion_models\\qwen-image-2.1",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\loras\\anima",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\loras\\anima-2.9b",
+      "G:\\ComfyUI-aki-v3\\_janima_parts"
+    ],
+    "files": [
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\text_encoders\\anima_baseV10_txt.safetensors",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\text_encoders\\anima_baseV10_txt.png",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\vae\\qwen_image_vae.safetensors",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\vae\\qwen_image_vae.png",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\vae\\qwen_image_2.1_vae_bf16.safetensors",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\text_encoders\\qwen3vl_8b_bf16.safetensors",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\controlnet\\anima-lllite-any-test-like-v2.safetensors",
+      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\controlnet\\anima-lllite-inpainting-v2.safetensors"
+    ],
+    "by_dir": [
+      {
+        "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\diffusion_models\\anima",
+        "files": 19,
+        "bytes": 30729098880
+      },
+      {
+        "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\diffusion_models\\anima-2.9b",
+        "files": 12,
+        "bytes": 23377714042
+      },
+      {
+        "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\diffusion_models\\qwen-image-2.1",
+        "files": 2,
+        "bytes": 14230273876
+      },
+      {
+        "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\loras\\anima",
+        "files": 738,
+        "bytes": 25746421088
+      },
+      {
+        "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\loras\\anima-2.9b",
+        "files": 6,
+        "bytes": 270380637
+      },
+      {
+        "path": "G:\\ComfyUI-aki-v3\\_janima_parts",
+        "files": 24,
+        "bytes": 11275839722
+      }
+    ]
+  },
+  "verification": {
+    "all_targets_absent": true,
+    "keep_invariants_unchanged": true,
+    "manifest_matches": true,
+    "manifest_file_count": 809,
+    "manifest_total_bytes": 125367967479,
+    "preflight_comfyui_running": false,
+    "deviations": []
+  },
+  "disk": {
+    "free_before_bytes": 133896777728,
+    "free_after_bytes": 258952290304,
+    "observed_free_delta_bytes": 125055512576
+  },
+  "preserved_unique_self_trained": {
+    "all_verified_byte_identical": true,
+    "unique_without_duplicate": [],
+    "loras": [
+      {
+        "key": "霓 r32",
+        "runtime_model_path": "ComfyUI/models/loras/anima/自训角色/Anima__霓 r32__v1__BF16.safetensors",
+        "bytes": 91986448,
+        "sha256": "2E3A5D612C86D9B20FA84704A291217E5DBE28419ABA2BD46540BB9532A74DEA",
+        "release_copy": "anima_lora_forge/releases/ni_anima_base_r32_v1/ni_anima_base_r32_v1.safetensors",
+        "verified_byte_identical": true
+      },
+      {
+        "key": "Rosasha r32",
+        "runtime_model_path": "ComfyUI/models/loras/anima/自训角色/Anima__Rosasha r32__v1__BF16__sha3b3679bfc88d.safetensors",
+        "bytes": 91886168,
+        "sha256": "3B3679BFC88D4A4187F4318093917C8AB7C1C37F6B9CC2CF6535FAA0EB803834",
+        "release_copy": "anima_lora_forge/releases/rosasha_anima_r32_v1/rosasha_anima_r32_v1.safetensors",
+        "verified_byte_identical": true
+      },
+      {
+        "key": "Alicia Bell 普通形态",
+        "runtime_model_path": "ComfyUI/models/loras/anima/自训角色/Anima__Alicia Bell 普通形态 r32__v1__BF16__shafd34bac14788.safetensors",
+        "bytes": 91895752,
+        "sha256": "FD34BAC14788C44DA8E69F2F730578053078508E13F0806395F28E6AA81522BD",
+        "release_copy": "anima_lora_forge/releases/alicia_bell_ordinary_anima_r32_v1/alicia_bell_ordinary_anima_r32_v1.safetensors",
+        "verified_byte_identical": true
+      },
+      {
+        "key": "Alicia Bell 晨星",
+        "runtime_model_path": "ComfyUI/models/loras/anima/自训角色/Anima__Alicia Bell 晨星 r32__v1__BF16__shae62f86968ab6.safetensors",
+        "bytes": 91897744,
+        "sha256": "E62F86968AB6E75EB60C2DA03C4FF8FF22F3C0504722C54F5ECA662354301920",
+        "release_copy": "anima_lora_forge/releases/alicia_bell_morning_star_anima_r32_v1/alicia_bell_morning_star_anima_r32_v1.safetensors",
+        "verified_byte_identical": true
+      },
+      {
+        "key": "Alicia Bell 晨星 2.9B",
+        "runtime_model_path": "ComfyUI/models/loras/anima-2.9b/自训角色/Anima-2.9B__Alicia Bell 晨星 r32__v1__BF16__shaaef260a4f99b.safetensors",
+        "bytes": 131241592,
+        "sha256": "AEF260A4F99B06C612F17101442BE2E80D2B749C33BE6EACC731545F922AECA1",
+        "release_copy": "anima_lora_forge/releases/alicia_bell_morning_star_anima29_r32_v1/alicia_bell_morning_star_anima29_r32_v1.safetensors",
+        "verified_byte_identical": true
+      }
+    ]
+  },
+  "kept": {
+    "models": [
+      "diffusion_models/krea2 (21 files)",
+      "loras/krea2 (322 files)",
+      "text_encoders/qwen3-vl-4b-heretic.safetensors",
+      "vae/krea2RealVae_v10.safetensors",
+      "upscale_models/OmniSR_X4_DIV2K.safetensors",
+      "RMBG",
+      "birefnet",
+      "sams",
+      "stocking_texture",
+      "taggers",
+      "ultralytics",
+      "checkpoints/sam3.1",
+      "LLM",
+      "clip_vision",
+      "ipadapter",
+      "loras root CSVs (22 files)"
+    ],
+    "training": [
+      "anima_lora_forge/releases",
+      "anima_lora_forge/runs",
+      "anima_lora_forge/profiles",
+      "anima_lora_forge/vendor",
+      "anima_lora_forge/tools",
+      "character_lora_forge/characters",
+      "character_lora_forge/tools"
+    ],
+    "other": [
+      "user/default/workflows (unchanged - task-3)",
+      "maintenance repo tree (unchanged)"
+    ]
+  },
+  "service": {
+    "state_before_and_after": "not running",
+    "listeners": "none",
+    "no_restart": true,
+    "no_queue_operation": true,
+    "no_generation": true
+  },
+  "catalogue": {
+    "assets_marked_absent": 238,
+    "workflow_refs_removed": 70,
+    "summary_after": {
+      "asset_count": 431,
+      "observed_present_count": 178,
+      "observed_missing_count": 253,
+      "workflow_asset_count": 23,
+      "missing_workflow_reference_count": 0
+    },
+    "catalogue_sha256": "1e7409160f3d3fcb1e10032ee4cf7ba7f13bf2ce25aa26bf6dd860a045014d20",
+    "rendered_document": "docs/MODEL_SOURCES.md",
+    "rendered_document_sha256": "52f5a35f15fce556ecd536d81acb2120640af83091c012b8cd48e63087751a21"
+  },
+  "deployment_reference": {
+    "receipt": "anima-workflow-deployment-20261024",
+    "status": "deployed",
+    "runtime_uap_sha256": "9f547db3a64e53e214625eab87b7163f3094c0d7994bd91e1f4dee0510d6f31b",
+    "files_installed": 16,
+    "files_deleted_from_runtime": 11
+  },
+  "external_receipts": {
+    "dir": "external-private-receipts/anima-assets-deletion-20261024 (G:\\ComfyUI-local\\receipts per docs/EXTERNAL_STATE.md)",
+    "sha256": {
+      "SUMMARY.json": "371d42a626b8ce1397515bd7a4d9b8d18846b9259e4eaf909a0cb4b161d730c6",
+      "manifest.json": "2040f9e8013a7eb1a1344774b4ab9bf0241abde5085e028b1014154e52568681",
+      "VERIFIED.json": "eb16c740d8ab94889b817889fee90b0c28dbf004787ae71a4819470f7e80ad8c",
+      "SELF_TRAINED_HASH_VERIFICATION.json": "483b88135ae96a6da2d3db511a91953a067f67afa755b3a5848b01fbfec1edd8",
+      "DELETE_RESULT.json": "1efe882faae23a5a285384579faef234a55bd7f820916220eb2bed55e63494a6",
+      "RECEIPT_HASHES.json": "5b75f2957c3aec5f17b01ecb9c3b67edb503b0fcf42b3036c36181778c997956"
+    }
+  },
+  "rollback": "None by user choice; deleted weights cannot be restored from this repository or receipts. Catalogue retains historical capture identity and source digests only."
+}

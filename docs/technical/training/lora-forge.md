@@ -53,3 +53,7 @@
 
 - 2026-10-05：统一数据准备、独立训练、检查点矩阵和发布记录的接手入口；代码/参数记录/权重分开归属，本轮不启动训练。
 - 2026-10-05：补齐 17 份参数和四套发布文字包的归档链接；核实联合资料 47/49 入仓及两份硬链接例外，保留环境/数据/权重缺口，未训练、推理或发布新权重。
+
+## 2026-10-24 Anima 权重退役
+
+按用户请求，运行区 `models/loras/{anima,anima-2.9b}`、`models/diffusion_models/{anima,anima-2.9b,qwen-image-2.1}`、`_janima_parts` 及相关文本编码器/VAE/LLLite 权重已永久删除（无归档/备份）。训练资产保留：`anima_lora_forge/{releases,runs,profiles,tools,vendor}` 与 `character_lora_forge/*`。5 个自训 Anima LoRA 在删除前已确认与 `anima_lora_forge/releases/` 副本 size+SHA-256 完全一致，唯一规范副本留在 releases。后续复训或再评估须重新下载对应底模/编码器/VAE/控制权重并按[模型来源](../runtime/models.md)与 `MODEL_SOURCES.md` 核验，不能从已删除运行路径恢复。
