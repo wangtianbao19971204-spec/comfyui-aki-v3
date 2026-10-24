@@ -1999,8 +1999,8 @@
       "bytes": 4182218328,
       "kind": "checkpoint",
       "captured_in_inventory": true,
-      "observed_present": true,
-      "local_sha256": "fcf423c227cd2ade6df46636f609f3a961371fdb4b57d84825e210a613df5c0b",
+      "observed_present": false,
+      "local_sha256": null,
       "source_status": "version_metadata",
       "family": "Anima",
       "sources": [
@@ -2040,23 +2040,9 @@
         "此版本的默认下载文件未确认；打开版本页按文件 ID、原文件名、精度和摘要选择。",
         "Civitai 文件标记：primary=true；版本文件数=3。",
         "配套按现有 Anima 工作流保留；2.9B 与原版 LoRA／LLLite 架构不同，不能直接混用。",
-        "2026-10-07 规范命名：现行放置使用 current_path；path 保留捕获身份。完整权重 SHA 已实测，触发词／收藏／排除／备注与原来源身份保持。"
-      ],
-      "current_path": "ComfyUI/models/checkpoints/anima/图像生成/Anima__SilvermoonMix-Anima-Evolved [2.9B-2B]__v2.3__BF16__cv3217855__f3099649.safetensors",
-      "standardization": {
-        "family_slug": "anima",
-        "family_label": "Anima",
-        "category": "图像生成",
-        "display_name": "SilvermoonMix-Anima-Evolved [2.9B/2B]",
-        "version": "v2.3",
-        "precision": "BF16",
-        "source_identity": "civitai:model=2639339,version=3217855,file=3099649",
-        "target_path": "ComfyUI/models/checkpoints/anima/图像生成/Anima__SilvermoonMix-Anima-Evolved [2.9B-2B]__v2.3__BF16__cv3217855__f3099649.safetensors",
-        "evidence": [
-          "snapshot/inventory/model_sources.json",
-          "ComfyUI/models/checkpoints/Anima/silvermoonmixAnimaEvolved_v23.metadata.json"
-        ]
-      }
+        "2026-10-07 规范命名：现行放置使用 current_path；path 保留捕获身份。完整权重 SHA 已实测，触发词／收藏／排除／备注与原来源身份保持。",
+        "2026-10-24 核对：该权重在运行路径缺失，目录仅余 `.lm-pending-delete` 标记（2026-10-12，早于本轮 Anima 资产退役且不在 809 文件删除清单）；原标准化放置路径 ComfyUI/models/checkpoints/anima/图像生成/Anima__SilvermoonMix-Anima-Evolved [2.9B-2B]__v2.3__BF16__cv3217855__f3099649.safetensors；仅保留历史捕获身份与来源摘要，不重建。"
+      ]
     },
     {
       "path": "ComfyUI/models/checkpoints/sam3.1_multiplex_fp16.safetensors",
@@ -21570,8 +21556,8 @@
   "summary": {
     "asset_count": 431,
     "inventory_asset_count": 384,
-    "observed_present_count": 178,
-    "observed_missing_count": 253,
+    "observed_present_count": 177,
+    "observed_missing_count": 254,
     "workflow_asset_count": 23,
     "missing_workflow_reference_count": 0,
     "source_status_counts": {

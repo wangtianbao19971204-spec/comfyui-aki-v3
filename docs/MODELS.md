@@ -124,3 +124,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Model source catalogue check failed' }
 Krea2 系列与通用工具模型保留（`diffusion_models/krea2`、`loras/krea2`、`qwen3-vl-4b-heretic`、`krea2RealVae_v10`、超分/检测/抠图/SAM/排序器等）。5 个自训 Anima LoRA 在删除前已确认与 `anima_lora_forge/releases/` 副本逐字节一致，**唯一规范副本继续存在于 releases**；训练 runs/datasets 与 `character_lora_forge` 资料未动。
 
 清单处理：被删资产保留历史捕获身份与来源摘要，`observed_present:false`、清除当前 `local_sha256` 并按 `model_sources.py` 规则移除 `current_path`/标准化放置字段，原放置与标准名写入备注；`models.json`/`workflow_models.json` 的捕获身份不重写。恢复只能重新下载并重新核验，`anima-lllite` 权重须匹配对应 LoRA/基模。证据见[收据](receipts/anima_asset_retirement_20261024.json)。
+
+## 2026-10-24 收尾核对
+
+独立核验补正一项早于本轮退役的旧缺失标记：`ComfyUI/models/checkpoints/anima/图像生成/Anima__SilvermoonMix-Anima-Evolved [2.9B-2B]__v2.3__BF16__cv3217855__f3099649.safetensors` 自 2026-10-12 起已不存在（目录仅 `.lm-pending-delete`，不在 809 文件删除清单）；来源清单改设 `observed_present:false` 并保留历史身份/来源摘要。当前汇总：资产 431、观察存在 177、已不存在 254。

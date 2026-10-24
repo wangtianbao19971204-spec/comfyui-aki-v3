@@ -159,7 +159,7 @@
   ],
   "boundaries": [
     "No runtime deployment, restart, queue clear, model release or generation",
-    "Runtime G:\\ComfyUI-aki-v3 not written",
+    "Runtime deployment target not written",
     "No push, PR, merge, tag or version bump",
     "Model/LoRA asset disposal and model_sources observed_present updates are separate tasks"
   ],

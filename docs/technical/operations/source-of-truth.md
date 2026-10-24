@@ -32,6 +32,8 @@ Git 源码与文字检查点、图库和权重、Python/CUDA 环境、最新在�
 
 ## 更新记录
 
+- 2026-10-24：收尾清理后重新 seal：修订 `repair_workflow.js`、`anime_preview.html`、`layout_uap_workbench.py` 三份源码身份，删除 `scripts/anima_control_cpu_acceptance.py` 并从技术目录移除登记；`model_sources.json` 补正 1 项旧缺失标记后刷新 `metadata_files` 摘要，快照校验通过，未部署。
+
 - 2026-10-24：Anima/Qwen 资产退役后再次 seal：`snapshot/inventory/model_sources.json` 更新 238 项存在状态与工作流引用，`metadata_files` 摘要同步刷新，快照校验通过；历史 `models.json`/`workflow_models.json` 不重写。见[收据](../../receipts/anima_asset_retirement_20261024.json)。
 
 - 2026-10-24：随 Anima 工作流退役重新 seal 源码清单：manifest 移除 9 份工作流/模板与 6 份 Anima 专用工具/测试源并记录 `removed_sources`、`live_deployed=false`，`verification.json` 同步；metadata_files 中 `model_sources.json` 摘要随 UAP 变更刷新，快照校验通过。见[工作流变更](../changes/runtime-workflows/2026-10-24-anima-assets-retirement.md)。

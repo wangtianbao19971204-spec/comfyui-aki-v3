@@ -15,51 +15,51 @@
     "bytes": 125367967479,
     "gib": 116.76,
     "dirs": [
-      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\diffusion_models\\anima",
-      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\diffusion_models\\anima-2.9b",
-      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\diffusion_models\\qwen-image-2.1",
-      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\loras\\anima",
-      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\loras\\anima-2.9b",
-      "G:\\ComfyUI-aki-v3\\_janima_parts"
+      "ComfyUI/models/diffusion_models/anima",
+      "ComfyUI/models/diffusion_models/anima-2.9b",
+      "ComfyUI/models/diffusion_models/qwen-image-2.1",
+      "ComfyUI/models/loras/anima",
+      "ComfyUI/models/loras/anima-2.9b",
+      "_janima_parts"
     ],
     "files": [
-      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\text_encoders\\anima_baseV10_txt.safetensors",
-      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\text_encoders\\anima_baseV10_txt.png",
-      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\vae\\qwen_image_vae.safetensors",
-      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\vae\\qwen_image_vae.png",
-      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\vae\\qwen_image_2.1_vae_bf16.safetensors",
-      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\text_encoders\\qwen3vl_8b_bf16.safetensors",
-      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\controlnet\\anima-lllite-any-test-like-v2.safetensors",
-      "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\controlnet\\anima-lllite-inpainting-v2.safetensors"
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.safetensors",
+      "ComfyUI/models/text_encoders/anima_baseV10_txt.png",
+      "ComfyUI/models/vae/qwen_image_vae.safetensors",
+      "ComfyUI/models/vae/qwen_image_vae.png",
+      "ComfyUI/models/vae/qwen_image_2.1_vae_bf16.safetensors",
+      "ComfyUI/models/text_encoders/qwen3vl_8b_bf16.safetensors",
+      "ComfyUI/models/controlnet/anima-lllite-any-test-like-v2.safetensors",
+      "ComfyUI/models/controlnet/anima-lllite-inpainting-v2.safetensors"
     ],
     "by_dir": [
       {
-        "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\diffusion_models\\anima",
+        "path": "ComfyUI/models/diffusion_models/anima",
         "files": 19,
         "bytes": 30729098880
       },
       {
-        "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\diffusion_models\\anima-2.9b",
+        "path": "ComfyUI/models/diffusion_models/anima-2.9b",
         "files": 12,
         "bytes": 23377714042
       },
       {
-        "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\diffusion_models\\qwen-image-2.1",
+        "path": "ComfyUI/models/diffusion_models/qwen-image-2.1",
         "files": 2,
         "bytes": 14230273876
       },
       {
-        "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\loras\\anima",
+        "path": "ComfyUI/models/loras/anima",
         "files": 738,
         "bytes": 25746421088
       },
       {
-        "path": "G:\\ComfyUI-aki-v3\\ComfyUI\\models\\loras\\anima-2.9b",
+        "path": "ComfyUI/models/loras/anima-2.9b",
         "files": 6,
         "bytes": 270380637
       },
       {
-        "path": "G:\\ComfyUI-aki-v3\\_janima_parts",
+        "path": "_janima_parts",
         "files": 24,
         "bytes": 11275839722
       }
@@ -170,14 +170,14 @@
     "workflow_refs_removed": 70,
     "summary_after": {
       "asset_count": 431,
-      "observed_present_count": 178,
-      "observed_missing_count": 253,
+      "observed_present_count": 177,
+      "observed_missing_count": 254,
       "workflow_asset_count": 23,
       "missing_workflow_reference_count": 0
     },
-    "catalogue_sha256": "1e7409160f3d3fcb1e10032ee4cf7ba7f13bf2ce25aa26bf6dd860a045014d20",
+    "catalogue_sha256": "fa5330e9d9fec075a844da1427e0ef9ca02ddf92c51f45b4465f8f426c92eeab",
     "rendered_document": "docs/MODEL_SOURCES.md",
-    "rendered_document_sha256": "52f5a35f15fce556ecd536d81acb2120640af83091c012b8cd48e63087751a21"
+    "rendered_document_sha256": "982a42da18b7f05e896f55942602870a8e108abaa945092117cb44af642ca32d"
   },
   "deployment_reference": {
     "receipt": "anima-workflow-deployment-20261024",
@@ -187,7 +187,7 @@
     "files_deleted_from_runtime": 11
   },
   "external_receipts": {
-    "dir": "external-private-receipts/anima-assets-deletion-20261024 (G:\\ComfyUI-local\\receipts per docs/EXTERNAL_STATE.md)",
+    "dir": "external-private-receipts/anima-assets-deletion-20261024",
     "sha256": {
       "SUMMARY.json": "371d42a626b8ce1397515bd7a4d9b8d18846b9259e4eaf909a0cb4b161d730c6",
       "manifest.json": "2040f9e8013a7eb1a1344774b4ab9bf0241abde5085e028b1014154e52568681",
@@ -197,5 +197,12 @@
       "RECEIPT_HASHES.json": "5b75f2957c3aec5f17b01ecb9c3b67edb503b0fcf42b3036c36181778c997956"
     }
   },
-  "rollback": "None by user choice; deleted weights cannot be restored from this repository or receipts. Catalogue retains historical capture identity and source digests only."
+  "rollback": "None by user choice; deleted weights cannot be restored from this repository or receipts. Catalogue retains historical capture identity and source digests only.",
+  "corrections": [
+    {
+      "date": "2026-10-24",
+      "item": "post-verification D1",
+      "detail": "ComfyUI/models/checkpoints/anima/图像生成/SilvermoonMix-Anima-Evolved 权重自 2026-10-12 起已缺失（目录仅 .lm-pending-delete，非本次 809 文件清单），来源清单补设 observed_present:false；汇总更新为存在 177/缺失 254，目录 sha fa5330e9…、渲染文档 sha 982a42da…。"
+    }
+  ]
 }

@@ -295,7 +295,7 @@ def build():
     data["last_group_id"] = next_gid - 1
     data["revision"] = 3
     data["id"] = "uap-unified-production-workbench-visual-20260906"
-    data["extra"]["uap_workbench"] = {"version": 1, "activeBranch": "a1", "viewBranch": "a1", "stage": "daily", "branches": branches}
+    data["extra"]["uap_workbench"] = {"version": 1, "activeBranch": "k2", "viewBranch": "k2", "stage": "daily", "branches": branches}
     data["extra"]["codex_uap_integration"].update(layout="operation_stages_compact", navigation="UAP stage toolbar + exact group navigation", generated_by="production_tools/layout_uap_workbench.py")
     data["extra"]["workflow_display_name"] = "UAP统一生产工作台 · 视觉操作优化"
     data["extra"]["workflow_variant"] = "unified_visual_operation_layout"

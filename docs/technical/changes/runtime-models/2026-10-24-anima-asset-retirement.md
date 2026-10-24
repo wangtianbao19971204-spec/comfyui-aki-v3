@@ -16,3 +16,7 @@ Krea2 的 `diffusion_models/krea2`（21 文件）与 `loras/krea2`（322 文件�
 ## 证据
 
 仓外 task-2 收据 `anima-assets-deletion-20261024`（manifest.json `2040f9e8…`、SUMMARY.json `371d42a6…`、VERIFIED.json `eb16c740…`）与主仓[资产退役收据](../../../receipts/anima_asset_retirement_20261024.json)。运行区部署状态见[工作流变更](../runtime-workflows/2026-10-24-anima-assets-retirement.md)。
+
+## 2026-10-24 复核修正
+
+独立核验发现 `ComfyUI/models/checkpoints/anima/图像生成/Anima__SilvermoonMix-Anima-Evolved [2.9B-2B]__v2.3__BF16__cv3217855__f3099649.safetensors` 自 2026-10-12 起已缺失（目录仅 `.lm-pending-delete`，不在本次 809 文件删除清单），来源清单补设 `observed_present:false` 并附注。最终汇总更新为资产 431、观察存在 177、已不存在 254、工作流关联 23、缺失工作流引用 0；目录 sha `fa5330e9…`，渲染文档 sha `982a42da…`。该修正不改权重删除范围与保留资产。

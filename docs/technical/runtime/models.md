@@ -65,6 +65,8 @@ LM Civitai 前后端兼容、插件版本和下载队列是独立边界，不能
 
 ## 更新记录
 
+- 2026-10-24：核验发现 `SilvermoonMix-Anima-Evolved` 权重自 2026-10-12 起已缺失（目录仅 `.lm-pending-delete`，不在 809 文件清单）；补设 `observed_present:false` 并附注，汇总更新为存在 177/缺失 254；目录 sha `fa5330e9…`，重渲染文档 sha `982a42da…`。
+
 - 2026-10-24：Anima/Qwen 权重永久删除后更新模型来源清单（238 项转 absent、清 current_path/local_sha256、汇总重算、移除 9 份退役工作流引用并重渲染），捕获身份与 Krea2/通用资产保持；见[收据](../../receipts/anima_asset_retirement_20261024.json)。
 
 - 2026-10-24：Anima 工作流退役只改 UAP 与工作流工具，`workflow_sha256` 刷新到 `9f547db3…` 并同步清单元数据摘要；模型清单资产身份、观察存在状态和权重未改。见[收据](../../receipts/anima_workflow_retirement_20261024.json)。

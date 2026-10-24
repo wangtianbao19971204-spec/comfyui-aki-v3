@@ -696,11 +696,9 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-2.9B-loraPatch/__init__.py",
         "snapshot/runtime/production_tools/profiles.json",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/__init__.py",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/native_loader.py",
-        "scripts/anima_control_cpu_acceptance.py"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/native_loader.py"
       ],
       "tests": [
-        "scripts/anima_control_cpu_acceptance.py"
       ],
       "evidence": [
         "docs/receipts/anima29_lorapatch_20261005.json",
@@ -715,8 +713,7 @@
       "watch": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-2.9B-loraPatch/",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/",
-        "scripts/anima_control_cpu_acceptance.py"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/"
       ],
       "examples": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-2.9B-loraPatch/README.md"

@@ -91,6 +91,8 @@ A29 手阶段：原手部 YOLO 检测框已经纳入画面左侧裸脚区，SAM 
 
 ## 更新记录
 
+- 2026-10-24 收尾清理：已退役的 `layout_uap_workbench.py` 默认 `activeBranch`/`viewBranch` 由 `a1` 改为 `k2`，避免重跑生成退役分支 id；技术目录移除已删除的 Anima CPU 验收脚本登记。正式图/模板未改，未部署。
+
 - 2026-10-24：Anima 原版/2.9B 工作流、模板与 UAP 分支退役，UAP 默认分支改为 Krea2；历史工作流与插件保留，未部署运行区。见[变更](../changes/runtime-workflows/2026-10-24-anima-assets-retirement.md)。
 
 - 2026-10-13：修复独立 03 与对应模板的控制接线，参考图/VNCCS 经统一来源与可选擦线进入 Encode→Apply，保留原模型、提示词、种子和采样设置。17 项相关回归和实际原生出图核对通过，擦线直接控制图在蒙版支持域外零变化；原 Turbo 的服装与姿态质量限制、配套非 Turbo 的有限改善，以及旧 UAP K2 QA 提示词错误和 A1 高强度模糊分别记录。源验收当时未部署；随后仅两份 03 已部署，中性输入现场两例通过。见[本轮说明](../changes/runtime-workflows/2026-10-13-standalone-krea2-control-routing.md)、[源验收收据](../../receipts/control_erase_routing_repair_20261013.json)与[部署收据](../../receipts/control_erase_deployment_20261013.json)。

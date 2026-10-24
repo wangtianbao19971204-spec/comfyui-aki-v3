@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-24T08:49:47.684981+00:00",
+  "created_at": "2026-10-24T09:32:59.036529+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -23715,8 +23715,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime_preview.html",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime_preview.html",
-      "sha256": "ce8e1b713479d59a2b4c28abed9db660573a439540aa3b7d46cf350179ed1b9c",
-      "bytes": 12505,
+      "sha256": "8d3b4dc9d33bc8723c40a1de0365b4d5adad3ad6fa4a0e04b4b3c443184eec72",
+      "bytes": 12499,
       "kind": "file"
     },
     {
@@ -23939,8 +23939,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
-      "sha256": "cb29a53a55feb8e052a3468005d362cd79f9bf2daf6558418c336007411439b4",
-      "bytes": 4794,
+      "sha256": "0da789ad2d68e79a08cb6fe0dfda2afbaeb1dfee8fec447901e4414deaf87ad2",
+      "bytes": 4737,
       "kind": "file"
     },
     {
@@ -57931,7 +57931,7 @@
     {
       "source": "production_tools/layout_uap_workbench.py",
       "path": "runtime/production_tools/layout_uap_workbench.py",
-      "sha256": "4711dc921ee9ad62f63ffe8e37090ac54ad84717f41fb2298459c8cfd653ad45",
+      "sha256": "ad03943c7bfa2ee537a3bd333a8cd11b2ecb62b0e1cb654b16f947be4d675870",
       "bytes": 20349,
       "kind": "file"
     },
@@ -68018,8 +68018,8 @@
     },
     {
       "path": "inventory/model_sources.json",
-      "sha256": "1e7409160f3d3fcb1e10032ee4cf7ba7f13bf2ce25aa26bf6dd860a045014d20",
-      "bytes": 1169095
+      "sha256": "fa5330e9d9fec075a844da1427e0ef9ca02ddf92c51f45b4465f8f426c92eeab",
+      "bytes": 1168610
     }
   ],
   "production_plugins": [
@@ -68114,13 +68114,15 @@
     }
   ],
   "development_revision": {
-    "note": "Retire Anima workflows, templates and UAP branches; keep Krea2 only (repo only, not deployed)",
-    "previous_manifest_sha256": "fecb032c44bceec66b7fc962303cb2f546e76308de5dc4987f69b202bafbe06b",
+    "note": "Clean up retired Anima UI and tooling leftovers; correct stale SilvermoonMix absence flag (repo only)",
+    "previous_manifest_sha256": "0d89bf66ff00f396ecec5f184300dbeb32a66494bbeefd6d66553c0246e6a600",
     "source_changes": {
       "added": [],
       "removed": [],
       "changed": [
-        "production_tools/README.md"
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime_preview.html",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
+        "production_tools/layout_uap_workbench.py"
       ]
     },
     "live_deployed": false,

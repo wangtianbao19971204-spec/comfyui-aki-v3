@@ -8,7 +8,6 @@ export function workflowChoices(config) {
     if(choices.some(b=>b.value==='stocking')) {
         return [
             {value:'@main',label:'返回统一生产工作台'},
-            {value:'@main:ext05',label:'裁剪精修'},
             {value:'@main:ext08',label:'2× 放大'},
             {value:'@main:ext09',label:'4× 放大'},
             ...choices,
@@ -19,7 +18,7 @@ export function workflowChoices(config) {
     return choices;
 }
 
-export function isWorkflowChoice(value) { return value===REPAIR_CHOICE||/^@main(?::ext0[589])?$/.test(value); }
+export function isWorkflowChoice(value) { return value===REPAIR_CHOICE||/^@main(?::ext0[89])?$/.test(value); }
 
 let opening=false;
 export async function openWorkflowChoice(app,value) {

@@ -7,7 +7,7 @@
 
 2026-10-11 更新：统一 [LoRA/ControlNet 补丁](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LoRA-ControlNet-Patch/README.md)锁定 `b25ae637102f2358116fe419a409f0594f61245b`，8 份上游原件摘要见 `UPSTREAM.json`，未改上游代码。production / diagnostic / anima 白名单以统一补丁替代旧 LoRA-only 补丁，旧源码保留但不叠加加载。新增 [原生加载器](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/native_loader.py)直接读取现有 controlnet 目录，输出 MODEL_PATCH；只有原生 AnimaLLLiteApply 能获得 ControlNet 映射，旧 sdscripts 节点保留给原版流程。
 
-真实 any-v2 权重在 CPU 上完成 40 个区块逐项精确路由检查：28 个继承块应用对应模块，12 个新增块原样透传；原生 40-block LoRA 不再次转换，禁用补丁及非列表路径被加载器拒绝。工具为 [anima_control_cpu_acceptance.py](../../../scripts/anima_control_cpu_acceptance.py)，须显式给出权重目录和全新收据路径；它不采样，ComfyUI 的注意力能力探测仍可能初始化 CUDA。本轮 Torch GPU 分配为 0。
+真实 any-v2 权重在 CPU 上完成 40 个区块逐项精确路由检查：28 个继承块应用对应模块，12 个新增块原样透传；原生 40-block LoRA 不再次转换，禁用补丁及非列表路径被加载器拒绝。工具为 `scripts/anima_control_cpu_acceptance.py`（已于 2026-10-24 随 Anima 权重永久退役删除，本轮保留历史记录），原命令须显式给出权重目录和全新收据路径；它不采样，ComfyUI 的注意力能力探测仍可能初始化 CUDA。本轮 Torch GPU 分配为 0。
 
 后续用户授权的 GPU 验收已完成四种控制、擦线、原尺寸深度及 VNCCS 浏览器捕获实测，统一补丁已按 22 文件范围部署并重启。准确证据见 [新收据](../../receipts/anima_control_gpu_deployment_20261011.json)；当前实测 LoRA 栈为空，不借用 10 月 5 日历史 A/B 认证新补丁的任意 LoRA 画质。 上游还支持其他层数/方向，本轮只验收 28→40 的 2.9B 用例。禁用变量改为 `ANIMA_COMPAT_LORA_REMAP` / `ANIMA_COMPAT_CONTROLNET_REMAP`；旧 `ANIMA_LORA_REMAP` 不控制新补丁。回滚必须成组恢复白名单、节点源码和四份工作流，不能只关新补丁后继续执行新控制图。详情见 [简化变更](../changes/runtime-workflows/2026-10-11-anima-control.md)与 [收据](../../receipts/anima_control_simple_20261011.json)。
 
@@ -46,3 +46,7 @@
 - 2026-10-05 追加交接：[原版 Anima 回归收据](../../receipts/anima29_lorapatch_original_anima_check_20261005.json)记录选定 28-block 模型/两个 LoRA 的开关对照像素完全相同，以及选定 2.9B 的重映射变化；整理任务复核了 5 份输出文件 SHA。该结论限于记录中的模型、LoRA 和采样参数，不泛化为所有模型/稀疏键零风险；服务 PID 也仅是收据当时值。
 
 - 2026-10-05：接收补丁部署与 A/B 证据，补齐来源、精确实现入口及接手限制；保留用户工作流数值，旧冻结包不作为新补丁证据。
+
+## 2026-10-24 权重退役后的工具状态
+
+Anima 原版/2.9B 与 Qwen-Image-2.1 权重已按用户请求永久删除（无归档/备份），`scripts/anima_control_cpu_acceptance.py` 因缺少 any-v2 权重已无法重跑，随本次退役删除并在技术目录移除登记；本文保留该轮历史结论与边界，不表示当前可复现。兼容补丁与加载器源码仍在主仓，但再次验证须先重新取得并核验对应权重。
