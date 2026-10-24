@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 2026-10-24：仓外历史归档按用户授权永久退役（15 目标 / 2,426 文件 / 94,571,215,064 B，无归档无备份），并修正三份生产工具现行说明（README、资源维护入口、项目使用指南）：`_archives/2026-09-28_workflow_cleanup` 不再可经 `resource_archive.py` 恢复，仅外部收据保留 SHA-256 清单与小型元数据；运行区、服务与模型未变。见[仓外归档收据](docs/receipts/external_archive_cleanup_20261024.json)。
+
 - 2026-10-19：CI 拆成快检与增量历史门禁。`--all-history --cache-file … --incremental` 以 Git 对象身份复用已核验内容判决，新对象仍完整扫描，`.part` 与 `snapshot/manifest.json` 每次读取以保留跨片检查，另跑 `git fsck --connectivity-only`；缓存只由成功的推送运行写入，PR 只还原，每周定时任务与正式发布仍是无缓存全扫。本机同一 refs 冷扫 1012 秒、增量热扫 21.7 秒。见[技术说明](docs/technical/changes/operations-source-of-truth/2026-10-19-incremental-history-gate.md)与[收据](docs/receipts/security_incremental_ci_20261019.json)。
 
 - 2026-10-19：导入 9 个新下载 LoRA（Anima 7、Krea2 2），按已审查用途表落位为画风与画师 3、角色与人物 5、服装与配饰 1，当前 322 个用户 LoRA。9 项完整 SHA 全部匹配 Civitai 确切版本文件，卡片、`LoraLoader` 枚举与 9 张预览通过，原有 329 条缓存行保持；按用户确认在核验后移走下载原件，同批 4 个重复件保留。未做 GPU 推理，见[收据](docs/receipts/lora_download_import_20261019.json)。

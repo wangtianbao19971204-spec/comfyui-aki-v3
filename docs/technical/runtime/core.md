@@ -27,6 +27,8 @@ VNCCS 子图执行同步现按冒号路径定位节点，后端与上传 API 复
 
 ## 更新记录
 
+- 2026-10-24：仓外历史归档退役后修正三份现行说明（`production_tools/README.md`、`资源维护入口.md`、`项目使用指南.md`）：`_archives/2026-09-28_workflow_cleanup` 的 207 项快照 payload 已按用户授权永久删除（无归档、无备份），仓外收据保留 manifest/operations/README 与 SHA-256 清单，`resource_archive.py` 对该归档的 verify/restore 不再可用。未写入运行区。见[仓外归档收据](../../receipts/external_archive_cleanup_20261024.json)。
+
 - 2026-10-11：K2 控制链维护工具整理：保留 `production_tools/keep_krea2_control_enabled.py`（分支模式表修正，用 `--write` 应用），移除仅用于比对的过渡脚本`production_tools/align_krea2_branch_modes.py`；两者都不改变运行逻辑，也不触碰权重。见[分支模式修复](../changes/runtime-workflows/2026-10-11-krea2-branch-mode-fix.md)。
 
 - 2026-10-11：K2 分支模式表漂移修复：ranches[k2].modes 曾把 Depth 控制链与姿势工作室（1160/1161/1172/1149）记为静音，而文件里它们是启用态。前端 ctivateBranch 在切分支时按表写 mode，于是从别的分支切到 Krea2 后 Krea2ControlApply 被静音、DazzleSwitch 1187 在 priority 下静默回退到原始模型——控制消失且无报错。现把该链在表里改为启用（其余节点记录不变，预览类仍保持关闭），并同步节点自身 mode 防止再次漂移。见[分支模式修复](../changes/runtime-workflows/2026-10-11-krea2-branch-mode-fix.md)。

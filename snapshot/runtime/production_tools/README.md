@@ -109,7 +109,7 @@
 
 ## 维护与历史快照
 
-后续网页 / 法典资料更新、预览生成与回写、测试依赖和历史恢复，请从 [资源维护入口](资源维护入口.md) 开始。207 个旧快照已可恢复归档至 `_archives/2026-09-28_workflow_cleanup`，原目录留有恢复说明；没有删除资源或释放磁盘空间。
+后续网页 / 法典资料更新、预览生成与回写、测试依赖和历史恢复，请从 [资源维护入口](资源维护入口.md) 开始。2026-10-24 经用户明确授权，`_archives/2026-09-28_workflow_cleanup` 的 207 个旧快照 payload 已**永久删除**（无归档、无备份）：删除前按 2,426 文件 / 94,571,215,064 B 生成 SHA-256 manifest，manifest/operations/README 等元数据保留在仓外收据 `comfyui-local-cleanup-20261024`；`resource_archive.py` 对该归档的 verify/restore 不再可用。
 
 本次 production 配置的实际重启由主任务执行，最终状态与验收以 `benchmark_reports/2026-09-28_workflow_ui/overnight_optimization/profile_live_restart.json` 为准；离线配置通过不能替代这份线上收据。
 

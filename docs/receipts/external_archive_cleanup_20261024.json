@@ -1,0 +1,185 @@
+{
+  "schema": 1,
+  "date": "2026-10-24",
+  "receipt_id": "external-archive-cleanup-20261024-01",
+  "status": "permanent_delete_applied_no_backup_external_receipt_only",
+  "scope": "External private archive payload under the external root (not the runtime root); no runtime/service/model change in this repository PR.",
+  "authorization": {
+    "summary": "User selected clean-up of the 2026-09-28 historical workflow-snapshot archive plus old TAG_INTEGRATION LLM weights and Colab-ni validation evidence; permanent deletion without archive/backup, overriding the default recoverable-move preference.",
+    "mode": "PERMANENT_DELETE_NO_BACKUP"
+  },
+  "deleted": {
+    "target_count": 15,
+    "file_count": 2426,
+    "total_bytes": 94571215064,
+    "targets": [
+      {
+        "path": "archives/20261005/workspace/_codex_backups/TAG_INTEGRATION_20260719_174907/sources/Qwen3-14B-GGUF-530227a",
+        "files": 1,
+        "bytes": 12121937248
+      },
+      {
+        "path": "archives/20261005/workspace/_codex_backups/TAG_INTEGRATION_20260719_174907/sources/Qwen3-30B-A3B-Instruct-2507-GGUF-eea7b2b",
+        "files": 1,
+        "bytes": 18556686752
+      },
+      {
+        "path": "archives/20261005/workspace/_codex_backups/TAG_INTEGRATION_20260719_174907/sources/Qwen3-4B-Instruct-2507-cdbee75f",
+        "files": 24,
+        "bytes": 8193383310
+      },
+      {
+        "path": "archives/20261005/workspace/_codex_backups/TAG_INTEGRATION_20260719_174907/sources/madlad400-3b-mt-fa184c6",
+        "files": 19,
+        "bytes": 5589008118
+      },
+      {
+        "path": "archives/20261005/workspace/_codex_backups/TAG_INTEGRATION_20260719_174907/sources/opus-mt-en-zh-408d9bc4",
+        "files": 17,
+        "bytes": 315321098
+      },
+      {
+        "path": "archives/20261005/workspace/_archives/2026-09-28_workflow_cleanup",
+        "files": 210,
+        "bytes": 30963975437
+      },
+      {
+        "path": "validation/colab-ni-1500-preparation-20261015-01",
+        "files": 14,
+        "bytes": 776643987
+      },
+      {
+        "path": "validation/colab-ni-2000-preparation-20261015-01",
+        "files": 16,
+        "bytes": 776680711
+      },
+      {
+        "path": "validation/colab-ni-calibration-20261014-01",
+        "files": 242,
+        "bytes": 3693585333
+      },
+      {
+        "path": "validation/colab-ni-comparison-20261015-01",
+        "files": 686,
+        "bytes": 136201657
+      },
+      {
+        "path": "validation/colab-ni-continuation-20261014-01",
+        "files": 287,
+        "bytes": 4159415577
+      },
+      {
+        "path": "validation/colab-ni-continuation-20261015-2000-01",
+        "files": 246,
+        "bytes": 3598063509
+      },
+      {
+        "path": "validation/colab-ni-long-comparison-20261015-01",
+        "files": 606,
+        "bytes": 59459239
+      },
+      {
+        "path": "validation/colab-ni-trial-20261014-01",
+        "files": 31,
+        "bytes": 3223415522
+      },
+      {
+        "path": "receipts/ni-colab-download-cleanup-20261015",
+        "files": 26,
+        "bytes": 2407437566
+      }
+    ],
+    "grouped": {
+      "TAG_INTEGRATION old LLM weights": 44776336526,
+      "2026-09-28 historical snapshot archive": 30963975437,
+      "Colab-ni validation evidence": 16423465535,
+      "ni-colab receipt evidence": 2407437566
+    }
+  },
+  "disk": {
+    "free_before_bytes": 258892402688,
+    "free_after_bytes": 353468731392,
+    "released_bytes": 94576328704,
+    "released_gb": 94.58
+  },
+  "preserved_metadata": {
+    "external_receipt": "external-private-receipts/comfyui-local-cleanup-20261024",
+    "file_count": 1536,
+    "bytes": 28389998,
+    "groups": {
+      "preserved/2026-09-28_workflow_cleanup": {
+        "files": 3,
+        "bytes": 361059
+      },
+      "preserved/colab-ni-validation-metadata": {
+        "files": 1514,
+        "bytes": 26486133
+      },
+      "preserved/ni-colab-download-cleanup-20261015": {
+        "files": 19,
+        "bytes": 1542806
+      }
+    },
+    "workflow_cleanup_metadata": [
+      {
+        "path": "preserved/2026-09-28_workflow_cleanup/manifest.json",
+        "sha256": "7652e21f998814416738918d2a59453539ca7bb2fcc4cd31f858f14c2bba27ca",
+        "bytes": 80014
+      },
+      {
+        "path": "preserved/2026-09-28_workflow_cleanup/operations.jsonl",
+        "sha256": "9e4ba3dbd33b20fa32414e526e28ee0052dfae4adeadf5f414c0d06a6dfa9c5b",
+        "bytes": 279565
+      },
+      {
+        "path": "preserved/2026-09-28_workflow_cleanup/README.md",
+        "sha256": "dab2cef7392df59dbfb8c81dfb17be564d18bef22df37b413504d6ba93c6af1a",
+        "bytes": 1480
+      }
+    ],
+    "notes": [
+      "2026-09-28 workflow cleanup archive payload deleted; manifest.json/operations.jsonl/README.md preserved under preserved/2026-09-28_workflow_cleanup/. Recovery via resource_archive.py is no longer possible.",
+      "ni-colab-download-cleanup receipt small JSON/scripts preserved under preserved/ni-colab-download-cleanup-20261015/; retained_unique_downloads binaries deleted.",
+      "colab-ni validation metadata (json/md/txt/log <=1MB, 1514 files) preserved under preserved/colab-ni-validation-metadata/; weights/zips/checkpoints deleted.",
+      "TAG_INTEGRATION sources root tag/text CSVs and licenses kept in place; only model weight directories deleted.",
+      "Repo docs referencing _archives/2026-09-28_workflow_cleanup (production_tools/README.md, 资源维护入口.md, 项目使用指南.md) require follow-up doc correction."
+    ]
+  },
+  "external_receipt_sha256": {
+    "manifest.json": "4d9c996f69e15a6ec78713742af760129f4782075d2c415a8db705501b3b72da",
+    "VERIFIED.json": "02f8fe6d764de9aa3b31168785bfa85e5f13ff6842a28f37ce98addab732a955",
+    "DELETION_RESULT.json": "97767949163bc6867f14ca7d2b209138c7d63c4c16d609304a131b8ba744afe4",
+    "BASELINE.json": "99a2c82d560f4a7a08b090b934a41c84daedb6424203bcc8da14a75274ed9377",
+    "RECEIPT_HASHES.json": "3813ca3c5b1b8dc66b1dd357e6c5adf6146c1a9312b21653bccdc4521d077901"
+  },
+  "kept": [
+    "TAG_INTEGRATION sources root text/tag CSVs and licenses",
+    "all other ComfyUI-local dirs incl retired Git, releases, manifests/plans/private-config",
+    "2026-09-30_lora_duplicates archive",
+    "receipts small JSON evidence copied into this receipt"
+  ],
+  "verification": {
+    "all_targets_absent": true,
+    "verified_pass": true,
+    "manifest_matches": true,
+    "service_operations": false
+  },
+  "recovery": "`resource_archive.py verify/restore` for `_archives/2026-09-28_workflow_cleanup` is no longer possible; only the external receipt metadata/SHA-256 manifest remains. Deletion cannot be rolled back from this receipt.",
+  "external_state_after": {
+    "measured_at": "2026-10-24",
+    "total_gb": 101.03,
+    "GB": {
+      "archives": 26.45,
+      "validation": 56.76,
+      "receipts": 15.73,
+      "releases": 1.69,
+      "staging": 0.37,
+      "other": 0.03
+    }
+  },
+  "boundaries": [
+    "No runtime-root writes, service restart, queue operation, model download or generation in this doc PR",
+    "No absolute private roots recorded here; paths are relative to the external root or opaque receipt names",
+    "Historical dated statements elsewhere in the repo are not rewritten"
+  ]
+}
