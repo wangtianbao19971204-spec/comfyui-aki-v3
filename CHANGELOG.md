@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 2026-10-24：导入 5 个新下载 Krea2 LoRA（Abp_Art style 与 Kzmynon AI Style 画风、白艺术光影 光影、np_sheer_taut v1.1 服装、Real Pussy For Krea2 概念），当前 329 个用户 LoRA。5 项完整 SHA 均匹配 Civitai 确切版本文件，卡片与 `LoraLoader` 枚举通过，原有 340 条模型缓存行保持；按用户确认在核验后移走下载原件，3 个重复件保留，MOSS 2 个底模与 6 个 LoRA 按用户要求未动。管理器下载代理离线，5 张预览待补。只读计划 13.7 秒、落位与登记 24.7 秒。见[收据](docs/receipts/lora_download_import_20261024.json)。
+
 - 2026-10-20：导入 2 个新下载 Krea2 LoRA（Line Art Anime Flat Krea2.v3 画风、God Pussy 概念与效果），当前 324 个用户 LoRA。两项完整 SHA 匹配 Civitai 确切版本文件，卡片、`LoraLoader` 枚举与 2 张预览通过，原有 338 条缓存行保持；核验后移走下载原件，4 个重复件保留。只读计划 2.6 秒、落位与登记 5.8 秒。见[收据](docs/receipts/lora_download_import_20261020.json)。
 
 - 2026-10-19：CI 拆成快检与增量历史门禁。`--all-history --cache-file … --incremental` 以 Git 对象身份复用已核验内容判决，新对象仍完整扫描，`.part` 与 `snapshot/manifest.json` 每次读取以保留跨片检查，另跑 `git fsck --connectivity-only`；缓存只由成功的推送运行写入，PR 只还原，每周定时任务与正式发布仍是无缓存全扫。本机同一 refs 冷扫 1012 秒、增量热扫 21.7 秒。见[技术说明](docs/technical/changes/operations-source-of-truth/2026-10-19-incremental-history-gate.md)与[收据](docs/receipts/security_incremental_ci_20261019.json)。

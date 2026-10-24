@@ -21,6 +21,8 @@
 
 2026-10-20 增量导入 2 个 Krea2 LoRA，当前共 **324 个用户 LoRA**：Anima 219、Anima 2.9B 2、Krea2 103。用途为画风与画师 1（Line Art Anime Flat Krea2.v3，与既有 v20 是同模型不同版本，按版本与文件 ID 并存）、概念与效果 1（God Pussy，Krea 2）。两项完整 SHA 均与 Civitai 确切版本文件一致，卡片、加载器枚举与 2 张预览通过；按用户确认在核验后移走下载原件，同批 4 个 2026-10-11 已导入的重复件保留。见[本批收据](receipts/lora_download_import_20261020.json)。
 
+2026-10-24 增量导入 5 个 Krea2 LoRA，当前共 **329 个用户 LoRA**：Anima 219、Anima 2.9B 2、Krea2 108。用途为画风与画师 2（Abp_Art style、Kzmynon AI Style）、光影与色彩 1（白艺术光影 v2.0）、服装与配饰 1（np_sheer_taut v1.1 标准 ComfyUI 版，与既有 v1.0 按版本与文件 ID 并存）、概念与效果 1（Real Pussy For Krea2 · Natural Spread）。5 项完整 SHA 均与 Civitai 确切版本文件一致，卡片与加载器枚举逐项通过；按用户确认在核验后移走下载原件。同批 3 个已导入的重复件保留；MOSS 底模 2 个与 MOSS Image 底模 LoRA 6 个按用户要求本批不动，flux2 VAE 不在 LoRA 整理范围。管理器下载代理离线，5 张预览尚未取到、后续可补。见[本批收据](receipts/lora_download_import_20261024.json)。
+
 ## 分类
 
 保留 ComfyUI 加载器的目录边界，在其中按“家族／用途”整理：
@@ -95,3 +97,4 @@ LoRA Manager 的常规与排除缓存须同时核验：本轮 286 个用户 LoRA
 - 2026-10-09：新增下载使用[一行快速整理入口](technical/runtime/lora-quick-import.md)，避免全库迁移；本批 3 个新权重分类为 Anima 服装／画风和 Krea2 画风，确切来源及完整摘要均登记。
 - 2026-10-19：沿用同一规则导入 9 个新下载（7 Anima、2 Krea2），逐项核对完整 SHA 与 Civitai 确切版本／文件 ID，按已审查用途表落位并登记卡片与预览；9 个下载原件在核验后移走，4 个重复件保留。加载器枚举与 32 项导入回归、26 项来源回归、47 项命名回归、36 项目录回归通过；未做 GPU 推理或全库重扫，见[收据](receipts/lora_download_import_20261019.json)。
 - 2026-10-20：再导入 2 个新下载 Krea2 LoRA，逐项核对完整 SHA 与 Civitai 确切版本／文件 ID，按已审查用途表落位（画风 1、概念与效果 1）并登记卡片与预览；核验后移走原件，4 个重复件保留。只读计划 2.6 秒、落位与登记 5.8 秒；加载器枚举与 32 项导入回归、26 项来源回归、47 项命名回归通过，见[收据](receipts/lora_download_import_20261020.json)。
+- 2026-10-24：沿用同一规则导入 5 个新下载 Krea2 LoRA（2 画风、1 光影、1 服装、1 概念），逐项核对完整 SHA 与 Civitai 确切版本／文件 ID，按已审查用途表落位并登记卡片；核验后移走 5 个下载原件，3 个重复件保留，MOSS 2 个底模与 6 个 LoRA 按用户要求未动。只读计划 13.7 秒、落位与登记 24.7 秒；加载器枚举与 32 项导入回归、26 项来源回归、47 项命名回归、36 项目录回归通过；管理器下载代理离线致 5 张预览待补，未做 GPU 推理或全库重扫，见[收据](receipts/lora_download_import_20261024.json)。

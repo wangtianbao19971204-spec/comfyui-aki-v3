@@ -1,0 +1,166 @@
+{
+  "schema": 1,
+  "date": "2026-10-24",
+  "scanned_downloads": 19,
+  "imported": 5,
+  "download_originals_retained": 0,
+  "new_bytes": 1105935788,
+  "user_loras_after": 329,
+  "assets": [
+    {
+      "original_name": "abpart_krea2_style_v2_0_krea2_4200.safetensors",
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Abp_Art style 【krea2&MOSS&anima&il】__krea2 v1.0__BF16__cv3422406__f3316635.safetensors",
+      "sha256": "3a7829de7ed5b4d25ab6c7ad1963da8a065763f191ddc5021e5ab58bd03d6db4",
+      "page_url": "https://civitai.com/models/2675626?modelVersionId=3422406",
+      "version_id": 3422406,
+      "file_id": 3316635,
+      "category": "画风与画师",
+      "family": "krea2"
+    },
+    {
+      "original_name": "kzmynon-krea2-v2.safetensors",
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Kzmynon AI Style [K-A]__krea2-v2__BF16__cv3377920__f3266337.safetensors",
+      "sha256": "09ae9c8d1d42129a333f7cd4a8b24d13bc6c7449fe65815ecbb007bc867488e2",
+      "page_url": "https://civitai.com/models/2878242?modelVersionId=3377920",
+      "version_id": 3377920,
+      "file_id": 3266337,
+      "category": "画风与画师",
+      "family": "krea2"
+    },
+    {
+      "original_name": "light_c1-st7000.safetensors",
+      "current_path": "ComfyUI/models/loras/krea2/光影与色彩/Krea2__白艺术光影__v2.0__FP16__cv3355484__f3242926.safetensors",
+      "sha256": "09bac46241a825890191d951542d97f651295ec1e6320986d5fbde8e1f33420e",
+      "page_url": "https://civitai.com/models/2908126?modelVersionId=3355484",
+      "version_id": 3355484,
+      "file_id": 3242926,
+      "category": "光影与色彩",
+      "family": "krea2"
+    },
+    {
+      "original_name": "npSheerTautE6A087E587.Yw5M.safetensors",
+      "current_path": "ComfyUI/models/loras/krea2/服装与配饰/Krea2__np_sheer_taut - Translucent Taut Sheer Tights (No__v1.1__FP16__cv3417930__f3311309.safetensors",
+      "sha256": "b6d48909787b677b1e3cabe64fb07b6f4a26a77e1e9ca7198619f9308e3384be",
+      "page_url": "https://civitai.com/models/3009623?modelVersionId=3417930",
+      "version_id": 3417930,
+      "file_id": 3311309,
+      "category": "服装与配饰",
+      "family": "krea2"
+    },
+    {
+      "original_name": "wm_realpussy_krea2.safetensors",
+      "current_path": "ComfyUI/models/loras/krea2/概念与效果/Krea2__Real Pussy For Krea2__Natural Spread__FP16__cv3391453__f3280919.safetensors",
+      "sha256": "e1bf889ce2c86aac121dc21d48dc243cca4b8499108f325f29a4906b42f796df",
+      "page_url": "https://civitai.com/models/2990835?modelVersionId=3391453",
+      "version_id": 3391453,
+      "file_id": 3280919,
+      "category": "概念与效果",
+      "family": "krea2"
+    }
+  ],
+  "duplicates_retained": [
+    {
+      "original_name": "Bandless Stockings.safetensors",
+      "sha256": "e0297cb1820de7eee9f9d850c11a17a89226dfaa090bd505dcf81458a5164301",
+      "note": "已随 2026-10-11 批次导入，未重复登记"
+    },
+    {
+      "original_name": "nnegret_krea2_linanime_v3.safetensors",
+      "sha256": "1bbe2d85dd9de4c493965d46601ec5aa03257c03cc2f91c7bdce5c62ed78a081",
+      "note": "已随 2026-10-20 批次导入，未重复登记"
+    },
+    {
+      "original_name": "undressing-kimono_Krea2_V1.0.safetensors",
+      "sha256": "16657c6d6febf42d6ca4d8182865e3cb5efd1200e31e88487c61583bb0177ae6",
+      "note": "已随 2026-10-11 批次导入，未重复登记"
+    }
+  ],
+  "skipped": [
+    {
+      "original_name": "@style_shionnnk-000850.safetensors",
+      "sha256": "b20f8fc96bb637d93b16dd4e79d63a93ff2a30b5e4fc6aa28059c96af17d5fd7",
+      "reason": "MOSS Image 底模 LoRA，按用户要求本轮不动"
+    },
+    {
+      "original_name": "BunnySlop_MOSS.safetensors",
+      "sha256": "5ba200c6e7b5fbc9230fe2bae7d118226d804364b9ccd80083d567c1138f32fe",
+      "reason": "MOSS Image 底模 LoRA，按用户要求本轮不动"
+    },
+    {
+      "original_name": "kzmynon-moss-v1_comfyui.safetensors",
+      "sha256": "8f0a79e0703fbd5cca11c6d5d97cdf3ce349f420c116c964aca59925f3c3f260",
+      "reason": "MOSS Image 底模 LoRA，按用户要求本轮不动"
+    },
+    {
+      "original_name": "sb10.safetensors",
+      "sha256": "99a888a219d9448520506193c137642a022bc5911a1ebb0cf5192d1268d76048",
+      "reason": "MOSS Image 底模 LoRA，按用户要求本轮不动"
+    },
+    {
+      "original_name": "style-moss-image-base-epoch-07.safetensors",
+      "sha256": "77d101c2d5af8895a006e682001b15583c295c314a91610247c2b6141c1ff635",
+      "reason": "MOSS Image 底模 LoRA，按用户要求本轮不动"
+    },
+    {
+      "original_name": "umina_style3_moss_uma_v1.safetensors",
+      "sha256": "3735d2db5686ec5a13a55bc9bb43a3682c5a24a0fb78df7adcec428c4fb4640c",
+      "reason": "MOSS Image 底模 LoRA，按用户要求本轮不动"
+    },
+    {
+      "original_name": "mossImage_base_pruned_int8.safetensors",
+      "sha256": null,
+      "reason": "MOSS 底模权重（INT8），按用户要求本轮不动，未计算本机摘要"
+    },
+    {
+      "original_name": "mossImage_base_txt_int8.safetensors",
+      "sha256": null,
+      "reason": "MOSS 底模权重（INT8），按用户要求本轮不动，未计算本机摘要"
+    },
+    {
+      "original_name": "flux2-vae.safetensors",
+      "sha256": "868fe7b343cc8f3a19dbcfcafbc3d5f888802be3f89bd81b65b3621a066ce8f3",
+      "reason": "Civitai 身份不是 LoRA（VAE），不属于本批 LoRA 整理范围，原件保留"
+    },
+    {
+      "original_name": "CandlelitRevelry_Anima-000007.safetensors",
+      "sha256": "7725883b9a75dcbb2233f9a11a0c853ecce21ce88dcae2c34103e04302c392c4",
+      "reason": "已登记 Anima 资产的运行文件已在 2026-10-24 Anima 资产退役范围移除，不重复导入"
+    },
+    {
+      "original_name": "undressing kimono_anima_V1.0.safetensors",
+      "sha256": "3289efca1c8d8f0fbeffafbed93870d88ccf4a9ae4be54b4588da5fdea096aae",
+      "reason": "已登记 Anima 资产的运行文件已在 2026-10-24 Anima 资产退役范围移除，不重复导入"
+    }
+  ],
+  "validation": {
+    "full_target_sha256": true,
+    "exact_public_version_file": true,
+    "cards_and_loader_enumeration": true,
+    "existing_identity_and_personal_fields_preserved": true,
+    "existing_model_cache_rows_before": 340,
+    "existing_lora_cache_rows_before": 321,
+    "lora_cache_rows_after": 326,
+    "autov3_index_rows_before": 338,
+    "autov3_index_rows_after": 343,
+    "old_index_rows_preserved": true,
+    "queue_empty_before_after": true,
+    "preview_downloaded_count": 0,
+    "preview_pending_count": 5,
+    "preview_pending_reason": "LoRA Manager 下载器使用应用级代理 127.0.0.1:10081，本轮该端口未监听，连接失败触发连通性冷却并返回离线提示；5 张官方静图未取到，后续代理恢复后可在管理器补图",
+    "unit_tests": 32,
+    "source_tests": 26,
+    "standardization_tests": 47,
+    "catalogue_tests": 36,
+    "gpu_tested": false,
+    "service_started_for_registration": false,
+    "service_restarted": false,
+    "full_library_rescan": false,
+    "duplicates_skipped": 3
+  },
+  "timings_seconds": {
+    "plan": 13.7,
+    "apply": 24.7
+  },
+  "private_receipt_id": "lora-import-20261024/import-20261024-212746-125533",
+  "rollback": "Download originals were removed after verified registration at the user's explicit request. Rollback reads this batch's journal.jsonl and completed-assets.json for the exact path/hash pairs, moves only this batch's five weights and sidecars out of the model tree, and drops only these five cards and loader entries; never replace the online SQLite with the prior backup. Re-download by version/file ID and confirm the full SHA-256 before placing any weight again."
+}
