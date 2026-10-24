@@ -32,7 +32,31 @@
 
 - 一次性成本：Tag 读取索引构建 2.0–2.2 s、tags DB +48.9 MiB（+9.6%），在 server ready 后的 warm 线程执行；warm 链首跑约 3.5 s（原 Tag warm 89.9–136 s）。
 - 语义等价：生产副本 32 组 filters/query 组合新旧 `items`/`total`/顺序完全一致，另 16 组与改动前原版逐字段一致；全测试目录 **138 OK / 1 skip**，`py_compile` 通过。
-- 隔离实例 `interaction` 基准：见 `temp/startup-warmup/interaction-bench.md`（before/after 在提交时回填）。
+
+## 隔离实例 HTTP 端到端 A/B
+
+同树同数据（生产数据副本）、8399 独立端口、串行单实例；before = 仅启动优化提交 `9b8639b5b`，after = 本提交。原始 JSON 见 `G:\ComfyUI-local\validation\startup-warmup-20261024\results\interaction-*.json`，汇总见 `temp/startup-warmup/interaction-bench.md`。
+
+| 场景 | before | after |
+|---|---|---|
+| 启动→listen | 38.6 s | 23.0 s |
+| warm 总等待 | 14.1 s | 13.6 s |
+| 编辑保存（description，不可补丁） | 5232 ms | 1125 ms |
+| 保存后立即 `library/index` | 3141 ms | 2543 ms（保留旧 warm 路径） |
+| 保存后立即 `library/prompts` | 2658 ms | 1020 ms |
+| 收藏切换（可补丁） | 1190 ms | 874 ms |
+| 可补丁写后立即 `library/index` | — | **22 ms** |
+| Tag 首次 `shape=group` | 700 ms | 16.3 ms |
+| Tag 首次 `shape=string` | 724 ms | 4.0 ms |
+| Tag 首次 `shape=atomic` | 232 ms | 16.7 ms |
+| Tag 首次 `theme` | 447 ms | 56.8 ms |
+| Tag 深 offset 3000 | 66 ms | 11.3 ms |
+| Tag `q=hair` / 空结果 q | 228 / 444 ms | 192 / 347 ms |
+| Tag complete | 226 ms | 196 ms |
+| 16 张缩略图冷并发生成 | 288.5 ms | 48.7 ms |
+| 首屏串行（status+index+tags/index） | 9.2 ms | 30.1 ms |
+
+方差说明：同代码基线三跑 save 4055/3527/5232 ms、保存后 index 2788/2831/3141 ms（±30–50%），after 以同轮相对幅度判读。剩余热点：无 scope 整库搜索约 192 ms、Tag 首次 favorite 4→15 ms 小回退、首屏 tags/index 4→26 ms（仍远低于人眼阈值）。
 
 ## 边界与未覆盖
 
