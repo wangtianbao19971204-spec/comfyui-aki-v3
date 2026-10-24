@@ -31,6 +31,8 @@ from .semantic_filter_counts import build_filter_masks, conditional_filter_count
 from .import_plan import plan_import
 from .prompt_merge import merge_preview, apply_merge, merged_source, known_merged_import
 from .selector_library import favorites_view, apply_favorites, apply_collection, update_collection, collection_groups, prompt_collection, COLLECTION_KINDS, CLASS_ROUTES
+from .startup_hooks import register_after_start
+from . import derived_cache
 
 # Logger导入
 import logging
@@ -528,6 +530,103 @@ def _library_signature():
     return (_prompt_data_signature(), _projection_signature())
 
 
+_DATA_UPGRADE_CHECKED = False
+
+# Per-row semantics are the expensive part of the read model: one binding hash,
+# the subcategory rules, the theme ids and the refinement regexes per prompt.
+# They only depend on the row's semantic binding and the projection document,
+# so derived_cache keeps them across restarts instead of recomputing them all.
+_SEMANTIC_ENTRIES = {}
+_SEMANTIC_CACHE = {"projection": (), "warned": False}
+
+
+def _semantic_cache_directory():
+    return os.path.join(PROMPT_STORE_DIR, "cache")
+
+
+def _semantic_cache_projection(signature=None):
+    """Projection identity stored in the cache payload: ``[size, mtime_ns]``."""
+    signature = _projection_signature() if signature is None else signature
+    if not signature:
+        return ()
+    return (signature[2], signature[0])
+
+
+def _semantic_cache_disabled():
+    """True when this process must use the uncached rebuild path."""
+    if os.environ.get("UW_DISABLE_SEMANTIC_CACHE") == "1":
+        if not _SEMANTIC_CACHE["warned"]:
+            logger.info("[Workbench] semantic cache disabled (UW_DISABLE_SEMANTIC_CACHE=1)")
+            _SEMANTIC_CACHE["warned"] = True
+        return True
+    if not derived_cache.AVAILABLE:
+        if not _SEMANTIC_CACHE["warned"]:
+            logger.warning("[Workbench] semantic cache disabled: msgpack/zstandard unavailable")
+            _SEMANTIC_CACHE["warned"] = True
+        return True
+    return False
+
+
+def _load_semantic_cache(projection_signature):
+    if _semantic_cache_disabled():
+        return None
+    return derived_cache.load(_semantic_cache_directory(), _semantic_cache_projection(projection_signature),
+                              REFINEMENT_VERSION)
+
+
+def _install_semantic_cache(entries, projection_signature):
+    _SEMANTIC_ENTRIES.clear()
+    _SEMANTIC_ENTRIES.update(entries)
+    _SEMANTIC_CACHE["projection"] = _semantic_cache_projection(projection_signature)
+
+
+def _schedule_semantic_cache_store():
+    """Persist the mapping after a short debounce; requests never wait for it."""
+    if _semantic_cache_disabled():
+        return
+    derived_cache.store(_semantic_cache_directory(), _SEMANTIC_CACHE["projection"],
+                        REFINEMENT_VERSION, _SEMANTIC_ENTRIES)
+
+
+def _upgrade_data_file_once(data):
+    """Add the timestamp fields once, lazily, after the first parse of the library.
+
+    ``initialize_data_file`` used to parse the 440 MB library during plugin
+    import just for this upgrade. The file identity is re-checked before writing
+    so a replacement that landed after this read is never overwritten.
+    """
+    global _DATA_UPGRADE_CHECKED, _PROMPT_DATA_CACHE, _PROMPT_DATA_CACHE_SIGNATURE
+    if _DATA_UPGRADE_CHECKED:
+        return
+    _DATA_UPGRADE_CHECKED = True
+    try:
+        needs_upgrade = "last_modified" not in data
+        for category in data.get("categories", []):
+            if "updated_at" not in category:
+                needs_upgrade = True
+                break
+            for prompt in category.get("prompts", []):
+                if "updated_at" not in prompt:
+                    needs_upgrade = True
+                    break
+            if needs_upgrade:
+                break
+        if not needs_upgrade:
+            return
+        if _prompt_data_signature() != _PROMPT_DATA_CACHE_SIGNATURE:
+            return
+        logger.info("📝 检测到数据文件缺少时间戳字段，正在升级...")
+        # Compatibility upgrades mutate their input; keep the read cache intact until commit.
+        upgraded_data = _ensure_data_compatibility(copy.deepcopy(data))
+        _atomic_save_json(DATA_FILE, upgraded_data, create_backup=True, compact=True)
+        logger.info("✅ 数据文件已升级，添加了时间戳字段")
+        _PROMPT_DATA_CACHE = upgraded_data
+        _PROMPT_DATA_CACHE_SIGNATURE = _prompt_data_signature()
+    except Exception as e:
+        logger.error(f"⚠️ 升级数据文件失败: {e}")
+        # 不影响启动，继续运行
+
+
 def _read_prompt_data_cached():
     global _PROMPT_DATA_CACHE, _PROMPT_DATA_CACHE_SIGNATURE
 
@@ -543,12 +642,14 @@ def _read_prompt_data_cached():
                 _PROMPT_DATA_CACHE = data
                 _PROMPT_DATA_CACHE_SIGNATURE = signature
                 _lib_trace("parse_data", signature=list(signature))
-                return data
+                _upgrade_data_file_once(data)
+                return _PROMPT_DATA_CACHE
         raise RuntimeError("词库正在更新，请重试读取")
 
 
 def _library_state_reset():
     """Drop every derived read model; the next read rebuilds it from source."""
+    _SEMANTIC_ENTRIES.clear()
     state = _LIBRARY_STATE
     state["version"] = None
     state["data"] = None
@@ -580,15 +681,35 @@ def _library_rebuild_locked():
     data = _read_prompt_data_cached()
     version = (_PROMPT_DATA_CACHE_SIGNATURE, _projection_signature())
     document = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+    cached = _load_semantic_cache(version[1])
     _library_state_reset()
     entries = _LIBRARY_STATE["entries"]
+    semantic_entries = {}
     indexed = True
+    reused = 0
+    computed = 0
     for category in data.get("categories", []) or []:
         for prompt in category.get("prompts", []) or []:
             identity = prompt.get("id")
-            entry = _library_entry(document, category, prompt)
-            if isinstance(identity, str) and identity and identity not in entries:
+            cacheable = isinstance(identity, str) and identity and identity not in entries
+            entry = None
+            binding = None
+            if cacheable and cached is not None:
+                stored = cached.get(identity)
+                if isinstance(stored, list) and len(stored) == 2 and isinstance(stored[1], dict):
+                    binding = semantic_binding(category, prompt)
+                    if stored[0] == binding:
+                        entry = {**prompt, "_semantic": stored[1]}
+                        reused += 1
+            if entry is None:
+                entry = _library_entry(document, category, prompt)
+                computed += 1
+                if cacheable:
+                    # ``_library_entry`` hashes the binding internally; the cache key needs it too.
+                    binding = semantic_binding(category, prompt)
+            if cacheable:
                 entries[identity] = entry
+                semantic_entries[identity] = [binding, entry["_semantic"]]
             else:
                 # Duplicate or missing identity: fall back to computing every row inline.
                 indexed = False
@@ -597,7 +718,12 @@ def _library_rebuild_locked():
     state["data"] = data
     state["document"] = document
     state["indexed"] = indexed
+    _install_semantic_cache(semantic_entries, version[1])
     _lib_trace("rebuild", signature=[list(version[0]), list(version[1])], indexed=indexed, entries=len(entries))
+    if not _semantic_cache_disabled():
+        logger.info("[Workbench] semantic cache rows: reused %d, recomputed %d", reused, computed)
+    if cached is None or computed:
+        _schedule_semantic_cache_store()
     return state
 
 
@@ -817,8 +943,8 @@ def _cache_prompt_data(data, changed_ids=None):
     """Install a just-committed library document.
 
     ``changed_ids`` names every prompt the caller rewrote, so the derived projection
-    is patched instead of dropped: the next read reuses ~93k bindings and only
-    recomputes the touched rows. Anything ambiguous falls back to a full rebuild.
+    is patched instead of dropped: the next read reuses every unchanged binding and
+    only recomputes the touched rows. Anything ambiguous falls back to a full rebuild.
     """
     global _PROMPT_DATA_CACHE, _PROMPT_DATA_CACHE_SIGNATURE
 
@@ -836,6 +962,7 @@ def _cache_prompt_data(data, changed_ids=None):
             return
         entries = state["entries"]
         document = state["document"]
+        cache_enabled = not _semantic_cache_disabled()
         wanted = {str(identity) for identity in changed_ids if identity}
         found = set()
         total = 0
@@ -844,10 +971,15 @@ def _cache_prompt_data(data, changed_ids=None):
                 total += 1
                 identity = prompt.get("id")
                 if identity in wanted:
-                    entries[identity] = _library_entry(document, category, prompt)
+                    entry = _library_entry(document, category, prompt)
+                    entries[identity] = entry
+                    if cache_enabled:
+                        _SEMANTIC_ENTRIES[identity] = [semantic_binding(category, prompt), entry["_semantic"]]
                     found.add(identity)
         for identity in wanted - found:
             entries.pop(identity, None)
+            if cache_enabled:
+                _SEMANTIC_ENTRIES.pop(identity, None)
         if len(entries) != total:
             # A caller under-reported its change set; rebuild rather than serve a stale view.
             _lib_trace("cache_reset", reason="count", entries=len(entries), total=total)
@@ -855,6 +987,9 @@ def _cache_prompt_data(data, changed_ids=None):
             return
         state["data"] = data
         state["version"] = version
+        if cache_enabled:
+            _SEMANTIC_CACHE["projection"] = _semantic_cache_projection(version[1])
+            _schedule_semantic_cache_store()
         # A favourite, a usage stamp, a note or a preview swap keeps its row in place,
         # so the 100k-row ordering can be patched instead of rebuilt (measured 721 ms).
         if _patch_derived_caches(state, data, found):
@@ -3089,7 +3224,7 @@ async def mark_prompt_used(request):
     except Exception as e:
         return web.json_response({"error": str(e)}, status=500)
 
-# 确保在启动时 data.json 文件存在，如果不存在则创建一个空的结构
+# 确保在启动时 data.json 文件存在；存在性检查保持廉价，词库解析推迟到第一次读取
 def initialize_data_file():
     # V52+: Prompt Selector has one canonical store owned by WeiLin. Legacy Gallery
     # folders are deliberately not scanned or modified. Copy data.json and preview/
@@ -3132,38 +3267,8 @@ def initialize_data_file():
             _atomic_save_json(DATA_FILE, fallback_data, create_backup=False)
             logger.error("⚠️ 默认词库文件不存在，已创建空词库结构")
 
-    # === 新增：升级现有数据文件，添加时间戳字段 ===
-    # 如果 data.json 已存在，检查并添加缺失的时间戳字段
-    if os.path.exists(DATA_FILE):
-        try:
-            existing_data = _read_prompt_data_cached()
-
-            # 检查是否缺少 last_modified 字段
-            needs_upgrade = "last_modified" not in existing_data
-
-            # 检查分类和提示词是否缺少时间戳
-            for category in existing_data.get("categories", []):
-                if "updated_at" not in category:
-                    needs_upgrade = True
-                    break
-                for prompt in category.get("prompts", []):
-                    if "updated_at" not in prompt:
-                        needs_upgrade = True
-                        break
-                if needs_upgrade:
-                    break
-
-            # 如果需要升级，使用 _ensure_data_compatibility 添加时间戳
-            if needs_upgrade:
-                logger.info("📝 检测到数据文件缺少时间戳字段，正在升级...")
-                # Compatibility upgrades mutate their input; keep the read cache intact until commit.
-                upgraded_data = _ensure_data_compatibility(copy.deepcopy(existing_data))
-                _atomic_save_json(DATA_FILE, upgraded_data, create_backup=True, compact=True)
-                logger.info("✅ 数据文件已升级，添加了时间戳字段")
-
-        except Exception as e:
-            logger.error(f"⚠️ 升级数据文件失败: {e}")
-            # 不影响启动，继续运行
+    # 解析与时间戳升级不在这里做：_upgrade_data_file_once 在第一次读取解析后
+    # 执行一次，避免在插件导入期解析 440 MB 词库。
 
 # 在插件加载时调用初始化
 initialize_data_file()
@@ -3172,9 +3277,9 @@ initialize_data_file()
 def _warm_library_caches(include_packed=True):
     """Precompute the reviewed library views so the first user request is not the cold one.
 
-    The gzip snapshot is only consumed by the node's whole-library fetch, so the
-    after-write warm-up skips it: compressing 172 MB costs seconds and no panel read
-    waits on it.
+    The gzip snapshot is only consumed by the node's whole-library fetch, so neither
+    the start-up nor the after-write warm-up builds it: compressing 172 MB costs
+    seconds and no panel read waits on it.
     """
     _tune_library_gc()
     _reviewed_library_data()
@@ -3240,19 +3345,22 @@ def _request_library_warm(delay=0.0, include_packed=False):
         thread.start()
 
 
-def _schedule_library_warmup(delay=0.0):
-    """Warm the read model as soon as the plugin loads.
+def _start_heavy_startup_tasks():
+    """Warm the read model once ComfyUI's HTTP application is starting.
 
-    The warm-up holds the read locks for the projection pass (~2-3 s on the current
-    100k-prompt library). Running it during ComfyUI's own start-up, before the HTTP port
-    opens, keeps that window off the user's path; the previous 8 s delay pushed it into
-    the first seconds of serving instead.
+    The projection pass is CPU-heavy and only serves the workbench itself, so it
+    stays off the plugin import path and runs from a registered start-up job.
+    The gzip snapshot is only read by the legacy whole-library fetch, so it is
+    not built here; ``_packed_library_payload`` still builds it on first use.
     """
-    _request_library_warm(delay=delay, include_packed=True)
+    started = time.perf_counter()
+    _warm_library_caches(include_packed=False)
+    logger.info("[Workbench] Library caches warmed in %.1f s; the next open is served from cache.",
+                time.perf_counter() - started)
 
 
 try:
     if os.environ.get("UW_SKIP_LIBRARY_WARMUP") != "1":
-        _schedule_library_warmup()
+        register_after_start(_start_heavy_startup_tasks, delay=1.0)
 except Exception as error:  # noqa: BLE001
     logger.warning(f"[Workbench] Library warm-up could not be scheduled: {error}")

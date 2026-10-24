@@ -4,6 +4,7 @@ from contextlib import closing, contextmanager
 from pathlib import Path
 import json
 import logging
+import os
 import sqlite3
 import threading
 import time
@@ -51,6 +52,86 @@ def _category_lock():
         lock = threading.RLock()
         globals()['_CATEGORY_LOCK'] = lock
     return lock
+
+
+# 目录树（区域/子夹/计数 + 「tags 串」分流）只有几百条，重算却要把 29 万行分组一遍；
+# 按 tags 库 revision 存一份 JSON，重启后连 532MB 库的冷读都省掉。版本/规则不符或
+# 文件损坏时整体忽略并重算，写盘走 daemon 线程 + 临时文件替换，失败只警告。
+# 改 categories() 的返回结构时把 _CATEGORY_CACHE_FORMAT +1，旧文件随之作废。
+_CATEGORY_CACHE_FILE = None
+_CATEGORY_CACHE_FORMAT = 1
+_CATEGORY_CACHE_DISABLED_LOGGED = False
+
+
+def _category_cache_path():
+    """Lazy: partial-source harnesses may import this module without the prompt store."""
+    global _CATEGORY_CACHE_FILE
+    if _CATEGORY_CACHE_FILE is None:
+        from . import prompt_selector as prompt_store
+        _CATEGORY_CACHE_FILE = Path(prompt_store.PROMPT_STORE_DIR) / 'cache' / 'tag_categories.v1.json'
+    return _CATEGORY_CACHE_FILE
+
+
+def _category_cache_rules():
+    return {'format': _CATEGORY_CACHE_FORMAT, 'string_flags': STRING_FLAGS_VERSION,
+            'word_min': STRING_WORD_MIN, 'ratio_limit': STRING_GROUP_RATIO,
+            'string_bucket': SHOW_STRING_BUCKET}
+
+
+def _category_cache_enabled():
+    if os.environ.get('UW_DISABLE_TAG_CATEGORY_CACHE') != '1':
+        return True
+    global _CATEGORY_CACHE_DISABLED_LOGGED
+    if not _CATEGORY_CACHE_DISABLED_LOGGED:
+        _CATEGORY_CACHE_DISABLED_LOGGED = True
+        logger.info("[Workbench] Tag 目录缓存已禁用 (UW_DISABLE_TAG_CATEGORY_CACHE=1)")
+    return False
+
+
+def _read_category_cache(revision):
+    if not _category_cache_enabled():
+        return None
+    try:
+        path = _category_cache_path()
+        document = json.loads(path.read_text(encoding='utf-8'))
+    except FileNotFoundError:
+        return None
+    except Exception as error:  # noqa: BLE001 - a bad cache must never block the panel
+        logger.warning("[Workbench] Tag 目录缓存无法读取，将重算: %s", error)
+        return None
+    if not isinstance(document, dict) or document.get('rules') != _category_cache_rules() \
+            or document.get('revision') != revision:
+        return None
+    payload = document.get('payload')
+    if not isinstance(payload, dict) or payload.get('revision') != revision:
+        return None
+    logger.info("[Workbench] Tag 目录缓存已加载（%s）", revision)
+    return payload
+
+
+def _write_category_cache(payload):
+    if not _category_cache_enabled():
+        return
+    try:
+        path = _category_cache_path()
+        text = json.dumps({'rules': _category_cache_rules(), 'revision': payload['revision'],
+                           'payload': payload}, ensure_ascii=False)
+    except Exception as error:  # noqa: BLE001
+        logger.warning("[Workbench] Tag 目录缓存无法序列化: %s", error)
+        return
+
+    def writer():
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            temporary = path.parent / (path.name + '.' + uuid.uuid4().hex + '.tmp')
+            temporary.write_text(text, encoding='utf-8')
+            os.replace(temporary, path)
+            logger.info("[Workbench] Tag 目录缓存已写入（%s，%.1f KB）", payload['revision'],
+                        len(text.encode('utf-8')) / 1024.0)
+        except Exception as error:  # noqa: BLE001 - cache write is best effort
+            logger.warning("[Workbench] Tag 目录缓存写入失败: %s", error)
+
+    threading.Thread(target=writer, name="uw-tag-category-cache", daemon=True).start()
 
 
 class TagConflict(ValueError):
@@ -273,21 +354,24 @@ class TagLibrary:
             with _category_lock():
                 if _CATEGORY_CACHE['payload'] is not None and _CATEGORY_CACHE['revision'] == revision:
                     return _CATEGORY_CACHE['payload']
-                groups = [dict(row) for row in conn.execute('SELECT * FROM tag_groups ORDER BY create_time,id_index')]
-                children = [dict(row) for row in conn.execute('SELECT * FROM tag_subgroups ORDER BY create_time,id_index')]
-                counts = {row[0]: row[1] for row in conn.execute('SELECT g_uuid,count(*) FROM tag_tags GROUP BY g_uuid')}
-                member_counts = {row[0]: row[1] for row in conn.execute(
-                    'SELECT g_uuid,count(*) FROM workbench_tag_folder_members GROUP BY g_uuid')}
-                layout = self.string_layout(conn, self.text_revision_of(conn))
-                for group in groups:
-                    group['groups'] = [{**row, 'count': counts.get(row['g_uuid'], 0),
-                                        'member_count': member_counts.get(row['g_uuid'], 0)}
-                                       for row in children if row['p_uuid'] == group['p_uuid']]
-                split = self._apply_string_split(groups, layout)
-                payload = {'groups': groups, 'total': sum(counts.values()), 'revision': revision}
-                payload['string_group'] = STRING_GROUP_UUID
-                payload['string_rules'] = {'word_min': STRING_WORD_MIN, 'ratio_limit': STRING_GROUP_RATIO}
-                payload['string_moved'] = split
+                payload = _read_category_cache(revision)
+                if payload is None:
+                    groups = [dict(row) for row in conn.execute('SELECT * FROM tag_groups ORDER BY create_time,id_index')]
+                    children = [dict(row) for row in conn.execute('SELECT * FROM tag_subgroups ORDER BY create_time,id_index')]
+                    counts = {row[0]: row[1] for row in conn.execute('SELECT g_uuid,count(*) FROM tag_tags GROUP BY g_uuid')}
+                    member_counts = {row[0]: row[1] for row in conn.execute(
+                        'SELECT g_uuid,count(*) FROM workbench_tag_folder_members GROUP BY g_uuid')}
+                    layout = self.string_layout(conn, self.text_revision_of(conn))
+                    for group in groups:
+                        group['groups'] = [{**row, 'count': counts.get(row['g_uuid'], 0),
+                                            'member_count': member_counts.get(row['g_uuid'], 0)}
+                                           for row in children if row['p_uuid'] == group['p_uuid']]
+                    split = self._apply_string_split(groups, layout)
+                    payload = {'groups': groups, 'total': sum(counts.values()), 'revision': revision}
+                    payload['string_group'] = STRING_GROUP_UUID
+                    payload['string_rules'] = {'word_min': STRING_WORD_MIN, 'ratio_limit': STRING_GROUP_RATIO}
+                    payload['string_moved'] = split
+                    _write_category_cache(payload)
                 _CATEGORY_CACHE['revision'] = revision
                 _CATEGORY_CACHE['payload'] = payload
                 return payload
