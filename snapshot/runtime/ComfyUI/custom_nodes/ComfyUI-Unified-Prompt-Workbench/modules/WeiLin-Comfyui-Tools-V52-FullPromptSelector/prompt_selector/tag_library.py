@@ -76,6 +76,62 @@ def _log_read_index_disabled():
         logger.info("[Workbench] Tag 读取索引已禁用 (UW_DISABLE_TAG_READ_INDEX=1)")
 
 
+# 子串搜索/自动补全：LIKE '%term%' 用不上索引，一次只能全表扫 29.8 万行 / 9760 万字符
+# （q=hair 约 185 ms、空结果约 340 ms）。这里把 lower(text)/lower(desc) 的 trigram FTS5
+# 放进可随时删除重建的 PROMPT_STORE_DIR/cache/tag_search.v1.db（不往用户 tags 库塞
+# ~288 MB 索引，避免拖慢 dao.py 的启动期 integrity_check），用户库只加一张很小的变更
+# 日志表 + 3 个触发器；搜索前把日志增量回放进 cache。trigram 只覆盖 ≥3 字符查询，
+# 1–2 字符/带过滤的查询仍走原 SQL。日志积压过多时直接重建 cache。
+SEARCH_INDEX_VERSION = 1
+SEARCH_INDEX_DISABLED_LOGGED = False
+SEARCH_CACHE_TABLE = 'tag_search'
+SEARCH_META_TABLE = 'search_meta'
+SEARCH_JOURNAL_TABLE = 'workbench_tag_search_journal'
+SEARCH_SCHEMA_TABLE = 'workbench_tag_search_meta'
+SEARCH_TRIGGERS = ('workbench_tag_search_insert', 'workbench_tag_search_update', 'workbench_tag_search_delete')
+SEARCH_MIN_QUERY = 3
+SEARCH_REBUILD_PENDING = 5000
+SEARCH_APPLY_BATCH = 500
+# 同步/重建与内存顺序表的进程级状态（按 tags 库路径区分）。
+_SEARCH_CACHE_FILE = None
+_SEARCH_ORDER = {}
+_SEARCH_BUILDING = set()
+_SEARCH_BUILDING_LOCK = threading.Lock()
+_SEARCH_ORDER_LOCK = threading.Lock()
+
+
+def _log_search_index_disabled():
+    global SEARCH_INDEX_DISABLED_LOGGED
+    if not SEARCH_INDEX_DISABLED_LOGGED:
+        SEARCH_INDEX_DISABLED_LOGGED = True
+        logger.info("[Workbench] Tag 搜索索引已禁用 (UW_DISABLE_TAG_SEARCH_INDEX=1)")
+
+
+def _search_cache_enabled():
+    return os.environ.get('UW_DISABLE_TAG_SEARCH_INDEX') != '1'
+
+
+def _search_cache_path():
+    """Lazy: partial-source harnesses may import this module without the prompt store."""
+    global _SEARCH_CACHE_FILE
+    if _SEARCH_CACHE_FILE is None:
+        try:
+            from . import prompt_selector as prompt_store
+        except ImportError:
+            return None
+        _SEARCH_CACHE_FILE = Path(prompt_store.PROMPT_STORE_DIR) / 'cache' / 'tag_search.v1.db'
+    return _SEARCH_CACHE_FILE
+
+
+# SQLite 的 LIKE / lower() 只折叠 ASCII 字母；cache 里的文本与查询用同一套折叠，
+# 因此 trigram 短语命中与旧 LIKE 子串命中逐条等价（含中文/下划线/空格/大小写）。
+_ASCII_FOLD = str.maketrans({chr(code): chr(code + 32) for code in range(ord('A'), ord('Z') + 1)})
+
+
+def _ascii_fold(value):
+    return str(value).translate(_ASCII_FOLD)
+
+
 def _category_lock():
     """Lazy so partial-source harnesses that drop module-level calls still work."""
     lock = globals().get('_CATEGORY_LOCK')
@@ -683,6 +739,368 @@ class TagLibrary:
 
         threading.Thread(target=build, name='uw-tag-read-index', daemon=True).start()
 
+    # ------------------------------------------------------------------
+    # 子串搜索索引：trigram FTS5 cache + tags 库变更日志
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _search_expression(forms):
+        """FTS5 MATCH query: lower() 后的 trigram 短语 = 旧 LIKE 的 ASCII 大小写折叠子串。"""
+        parts = ['tag_text : "' + _ascii_fold(form).replace('"', '""') + '"' for form in forms]
+        parts.append('tag_desc : "' + _ascii_fold(forms[0]).replace('"', '""') + '"')
+        return ' OR '.join(parts)
+
+    @staticmethod
+    def _search_cache_meta(cache_path):
+        if not cache_path or not os.path.isfile(cache_path):
+            return None
+        try:
+            connection = sqlite3.connect(cache_path, timeout=10)
+            try:
+                row = connection.execute('SELECT format, applied_seq, built_revision FROM ' + SEARCH_META_TABLE +
+                                         ' WHERE id=1').fetchone()
+            finally:
+                connection.close()
+        except sqlite3.Error:
+            return None
+        if row is None or row[0] != SEARCH_INDEX_VERSION:
+            return None
+        return {'applied_seq': row[1], 'built_revision': row[2]}
+
+    @staticmethod
+    def _search_schema_version(conn):
+        try:
+            row = conn.execute('SELECT version FROM ' + SEARCH_SCHEMA_TABLE + ' WHERE id=1').fetchone()
+            missing = conn.execute(
+                "SELECT count(*) FROM sqlite_master WHERE type='trigger' AND name IN (?,?,?)",
+                SEARCH_TRIGGERS).fetchone()[0]
+        except sqlite3.OperationalError:
+            return None
+        if row is None or missing != len(SEARCH_TRIGGERS):
+            return None
+        return row[0]
+
+    def _prepare_search_schema(self, conn):
+        """Create the tiny change journal + triggers in the tags DB; a version bump recreates them."""
+        if self._search_schema_version(conn) == SEARCH_INDEX_VERSION:
+            return
+        with conn:
+            conn.execute('BEGIN IMMEDIATE')
+            for name in SEARCH_TRIGGERS:
+                conn.execute(f'DROP TRIGGER IF EXISTS {name}')
+            conn.execute(f'DROP TABLE IF EXISTS {SEARCH_JOURNAL_TABLE}')
+            conn.execute(f'DROP TABLE IF EXISTS {SEARCH_SCHEMA_TABLE}')
+            conn.execute(f'''CREATE TABLE {SEARCH_JOURNAL_TABLE} (
+                seq INTEGER PRIMARY KEY AUTOINCREMENT, id_index INTEGER NOT NULL,
+                operation TEXT NOT NULL, tag_text TEXT, tag_desc TEXT)''')
+            conn.execute(f'CREATE TABLE {SEARCH_SCHEMA_TABLE} (id INTEGER PRIMARY KEY, version INTEGER NOT NULL)')
+            conn.execute(f'INSERT INTO {SEARCH_SCHEMA_TABLE} VALUES (1, ?)', (SEARCH_INDEX_VERSION,))
+            for index, (event, source) in enumerate((('insert', 'NEW'), ('update', 'NEW'), ('delete', 'OLD'))):
+                if event == 'delete':
+                    body = (f'INSERT INTO {SEARCH_JOURNAL_TABLE} (id_index, operation, tag_text, tag_desc) '
+                            f"VALUES ({source}.id_index, 'delete', NULL, NULL);")
+                else:
+                    body = (f'INSERT INTO {SEARCH_JOURNAL_TABLE} (id_index, operation, tag_text, tag_desc) '
+                            f"VALUES ({source}.id_index, 'upsert', lower({source}.text), lower({source}.desc));")
+                conn.execute(f'CREATE TRIGGER {SEARCH_TRIGGERS[index]} AFTER {event.upper()} ON tag_tags '
+                             f'BEGIN {body} END')
+
+    def _build_search_cache(self):
+        """Snapshot the tags DB into a fresh trigram FTS cache file, then atomically replace it."""
+        path = _search_cache_path()
+        if path is None:
+            raise RuntimeError('Tag 搜索缓存目录不可用')
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = path.parent / (path.name + '.' + uuid.uuid4().hex + '.tmp')
+        if temporary.exists():
+            temporary.unlink()
+        started = time.perf_counter()
+        main = sqlite3.connect(self.path, timeout=60)
+        try:
+            main.execute('ATTACH DATABASE ? AS search_cache', (str(temporary),))
+            main.execute('PRAGMA search_cache.journal_mode=OFF')
+            main.execute('PRAGMA search_cache.synchronous=OFF')
+            main.execute('BEGIN')
+            seq = main.execute('SELECT COALESCE(MAX(seq),0) FROM ' + SEARCH_JOURNAL_TABLE).fetchone()[0]
+            revision = main.execute('SELECT value FROM workbench_tag_revision WHERE id=1').fetchone()[0]
+            rows = main.execute('SELECT count(*) FROM tag_tags').fetchone()[0]
+            main.execute(f'CREATE VIRTUAL TABLE search_cache.{SEARCH_CACHE_TABLE} USING fts5('
+                         "tag_text, tag_desc, content='', contentless_delete=1, tokenize='trigram case_sensitive 1')")
+            main.execute(f'CREATE TABLE search_cache.{SEARCH_META_TABLE} (id INTEGER PRIMARY KEY, '
+                         'format INTEGER NOT NULL, applied_seq INTEGER NOT NULL, built_revision INTEGER NOT NULL, '
+                         'rows INTEGER NOT NULL)')
+            main.execute(f'INSERT INTO search_cache.{SEARCH_META_TABLE} VALUES (1, ?, ?, ?, ?)',
+                         (SEARCH_INDEX_VERSION, seq, revision, rows))
+            main.execute(f'INSERT INTO search_cache.{SEARCH_CACHE_TABLE}(rowid, tag_text, tag_desc) '
+                         "SELECT id_index, COALESCE(lower(text),''), COALESCE(lower(desc),'') FROM tag_tags")
+            main.commit()
+            main.execute('DETACH DATABASE search_cache')
+        except Exception:
+            try:
+                main.close()
+            except sqlite3.Error:
+                pass
+            try:
+                temporary.unlink()
+            except OSError:
+                pass
+            raise
+        main.close()
+        writer = sqlite3.connect(str(temporary), timeout=60)
+        try:
+            writer.execute('PRAGMA journal_mode=DELETE')
+            writer.execute('PRAGMA synchronous=NORMAL')
+        finally:
+            writer.close()
+        try:
+            os.replace(temporary, path)
+        except OSError:
+            # 目标文件正被一个搜索连接占用：保留旧 cache，清掉临时文件，下次再试。
+            try:
+                temporary.unlink()
+            except OSError:
+                pass
+            raise
+        # 快照里已经包含 seq 之前的全部变更，清掉避免下次重复回放（崩溃时重复回放也是幂等的）。
+        with self.connection() as conn, conn:
+            conn.execute('BEGIN IMMEDIATE')
+            conn.execute(f'DELETE FROM {SEARCH_JOURNAL_TABLE} WHERE seq <= ?', (seq,))
+        logger.info("[Workbench] Tag 搜索索引已建立（%d 行，%.1f s，%.1f MB）",
+                    rows, time.perf_counter() - started, path.stat().st_size / 1048576.0)
+
+    def _search_sync(self, force_rebuild=False):
+        """Apply the change journal to the cache; rebuild it when missing/stale/too far behind."""
+        if not _search_cache_enabled():
+            _log_search_index_disabled()
+            return False
+        path = _search_cache_path()
+        if path is None:
+            return False
+        meta = None if force_rebuild else self._search_cache_meta(path)
+        try:
+            with self.connection() as conn:
+                if self._search_schema_version(conn) != SEARCH_INDEX_VERSION:
+                    return False
+                revision = conn.execute('SELECT value FROM workbench_tag_revision WHERE id=1').fetchone()[0]
+                pending = conn.execute(f'SELECT count(*) FROM {SEARCH_JOURNAL_TABLE}').fetchone()[0]
+        except sqlite3.OperationalError:
+            return False
+        if meta is None or meta['built_revision'] > revision or pending > SEARCH_REBUILD_PENDING:
+            self._build_search_cache()
+            return True
+        applied = meta['applied_seq']
+        while True:
+            with self.connection() as conn:
+                rows = conn.execute(f'SELECT seq, id_index, operation, tag_text, tag_desc FROM {SEARCH_JOURNAL_TABLE} '
+                                    'WHERE seq > ? ORDER BY seq LIMIT ?', (applied, SEARCH_APPLY_BATCH)).fetchall()
+                if not rows:
+                    if applied:
+                        with conn:
+                            conn.execute('BEGIN IMMEDIATE')
+                            conn.execute(f'DELETE FROM {SEARCH_JOURNAL_TABLE} WHERE seq <= ?', (applied,))
+                    return True
+                last = rows[-1][0]
+            cache = sqlite3.connect(path, timeout=30)
+            try:
+                cache.execute('PRAGMA synchronous=NORMAL')
+                with cache:
+                    for _seq, id_index, operation, tag_text, tag_desc in rows:
+                        cache.execute(f'DELETE FROM {SEARCH_CACHE_TABLE} WHERE rowid=?', (id_index,))
+                        if operation == 'upsert':
+                            cache.execute(f'INSERT INTO {SEARCH_CACHE_TABLE}(rowid, tag_text, tag_desc) '
+                                          'VALUES (?,?,?)', (id_index, tag_text or '', tag_desc or ''))
+                    cache.execute(f'UPDATE {SEARCH_META_TABLE} SET applied_seq=? WHERE id=1', (last,))
+            finally:
+                cache.close()
+            with self.connection() as conn, conn:
+                conn.execute('BEGIN IMMEDIATE')
+                conn.execute(f'DELETE FROM {SEARCH_JOURNAL_TABLE} WHERE seq <= ?', (last,))
+            applied = last
+            logger.info("[Workbench] Tag 搜索索引增量同步 %d 条（seq ≤ %d）", len(rows), last)
+
+    def prepare_search_index(self):
+        """Ensure journal/triggers exist and the FTS cache matches the tags DB (rebuild if needed)."""
+        if not _search_cache_enabled():
+            _log_search_index_disabled()
+            return False
+        if _search_cache_path() is None:
+            return False
+        with _SCHEMA_LOCK, self.connection() as conn:
+            previous = self._search_schema_version(conn)
+            self._prepare_search_schema(conn)
+        if previous != SEARCH_INDEX_VERSION:
+            _SEARCH_ORDER.pop(str(self.path), None)
+            self._search_sync(force_rebuild=True)
+        else:
+            self._search_sync()
+        return True
+
+    def warm_search_index(self):
+        """Post-ready warm: build/sync the FTS cache and the in-memory create_time order."""
+        if not _search_cache_enabled():
+            _log_search_index_disabled()
+            return False
+        if _search_cache_path() is None:
+            return False
+        key = str(self.path)
+        with _SEARCH_BUILDING_LOCK:
+            if key in _SEARCH_BUILDING:
+                return False
+            _SEARCH_BUILDING.add(key)
+        try:
+            started = time.perf_counter()
+            self.prepare_search_index()
+            with self.connection() as conn:
+                order = self._remember_search_order(conn)
+            ready = self._search_cache_meta(_search_cache_path()) is not None
+        except Exception as error:  # noqa: BLE001 - a failed warm-up only costs speed
+            logger.warning("[Workbench] Tag 搜索索引预热失败，将在首次搜索时重试: %s", error)
+            return False
+        finally:
+            with _SEARCH_BUILDING_LOCK:
+                _SEARCH_BUILDING.discard(key)
+        logger.info("[Workbench] Tag 搜索索引已就绪（%.1f s，内存顺序 %d 条）",
+                    time.perf_counter() - started, len(order))
+        return ready
+
+    def _schedule_search_index_sync(self):
+        """Single-flight background sync/rebuild for requests that arrive while the cache is stale."""
+        if not _search_cache_enabled():
+            _log_search_index_disabled()
+            return
+        if _search_cache_path() is None:
+            return
+        key = str(self.path)
+        with _SEARCH_BUILDING_LOCK:
+            if key in _SEARCH_BUILDING:
+                return
+
+        def run():
+            try:
+                self.warm_search_index()
+            except Exception as error:  # noqa: BLE001
+                logger.warning("[Workbench] Tag 搜索索引同步失败，继续用旧查询: %s", error)
+
+        threading.Thread(target=run, name='uw-tag-search-index', daemon=True).start()
+
+    @staticmethod
+    def _build_search_order(conn):
+        return array('i', (row[0] for row in conn.execute(
+            'SELECT id_index FROM tag_tags ORDER BY create_time DESC, id_index')))
+
+    def _search_order(self, conn):
+        """In-memory create_time/id_index order, rebuilt only when tag_tags changes (text revision)."""
+        key = str(self.path)
+        text_revision = self.text_revision_of(conn)
+        with _SEARCH_ORDER_LOCK:
+            cached = _SEARCH_ORDER.get(key)
+        if cached is None or cached[0] != text_revision:
+            return None
+        return cached[1]
+
+    def _remember_search_order(self, conn):
+        key = str(self.path)
+        text_revision = self.text_revision_of(conn)
+        with _SEARCH_ORDER_LOCK:
+            cached = _SEARCH_ORDER.get(key)
+            if cached is not None and cached[0] == text_revision:
+                return cached[1]
+        order = self._build_search_order(conn)
+        with _SEARCH_ORDER_LOCK:
+            _SEARCH_ORDER[key] = (text_revision, order)
+        return order
+
+    def _search_fast_numbers(self, conn, query, forms, offset, limit):
+        """FTS cache path for a plain ``q`` search; returns (total, ordered ids) or None to fall back."""
+        if not _search_cache_enabled() or len(query) < SEARCH_MIN_QUERY:
+            return None
+        if not all(ord(value[-1]) < 0x10ffff for value in forms):
+            return None
+        path = _search_cache_path()
+        if path is None or not os.path.isfile(path):
+            self._schedule_search_index_sync()
+            return None
+        try:
+            revision = conn.execute('SELECT value FROM workbench_tag_revision WHERE id=1').fetchone()[0]
+            if conn.execute(f'SELECT 1 FROM {SEARCH_JOURNAL_TABLE} LIMIT 1').fetchone() is not None:
+                self._schedule_search_index_sync()
+                return None
+        except sqlite3.OperationalError:
+            self._schedule_search_index_sync()
+            return None
+        order = self._search_order(conn)
+        if order is None:
+            self._schedule_search_index_sync()
+            return None
+        try:
+            cache = sqlite3.connect(path, timeout=10)
+            try:
+                meta = cache.execute('SELECT format, applied_seq, built_revision FROM ' + SEARCH_META_TABLE +
+                                     ' WHERE id=1').fetchone()
+                if meta is None or meta[0] != SEARCH_INDEX_VERSION or meta[2] > revision:
+                    self._schedule_search_index_sync()
+                    return None
+                candidates = [row[0] for row in cache.execute(
+                    f'SELECT rowid FROM {SEARCH_CACHE_TABLE} WHERE {SEARCH_CACHE_TABLE} MATCH ?',
+                    (self._search_expression(forms),))]
+            finally:
+                cache.close()
+        except sqlite3.Error as error:
+            logger.warning("[Workbench] Tag 搜索索引读取失败，回退旧查询: %s", error)
+            self._schedule_search_index_sync()
+            return None
+        total = len(candidates)
+        if total == 0:
+            return 0, array('i')
+        # 三层顺序与旧实现一致：精确（按 text,id_index）→ 前缀（按 text,id_index）→ 其余（create_time DESC,id_index）。
+        exact_match = 't.text IN (' + ','.join('?' for _ in forms) + ')'
+        range_condition = '(' + ' OR '.join(['(t.text>=? AND t.text<?)'] * len(forms)) + ')'
+        range_args = [bound for value in forms for bound in (value, value[:-1] + chr(ord(value[-1]) + 1))]
+        exact_count = conn.execute('SELECT count(*) FROM tag_tags t WHERE ' + exact_match, forms).fetchone()[0]
+        prefix_count = conn.execute('SELECT count(*) FROM tag_tags t WHERE ' + range_condition + ' AND NOT ' +
+                                    exact_match, [*range_args, *forms]).fetchone()[0]
+        rest_count = total - exact_count - prefix_count
+        if rest_count < 0:
+            logger.warning("[Workbench] Tag 搜索索引与 tags 库不一致（total=%d, exact=%d, prefix=%d），重建索引",
+                           total, exact_count, prefix_count)
+            self._schedule_search_index_sync()
+            return None
+        numbers = array('i')
+        skip = offset
+
+        def take(fetch, count):
+            nonlocal skip
+            if skip >= count:
+                skip -= count
+                return
+            take_count = min(limit - len(numbers), count - skip)
+            numbers.extend(fetch(skip, take_count))
+            skip = 0
+
+        take(lambda off, count: (row[0] for row in conn.execute(
+            'SELECT t.id_index FROM tag_tags t WHERE ' + exact_match +
+            ' ORDER BY t.text,t.id_index LIMIT ? OFFSET ?', [*forms, count, off])), exact_count)
+        if len(numbers) < limit:
+            take(lambda off, count: (row[0] for row in conn.execute(
+                'SELECT t.id_index FROM tag_tags t WHERE ' + range_condition + ' AND NOT ' + exact_match +
+                ' ORDER BY t.text,t.id_index LIMIT ? OFFSET ?', [*range_args, *forms, count, off])), prefix_count)
+        if len(numbers) < limit and rest_count > 0:
+            need = limit - len(numbers)
+            excluded = {row[0] for row in conn.execute(
+                'SELECT t.id_index FROM tag_tags t WHERE ' + range_condition, range_args)}
+            candidate_set = set(candidates)
+            for id_index in order:
+                if id_index in excluded or id_index not in candidate_set:
+                    continue
+                if skip:
+                    skip -= 1
+                    continue
+                numbers.append(id_index)
+                need -= 1
+                if need == 0:
+                    break
+        return total, numbers
+
     def _page_clauses(self, conn, query, forms, subgroup, group, favorite, collection, known_collections,
                       shape, scope, theme, indexed):
         """WHERE clauses shared by the fast path and the original fallback path.
@@ -792,7 +1210,8 @@ class TagLibrary:
         by_number = {row['id_index']: row for row in fetched}
         return [by_number[number] for number in row_numbers if number in by_number]
 
-    def _page_row_numbers(self, conn, query, forms, where, args, cache_key, offset, limit, indexed, fast_text):
+    def _page_row_numbers(self, conn, query, forms, where, args, cache_key, offset, limit, indexed, fast_text,
+                          plain_search):
         """Return ``(total, id_index array)`` for one page, honouring the historical slice cache."""
         cached = _PAGE_CACHE.get(cache_key)
         if cached is None:
@@ -804,6 +1223,15 @@ class TagLibrary:
         row_numbers = cached_slices.get((offset, limit))
         if row_numbers is not None:
             return total, row_numbers
+        if plain_search:
+            fast = self._search_fast_numbers(conn, query, forms, offset, limit)
+            if fast is not None:
+                total, row_numbers = fast
+                cached[0] = total
+                if len(cached_slices) >= _PAGE_SLICE_LIMIT:
+                    cached_slices.clear()
+                cached_slices[(offset, limit)] = row_numbers
+                return total, row_numbers
         if indexed and fast_text and query and all(ord(value[-1]) < 0x10ffff for value in forms):
             # 单遍：窗口函数顺便给出 total，排序键直接复刻旧的三段（精确/前缀/其余）顺序。
             # 只有 scope/形状这类可走索引的过滤才划算；无过滤的整库搜索仍用旧的分层查询。
@@ -920,8 +1348,13 @@ class TagLibrary:
             where = (' WHERE ' + ' AND '.join(clauses)) if clauses else ''
             cache_key = (revision, query, subgroup, group, favorite, collection,
                          tuple(known_collections or ()), shape, scope, theme)
+            plain_search = bool(query) and not (subgroup or group or favorite or collection or theme or
+                                                scope or shape)
+            # 单遍窗口查询只在有筛选时用（无筛选的 q 走 FTS cache）：group/favorite 这类
+            # 可索引筛选放进窗口查询后是 0.3–70 ms，比旧的三段扫描快一个数量级。
+            indexed_text = bool(query) and bool(scope or shape or subgroup or group or favorite)
             total, row_numbers = self._page_row_numbers(conn, query, forms, where, args, cache_key,
-                                                        offset, limit, indexed, bool(scope or shape))
+                                                        offset, limit, indexed, indexed_text, plain_search)
             rows = self._rows_by_numbers(conn, row_numbers)
             items = [self.entry(row) for row in rows]
             if query:

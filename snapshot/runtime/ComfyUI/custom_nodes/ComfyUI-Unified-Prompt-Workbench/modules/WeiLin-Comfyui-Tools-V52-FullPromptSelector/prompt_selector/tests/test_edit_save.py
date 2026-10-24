@@ -164,30 +164,37 @@ class EditSaveTests(unittest.TestCase):
         if thread is not None and thread.is_alive():
             thread.join(10.0)
 
-    def _decision(self, category, prompt):
-        return {'binding': self.module.semantic_binding(category, prompt),
-                'disposition': 'classified', 'primary_class': 'appearance',
-                'content_type': 'fragment', 'usage': 'positive', 'declared_usage': 'positive',
-                'model_scope': 'unknown', 'manual_search_eligible': True,
-                'random_pool_eligible': False, 'strict_model_pool_eligible': False,
-                'themes': [], 'subcategories': ['其他'], 'alternative_classes': [],
-                'count_markers': [], 'refinements': [], 'note': '',
-                'taxonomy_version': '2026-09-20-v1',
-                'subcategory_owners': {'其他': 'appearance'},
-                'semantic_review_status': 'user_confirmed'}
+    def _decision(self, category, prompt, disposition='classified'):
+        decision = {'binding': self.module.semantic_binding(category, prompt),
+                    'disposition': disposition, 'primary_class': 'appearance',
+                    'content_type': 'fragment', 'usage': 'positive',
+                    'declared_usage': 'positive', 'model_scope': 'unknown',
+                    'manual_search_eligible': True,
+                    'random_pool_eligible': False, 'strict_model_pool_eligible': False,
+                    'themes': [], 'subcategories': ['其他'], 'alternative_classes': [],
+                    'count_markers': [], 'refinements': [], 'note': '',
+                    'taxonomy_version': '2026-09-20-v1',
+                    'subcategory_owners': {'其他': 'appearance'},
+                    'semantic_review_status': 'user_confirmed'}
+        if disposition not in ('reviewed', 'classified'):
+            decision.update(manual_search_eligible=False, random_pool_eligible=False,
+                            strict_model_pool_eligible=False)
+        return decision
 
-    def _write_library(self, prompts, name='fixture', identity='cat-1'):
+    def _write_library(self, prompts, name='fixture', identity='cat-1', dispositions=None):
         category = _category(name, identity, prompts)
-        return self._write_categories([category])
+        return self._write_categories([category], dispositions)
 
-    def _write_categories(self, categories):
+    def _write_categories(self, categories, dispositions=None):
         data = {'version': '1.6', 'last_modified': '2026-01-01T00:00:00',
                 'settings': {'language': 'zh-CN', 'separator': ', ', 'save_selection': True},
                 'categories': categories}
+        dispositions = dispositions or {}
         decisions = {}
         for category in categories:
             for prompt in category['prompts']:
-                decisions[prompt['id']] = self._decision(category, prompt)
+                decisions[prompt['id']] = self._decision(
+                    category, prompt, dispositions.get(prompt['id'], 'classified'))
         projection = {'schema': 'S4-semantic-projection-v1', 'decisions': decisions,
                       'class_labels': {}}
         self.data_file.write_text(json.dumps(data, ensure_ascii=False), encoding='utf-8')
@@ -204,10 +211,12 @@ class EditSaveTests(unittest.TestCase):
         return {'primary_class': 'appearance', 'content_type': 'fragment',
                 'usage': 'positive', 'subcategories': ['其他']}
 
-    def _edit_payload(self, row, base_revision, **overrides):
-        return {'mode': 'edit', 'target_category_id': 'cat-1',
-                'prompt': {**row, **overrides}, 'base_revision': base_revision,
-                'classification': self._classification()}
+    def _edit_payload(self, row, base_revision, classification=True, **overrides):
+        payload = {'mode': 'edit', 'target_category_id': 'cat-1',
+                   'prompt': {**row, **overrides}, 'base_revision': base_revision}
+        if classification:
+            payload['classification'] = self._classification()
+        return payload
 
     def _prime(self, warm=False):
         """Parse + cache the library (and optionally build the derived read model)."""
@@ -216,12 +225,72 @@ class EditSaveTests(unittest.TestCase):
             self._warm_state()
         return data
 
-    def _warm_state(self):
+    def _warm_state(self, include_review=False):
         module = self.module
         module._reviewed_library_data()
         module._library_index_payload()
         module._library_page_payload('', '', 0, 30)
+        if include_review:
+            module._reviewed_library_data(True)
+            module._library_page_payload('', '', 0, 30, 'review')
         return module._LIBRARY_STATE
+
+    def _snapshot_state(self):
+        module = self.module
+        state = module._LIBRARY_STATE
+        snapshot = {
+            'view': state['views'].get(False),
+            'review_view': state['views'].get(True),
+            'index': state['index'],
+            'page': module._library_page_payload('', '', 0, 30),
+            'review_page': module._library_page_payload('', '', 0, 30, 'review'),
+            'rows': state['rows'].get(False),
+            'review_rows': state['rows'].get(True),
+            'ranges': state['ranges'].get(False),
+            'review_ranges': state['ranges'].get(True),
+            'view_index': dict(state['view_index'].get(False) or {}),
+            'review_view_index': dict(state['view_index'].get(True) or {}),
+            'row_index': dict(state['row_index'].get(False) or {}),
+            'review_row_index': dict(state['row_index'].get(True) or {}),
+        }
+        return snapshot
+
+    def _full_rebuild(self):
+        """Drop the derived models and rebuild them from the committed document."""
+        module = self.module
+        module._library_state_reset()
+        module._read_prompt_data_cached()
+        with module._PROMPT_FILE_LOCK, module._PROMPT_CACHE_LOCK:
+            module._library_rebuild_locked()
+        self._warm_state(include_review=True)
+        return module._LIBRARY_STATE
+
+    def _assert_incremental_matches_full(self, snapshot, revision):
+        """Every patched structure must equal the full rebuild, field by field."""
+        fresh = self._full_rebuild()
+        module = self.module
+
+        def canonical(value):
+            return json.dumps(value, ensure_ascii=False, sort_keys=True)
+
+        self.assertEqual(canonical(snapshot['view']), canonical(fresh['views'][False]))
+        self.assertEqual(canonical(snapshot['review_view']), canonical(fresh['views'][True]))
+        self.assertEqual(canonical(snapshot['index']), canonical(fresh['index']))
+        self.assertEqual(snapshot['index']['last_modified'], revision)
+        self.assertEqual(canonical(snapshot['rows']), canonical(fresh['rows'][False]))
+        self.assertEqual(canonical(snapshot['review_rows']), canonical(fresh['rows'][True]))
+        self.assertEqual(canonical(snapshot['ranges']), canonical(fresh['ranges'][False]))
+        self.assertEqual(canonical(snapshot['review_ranges']), canonical(fresh['ranges'][True]))
+        self.assertEqual(canonical(snapshot['view_index']), canonical(fresh['view_index'][False]))
+        self.assertEqual(canonical(snapshot['review_view_index']),
+                         canonical(fresh['view_index'][True]))
+        self.assertEqual(canonical(snapshot['row_index']), canonical(fresh['row_index'][False]))
+        self.assertEqual(canonical(snapshot['review_row_index']),
+                         canonical(fresh['row_index'][True]))
+        self.assertEqual(canonical(snapshot['page']),
+                         canonical(module._library_page_payload('', '', 0, 30)))
+        self.assertEqual(canonical(snapshot['review_page']),
+                         canonical(module._library_page_payload('', '', 0, 30, 'review')))
 
     def _wait_for(self, predicate, timeout=5.0):
         deadline = time.monotonic() + timeout
@@ -522,23 +591,128 @@ class EditSaveTests(unittest.TestCase):
                                    revision, description='cold state'))
             self.assertTrue(self._wait_for(lambda: len(warm_calls) == 2))
 
-    def test_semantic_change_drops_the_index_and_requests_the_warm(self):
-        data = self._write_library([_prompt('p1', 'one')])
+    def test_body_edit_patches_index_incrementally_without_warm(self):
+        data = self._write_library([_prompt('p1', 'one'), _prompt('p2', 'two')])
         current = self._prime(warm=True)
+        self._warm_state(include_review=True)
         os.environ.pop('UW_SKIP_LIBRARY_WARMUP')
         self.assertIsNotNone(self.module._LIBRARY_STATE['index'])
 
-        with mock.patch.object(self.module, '_request_library_warm') as warm:
-            self.module._apply_upsert_prompt(
-                self._edit_payload(current['categories'][0]['prompts'][0],
-                                   data['last_modified'], prompt='1girl'))
-            self.assertEqual(warm.call_count, 1)
-        self.assertIsNone(self.module._LIBRARY_STATE['index'])
-        # The views stayed patched; only the index payload needs a rebuild.
-        self.assertIsNotNone(self.module._LIBRARY_STATE['views'].get(False))
+        with mock.patch.object(self.module, '_request_library_warm') as warm, \
+                mock.patch.object(self.module, '_warm_library_caches',
+                                  side_effect=AssertionError('full warm must not run')):
+            result = self.module._apply_upsert_prompt(
+                self._edit_payload(current['categories'][0]['prompts'][0], data['last_modified'],
+                                   prompt='1girl, solo'))
+            self.assertEqual(warm.call_count, 0)
+        self.assertIsNotNone(self.module._LIBRARY_STATE['index'])
         page = self.module._library_page_payload('', '', 0, 30)
         edited = next(item for item in page['items'] if item['id'] == 'p1')
-        self.assertEqual(edited['_semantic']['count_markers'], ['1girl'])
+        self.assertEqual(edited['_semantic']['count_markers'], ['1girl', 'solo'])
+        index = self.module._library_index_payload()
+        self.assertEqual(index['last_modified'], result['revision'])
+        self.assertEqual(index['total_prompts'], 2)
+        self.assertEqual(index['filter_pool']['count'], {'1girl': 1, 'solo': 1})
+        self.assertEqual(index['review_counts'], {'classified': 2})
+        snapshot = self._snapshot_state()
+        self._assert_incremental_matches_full(snapshot, result['revision'])
+
+    def test_body_edit_leaving_the_view_patches_review_and_index(self):
+        data = self._write_library([_prompt('p1', 'one'), _prompt('p2', 'two'),
+                                    _prompt('p3', 'three')],
+                                   dispositions={'p3': 'pending'})
+        current = self._prime(warm=True)
+        self._warm_state(include_review=True)
+        os.environ.pop('UW_SKIP_LIBRARY_WARMUP')
+        self.assertEqual(len(self.module._LIBRARY_STATE['rows'][False]), 2)
+
+        with mock.patch.object(self.module, '_request_library_warm') as warm, \
+                mock.patch.object(self.module, '_warm_library_caches',
+                                  side_effect=AssertionError('full warm must not run')):
+            result = self.module._apply_upsert_prompt(
+                self._edit_payload(current['categories'][0]['prompts'][0], data['last_modified'],
+                                   classification=False, description='needs review'))
+            self.assertEqual(warm.call_count, 0)
+        state = self.module._LIBRARY_STATE
+        normal_ids = [prompt['id'] for prompt in state['views'][False]['categories'][0]['prompts']]
+        review_ids = [prompt['id'] for prompt in state['views'][True]['categories'][0]['prompts']]
+        self.assertEqual(normal_ids, ['p2'])
+        self.assertEqual(review_ids, ['p1', 'p2', 'p3'])
+        self.assertEqual(len(state['rows'][False]), 1)
+        self.assertEqual(len(state['rows'][True]), 3)
+        index = self.module._library_index_payload()
+        self.assertEqual(index['last_modified'], result['revision'])
+        self.assertEqual(index['total_prompts'], 1)
+        self.assertEqual(index['review_counts'], {'classified': 1, 'pending': 2})
+        self.assertNotIn('person_count', index['filter_pool']['theme'])
+        snapshot = self._snapshot_state()
+        self._assert_incremental_matches_full(snapshot, result['revision'])
+
+    def test_pending_row_entering_the_view_is_patched_incrementally(self):
+        data = self._write_library([_prompt('p1', 'one'), _prompt('p2', 'two')],
+                                   dispositions={'p1': 'pending'})
+        current = self._prime(warm=True)
+        self._warm_state(include_review=True)
+        os.environ.pop('UW_SKIP_LIBRARY_WARMUP')
+        self.assertEqual(len(self.module._LIBRARY_STATE['rows'][False]), 1)
+
+        with mock.patch.object(self.module, '_request_library_warm') as warm, \
+                mock.patch.object(self.module, '_warm_library_caches',
+                                  side_effect=AssertionError('full warm must not run')):
+            result = self.module._apply_upsert_prompt(
+                self._edit_payload(current['categories'][0]['prompts'][0], data['last_modified']))
+            self.assertEqual(warm.call_count, 0)
+        state = self.module._LIBRARY_STATE
+        normal_ids = [prompt['id'] for prompt in state['views'][False]['categories'][0]['prompts']]
+        self.assertEqual(normal_ids, ['p1', 'p2'])
+        self.assertEqual(len(state['rows'][False]), 2)
+        self.assertIsNotNone(index := self.module._library_index_payload())
+        self.assertEqual(index['last_modified'], result['revision'])
+        self.assertEqual(index['total_prompts'], 2)
+        self.assertEqual(index['review_counts'], {'classified': 2})
+        snapshot = self._snapshot_state()
+        self._assert_incremental_matches_full(snapshot, result['revision'])
+
+    def test_unsafe_commit_falls_back_to_the_full_rebuild(self):
+        data = self._write_library([_prompt('p1', 'one'), _prompt('p2', 'two')])
+        self._prime(warm=True)
+        os.environ.pop('UW_SKIP_LIBRARY_WARMUP')
+        moved = json.loads(json.dumps(data))
+        moved['categories'].append(_category('second', 'cat-2'))
+        moved['categories'][1]['prompts'].append(
+            moved['categories'][0]['prompts'].pop(0))
+        moved['last_modified'] = '2026-10-25T00:00:00'
+        self.data_file.write_text(json.dumps(moved, ensure_ascii=False), encoding='utf-8')
+
+        with mock.patch.object(self.module, '_request_library_warm') as warm:
+            self.assertFalse(self.module._commit_prompt_data(moved, ['p1', 'p2']))
+            self.assertEqual(warm.call_count, 1)
+        state = self.module._LIBRARY_STATE
+        self.assertIsNone(state['index'])
+        self.assertEqual(state['views'], {})
+        self.assertEqual(len(state['entries']), 2)
+
+    def test_patch_exception_drops_the_derived_state_without_failing_the_save(self):
+        data = self._write_library([_prompt('p1', 'one')])
+        current = self._prime(warm=True)
+        os.environ.pop('UW_SKIP_LIBRARY_WARMUP')
+        with mock.patch.object(self.module, '_patch_one_changed_row',
+                               side_effect=RuntimeError('boom')), \
+                mock.patch.object(self.module, '_request_library_warm') as warm:
+            result = self.module._apply_upsert_prompt(
+                self._edit_payload(current['categories'][0]['prompts'][0],
+                                   data['last_modified'], description='still saved'))
+            self.assertEqual(warm.call_count, 1)
+        self.assertEqual(self._read_saved()['categories'][0]['prompts'][0]['description'],
+                         'still saved')
+        self.assertEqual(result['revision'], NOW)
+        state = self.module._LIBRARY_STATE
+        self.assertIsNone(state['index'])
+        self.assertEqual(state['views'], {})
+        # The next read rebuilds the correct model from the committed document.
+        rebuilt = self.module._library_index_payload()
+        self.assertEqual(rebuilt['total_prompts'], 1)
+        self.assertEqual(rebuilt['last_modified'], NOW)
 
     def test_atomic_save_triggers_the_warm_only_by_default(self):
         data = self._write_library([_prompt('p1', 'one')])

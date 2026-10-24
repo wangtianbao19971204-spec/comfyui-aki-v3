@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 2026-10-25：工作台交互第二轮：Tag 子串搜索/自动补全改用 trigram FTS 缓存库（q=hair 178→18.6 ms、complete 168.6→19.5 ms、空结果 326→3.9 ms；1–2 字符仍回退旧 LIKE）；正文编辑后单行增量刷新 index，保存后首次 index 3.0–3.5 s→<0.1 s、prompts 1.1 s→0.13 s。Tag 语义 165 组 query 逐字段一致、编辑后结构与全量重建 ALL EQUAL；测试 156 OK/1 skip，见[说明](docs/technical/changes/runtime-workbench/2026-10-25-interaction-round2.md)。未部署生产。
+
 - 2026-10-24：工作台交互延迟优化：单条提示词保存 3.9–5.2 s→0.8–0.9 s（复用解析缓存/备份节流/可补丁写跳过整库 warm）；Tag 首次筛选与搜索加表达式索引/派生表并修正默认视图预热（shape 508→6.5 ms、q 189→11.5 ms）；缩略图管线 1.64×、16 张首屏 3.14×；新增离线缩略图预生成维护工具。测试 138 OK/1 skip，见[说明](docs/technical/changes/runtime-workbench/2026-10-24-workbench-interaction-latency.md)。未部署生产。
 
 - 2026-10-24：统一包启动期零重活与派生语义缓存：词库解析与预热移出插件导入期，派生语义按 `id+binding` 持久化、热启动只重算变更行；Tag 目录树按 revision 落盘并删除无效全表预热。单测 99 OK，隔离 A/B 与边界见[本轮说明](docs/technical/changes/runtime-workbench/2026-10-24-startup-warmup-cache.md)。未部署生产。

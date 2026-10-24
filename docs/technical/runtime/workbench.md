@@ -25,6 +25,8 @@
 
 ## 更新记录
 
+- 2026-10-25：工作台交互第二轮：Tag 子串搜索/自动补全走 trigram FTS 缓存库（q=hair 178→18.6 ms、complete 168.6→19.5 ms、空结果 326→3.9 ms；1–2 字符仍回退旧 LIKE）；正文编辑后走单行增量 index patch，保存后首次 index 3.0–3.5 s→<0.1 s、prompts 1.1 s→0.13 s，不再触发整库 warm。Tag 语义 165 组 query 逐字段 0 mismatch、编辑后结构与全量重建 ALL EQUAL；测试 156 OK/1 skip，详见[第二轮说明](../changes/runtime-workbench/2026-10-25-interaction-round2.md)。本轮未部署生产。
+
 - 2026-10-24：工作台交互延迟优化：单条提示词编辑保存复用已解析缓存并跳过整库 warm（3.9–5.2 s→0.8–0.9 s，可补丁写后首次 index 0 ms）；Tag 面板加表达式索引/派生表并按真实缓存键预热默认视图（shape 首次 508→6.5 ms、q 搜索 189→11.5 ms）；缩略图管线 1.64×、16 张首屏 3.14×。测试 138 OK/1 skip，完整数据与边界见[交互延迟优化](../changes/runtime-workbench/2026-10-24-workbench-interaction-latency.md)。本轮未部署生产。
 
 - 2026-10-24：词库与 Tag 预热移出插件导入期：派生 `_semantic` 按 `id+binding` 持久化（msgpack+zstd），热启动只重算变更行；Tag 目录树按 revision 缓存落盘，并删除 5 次与真实请求缓存键不符的 `page()` 全表预热。单测与隔离 A/B 见[启动期零重活与派生语义缓存](../changes/runtime-workbench/2026-10-24-startup-warmup-cache.md)。本轮未部署生产。

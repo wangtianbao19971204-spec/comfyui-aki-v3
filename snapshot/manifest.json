@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-24T16:02:52.308339+00:00",
+  "created_at": "2026-10-24T23:38:30.839954+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -14307,8 +14307,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/prompt_selector.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/prompt_selector.py",
-      "sha256": "6984defd9a163f52088107f7a06559b40f45f108bdeaeb7e149ec13690d8a7b1",
-      "bytes": 171652,
+      "sha256": "8dbddf7b16adb78a0c18bd57851450137c8556a430039c8e5cc558489bfc7f84",
+      "bytes": 185887,
       "kind": "file"
     },
     {
@@ -14377,8 +14377,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_api.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_api.py",
-      "sha256": "b49ae9775710d11e3ffac23e708929bed02e35fde10ddcb859dde24666d27181",
-      "bytes": 26934,
+      "sha256": "d7b8bb4a474d26e77aab3ce33f5423b0b8b4c07b6f487bc66d982ff84e9941d5",
+      "bytes": 27453,
       "kind": "file"
     },
     {
@@ -14405,8 +14405,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_library.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_library.py",
-      "sha256": "4237e81b9a182b7a92b758e4e10c8c223d7b01be94a5def77bc3d63339cb6961",
-      "bytes": 74587,
+      "sha256": "d2ef0e59a2b51398bc5708e8726b8ffcec6fbacd4d3cacbbaade802467c0d903",
+      "bytes": 96511,
       "kind": "file"
     },
     {
@@ -14454,8 +14454,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_edit_save.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_edit_save.py",
-      "sha256": "c04a17e5c8bb2890f1c214f2dcaff8c74110d37276a8e8a451f46914ea06f578",
-      "bytes": 31301,
+      "sha256": "47326ed92f54629de104b18ae1d5b14eea974767a79eb39c792b26d41faa5741",
+      "bytes": 41364,
       "kind": "file"
     },
     {
@@ -14489,8 +14489,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_tag_read_speed.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_tag_read_speed.py",
-      "sha256": "cea22a890df397a127e528115b819fe0ce581e125322937b40a8f97eb675737d",
-      "bytes": 25239,
+      "sha256": "0ca7e8763bd19c66af506f3db1948087c98f103a49083c22bfafddfa891493e4",
+      "bytes": 38796,
       "kind": "file"
     },
     {
@@ -68254,19 +68254,17 @@
     }
   ],
   "development_revision": {
-    "note": "Interactions: cached prompt save with throttled backups, Tag read indexes/derived tables and corrected warm keys, faster thumbnails and pregeneration tool",
-    "previous_manifest_sha256": "c46df2af0b64fb10a6a8b662ea54aee8c7bfe15002f7f3ccda036d03454b7651",
+    "note": "Interactions round2: Tag trigram FTS search cache and single-row incremental index refresh after prompt edits",
+    "previous_manifest_sha256": "2724f9fbe305b0c8796323b8c4665e1aef7c94857d4c4d674421c3ee82899942",
     "source_changes": {
-      "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_edit_save.py",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_tag_read_speed.py",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_thumbnail_opt.py"
-      ],
+      "added": [],
       "removed": [],
       "changed": [
         "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/prompt_selector.py",
         "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_api.py",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_library.py"
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_library.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_edit_save.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_tag_read_speed.py"
       ]
     },
     "live_deployed": false,

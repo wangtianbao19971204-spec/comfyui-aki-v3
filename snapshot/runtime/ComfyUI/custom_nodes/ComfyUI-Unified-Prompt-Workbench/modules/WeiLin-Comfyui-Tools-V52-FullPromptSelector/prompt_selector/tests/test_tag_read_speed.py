@@ -116,6 +116,9 @@ class _TempDatabase(unittest.TestCase):
     def _reset_module_state(self):
         TAG_LIBRARY._PAGE_CACHE.clear()
         TAG_LIBRARY._READ_INDEX_BUILDING.clear()
+        TAG_LIBRARY._SEARCH_CACHE_FILE = None
+        TAG_LIBRARY._SEARCH_ORDER.clear()
+        TAG_LIBRARY._SEARCH_BUILDING.clear()
         TAG_LIBRARY.release_string_caches()
 
     def _clear_caches(self):
@@ -341,6 +344,239 @@ class TextSearchEquivalenceTests(_TempDatabase):
         self.assertEqual((page['total'], page['items']), (0, []))
 
 
+SEARCH_EXTRA_TAGS = [
+    # (t_uuid, text, desc, create_time, id_index) —— 中文/组合/大小写查询覆盖
+    ('ts01', '女仆装', '', 200, 500),
+    ('ts02', '黑色过膝袜', '过膝长袜', 201, 501),
+    ('ts03', 'Hair Accessory', '', 202, 502),
+    ('ts04', 'zzz-placeholder', 'nothing here', 203, 503),
+]
+
+
+class SearchIndexTests(_TempDatabase):
+    """trigram FTS cache + tags 库变更日志：构建/回退/增量同步/语义等价。"""
+
+    def setUp(self):
+        super().setUp()
+        self.search_cache = Path(self.directory.name) / 'cache' / 'tag_search.v1.db'
+        TAG_LIBRARY._SEARCH_CACHE_FILE = self.search_cache
+        self._schedule = mock.patch.object(TAG_LIBRARY.TagLibrary, '_schedule_search_index_sync')
+        self.schedule = self._schedule.start()
+        self.addCleanup(self._schedule.stop)
+        self.library = self.built()
+        with self.library.connection() as conn, conn:
+            conn.execute('BEGIN IMMEDIATE')
+            for t_uuid, text, desc, create_time, id_index in SEARCH_EXTRA_TAGS:
+                conn.execute('INSERT INTO tag_tags (t_uuid, subgroup_id, text, desc, color, create_time, '
+                             'g_uuid, id_index) VALUES (?,?,?,?,?,?,?,?)',
+                             (t_uuid, 0, text, desc, '', create_time, 'fa-base', id_index))
+        TAG_LIBRARY._PAGE_CACHE.clear()
+
+    def warm(self):
+        self.assertTrue(self.library.warm_search_index())
+        return self.library
+
+    @staticmethod
+    def _old(library, **kwargs):
+        with mock.patch.dict(os.environ, {'UW_DISABLE_TAG_SEARCH_INDEX': '1'}):
+            TAG_LIBRARY._PAGE_CACHE.clear()
+            return library.page(**kwargs)
+
+    @staticmethod
+    def _fast(library, **kwargs):
+        TAG_LIBRARY._PAGE_CACHE.clear()
+        return library.page(**kwargs)
+
+    def assert_fast_equal(self, **kwargs):
+        old = self._old(self.library, **kwargs)
+        fast = self._fast(self.library, **kwargs)
+        self.assertEqual(old['total'], fast['total'], kwargs)
+        self.assertEqual([dict(item) for item in old['items']],
+                         [dict(item) for item in fast['items']], kwargs)
+        return fast
+
+    def test_build_creates_cache_journal_and_versions(self):
+        library = self.warm()
+        self.assertTrue(self.search_cache.is_file())
+        with library.connection() as conn:
+            names = {row[0] for row in conn.execute(
+                "SELECT name FROM sqlite_master WHERE name LIKE 'workbench_tag_search%'")}
+            for name in TAG_LIBRARY.SEARCH_TRIGGERS:
+                self.assertIn(name, names)
+            self.assertIn(TAG_LIBRARY.SEARCH_JOURNAL_TABLE, names)
+            self.assertIn(TAG_LIBRARY.SEARCH_SCHEMA_TABLE, names)
+            self.assertEqual(library._search_schema_version(conn), TAG_LIBRARY.SEARCH_INDEX_VERSION)
+            self.assertEqual(conn.execute('SELECT count(*) FROM workbench_tag_search_journal').fetchone()[0], 0)
+        meta = library._search_cache_meta(self.search_cache)
+        with contextlib.closing(sqlite3.connect(str(self.path))) as raw:
+            self.assertEqual(meta['built_revision'],
+                             raw.execute('SELECT value FROM workbench_tag_revision WHERE id=1').fetchone()[0])
+        # 第二次 warm 不再重建 cache。
+        with mock.patch.object(TAG_LIBRARY.TagLibrary, '_build_search_cache',
+                               side_effect=AssertionError('cache rebuilt on a warm hit')):
+            self.assertTrue(library.warm_search_index())
+
+    def test_plain_search_matches_original_sql(self):
+        library = self.warm()
+        queries = ['hair', 'Hair', 'HAIR', 'hair brush', 'hair_brush', 'hair  brush', 'under_score',
+                   '女仆装', '黑色过膝袜', 'zzz-placeholder', 'car', 'tag', '100%', 'a b c',
+                   'apple_zx', 'ab', '紫', '的']
+        for query in queries:
+            for offset, limit in ((0, 100), (0, 20), (3, 5), (50, 5)):
+                page = self.assert_fast_equal(query=query, offset=offset, limit=limit)
+                self.assertEqual(page['offset'], offset)
+        for page_kwargs in (dict(query='hair', offset=0, limit=1), dict(query='hair', offset=6, limit=10),
+                            dict(query='', offset=0, limit=10)):
+            self.assert_fast_equal(**page_kwargs)
+
+    def test_search_tier_order_is_preserved_by_fast_path(self):
+        library = self.warm()
+        page = self._fast(library, query='hair', offset=0, limit=100)
+        self.assertEqual([item['text'] for item in page['items']][:4],
+                         ['hair', 'hair brush', 'hair brush', 'hair style'])
+        self.assertEqual([item.get('match_reason') for item in page['items']][:4],
+                         ['Tag 精确匹配', 'Tag 前缀匹配', 'Tag 前缀匹配', 'Tag 前缀匹配'])
+        rest = self._fast(library, query='hair', offset=4, limit=2)
+        self.assertEqual([item['text'] for item in rest['items']], ['Hair Accessory', 'redhair'])
+
+    def _spy_fast_numbers(self):
+        original = TAG_LIBRARY.TagLibrary._search_fast_numbers
+        calls = []
+
+        def spy(instance, conn, query, forms, offset, limit):
+            calls.append((query, offset, limit))
+            return original(instance, conn, query, forms, offset, limit)
+
+        patcher = mock.patch.object(TAG_LIBRARY.TagLibrary, '_search_fast_numbers', spy)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        return calls
+
+    def test_short_and_empty_queries_fall_back(self):
+        self.warm()
+        calls = self._spy_fast_numbers()
+        for query in ('', 'a', 'ab', '紫', '的'):
+            self.assert_fast_equal(query=query, offset=0, limit=10)
+        self.assertGreater(len(calls), 0)
+
+    def test_filters_keep_using_the_original_paths(self):
+        self.warm()
+        with mock.patch.object(TAG_LIBRARY.TagLibrary, '_search_fast_numbers',
+                               side_effect=AssertionError('fast search used with filters')):
+            self.assert_fast_equal(query='hair', scope='tags', offset=0, limit=100)
+            self.assert_fast_equal(query='hair', shape='group', scope='tags', offset=0, limit=100)
+            self.assert_fast_equal(query='hair', favorite=True, offset=0, limit=100)
+
+    def test_journal_triggers_and_incremental_sync(self):
+        library = self.warm()
+        with library.connection() as conn, conn:
+            conn.execute('BEGIN IMMEDIATE')
+            conn.execute("UPDATE tag_tags SET text='hair!', desc='' WHERE t_uuid='t06'")
+        with library.connection() as conn:
+            row = conn.execute('SELECT operation, tag_text, tag_desc FROM workbench_tag_search_journal').fetchone()
+        self.assertEqual(tuple(row), ('upsert', 'hair!', ''))
+        # 日志未回放时走旧 SQL（结果正确），并调度后台同步。
+        self.assert_fast_equal(query='hair', offset=0, limit=100)
+        self.schedule.assert_called()
+        library._search_sync()
+        with library.connection() as conn:
+            self.assertEqual(conn.execute('SELECT count(*) FROM workbench_tag_search_journal').fetchone()[0], 0)
+        self.assertTrue(library.warm_search_index())  # 重建内存顺序表
+        page = self.assert_fast_equal(query='hair', offset=0, limit=100)
+        self.assertIn('hair!', [item['text'] for item in page['items']])
+
+    def test_delete_tag_is_journaled_and_synced(self):
+        library = self.warm()
+        with library.connection() as conn, conn:
+            conn.execute('BEGIN IMMEDIATE')
+            conn.execute("DELETE FROM tag_tags WHERE t_uuid='t06'")
+        with library.connection() as conn:
+            self.assertEqual(conn.execute('SELECT operation FROM workbench_tag_search_journal').fetchone()[0], 'delete')
+        self.assert_fast_equal(query='hair', offset=0, limit=100)
+        library._search_sync()
+        self.assertTrue(library.warm_search_index())
+        page = self.assert_fast_equal(query='hair', offset=0, limit=100)
+        self.assertNotIn('hair', [item['text'] for item in page['items']])
+
+    def test_missing_or_version_mismatched_cache_is_rebuilt(self):
+        library = self.warm()
+        self.search_cache.unlink()
+        self.assertTrue(library.prepare_search_index())
+        self.assertTrue(self.search_cache.is_file())
+        cache = sqlite3.connect(str(self.search_cache))
+        with cache:
+            cache.execute('UPDATE search_meta SET format=999 WHERE id=1')
+        cache.close()
+        self.assertIsNone(library._search_cache_meta(self.search_cache))
+        self.assertTrue(library.prepare_search_index())
+        meta = library._search_cache_meta(self.search_cache)
+        self.assertIsNotNone(meta)
+        self.assert_fast_equal(query='hair', offset=0, limit=10)
+
+    def test_disabled_environment_skips_everything(self):
+        TAG_LIBRARY._SEARCH_ORDER.clear()
+        with mock.patch.dict(os.environ, {'UW_DISABLE_TAG_SEARCH_INDEX': '1'}), \
+                mock.patch.object(TAG_LIBRARY.threading, 'Thread') as thread:
+            self.assertFalse(self.library.warm_search_index())
+            self._fast(self.library, query='hair', offset=0, limit=10)
+        thread.assert_not_called()
+        self.assertFalse(self.search_cache.exists())
+        with self.library.connection() as conn:
+            names = {row[0] for row in conn.execute(
+                "SELECT name FROM sqlite_master WHERE name LIKE 'workbench_tag_search%'")}
+        self.assertEqual(names, set())
+
+    def test_order_array_is_rebuilt_after_tag_writes(self):
+        library = self.warm()
+        key = str(library.path)
+        self.assertIn(key, TAG_LIBRARY._SEARCH_ORDER)
+        with library.connection() as conn, conn:
+            conn.execute('BEGIN IMMEDIATE')
+            conn.execute("UPDATE tag_tags SET create_time=12345 WHERE t_uuid='t06'")
+        with library.connection() as conn:
+            self.assertIsNone(library._search_order(conn))
+        self.assertTrue(library.warm_search_index())
+        with library.connection() as conn:
+            order = library._search_order(conn)
+        self.assertIsNotNone(order)
+        with contextlib.closing(sqlite3.connect(str(self.path))) as raw:
+            self.assertEqual(len(order), raw.execute('SELECT count(*) FROM tag_tags').fetchone()[0])
+
+    def test_too_many_pending_changes_rebuilds_instead_of_replaying(self):
+        library = self.warm()
+        with mock.patch.object(TAG_LIBRARY, 'SEARCH_REBUILD_PENDING', 2):
+            with library.connection() as conn, conn:
+                conn.execute('BEGIN IMMEDIATE')
+                for index in range(3):
+                    conn.execute('UPDATE tag_tags SET text=? WHERE t_uuid=?', (f'hair {index}', 't06'))
+            with mock.patch.object(TAG_LIBRARY.TagLibrary, '_build_search_cache', wraps=library._build_search_cache) as build:
+                library._search_sync()
+            self.assertEqual(build.call_count, 1)
+        with library.connection() as conn:
+            self.assertEqual(conn.execute('SELECT count(*) FROM workbench_tag_search_journal').fetchone()[0], 0)
+        self.assertTrue(library.warm_search_index())
+        self.assert_fast_equal(query='hair', offset=0, limit=10)
+
+    def test_restored_older_tags_db_invalidates_cache(self):
+        library = self.warm()
+        with contextlib.closing(sqlite3.connect(str(self.search_cache))) as cache, cache:
+            cache.execute('UPDATE search_meta SET built_revision=built_revision+1 WHERE id=1')
+        library._search_sync()
+        meta = library._search_cache_meta(self.search_cache)
+        with contextlib.closing(sqlite3.connect(str(self.path))) as raw:
+            self.assertEqual(meta['built_revision'],
+                             raw.execute('SELECT value FROM workbench_tag_revision WHERE id=1').fetchone()[0])
+        self.assert_fast_equal(query='hair', offset=0, limit=10)
+
+    def test_warm_failure_is_logged_and_does_not_raise(self):
+        with mock.patch.object(TAG_LIBRARY.TagLibrary, '_build_search_cache',
+                               side_effect=sqlite3.OperationalError('boom')):
+            with self.assertLogs('weilin.prompt_selector', level='WARNING') as logs:
+                self.assertFalse(self.library.warm_search_index())
+        self.assertIn('Tag 搜索索引预热失败', '\n'.join(logs.output))
+        self.assert_fast_equal(query='hair', offset=0, limit=10)
+
+
 class _FakeWarmLibrary:
     def __init__(self):
         self.calls = []
@@ -461,6 +697,23 @@ class WarmCacheKeyTests(_TempDatabase):
                                   for shape in ('', 'atomic', 'group', 'string')})
         self.assertTrue(all(call[1][7] == ('grp-a',) for call in pages))
         self.assertIn('Tag catalog warmed in', '\n'.join(logs.output))
+
+    def test_warm_tag_catalog_builds_search_cache_with_real_library(self):
+        tag_api = _load_tag_api()
+        library = self.build()
+        cache = Path(self.directory.name) / 'cache' / 'tag_search.v1.db'
+        TAG_LIBRARY._SEARCH_CACHE_FILE = cache
+        TAG_LIBRARY._CATEGORY_CACHE_FILE = Path(self.directory.name) / 'cache' / 'tag_categories.v1.json'
+        with mock.patch.object(tag_api, 'library', return_value=library), \
+                mock.patch.object(tag_api, 'catalog', return_value={'collections': [],
+                                                                    'collection_revision': 'rev'}):
+            with self.assertLogs('weilin.prompt_selector', level='INFO') as logs:
+                tag_api._warm_tag_catalog()
+        self.assertTrue(cache.is_file())
+        self.assertIn(str(library.path), TAG_LIBRARY._SEARCH_ORDER)
+        joined = '\n'.join(logs.output)
+        self.assertIn('Tag 搜索索引已就绪', joined)
+        self.assertIn('Tag catalog warmed in', joined)
 
     def test_prewarmed_default_view_is_served_from_cache(self):
         tag_api = _load_tag_api()

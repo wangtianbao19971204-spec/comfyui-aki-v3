@@ -1032,6 +1032,259 @@ def _same_selector_library(previous, data):
     return old is new or old == new
 
 
+def _adjust_count(counts, key, delta):
+    value = counts.get(key, 0) + delta
+    if value > 0:
+        counts[key] = value
+    else:
+        counts.pop(key, None)
+
+
+def _index_row_fragments(entry, delta, themes, facets, counts, refinements, label_owners, unknown):
+    """Apply (or remove) one visible row's contribution to the index tallies."""
+    semantic = entry.get("_semantic") or {}
+    for theme in semantic_themes(semantic):
+        if theme:
+            _adjust_count(themes, theme, delta)
+    for facet in set(semantic.get("themes") or []):
+        _adjust_count(facets, facet, delta)
+    for marker in set(semantic.get("count_markers") or []):
+        _adjust_count(counts, marker, delta)
+    for identity in set(semantic.get("refinements") or []):
+        _adjust_count(refinements, identity, delta)
+    for label in set(semantic.get("subcategories") or []):
+        owner = subcategory_owner(semantic, label)
+        if owner:
+            owners = label_owners.setdefault(label, Counter())
+            _adjust_count(owners, owner, delta)
+            if not owners:
+                label_owners.pop(label, None)
+        else:
+            _adjust_count(unknown, label, delta)
+
+
+def _patch_library_index_for_row(state, view, previous_entry, entry, old_visible, new_visible,
+                                 category_positions):
+    """Update the cached index payload for one changed row; False when it must rebuild."""
+    payload = state["index"]
+    if payload is None or view is None:
+        return False
+    pool = payload.get("filter_pool")
+    if not isinstance(pool, dict):
+        return False
+    themes = dict(pool.get("theme") or {})
+    facets = dict(pool.get("facet") or {})
+    counts = dict(pool.get("count") or {})
+    unknown = Counter(pool.get("unmapped_subcategories") or {})
+    refinements = Counter()
+    for children in (pool.get("refinements") or {}).values():
+        for node in children:
+            refinements[node["id"]] = node["count"]
+    label_owners = {}
+    for owner, labels in (pool.get("subcategory") or {}).items():
+        for label, count in labels.items():
+            label_owners.setdefault(label, Counter())[owner] += count
+    for label, owners in (pool.get("conflicting_subcategories") or {}).items():
+        label_owners.setdefault(label, Counter()).update(owners)
+    if old_visible and previous_entry is not None:
+        _index_row_fragments(previous_entry, -1, themes, facets, counts, refinements,
+                             label_owners, unknown)
+    if new_visible:
+        _index_row_fragments(entry, 1, themes, facets, counts, refinements,
+                             label_owners, unknown)
+    class_keys = list(view.get("_semantic_class_labels") or {})
+    semantic_subcategories, filter_pool = _index_sections(
+        themes, facets, counts, refinements, label_owners, unknown, class_keys)
+    categories = payload.get("categories") or []
+    view_categories = view.get("categories") or []
+    if len(categories) != len(view_categories):
+        return False
+    for position in sorted(category_positions):
+        category = view_categories[position]
+        summary = {key: value for key, value in category.items() if key != "prompts"}
+        summary["prompt_count"] = len(category.get("prompts", []) or [])
+        summary["prompts"] = []
+        categories[position] = summary
+    payload["semantic_subcategories"] = semantic_subcategories
+    payload["filter_pool"] = filter_pool
+    payload["total_prompts"] = sum(len(category.get("prompts", []) or [])
+                                   for category in view_categories)
+    payload["review_counts"] = view.get("_review_counts") or {}
+    payload["semantic_classes"] = view.get("_semantic_class_labels") or {}
+    payload["selector_groups"] = {kind: collection_groups(view) for kind in COLLECTION_KINDS}
+    payload["version"] = view.get("version", "1.6")
+    payload["settings"] = view.get("settings", {})
+    payload["last_modified"] = view.get("last_modified")
+    return True
+
+
+def _data_row_location(data, prompt_id):
+    for category_position, category in enumerate(data.get("categories", []) or []):
+        identity = str(category.get("id") or category.get("name") or "")
+        name = str(category.get("name") or "")
+        prompts = category.get("prompts", []) or []
+        for prompt in prompts:
+            if str(prompt.get("id") or "") == prompt_id:
+                return category_position, identity, name, prompts
+    return None
+
+
+def _shift_view_index(view_index, category_position, from_item, delta):
+    for identity, placement in view_index.items():
+        if placement[0] == category_position and placement[1] >= from_item:
+            view_index[identity] = (placement[0], placement[1] + delta)
+
+
+def _shift_row_positions(row_index, from_position, delta):
+    for identity, position in row_index.items():
+        if position >= from_position:
+            row_index[identity] = position + delta
+
+
+def _shift_ranges(ranges, category_position, delta):
+    identity, name, start, end = ranges[category_position]
+    ranges[category_position] = (identity, name, start, end + delta)
+    for position in range(category_position + 1, len(ranges)):
+        identity, name, start, end = ranges[position]
+        ranges[position] = (identity, name, start + delta, end + delta)
+
+
+def _patch_one_changed_row(state, data, prompt_id, previous_entry, entry, same_selector):
+    """Install one committed row into views/rows/index without rebuilding them.
+
+    Handles the single-record shapes: a content edit in place, a row losing its
+    review eligibility (leaves the normal view) and a row gaining it (enters the
+    normal view). Returns True when the read model is fully current, False when the
+    views are current but the index payload needs a rebuild and None when the shape
+    is not safe to patch and the caller must drop the derived models.
+    """
+    location = _data_row_location(data, prompt_id)
+    if location is None or previous_entry is None or entry is None:
+        return None
+    category_position, identity, name, data_prompts = location
+    plans = {}
+    for key in (False, True):
+        view = state["views"].get(key)
+        if view is None:
+            plans[key] = None
+            continue
+        view_index = state["view_index"].get(key)
+        rows = state["rows"].get(key)
+        row_index = state["row_index"].get(key)
+        if view_index is None or (rows is not None and row_index is None):
+            return None
+        eligible = _library_entry_in_view(entry, key)
+        old_placement = view_index.get(prompt_id)
+        if old_placement is not None:
+            if old_placement[0] != category_position:
+                return None
+            if rows is not None and row_index.get(prompt_id) is None:
+                return None
+        expected_item = None
+        if eligible:
+            expected_item = 0
+            for prompt in data_prompts:
+                candidate = str(prompt.get("id") or "")
+                if candidate == prompt_id:
+                    break
+                placement = view_index.get(candidate)
+                if placement is not None and placement[0] == category_position:
+                    expected_item += 1
+            if old_placement is not None and old_placement[1] != expected_item:
+                return None
+        plans[key] = {"view": view, "view_index": view_index, "rows": rows,
+                      "row_index": row_index, "old_placement": old_placement,
+                      "eligible": eligible, "expected_item": expected_item}
+    if plans[False] is None:
+        return None
+    data_categories = data.get("categories", []) or []
+    if category_position >= len(data_categories):
+        return None
+    data_category = data_categories[category_position]
+    if str(data_category.get("id") or data_category.get("name") or "") != identity:
+        return None
+    derived = {"categories", "_review_counts", "_semantic_class_labels", "_selection_projection"}
+    old_disposition = (previous_entry.get("_semantic") or {}).get("disposition")
+    new_disposition = (entry.get("_semantic") or {}).get("disposition")
+    old_visible_normal = plans[False]["old_placement"] is not None
+    new_visible_normal = plans[False]["eligible"]
+    names, body = _search_terms(entry)
+    row_tuple = (entry, identity, name, name.casefold(), names, body)
+    for key in (False, True):
+        plan = plans[key]
+        if plan is None:
+            continue
+        view = plan["view"]
+        view_categories = view.get("categories") or []
+        if category_position >= len(view_categories):
+            return None
+        category = view_categories[category_position]
+        if str(category.get("id") or category.get("name") or "") != identity:
+            return None
+        view_index = plan["view_index"]
+        rows = plan["rows"]
+        row_index = plan["row_index"]
+        old_placement = plan["old_placement"]
+        eligible = plan["eligible"]
+        if old_placement is not None and eligible:
+            category["prompts"][old_placement[1]] = entry
+            if rows is not None:
+                rows[row_index[prompt_id]] = row_tuple
+        elif old_placement is not None:
+            item_position = old_placement[1]
+            del category["prompts"][item_position]
+            view_index.pop(prompt_id, None)
+            _shift_view_index(view_index, category_position, item_position, -1)
+            if rows is not None:
+                row_position = row_index.pop(prompt_id)
+                rows.pop(row_position)
+                _shift_row_positions(row_index, row_position, -1)
+                _shift_ranges(state["ranges"][key], category_position, -1)
+        elif eligible:
+            item_position = plan["expected_item"]
+            _shift_view_index(view_index, category_position, item_position, 1)
+            category["prompts"].insert(item_position, entry)
+            view_index[prompt_id] = (category_position, item_position)
+            if rows is not None:
+                row_position = state["ranges"][key][category_position][2] + item_position
+                rows.insert(row_position, row_tuple)
+                _shift_row_positions(row_index, row_position, 1)
+                row_index[prompt_id] = row_position
+                _shift_ranges(state["ranges"][key], category_position, 1)
+        view_categories[category_position] = {
+            **data_category,
+            "prompts": view_categories[category_position]["prompts"]}
+        for name_of_field, value in data.items():
+            if name_of_field not in derived:
+                view[name_of_field] = value
+        if old_disposition != new_disposition:
+            counts = view.get("_review_counts")
+            if isinstance(counts, dict):
+                remaining = counts.get(old_disposition, 0) - 1
+                if remaining > 0:
+                    counts[old_disposition] = remaining
+                else:
+                    counts.pop(old_disposition, None)
+                counts[new_disposition] = counts.get(new_disposition, 0) + 1
+        state["views"][key] = view
+    state["matches"].clear()
+    state["filter_masks"].clear()
+    state["filter_scopes"].clear()
+    signature_changed = _index_patch_signature(previous_entry) != _index_patch_signature(entry)
+    refresh_needed = signature_changed or old_visible_normal != new_visible_normal \
+        or old_disposition != new_disposition
+    normal_view = plans[False]["view"]
+    if not refresh_needed and same_selector \
+            and _refresh_library_index(state, data, {category_position}):
+        return True
+    if _patch_library_index_for_row(state, normal_view, previous_entry, entry,
+                                    old_visible_normal, new_visible_normal,
+                                    {category_position}):
+        return True
+    state["index"] = None
+    return False
+
+
 def _cache_prompt_data(data, changed_ids=None):
     """Install a just-committed library document.
 
@@ -1065,6 +1318,7 @@ def _cache_prompt_data(data, changed_ids=None):
         found = set()
         total = 0
         index_patchable = True
+        previous_entries = {}
         for category in data.get("categories", []) or []:
             for prompt in category.get("prompts", []) or []:
                 total += 1
@@ -1072,6 +1326,7 @@ def _cache_prompt_data(data, changed_ids=None):
                 if identity in wanted:
                     entry = _library_entry(document, category, prompt)
                     previous = entries.get(identity)
+                    previous_entries[identity] = previous
                     if previous is None or _index_patch_signature(previous) != _index_patch_signature(entry):
                         index_patchable = False
                     entries[identity] = entry
@@ -1093,13 +1348,29 @@ def _cache_prompt_data(data, changed_ids=None):
         if cache_enabled:
             _SEMANTIC_CACHE["projection"] = _semantic_cache_projection(version[1])
             _schedule_semantic_cache_store()
-        # A favourite, a usage stamp, a note or a preview swap keeps its row in place,
-        # so the 100k-row ordering can be patched instead of rebuilt (measured 721 ms).
-        if _patch_derived_caches(state, data, found,
-                                 refresh_index=index_patchable and _same_selector_library(previous_data, data)):
-            _lib_trace("cache_patch", changed=sorted(found), rows="patched",
-                       signature=[list(version[0]), list(version[1])])
-            return state["index"] is not None
+        same_selector = _same_selector_library(previous_data, data)
+        # One changed row (every single-record writer) patches only the structures that
+        # depend on it: views, ordering, tallies and the cached index payload.
+        try:
+            if len(found) == 1:
+                prompt_id = next(iter(found))
+                status = _patch_one_changed_row(state, data, prompt_id,
+                                                previous_entries.get(prompt_id),
+                                                entries.get(prompt_id), same_selector)
+                if status is not None:
+                    _lib_trace("cache_patch", changed=sorted(found), rows="patched",
+                               signature=[list(version[0]), list(version[1])])
+                    return bool(status)
+            # A favourite, a usage stamp, a note or a preview swap keeps its row in place,
+            # so the 100k-row ordering can be patched instead of rebuilt (measured 721 ms).
+            if _patch_derived_caches(state, data, found, refresh_index=index_patchable and same_selector):
+                _lib_trace("cache_patch", changed=sorted(found), rows="patched",
+                           signature=[list(version[0]), list(version[1])])
+                return state["index"] is not None
+        except Exception as error:  # noqa: BLE001 - a broken patch must never fail the save
+            logger.warning("[Workbench] derived read model patch failed; rebuilding lazily: %s", error)
+            _library_state_reset()
+            return False
         state["views"].clear()
         state["rows"].clear()
         state["ranges"].clear()
@@ -1303,6 +1574,61 @@ def pool_filter_hit(semantic, filters, mode="any"):
     return True
 
 
+def _ordered_counts(counts):
+    """Most-common order with a deterministic tie break (count desc, key asc)."""
+    return {key: count for key, count in sorted(counts.items(), key=lambda item: (-item[1], item[0]))}
+
+
+def _refinement_sections(counts):
+    """Group refinement ids by parent, ordered by (count desc, id asc)."""
+    sections = {}
+    for identity, count in _ordered_counts(counts).items():
+        node = REFINEMENT_NODES[identity]
+        sections.setdefault(node["parent"], []).append({
+            "id": identity, "label": node["label"], "parent": node["parent"],
+            "owner": node["owner"], "count": count,
+            "tags": node["tags"],
+        })
+    return sections
+
+
+def _index_sections(themes, facets, counts, refinements, label_owners, unknown, class_keys):
+    """Build the index payload's aggregate sections with deterministic ordering.
+
+    ``label_owners`` maps a subcategory label to its {owner: row count} tally. The
+    full rebuild collects it in one pass and the single-row patch adjusts it in
+    place, so both paths produce the same payload.
+    """
+    subcategories = {key: set() for key in class_keys}
+    pool_subcategories = {}
+    conflicting = {}
+    values = {}
+    for label in sorted(label_owners):
+        owners = label_owners[label]
+        if len(owners) > 1:
+            conflicting[label] = {owner: owners[owner] for owner in sorted(owners)}
+            continue
+        owner = next(iter(owners))
+        subcategories.setdefault(owner, set()).add(label)
+        pool_subcategories.setdefault(owner, {})[label] = owners[owner]
+        if not subcategory_owner({}, label):
+            values[label] = owner + "::" + label
+    semantic_subcategories = {key: sorted(labels) for key, labels in subcategories.items()}
+    filter_pool = {
+        "theme": _ordered_counts(themes),
+        "subcategory": {owner: _ordered_counts(counter)
+                        for owner, counter in sorted(pool_subcategories.items())},
+        "subcategory_values": {label: values[label] for label in sorted(values)},
+        "facet": _ordered_counts(facets),
+        "count": _ordered_counts(counts),
+        "refinements": _refinement_sections(refinements),
+        "refinement_version": REFINEMENT_VERSION,
+        "unmapped_subcategories": _ordered_counts(unknown),
+        "conflicting_subcategories": {label: conflicting[label] for label in sorted(conflicting)},
+    }
+    return semantic_subcategories, filter_pool
+
+
 def _library_index_payload():
     with _PROMPT_FILE_LOCK, _PROMPT_CACHE_LOCK:
         data = _reviewed_library_data()
@@ -1318,15 +1644,14 @@ def _library_index_payload():
             categories.append(summary)
         # One pass collects the per-class subcategory vocabulary; the previous shape
         # walked every prompt once per class label.
-        subcategories = {key: set() for key in data.get("_semantic_class_labels", {})}
+        class_keys = list(data.get("_semantic_class_labels", {}))
         # 小主题只使用词表声明的归属，数据量变化不会让它换父主题。
         pool_themes = Counter()
-        pool_subcategories = {}
-        subcategory_owners = {}
-        unknown_subcategories = Counter()
         pool_facets = Counter()
         pool_counts = Counter()
         pool_refinements = Counter()
+        label_owners = {}
+        unknown_subcategories = Counter()
         for category in data.get("categories", []) or []:
             for prompt in category.get("prompts", []) or []:
                 semantic = prompt["_semantic"]
@@ -1336,9 +1661,7 @@ def _library_index_payload():
                 for label in set(semantic.get("subcategories") or []):
                     owner = subcategory_owner(semantic, label)
                     if owner:
-                        subcategory_owners.setdefault(label, set()).add(owner)
-                        subcategories.setdefault(owner, set()).add(label)
-                        pool_subcategories.setdefault(owner, Counter())[label] += 1
+                        label_owners.setdefault(label, Counter())[owner] += 1
                     else:
                         unknown_subcategories[label] += 1
                 for facet in set(semantic.get("themes") or []):
@@ -1346,23 +1669,9 @@ def _library_index_payload():
                 for marker in set(semantic.get("count_markers") or []):
                     pool_counts[marker] += 1
                 pool_refinements.update(set(semantic.get("refinements") or []))
-        conflicting_subcategories = {}
-        subcategory_values = {}
-        for label, owners in subcategory_owners.items():
-            if len(owners) > 1:
-                conflicting_subcategories[label] = {owner: pool_subcategories[owner].pop(label) for owner in sorted(owners)}
-                for owner in owners:
-                    subcategories[owner].discard(label)
-            elif not subcategory_owner({}, label):
-                subcategory_values[label] = next(iter(owners)) + "::" + label
-        refinements = {}
-        for identity, count in pool_refinements.most_common():
-            node = REFINEMENT_NODES[identity]
-            refinements.setdefault(node["parent"], []).append({
-                "id": identity, "label": node["label"], "parent": node["parent"],
-                "owner": node["owner"], "count": count,
-                "tags": node["tags"],
-            })
+        semantic_subcategories, filter_pool = _index_sections(
+            pool_themes, pool_facets, pool_counts, pool_refinements,
+            label_owners, unknown_subcategories, class_keys)
         payload = {
             "version": data.get("version", "1.6"),
             "settings": data.get("settings", {}),
@@ -1373,18 +1682,8 @@ def _library_index_payload():
             "semantic_classes": data.get("_semantic_class_labels", {}),
             "selector_groups": {kind: collection_groups(data) for kind in COLLECTION_KINDS},
             "selector_class_kinds": {key: route[0] for key, route in CLASS_ROUTES.items()},
-            "semantic_subcategories": {key: sorted(value) for key, value in subcategories.items()},
-            "filter_pool": {
-                "theme": dict(pool_themes.most_common()),
-                "subcategory": {key: dict(value.most_common()) for key, value in pool_subcategories.items()},
-                "subcategory_values": subcategory_values,
-                "facet": dict(pool_facets.most_common()),
-                "count": dict(pool_counts.most_common()),
-                "refinements": refinements,
-                "refinement_version": REFINEMENT_VERSION,
-                "unmapped_subcategories": dict(unknown_subcategories.most_common()),
-                "conflicting_subcategories": conflicting_subcategories,
-            },
+            "semantic_subcategories": semantic_subcategories,
+            "filter_pool": filter_pool,
         }
         if state["views"].get(False) is data:
             state["index"] = payload

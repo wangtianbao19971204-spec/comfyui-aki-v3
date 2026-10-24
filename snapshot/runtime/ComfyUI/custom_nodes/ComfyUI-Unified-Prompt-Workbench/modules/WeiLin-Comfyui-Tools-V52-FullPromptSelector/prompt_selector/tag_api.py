@@ -45,12 +45,14 @@ def _warm_default_tag_views(tag_library):
 
 
 def _warm_tag_catalog():
-    """Build the folder tree, the Tag read indexes and the default pages before first use.
+    """Build the folder tree, the Tag read indexes, the search cache and the default pages.
 
     ``categories()`` is the one expensive read (all tag rows grouped by folder plus the
     标签串 layout), and TagLibrary persists it, so after the first run this costs almost
     nothing.  ``warm_read_index()`` builds the expression indexes/derived tables once, then
     the default views are pre-warmed under the same cache keys the panel will request.
+    ``warm_search_index()`` builds/syncs the trigram FTS cache for ``q`` searches; it is
+    optional (a missing cache or a failed build just keeps the old LIKE fallback).
     """
     started = time.perf_counter()
     tag_library = library()
@@ -62,6 +64,12 @@ def _warm_tag_catalog():
                 _warm_default_tag_views(tag_library)
         except Exception as error:  # noqa: BLE001 - a failed warm-up must not break the panel
             logger.warning("[Workbench] Tag 读取预热失败，将在首次打开时重试: %s", error)
+    warm_search = getattr(tag_library, 'warm_search_index', None)
+    if warm_search is not None:
+        try:
+            warm_search()
+        except Exception as error:  # noqa: BLE001 - a failed warm-up must not break the panel
+            logger.warning("[Workbench] Tag 搜索预热失败，将在首次搜索时重试: %s", error)
     logger.info("[Workbench] Tag catalog warmed in %.1f s; the Tag manager opens from cache.",
                 time.perf_counter() - started)
 
