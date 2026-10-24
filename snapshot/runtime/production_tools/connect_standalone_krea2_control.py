@@ -6,7 +6,13 @@ import copy
 import json
 from pathlib import Path
 
-from simplify_anima_control import node
+
+def node(node_id, kind, title, widgets=(), inputs=(), outputs=(), pos=(0, 0)):
+    return {"id": node_id, "type": kind, "title": title, "pos": list(pos), "size": [300, 150],
+            "flags": {}, "order": 0, "mode": 0, "inputs": [{"name": n, "type": t, "link": None} for n, t in inputs],
+            "outputs": [{"name": n, "type": t, "links": []} for n, t in outputs],
+            "properties": {}, "widgets_values": list(widgets)}
+
 
 ROOT = Path(__file__).resolve().parents[1]
 FILENAME = "生产套件_03_Krea2_一体化生产_v2.json"

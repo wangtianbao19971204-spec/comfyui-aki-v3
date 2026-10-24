@@ -27,6 +27,8 @@ VNCCS 子图执行同步现按冒号路径定位节点，后端与上传 API 复
 
 ## 更新记录
 
+- 2026-10-24：Anima 工作流退役同步更新 production_tools 工具与测试（删除 Anima 分支迁移/擦线工具及其测试，启动配置检查与 UAP 校验改以 Krea2 为默认）；Anima 插件与训练工具保留，未改运行区。见[工作流变更](../changes/runtime-workflows/2026-10-24-anima-assets-retirement.md)。
+
 - 2026-10-11：K2 控制链维护工具整理：保留 `production_tools/keep_krea2_control_enabled.py`（分支模式表修正，用 `--write` 应用），移除仅用于比对的过渡脚本`production_tools/align_krea2_branch_modes.py`；两者都不改变运行逻辑，也不触碰权重。见[分支模式修复](../changes/runtime-workflows/2026-10-11-krea2-branch-mode-fix.md)。
 
 - 2026-10-11：K2 分支模式表漂移修复：ranches[k2].modes 曾把 Depth 控制链与姿势工作室（1160/1161/1172/1149）记为静音，而文件里它们是启用态。前端 ctivateBranch 在切分支时按表写 mode，于是从别的分支切到 Krea2 后 Krea2ControlApply 被静音、DazzleSwitch 1187 在 priority 下静默回退到原始模型——控制消失且无报错。现把该链在表里改为启用（其余节点记录不变，预览类仍保持关闭），并同步节点自身 mode 防止再次漂移。见[分支模式修复](../changes/runtime-workflows/2026-10-11-krea2-branch-mode-fix.md)。

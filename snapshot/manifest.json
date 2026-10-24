@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-14T05:06:39.061787+00:00",
+  "created_at": "2026-10-24T08:49:47.684981+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -23706,13 +23706,6 @@
       "kind": "file"
     },
     {
-      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
-      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
-      "sha256": "4c5dcf1031ae572c2f65519e378439898a59eeb05e8df6f7e9acbaeae1e8ca97",
-      "bytes": 7853,
-      "kind": "file"
-    },
-    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime.css",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime.css",
       "sha256": "6e59a415c4814d64b840be16e00c372d8cf48bf163bd63147f531f3e4f8b51ce",
@@ -23862,8 +23855,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_switches.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_switches.js",
-      "sha256": "50f5d30b17cb78c6d7314b72daf2d04c6edcf6cfbdab3aed35a54dcde5c1ab4e",
-      "bytes": 12137,
+      "sha256": "b90cdd4abc92be482b3339fa577ee7313dac3a68eaddbb4408ba3af208f75726",
+      "bytes": 9941,
       "kind": "file"
     },
     {
@@ -23911,8 +23904,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_inspector.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_inspector.js",
-      "sha256": "73974f3283172cdf27adfb2a497d1b56b6cc27d0bb9a30195911bb5c25dd7d2c",
-      "bytes": 18160,
+      "sha256": "305da3a8db57d3626bca56ad8adc6439a473c642061097b49578016ea465f444",
+      "bytes": 17899,
       "kind": "file"
     },
     {
@@ -23974,8 +23967,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
-      "sha256": "8035456d5b36a0375805f125c01c85622167476ffc0812fcee0f2b4cbaf85186",
-      "bytes": 12246,
+      "sha256": "5850dece1ed86518d59d6dec50e01722c390a13091e1c74660d376aa0d0a12b0",
+      "bytes": 9946,
       "kind": "file"
     },
     {
@@ -24016,8 +24009,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
-      "sha256": "af35a74fa2a62cc044397abbeaa19a5f2b64c6f6b206614308c7bd9e39108b06",
-      "bytes": 25007,
+      "sha256": "60f4c10b8669c554655ca1ebe2138239c365de7482475e3027a96c873c2bda69",
+      "bytes": 24777,
       "kind": "file"
     },
     {
@@ -24065,8 +24058,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
-      "sha256": "7e4b65407314b2c70cdbd5d62443966d85bda9965b9971dafa8266bc89310499",
-      "bytes": 19569,
+      "sha256": "c193b15bb6ef178cf11eca7abf8f865c5b8e78277a018c6186176e23a8013f20",
+      "bytes": 19396,
       "kind": "file"
     },
     {
@@ -51526,8 +51519,8 @@
     {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-      "sha256": "c4eb1072b8742afb55675e1bb0f9136a10a01c99921bb53d6e9fd1173ad80267",
-      "bytes": 849423,
+      "sha256": "9f547db3a64e53e214625eab87b7163f3094c0d7994bd91e1f4dee0510d6f31b",
+      "bytes": 240208,
       "kind": "file"
     },
     {
@@ -51587,20 +51580,6 @@
       "kind": "file"
     },
     {
-      "source": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
-      "path": "runtime/ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
-      "sha256": "b78421000e2f826f5e084e96efad48aa3505756ce4109e262cebf872ef427439",
-      "bytes": 542611,
-      "kind": "file"
-    },
-    {
-      "source": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
-      "path": "runtime/ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
-      "sha256": "432ab427152c2a6db60e3a85f0778f025a59734fbe91207a18c5b9bcc976b7a2",
-      "bytes": 411406,
-      "kind": "file"
-    },
-    {
       "source": "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
       "sha256": "30cf66fe43ca785b902aa679373fa6ca4355f88f350ae1a2e65368c9da6d6935",
@@ -51622,24 +51601,10 @@
       "kind": "file"
     },
     {
-      "source": "ComfyUI/user/default/workflows/生产扩展_05_Anima2.9_裁剪精修回贴.json",
-      "path": "runtime/ComfyUI/user/default/workflows/生产扩展_05_Anima2.9_裁剪精修回贴.json",
-      "sha256": "98dd515382ca711177730b0e5c1f468a2f5a62dabbcfe266c8e2947c307ade02",
-      "bytes": 17184,
-      "kind": "file"
-    },
-    {
       "source": "ComfyUI/user/default/workflows/生产扩展_06_透明素材_抠图导出.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产扩展_06_透明素材_抠图导出.json",
       "sha256": "32189183436c09f3a9fa19e0e894251f5fedcf62f35e6de69db5f13d96f01fc3",
       "bytes": 4989,
-      "kind": "file"
-    },
-    {
-      "source": "ComfyUI/user/default/workflows/生产扩展_07_Anima原版_左右扩图.json",
-      "path": "runtime/ComfyUI/user/default/workflows/生产扩展_07_Anima原版_左右扩图.json",
-      "sha256": "0fa1efe26029ed56216f71a24fa9828316c9145d2f06db9fb734a80e92eee2fe",
-      "bytes": 14396,
       "kind": "file"
     },
     {
@@ -51654,13 +51619,6 @@
       "path": "runtime/ComfyUI/user/default/workflows/生产扩展_09_超分_四倍素材.json",
       "sha256": "af48d8a11187611b85f77a8f67c8b42a8f25993488c1bb6fae5fe8992d2b5862",
       "bytes": 5382,
-      "kind": "file"
-    },
-    {
-      "source": "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
-      "path": "runtime/ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
-      "sha256": "af6292aeda10c1c448cb7060dfe11637292897e5808d63745b5e1988514967c4",
-      "bytes": 220653,
       "kind": "file"
     },
     {
@@ -57742,15 +57700,15 @@
     {
       "source": "production_tools/README.md",
       "path": "runtime/production_tools/README.md",
-      "sha256": "defe791928784256248a854de1bfd316ad9f4532a72e687034345b39831620cd",
-      "bytes": 12928,
+      "sha256": "06875a5e3a7bd77878f9b7ab2ae00da7bef46946ed593b0ed41ddab4241e40c4",
+      "bytes": 12910,
       "kind": "file"
     },
     {
       "source": "production_tools/UAP统一工作台说明.md",
       "path": "runtime/production_tools/UAP统一工作台说明.md",
-      "sha256": "2dbf2e2f77a9cc7368a8fe846ace05fad6176f1ca4017a52b50d4efbaa16a768",
-      "bytes": 7909,
+      "sha256": "4bb937035af7918b9698e356d1aae9a00f7adbc92649f69ced52bde2a13283ea",
+      "bytes": 7875,
       "kind": "file"
     },
     {
@@ -57812,8 +57770,8 @@
     {
       "source": "production_tools/connect_standalone_krea2_control.py",
       "path": "runtime/production_tools/connect_standalone_krea2_control.py",
-      "sha256": "2f46ad5fa192733c068e3d9205e998aa580d29954a45528a0ef1a7c25c414e55",
-      "bytes": 9296,
+      "sha256": "04d1fdbce57ae57bac801eebfd7ab5e16906e366666cf7c73bbc70795f4604fe",
+      "bytes": 9694,
       "kind": "file"
     },
     {
@@ -57821,13 +57779,6 @@
       "path": "runtime/production_tools/export_stocking_upstream.py",
       "sha256": "51324f8e689657aa2d37bc751345fa89456920130721a2e00b3d45d9cba7d327",
       "bytes": 8572,
-      "kind": "file"
-    },
-    {
-      "source": "production_tools/fix_anima_erase_mask.py",
-      "path": "runtime/production_tools/fix_anima_erase_mask.py",
-      "sha256": "93cedbf40c913d4e066ddf789c17596de1035962ca82a1949443f26f799574b3",
-      "bytes": 3522,
       "kind": "file"
     },
     {
@@ -57987,8 +57938,8 @@
     {
       "source": "production_tools/merge_unified_workflow.py",
       "path": "runtime/production_tools/merge_unified_workflow.py",
-      "sha256": "c22f8ac79425459d750bef702e4a69d95ed9246c52fc3cb5fc8c578f80dce079",
-      "bytes": 37729,
+      "sha256": "63e6524091e072bb9dc422119216c636a53d3be0e392f6c18e800a0e86218bd9",
+      "bytes": 36579,
       "kind": "file"
     },
     {
@@ -58010,13 +57961,6 @@
       "path": "runtime/production_tools/resource_archive.py",
       "sha256": "933ed48214d3c65cd38c475939540564e7ca0fd3d3cb0e12cb0d3b072130255a",
       "bytes": 9683,
-      "kind": "file"
-    },
-    {
-      "source": "production_tools/simplify_anima_control.py",
-      "path": "runtime/production_tools/simplify_anima_control.py",
-      "sha256": "5d36098143c9193e4e39c0ebd1644713c384b899489d18df7b1fada716fd875b",
-      "bytes": 11950,
       "kind": "file"
     },
     {
@@ -58078,22 +58022,8 @@
     {
       "source": "production_tools/templates/UAP统一生产工作台_v2.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v2.json",
-      "sha256": "c4eb1072b8742afb55675e1bb0f9136a10a01c99921bb53d6e9fd1173ad80267",
-      "bytes": 849423,
-      "kind": "file"
-    },
-    {
-      "source": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
-      "path": "runtime/production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
-      "sha256": "08e8b1707f45887967345c7d53c4717d87ea07af448e4d1cecfe220cf95a372c",
-      "bytes": 490562,
-      "kind": "file"
-    },
-    {
-      "source": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
-      "path": "runtime/production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
-      "sha256": "2b0e2a566a241ddefbf9968d2858655500179e218298f967db95ac62769c0c31",
-      "bytes": 408414,
+      "sha256": "9f547db3a64e53e214625eab87b7163f3094c0d7994bd91e1f4dee0510d6f31b",
+      "bytes": 240208,
       "kind": "file"
     },
     {
@@ -58118,24 +58048,10 @@
       "kind": "file"
     },
     {
-      "source": "production_tools/templates/生产扩展_05_Anima2.9_裁剪精修回贴.json",
-      "path": "runtime/production_tools/templates/生产扩展_05_Anima2.9_裁剪精修回贴.json",
-      "sha256": "98dd515382ca711177730b0e5c1f468a2f5a62dabbcfe266c8e2947c307ade02",
-      "bytes": 17184,
-      "kind": "file"
-    },
-    {
       "source": "production_tools/templates/生产扩展_06_透明素材_抠图导出.json",
       "path": "runtime/production_tools/templates/生产扩展_06_透明素材_抠图导出.json",
       "sha256": "32189183436c09f3a9fa19e0e894251f5fedcf62f35e6de69db5f13d96f01fc3",
       "bytes": 4989,
-      "kind": "file"
-    },
-    {
-      "source": "production_tools/templates/生产扩展_07_Anima原版_左右扩图.json",
-      "path": "runtime/production_tools/templates/生产扩展_07_Anima原版_左右扩图.json",
-      "sha256": "0fa1efe26029ed56216f71a24fa9828316c9145d2f06db9fb734a80e92eee2fe",
-      "bytes": 14396,
       "kind": "file"
     },
     {
@@ -58157,13 +58073,6 @@
       "path": "runtime/production_tools/templates/生产扩展_丝袜纹理修复.json",
       "sha256": "cf545e5128efb3a113c75fe18deb4eefbd08c7449514d113a37f1ce451556f35",
       "bytes": 5650,
-      "kind": "file"
-    },
-    {
-      "source": "production_tools/test_anima_control.cjs",
-      "path": "runtime/production_tools/test_anima_control.cjs",
-      "sha256": "2d526655d14d1d42a270b7754d61aa737bfe40099526f1dbfb7916d887f7c1b5",
-      "bytes": 6362,
       "kind": "file"
     },
     {
@@ -58190,8 +58099,8 @@
     {
       "source": "production_tools/test_control_switches.cjs",
       "path": "runtime/production_tools/test_control_switches.cjs",
-      "sha256": "7c5d6355dbdf92dc931a34c54c71a3128bc46a2965d6f59179db0c778c28a01f",
-      "bytes": 16697,
+      "sha256": "e03d687f6b97a79d87cbb34be49b22541a4d048c886befab3c3b2edcd438dcf7",
+      "bytes": 16560,
       "kind": "file"
     },
     {
@@ -58232,8 +58141,8 @@
     {
       "source": "production_tools/test_uap_browser_retirement.py",
       "path": "runtime/production_tools/test_uap_browser_retirement.py",
-      "sha256": "f6003bdae3c4d0f4c1de0d06ea407f4f21ef801b44258a213578c9ce2e7740b2",
-      "bytes": 15407,
+      "sha256": "4421513d2a3c6809609f40bfc75fd1f132f2971dcba4f8e639ae1e585a8987e0",
+      "bytes": 13101,
       "kind": "file"
     },
     {
@@ -58260,8 +58169,8 @@
     {
       "source": "production_tools/test_validate_profiles.py",
       "path": "runtime/production_tools/test_validate_profiles.py",
-      "sha256": "1d4c3bdc54eb18a696862e8b2a256fd6869ddface67feb5e99e4fab441276a88",
-      "bytes": 5042,
+      "sha256": "291dde2ee61aa8cadc376ee9c9fad7b82c684c68a731cd0d2eb51f05656ed5c8",
+      "bytes": 4926,
       "kind": "file"
     },
     {
@@ -58288,15 +58197,15 @@
     {
       "source": "production_tools/validate_profiles.py",
       "path": "runtime/production_tools/validate_profiles.py",
-      "sha256": "65c5808b73d8e5d8fdc258317a0c9104546dba81310f61d58998be95eb28d87f",
-      "bytes": 5194,
+      "sha256": "725f3777c3978ed21e8f7935fff069e01f81ba8503803a614d87afffbca8069a",
+      "bytes": 5316,
       "kind": "file"
     },
     {
       "source": "production_tools/validate_uap_workflow.py",
       "path": "runtime/production_tools/validate_uap_workflow.py",
-      "sha256": "9969a025a5344d561d60acc666ecb905697b3b39392a57a96e23e03ce632313c",
-      "bytes": 9623,
+      "sha256": "f279856b640159d8d439a9af1643b3d411dcbeee560cd0928fe8161882b51ddd",
+      "bytes": 10169,
       "kind": "file"
     },
     {
@@ -58316,8 +58225,8 @@
     {
       "source": "production_tools/工作流状态表.md",
       "path": "runtime/production_tools/工作流状态表.md",
-      "sha256": "74917bc8e0060dcaf67fb8229dfc5d65f92e3c8ea8a56f7cfe144bfd63c8d099",
-      "bytes": 3791,
+      "sha256": "e202036ffd51dbc590e1321c3e5a74ed529f79843f41034df99166396afff012",
+      "bytes": 3269,
       "kind": "file"
     },
     {
@@ -58358,8 +58267,8 @@
     {
       "source": "production_tools/插件融合使用说明.md",
       "path": "runtime/production_tools/插件融合使用说明.md",
-      "sha256": "e454a0373ea7f4a680f3a92257d9eee04c1ba7d6dcc303a559c394cfd6f39b62",
-      "bytes": 5394,
+      "sha256": "44e4a286fc6eb2c19967ef647fbd6d87e02ca8255f62cbc56921b86ba3e29d86",
+      "bytes": 5428,
       "kind": "file"
     },
     {
@@ -58372,8 +58281,8 @@
     {
       "source": "production_tools/项目使用指南.md",
       "path": "runtime/production_tools/项目使用指南.md",
-      "sha256": "027d4d160a6b8849ac793c7ec3cb380fc837769e04ffd603afedb71d6ec3411d",
-      "bytes": 7317,
+      "sha256": "bcd098f31f9e43cb3bd367a2326a3eae0da2de42ec4f5aa7965b5fa7cf33eeaf",
+      "bytes": 6748,
       "kind": "file"
     },
     {
@@ -68109,7 +68018,7 @@
     },
     {
       "path": "inventory/model_sources.json",
-      "sha256": "ffd73a0afc8065cc67a906a4ffaabcea41e559ff7c6dc59de69ad7c70c779343",
+      "sha256": "7d258ea779e740432b19aeab2a802cf5acfd5c82dd2e36c3cff5a1f28b6afdd6",
       "bytes": 1283777
     }
   ],
@@ -68205,31 +68114,13 @@
     }
   ],
   "development_revision": {
-    "note": "Sync stocking e6aeaeb multilayer editor and browser preset exchange with cache and finite-input fixes",
-    "previous_manifest_sha256": "b3adee7b56e96d657a018489fa83bc1eee819b17d8fc38cb138fd38de31f60b1",
+    "note": "Retire Anima workflows, templates and UAP branches; keep Krea2 only (repo only, not deployed)",
+    "previous_manifest_sha256": "fecb032c44bceec66b7fc962303cb2f546e76308de5dc4987f69b202bafbe06b",
     "source_changes": {
-      "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_rendering.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_studio.py"
-      ],
+      "added": [],
       "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/rendering.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_api.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_assets.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/document.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/look.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/presets.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/server.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/app.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n/en.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/index.html",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/look.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/style.css"
+        "production_tools/README.md"
       ]
     },
     "live_deployed": false,
@@ -68311,12 +68202,64 @@
         "previous_sha256": "1add5ddd582af05cdfff1c3a9b43b8cabd1fe265c8adb5a415df1a02b0914993"
       },
       {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
+        "previous_sha256": "4c5dcf1031ae572c2f65519e378439898a59eeb05e8df6f7e9acbaeae1e8ca97"
+      },
+      {
         "source": "ComfyUI/custom_nodes/TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters/models_cache.json",
         "previous_sha256": "256920e0f444fce3358401b72bc1529e32d3954690ec2f1cd397aaf9251df3c6"
       },
       {
+        "source": "ComfyUI/user/default/workflows/生产套件_01_Anima原版_LoRA生产_v2.json",
+        "previous_sha256": "b78421000e2f826f5e084e96efad48aa3505756ce4109e262cebf872ef427439"
+      },
+      {
+        "source": "ComfyUI/user/default/workflows/生产套件_02_Anima2.9B_动漫生产_v2.json",
+        "previous_sha256": "432ab427152c2a6db60e3a85f0778f025a59734fbe91207a18c5b9bcc976b7a2"
+      },
+      {
+        "source": "ComfyUI/user/default/workflows/生产扩展_05_Anima2.9_裁剪精修回贴.json",
+        "previous_sha256": "98dd515382ca711177730b0e5c1f468a2f5a62dabbcfe266c8e2947c307ade02"
+      },
+      {
+        "source": "ComfyUI/user/default/workflows/生产扩展_07_Anima原版_左右扩图.json",
+        "previous_sha256": "0fa1efe26029ed56216f71a24fa9828316c9145d2f06db9fb734a80e92eee2fe"
+      },
+      {
+        "source": "ComfyUI/user/default/workflows/生产扩展_10_部位细化_Anima.json",
+        "previous_sha256": "af6292aeda10c1c448cb7060dfe11637292897e5808d63745b5e1988514967c4"
+      },
+      {
         "source": "production_tools/align_krea2_branch_modes.py",
         "previous_sha256": "c9446485c424dfbacf786fcc8b1939e550218b09963e636bf822e66df2acef3d"
+      },
+      {
+        "source": "production_tools/fix_anima_erase_mask.py",
+        "previous_sha256": "93cedbf40c913d4e066ddf789c17596de1035962ca82a1949443f26f799574b3"
+      },
+      {
+        "source": "production_tools/simplify_anima_control.py",
+        "previous_sha256": "5d36098143c9193e4e39c0ebd1644713c384b899489d18df7b1fada716fd875b"
+      },
+      {
+        "source": "production_tools/templates/生产套件_01_Anima原版_LoRA生产_v2.json",
+        "previous_sha256": "08e8b1707f45887967345c7d53c4717d87ea07af448e4d1cecfe220cf95a372c"
+      },
+      {
+        "source": "production_tools/templates/生产套件_02_Anima2.9B_动漫生产_v2.json",
+        "previous_sha256": "2b0e2a566a241ddefbf9968d2858655500179e218298f967db95ac62769c0c31"
+      },
+      {
+        "source": "production_tools/templates/生产扩展_05_Anima2.9_裁剪精修回贴.json",
+        "previous_sha256": "98dd515382ca711177730b0e5c1f468a2f5a62dabbcfe266c8e2947c307ade02"
+      },
+      {
+        "source": "production_tools/templates/生产扩展_07_Anima原版_左右扩图.json",
+        "previous_sha256": "0fa1efe26029ed56216f71a24fa9828316c9145d2f06db9fb734a80e92eee2fe"
+      },
+      {
+        "source": "production_tools/test_anima_control.cjs",
+        "previous_sha256": "2d526655d14d1d42a270b7754d61aa737bfe40099526f1dbfb7916d887f7c1b5"
       }
     ]
   },

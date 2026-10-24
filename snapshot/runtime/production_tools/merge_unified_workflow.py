@@ -35,30 +35,11 @@ GROUP_MARGIN = 10
 # Small, source-local collision fixes for the compact presentation.  They
 # affect only the generated UAP copy; source workflows and links stay intact.
 COMPACT_NODE_NUDGES = {
-    "a1": {"[03I]": (80, 0)},
     "k2": {"[00B5]": (480, 0), "id:573": (0, 350)},
 }
 
 
 SOURCES = [
-    {
-        "file": "生产套件_01_Anima原版_LoRA生产_v2.json",
-        "key": "a1",
-        "suffix": "· A1 原版",
-        "offset": (0, 0),
-        "label": "Anima 原版生产",
-        "nav": "[01] Anima 原版生产",
-        "color": "#4D6C5B",
-    },
-    {
-        "file": "生产套件_02_Anima2.9B_动漫生产_v2.json",
-        "key": "a29",
-        "suffix": "· A29 2.9B",
-        "offset": (15000, 0),
-        "label": "Anima 2.9B 生产",
-        "nav": "[02] Anima 2.9B 生产",
-        "color": "#5C5878",
-    },
     {
         "file": "生产套件_03_Krea2_一体化生产_v2.json",
         "key": "k2",
@@ -78,15 +59,6 @@ SOURCES = [
         "color": "#70566D",
     },
     {
-        "file": "生产扩展_05_Anima2.9_裁剪精修回贴.json",
-        "key": "ext05",
-        "suffix": "· EXT05",
-        "offset": (5000, 8000),
-        "label": "Anima2.9 裁剪精修回贴",
-        "nav": "[05] Anima2.9 裁剪精修回贴",
-        "color": "#78633F",
-    },
-    {
         "file": "生产扩展_06_透明素材_抠图导出.json",
         "key": "ext06",
         "suffix": "· EXT06",
@@ -94,15 +66,6 @@ SOURCES = [
         "label": "透明素材抠图导出",
         "nav": "[06] 透明素材抠图导出",
         "color": "#55705A",
-    },
-    {
-        "file": "生产扩展_07_Anima原版_左右扩图.json",
-        "key": "ext07",
-        "suffix": "· EXT07",
-        "offset": (15000, 8000),
-        "label": "Anima 原版左右扩图",
-        "nav": "[07] Anima 原版左右扩图",
-        "color": "#5C5878",
     },
     {
         "file": "生产扩展_08_超分_二倍交付.json",

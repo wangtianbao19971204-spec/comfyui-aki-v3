@@ -9,7 +9,7 @@
 - 双击根目录 `启动_ComfyUI_生产.cmd`：加载 25 个生产插件，使用 8188。
 - 双击 `启动_ComfyUI_诊断.cmd`：在生产配置上增加开发诊断，共 26 个插件。
 - 双击 `启动_ComfyUI_轻量.cmd`：只加载六条扩展工作流所需的 5 个插件，适合局部精修、抠图、扩图和超分；默认仍使用 8188，请先停止其他后端。
-- 双击 `启动_ComfyUI_Anima.cmd`：仅加载 Anima 01–02 主套件所需的 17 个插件。
+- 双击 `启动_ComfyUI_Anima.cmd`：保留的 Anima 插件配置（17 个插件），供 Anima 训练/兼容工具使用；现行 Anima 生成工作流已退役。
 - 双击 `启动_ComfyUI_Krea2.cmd`：仅加载 Krea2 03 主套件所需的 16 个插件。
 - 浏览器打开 `http://127.0.0.1:8188`。启动日志位于 `production_tools/logs`。
 - Windows 中文环境已规避 bitsandbytes 的 Linux Gaudi 探测编码异常；若启动日志出现新的异常，应先保留对应日志再切换 profile。
@@ -31,14 +31,12 @@
 
 ## 工作流入口
 
-现有四条 `生产套件_*.json` 仍是主入口。新增六条 `生产扩展_*.json`：
+现行主入口为 Krea2 生产套件 03 与 99 释放流程；Anima 套件 01/02 与扩展 05/07/10 已于 2026-10-24 退役。现行图片处理扩展 04/06/08/09：
 
 | 入口 | 用途 | 默认配置 |
 |---|---|---|
 | 04 Krea2 指令编辑 | 用自然语言改色、调整内容 | Identity Edit v1.2，8 步，CFG 1，fit，ref_boost 4 |
-| 05 Anima 2.9 裁剪精修回贴 | 拖选局部、重绘、羽化、按坐标回贴 | 512×512，denoise 0.35，32 像素羽化 |
 | 06 透明素材 | 抠图，保存含 Alpha 的 PNG | BiRefNet lite |
-| 07 Anima 原版左右扩图 | 保留中心，生成左右延伸 | 左右各 128，inpainting LLLite |
 | 08 二倍交付 | 内容保真的快速放大 | OmniSR 4× 后缩为 2× |
 | 09 四倍素材 | 输出四倍尺寸素材 | OmniSR 4× |
 
@@ -58,7 +56,7 @@
 
 ## 已确认的限制
 
-- 2026-10-11 源码候选已为 2.9B 的姿态/VNCCS 接入原生 AnimaLLLiteApply 与统一 LoRA/ControlNet 层映射；原版流程继续使用旧节点。控制分支仍默认关闭。`simplify_anima_control.py` 默认只检查，`--write-source` 才写四份源码/模板；不部署、不排队。新图须连同加载器和白名单一起部署，不能直接用于只有旧补丁的在线服务。CPU 映射与实页导出已验证，生产部署和实际 GPU 控制效果待授权验收。
+- 2026-10-11 源码候选已为 2.9B 的姿态/VNCCS 接入原生 AnimaLLLiteApply 与统一 LoRA/ControlNet 层映射；原版流程继续使用旧节点（Anima 工作流已于 2026-10-24 退役）。控制分支仍默认关闭。`simplify_anima_control.py` 默认只检查，`--write-source` 才写四份源码/模板；不部署、不排队。新图须连同加载器和白名单一起部署，不能直接用于只有旧补丁的在线服务。CPU 映射与实页导出已验证，生产部署和实际 GPU 控制效果待授权验收。
 - Krea2 Turbo 编辑适合改色、添加、重绘；强删除使用 Raw 配方并另做验证。本版没有为删除任务切换你的主模型。
 - 扩图已验证中心保留区域像素不变，但接缝、透视和延伸内容仍需逐张检查。
 - BiRefNet lite 已实测可用。RMBG 内的可选 SAM3 实现缺 triton，生产现有原生 SAM3 与该可选实现不同，不以此宣称原生 SAM3 不可用。
@@ -89,7 +87,7 @@
 
 结果写入 `benchmark_reports/2026-09-06_plugin_optimization/workflow_node_inventory.json`，记录工作流实际使用的节点、频次和当前服务器注册情况。该盘点不会自动移除插件；只有结合个人工作流和插件导入依赖复核后，才调整 `profiles.json`，调整后再做一次结构检查。
 
-轻量入口只覆盖 `生产扩展_04` 到 `生产扩展_09`，不包含生产套件 01–03 的标签、画廊、LoRA 管理及姿态辅助节点；Anima/Krea2 专用入口分别覆盖主套件 01–02 和 03。需要全部个人旧流时继续使用生产入口。非 8188 端口会使用独立 SQLite 文件，避免测试实例锁住生产数据库。
+轻量入口只覆盖 `生产扩展_04` 到 `生产扩展_09`，不包含主生产套件 01–03 的标签、画廊、LoRA 管理及姿态辅助节点；Krea2 专用入口覆盖主套件 03，Anima 入口保留给训练/兼容工具。需要全部个人旧流时继续使用生产入口。非 8188 端口会使用独立 SQLite 文件，避免测试实例锁住生产数据库。
 
 ## 证据与恢复
 
@@ -105,7 +103,7 @@
 
 `validate_profiles.py --inventory <resources_plugins_audit.json>` 可用捕获的节点注册表检查七种启动配置及嵌套子图依赖，全程不启动服务、不排队生图。最新结果在 `benchmark_reports/2026-09-28_workflow_ui/overnight_optimization/profiles_after_validation.json`。
 
-生产/诊断配置覆盖主套件、扩展、UAP 和当前 Anima/Krea2 推荐入口；旧 `▶▷Krea2-高清生图优化流(整合).json` 仍缺 `GetImageSize+`、`SimpleMathDual+`、`LoaderGGUF`，保留作参考，不列入通过范围。轻量配置只供局部扩展任务，保持 5 个插件，不加载完整工作台界面。
+生产/诊断配置覆盖 Krea2 主套件、图片处理扩展、UAP 与历史推荐入口；旧 `▶▷Krea2-高清生图优化流(整合).json` 仍缺 `GetImageSize+`、`SimpleMathDual+`、`LoaderGGUF`，保留作参考，不列入通过范围。轻量配置只供局部扩展任务，保持 5 个插件，不加载完整工作台界面。
 
 ## 维护与历史快照
 

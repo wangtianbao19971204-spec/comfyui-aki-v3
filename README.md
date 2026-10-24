@@ -10,7 +10,7 @@
 |---|---|
 | 提示词资料管理 | 检索 Tag、翻译和提示词，复用个人资料与随机模板；[资料库说明](docs/technical/library/README.md) |
 | 统一绘图工作台 | 编辑正负提示词、选择模型与 LoRA、提交任务和查看结果；[工作台说明](docs/technical/runtime/workbench.md) |
-| 生成与图像处理 | Anima、Anima 2.9B、Krea2 生成／编辑，以及裁剪精修、抠图、扩图和超分；[工作流说明](docs/technical/runtime/workflows.md) |
+| 生成与图像处理 | Krea2 生成／编辑、透明抠图、二倍／四倍超分；Anima 工作流已退役（历史版本保留只读），[工作流说明](docs/technical/runtime/workflows.md) |
 | 网页提示词导入 | 配套油猴脚本从支持的网站提取标签／提示词，发送到工作台待采用区；[安装与使用](docs/technical/runtime/browser-import.md) |
 | 角色 LoRA 制作 | 附带角色数据集整理及 Anima LoRA 训练工具；[训练工具说明](docs/technical/training/README.md) |
 

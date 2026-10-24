@@ -19,7 +19,7 @@
 |---|---|
 | 本体、插件、五模块装配与启动 | [本体与装配](technical/runtime/core.md) |
 | 工作台界面、检索、目标写入与运行控制 | [工作台](technical/runtime/workbench.md) |
-| UAP 九分支、内嵌子图、部位细化与二放 | [工作流](technical/runtime/workflows.md) |
+| UAP 五分支、内嵌子图与二放 | [工作流](technical/runtime/workflows.md) |
 | 网页提示词直送工作台、图片反推标签 | [网页桥接](technical/runtime/browser-import.md)、[PixAI](technical/runtime/pixai.md) |
 | 提示词、Tag、共享选择器、导入与预览绑定 | [资料库](technical/library/README.md) |
 | 角色数据集、Anima LoRA 训练与兼容 | [训练工具](technical/training/README.md) |

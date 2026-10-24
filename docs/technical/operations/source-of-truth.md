@@ -32,6 +32,8 @@ Git 源码与文字检查点、图库和权重、Python/CUDA 环境、最新在�
 
 ## 更新记录
 
+- 2026-10-24：随 Anima 工作流退役重新 seal 源码清单：manifest 移除 9 份工作流/模板与 6 份 Anima 专用工具/测试源并记录 `removed_sources`、`live_deployed=false`，`verification.json` 同步；metadata_files 中 `model_sources.json` 摘要随 UAP 变更刷新，快照校验通过。见[工作流变更](../changes/runtime-workflows/2026-10-24-anima-assets-retirement.md)。
+
 - 2026-10-11：`project.py` 的本地 status/seal/deploy-plan 复用 [snapshot_cache.py](../../../scripts/snapshot_cache.py) 的文件身份与目录指纹。未变文件不再重复读取正文／SHA，分片顺序及内容身份不变时复用拼接验证；运行比较支持 `--scope`。显式全读、CI、恢复、release 与历史上传门禁边界保持独立；见[实现和失效条件](../changes/operations-source-of-truth/2026-10-11-snapshot-fingerprints.md)及[回归](../../../tests/test_snapshot_cache.py)。
 
 - 2026-10-10：日常上传复用已验证的历史对象内容扫描，保留完整历史覆盖与 SHA-256 复核；历史／暂存缓存相互隔离，复制到另一个克隆或工作树会失效。新增历史风险回归和实际冷／热扫描对照，见[增量检查说明](../changes/operations-source-of-truth/2026-10-10-incremental-security.md)。LoRA 等仓外资源整理不触发 Git 上传门禁，部署同哈希文件继续跳过。

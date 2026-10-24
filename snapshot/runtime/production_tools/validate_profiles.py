@@ -20,7 +20,9 @@ def selected_workflows(profile, workflows):
         if profile in {"production", "diagnostic", "legacy"}:
             selected = name.startswith(("生产套件_", "生产扩展_", "UAP统一", "Anima_推荐版_", "Krea2_"))
         elif profile == "anima":
-            selected = name.startswith(("生产套件_01_", "生产套件_02_", "生产套件_99_"))
+            # Anima generation workflows were retired on 2026-10-24; the profile
+            # keeps the plugin whitelist for retained Anima training/legacy tools.
+            selected = name.startswith("生产套件_99_")
         elif profile == "krea":
             selected = name.startswith(("生产套件_03_", "生产套件_99_"))
         elif profile == "lean":

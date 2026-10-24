@@ -1,6 +1,8 @@
 # 模型、LoRA 管理与资源配套
 
-文档修订：2026-10-19。
+文档修订：2026-10-24。
+
+2026-10-24 Anima 工作流退役：UAP v2 与权威模板的 Anima 分支已删除，`model_sources.json` 与[下载表](../../MODEL_SOURCES.md)的 `workflow_sha256` 刷新为新 UAP 摘要 `9f547db3…`，并同步快照清单元数据条目的摘要；资产数、观察存在计数与所有模型身份不变。权重与 LoRA 的运行区处置和 `observed_present` 标记另行记录，本轮不改模型清单身份。
 
 
 2026-10-11 更新：Anima 2.9B 控制图简化后，仅刷新 model_sources.json 的 UAP 文件摘要绑定，并重新生成下载表；对比基线确认 UAP 模型引用集合、23 项目录关联与所有资产身份保持。权重没有移动、下载或转换；[专用加载器](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/native_loader.py)继续读取原 controlnet 目录。见 [简化收据](../../receipts/anima_control_simple_20261011.json)。
@@ -60,6 +62,8 @@ LM Civitai 前后端兼容、插件版本和下载队列是独立边界，不能
 2026-10-07 [最终验收](../../receipts/final_workflow_acceptance_20261007.json)：Krea2 三个初始黑图在复合模型／执行缓存清理后用相同输入恢复。当前与历史正常记录的实际 UNET/VAE 均为 BF16，当前进程未强制其精度；原生 latent 类也有成功反证。本轮不盲改 dtype、latent 或正式参数，不能把冷态恢复称为根因永久修复。现行模型检查绑定此前完整摘要，不重复认证全部权重。
 
 ## 更新记录
+
+- 2026-10-24：Anima 工作流退役只改 UAP 与工作流工具，`workflow_sha256` 刷新到 `9f547db3…` 并同步清单元数据摘要；模型清单资产身份、观察存在状态和权重未改。见[收据](../../receipts/anima_workflow_retirement_20261024.json)。
 
 - 2026-10-10：修正丝袜插件说明误写入生成目录导致的 CI `rendered_document_mismatch`。SAM ViT-B 与 Depth Anything V2 Small HF 的来源指引移至[模型维护](../../MODELS.md)，易读来源表由 `scripts/model_sources.py render` 重新生成并经 `check` 核对。仅调整文档，保留原来源 JSON、模型文件及工作流参数。
 

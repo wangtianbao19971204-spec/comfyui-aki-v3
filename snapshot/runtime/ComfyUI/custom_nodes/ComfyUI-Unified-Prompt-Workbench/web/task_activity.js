@@ -72,8 +72,6 @@ export function taskPlan(app,task,method){
         const groups=deliveryGroups(context);
         targets.push(...entries.filter(item=>item.enabled&&item.node.type==='VRAMCleanup'&&groups.has(item.root.properties?.uap_layout_group)&&item.node.inputs?.some(input=>input.name==='anything'&&input.link!=null)));
         targets.push(...entries.filter(item=>item.enabled&&item.node.type==='Image Comparer (rgthree)'&&String(item.root.properties?.uap_layout_group||'').startsWith('SW-10V')));
-        targets.push(...entries.filter(item=>item.enabled&&item.root.properties?.uap_anima_control&&item.node.type==='PreviewImage'
-            &&String(item.node.id)===String(item.root.properties.anima_control_roles?.preview)));
     }
     const methodRoots=roots.filter(node=>captionMethod(node)===method);
     const label=task==='generate'?'开始'+imageTaskName(context):task==='caption'?'开始反推':'开始优化';
