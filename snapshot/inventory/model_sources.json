@@ -24879,18 +24879,391 @@
           "ComfyUI/models/loras/viichan_white_dress.metadata.json"
         ]
       }
+    },
+    {
+      "path": "ComfyUI/models/loras/Krea 2 - God Pussy.safetensors",
+      "bytes": 228587736,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "4223eaa3b3432d20956325ac24cd4741a51c7ccaa8864157a6ad2a980fe94104",
+      "source_status": "version_metadata",
+      "family": "krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2743994?modelVersionId=3086265",
+          "download_url": "https://civitai.com/api/download/models/3086265",
+          "model_id": 2743994,
+          "version_id": 3086265,
+          "file_id": 2965683,
+          "filename": "Krea 2 - God Pussy.safetensors",
+          "declared_sha256": "4223eaa3b3432d20956325ac24cd4741a51c7ccaa8864157a6ad2a980fe94104",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/technical/runtime/lora-quick-import.md"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/krea2/概念与效果/Krea2__God Pussy__Krea 2__BF16__cv3086265__f2965683.metadata.json",
+        "ComfyUI/models/loras/krea2/概念与效果/Krea2__God Pussy__Krea 2__BF16__cv3086265__f2965683.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "Downloaded file verified by full SHA-256 against the exact public version; weights stay outside Git."
+      ],
+      "current_path": "ComfyUI/models/loras/krea2/概念与效果/Krea2__God Pussy__Krea 2__BF16__cv3086265__f2965683.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "概念与效果",
+        "display_name": "God Pussy",
+        "version": "Krea 2",
+        "precision": "BF16",
+        "source_identity": "civitai:model=2743994,version=3086265,file=2965683",
+        "target_path": "ComfyUI/models/loras/krea2/概念与效果/Krea2__God Pussy__Krea 2__BF16__cv3086265__f2965683.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "ComfyUI/models/loras/Krea 2 - God Pussy.metadata.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/nnegret_krea2_linanime_v3.safetensors",
+      "bytes": 228587784,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "1bbe2d85dd9de4c493965d46601ec5aa03257c03cc2f91c7bdce5c62ed78a081",
+      "source_status": "version_metadata",
+      "family": "krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2741033?modelVersionId=3415176",
+          "download_url": "https://civitai.com/api/download/models/3415176",
+          "model_id": 2741033,
+          "version_id": 3415176,
+          "file_id": 3307999,
+          "filename": "nnegret_krea2_linanime_v3.safetensors",
+          "declared_sha256": "1bbe2d85dd9de4c493965d46601ec5aa03257c03cc2f91c7bdce5c62ed78a081",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/technical/runtime/lora-quick-import.md"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__Line Art Anime Flat__Krea2.v3__BF16__cv3415176__f3307999.metadata.json",
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__Line Art Anime Flat__Krea2.v3__BF16__cv3415176__f3307999.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "Downloaded file verified by full SHA-256 against the exact public version; weights stay outside Git."
+      ],
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Line Art Anime Flat__Krea2.v3__BF16__cv3415176__f3307999.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "画风与画师",
+        "display_name": "Line Art Anime Flat",
+        "version": "Krea2.v3",
+        "precision": "BF16",
+        "source_identity": "civitai:model=2741033,version=3415176,file=3307999",
+        "target_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Line Art Anime Flat__Krea2.v3__BF16__cv3415176__f3307999.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "ComfyUI/models/loras/nnegret_krea2_linanime_v3.metadata.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/abpart_krea2_style_v2_0_krea2_4200.safetensors",
+      "bytes": 228588968,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "3a7829de7ed5b4d25ab6c7ad1963da8a065763f191ddc5021e5ab58bd03d6db4",
+      "source_status": "version_metadata",
+      "family": "krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2675626?modelVersionId=3422406",
+          "download_url": "https://civitai.com/api/download/models/3422406",
+          "model_id": 2675626,
+          "version_id": 3422406,
+          "file_id": 3316635,
+          "filename": "abpart_krea2_style_v2_0_krea2_4200.safetensors",
+          "declared_sha256": "3a7829de7ed5b4d25ab6c7ad1963da8a065763f191ddc5021e5ab58bd03d6db4",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/technical/runtime/lora-quick-import.md"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__Abp_Art style 【krea2&MOSS&anima&il】__krea2 v1.0__BF16__cv3422406__f3316635.metadata.json"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "Downloaded file verified by full SHA-256 against the exact public version; weights stay outside Git."
+      ],
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Abp_Art style 【krea2&MOSS&anima&il】__krea2 v1.0__BF16__cv3422406__f3316635.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "画风与画师",
+        "display_name": "Abp_Art style 【krea2&MOSS&anima&il】",
+        "version": "krea2 v1.0",
+        "precision": "BF16",
+        "source_identity": "civitai:model=2675626,version=3422406,file=3316635",
+        "target_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Abp_Art style 【krea2&MOSS&anima&il】__krea2 v1.0__BF16__cv3422406__f3316635.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "ComfyUI/models/loras/abpart_krea2_style_v2_0_krea2_4200.metadata.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/kzmynon-krea2-v2.safetensors",
+      "bytes": 234703760,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "09ae9c8d1d42129a333f7cd4a8b24d13bc6c7449fe65815ecbb007bc867488e2",
+      "source_status": "version_metadata",
+      "family": "krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2878242?modelVersionId=3377920",
+          "download_url": "https://civitai.com/api/download/models/3377920",
+          "model_id": 2878242,
+          "version_id": 3377920,
+          "file_id": 3266337,
+          "filename": "kzmynon-krea2-v2.safetensors",
+          "declared_sha256": "09ae9c8d1d42129a333f7cd4a8b24d13bc6c7449fe65815ecbb007bc867488e2",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/technical/runtime/lora-quick-import.md"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/krea2/画风与画师/Krea2__Kzmynon AI Style [K-A]__krea2-v2__BF16__cv3377920__f3266337.metadata.json"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "Downloaded file verified by full SHA-256 against the exact public version; weights stay outside Git."
+      ],
+      "current_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Kzmynon AI Style [K-A]__krea2-v2__BF16__cv3377920__f3266337.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "画风与画师",
+        "display_name": "Kzmynon AI Style [K/A]",
+        "version": "krea2-v2",
+        "precision": "BF16",
+        "source_identity": "civitai:model=2878242,version=3377920,file=3266337",
+        "target_path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Kzmynon AI Style [K-A]__krea2-v2__BF16__cv3377920__f3266337.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "ComfyUI/models/loras/kzmynon-krea2-v2.metadata.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/light_c1-st7000.safetensors",
+      "bytes": 234680576,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "09bac46241a825890191d951542d97f651295ec1e6320986d5fbde8e1f33420e",
+      "source_status": "version_metadata",
+      "family": "krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2908126?modelVersionId=3355484",
+          "download_url": "https://civitai.com/api/download/models/3355484",
+          "model_id": 2908126,
+          "version_id": 3355484,
+          "file_id": 3242926,
+          "filename": "light_c1-st7000.safetensors",
+          "declared_sha256": "09bac46241a825890191d951542d97f651295ec1e6320986d5fbde8e1f33420e",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/technical/runtime/lora-quick-import.md"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/krea2/光影与色彩/Krea2__白艺术光影__v2.0__FP16__cv3355484__f3242926.metadata.json"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "Downloaded file verified by full SHA-256 against the exact public version; weights stay outside Git."
+      ],
+      "current_path": "ComfyUI/models/loras/krea2/光影与色彩/Krea2__白艺术光影__v2.0__FP16__cv3355484__f3242926.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "光影与色彩",
+        "display_name": "白艺术光影",
+        "version": "v2.0",
+        "precision": "FP16",
+        "source_identity": "civitai:model=2908126,version=3355484,file=3242926",
+        "target_path": "ComfyUI/models/loras/krea2/光影与色彩/Krea2__白艺术光影__v2.0__FP16__cv3355484__f3242926.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "ComfyUI/models/loras/light_c1-st7000.metadata.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/npSheerTautE6A087E587.Yw5M.safetensors",
+      "bytes": 179375196,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "b6d48909787b677b1e3cabe64fb07b6f4a26a77e1e9ca7198619f9308e3384be",
+      "source_status": "version_metadata",
+      "family": "krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/3009623?modelVersionId=3417930",
+          "download_url": "https://civitai.com/api/download/models/3417930",
+          "model_id": 3009623,
+          "version_id": 3417930,
+          "file_id": 3311309,
+          "filename": "np_sheer_taut_标准ComfyUI版.safetensors",
+          "declared_sha256": "b6d48909787b677b1e3cabe64fb07b6f4a26a77e1e9ca7198619f9308e3384be",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/technical/runtime/lora-quick-import.md"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/krea2/服装与配饰/Krea2__np_sheer_taut - Translucent Taut Sheer Tights (No__v1.1__FP16__cv3417930__f3311309.metadata.json"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "Downloaded file verified by full SHA-256 against the exact public version; weights stay outside Git."
+      ],
+      "current_path": "ComfyUI/models/loras/krea2/服装与配饰/Krea2__np_sheer_taut - Translucent Taut Sheer Tights (No__v1.1__FP16__cv3417930__f3311309.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "服装与配饰",
+        "display_name": "np_sheer_taut | Translucent Taut Sheer Tights (No Underwear Concept) 无内超薄紧绷连裤袜物理质感微调[Krea 2]",
+        "version": "v1.1",
+        "precision": "FP16",
+        "source_identity": "civitai:model=3009623,version=3417930,file=3311309",
+        "target_path": "ComfyUI/models/loras/krea2/服装与配饰/Krea2__np_sheer_taut - Translucent Taut Sheer Tights (No__v1.1__FP16__cv3417930__f3311309.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "ComfyUI/models/loras/npSheerTautE6A087E587.Yw5M.metadata.json"
+        ]
+      }
+    },
+    {
+      "path": "ComfyUI/models/loras/wm_realpussy_krea2.safetensors",
+      "bytes": 228587288,
+      "kind": "lora",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "e1bf889ce2c86aac121dc21d48dc243cca4b8499108f325f29a4906b42f796df",
+      "source_status": "version_metadata",
+      "family": "krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2990835?modelVersionId=3391453",
+          "download_url": "https://civitai.com/api/download/models/3391453",
+          "model_id": 2990835,
+          "version_id": 3391453,
+          "file_id": 3280919,
+          "filename": "wm_realpussy_krea2.safetensors",
+          "declared_sha256": "e1bf889ce2c86aac121dc21d48dc243cca4b8499108f325f29a4906b42f796df",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/technical/runtime/lora-quick-import.md"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/loras/krea2/概念与效果/Krea2__Real Pussy For Krea2__Natural Spread__FP16__cv3391453__f3280919.metadata.json"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "Downloaded file verified by full SHA-256 against the exact public version; weights stay outside Git."
+      ],
+      "current_path": "ComfyUI/models/loras/krea2/概念与效果/Krea2__Real Pussy For Krea2__Natural Spread__FP16__cv3391453__f3280919.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "概念与效果",
+        "display_name": "Real Pussy For Krea2",
+        "version": "Natural Spread",
+        "precision": "FP16",
+        "source_identity": "civitai:model=2990835,version=3391453,file=3280919",
+        "target_path": "ComfyUI/models/loras/krea2/概念与效果/Krea2__Real Pussy For Krea2__Natural Spread__FP16__cv3391453__f3280919.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "ComfyUI/models/loras/wm_realpussy_krea2.metadata.json"
+        ]
+      }
     }
   ],
   "missing_workflow_references": [],
   "summary": {
-    "asset_count": 431,
+    "asset_count": 438,
     "inventory_asset_count": 384,
-    "observed_present_count": 416,
+    "observed_present_count": 423,
     "observed_missing_count": 15,
     "workflow_asset_count": 23,
     "missing_workflow_reference_count": 0,
     "source_status_counts": {
-      "version_metadata": 338,
+      "version_metadata": 345,
       "upstream_mapping": 73,
       "local_derivative": 19,
       "unresolved": 1
