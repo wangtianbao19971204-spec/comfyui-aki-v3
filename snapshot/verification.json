@@ -1,5 +1,5 @@
 {
-  "time": "2026-10-14T05:08:11.827967+00:00",
+  "time": "2026-10-24T10:50:27.056389+00:00",
   "pass": true,
   "entry_count": 9608,
   "failures": [],
@@ -17,10 +17,10 @@
   ],
   "cache": {
     "mode": "local-snapshot-fingerprints",
-    "state": "policy_changed",
+    "state": "cold",
     "written": true,
     "hashed_files": 9745,
-    "hashed_bytes": 1723456415,
+    "hashed_bytes": 1723479225,
     "joined_hashed_bytes": 1031261601,
     "content_scanned_files": 9743,
     "reused_content_scans": 0,

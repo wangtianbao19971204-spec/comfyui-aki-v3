@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-14T05:06:39.061787+00:00",
+  "created_at": "2026-10-24T10:49:05.911274+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -57742,8 +57742,8 @@
     {
       "source": "production_tools/README.md",
       "path": "runtime/production_tools/README.md",
-      "sha256": "defe791928784256248a854de1bfd316ad9f4532a72e687034345b39831620cd",
-      "bytes": 12928,
+      "sha256": "657ff7423dc75a49ba5f1bea8ae138f48c65e6041641e75e8de86c454f6c3711",
+      "bytes": 13164,
       "kind": "file"
     },
     {
@@ -58365,15 +58365,15 @@
     {
       "source": "production_tools/资源维护入口.md",
       "path": "runtime/production_tools/资源维护入口.md",
-      "sha256": "4315e3a6ca3225edd5d0d326a1509d55de10d838047bb6fd52d5d1653357efed",
-      "bytes": 8324,
+      "sha256": "30035a09a73e84a99f20960f25bee5b75bed8e03a27dc0932b60aa3d484df125",
+      "bytes": 8480,
       "kind": "file"
     },
     {
       "source": "production_tools/项目使用指南.md",
       "path": "runtime/production_tools/项目使用指南.md",
-      "sha256": "027d4d160a6b8849ac793c7ec3cb380fc837769e04ffd603afedb71d6ec3411d",
-      "bytes": 7317,
+      "sha256": "7a8029597d594a285d38a48c15748b93ff7d1f6895d4cad64f1ed1e4addec894",
+      "bytes": 7536,
       "kind": "file"
     },
     {
@@ -68205,31 +68205,15 @@
     }
   ],
   "development_revision": {
-    "note": "Sync stocking e6aeaeb multilayer editor and browser preset exchange with cache and finite-input fixes",
-    "previous_manifest_sha256": "b3adee7b56e96d657a018489fa83bc1eee819b17d8fc38cb138fd38de31f60b1",
+    "note": "Record external archive retirement and correct restore docs (repo only, not deployed)",
+    "previous_manifest_sha256": "4a332f6235b2b0fc9557bcc16077f3dd71b935accb644b01bb65a9f7ba3435c3",
     "source_changes": {
-      "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_rendering.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_studio.py"
-      ],
+      "added": [],
       "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/rendering.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_api.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_assets.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/document.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/look.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/presets.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/server.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/app.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n/en.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/index.html",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/look.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/style.css"
+        "production_tools/README.md",
+        "production_tools/资源维护入口.md",
+        "production_tools/项目使用指南.md"
       ]
     },
     "live_deployed": false,
