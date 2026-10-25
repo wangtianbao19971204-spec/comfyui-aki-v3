@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-25T05:44:53.704097+00:00",
+  "created_at": "2026-10-25T09:11:43.367310+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -24079,8 +24079,15 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/studio.css",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/studio.css",
-      "sha256": "f73dc4599d4c77c29b49f654bb0e8dbc7967aed23e60202e0bffbcf6fe89e6c1",
-      "bytes": 45609,
+      "sha256": "e1ee867e0e7dc0553f5fd4b696452297d70e3d1bc8fe3df6e750975454b7b1e0",
+      "bytes": 45689,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/system_stats.js",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/system_stats.js",
+      "sha256": "79e50b66f5a80781b124b84271f17778a2f328f6e2b55ebb9977b19566fe2b07",
+      "bytes": 5678,
       "kind": "file"
     },
     {
@@ -24114,15 +24121,15 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_theme.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_theme.js",
-      "sha256": "b1114c4e1324b0c95f00bbadefce82ad3bcb51199721672f5ac9d7c0e96d5c85",
-      "bytes": 2446,
+      "sha256": "f2afb04cf05de1a0a195ea5641f75074462c406eb462ea71a168820493d93d9f",
+      "bytes": 2447,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.css",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.css",
-      "sha256": "9fc38efb37118c2865285a00bd5756c2dc3a616b384bf28e297fe4fcc4c71f91",
-      "bytes": 35044,
+      "sha256": "05ce0e86eb0c9f52c12b4edfa12b5f262402d82d1e431c24809efe78a298160a",
+      "bytes": 36599,
       "kind": "file"
     },
     {
@@ -24135,8 +24142,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
-      "sha256": "3a70878c77a4c49f214b57275461b65bc0de13a22425b9ce47bab045f0e5896d",
-      "bytes": 56777,
+      "sha256": "f762f025bf9e9b349e69634373540456f8e96d0de7a6f5930871f81aab5018fa",
+      "bytes": 56995,
       "kind": "file"
     },
     {
@@ -58307,6 +58314,13 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/test_system_stats.cjs",
+      "path": "runtime/production_tools/test_system_stats.cjs",
+      "sha256": "d9585b39b94028f5f6fa680859a63ff700e21909f3fd858304d4b5472349d077",
+      "bytes": 9845,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/test_uap_browser_retirement.py",
       "path": "runtime/production_tools/test_uap_browser_retirement.py",
       "sha256": "f6003bdae3c4d0f4c1de0d06ea407f4f21ef801b44258a213578c9ce2e7740b2",
@@ -68282,36 +68296,19 @@
     }
   ],
   "development_revision": {
-    "note": "Merge origin/main into the stocking upstream sync; regenerated manifest after conflict resolution.",
-    "previous_manifest_sha256": "c3c7686160da766c5a834380bc0cbcac0bacb4e3a6026c28bd72b17ce7c75e7e",
+    "note": "Workbench nav GPU/RAM readout from /system_stats; frontend only, bounded deployment to runtime web",
+    "previous_manifest_sha256": "e84dcd71a994da3743c9897437c6f5f7171cfedf49d1a92924119809677161c1",
     "source_changes": {
       "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_highlight_update.py"
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/system_stats.js",
+        "production_tools/test_system_stats.cjs"
       ],
       "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/engine.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/nodes.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/rendering.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/compare_upstream.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/feature_acceptance.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/parity_matrix.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_rendering.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/document.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/guide_fields.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/knit.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/look.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/oily.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/server.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n/en.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/index.html",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/look.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/style.css"
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/studio.css",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_theme.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.css",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js"
       ]
     },
     "live_deployed": false,

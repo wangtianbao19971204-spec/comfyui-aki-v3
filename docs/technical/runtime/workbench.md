@@ -9,7 +9,7 @@
 
 统一包 `web/` 是外层工作台唯一实现。主要入口：[workbench_shell.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js)、[workbench.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.js)。主题/图标为 [ui_theme.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_theme.js)、[ui_identity.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_identity.js)、[anime.css](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime.css)。
 
-交互按职责拆分：`modal_focus.js` 处理弹窗焦点，`prompt_target.js` 解析真实提示词目标，`pending_prompts.js` 管理待采用内容，`prompt_optimizer.js` 对接已有优化服务，`run_controls.js` 与 `runtime_controls.js` 管理提交反馈与运行状态，`refinement_controls.js` 编辑原节点的细化参数。不要在 UI 再造一份隐形参数状态。
+交互按职责拆分：`modal_focus.js` 处理弹窗焦点，`prompt_target.js` 解析真实提示词目标，`pending_prompts.js` 管理待采用内容，`prompt_optimizer.js` 对接已有优化服务，`run_controls.js` 与 `runtime_controls.js` 管理提交反馈与运行状态，`refinement_controls.js` 编辑原节点的细化参数，`system_stats.js` 只读显示导航栏的显存/内存占用。不要在 UI 再造一份隐形参数状态。
 
 ## 交互契约
 
@@ -24,6 +24,8 @@
 修改后用全新页面核对实际 served 文件和磁盘 SHA，检查主题、窄屏、键盘、焦点与提示词保持性。模拟 composition/事件不是物理 IME；浏览器拦截入队不等于 GPU 推理，历史测试数量不是今天自动通过的证明。
 
 ## 更新记录
+
+- 2026-10-25：导航栏右端新增 GPU 与内存读数（已用/总量、85%／95% 配色、2.5 秒轮询、点击刷新、失败保留上次数值），数据取自 ComfyUI `/system_stats`；桌面单行，≤800px 换行。只读显示，不释放显存、不入队、不改工作流。验证与部署边界见[本轮说明](../changes/runtime-workbench/2026-10-25-nav-memory-stats.md)。
 
 - 2026-10-25：提示词库改 SQLite 权威存储（WAL + `synchronous=FULL`），读模型/API/语义不变，data.json 降级为按需导出快照；单条编辑只提交 1 行 + revision 小事务（**中位 1.59 ms**，原 ~1033 ms 且不再随库增长），批量事务化并事务前 backup；后台自动导出/备份 + 行级 journal + `store-status` 告警；迁移 8.81 s/逐字段 equal，启动加载 2.17–2.71 s；`UW_LIBRARY_STORE=json|sqlite` 灰度；snapshot/restore 将 library DB 纳入 SQL dump。测试 188 OK/1 skip，详见[说明](../changes/runtime-workbench/2026-10-25-library-store-sqlite.md)。本轮未部署生产。
 

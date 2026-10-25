@@ -95,7 +95,21 @@ body:has(#unified-workbench) :is(.danbooru-tag-context-menu,.danbooru-tag-toolti
 .tb-spm-details-sheet header,.tb-spm-details-sheet footer{padding:15px;display:flex;gap:10px;align-items:center;border-bottom:1px solid #435064;flex-shrink:0}.tb-spm-details-sheet h2{font-size:18px;margin:0;flex:1}.tb-spm-details-sheet footer{border-top:1px solid #435064;border-bottom:0}
 .tb-spm-details-sheet button{font:inherit;color:inherit;background:#35435a;border:1px solid #7384a2;border-radius:7px;padding:7px 12px;cursor:pointer}.tb-spm-details-body{padding:16px;overflow:auto;flex:1;min-height:0;overflow-wrap:anywhere}.tb-spm-details-body pre{white-space:pre-wrap;overflow-wrap:anywhere}
 #tb-shared-preset-editor .tb-spm-editor{width:min(680px,96vw);max-height:96vh}.tb-spm-editor-actions{position:sticky;bottom:0;background:#25252a;z-index:1}
+/* 导航右端的显存/内存读数；数值、进度条与状态色由 system_stats.js 维护。 */
+#unified-workbench .uw-sysstats{margin-left:auto;display:flex;align-items:center;gap:6px;min-width:0}
+#unified-workbench .uw-sysstats+[data-uw=sidebar-toggle]{margin-left:8px}
+#unified-workbench .uw-nav .uw-sysstat{position:relative;display:inline-flex;align-items:center;gap:6px;min-width:0;padding:0 10px 5px;border-color:var(--uw-border);font-size:12px;line-height:1.9;font-variant-numeric:tabular-nums;white-space:nowrap}
+#unified-workbench .uw-sysstat-name{color:var(--uw-muted)}
+#unified-workbench .uw-sysstat[data-state=normal]{color:var(--uw-success)}
+#unified-workbench .uw-sysstat[data-state=warn]{color:var(--uw-warn)}
+#unified-workbench .uw-sysstat[data-state=hot]{color:var(--uw-danger)}
+#unified-workbench .uw-sysstat[data-state=wait]{color:var(--uw-muted)}
+#unified-workbench .uw-sysstat[data-stale=true] .uw-sysstat-value{opacity:.55}
+#unified-workbench .uw-sysstat-meter{position:absolute;left:8px;right:8px;bottom:2px;height:2px;border-radius:2px;background:var(--uw-border);overflow:hidden}
+#unified-workbench .uw-sysstat-meter>span{display:block;height:100%;width:0;background:currentColor;transition:width .45s ease-out}
+@media(prefers-reduced-motion:reduce){#unified-workbench .uw-sysstat-meter>span{transition:none}}
 @media(max-width:1050px){#unified-workbench{inset:12px}#unified-workbench .uw-sidebar{width:140px}#unified-workbench .uw-header input{margin:0}}
+@media(max-width:800px){#unified-workbench .uw-sysstats{order:1;flex:1 1 100%;margin-left:0;justify-content:flex-end;gap:4px}#unified-workbench .uw-nav .uw-sysstat{flex:0 0 auto;padding:0 8px 5px}}
 @media(max-width:800px){#unified-workbench{inset:5px;border-radius:8px}#unified-workbench .uw-sidebar{width:115px;padding:8px 4px}#unified-workbench .uw-main{padding:10px}#unified-workbench .uw-header{padding:10px}#unified-workbench .uw-nav button{min-width:0;flex:1}#unified-workbench .uw-nav{padding:6px 10px;gap:5px}#unified-workbench .uw-footer{padding:7px}#unified-workbench .uw-footer select{max-width:65vw}}
 @media(max-width:600px){
     #unified-workbench:has(.uw-native-selector .uw-selector) :is(.uw-header,.uw-nav,.uw-sidebar,.uw-footer){display:none}

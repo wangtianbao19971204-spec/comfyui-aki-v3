@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "date": "2026-10-25",
+  "status": "deployed-frontend-headless-rendered-no-new-gpu-sampling",
+  "feature": "runtime-workbench",
+  "scope": [
+    "工作台导航栏显存/内存读数，工作区、资料库、模型、图库共用同一条导航"
+  ],
+  "implementation": [
+    "web/system_stats.js",
+    "web/workbench_shell.js",
+    "web/workbench.css",
+    "web/studio.css",
+    "web/ui_theme.js"
+  ],
+  "automated_acceptance": {
+    "passed": [
+      "test_system_stats.cjs: payload parsing, multi-device aggregation, cpu/mps exclusion, GiB formatting, 85%/95% levels, 2.5s polling, failure keeps last numbers and marks stale, hidden tab, covered workbench, click refresh, single in-flight request, 6s abort, dispose, nav wiring order, four theme tokens",
+      "test_uap_navigation.cjs",
+      "test_uap_daily_controls.cjs",
+      "test_uap_compact_widgets.cjs",
+      "test_run_controls.cjs",
+      "test_anima_control.cjs",
+      "test_control_switches.cjs",
+      "node --check on workbench_shell.js, system_stats.js, ui_theme.js"
+    ],
+    "baseline_note": "The same suite was run on the feature branch base; test_control_switches.cjs fails there instead because the separate main-checkout worktree holds unreviewed Krea2 03 workflow edits, which is why this change was built in its own worktree."
+  },
+  "browser_acceptance": {
+    "method": "Headless Edge over the DevTools protocol against the running instance http://127.0.0.1:8188/; every frontend asset was fetched over HTTP from the service. No queue submission, no image generation, no database writes.",
+    "sample_readout": {
+      "gpu": "30.6/31.8G",
+      "gpu_state": "hot",
+      "gpu_color": "rgb(239, 175, 189)",
+      "ram": "29.4/31.1G",
+      "ram_state": "warn",
+      "ram_color": "rgb(232, 201, 139)",
+      "warn_token": "#e8c98b",
+      "gpu_title": "GPU 已用 30.6/31.8G，可用 1.2G。 / cuda:0 NVIDIA GeForce RTX 5090 D : cudaMallocAsync / 来源：ComfyUI /system_stats · 每 2.5 秒刷新 · 点击立即刷新",
+      "note": "Readings move with live load; these are one sample, not fixed expectations."
+    },
+    "layout": {
+      "1600x900": "single row; readout right edge 18px left of 收起侧栏",
+      "1100x800": "single row",
+      "760x800": "readout drops to its own right-aligned second row; tab labels keep one line",
+      "620x800": "readout on its own right-aligned second row; tab labels keep one line"
+    },
+    "screenshots": [
+      "external-local://validation/workbench-sysstats-20261025/nav-desktop.png",
+      "external-local://validation/workbench-sysstats-20261025/nav-1100.png",
+      "external-local://validation/workbench-sysstats-20261025/nav-760.png",
+      "external-local://validation/workbench-sysstats-20261025/nav-620.png",
+      "external-local://validation/workbench-sysstats-20261025/workbench-desktop.png"
+    ],
+    "evidence_ref": "external-local://validation/workbench-sysstats-20261025"
+  },
+  "deployment": {
+    "performed": true,
+    "deployed_at": "2026-10-25T16:55:37+08:00",
+    "final_checked_at": "2026-10-25T16:59:07+08:00",
+    "files": [
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
+        "before_sha256": "3a70878c77a4c49f214b57275461b65bc0de13a22425b9ce47bab045f0e5896d",
+        "source_sha256": "f762f025bf9e9b349e69634373540456f8e96d0de7a6f5930871f81aab5018fa",
+        "deployed_sha256": "f762f025bf9e9b349e69634373540456f8e96d0de7a6f5930871f81aab5018fa"
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_theme.js",
+        "before_sha256": "b1114c4e1324b0c95f00bbadefce82ad3bcb51199721672f5ac9d7c0e96d5c85",
+        "source_sha256": "f2afb04cf05de1a0a195ea5641f75074462c406eb462ea71a168820493d93d9f",
+        "deployed_sha256": "f2afb04cf05de1a0a195ea5641f75074462c406eb462ea71a168820493d93d9f"
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/system_stats.js",
+        "before_sha256": null,
+        "source_sha256": "79e50b66f5a80781b124b84271f17778a2f328f6e2b55ebb9977b19566fe2b07",
+        "deployed_sha256": "79e50b66f5a80781b124b84271f17778a2f328f6e2b55ebb9977b19566fe2b07"
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.css",
+        "before_sha256": "591f1a474a3313e3850e1d1c12e5f265a292c87edf3190e83da8a77d7a7c9cfc",
+        "source_sha256": "05ce0e86eb0c9f52c12b4edfa12b5f262402d82d1e431c24809efe78a298160a",
+        "deployed_sha256": "6bdbba4843d09e6e41dbe427ebce355b0729c3ed1ad1c00f81fde5fef928d79b"
+      },
+      {
+        "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/studio.css",
+        "before_sha256": "48d47a239fe5d035eb47a2c1b53929f877b1854a1ab883613ba4b3d99b0a73d6",
+        "source_sha256": "e1ee867e0e7dc0553f5fd4b696452297d70e3d1bc8fe3df6e750975454b7b1e0",
+        "deployed_sha256": "8da0cbd14eaa7e3cf4535225158f2407869e40a7aa59a273300ff40bd1e0e4eb"
+      }
+    ],
+    "merged_not_overwritten": [
+      "web/workbench.css",
+      "web/studio.css"
+    ],
+    "merge_note": "这两份运行区 CSS 已带着此前会话只落在运行区的增补；本次只在锚点处合并本功能的两段规则，未用源码快照覆盖。其余三个文件与源码逐字节一致。",
+    "served_sha256_match": true,
+    "served_note": "workbench.css、studio.css、workbench_shell.js、ui_theme.js、system_stats.js 均经 HTTP 取回后 SHA-256 与部署文件一致。",
+    "backup_ref": "external-local://production-backups/workbench_sysstats_20261025_165537",
+    "rollback": "把 production-backups 目录中的 workbench.css.before、studio.css.before、workbench_shell.js.before、ui_theme.js.before 覆盖回运行区 web/，并删除 system_stats.js；无需重启服务。",
+    "service_pid": 8488,
+    "service_started_at": "2026-10-25T16:31:51+08:00",
+    "restarted": false,
+    "queue_cleared": false,
+    "queue_running_at_write": 1,
+    "queue_pending_at_write": 0,
+    "queue_note": "写入时队列里有一件正在执行的任务；本次只写前端静态文件，没有入队、中断或清队列。",
+    "gpu_jobs_submitted": 0
+  },
+  "limitations": [
+    "读数按 /system_stats 的 vram_total/vram_free 计算，属于设备与内存池层面的占用。本机带 --cuda-malloc，PyTorch 异步内存池按需才回收，空闲时仍可能接近满值，与 nvidia-smi 一致，不代表模型仍在显存里。",
+    "只读显示：不释放显存、不清 torch 缓存、不入队、不重启；不读写工作流、提示词、模型、采样与 LoRA 参数。",
+    "无头 Edge 单浏览器渲染不等于物理 IME、多屏或 GPU 画质验收；本轮没有排队生图。",
+    "运行区 workbench.css、studio.css 与源码快照不同源（保留此前运行区专有增补）；正式发布前仍需把这两份的完整差异收敛回主 Git。"
+  ]
+}

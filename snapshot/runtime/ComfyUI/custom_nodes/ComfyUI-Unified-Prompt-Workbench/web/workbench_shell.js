@@ -12,6 +12,7 @@ import {installUiTheme, mountThemeToggle} from './ui_theme.js';
 import {installCanvasTheme, mountCanvasThemeSetting} from './canvas_theme.js';
 import {toolIdentity, mountFunctionCard, mountFunctionIcon} from './ui_identity.js';
 import {mountSelectorTools, openPromptSelector} from './selector_tools.js';
+import {mountSystemStats} from './system_stats.js';
 
 const pages={workspace:'工作区',library:'资料库',models:'模型',gallery:'图库'};
 const providers={loras:'LoRA',checkpoints:'基础模型',embeddings:'Embedding','loras/recipes':'模型组合',statistics:'统计'};
@@ -173,7 +174,7 @@ export async function openWorkbench(options={}) {
     for(const [key,label]of Object.entries(pages)){const item=button(label,'page-'+key,()=>{contextBack.hidden=true;browseReturn=null;return navigate(key);},nav);mountFunctionIcon(item,key);item.title=toolIdentity[key].purpose;}
     mountThemeToggle(header);
     button('设置','settings',()=>showSettings(),header);
-    function close(){if(!canLeave())return false;closed=true;clearTimeout(componentRetryTimer);componentRequest?.abort();sidebarVersion++;searchVersion++;results?.dispose();restoreSelector?.();utilityCleanup?.();utilityCleanup=null;clearInterval(targetTimer);clearTimeout(searchTimer);writer?.dispose();workspace.dispose();closeTagManager();restoreGallery?.();root.remove();current=null;if(previousFocus?.isConnected)previousFocus.focus?.();return true;}
+    function close(){if(!canLeave())return false;closed=true;clearTimeout(componentRetryTimer);componentRequest?.abort();sidebarVersion++;searchVersion++;results?.dispose();restoreSelector?.();utilityCleanup?.();utilityCleanup=null;clearInterval(targetTimer);systemStats.dispose();clearTimeout(searchTimer);writer?.dispose();workspace.dispose();closeTagManager();restoreGallery?.();root.remove();current=null;if(previousFocus?.isConnected)previousFocus.focus?.();return true;}
     const returnButton=button('返回常用控制台','return-origin',()=>{const destination=returnTo;if(close())destination?.onReturn();},header);
     returnButton.hidden=true;returnButton.className='uw-return-origin';header.prepend(returnButton);
     button('关闭工作台','close',close,header);
@@ -203,6 +204,8 @@ export async function openWorkbench(options={}) {
     const libraryBar=element('div',null,sections.library,{className:'uw-toolbar'}),libraryHost=element('div',null,sections.library,{className:'uw-library-host'});
     search.placeholder='搜索资料、Tag、模型 · Ctrl+K';
     search.setAttribute('aria-keyshortcuts','Control+k Meta+k');
+    // 显存/内存占用放在导航右端、侧栏开关之前；数据来自 /system_stats。
+    const systemStats=mountSystemStats(nav);
     const sidebarToggle=button('收起侧栏','sidebar-toggle',()=>{
         const collapsed=root.dataset.sidebarCollapsed!=='true';root.dataset.sidebarCollapsed=String(collapsed);
         sidebarToggle.textContent=collapsed?'展开侧栏':'收起侧栏';sidebarToggle.setAttribute('aria-expanded',String(!collapsed));
@@ -498,7 +501,7 @@ app.registerExtension({name:'UnifiedPromptWorkbench',afterConfigureGraph(){
     window.unifiedUseResourcePrompt=async options=>{const owner=current?.root.isConnected?current:await openWorkbench();return owner.useResource(options);};
     window.unifiedQueuePrompt=async resource=>{const owner=current?.root.isConnected?current:await openWorkbench();owner.addPending(resource);if(resource.open)await owner.showPending();};
     window.unifiedQueuePrompts=async resources=>{const owner=current?.root.isConnected?current:await openWorkbench();return owner.addPendingMany(resources);};
-    if(!document.getElementById('uw-experience-style'))element('link',null,document.head,{id:'uw-experience-style',rel:'stylesheet',href:'/extensions/ComfyUI-Unified-Prompt-Workbench/workbench.css?v=20260928-gallery'});
+    if(!document.getElementById('uw-experience-style'))element('link',null,document.head,{id:'uw-experience-style',rel:'stylesheet',href:'/extensions/ComfyUI-Unified-Prompt-Workbench/workbench.css?v=20261025-sysstats'});
     const entry=element('button','统一工作台',document.body,{id:'unified-workbench-entry',type:'button'});entry.title='工作区、资料库、模型与图库';entry.onclick=()=>openWorkbench();
     installBrowserImportReceiver({openWorkbench});
 }});
