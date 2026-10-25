@@ -1,0 +1,165 @@
+{
+  "schema": 1,
+  "date": "2026-10-16",
+  "feature": "runtime-stocking-texture",
+  "upstream_repository": "https://github.com/silvermoong/stocking-texture-tool",
+  "from_commit": "e6aeaebd0410301f4db61034db1b1c592eeb57d4",
+  "to_commit": "bcc4e89d7319ca59f521dd1c5557db457cde6d92",
+  "upstream_commits_ahead": 13,
+  "raw_dependency_files": 29,
+  "license": "MIT",
+  "tests": {
+    "plugin_passed": 119,
+    "plugin_includes_real_cuda": 2,
+    "new_regressions_included": 12,
+    "frontend_passed": 17,
+    "export_passed": 6,
+    "workflow_regression_passed": true,
+    "maintenance_passed": 703,
+    "upstream_raw_passed": 388,
+    "upstream_raw_skipped": 52,
+    "skip_reason": "Author private sample-guides.psd and sample.png are not published; skips are not passes."
+  },
+  "acceptance": {
+    "raw_upstream_blobs_materialized": 140,
+    "raw_dependency_sha256_match": true,
+    "real_image_style_effect_pixel_parity_cases": 108,
+    "full_crop_and_check_preview_equal": true,
+    "isolated_real_gpu_regions": 2,
+    "gpu_fallback": false,
+    "isolated_http_renders": 7,
+    "particle_on_off_restores_pixels": true,
+    "fade_on_off_restores_pixels": true,
+    "four_layer_particle_applied_once": true,
+    "browser_controls_and_undo_checked": true,
+    "browser_console_errors": 0
+  },
+  "production": {
+    "status": "deployed_and_accepted",
+    "changed_files": 14,
+    "protected_files": 65,
+    "consistent_database_backups": 5,
+    "online_databases_replaced": false,
+    "source_runtime_files_equal": 81,
+    "protected_files_unchanged": true,
+    "launch_arguments_preserved": true,
+    "original_launcher_restart": true,
+    "real_http_renders": 7,
+    "png_equal_isolation": 7,
+    "gpu_fallback": false,
+    "new_test_draft_archived": true,
+    "isolated_process_stopped": true,
+    "queue_empty": true,
+    "rollback_available": true
+  },
+  "compatibility": {
+    "workflow_schema": 2,
+    "node_interfaces_changed": false,
+    "workflow_files_replaced": false,
+    "uap_order_changed": false,
+    "old_default_particle_on": false,
+    "old_default_fade": true,
+    "strict_live_and_preset_validation_retained": true
+  },
+  "limitations": [
+    "Fixed real images and synthetic contracts do not establish quality for every input.",
+    "General white-stocking highlight support was reverted upstream and is not claimed.",
+    "Unchanged SAM and depth model quality was not revalidated in this update.",
+    "Git archive text conversion is not raw-blob evidence; use pristine-raw receipts."
+  ],
+  "external_evidence_id": "stocking-highlights-sync-20261016-01",
+  "evidence": [
+    {
+      "id": "BASELINE.json",
+      "sha256": "709915cd3d33095741fe4a4f6e594b83345f6104e3711297ac6dc42fa753e6bd"
+    },
+    {
+      "id": "DEPLOY_PLAN.json",
+      "sha256": "cb20f5f21b87d064d84e9eee56ce2c2e1fdbff5a692bd71b8d1f8fc9d80a8f5c"
+    },
+    {
+      "id": "FILES_DEPLOYED.json",
+      "sha256": "1937b0f7d56feb1fd1b9b3a2a8901b10908958c73050449988bd574825af0761"
+    },
+    {
+      "id": "PRODUCTION_VERIFIED.json",
+      "sha256": "2b8b3a02c506a141d4be5ef582283eff20e3bbd5f11cf739146b99be23b7fabb"
+    },
+    {
+      "id": "HTTP_RENDER.json",
+      "sha256": "1ac6e53774086e6a60f6910525a0b438d9d9683ca6bd85f172847e4f8361e579"
+    },
+    {
+      "id": "PRODUCTION_RENDER.json",
+      "sha256": "d85f9f10429de0e2a9a85ac4edb7b26963c5b9e86ebcba23844a6802718e0b95"
+    },
+    {
+      "id": "FINAL_STATE.json",
+      "sha256": "81acd16d1b1bccb0288c5c62c5eefad010babf5b68ec785b44b32500662a3400"
+    },
+    {
+      "id": "UPSTREAM_RAW_BLOBS.json",
+      "sha256": "3990285b5c061d4739885c6e9c69b3175949eaff0aa637db4a2b52bddedad0c6"
+    },
+    {
+      "id": "plugin-final-tests.log",
+      "sha256": "b2255607cb81f5a17182c848d2ee0def87f2de7284b2069c3a1b1c766f617141"
+    },
+    {
+      "id": "cuda-tests.log",
+      "sha256": "a92fdc1f9b7779862fd4ae527f074688d5e8683fc9661f1160e9d888814feefd"
+    },
+    {
+      "id": "frontend-tests.log",
+      "sha256": "8862e627c7aa86c16d342722306b3c31652e6208972f04c8bfa1a1f03d337473"
+    },
+    {
+      "id": "export-tests.log",
+      "sha256": "83a3c3f4b72ad3ffdeb9055c88806ec99f738f4ec79fc8005b235aac5381b175"
+    },
+    {
+      "id": "workflow-tests.log",
+      "sha256": "173a9d1cde12cfe88c159db0e1545e3ff7769e7eaa46a706614b99d2fb8283ce"
+    },
+    {
+      "id": "maintenance-tests.log",
+      "sha256": "bb80419d5d7469b2edf49b28369063e6583b6751394f10d6087ffc663ff33f20"
+    },
+    {
+      "id": "upstream-raw-tests.log",
+      "sha256": "bf41bbc8a4650332deabc3c43b74d3dc38d6d214a765a9e396e42d4ca1422a08"
+    },
+    {
+      "id": "upstream-raw-tests.xml",
+      "sha256": "acf980991e8d5981d2d1c33e1e9cdf7c09d9bfc34bed80b6e405b44866289107"
+    },
+    {
+      "id": "real-parity-raw/ACCEPTANCE.json",
+      "sha256": "aa60622704f0ed01927d2962c66338774870d80238be45e5cc90044771d51307"
+    },
+    {
+      "id": "isolated-editor.png",
+      "sha256": "0a0834c839e52e1ef020a451f3dd4908cf0169e5b74eaa07f848064a0e7c7084"
+    },
+    {
+      "id": "production-editor.png",
+      "sha256": "d3a82600a44edf352d499a35117f6d9bea4277d90db445713ae374b41275e8bb"
+    },
+    {
+      "id": "snapshot-verify.log",
+      "sha256": "afef68de9114eb21a3eb368093f872fe4d0b47869b265de1f297b8b4a5380151"
+    },
+    {
+      "id": "catalog-check.log",
+      "sha256": "c70e8294f64fa1fac62c5bd8159dc37fc2b10d324a543ff1fb8f6c4d1b80dbd0"
+    },
+    {
+      "id": "database-contract.log",
+      "sha256": "b1018935c52d9ddd50fd62ffd1dd5330615b5a5e6ed3ae624ac1b35a161d888c"
+    },
+    {
+      "id": "model-sources.log",
+      "sha256": "510e461db528024b94cd4d4b525fc8ee1a85aec37f571ca8ff77d2a89bc984f1"
+    }
+  ]
+}

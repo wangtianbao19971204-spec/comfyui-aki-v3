@@ -1,0 +1,154 @@
+{
+  "schema": 1,
+  "date": "2026-10-25",
+  "feature": "runtime-stocking-texture",
+  "upstream_repository": "https://github.com/silvermoong/stocking-texture-tool",
+  "from_commit": "bcc4e89d7319ca59f521dd1c5557db457cde6d92",
+  "to_commit": "204a1b8e36dabb0ca11aa3720113be17877fa245",
+  "upstream_commits_ahead": 3,
+  "upstream_commits": [
+    "7db8f4c Texture page: Sparkles switch and divider, move Show problems to the panel, remake README page screenshots",
+    "e3e3548 Presets: hide the empty placeholder option from the opened dropdown menu",
+    "204a1b8 Server: pin .js, .json, and .css MIME types against HKCR overrides (#6)"
+  ],
+  "raw_dependency_files": 29,
+  "vendored_files_changed": 6,
+  "repository_wide_diff": "27 files changed, 289 insertions(+), 68 deletions(-); the other 21 are the author's README images and own tests, outside the sync scope",
+  "vendored_scope_diff": "6 files changed, 57 insertions(+), 41 deletions(-)",
+  "license": "MIT",
+  "license_sha256_unchanged": true,
+  "raw_dependency_sha256_match": true,
+  "tests": {
+    "plugin_passed": 120,
+    "plugin_skipped": 2,
+    "skip_reason": "Two real-CUDA contracts are skipped on this CPU run; skips are not passes.",
+    "plugin_baseline_before_this_change": 119,
+    "new_regressions_included": 1,
+    "frontend_passed": 17,
+    "export_passed": 6,
+    "workflow_regression_passed": true,
+    "maintenance_passed": 703
+  },
+  "compatibility": {
+    "workflow_schema": 2,
+    "node_interfaces_changed": false,
+    "workflow_files_replaced": false,
+    "uap_order_changed": false,
+    "upstream_default_sparkle_on": false,
+    "node_forces_sparkle_on": true,
+    "painted_psd_layer_forces_sparkle_on": true,
+    "legacy_look_migration": "clean_look turns sparkles on only when sparkle_on is absent and some amount is above zero; an explicit key is never overridden",
+    "cases_made_explicit": [
+      "test_nodes.py bright-pixel parity and SaveImage truncation",
+      "test_upstream_rendering.py depth-ready and once-per-render effect cases",
+      "parity_matrix.py bright loop",
+      "compare_upstream.py bright loop",
+      "feature_acceptance.py sparkle variants plus a switched-off contrast"
+    ]
+  },
+  "production": {
+    "status": "deployed_and_accepted",
+    "runtime": "G:/ComfyUI-aki-v3",
+    "changed_files": 16,
+    "product_files": 10,
+    "test_files": 6,
+    "unexpected_changed_files": 0,
+    "previous_pid": 39092,
+    "new_pid": 41068,
+    "stopped_with": "production_tools/launch.py production --stop",
+    "started_with": "production_tools/launch.py production --memory-mode original --preview-method auto --cuda-malloc --reserve-vram 4",
+    "launch_arguments_preserved": true,
+    "queue_empty_before_stop": true,
+    "ready_after_seconds": 40,
+    "stderr_bytes": 0,
+    "online_databases_replaced": false,
+    "workflows_or_prompts_replaced": false,
+    "rollback_available": true,
+    "rollback_directory": "G:/ComfyUI-local/production-backups/stocking-upstream-sync-20261025/before"
+  },
+  "acceptance": {
+    "sync_script": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/sync_upstream.py",
+    "pin_requires_full_sha": true,
+    "raw_git_blobs_materialized": 29,
+    "adapter_anchor_check": "All studio_assets.py replace_once anchors and page injection points exist exactly once at the new pin.",
+    "preview_honours_switch": "studio.params merges query overrides through look.DEFAULTS, so sparkle_on reaches the preview render.",
+    "deployed_pin_on_disk": "204a1b8e36dabb0ca11aa3720113be17877fa245",
+    "node_required_inputs_after_reload": 14,
+    "live_http_renders": 2,
+    "sparkle_switch_changes_pixels": true,
+    "sparkle_difference_pixels": 4688,
+    "sparkle_max_channel_delta": 76,
+    "sparkle_pixels_mean_brightness": 176.6,
+    "whole_image_mean_brightness": 144.9,
+    "texture_changes_pixels_vs_source": 940648,
+    "editor_page_has_sparkle_switch": true,
+    "editor_page_has_moved_check_button": true
+  },
+  "limitations": [
+    "No browser interaction with the new switch, its collapsed sliders or the moved Show problems button was exercised; only the served markup and module behaviour were checked.",
+    "No diffusion model was loaded and no quality review of the two deployment renders was recorded.",
+    "The author's new 201-line preset test is outside the synced files, so the empty placeholder fix has no matching regression here.",
+    "Fixed fixtures and synthetic contracts do not establish quality for every input.",
+    "Unchanged SAM and depth model quality was not revalidated."
+  ],
+  "external_evidence_id": "stocking-upstream-sync-20261025-01",
+  "external_evidence_directory": "G:/ComfyUI-local/validation/stocking-upstream-sync-20261025",
+  "evidence": [
+    {
+      "id": "upstream-sync.json",
+      "sha256": "12c4a242227eb7aa504c0f2425c4da3698e69b55f49792656e1f1f9a7db586bb"
+    },
+    {
+      "id": "plugin-cpu-tests.log",
+      "sha256": "a70303974c86532ec8011114de71fc31f9c9541104c8aafd6c3007c6733833d7"
+    },
+    {
+      "id": "frontend-tests.log",
+      "sha256": "1b638afa4540ec2c4e4d1349f5c04727a6d520b31578383622b701958435890d"
+    },
+    {
+      "id": "export-contracts.log",
+      "sha256": "3f80e932c962481d9c05a4a78c517e4f408f1d86d66a7e27bae71e2b864dc3de"
+    },
+    {
+      "id": "workflow-cjs.log",
+      "sha256": "173a9d1cde12cfe88c159db0e1545e3ff7769e7eaa46a706614b99d2fb8283ce"
+    },
+    {
+      "id": "deploy-plan.json",
+      "sha256": "91b44ce22884b2522823317f944b785701428047f1b1676b6238965f7fe0a807"
+    },
+    {
+      "id": "FILES_DEPLOYED.json",
+      "sha256": "ff961cfa4c04389874512f848d56c576c872af0fcf6c1d34662f82f647a896a0"
+    },
+    {
+      "id": "PRODUCTION_VERIFIED.json",
+      "sha256": "8f6f026d94ce61725d2743a478b564814d68ebb13629946c177485dfe40e29e5"
+    },
+    {
+      "id": "plugin-before.json",
+      "sha256": "77bf25fa542c53a256a96c5e496068f12f2c8c342453e57c983761be615638cb"
+    },
+    {
+      "id": "plugin-after.json",
+      "sha256": "416cf24cb604cf1094d27f207d2dcb9860de35532f32083e66318a8c09b5769a"
+    },
+    {
+      "id": "deployed-module-check.log",
+      "sha256": "25da89a397098e8eb2442eafd608f49cd2cfebeffb174ce71d8ee6ab02ec7978"
+    },
+    {
+      "id": "live-render/ACCEPTANCE.json",
+      "sha256": "d082aae16d75e8620b60277ee962586d70d5ed8cea7570d38c44dc9dc59a07c2"
+    },
+    {
+      "id": "live-render/off-off_00001_.png",
+      "sha256": "3bb96376ab9d5cb8564bd020f69f2e183480497395f9e19fadfc7f186506dab4"
+    },
+    {
+      "id": "live-render/on-on_00001_.png",
+      "sha256": "f79c1166413bba2cc0817028a9ced14f405893c0e0150020d8134f65c9a8af22"
+    }
+  ]
+}

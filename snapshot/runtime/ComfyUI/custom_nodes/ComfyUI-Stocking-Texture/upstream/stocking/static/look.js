@@ -161,9 +161,10 @@ export function createLook({ getDoc, getArt, request, edit, flash, focusByKeyboa
     const q = new URLSearchParams({ style: p.style, density: p.density, tilt: p.tilt,
       strength: p.strength, strength_auto: p.strength_auto, weight: p.weight, amount: p.amount ?? '',
       layers: JSON.stringify(p.layers || []), lock_total: p.lock_total,
-      sparkle_depth: p.sparkle_depth, sparkle_bright: p.sparkle_bright, sparkle_painted: p.sparkle_painted,
-      sparkle_even: p.sparkle_even,
-      sparkle_link: p.sparkle_link, moire_on: p.moire_on, moire: p.moire, moire_area: p.moire_area });
+      sparkle_on: p.sparkle_on, sparkle_depth: p.sparkle_depth, sparkle_bright: p.sparkle_bright,
+      sparkle_painted: p.sparkle_painted, sparkle_even: p.sparkle_even,
+      sparkle_link: p.sparkle_link, particle_on: p.particle_on, particle: p.particle,
+      moire_on: p.moire_on, moire: p.moire, moire_area: p.moire_area, fade: p.fade !== false });
     for (const [k, v] of Object.entries(extra || {})) q.set(k, v);
     return q.toString();
   }
@@ -681,11 +682,17 @@ export function createLook({ getDoc, getArt, request, edit, flash, focusByKeyboa
     setVal($('#strength-val'), p.strength, '%');
     $('#strength-auto').hidden = !p.strength_auto;
     $('#btn-strength-auto').hidden = !!p.strength_auto;
+    $('#sparkle-on').checked = !!all.sparkle_on;
+    $('#sparkle-fields').hidden = !all.sparkle_on;
     for (const k of ['depth', 'bright', 'painted', 'even']) {
       $(`#sparkle-${k}`).value = all[`sparkle_${k}`];
       setVal($(`#sparkle-${k}-val`), all[`sparkle_${k}`], '%');
     }
     $('#btn-sparkle-link').setAttribute('aria-pressed', String(!!all.sparkle_link));
+    $('#particle-on').checked = !!all.particle_on;
+    $('#particle-fields').hidden = !all.particle_on;
+    $('#particle').value = all.particle;
+    setVal($('#particle-val'), all.particle, '%');
     $('#moire-on').checked = !!all.moire_on;
     $('#moire-fields').hidden = !all.moire_on;
     $('#moire').value = all.moire;
@@ -696,9 +703,21 @@ export function createLook({ getDoc, getArt, request, edit, flash, focusByKeyboa
     $('#check-legend').hidden = !L.showCheck;
     $('#peek-hint').hidden = L.showCheck;
     for (const el of document.querySelectorAll('.look-only input[type="range"]')) fillRange(el);
+    renderFade();
     renderExclude();
     renderReset();
     renderPresetState();
+  }
+
+  function renderFade() {
+    const p = L.params;
+    if (!p) return;
+    const on = p.fade !== false;
+    $('#fade').checked = on;
+    const i = L.info;
+    $('#fade-note').textContent = !on ? t('已关闭：横纹密集处也不减弱纹理。')
+      : !i ? '' : i.solving.length ? t('正在更新…')
+        : i.check.faded > 0 ? t('现在减弱了纹理的 {p}。', { p: pct(i.check.faded) }) : t('这张图没有被减弱的地方。');
   }
 
   // 颜色排除 is a document setting (undoable, saved with the work), not a look parameter
@@ -718,6 +737,7 @@ export function createLook({ getDoc, getArt, request, edit, flash, focusByKeyboa
     if (!i) return;
     $('#check-faded').textContent = pct(i.check.faded);
     $('#check-excluded').textContent = pct(i.check.excluded);
+    renderFade();
     renderExclude();
     const ns = $('#check-nostroke');
     ns.textContent = (i.untextured.length ? pct(i.check.nostroke) : t('没有')) + (i.solving.length ? t('（求解中…）') : '');
@@ -729,7 +749,7 @@ export function createLook({ getDoc, getArt, request, edit, flash, focusByKeyboa
     $('#sparkle-painted-field').hidden = !i.has_sparkle_layer;
     const sn = $('#sparkle-note');
     sn.className = 'note';
-    const usesDepth = L.params.sparkle_depth > 0;
+    const usesDepth = !!L.params.sparkle_on && L.params.sparkle_depth > 0;
     if (usesDepth && i.depth !== 'ready' && i.depth !== 'error') sn.textContent = t('正在估算深度（第一次要几秒）…');
     else if (usesDepth && i.depth === 'error') {
       sn.textContent = t('深度模型不可用：{error}。按深度的亮点先不显示，按画面亮部的照常。', { error: i.depth_error || t('未知错误') });
@@ -768,6 +788,7 @@ export function createLook({ getDoc, getArt, request, edit, flash, focusByKeyboa
   function renderPresetList() {
     const none = document.createElement('option');
     none.value = '';
+    none.hidden = true;
     none.textContent = L.presets.length ? t('选一个预设') : t('还没有预设');
     const asNew = document.createElement('option');
     asNew.textContent = t('保存为新预设…');
@@ -783,6 +804,7 @@ export function createLook({ getDoc, getArt, request, edit, flash, focusByKeyboa
   }
 
   function renderPresetState() {
+    if (!presetSel.options.length) { renderPresetList(); return; }
     const p = presetOf(L.presetName);
     if (!p) L.presetName = null;                 // none, or deleted since
     presetSel.value = p ? p.name : '';
@@ -798,7 +820,7 @@ export function createLook({ getDoc, getArt, request, edit, flash, focusByKeyboa
     const notes = [];
     if (p && !p.params) notes.push(t('这个预设读不了（可能是新版本存的），可以删掉它。'));
     else if (modified) notes.push(t('已改动（和“{name}”不同）。', { name: p.name }));
-    if (p && p.params && p.params.sparkle_painted > 0 && L.info && !L.info.has_sparkle_layer) {
+    if (p && p.params && p.params.sparkle_on && p.params.sparkle_painted > 0 && L.info && !L.info.has_sparkle_layer) {
       notes.push(t('这张图没有“亮点”层，预设里按“亮点”层放亮点的那一项暂时不起作用。'));
     }
     $('#preset-note').textContent = notes.join(' ');
@@ -943,7 +965,7 @@ export function createLook({ getDoc, getArt, request, edit, flash, focusByKeyboa
   });
 
   presetSel.addEventListener('change', () => {
-    if (presetSel.selectedOptions[0].dataset.new) {
+    if (presetSel.selectedOptions[0]?.dataset.new) {
       renderPresetState();                       // the list shows the selected preset again while the name is asked
       openSavePreset();
     } else if (presetSel.value) applyPreset(presetSel.value);
@@ -1001,14 +1023,22 @@ export function createLook({ getDoc, getArt, request, edit, flash, focusByKeyboa
   $('#strength').addEventListener('input', (e) => setLayer({ strength: +e.target.value, strength_auto: false },
     { gesture: `strength:${L.layer}` }));
   $('#btn-strength-auto').addEventListener('click', () => setLayer({ strength_auto: true }));
+  $('#sparkle-on').addEventListener('change', (e) => set({ sparkle_on: e.target.checked }));
   $('#sparkle-depth').addEventListener('input', (e) => setAmount('sparkle_depth', +e.target.value));
   $('#sparkle-bright').addEventListener('input', (e) => setAmount('sparkle_bright', +e.target.value));
   $('#sparkle-painted').addEventListener('input', (e) => set({ sparkle_painted: +e.target.value }, { gesture: 'sparkle_painted' }));
   $('#sparkle-even').addEventListener('input', (e) => set({ sparkle_even: +e.target.value }, { gesture: 'sparkle_even' }));
+  $('#particle-on').addEventListener('change', (e) => set({ particle_on: e.target.checked }));
+  $('#particle').addEventListener('input', (e) => set({ particle: +e.target.value }, { gesture: 'particle' }));
   $('#moire-on').addEventListener('change', (e) => set({ moire_on: e.target.checked }));
   $('#moire').addEventListener('input', (e) => set({ moire: +e.target.value }, { gesture: 'moire' }));
   $('#moire-area').addEventListener('input', (e) => set({ moire_area: +e.target.value }, { gesture: 'moire_area' }));
   $('#btn-sparkle-link').addEventListener('click', toggleLink);
+  $('#fade').addEventListener('change', (e) => {
+    const on = e.target.checked;
+    set({ fade: on });
+    flash(on ? t('已打开纹理减弱，Ctrl+Z 可以撤销') : t('已关闭纹理减弱：横纹密集处也不减弱纹理，Ctrl+Z 可以撤销'));
+  });
   $('#exclude').addEventListener('change', (e) => {
     const doc = getDoc();
     if (!doc) return;
@@ -1065,9 +1095,10 @@ export function createLook({ getDoc, getArt, request, edit, flash, focusByKeyboa
     set({ style: 'knit', density: 100, tilt: 32,
       strength: L.info ? L.info.strength_suggested : 100, strength_auto: true, weight: 100, amount: null, layers: [],
       lock_total: L.info ? L.info.blend_auto : true,         // what a new look starts with: the user's last choice
-      sparkle_depth: layer ? 0 : 100,
+      sparkle_on: false, sparkle_depth: layer ? 0 : 100,
       sparkle_bright: layer ? 0 : 100, sparkle_painted: layer ? 100 : 0, sparkle_even: 0, sparkle_link: true,
-      moire_on: false, moire: 100, moire_area: 100 });
+      particle_on: false, particle: 100,
+      moire_on: false, moire: 100, moire_area: 100, fade: true });
     L.beforeReset = before;
     renderReset();
     flash(t('已全部恢复默认；想回去，点“撤销恢复默认”'));

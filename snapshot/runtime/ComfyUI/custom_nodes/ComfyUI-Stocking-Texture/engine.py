@@ -187,9 +187,14 @@ def render_texture(rgb, data, geometry, disparity, params, seed, dark_adapt=True
         def randoms(self, style):
             with self._lock:
                 if style not in self._randoms:
-                    rng = np.random.default_rng(seed)
-                    grain = knit.grain_noise(rng, self.h, self.w) if style == "grain" else ()
-                    self._randoms[style] = (*grain, rng.random((self.h, self.w)), rng.random((self.h, self.w)))
+                    if style == "particle":
+                        rng = np.random.default_rng(int(seed) + 1)
+                        self._randoms[style] = look.particle_field(
+                            rng, self.h, self.w, float(np.sqrt(self.w * self.h / look.REF_AREA)))
+                    else:
+                        rng = np.random.default_rng(seed)
+                        grain = knit.grain_noise(rng, self.h, self.w) if style == "grain" else ()
+                        self._randoms[style] = (*grain, rng.random((self.h, self.w)), rng.random((self.h, self.w)))
                 return self._randoms[style]
 
     rgb8 = np.round(np.clip(rgb, 0, 1) * 255).astype(np.uint8)

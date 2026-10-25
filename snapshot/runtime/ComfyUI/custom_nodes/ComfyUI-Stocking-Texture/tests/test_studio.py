@@ -146,6 +146,15 @@ class StudioContracts(unittest.TestCase):
         p.delete_preset("常用白丝")
         self.assertEqual(p.presets()[0]["name"], "future")
 
+    def test_looks_saved_before_the_sparkle_switch_keep_their_sparkles(self):
+        self.assertIs(store.clean_look({"style": "coil", "sparkle_bright": 120})["sparkle_on"], True)
+        self.assertIs(store.clean_look({"sparkle_on": False, "sparkle_bright": 120})["sparkle_on"], False)
+        self.assertIs(store.clean_look({"sparkle_on": True})["sparkle_on"], True)
+        self.assertIs(store.clean_look({"style": "coil"})["sparkle_on"], False)
+        p = store.Preferences(self.root / "user")
+        p.save_preset("旧版白丝", {"style": "coil", "sparkle_even": 150})
+        self.assertIs(p.presets()[0]["params"]["sparkle_on"], True)
+
     def test_draft_restore_does_not_replace_a_changed_workflow(self):
         draft_id = "a" * 32
         first = self.studio(draft_id=draft_id)

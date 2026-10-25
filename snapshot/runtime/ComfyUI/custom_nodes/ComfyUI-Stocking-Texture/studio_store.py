@@ -90,7 +90,7 @@ def clean_look(value):
     dumps(value)
     def finite_fields(item):
         for key, raw in item.items():
-            if key in look.DEFAULTS and key not in ("style", "strength_auto", "sparkle_link", "moire_on", "lock_total", "layers"):
+            if key in look.DEFAULTS and key not in ("style", "strength_auto", "sparkle_on", "sparkle_link", "particle_on", "moire_on", "fade", "lock_total", "layers"):
                 if raw not in (None, "", "null") and not math.isfinite(float(raw)):
                     raise ValueError("纹理参数必须为有限数值")
     if isinstance(value, dict):
@@ -103,6 +103,10 @@ def clean_look(value):
             for layer in layers:
                 if isinstance(layer, dict):
                     finite_fields(layer)
+    if isinstance(value, dict) and "sparkle_on" not in value:
+        # Looks, drafts and preset files saved before upstream's switch asked for sparkles by amount alone.
+        if any(float(value.get(f"sparkle_{kind}") or 0) > 0 for kind in look.SPARKLE_KINDS):
+            value = {**value, "sparkle_on": True}
     params = look.clean_params(value)
     dumps(params)  # Reject nonfinite nested layer values before changing a document.
     return params
@@ -294,7 +298,13 @@ def restore(value, assets, art=None, *, preferred="gpu"):
     if erased:
         erased = points(np.asarray(erased).ravel().tolist(), w, h, 1).tolist()
     sparkle = unpack(p["sparkle"], w, h, False) if p.get("sparkle") is not None else None
-    params = clean_look(p["look"]) if p.get("look") is not None else None
+    # Match upstream recovery: an unreadable saved look must not prevent opening
+    # the image and guides. The input snapshot stays untouched; live edits and
+    # preset imports still use strict clean_look validation.
+    try:
+        params = clean_look(p["look"]) if p.get("look") is not None else None
+    except (ValueError, TypeError):
+        params = None
     doc = document_type.from_snapshot(np.asarray(art, np.uint8), str(p.get("name", "ComfyUI.png"))[:180], None,
                                  regions, strokes, sparkle, params, dividers, erased,
                                  p.get("color_exclude", True), p.get("guides_saved", False))

@@ -65,12 +65,12 @@ _GAIN = (_d.std() / (1 - _d.mean())) / np.sqrt(0.5)
 
 
 def render(src, reg, phi, u, alpha, amp=0.16, zig=0.12, wale=0.10, f_lo=0.27, f_hi=0.34,
-           tint=(0.90, 1.0, 1.10), dark=(0.03, 0.30)):
+           tint=(0.90, 1.0, 1.10), dark=(0.03, 0.30), fade=True):
     """Multiply a knit pattern into src.
 
     reg: int region map, 0 = untouched; phase fields are never differentiated across a region border.
     phi: course phase in cycles. u: wale phase in cycles. alpha: 0..1 coverage.
-    f_lo..f_hi: local frequency (cycles/px) over which each sinusoid fades out before it can alias.
+    f_lo..f_hi: local frequency (cycles/px) over which each sinusoid fades out before it can alias (unless fade is False).
     tint is B, G, R. Returns (out BGR uint8, gate) where gate is the per-pixel strength.
     """
     same = reg > 0
@@ -82,13 +82,15 @@ def render(src, reg, phi, u, alpha, amp=0.16, zig=0.12, wale=0.10, f_lo=0.27, f_
         return np.where(same, gx, 0), np.where(same, gy, 0)
 
     def comp(phase, fx, fy):
+        if not fade:
+            return np.cos(2 * np.pi * phase)
         f = np.sqrt(fx * fx + fy * fy)
         return np.cos(2 * np.pi * phase) * (1 - sstep(f_lo, f_hi, f)) * np.sinc(fx) * np.sinc(fy)
 
     cx, cy = grad(phi)
     ux, uy = grad(u)
     zs = np.pi * zig
-    keep_c = 1 - sstep(f_lo, f_hi, np.sqrt(cx * cx + cy * cy))
+    keep_c = 1.0 if not fade else 1 - sstep(f_lo, f_hi, np.sqrt(cx * cx + cy * cy))
     m = comp(phi, cx, cy)
     # knit loops = first-order sidebands of a sideways wobble of each course; they live only where the courses do
     knit = zs * comp(phi + u, cx + ux, cy + uy) - zs * comp(phi - u, cx - ux, cy - uy) - 0.5 * wale * comp(u, ux, uy)
@@ -112,14 +114,18 @@ def _luma(src, sigma):
     return cv2.GaussianBlur(v, (0, 0), sigma)
 
 
-def render_lines(src, reg, phase, alpha, amp=0.115, f_lo=0.27, f_hi=0.34, tint=(0.92, 1.0, 1.08), dark=(0.03, 0.30)):
+def render_lines(src, reg, phase, alpha, amp=0.115, f_lo=0.27, f_hi=0.34, tint=(0.92, 1.0, 1.08), dark=(0.03, 0.30),
+                 fade=True):
     """斜单线 style (the reference's 单线亮点), lines half: one band-limited line family along `phase` (cycles), no
     loops. Pair with add_sparkles."""
     same = _same_region(reg)
-    gy, gx = np.gradient(phase)
-    gx = np.where(same, gx, 0); gy = np.where(same, gy, 0)
-    f = np.sqrt(gx * gx + gy * gy)
-    m = np.where(same, np.cos(2 * np.pi * phase) * (1 - sstep(f_lo, f_hi, f)) * np.sinc(gx) * np.sinc(gy), 0)
+    if fade:
+        gy, gx = np.gradient(phase)
+        gx = np.where(same, gx, 0); gy = np.where(same, gy, 0)
+        f = np.sqrt(gx * gx + gy * gy)
+        m = np.where(same, np.cos(2 * np.pi * phase) * (1 - sstep(f_lo, f_hi, f)) * np.sinc(gx) * np.sinc(gy), 0)
+    else:
+        m = np.where(same, np.cos(2 * np.pi * phase), 0)
     gate = sstep(dark[0], dark[1], _luma(src, 1.5)) * alpha
     res = src.astype(np.float64) * (1 - amp * (gate * m)[..., None] * np.asarray(tint)[None, None, :])
     return np.clip(np.round(res), 0, 255).astype(np.uint8), gate
@@ -160,7 +166,8 @@ def _rip(name):
     return _RIPS[name]
 
 
-def gap_factor(src, reg, phi, u, alpha, tone, rip, amp, f_lo=0.27, f_hi=0.34, dark=(0.03, 0.30), flip=FLIP):
+def gap_factor(src, reg, phi, u, alpha, tone, rip, amp, f_lo=0.27, f_hi=0.34, dark=(0.03, 0.30), flip=FLIP,
+               fade=True):
     """What render_gaps multiplies src by, as float32 HxWx3, and the gate. amp: a number, or an HxW array of
     amplitudes. tone: region_tone() of the whole image (cropped like src); below flip the gaps are lighter than the
     stocking, above it darker."""
@@ -170,9 +177,13 @@ def gap_factor(src, reg, phi, u, alpha, tone, rip, amp, f_lo=0.27, f_hi=0.34, da
         gy, gx = np.gradient(f.astype(np.float32))
         return np.where(same, np.hypot(gx, gy), np.float32(0))
 
-    fv = footprint(phi)
-    keep = (1 - sstep(f_lo, f_hi, fv)) * same
-    m = tiles.sample(rip, u, phi, footprint(u), fv) * keep
+    if fade:
+        fv = footprint(phi)
+        keep = (1 - sstep(f_lo, f_hi, fv)) * same
+        m = tiles.sample(rip, u, phi, footprint(u), fv) * keep
+    else:
+        z = np.zeros(phi.shape, np.float32)
+        m = tiles.sample(rip, u, phi, z, z) * same
     gate = sstep(dark[0], dark[1], _luma(src, 1.5)) * alpha
     to_dark = np.array([1.25, 1.1, 0.6], np.float32)                 # B, G, R: the gap as a pink line
     to_light = np.array([0.75, 0.95, 1.25], np.float32)              # the gap as a warm light line
@@ -181,7 +192,7 @@ def gap_factor(src, reg, phi, u, alpha, tone, rip, amp, f_lo=0.27, f_hi=0.34, da
     return 1 + a * (gate * m).astype(np.float32)[..., None] * tint, gate
 
 
-def render_gaps(src, reg, phi, u, alpha, tone, rip, amp, f_lo=0.27, f_hi=0.34, dark=(0.03, 0.30)):
+def render_gaps(src, reg, phi, u, alpha, tone, rip, amp, f_lo=0.27, f_hi=0.34, dark=(0.03, 0.30), fade=True):
     """A knit drawn as the gaps between its yarn, where the skin shows through: rip is a ripmap of a tiles.*_gap_tile
     (one course by one wale, positive in the gaps).
 
@@ -190,7 +201,7 @@ def render_gaps(src, reg, phi, u, alpha, tone, rip, amp, f_lo=0.27, f_hi=0.34, d
     cycles; tone: region_tone() of the whole image (cropped like src), so a crop renders exactly like the same area
     of the whole. Returns (out BGR uint8, gate).
     """
-    f, gate = gap_factor(src, reg, phi, u, alpha, tone, rip, amp, f_lo, f_hi, dark)
+    f, gate = gap_factor(src, reg, phi, u, alpha, tone, rip, amp, f_lo, f_hi, dark, fade=fade)
     res = src.astype(np.float32) * f
     return np.clip(np.round(res), 0, 255).astype(np.uint8), gate
 
@@ -260,13 +271,13 @@ def grain_noise(rng, h, w, sigma=0.6):
 
 
 def render_grain(src, reg, phi, u, alpha, rng, knit_amp=0.04, grain=0.050, grain_dark=0.020, chroma=0.35, sigma=0.6,
-                 f_lo=0.29, f_hi=0.35, dark=(0.02, 0.16), noise=None):
+                 f_lo=0.29, f_hi=0.35, dark=(0.02, 0.16), noise=None, fade=True):
     """加濑风 style, grain half: 1-2 px grain (heavier toward the darks, faintly chromatic) over a faint knit.
 
     Pair with add_sparkles(neutral). Returns (out, gate) with gate covering both layers. noise: a precomputed
     grain_noise() field (or a crop of one) instead of drawing from rng.
     """
-    faint, gate_k = render(src, reg, phi, u, alpha, amp=knit_amp, f_lo=f_lo, f_hi=f_hi)
+    faint, gate_k = render(src, reg, phi, u, alpha, amp=knit_amp, f_lo=f_lo, f_hi=f_hi, fade=fade)
     h, w = src.shape[:2]
     g, gc = grain_noise(rng, h, w, sigma) if noise is None else noise
     L = _luma(src, 1.5)
