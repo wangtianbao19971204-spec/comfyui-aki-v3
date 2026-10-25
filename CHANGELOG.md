@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 2026-10-25：「控制与擦线 → 画擦线区域」在 Krea2 流程自动读取当前线稿画布（取 `[05V5]` 预览，必要时临时恢复静音预览节点只跑一次并还原），上传为临时画布写入 `[05C2]` 后再打开原生 MaskEditor，不用手选文件；结果缓存复用；`test_control_switches.cjs` 新增用例并通过全套。见[说明](docs/technical/changes/runtime-workbench/2026-10-25-erase-auto-mask-canvas.md)。仅前端 JS，热更新生效。
+
 - 2026-10-25：提示词库改 SQLite 权威存储（WAL + `synchronous=FULL`，读模型/API 不变、data.json 降级为按需导出）：单条编辑 1.59 ms 中位（原 ~1033 ms 且 O(库)），批量事务化+事务前 backup，后台自动导出/备份+行级 journal+`store-status` 告警；迁移 8.81 s 逐字段 equal、启动加载 2.17–2.71 s；`UW_LIBRARY_STORE=json|sqlite` 灰度；snapshot/restore 纳入 library DB SQL dump；Tag 池写连接升 synchronous=FULL。测试 203 OK/1 skip（含 O(1) patch、编辑尖峰与退出 flush 修复），见[说明](docs/technical/changes/runtime-workbench/2026-10-25-library-store-sqlite.md)。未部署生产。
 
 - 2026-10-25：工作台交互第二轮：Tag 子串搜索/自动补全改用 trigram FTS 缓存库（q=hair 178→18.6 ms、complete 168.6→19.5 ms、空结果 326→3.9 ms；1–2 字符仍回退旧 LIKE）；正文编辑后单行增量刷新 index，保存后首次 index 3.0–3.5 s→<0.1 s、prompts 1.1 s→0.13 s。Tag 语义 165 组 query 逐字段一致、编辑后结构与全量重建 ALL EQUAL；测试 156 OK/1 skip，见[说明](docs/technical/changes/runtime-workbench/2026-10-25-interaction-round2.md)。未部署生产。

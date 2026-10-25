@@ -221,3 +221,39 @@ function lifecycle() {
     console.log('PASS: standalone panel rebinds on same-graph workflow replacement and hides for UAP.');
 }
 lifecycle();
+
+async function autoCanvas() {
+    const graph = load(read(path.join(runtime, 'ComfyUI/user/default/workflows', files[3])));
+    let uploads = 0, queues = 0;
+    const api = {
+        apiURL: value => value,
+        fetchApi: async (url, options) => {
+            if (url.startsWith('/history/'))
+                return {ok: true, json: async () => ({p1: {status: {completed: true}, outputs: {498: {images: [{filename: 'lineart.png', subfolder: '', type: 'temp'}]}}}})};
+            if (url === '/upload/image') { uploads++; return {json: async () => ({name: `auto_canvas_${uploads}.png`, subfolder: ''})}; }
+            throw new Error(`unexpected api url ${url}`);
+        },
+    };
+    class FormData {append(name, value, filename) {this[name] = {value, filename};}}
+    const dom = vm.createContext({
+        api, URLSearchParams, FormData,
+        fetch: async () => ({ok: true, blob: async () => ({size: 1})}),
+        commitWidget: (_, node, widget, value) => {widget.value = value;},
+    });
+    vm.runInContext(source, dom);
+    const scope = dom.controlScope(graph), preview = dom.previewCanvas(scope);
+    assert.ok(preview, 'Krea2 root workflow exposes the lineart preview');
+    assert.equal(preview.id, 498);
+    const app = {queuePrompt: async () => {queues++; return {prompt_id: 'p1'};}};
+    const status = {textContent: ''};
+    assert.equal(await dom.prepareMaskCanvas(app, scope, status), true);
+    assert.equal(scope.mask.widgets[0].value, 'auto_canvas_1.png', 'Mask node points at the generated canvas');
+    assert.equal(preview.mode, 2, 'Muted lineart preview is restored after rendering');
+    assert.equal(queues, 1);
+    assert.equal(await dom.prepareMaskCanvas(app, scope, status), true);
+    assert.equal(scope.mask.widgets[0].value, 'auto_canvas_2.png');
+    assert.equal(queues, 1, 'Cached lineart preview is reused');
+    assert.equal(uploads, 2);
+    console.log('PASS: Krea2 auto mask canvas loads the lineart preview without a file picker, restores preview mode and reuses the cached preview.');
+}
+autoCanvas().catch(error => {console.error(error); process.exitCode = 1;});

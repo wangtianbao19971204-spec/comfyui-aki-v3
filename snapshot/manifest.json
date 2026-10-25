@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-25T02:00:02.964251+00:00",
+  "created_at": "2026-10-25T03:59:27.782037+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -23932,8 +23932,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_switches.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_switches.js",
-      "sha256": "50f5d30b17cb78c6d7314b72daf2d04c6edcf6cfbdab3aed35a54dcde5c1ab4e",
-      "bytes": 12137,
+      "sha256": "e2f6cbd7a611f6936f62920383340d2e49027423726a5014d19d3812f263b3ab",
+      "bytes": 15878,
       "kind": "file"
     },
     {
@@ -58260,8 +58260,8 @@
     {
       "source": "production_tools/test_control_switches.cjs",
       "path": "runtime/production_tools/test_control_switches.cjs",
-      "sha256": "7c5d6355dbdf92dc931a34c54c71a3128bc46a2965d6f59179db0c778c28a01f",
-      "bytes": 16697,
+      "sha256": "4d42fcb0a7e4bea857e8f373b60ea85021936a6d3c8e19727e06354a3a99ac1d",
+      "bytes": 18807,
       "kind": "file"
     },
     {
@@ -68275,15 +68275,14 @@
     }
   ],
   "development_revision": {
-    "note": "Graceful exit: synchronous semantic cache flush (store flush_now + on_cleanup)",
-    "previous_manifest_sha256": "973fb359a4af2ccede37d975fa960068ef4e9910e3d3772567c631b8b28db813",
+    "note": "Erase mask editor: auto-load current lineart canvas from the workflow preview",
+    "previous_manifest_sha256": "c3c7686160da766c5a834380bc0cbcac0bacb4e3a6026c28bd72b17ce7c75e7e",
     "source_changes": {
       "added": [],
       "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/derived_cache.py",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/prompt_selector.py",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_library_store.py"
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_switches.js",
+        "production_tools/test_control_switches.cjs"
       ]
     },
     "live_deployed": false,
