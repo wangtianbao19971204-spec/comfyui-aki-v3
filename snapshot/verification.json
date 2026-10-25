@@ -1,5 +1,5 @@
 {
-  "time": "2026-10-25T01:39:40.259541+00:00",
+  "time": "2026-10-25T02:00:11.178508+00:00",
   "pass": true,
   "entry_count": 9618,
   "failures": [],
@@ -20,7 +20,7 @@
     "state": "warm",
     "written": true,
     "hashed_files": 7,
-    "hashed_bytes": 3818119,
+    "hashed_bytes": 3787707,
     "joined_hashed_bytes": 0,
     "content_scanned_files": 5,
     "reused_content_scans": 9748,

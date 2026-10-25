@@ -750,7 +750,7 @@ def _library_store_shutdown():
     if timer is not None:
         timer.cancel()
     if pending:
-        _flush_semantic_cache_snapshot(force=True)
+        _flush_semantic_cache_snapshot(force=True, sync=True)
     maintenance = _LIBRARY_STORE_STATE.get("maintenance")
     if maintenance is not None:
         try:
@@ -762,6 +762,38 @@ def _library_store_shutdown():
 
 
 atexit.register(_library_store_shutdown)
+
+_LIBRARY_SHUTDOWN_HOOK = {"app": None}
+
+
+def _register_library_shutdown_hook():
+    """Flush the library store when the host cleans its aiohttp application.
+
+    ComfyUI's ``main.py`` does not run ``AppRunner.cleanup`` on Ctrl+C today (atexit
+    covers the normal interpreter exit); registering on_cleanup is the documented
+    graceful path for hosts that do clean up and is a no-op otherwise.
+    """
+    try:
+        instance = getattr(PromptServer, "instance", None)
+        app = getattr(instance, "app", None)
+        if app is None or not hasattr(app, "on_cleanup"):
+            return False
+        if _LIBRARY_SHUTDOWN_HOOK.get("app") is app:
+            return False
+
+        async def flush_on_cleanup(_app):
+            await asyncio.to_thread(_library_store_shutdown)
+
+        app.on_cleanup.append(flush_on_cleanup)
+        _LIBRARY_SHUTDOWN_HOOK["app"] = app
+        logger.info("[Workbench] library store shutdown hook registered on app.on_cleanup")
+        return True
+    except Exception as error:  # noqa: BLE001 - the hook is best effort
+        logger.warning("[Workbench] library store shutdown hook unavailable: %s", error)
+        return False
+
+
+_register_library_shutdown_hook()
 
 
 class PromptSelector:
@@ -908,7 +940,7 @@ def _install_semantic_cache(entries, projection_signature):
     _SEMANTIC_CACHE["projection"] = _semantic_cache_projection(projection_signature)
 
 
-def _flush_semantic_cache_snapshot(force=False):
+def _flush_semantic_cache_snapshot(force=False, sync=False):
     """Hand the (unsnapshotted) mapping to derived_cache once the library is idle.
 
     ``derived_cache.store`` snapshots the 325k-entry dict and a later timer serialises
@@ -916,7 +948,8 @@ def _flush_semantic_cache_snapshot(force=False):
     70-110ms spikes. The write is therefore only armed after
     ``UW_LIBRARY_SEMANTIC_STORE_IDLE_S`` (default 30s) without an edit: every edit
     re-arms the timer and a late callback re-arms instead of writing. ``force`` is
-    used by the exit and small-library paths.
+    used by the exit and small-library paths; ``sync`` writes the snapshot before
+    returning (graceful shutdown, where the 2s debounce timer would never fire).
     """
     with _SEMANTIC_CACHE_STORE_LOCK:
         _SEMANTIC_CACHE_STORE["timer"] = None
@@ -930,7 +963,7 @@ def _flush_semantic_cache_snapshot(force=False):
         return False
     try:
         derived_cache.store(_semantic_cache_directory(), _SEMANTIC_CACHE["projection"],
-                            REFINEMENT_VERSION, _SEMANTIC_ENTRIES)
+                            REFINEMENT_VERSION, _SEMANTIC_ENTRIES, flush_now=sync)
     except Exception as error:  # noqa: BLE001 - persistence is best effort
         logger.warning("[Workbench] semantic cache store scheduling failed: %s", error)
         return False

@@ -1013,15 +1013,7 @@ class EditPatchO1Tests(unittest.TestCase):
 
     def test_edit_patch_matches_rebuild_without_row_index(self):
         module = self._module()
-        categories_seen = []
-        original_shift = module._shift_view_index
-
-        def counted_shift(view, view_index, category_position, from_item, delta):
-            categories_seen.append(category_position)
-            return original_shift(view, view_index, category_position, from_item, delta)
-
-        with mock.patch.dict(os.environ, self.environment), \
-                mock.patch.object(module, '_shift_view_index', counted_shift):
+        with mock.patch.dict(os.environ, self.environment):
             module._apply_upsert_prompt({
                 'mode': 'edit', 'base_revision': self._revision(module),
                 'target_category_id': 'cat-a',
@@ -1040,6 +1032,77 @@ class EditPatchO1Tests(unittest.TestCase):
         self.assertEqual(module._LIBRARY_STATE['views'].get(False), snapshot['view'])
         self.assertEqual(module._LIBRARY_STATE['rows'].get(False), snapshot['rows'])
         self.assertEqual(module._LIBRARY_STATE['view_index'].get(False), snapshot['view_index'])
+
+    def _cache_environment(self, idle_seconds='60'):
+        environment = {key: value for key, value in self.environment.items()
+                       if key != 'UW_DISABLE_SEMANTIC_CACHE'}
+        environment['UW_LIBRARY_SEMANTIC_STORE_IDLE_S'] = idle_seconds
+        return environment
+
+    def _edit_p1(self, module, description):
+        module._apply_upsert_prompt({
+            'mode': 'edit', 'base_revision': self._revision(module),
+            'target_category_id': 'cat-a',
+            'prompt': {'id': 'p1', 'alias': 'flush', 'prompt': 'flush body',
+                       'description': description, 'image': '', 'tags': []},
+        })
+
+    def test_force_flush_writes_cache_synchronously(self):
+        environment = self._cache_environment()
+        module = self._module(environment)
+        cache_dir = module._semantic_cache_directory()
+        cache_file = Path(cache_dir) / module.derived_cache.CACHE_FILENAME
+        with mock.patch.dict(os.environ, environment), \
+                mock.patch.object(module, '_SEMANTIC_STORE_SNAPSHOT_LIMIT', 0):
+            self._edit_p1(module, 'synchronous flush')
+            self.assertIsNotNone(module._SEMANTIC_CACHE_STORE['timer'])
+            module._library_store_shutdown()
+        self.assertTrue(cache_file.is_file(), 'graceful exit wrote the cache file')
+        self.assertGreater(cache_file.stat().st_size, 0)
+        self.assertFalse(module.derived_cache.flush(),
+                         'the debounce timer must not be pending after a synchronous flush')
+        projection = module._semantic_cache_projection(module._projection_signature())
+        reloaded = module.derived_cache.load(cache_dir, projection, module.REFINEMENT_VERSION)
+        self.assertIsNotNone(reloaded)
+        self.assertEqual(reloaded, module._SEMANTIC_ENTRIES)
+        self.assertEqual(reloaded['p1'][1], module._SEMANTIC_ENTRIES['p1'][1])
+
+    def test_force_flush_failure_is_warning_only(self):
+        environment = self._cache_environment()
+        module = self._module(environment)
+        with mock.patch.object(module.derived_cache, 'store',
+                               side_effect=RuntimeError('disk unavailable')):
+            self.assertFalse(module._flush_semantic_cache_snapshot(force=True, sync=True))
+
+    def test_shutdown_hook_registration(self):
+        module = self._module()
+        cleanup = []
+        fake_app = types.SimpleNamespace(on_cleanup=cleanup)
+        fake_instance = types.SimpleNamespace(app=fake_app)
+        original = module._LIBRARY_SHUTDOWN_HOOK.get('app')
+        with mock.patch.object(module.PromptServer, 'instance', fake_instance):
+            module._LIBRARY_SHUTDOWN_HOOK['app'] = None
+            try:
+                self.assertTrue(module._register_library_shutdown_hook())
+                self.assertFalse(module._register_library_shutdown_hook())
+            finally:
+                module._LIBRARY_SHUTDOWN_HOOK['app'] = original
+        self.assertEqual(len(cleanup), 1)
+        self.assertTrue(asyncio.iscoroutinefunction(cleanup[0]))
+
+    def test_restart_reuses_force_flushed_cache(self):
+        environment = self._cache_environment()
+        first = self._module(environment)
+        with mock.patch.dict(os.environ, environment), \
+                mock.patch.object(first, '_SEMANTIC_STORE_SNAPSHOT_LIMIT', 0):
+            self._edit_p1(first, 'restart reuse')
+            first._library_store_shutdown()
+        second = self._module(environment)
+        cache_dir = second._semantic_cache_directory()
+        projection = second._semantic_cache_projection(second._projection_signature())
+        cached = second.derived_cache.load(cache_dir, projection, second.REFINEMENT_VERSION)
+        self.assertIsNotNone(cached, 'the restarted process finds the cache')
+        self.assertEqual(cached, second._SEMANTIC_ENTRIES)
 
 
 if __name__ == '__main__':

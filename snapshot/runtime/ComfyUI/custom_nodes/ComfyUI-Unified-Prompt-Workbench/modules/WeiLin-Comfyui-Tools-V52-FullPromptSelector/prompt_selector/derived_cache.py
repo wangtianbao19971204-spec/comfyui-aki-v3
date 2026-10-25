@@ -75,10 +75,15 @@ def load(cache_dir, projection, refinement_version):
     return entries
 
 
-def store(cache_dir, projection, refinement_version, entries):
-    """Persist ``entries`` after a short debounce so a burst of edits writes once."""
+def store(cache_dir, projection, refinement_version, entries, flush_now=False):
+    """Persist ``entries`` after a short debounce so a burst of edits writes once.
+
+    ``flush_now`` writes the snapshot synchronously instead of arming the debounce
+    timer; the graceful-shutdown path uses it so the 23 MB write cannot be lost
+    when the interpreter exits before the timer fires.
+    """
     if not AVAILABLE or not entries:
-        return
+        return False
     # The dict copy is atomic under the GIL; later in-place edits must not race the writer.
     snapshot = dict(entries)
     header = {"format": CACHE_FORMAT, "refinement_version": refinement_version,
@@ -87,10 +92,17 @@ def store(cache_dir, projection, refinement_version, entries):
         _PENDING["payload"] = (cache_dir, header, snapshot)
         if _PENDING["timer"] is not None:
             _PENDING["timer"].cancel()
-        timer = threading.Timer(STORE_DELAY, _run_pending)
-        timer.daemon = True
-        _PENDING["timer"] = timer
-        timer.start()
+        if flush_now:
+            _PENDING["timer"] = None
+        else:
+            timer = threading.Timer(STORE_DELAY, _run_pending)
+            timer.daemon = True
+            _PENDING["timer"] = timer
+    if flush_now:
+        _run_pending()
+        return True
+    timer.start()
+    return True
 
 
 def flush():
