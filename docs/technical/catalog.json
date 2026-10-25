@@ -312,7 +312,8 @@
         "docs/receipts/lora_download_import_20261007.json",
         "docs/receipts/lora_download_import_20261008.json",
         "docs/receipts/lora_quick_import_20261009.json",
-        "docs/receipts/lora_download_import_20261011.json"
+        "docs/receipts/lora_download_import_20261011.json",
+        "docs/receipts/lora_download_import_20261019.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -790,7 +791,8 @@
         "docs/receipts/privacy_completeness_recheck_20261007.json",
         "docs/receipts/incremental_security_20261011.json",
         "docs/receipts/snapshot_fingerprints_20261011.json",
-        "docs/receipts/full_suite_audit_20261014.json"
+        "docs/receipts/full_suite_audit_20261014.json",
+        "docs/receipts/security_incremental_ci_20261019.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -835,7 +837,8 @@
         "governance/version.json",
         ".githooks/run",
         ".githooks/pre-commit",
-        ".githooks/pre-push"
+        ".githooks/pre-push",
+        ".github/workflows/maintenance.yml"
       ],
       "tests": [
         "tests/test_release.py",

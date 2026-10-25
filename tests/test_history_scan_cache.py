@@ -309,5 +309,157 @@ class HistoryCacheTests(unittest.TestCase):
                 self.assertFalse(json.loads(result.stdout)['pass'])
 
 
+class IncrementalHistoryGateTests(unittest.TestCase):
+    """Portable-cache gate: unchanged objects are trusted, new bytes are not."""
+
+    def setUp(self):
+        temp = tempfile.TemporaryDirectory()
+        self.addCleanup(temp.cleanup)
+        self.repo = Path(temp.name)
+        self.cache = self.repo / 'portable-cache.json'
+        self.git('init', '-b', 'main')
+        self.git('config', 'user.name', 'Incremental Tests')
+        self.git('config', 'user.email', 'tests@local.invalid')
+        self.git('remote', 'add', 'origin', 'https://example.invalid/maintenance.git')
+        self.write('README.md', b'Neutral documentation.\n')
+        self.commit('Baseline', 'README.md')
+
+    def git(self, *args, input_data=None):
+        result = subprocess.run(['git', '-C', str(self.repo), *args], input=input_data, capture_output=True)
+        self.assertEqual(result.returncode, 0, result.stderr.decode(errors='replace'))
+        return result.stdout
+
+    def write(self, name, value):
+        path = self.repo / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(value)
+
+    def commit(self, message, *paths):
+        self.git('add', '--', *paths)
+        self.git('commit', '-qm', message)
+
+    def scan(self, repo=None):
+        return guard.run(repo or self.repo, cache_file=self.cache if repo is None else repo / 'portable-cache.json',
+                         incremental=True)
+
+    @staticmethod
+    def secret():
+        return b'sk-' + b'A1b2C3d4E5f6G7h8' * 3
+
+    def assert_same_findings(self, result):
+        fresh = guard.run(self.repo)
+        self.assertEqual(result['findings'], fresh['findings'])
+        self.assertEqual(result['pass'], fresh['pass'])
+        self.assertNotIn(self.secret().decode(), json.dumps(result))
+
+    def test_cold_then_warm_resumes_without_reading_cached_bytes(self):
+        cold = self.scan()
+        self.assertTrue(cold['pass'])
+        self.assertEqual(cold['mode'], 'all-history-incremental')
+        self.assertFalse(cold['cache']['all_object_bytes_rehashed'])
+        self.assertEqual(cold['cache']['resumed_objects'], 0)
+        warm = self.scan()
+        self.assertTrue(warm['pass'])
+        self.assertEqual(warm['cache']['resumed_objects'], cold['scanned_objects'])
+        self.assertEqual(warm['cache']['read_bytes'], 0)
+        self.assertEqual(warm['cache']['state'], 'warm')
+        self.assertEqual(warm['mode'], 'all-history-incremental')
+        self.assert_same_findings(warm)
+        # The saved store must keep every verdict, not only the ones read this run.
+        self.assertEqual(len(json.loads(self.cache.read_bytes())['payload']['records']), cold['scanned_objects'])
+        self.assertNotIn(b'Neutral documentation', self.cache.read_bytes())
+
+    def test_new_commit_is_scanned_and_failure_does_not_save(self):
+        self.scan()
+        before = self.cache.read_bytes()
+        self.write('notes.md', b'Reviewed neutral content.\n')
+        self.commit('Add notes', 'notes.md')
+        clean = self.scan()
+        self.assertTrue(clean['pass'])
+        self.assertLess(clean['cache']['resumed_objects'], clean['scanned_objects'])
+        self.assert_same_findings(clean)
+        before = self.cache.read_bytes()
+        self.write('leak.txt', self.secret())
+        self.commit('Leak fixture', 'leak.txt')
+        result = self.scan()
+        self.assertFalse(result['pass'])
+        self.assertIn('openai_style_key', {item['rule'] for item in result['findings']})
+        self.assertFalse(result['cache']['written'])
+        self.assertEqual(before, self.cache.read_bytes())
+        self.assert_same_findings(result)
+
+    def test_cached_parts_and_manifest_are_still_read(self):
+        token = self.secret()
+        for name, data in [('c', token[:20]), ('a', token[20:]), ('b', b' unrelated separator ')]:
+            self.write('snapshot/library/data/' + name + '.part', data)
+        def manifest(order):
+            return json.dumps({'files': [{'path': 'library/data', 'parts': [{'path': p + '.part'} for p in order]}]}).encode()
+        self.write('snapshot/manifest.json', manifest('cba'))
+        self.commit('Safe split order', 'snapshot')
+        cold = self.scan()
+        self.assertTrue(cold['pass'])
+        self.assertGreater(cold['cache']['read_bytes'], 0)
+        self.write('snapshot/manifest.json', manifest('cab'))
+        self.commit('Change split order', 'snapshot/manifest.json')
+        result = self.scan()
+        self.assertFalse(result['pass'])
+        self.assertGreaterEqual(result['cache']['resumed_objects'], 3)
+        self.assertIn('cross_part_openai_style_key', {item['rule'] for item in result['findings']})
+        self.assert_same_findings(result)
+
+    def test_portable_cache_is_rejected_for_another_repository(self):
+        self.scan()
+        temp = tempfile.TemporaryDirectory()
+        self.addCleanup(temp.cleanup)
+        other = Path(temp.name)
+        self.git_at(other, 'init', '-b', 'main')
+        self.git_at(other, 'config', 'user.name', 'Incremental Tests')
+        self.git_at(other, 'config', 'user.email', 'tests@local.invalid')
+        (other / 'a.txt').write_bytes(b'Different history.\n')
+        self.git_at(other, 'add', 'a.txt')
+        self.git_at(other, 'commit', '-qm', 'Other root')
+        shutil.copyfile(self.cache, other / 'portable-cache.json')
+        result = guard.run(other, cache_file=other / 'portable-cache.json', incremental=True)
+        self.assertTrue(result['pass'])
+        self.assertEqual(result['cache']['state'], 'policy_changed')
+        self.assertEqual(result['cache']['resumed_objects'], 0)
+
+    def git_at(self, repo, *args):
+        out = subprocess.run(['git', '-C', str(repo), *args], capture_output=True)
+        self.assertEqual(out.returncode, 0, out.stderr.decode(errors='replace'))
+        return out.stdout
+
+    def test_corrupted_store_falls_back_to_a_full_scan(self):
+        self.scan()
+        self.cache.write_bytes(b'broken metadata')
+        result = self.scan()
+        self.assertTrue(result['pass'])
+        self.assertEqual(result['cache']['state'], 'invalid_full_rescan')
+        self.assertEqual(result['cache']['resumed_objects'], 0)
+        self.assert_same_findings(result)
+
+    def test_salt_change_invalidates_the_portable_store(self):
+        self.scan()
+        with mock.patch.dict(os.environ, {'COMFYUI_SCAN_SALT': 'rotate-1'}):
+            result = self.scan()
+        self.assertTrue(result['pass'])
+        self.assertEqual(result['cache']['state'], 'policy_changed')
+        self.assertEqual(result['cache']['resumed_objects'], 0)
+
+    def test_incremental_requires_an_explicit_portable_cache(self):
+        with self.assertRaises(ValueError):
+            guard.run(self.repo, incremental=True)
+        with self.assertRaises(ValueError):
+            guard.run(self.repo, staged=True, cache_file=self.cache)
+        for flags in [('--all-history', '--incremental'),
+                      ('--staged', '--cache-file', str(self.cache)),
+                      ('--all-history', '--incremental', '--cache-file', str(self.cache), '--cache-history')]:
+            with self.subTest(flags=flags):
+                result = subprocess.run([sys.executable, '-B', str(SCRIPTS / 'security_guard.py'),
+                                         '--repo', str(self.repo), *flags], capture_output=True)
+                self.assertEqual(result.returncode, 2)
+                self.assertFalse(json.loads(result.stdout)['pass'])
+
+
 if __name__ == '__main__':
     unittest.main()

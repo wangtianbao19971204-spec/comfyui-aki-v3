@@ -1,0 +1,123 @@
+{
+  "schema": 1,
+  "date": "2026-10-19",
+  "scanned_downloads": 13,
+  "imported": 9,
+  "download_originals_retained": 0,
+  "new_bytes": 1104911664,
+  "user_loras_after": 322,
+  "assets": [
+    {
+      "original_name": "moria_luluka_7in1__v1.safetensors",
+      "current_path": "ComfyUI/models/loras/anima/角色与人物/Anima__名侦探光之美少女 森亚露露卡 奥秘天使 漂白 黑化( 森亜るるか キュアアルカナ-Moria Lul__7 in 1__BF16__cv3281127__f3165331.safetensors",
+      "sha256": "45d6ad5ae8957e50a3c77f20b9f5539608b2af66a13bdf57f7a90a7ebfd6c0d2",
+      "page_url": "https://civitai.com/models/2863264?modelVersionId=3281127",
+      "version_id": 3281127,
+      "file_id": 3165331,
+      "category": "角色与人物",
+      "family": "anima"
+    },
+    {
+      "original_name": "cure_arcana_shadow_3in1_krea2_uma_v1.safetensors",
+      "current_path": "ComfyUI/models/loras/krea2/角色与人物/Krea2__名侦探光之美少女 森亚露露卡 奥秘天使 漂白 黑化( 森亜るるか キュアアルカナ-Moria Lul__krea2 v1.0__FP16__cv3401978__f3292687.safetensors",
+      "sha256": "ae9fd23f26a59a9910a024bf36aac6098699c21df57fea0478c8707a74969bc8",
+      "page_url": "https://civitai.com/models/2863264?modelVersionId=3401978",
+      "version_id": 3401978,
+      "file_id": 3292687,
+      "category": "角色与人物",
+      "family": "krea2"
+    },
+    {
+      "original_name": "eternalReturnSeres_v1.safetensors",
+      "current_path": "ComfyUI/models/loras/anima/角色与人物/Anima__eternal return seres__v1__cv3402326__f3293073.safetensors",
+      "sha256": "92f376a71994b71b70cbcd3ff7e7b75a90d6c42ae2e9c23520ff00a9acbb873b",
+      "page_url": "https://civitai.com/models/2999544?modelVersionId=3402326",
+      "version_id": 3402326,
+      "file_id": 3293073,
+      "category": "角色与人物",
+      "family": "anima"
+    },
+    {
+      "original_name": "mysticPureBunnySua_v1.safetensors",
+      "current_path": "ComfyUI/models/loras/anima/角色与人物/Anima__Eternal return - Mystic Pure Bunny Sua__v1__cv3403172__f3294087.safetensors",
+      "sha256": "ef25d256e90d7ed2ce01f2e123ae53c75a3134d59cb34710adb1b84092a4c1a5",
+      "page_url": "https://civitai.com/models/3000211?modelVersionId=3403172",
+      "version_id": 3403172,
+      "file_id": 3294087,
+      "category": "角色与人物",
+      "family": "anima"
+    },
+    {
+      "original_name": "mystyle.safetensors",
+      "current_path": "ComfyUI/models/loras/anima/画风与画师/Anima__mystyle__v1.0__FP16__cv3405019__f3296285.safetensors",
+      "sha256": "bfc77533af3a6fcdae64edb5aa8c397fd11f6e7e526eb611613f18a5c4ec2d69",
+      "page_url": "https://civitai.com/models/3001661?modelVersionId=3405019",
+      "version_id": 3405019,
+      "file_id": 3296285,
+      "category": "画风与画师",
+      "family": "anima"
+    },
+    {
+      "original_name": "viichan_white_dress.safetensors",
+      "current_path": "ComfyUI/models/loras/anima/角色与人物/Anima__[ISEGYE IDOL] 화이트 드레스 비챤 White Dress VIichan__v0.1__BF16__cv3406178__f3297586.safetensors",
+      "sha256": "d2e49c0f866a6f5a47efeb3a38e68d2637e5c8fa72f3561b23102762fa2a6cc5",
+      "page_url": "https://civitai.com/models/3002571?modelVersionId=3406178",
+      "version_id": 3406178,
+      "file_id": 3297586,
+      "category": "角色与人物",
+      "family": "anima"
+    },
+    {
+      "original_name": "@ZIYUEYUE.safetensors",
+      "current_path": "ComfyUI/models/loras/anima/画风与画师/Anima__紫月月月月月 Style Lora -Ziyueyueyueyueyue Style lora__v1.0__BF16__cv3406253__f3297664.safetensors",
+      "sha256": "38225f56c6ae61ebb085761c6ad3963ab6da5b22990bef6691d5b969c20410f4",
+      "page_url": "https://civitai.com/models/3002628?modelVersionId=3406253",
+      "version_id": 3406253,
+      "file_id": 3297664,
+      "category": "画风与画师",
+      "family": "anima"
+    },
+    {
+      "original_name": "animaNai5E585B6E4B889.YDAV.safetensors",
+      "current_path": "ComfyUI/models/loras/anima/画风与画师/Anima__Anima-油画湿润厚涂二次元(nai5其三)__v2.0__BF16__cv3406761__f3298236.safetensors",
+      "sha256": "e72c670dfa4303af332aa2160b7d811e874a745d77aad75976939011effcb7c3",
+      "page_url": "https://civitai.com/models/3001542?modelVersionId=3406761",
+      "version_id": 3406761,
+      "file_id": 3298236,
+      "category": "画风与画师",
+      "family": "anima"
+    },
+    {
+      "original_name": "np_sheer_taut.safetensors",
+      "current_path": "ComfyUI/models/loras/krea2/服装与配饰/Krea2__np_sheer_taut - Translucent Taut Sheer Tights (No__v1.0__FP16__cv3415306__f3308148.safetensors",
+      "sha256": "d4765d8919196ce39e21092f8bdf8425d810d214fa32d8c864c01d7ea8ff136b",
+      "page_url": "https://civitai.com/models/3009623?modelVersionId=3415306",
+      "version_id": 3415306,
+      "file_id": 3308148,
+      "category": "服装与配饰",
+      "family": "krea2"
+    }
+  ],
+  "validation": {
+    "full_target_sha256": true,
+    "exact_public_version_file": true,
+    "cards_and_loader_enumeration": true,
+    "existing_identity_and_personal_fields_preserved": true,
+    "existing_cache_rows_preserved": 329,
+    "old_index_rows_preserved": true,
+    "queue_empty_before_after": true,
+    "preview_downloaded_count": 9,
+    "unit_tests": 32,
+    "source_tests": 26,
+    "standardization_tests": 47,
+    "technical_catalog_tests": 36,
+    "gpu_tested": false,
+    "service_started_for_registration": true,
+    "service_restarted": false,
+    "full_library_rescan": false,
+    "duplicates_skipped": 4
+  },
+  "private_receipt_id": "lora-import-20261019/import-20261019-210245-161982",
+  "private_evidence": "LOCALAPPDATA/ComfyUI-LoRA-Imports/import-20261019-210245-161982",
+  "rollback": "Download originals were removed after verified registration at the user's explicit request. Rollback reads this batch's journal.jsonl and completed-assets.json for the exact path/hash pairs, moves only this batch's nine weights and sidecars out of the model tree, and drops only these nine cards; never replace the online SQLite with the prior backup. Re-download by version/file ID and confirm the full SHA-256 before placing any weight again."
+}
