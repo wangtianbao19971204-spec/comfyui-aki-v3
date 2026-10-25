@@ -23,12 +23,19 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 from security_guard import EXACT_SOURCE_SUPPORT_FILES, blocked_path
-from library_sql import ITERDUMP, GALLERY_FTS5, FORMATS, iter_sql, table_counts, restore_sql, summary as sql_summary
+from library_sql import (ITERDUMP, GALLERY_FTS5, FORMATS, LIBRARY_PROFILES,
+                         LIBRARY_SCHEMA_VERSIONS, LIBRARY_STORE_PROFILE, iter_sql,
+                         table_counts, restore_sql, summary as sql_summary,
+                         library_store_summary)
 
 REPO = Path(__file__).resolve().parents[1]
 WB = 'ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench'
 LIBRARY = WB + '/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/user_data'
 LIBRARY_DATABASES = ('userdatas_zh_CN_danbooru.db', 'userdatas_zh_CN_history.db', 'userdatas_zh_CN_tags.db')
+LIBRARY_PROMPT_STORE = LIBRARY + '/prompt_selector'
+LIBRARY_STORE = LIBRARY_PROMPT_STORE + '/library.sqlite3'
+LIBRARY_TEXT_FILES = ('data.json', 'default.json', 'semantic_projection.json',
+                      'shared_pairs.json', 'shared_sync_log.json', 'STORE_OWNER.txt')
 GALLERY_DATABASE = WB + '/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/py/shared/data/tags_cache.db'
 RANDOM_TEMPLATES = tuple(WB + '/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/random_tag/' + name
                          for name in ('20260606_203538.json', '20260606_205040.json'))
@@ -246,6 +253,10 @@ def manifest_path_failures(manifest):
 
     if not isinstance(manifest, dict) or not isinstance(manifest.get('files'), list) or not isinstance(manifest.get('metadata_files', []), list):
         return [{'path': 'manifest.json', 'reason': 'invalid_manifest_structure'}]
+    if manifest.get('library_authority') not in (None, 'sqlite', 'json'):
+        failures.append({'path': 'manifest.json', 'reason': 'invalid_library_authority'})
+    if manifest.get('library_json_export') not in (None, 'authority', 'compatibility_export', 'absent'):
+        failures.append({'path': 'manifest.json', 'reason': 'invalid_library_json_export'})
     claim('manifest.json', payloads, payload_parents, 'reserved-manifest')
     claim('verification.json', payloads, payload_parents, 'reserved-verification')
     claim('RESTORE_RECEIPT.json', sources, source_parents, 'reserved-restore-receipt', scope='source')
@@ -268,6 +279,23 @@ def manifest_path_failures(manifest):
                 claim(entry['source'] + '.restore.sql', sources, source_parents, owner + '-sql-sidecar', scope='source')
             if not isinstance(entry.get('tables'), dict) or any(not isinstance(table, str) or not isinstance(count, int) or count < 0 for table, count in entry.get('tables', {}).items()):
                 failures.append({'path': '<' + owner + '>', 'reason': 'invalid_sql_table_counts'})
+            profile = entry.get('library_profile')
+            if profile is not None:
+                if (not isinstance(profile, str) or profile not in LIBRARY_PROFILES
+                        or sql_format != ITERDUMP or entry.get('source') != LIBRARY_STORE):
+                    failures.append({'path': '<' + owner + '>', 'reason': 'unreviewed_library_profile'})
+                summary = entry.get('library_store')
+                if (not isinstance(summary, dict) or summary.get('profile') != profile
+                        or summary.get('schema_version') not in LIBRARY_SCHEMA_VERSIONS
+                        or not isinstance(summary.get('counts'), dict)
+                        or summary.get('counts', {}).get('prompts') != summary.get('prompt_count')
+                        or summary.get('counts', {}).get('categories') != summary.get('category_count')
+                        or not isinstance(summary.get('prompt_count'), int)
+                        or not isinstance(summary.get('category_count'), int)
+                        or not isinstance(summary.get('last_modified'), str)
+                        or summary.get('order_covers_all_prompts') is not True
+                        or summary.get('foreign_key_violations') != 0):
+                    failures.append({'path': '<' + owner + '>', 'reason': 'invalid_library_store_summary'})
         if kind == 'file':
             continue
         if not isinstance(entry.get('parts'), list):
@@ -468,6 +496,74 @@ def split_file(source, out):
     return parts
 
 
+def library_export_plan(root):
+    """Prompt-library payloads for one capture and which source is authoritative.
+
+    Once ``library.sqlite3`` exists the SQLite store is the runtime authority: it is
+    captured as a logical SQL checkpoint and ``data.json`` becomes an optional
+    compatibility export (captured only when it is still present). A json-only runtime
+    keeps ``data.json`` as the required fallback authority.
+    """
+    root = Path(root)
+    prompt_dir = root / LIBRARY_PROMPT_STORE
+    has_store = (root / LIBRARY_STORE).is_file()
+    files = []
+    for name in LIBRARY_TEXT_FILES:
+        source = prompt_dir / name
+        if not source.is_file():
+            if name == 'data.json' and has_store:
+                continue
+            raise FileNotFoundError(source)
+        item = {'source': LIBRARY_PROMPT_STORE + '/' + name,
+                'payload_path': 'library/json/' + name}
+        if name == 'data.json':
+            item['role'] = 'compatibility_export' if has_store else 'authority'
+        files.append(item)
+    return {'has_store': has_store, 'authority': 'sqlite' if has_store else 'json',
+            'files': files}
+
+
+def sqlite_export(out, root, source_relative, payload_path, sql_format=ITERDUMP, profile=None):
+    """Dump one database from an online-consistent backup and return its manifest entry."""
+    out, root = Path(out), Path(root)
+    if profile is not None and (sql_format != ITERDUMP or profile not in LIBRARY_PROFILES):
+        raise ValueError('Unsupported prompt library SQL profile')
+    source = unlinked_source(root, source_relative)
+    if not source.is_file():
+        raise FileNotFoundError(source)
+    before = database_state(source)
+    with tempfile.TemporaryDirectory(prefix='comfyui-sql-') as temp:
+        backup = Path(temp) / source.name
+        src = sqlite3.connect(source.as_uri() + '?mode=ro', uri=True)
+        target = sqlite3.connect(backup)
+        try:
+            src.backup(target, pages=1024)
+            if target.execute('PRAGMA integrity_check').fetchone()[0] != 'ok':
+                raise RuntimeError('SQLite integrity check failed: ' + source.name)
+            store = library_store_summary(target) if profile is not None else None
+            dump = Path(temp) / 'dump.sql'
+            with dump.open('w', encoding='utf-8', newline='\n') as stream:
+                for line in iter_sql(target, sql_format, allow_stale_fts=sql_format == GALLERY_FTS5):
+                    stream.write(line + '\n')
+            tables = table_counts(target, sql_format, allow_stale_fts=sql_format == GALLERY_FTS5)
+            fts_state = ({key: value for key, value in sql_summary(target, sql_format, allow_stale_fts=True).items()
+                          if key.startswith('fts_')} if sql_format == GALLERY_FTS5 else {})
+        finally:
+            target.close(); src.close()
+        destination = out / payload_path
+        parts = split_file(dump, destination)
+        entry = {'source': source_relative, 'path': destination.relative_to(out).as_posix(),
+                 'kind': 'sqlite_sql', 'sql_format': sql_format, **fts_state, **before,
+                 'sql_sha256': digest(dump), 'sql_bytes': dump.stat().st_size,
+                 'tables': tables, 'parts': parts}
+        if profile is not None:
+            entry['library_profile'] = profile
+            entry['library_store'] = store
+    if database_state(source) != before:
+        raise RuntimeError('Database main/WAL changed during capture; retry a quiet interval')
+    return entry
+
+
 def capture(root, out, offline=False):
     root, out = root.resolve(), out.resolve()
     if out.exists():
@@ -489,15 +585,16 @@ def capture(root, out, offline=False):
         entries.append({'source': rel, 'path': target.relative_to(out).as_posix(), 'sha256': before, 'bytes': target.stat().st_size, 'kind': 'file'})
     print('Capturing authoritative library bytes in reversible chunks...', flush=True)
     library = root / LIBRARY
-    text_exports = [(library / 'prompt_selector' / name, 'library/json/' + name)
-                    for name in ['data.json', 'default.json', 'semantic_projection.json', 'shared_pairs.json', 'shared_sync_log.json', 'STORE_OWNER.txt']]
-    text_exports.extend((root / relative, 'library/random_templates/' + Path(relative).name) for relative in RANDOM_TEMPLATES)
-    text_exports.extend((root / relative, 'library/legacy_selector/' + Path(relative).name) for relative in LEGACY_SELECTOR_FILES)
-    text_exports.extend(prompt_assistant_text_exports(root))
+    library_plan = library_export_plan(root)
+    text_exports = [(root / item['source'], item['payload_path'], item.get('role'))
+                    for item in library_plan['files']]
+    text_exports.extend((root / relative, 'library/random_templates/' + Path(relative).name, None) for relative in RANDOM_TEMPLATES)
+    text_exports.extend((root / relative, 'library/legacy_selector/' + Path(relative).name, None) for relative in LEGACY_SELECTOR_FILES)
+    text_exports.extend((source, payload_path, None) for source, payload_path in prompt_assistant_text_exports(root))
     unreviewed_templates = {file.relative_to(root).as_posix() for file in (library.parent / 'random_tag').glob('*.json')} - set(RANDOM_TEMPLATES)
     if unreviewed_templates:
         raise ValueError('Review new random templates before capture: ' + ', '.join(sorted(unreviewed_templates)))
-    for source, payload_path in text_exports:
+    for source, payload_path, role in text_exports:
         source = unlinked_source(root, source.relative_to(root).as_posix())
         if not source.exists():
             raise FileNotFoundError(source)
@@ -506,40 +603,24 @@ def capture(root, out, offline=False):
         parts = split_file(source, destination)
         if digest(source) != before:
             raise RuntimeError('Library changed during capture: ' + source.name)
-        entries.append({'source': source.relative_to(root).as_posix(), 'path': destination.relative_to(out).as_posix(), 'kind': 'chunks', 'sha256': before, 'bytes': source.stat().st_size, 'parts': parts})
+        entry = {'source': source.relative_to(root).as_posix(), 'path': destination.relative_to(out).as_posix(), 'kind': 'chunks', 'sha256': before, 'bytes': source.stat().st_size, 'parts': parts}
+        if role:
+            entry['role'] = role
+        entries.append(entry)
     print('Online-consistent SQLite backups and SQL exports...', flush=True)
     for source in sorted(library.glob('*.db')):
         if source.name not in LIBRARY_DATABASES:
             omitted.append({'path': source.relative_to(root).as_posix(), 'reason': 'database_not_in_reviewed_contract'})
-    database_exports = [(library / name, 'library/sql/' + name, ITERDUMP) for name in LIBRARY_DATABASES]
-    database_exports.append((root / GALLERY_DATABASE, 'library/sql/gallery_tags_cache.db', GALLERY_FTS5))
-    for source, payload_path, sql_format in database_exports:
-        source = unlinked_source(root, source.relative_to(root).as_posix())
-        if not source.is_file():
-            raise FileNotFoundError(source)
-        before = database_state(source)
-        with tempfile.TemporaryDirectory(prefix='comfyui-sql-') as temp:
-            backup = Path(temp) / source.name
-            src = sqlite3.connect(source.as_uri() + '?mode=ro', uri=True)
-            target = sqlite3.connect(backup)
-            try:
-                src.backup(target, pages=1024)
-                if target.execute('PRAGMA integrity_check').fetchone()[0] != 'ok':
-                    raise RuntimeError('SQLite integrity check failed: ' + source.name)
-                dump = Path(temp) / 'dump.sql'
-                with dump.open('w', encoding='utf-8', newline='\n') as stream:
-                    for line in iter_sql(target, sql_format, allow_stale_fts=sql_format == GALLERY_FTS5):
-                        stream.write(line + '\n')
-                tables = table_counts(target, sql_format, allow_stale_fts=sql_format == GALLERY_FTS5)
-                fts_state = ({key: value for key, value in sql_summary(target, sql_format, allow_stale_fts=True).items()
-                              if key.startswith('fts_')} if sql_format == GALLERY_FTS5 else {})
-            finally:
-                target.close(); src.close()
-            destination = out / payload_path
-            parts = split_file(dump, destination)
-            entries.append({'source': source.relative_to(root).as_posix(), 'path': destination.relative_to(out).as_posix(), 'kind': 'sqlite_sql', 'sql_format': sql_format, **fts_state, **before, 'sql_sha256': digest(dump), 'sql_bytes': dump.stat().st_size, 'tables': tables, 'parts': parts})
-        if database_state(source) != before:
-            raise RuntimeError('Database main/WAL changed during capture; retry a quiet interval')
+    for source in sorted((root / LIBRARY_PROMPT_STORE).glob('*')):
+        if (source.is_file() and source.suffix.lower() in {'.sqlite', '.sqlite3'}
+                and source.relative_to(root).as_posix() != LIBRARY_STORE):
+            omitted.append({'path': source.relative_to(root).as_posix(), 'reason': 'database_not_in_reviewed_contract'})
+    database_exports = [(LIBRARY + '/' + name, 'library/sql/' + name, ITERDUMP, None) for name in LIBRARY_DATABASES]
+    database_exports.append((GALLERY_DATABASE, 'library/sql/gallery_tags_cache.db', GALLERY_FTS5, None))
+    if library_plan['has_store']:
+        database_exports.append((LIBRARY_STORE, 'library/sql/library.sqlite3', ITERDUMP, LIBRARY_STORE_PROFILE))
+    for source_relative, payload_path, sql_format, profile in database_exports:
+        entries.append(sqlite_export(out, root, source_relative, payload_path, sql_format, profile))
     print('Recording models and external library media (no weight/media copying)...', flush=True)
     inventory = out / 'inventory'; inventory.mkdir()
     model_files = []
@@ -609,7 +690,9 @@ def capture(root, out, offline=False):
         if not matches:
             raise RuntimeError('Runtime source drifted: ' + entry['source'])
     metadata = [{'path': file.relative_to(out).as_posix(), 'sha256': digest(file), 'bytes': file.stat().st_size} for folder in [inventory, evidence] for file in walk(folder, set())]
-    save(out / 'manifest.json', {'schema':1,'created_at':now(),'source_root':str(root),'files':entries,'metadata_files':metadata,'production_plugins':plugins,'runtime_before':runtime_before,'runtime_after':runtime_after,'scope':'Core + production and registered installed plugin sources/support + workflows + six authoritative prompt files + two reviewed random templates + three WeiLin logical SQL databases and Gallery FTS5 dictionary/history; external weights/user media are inventories, not payloads'})
+    json_export = next((item.get('role') for item in library_plan['files']
+                        if item['payload_path'] == 'library/json/data.json'), 'absent')
+    save(out / 'manifest.json', {'schema':1,'created_at':now(),'source_root':str(root),'files':entries,'metadata_files':metadata,'production_plugins':plugins,'runtime_before':runtime_before,'runtime_after':runtime_after,'library_authority':library_plan['authority'],'library_json_export':json_export,'scope':'Core + production and registered installed plugin sources/support + workflows + six authoritative prompt files + two reviewed random templates + three WeiLin logical SQL databases, the prompt-library SQLite authority and Gallery FTS5 dictionary/history; data.json is an optional compatibility export when the SQLite authority exists; external weights/user media are inventories, not payloads'})
     result = verify(out)
     save(out / 'verification.json', result)
     if not result['pass']:
@@ -729,7 +812,14 @@ def materialize(snapshot, destination):
                         raise RuntimeError('Database row count mismatch')
                     if restored['sql_sha256'] != entry['sql_sha256']:
                         raise RuntimeError('Restored logical SQL content mismatch')
-                checks.append({'path':entry['source'],'logical_sql_match':True,'rows':rows});continue
+                    check = {'path': entry['source'], 'logical_sql_match': True, 'rows': rows}
+                    profile = entry.get('library_profile')
+                    if profile is not None:
+                        store = library_store_summary(conn)
+                        if store != entry.get('library_store'):
+                            raise RuntimeError('Restored prompt library logical content mismatch')
+                        check.update({'library_profile': profile, 'library_store_match': True})
+                checks.append(check);continue
         if digest(target)!=entry['sha256']:
             raise RuntimeError('Restored file hash mismatch')
         checks.append({'path':entry['source'],'sha256_match':True})

@@ -34,6 +34,7 @@ from .prompt_merge import merge_preview, apply_merge, merged_source, known_merge
 from .selector_library import favorites_view, apply_favorites, apply_collection, update_collection, collection_groups, prompt_collection, COLLECTION_KINDS, CLASS_ROUTES
 from .startup_hooks import register_after_start
 from . import derived_cache
+from . import library_store
 
 # Logger导入
 import logging
@@ -86,6 +87,12 @@ PREVIEW_DIR = os.path.join(PROMPT_STORE_DIR, "preview")
 THUMBNAIL_DIR = os.path.join(PROMPT_STORE_DIR, "preview_thumbnails")
 os.makedirs(PREVIEW_DIR, exist_ok=True)
 os.makedirs(THUMBNAIL_DIR, exist_ok=True)
+# Round-3 storage: the SQLite file becomes authoritative only when
+# UW_LIBRARY_STORE=sqlite; data.json stays the default and the fallback.
+LIBRARY_STORE_FILE = os.path.join(PROMPT_STORE_DIR, "library.sqlite3")
+LIBRARY_STORE_BACKUP_DIR = os.path.join(PROMPT_STORE_DIR, "library_backups")
+_LIBRARY_STORE_MODE = os.environ.get("UW_LIBRARY_STORE", "json").strip().lower()
+_LIBRARY_STORE_STATE = {"active": None, "instance": None, "dirty": False, "maintenance": None}
 _ROUTE_BRANCH_LAST_BACKUP_AT = 0
 _ROUTE_BRANCH_BACKUP_INTERVAL_SEC = 180
 _PROMPT_DATA_LOCK = asyncio.Lock()
@@ -469,6 +476,284 @@ def _should_create_route_branch_backup():
     _ROUTE_BRANCH_LAST_BACKUP_AT = now
     return True
 
+# --- SQLite library authority (round 3; UW_LIBRARY_STORE=sqlite) ---
+
+def _library_store_instance():
+    """Open the authority database lazily; a missing/broken DB falls back to data.json."""
+    state = _LIBRARY_STORE_STATE
+    if state["active"] is not None:
+        return state["instance"] if state["active"] else None
+    instance = None
+    if _LIBRARY_STORE_MODE == "sqlite":
+        try:
+            instance = library_store.open_store(LIBRARY_STORE_FILE)
+            logger.info("[Workbench] library store: sqlite (%s) revision=%r",
+                        LIBRARY_STORE_FILE, instance.revision())
+            try:
+                maintenance = library_store.AutoMaintenance(
+                    instance, export_path=DATA_FILE,
+                    document_provider=_library_store_export_document,
+                    backup_dir=LIBRARY_STORE_BACKUP_DIR)
+                maintenance.start()
+                state["maintenance"] = maintenance
+                logger.info("[Workbench] library store maintenance started: export debounce %.0fs"
+                            " / interval %.0fs, backup interval %.0fs / retain %d",
+                            maintenance.export_debounce_s, maintenance.export_interval_s,
+                            maintenance.backup_interval_s, maintenance.backup_retain)
+            except Exception as error:  # noqa: BLE001 - maintenance is optional
+                logger.warning("[Workbench] library store maintenance could not start: %s", error)
+        except library_store.StoreMissingError:
+            logger.error("[Workbench] UW_LIBRARY_STORE=sqlite but %s is missing; run "
+                         "scripts/migrate_library_store.py --apply. Falling back to data.json this run.",
+                         LIBRARY_STORE_FILE)
+        except Exception as error:  # noqa: BLE001 - a broken DB must not brick the panel
+            logger.error("[Workbench] UW_LIBRARY_STORE=sqlite but %s cannot be opened (%s); "
+                         "falling back to data.json this run.", LIBRARY_STORE_FILE, error)
+    state["active"] = instance is not None
+    state["instance"] = instance
+    return instance
+
+
+def _library_store_active():
+    return _library_store_instance() is not None
+
+
+def _library_data_exists():
+    if _library_store_active():
+        return True
+    return os.path.exists(DATA_FILE)
+
+
+def _library_document_for_batch_write():
+    """Private mutable document for batch writers that used to parse data.json."""
+    if _library_store_active():
+        return copy.deepcopy(_read_prompt_data_cached())
+    return _json_load_path(DATA_FILE)
+
+
+def _category_store_id(category):
+    return str(category.get("id") or category.get("name") or "")
+
+
+def _library_store_commit(document, changes, *, expected_revision=None):
+    instance = _library_store_instance()
+    if instance is None:
+        raise RuntimeError("library store is not available")
+    try:
+        revision = instance.commit_document(document, changes, expected_revision=expected_revision)
+    except library_store.StoreRevisionConflict as error:
+        raise RevisionConflict(error.expected, error.actual) from None
+    _LIBRARY_STORE_STATE["dirty"] = True
+    maintenance = _LIBRARY_STORE_STATE.get("maintenance")
+    if maintenance is not None:
+        maintenance.notify_write()
+    return revision
+
+
+def _diff_library_change_set(previous, document):
+    """Change set between two in-memory documents (batch writers without explicit hints)."""
+    if not isinstance(previous, dict) or not isinstance(document, dict):
+        return None
+
+    def identity(category):
+        return str(category.get("id") or category.get("name") or "")
+
+    categories = document.get("categories") or []
+    previous_categories = previous.get("categories") or []
+    previous_by_id = {identity(category): category for category in previous_categories}
+    changes = library_store.ChangeSet()
+    if [identity(category) for category in previous_categories] != [identity(category) for category in categories]:
+        changes.update_positions = True
+    new_prompt_ids = set()
+    for category in categories:
+        category_id = identity(category)
+        new_prompts = category.get("prompts") or []
+        new_prompt_ids.update(str(prompt["id"]) for prompt in new_prompts if prompt.get("id"))
+        previous_category = previous_by_id.get(category_id)
+        if previous_category is None:
+            changes.rewrite_categories.append(category)
+            continue
+        previous_prompts = {str(prompt["id"]): prompt for prompt in previous_category.get("prompts") or []
+                            if prompt.get("id")}
+        if ({key: value for key, value in previous_category.items() if key != "prompts"}
+                != {key: value for key, value in category.items() if key != "prompts"}
+                or [str(prompt["id"]) for prompt in previous_category.get("prompts") or [] if prompt.get("id")]
+                != [str(prompt["id"]) for prompt in new_prompts if prompt.get("id")]):
+            changes.write_categories.append(category)
+        for prompt in new_prompts:
+            prompt_id = str(prompt.get("id") or "")
+            if prompt_id and previous_prompts.get(prompt_id) != prompt:
+                changes.upsert_prompts.append((category_id, prompt))
+    changes.delete_prompt_ids = sorted(
+        {str(prompt["id"]) for category in previous_categories
+         for prompt in category.get("prompts") or [] if prompt.get("id")} - new_prompt_ids)
+    known_categories = {identity(category) for category in categories}
+    changes.delete_category_ids = [category_id for category_id in previous_by_id
+                                   if category_id not in known_categories]
+    changed_meta = []
+    for key in document:
+        if key == "categories":
+            continue
+        if key not in previous or previous[key] != document[key]:
+            changed_meta.append(key)
+    for key in previous:
+        if key != "categories" and key not in document:
+            changed_meta.append(key)
+    changes.meta_keys = changed_meta
+    return changes
+
+
+def _commit_library_document(document, *, changes=None, previous=None, create_backup=True,
+                             store_backup=False, compact=True, sync_to_disk=True,
+                             expected_revision=None, schedule_warm=True):
+    """Persist a library document through the SQLite authority or the legacy JSON path."""
+    instance = _library_store_instance()
+    if instance is not None:
+        if changes is None:
+            changes = _diff_library_change_set(previous, document)
+        if changes is None:
+            changes = library_store.ChangeSet(full=True)
+        if store_backup:
+            changes.backup = True
+        revision = _library_store_commit(document, changes, expected_revision=expected_revision)
+        if schedule_warm and os.environ.get("UW_SKIP_LIBRARY_WARMUP") != "1":
+            _request_library_warm(delay=0.05)
+        return revision
+    _atomic_save_json(DATA_FILE, document, create_backup=create_backup, compact=compact,
+                      sync_to_disk=sync_to_disk, expected_revision=expected_revision,
+                      schedule_warm=schedule_warm)
+
+
+def _library_store_export_document():
+    """Export source: the in-memory document when it is loaded, else the authority rows."""
+    document = globals().get("_PROMPT_DATA_CACHE")
+    if isinstance(document, dict):
+        return document
+    instance = _LIBRARY_STORE_STATE.get("instance")
+    return instance.load_document() if instance is not None else None
+
+
+def _library_store_status():
+    state = _LIBRARY_STORE_STATE
+    maintenance = state.get("maintenance")
+    status = maintenance.status() if maintenance is not None else {"active": state.get("active") is True}
+    data_json_exists = os.path.exists(DATA_FILE)
+    status.update({
+        "mode": _LIBRARY_STORE_MODE,
+        "store_file": LIBRARY_STORE_FILE,
+        "store_exists": os.path.isfile(LIBRARY_STORE_FILE),
+        "data_json": DATA_FILE,
+        "data_json_exists": data_json_exists,
+        "data_json_mtime": os.path.getmtime(DATA_FILE) if data_json_exists else None,
+        "data_json_bytes": os.path.getsize(DATA_FILE) if data_json_exists else 0,
+        "backup_dir": LIBRARY_STORE_BACKUP_DIR,
+        "cache_loaded": isinstance(globals().get("_PROMPT_DATA_CACHE"), dict),
+        "env": {
+            "UW_LIBRARY_STORE": _LIBRARY_STORE_MODE,
+            "UW_LIBRARY_EXPORT_DEBOUNCE_S": maintenance.export_debounce_s if maintenance else None,
+            "UW_LIBRARY_EXPORT_INTERVAL_S": maintenance.export_interval_s if maintenance else None,
+            "UW_LIBRARY_BACKUP_INTERVAL_S": maintenance.backup_interval_s if maintenance else None,
+            "UW_LIBRARY_BACKUP_RETAIN": maintenance.backup_retain if maintenance else None,
+            "UW_DISABLE_LIBRARY_AUTOEXPORT": bool(maintenance and not maintenance.enable_export),
+            "UW_DISABLE_LIBRARY_AUTOBACKUP": bool(maintenance and not maintenance.enable_backup),
+        },
+    })
+    return status
+
+
+def _restore_library_journal_entry(payload):
+    instance = _library_store_instance()
+    if instance is None:
+        raise RuntimeError("library store is not active; journal restore is unavailable")
+    seq = payload.get("seq")
+    if isinstance(seq, bool) or not isinstance(seq, int):
+        raise ValueError("journal restore needs an integer seq")
+    global _PROMPT_DATA_CACHE, _PROMPT_DATA_CACHE_SIGNATURE
+    with _PROMPT_FILE_LOCK:
+        _require_revision(payload, _read_prompt_data_cached())
+        result = instance.restore_journal(seq)
+        _PROMPT_DATA_CACHE = None
+        _PROMPT_DATA_CACHE_SIGNATURE = None
+        _library_state_reset()
+        maintenance = _LIBRARY_STORE_STATE.get("maintenance")
+        if maintenance is not None:
+            maintenance.notify_write()
+    return {"success": True, **result, "status": _library_store_status()}
+
+
+@PromptServer.instance.routes.get("/prompt_selector/library/store-status")
+async def get_library_store_status(request):
+    return web.json_response(await asyncio.to_thread(_library_store_status))
+
+
+@PromptServer.instance.routes.get("/prompt_selector/library/journal")
+async def get_library_journal(request):
+    instance = _library_store_instance()
+    if instance is None:
+        return web.json_response({"enabled": False, "entries": []})
+    try:
+        limit = request.query.get("limit", 50)
+        prompt_id = request.query.get("prompt_id") or None
+        entries = await asyncio.to_thread(instance.journal_entries, limit, prompt_id)
+        return web.json_response({"enabled": True, **instance.journal_counts(), "entries": entries})
+    except Exception as error:  # noqa: BLE001 - a journal read must not fail the panel
+        return web.json_response({"error": str(error)}, status=500)
+
+
+@PromptServer.instance.routes.post("/prompt_selector/library/journal/restore")
+async def post_library_journal_restore(request):
+    try:
+        payload = await request.json()
+        if not isinstance(payload, dict):
+            raise ValueError("journal restore body must be an object")
+        payload["base_revision"] = _request_revision(request, payload)
+        async with _PROMPT_DATA_LOCK:
+            result = await asyncio.to_thread(_restore_library_journal_entry, payload)
+        return _success_response(result)
+    except RevisionConflict as error:
+        return web.json_response({"error": str(error), "conflict": True,
+                                  "expected_revision": error.expected,
+                                  "current_revision": error.actual}, status=409)
+    except (KeyError, ValueError) as error:
+        return web.json_response({"error": str(error)}, status=400)
+    except Exception as error:
+        return web.json_response({"error": str(error)}, status=500)
+
+
+def _library_store_export_on_exit():
+    """Fallback exit export when no maintenance thread was started."""
+    if not _LIBRARY_STORE_STATE.get("dirty"):
+        return
+    if os.environ.get("UW_LIBRARY_STORE_EXPORT_ON_EXIT") == "0":
+        return
+    instance = _LIBRARY_STORE_STATE.get("instance")
+    document = globals().get("_PROMPT_DATA_CACHE")
+    if instance is None or not isinstance(document, dict):
+        return
+    try:
+        started = time.perf_counter()
+        info = instance.export_json(DATA_FILE, document=document)
+        logger.info("[Workbench] data.json exported from library store in %.1f s (%.1f MB)",
+                    time.perf_counter() - started, info["bytes"] / 1e6)
+    except Exception as error:  # noqa: BLE001 - shutdown export is best effort
+        logger.warning("[Workbench] data.json export on shutdown failed: %s", error)
+
+
+def _library_store_shutdown():
+    """Stop the maintenance thread; it performs the final export and SQLite backup."""
+    maintenance = _LIBRARY_STORE_STATE.get("maintenance")
+    if maintenance is not None:
+        try:
+            maintenance.shutdown()
+        except Exception as error:  # noqa: BLE001 - shutdown must never raise
+            logger.warning("[Workbench] library store maintenance shutdown failed: %s", error)
+        return
+    _library_store_export_on_exit()
+
+
+atexit.register(_library_store_shutdown)
+
+
 class PromptSelector:
     """
     提示词选择器节点，用于管理和选择提示词。
@@ -502,7 +787,7 @@ class PromptSelector:
 
         # 从 data.json 加载设置以获取分隔符
         separator = ", "
-        if os.path.exists(DATA_FILE):
+        if _library_data_exists():
             # Node execution used to parse the whole 118 MB library just for the separator.
             data = _read_prompt_data_cached()
             separator = data.get("settings", {}).get("separator", ", ")
@@ -517,6 +802,9 @@ class PromptSelector:
         return (final_prompt,)
 
 def _prompt_data_signature():
+    instance = _library_store_instance()
+    if instance is not None:
+        return ("library.sqlite3",) + instance.data_signature()
     try:
         stat = os.stat(DATA_FILE)
     except OSError:
@@ -625,6 +913,15 @@ def _upgrade_data_file_once(data):
         if not needs_upgrade:
             _DATA_COMPATIBLE = True
             return
+        if _library_store_active():
+            # The SQLite authority owns the rows now; keep the one-time upgrade in
+            # a full transaction instead of rewriting a data.json.
+            upgraded_data = _ensure_data_compatibility(copy.deepcopy(data))
+            _library_store_commit(upgraded_data, library_store.ChangeSet(full=True))
+            _PROMPT_DATA_CACHE = upgraded_data
+            _PROMPT_DATA_CACHE_SIGNATURE = _prompt_data_signature()
+            _DATA_COMPATIBLE = True
+            return
         if _prompt_data_signature() != _PROMPT_DATA_CACHE_SIGNATURE:
             return
         logger.info("📝 检测到数据文件缺少时间戳字段，正在升级...")
@@ -646,6 +943,17 @@ def _read_prompt_data_cached():
     with _PROMPT_FILE_LOCK, _PROMPT_CACHE_LOCK:
         signature = _prompt_data_signature()
         if _PROMPT_DATA_CACHE is not None and _PROMPT_DATA_CACHE_SIGNATURE == signature:
+            return _PROMPT_DATA_CACHE
+        instance = _library_store_instance()
+        if instance is not None:
+            data = instance.load_document()
+            _PROMPT_DATA_CACHE = data
+            _PROMPT_DATA_CACHE_SIGNATURE = _prompt_data_signature()
+            logger.info("[Workbench] library store loaded in %.2f s (%d categories)",
+                        instance.last_load_seconds, len(data.get("categories") or []))
+            _lib_trace("store_load", seconds=round(instance.last_load_seconds, 3),
+                       categories=len(data.get("categories") or []))
+            _upgrade_data_file_once(data)
             return _PROMPT_DATA_CACHE
         # External replacement must not pair bytes from one file with another's signature.
         for _ in range(3):
@@ -1452,7 +1760,8 @@ def _save_selector_favorites(body, expected):
         for key, value in body.items():
             if key not in updated['selector_library']['kinds']:
                 updated['selector_library']['legacy_favorites'][key] = value
-        _atomic_save_json(DATA_FILE, updated, compact=True, create_backup=True, expected_revision=_revision(current))
+        _commit_library_document(updated, previous=current, compact=True, create_backup=True,
+                                 expected_revision=_revision(current))
         _cache_prompt_data(updated)
         return _selector_favorites_state()[3]
 
@@ -1483,8 +1792,9 @@ def _apply_collection_update(payload):
         changed = update_collection(updated, payload)
         if changed:
             updated['last_modified'] = datetime.now().isoformat()
-            _atomic_save_json(DATA_FILE, updated, compact=True, create_backup=_should_create_route_branch_backup(),
-                expected_revision=_revision(current))
+            _commit_library_document(updated, previous=current, compact=True,
+                                     create_backup=_should_create_route_branch_backup(),
+                                     expected_revision=_revision(current))
             _cache_prompt_data(updated)
         return {'success': True, 'changed': changed, 'revision': _revision(updated),
             'groups': collection_groups(updated)}
@@ -2117,7 +2427,7 @@ def _packed_library_payload():
 
 @PromptServer.instance.routes.get("/prompt_selector/data")
 async def get_data(request):
-    if not os.path.exists(DATA_FILE):
+    if not _library_data_exists():
         return web.json_response({"error": "Data file not found"}, status=404)
     try:
         revision, packed = await asyncio.to_thread(_packed_library_payload)
@@ -2180,7 +2490,7 @@ async def resolve_saved_selection(request):
 
 @PromptServer.instance.routes.get("/prompt_selector/library/index")
 async def get_library_index(request):
-    if not os.path.exists(DATA_FILE):
+    if not _library_data_exists():
         return web.json_response({"error": "Data file not found"}, status=404)
     try:
         payload = await asyncio.to_thread(_library_index_payload)
@@ -2205,7 +2515,7 @@ async def get_library_index(request):
 
 @PromptServer.instance.routes.get("/prompt_selector/library/prompts")
 async def get_library_prompts_page(request):
-    if not os.path.exists(DATA_FILE):
+    if not _library_data_exists():
         return web.json_response({"error": "Data file not found"}, status=404)
     category_id = request.query.get("category_id", "")
     if category_id.startswith("tagstr:"):
@@ -2251,10 +2561,10 @@ async def get_library_prompt(request):
     category_id = str(request.query.get("category_id") or "").strip()
     if not prompt_id:
         return web.json_response({"error": "Missing prompt_id"}, status=400)
-    if not os.path.exists(DATA_FILE):
+    if not _library_data_exists():
         return web.json_response({"error": "Data file not found"}, status=404)
     try:
-        data = _ensure_data_compatibility(_json_load_path(DATA_FILE))
+        data = _read_prompt_data_cached()
         requested_id = prompt_id
         mapped = merged_source(data, prompt_id, category_id)
         if mapped:
@@ -2304,7 +2614,7 @@ async def get_metadata(request):
         "total_prompts": 120
     }
     """
-    if not os.path.exists(DATA_FILE):
+    if not _library_data_exists():
         # 返回空的元数据而非 404 错误，避免前端同步检查失败
         return web.json_response({
             "last_modified": None,
@@ -2336,9 +2646,9 @@ async def save_data(request):
 
         # 读取旧数据用于智能时间戳更新
         old_data = None
-        if os.path.exists(DATA_FILE):
+        if _library_data_exists():
             try:
-                old_data = _json_load_path(DATA_FILE)
+                old_data = _read_prompt_data_cached()
             except Exception as e:
                 logger.warning(f"读取旧数据失败，将跳过时间戳比较: {e}")
 
@@ -2352,8 +2662,9 @@ async def save_data(request):
 
         # 使用原子保存机制，确保数据安全
         # 整库保存按紧凑格式写盘：缩进格式会把约 70MB 的库文件放大到约 145MB。
-        _atomic_save_json(DATA_FILE, updated_data, create_backup=True, compact=True,
-                          expected_revision=base_revision)
+        _commit_library_document(updated_data, changes=library_store.ChangeSet(full=True),
+                                 create_backup=True, store_backup=True,
+                                 expected_revision=base_revision)
 
         if request.query.get("minimal") == "1":
             return _with_etag(web.json_response({
@@ -2597,6 +2908,8 @@ def _update_timestamps(new_data, old_data=None):
     return _ensure_data_compatibility(new_data)
 
 def _import_local_snapshot():
+    if _library_store_active():
+        return copy.deepcopy(_read_prompt_data_cached())
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, 'r', encoding='utf-8') as stream:
             return json.load(stream)
@@ -2712,8 +3025,8 @@ async def import_zip(request):
         selected_categories = json.loads(selected_categories_str)
         
         # 加载本地数据
-        if os.path.exists(DATA_FILE):
-            local_data = _json_load_path(DATA_FILE)
+        if _library_data_exists():
+            local_data = _library_document_for_batch_write()
         else:
             # 如果本地文件不存在，则创建一个空的结构
             local_data = {
@@ -2784,8 +3097,9 @@ async def import_zip(request):
                 phase = "json_commit"
                 # Save JSON only after all preview side effects are prepared.
                 local_data["last_modified"] = datetime.now().isoformat()
-                _atomic_save_json(DATA_FILE, local_data, create_backup=True, compact=True,
-                                  expected_revision=_request_revision(request, post))
+                _commit_library_document(local_data, changes=library_store.ChangeSet(full=True),
+                                         create_backup=True, store_backup=True,
+                                         expected_revision=_request_revision(request, post))
             except Exception:
                 for created_path, created_dev, created_ino in created_preview_paths:
                     try:
@@ -2823,11 +3137,27 @@ def _export_preview_bytes():
     return total
 
 
+def _library_export_data_size():
+    if _library_store_active():
+        try:
+            return os.path.getsize(LIBRARY_STORE_FILE)
+        except OSError:
+            return 0
+    try:
+        return os.path.getsize(DATA_FILE)
+    except OSError:
+        return 0
+
+
 def _build_export_archive(target_path, include_previews=True):
     """Worker-thread body for the export route; never call this on the event loop."""
     with zipfile.ZipFile(target_path, 'w') as zf:
-        zf.write(DATA_FILE, arcname='data.json',
-                 compress_type=zipfile.ZIP_DEFLATED, compresslevel=1)
+        if _library_store_active():
+            zf.writestr('data.json', _json_dump_bytes(_read_prompt_data_cached()),
+                        compress_type=zipfile.ZIP_DEFLATED, compresslevel=1)
+        else:
+            zf.write(DATA_FILE, arcname='data.json',
+                     compress_type=zipfile.ZIP_DEFLATED, compresslevel=1)
         # 添加图片
         if include_previews and os.path.exists(PREVIEW_DIR):
             for root, _, files in os.walk(PREVIEW_DIR):
@@ -2848,7 +3178,7 @@ async def export_zip(request):
         # Callers that really need the images must ask for them explicitly.
         include_previews = str(request.query.get('include_previews', '0')).lower() in ('1', 'true', 'yes')
         if include_previews:
-            required = _export_preview_bytes() + os.path.getsize(DATA_FILE)
+            required = _export_preview_bytes() + _library_export_data_size()
             free = shutil.disk_usage(tempfile.gettempdir()).free
             if required > free * 0.8:
                 return web.json_response({
@@ -2908,7 +3238,7 @@ def _rename_category_branch(payload):
     if new_key != old_key and new_key.startswith(prefix):
         raise ValueError("不能把分类移动到它自己的子分类下")
     with _PROMPT_FILE_LOCK:
-        file_data = _json_load_path(DATA_FILE)
+        file_data = _library_document_for_batch_write()
         _require_revision(payload, file_data)
         categories = file_data.get("categories", [])
         normalized = [str(category.get("name") or "").lstrip("/") for category in categories]
@@ -2921,6 +3251,7 @@ def _rename_category_branch(payload):
                 raise ValueError("Category name already exists")
         now = datetime.now().isoformat()
         renamed = []
+        renamed_categories = []
         projection = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
         for category, name in zip(categories, normalized):
             if name != old_key and not name.startswith(prefix):
@@ -2933,9 +3264,14 @@ def _rename_category_branch(payload):
             for old_prompt, prompt in zip(previous_category.get("prompts", []), category.get("prompts", [])):
                 rebind_unchanged_prompt(projection, previous_category, old_prompt, category, prompt)
             renamed.append(new_key + rest)
+            renamed_categories.append(category)
         file_data["last_modified"] = now
-        _atomic_save_json(DATA_FILE, file_data, create_backup=True, compact=True,
-                          expected_revision=payload.get("base_revision"))
+        _commit_library_document(
+            file_data,
+            changes=library_store.ChangeSet(rewrite_categories=renamed_categories,
+                                            meta_keys=["last_modified"]),
+            create_backup=True, store_backup=True,
+            expected_revision=payload.get("base_revision"))
         _cache_prompt_data(file_data)
         return {"success": True, "renamed": renamed, "count": len(renamed),
                 "revision": _revision(file_data)}
@@ -2971,16 +3307,17 @@ async def delete_category(request):
         if not category_name_to_delete:
             return web.json_response({"error": "Missing category name"}, status=400)
 
-        if not os.path.exists(DATA_FILE):
+        if not _library_data_exists():
             return web.json_response({"success": True})
 
-        file_data = _json_load_path(DATA_FILE)
+        file_data = _library_document_for_batch_write()
         _require_revision(data, file_data)
         _require_revision(data, file_data)
 
         prefix_to_delete = category_name_to_delete + '/'
         categories_to_keep = []
         removed_prompt_ids = []
+        removed_category_ids = []
         for cat in file_data.get("categories", []):
             original_cat_name = cat.get("name", "")
             # Sanitize the name by removing any leading slashes before comparison
@@ -2991,6 +3328,7 @@ async def delete_category(request):
                 categories_to_keep.append(cat)
             else:
                 removed_prompt_ids.extend(prompt.get("id") for prompt in cat.get("prompts", []) or [])
+                removed_category_ids.append(_category_store_id(cat))
 
 
         file_data["categories"] = categories_to_keep
@@ -3000,11 +3338,15 @@ async def delete_category(request):
 
         file_data["last_modified"] = datetime.now().isoformat()
 
-        # 使用原子保存机制
         # Compact on every library write: the indented form doubles the 100 MB+ store and
         # the cold parse along with it.
-        _atomic_save_json(DATA_FILE, file_data, create_backup=True, compact=True,
-                          expected_revision=data.get("base_revision"))
+        _commit_library_document(
+            file_data,
+            changes=library_store.ChangeSet(delete_category_ids=removed_category_ids,
+                                            update_positions=True,
+                                            meta_keys=["last_modified"]),
+            create_backup=True, store_backup=True,
+            expected_revision=data.get("base_revision"))
         _cache_prompt_data(file_data, removed_prompt_ids)
 
         return _success_response({"success": True, "revision": _revision(file_data)})
@@ -3031,7 +3373,7 @@ async def batch_delete_prompts(request):
         if not prompt_ids and not prompt_items:
             return web.json_response({"error": "Missing parameters"}, status=400)
 
-        file_data = _json_load_path(DATA_FILE)
+        file_data = _library_document_for_batch_write()
         _require_revision(data, file_data)
 
         categories = file_data.get("categories", [])
@@ -3081,6 +3423,7 @@ async def batch_delete_prompts(request):
 
         deleted_count = 0
         touched_categories = []
+        touched_category_objects = []
         deleted_prompt_ids = []
         now = datetime.now().isoformat()
 
@@ -3101,6 +3444,7 @@ async def batch_delete_prompts(request):
                 deleted_count += removed
                 category["updated_at"] = now
                 touched_categories.append(cat_name)
+                touched_category_objects.append(category)
                 deleted_prompt_ids.extend(ids_for_this_category)
 
         if deleted_count <= 0:
@@ -3112,8 +3456,13 @@ async def batch_delete_prompts(request):
         file_data["last_modified"] = now
 
         # 使用原子保存机制
-        _atomic_save_json(DATA_FILE, file_data, create_backup=True, compact=True,
-                          expected_revision=data.get("base_revision"))
+        _commit_library_document(
+            file_data,
+            changes=library_store.ChangeSet(delete_prompt_ids=deleted_prompt_ids,
+                                            write_categories=touched_category_objects,
+                                            meta_keys=["last_modified"]),
+            create_backup=True, store_backup=True,
+            expected_revision=data.get("base_revision"))
         _cache_prompt_data(file_data, deleted_prompt_ids)
 
         return _success_response({
@@ -3179,11 +3528,11 @@ def _apply_create_category(category_name, expected_revision):
     }
     categories.append(category)
     file_data = {**current, "categories": categories, "last_modified": now}
-    _atomic_save_json(
-        DATA_FILE,
+    _commit_library_document(
         file_data,
+        changes=library_store.ChangeSet(write_categories=[category],
+                                        meta_keys=["last_modified"]),
         create_backup=_should_create_route_branch_backup(),
-        compact=True,
         sync_to_disk=False,
         expected_revision=expected_revision,
         schedule_warm=False,
@@ -3195,11 +3544,13 @@ def _apply_create_category(category_name, expected_revision):
 def _apply_upsert_prompt(payload):
     current = _prompt_data_for_write()
     _require_revision(payload, current)
+    full_store_commit = False
     if "selector_group_ids" in payload and "collections" not in (current.get("selector_library") or {}):
         # The one-time selector-library migration rewrites every prompt record in
-        # place; that single commit keeps the historical parse-then-edit path.
-        current = _ensure_data_compatibility(_json_load_path(DATA_FILE))
+        # place; that single commit keeps the historical batch rewrite path.
+        current = _ensure_data_compatibility(_library_document_for_batch_write())
         _require_revision(payload, current)
+        full_store_commit = True
     # Only the touched category and row are copied, so a conflict or a validation
     # error after this point can never leak into the shared parsed document.
     categories = list(current.get("categories", []) or [])
@@ -3358,11 +3709,21 @@ def _apply_upsert_prompt(payload):
     if source_category is not None and source_category is not target_category:
         source_category["updated_at"] = now
     file_data["last_modified"] = now
-    _atomic_save_json(
-        DATA_FILE,
+    if full_store_commit:
+        store_changes = library_store.ChangeSet(full=True)
+    else:
+        affected_categories = [target_category]
+        if source_category is not None and source_category is not target_category:
+            affected_categories.append(source_category)
+        store_changes = library_store.ChangeSet(
+            upsert_prompts=[(_category_store_id(target_category), prompt)],
+            write_categories=affected_categories,
+            meta_keys=["last_modified"],
+        )
+    _commit_library_document(
         file_data,
+        changes=store_changes,
         create_backup=_should_create_route_branch_backup(),
-        compact=True,
         sync_to_disk=False,
         expected_revision=payload.get("base_revision"),
         schedule_warm=False,
@@ -3409,11 +3770,12 @@ def _apply_delete_prompt(prompt_id, expected_revision):
 
     source_category["updated_at"] = now
     file_data = {**current, "categories": categories, "last_modified": now}
-    _atomic_save_json(
-        DATA_FILE,
+    _commit_library_document(
         file_data,
+        changes=library_store.ChangeSet(delete_prompt_ids=[prompt_id],
+                                        write_categories=[source_category],
+                                        meta_keys=["last_modified"]),
         create_backup=_should_create_route_branch_backup(),
-        compact=True,
         sync_to_disk=False,
         expected_revision=expected_revision,
         schedule_warm=False,
@@ -3465,8 +3827,13 @@ def _apply_plan_flag(payload):
             updated_category = _category_for_write(categories, category_position)
             updated_category['prompts'][index] = updated_prompt
             file_data = {**current, 'categories': categories, 'last_modified': now}
-            _atomic_save_json(DATA_FILE, file_data, create_backup=_should_create_route_branch_backup(), compact=True,
-                              expected_revision=payload.get('base_revision'), schedule_warm=False)
+            _commit_library_document(
+                file_data,
+                changes=library_store.ChangeSet(
+                    upsert_prompts=[(_category_store_id(updated_category), updated_prompt)],
+                    meta_keys=['last_modified']),
+                create_backup=_should_create_route_branch_backup(), compact=True,
+                expected_revision=payload.get('base_revision'), schedule_warm=False)
             _commit_prompt_data(file_data, [updated_prompt['id']])
             return {'success': True, 'prompt_id': updated_prompt['id'], 'is_user_plan': value,
                     'revision': _revision(file_data)}
@@ -3511,14 +3878,15 @@ async def upsert_prompt(request):
 
 
 def _apply_merge_request(payload):
-    data = _json_load_path(DATA_FILE)
+    data = _library_document_for_batch_write()
     _require_revision(payload, data)
     projection = read_projection(os.path.join(PROMPT_STORE_DIR, 'semantic_projection.json'))
     if payload.get('commit') is not True:
         return merge_preview(data, projection, payload.get('prompt_ids'), payload.get('canonical_id'))
     merged, preview = apply_merge(data, projection, payload, datetime.now().isoformat())
-    _atomic_save_json(DATA_FILE, merged, create_backup=True, compact=True,
-                      expected_revision=payload.get('base_revision'))
+    _commit_library_document(merged, changes=library_store.ChangeSet(full=True),
+                             create_backup=True, store_backup=True,
+                             expected_revision=payload.get('base_revision'))
     _cache_prompt_data(merged)
     return {'success': True, 'canonical_id': preview['canonical_id'],
         'mapped_ids': [x for x in preview['prompt_ids'] if x != preview['canonical_id']],
@@ -3549,7 +3917,7 @@ async def delete_prompt(request):
         prompt_id = str(payload.get("prompt_id") or "").strip()
         if not prompt_id:
             return web.json_response({"error": "Missing prompt id"}, status=400)
-        current = _json_load_path(DATA_FILE)
+        current = _read_prompt_data_cached()
         _require_revision(payload, current)
         async with _PROMPT_DATA_LOCK:
             result = await asyncio.to_thread(_apply_delete_prompt, prompt_id, payload.get("base_revision"))
@@ -3614,8 +3982,13 @@ async def update_prompt_order(request):
             return web.json_response({"error": "Category not found"}, status=404)
 
         # 使用原子保存机制
-        _atomic_save_json(DATA_FILE, file_data, create_backup=_should_create_route_branch_backup(), compact=True,
-                          expected_revision=data.get("base_revision"), schedule_warm=False)
+        _commit_library_document(
+            file_data,
+            changes=library_store.ChangeSet(
+                write_categories=[categories[category_position]],
+                meta_keys=["last_modified"]),
+            create_backup=_should_create_route_branch_backup(), compact=True,
+            expected_revision=data.get("base_revision"), schedule_warm=False)
         _commit_prompt_data(file_data, [])
 
         return _success_response({"success": True, "revision": _revision(file_data)})
@@ -3665,8 +4038,14 @@ async def toggle_favorite(request):
                 return web.json_response({"error": "资料已移动或不存在，请刷新后重试"}, status=404)
 
             # 使用原子保存机制
-            _atomic_save_json(DATA_FILE, file_data, create_backup=_should_create_route_branch_backup(), compact=True,
-                              expected_revision=data.get("base_revision"), schedule_warm=False)
+            _commit_library_document(
+                file_data,
+                changes=library_store.ChangeSet(
+                    upsert_prompts=[(_category_store_id(rebuilt[index]), prompts[position])],
+                    write_categories=[rebuilt[index]],
+                    meta_keys=["last_modified"]),
+                create_backup=_should_create_route_branch_backup(), compact=True,
+                expected_revision=data.get("base_revision"), schedule_warm=False)
             _commit_prompt_data(file_data, [prompt_id])
 
         return _success_response({"success": True, "revision": _revision(file_data)})
@@ -3713,8 +4092,14 @@ async def mark_prompt_used(request):
             if file_data is None:
                 return web.json_response({"error": "Prompt not found"}, status=404)
 
-            _atomic_save_json(DATA_FILE, file_data, create_backup=_should_create_route_branch_backup(), compact=True,
-                              expected_revision=data.get("base_revision"), schedule_warm=False)
+            _commit_library_document(
+                file_data,
+                changes=library_store.ChangeSet(
+                    upsert_prompts=[(_category_store_id(rebuilt[index]), prompts[position])],
+                    write_categories=[rebuilt[index]],
+                    meta_keys=["last_modified"]),
+                create_backup=_should_create_route_branch_backup(), compact=True,
+                expected_revision=data.get("base_revision"), schedule_warm=False)
             _commit_prompt_data(file_data, [prompt_id])
         return _success_response({"success": True, "prompt_id": prompt_id, "last_used": now, "revision": _revision(file_data)})
     except RevisionConflict as e:
@@ -3727,6 +4112,9 @@ def initialize_data_file():
     # V52+: Prompt Selector has one canonical store owned by WeiLin. Legacy Gallery
     # folders are deliberately not scanned or modified. Copy data.json and preview/
     # into user_data/prompt_selector manually when migrating an existing install.
+    if _LIBRARY_STORE_MODE == "sqlite" and os.path.isfile(LIBRARY_STORE_FILE):
+        # The SQLite authority is already in place; data.json is only an export.
+        return
     # === 原有逻辑：创建默认数据 ===
     if not os.path.exists(DATA_FILE):
         if os.path.exists(DEFAULT_DATA_FILE):
