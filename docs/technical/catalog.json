@@ -146,7 +146,8 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_switches.js",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_panel.js"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_panel.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/system_stats.js"
       ],
       "tests": [
         "snapshot/runtime/production_tools/test_uap_navigation.cjs",
@@ -157,7 +158,8 @@
         "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/lifecycle_collector.js",
         "snapshot/runtime/production_tools/test_stocking_workflow.cjs",
         "snapshot/runtime/production_tools/test_anima_control.cjs",
-        "snapshot/runtime/production_tools/test_control_switches.cjs"
+        "snapshot/runtime/production_tools/test_control_switches.cjs",
+        "snapshot/runtime/production_tools/test_system_stats.cjs"
       ],
       "evidence": [
         "snapshot/evidence/20261005_workbench_anime_polish/REPORT.txt",
@@ -185,7 +187,8 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
         "snapshot/runtime/production_tools/test_anima_control.cjs",
-        "snapshot/runtime/production_tools/test_control_switches.cjs"
+        "snapshot/runtime/production_tools/test_control_switches.cjs",
+        "snapshot/runtime/production_tools/test_system_stats.cjs"
       ],
       "examples": [
         "snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",

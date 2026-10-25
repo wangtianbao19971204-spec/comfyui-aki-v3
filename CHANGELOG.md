@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 2026-10-25：工作台导航栏右端新增 GPU 与内存读数（已用/总量，85%／95% 配色，2.5 秒刷新、点击立即刷新），数据来自 ComfyUI `/system_stats`，只读显示；桌面单行，≤800px 换行。验证与部署边界见[读数说明](docs/technical/changes/runtime-workbench/2026-10-25-nav-memory-stats.md)。
+
 - 2026-10-25：丝袜纹理同步作者 `204a1b8`：亮点改为默认关闭的总开关并折叠滑杆、预设下拉隐藏空占位项、静态资源钉住 MIME。本地节点与手绘亮点层保持开启，旧草稿／预设仅在缺少 `sparkle_on` 键时按亮点量迁移；节点接口、schema 2 与工作流不变。插件 120 项（2 项真实 CUDA 跳过）、前端 17、导出 6、维护仓 703 通过；已按授权部署运行区，两张现场渲染证明开关与纹理仍生效。见[同步与部署](docs/technical/changes/runtime-stocking-texture/2026-10-25-upstream-sparkle-switch.md)与[收据](docs/receipts/stocking_upstream_sync_20261025.json)。
 
 - 2026-10-25：提示词库改 SQLite 权威存储（WAL + `synchronous=FULL`，读模型/API 不变、data.json 降级为按需导出）：单条编辑 1.59 ms 中位（原 ~1033 ms 且 O(库)），批量事务化+事务前 backup，后台自动导出/备份+行级 journal+`store-status` 告警；迁移 8.81 s 逐字段 equal、启动加载 2.17–2.71 s；`UW_LIBRARY_STORE=json|sqlite` 灰度；snapshot/restore 纳入 library DB SQL dump；Tag 池写连接升 synchronous=FULL。测试 203 OK/1 skip（含 O(1) patch、编辑尖峰与退出 flush 修复），见[说明](docs/technical/changes/runtime-workbench/2026-10-25-library-store-sqlite.md)。未部署生产。
