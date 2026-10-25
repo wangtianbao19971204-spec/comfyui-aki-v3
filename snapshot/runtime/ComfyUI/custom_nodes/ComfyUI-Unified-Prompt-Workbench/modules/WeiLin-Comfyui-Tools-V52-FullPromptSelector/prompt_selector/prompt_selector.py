@@ -3,6 +3,7 @@
 import os
 import json
 import gc
+import math
 from array import array
 from collections import Counter
 from server import PromptServer
@@ -31,6 +32,9 @@ from .semantic_filter_counts import build_filter_masks, conditional_filter_count
 from .import_plan import plan_import
 from .prompt_merge import merge_preview, apply_merge, merged_source, known_merged_import
 from .selector_library import favorites_view, apply_favorites, apply_collection, update_collection, collection_groups, prompt_collection, COLLECTION_KINDS, CLASS_ROUTES
+from .startup_hooks import register_after_start
+from . import derived_cache
+from . import library_store
 
 # Logger导入
 import logging
@@ -83,11 +87,17 @@ PREVIEW_DIR = os.path.join(PROMPT_STORE_DIR, "preview")
 THUMBNAIL_DIR = os.path.join(PROMPT_STORE_DIR, "preview_thumbnails")
 os.makedirs(PREVIEW_DIR, exist_ok=True)
 os.makedirs(THUMBNAIL_DIR, exist_ok=True)
+# Round-3 storage: the SQLite file becomes authoritative only when
+# UW_LIBRARY_STORE=sqlite; data.json stays the default and the fallback.
+LIBRARY_STORE_FILE = os.path.join(PROMPT_STORE_DIR, "library.sqlite3")
+LIBRARY_STORE_BACKUP_DIR = os.path.join(PROMPT_STORE_DIR, "library_backups")
+_LIBRARY_STORE_MODE = os.environ.get("UW_LIBRARY_STORE", "json").strip().lower()
+_LIBRARY_STORE_STATE = {"active": None, "instance": None, "dirty": False, "maintenance": None}
 _ROUTE_BRANCH_LAST_BACKUP_AT = 0
 _ROUTE_BRANCH_BACKUP_INTERVAL_SEC = 180
 _PROMPT_DATA_LOCK = asyncio.Lock()
 _PROMPT_FILE_LOCK = threading.RLock()
-_THUMBNAIL_BUILD_SEMAPHORE = asyncio.Semaphore(2)
+_THUMBNAIL_BUILD_SEMAPHORE = asyncio.Semaphore(4)
 _PROMPT_CACHE_LOCK = threading.RLock()
 _PROMPT_DATA_CACHE = None
 _PROMPT_DATA_CACHE_SIGNATURE = None
@@ -97,7 +107,8 @@ _PROMPT_DATA_CACHE_SIGNATURE = None
 # guarded by the same lock as the parsed document, which is always taken first.
 _LIBRARY_STATE = {"version": None, "data": None, "document": None, "indexed": True,
                   "entries": {}, "views": {}, "rows": {}, "ranges": {}, "matches": {}, "index": None,
-                  "view_index": {}, "row_index": {}, "filter_masks": {}, "filter_scopes": {}}
+                  "view_index": {}, "filter_masks": {}, "filter_scopes": {},
+                  "locations": {}, "total_prompts": 0}
 _REVIEWED_LIBRARY_CACHE = _LIBRARY_STATE["views"]
 _LIBRARY_MATCH_CACHE_LIMIT = 24
 _LIBRARY_PAGE_SIZE = 30
@@ -323,8 +334,14 @@ def _atomic_save_json_unlocked(file_path, data, create_backup=True, compact=Fals
                 pass
         raise
 
-def _atomic_save_json(file_path, data, create_backup=True, compact=False, sync_to_disk=True, expected_revision=None):
-    """Validate the expected revision, then replace the file atomically."""
+def _atomic_save_json(file_path, data, create_backup=True, compact=False, sync_to_disk=True, expected_revision=None,
+                      schedule_warm=True):
+    """Validate the expected revision, then replace the file atomically.
+
+    ``schedule_warm`` can be turned off by the single-record writers: they patch the
+    derived read model in place after committing and only need a warm-up when that
+    patch has to fall back to a rebuild.
+    """
     with _PROMPT_FILE_LOCK:
         is_library = os.path.normcase(os.path.abspath(file_path)) == os.path.normcase(os.path.abspath(DATA_FILE))
         current = {}
@@ -345,7 +362,7 @@ def _atomic_save_json(file_path, data, create_backup=True, compact=False, sync_t
     # A write invalidated every derived view; rebuild them off the request path so the
     # next 资料库 / Tag / 节点 read is served warm instead of paying the projection pass.
     warm = globals().get("_request_library_warm")
-    if is_library and warm is not None and os.environ.get("UW_SKIP_LIBRARY_WARMUP") != "1":
+    if schedule_warm and is_library and warm is not None and os.environ.get("UW_SKIP_LIBRARY_WARMUP") != "1":
         warm(delay=0.05)
     return result
 
@@ -460,6 +477,325 @@ def _should_create_route_branch_backup():
     _ROUTE_BRANCH_LAST_BACKUP_AT = now
     return True
 
+# --- SQLite library authority (round 3; UW_LIBRARY_STORE=sqlite) ---
+
+def _library_store_instance():
+    """Open the authority database lazily; a missing/broken DB falls back to data.json."""
+    state = _LIBRARY_STORE_STATE
+    if state["active"] is not None:
+        return state["instance"] if state["active"] else None
+    instance = None
+    if _LIBRARY_STORE_MODE == "sqlite":
+        try:
+            instance = library_store.open_store(LIBRARY_STORE_FILE)
+            logger.info("[Workbench] library store: sqlite (%s) revision=%r",
+                        LIBRARY_STORE_FILE, instance.revision())
+            try:
+                maintenance = library_store.AutoMaintenance(
+                    instance, export_path=DATA_FILE,
+                    document_provider=_library_store_export_document,
+                    backup_dir=LIBRARY_STORE_BACKUP_DIR)
+                maintenance.start()
+                state["maintenance"] = maintenance
+                logger.info("[Workbench] library store maintenance started: export debounce %.0fs"
+                            " / interval %.0fs, backup interval %.0fs / retain %d",
+                            maintenance.export_debounce_s, maintenance.export_interval_s,
+                            maintenance.backup_interval_s, maintenance.backup_retain)
+            except Exception as error:  # noqa: BLE001 - maintenance is optional
+                logger.warning("[Workbench] library store maintenance could not start: %s", error)
+        except library_store.StoreMissingError:
+            logger.error("[Workbench] UW_LIBRARY_STORE=sqlite but %s is missing; run "
+                         "scripts/migrate_library_store.py --apply. Falling back to data.json this run.",
+                         LIBRARY_STORE_FILE)
+        except Exception as error:  # noqa: BLE001 - a broken DB must not brick the panel
+            logger.error("[Workbench] UW_LIBRARY_STORE=sqlite but %s cannot be opened (%s); "
+                         "falling back to data.json this run.", LIBRARY_STORE_FILE, error)
+    state["active"] = instance is not None
+    state["instance"] = instance
+    return instance
+
+
+def _library_store_active():
+    return _library_store_instance() is not None
+
+
+def _library_data_exists():
+    if _library_store_active():
+        return True
+    return os.path.exists(DATA_FILE)
+
+
+def _library_document_for_batch_write():
+    """Private mutable document for batch writers that used to parse data.json."""
+    if _library_store_active():
+        return copy.deepcopy(_read_prompt_data_cached())
+    return _json_load_path(DATA_FILE)
+
+
+def _category_store_id(category):
+    return str(category.get("id") or category.get("name") or "")
+
+
+def _library_store_commit(document, changes, *, expected_revision=None):
+    instance = _library_store_instance()
+    if instance is None:
+        raise RuntimeError("library store is not available")
+    try:
+        revision = instance.commit_document(document, changes, expected_revision=expected_revision)
+    except library_store.StoreRevisionConflict as error:
+        raise RevisionConflict(error.expected, error.actual) from None
+    _LIBRARY_STORE_STATE["dirty"] = True
+    maintenance = _LIBRARY_STORE_STATE.get("maintenance")
+    if maintenance is not None:
+        maintenance.notify_write()
+    return revision
+
+
+def _diff_library_change_set(previous, document):
+    """Change set between two in-memory documents (batch writers without explicit hints)."""
+    if not isinstance(previous, dict) or not isinstance(document, dict):
+        return None
+
+    def identity(category):
+        return str(category.get("id") or category.get("name") or "")
+
+    categories = document.get("categories") or []
+    previous_categories = previous.get("categories") or []
+    previous_by_id = {identity(category): category for category in previous_categories}
+    changes = library_store.ChangeSet()
+    if [identity(category) for category in previous_categories] != [identity(category) for category in categories]:
+        changes.update_positions = True
+    new_prompt_ids = set()
+    for category in categories:
+        category_id = identity(category)
+        new_prompts = category.get("prompts") or []
+        new_prompt_ids.update(str(prompt["id"]) for prompt in new_prompts if prompt.get("id"))
+        previous_category = previous_by_id.get(category_id)
+        if previous_category is None:
+            changes.rewrite_categories.append(category)
+            continue
+        previous_prompts = {str(prompt["id"]): prompt for prompt in previous_category.get("prompts") or []
+                            if prompt.get("id")}
+        if ({key: value for key, value in previous_category.items() if key != "prompts"}
+                != {key: value for key, value in category.items() if key != "prompts"}
+                or [str(prompt["id"]) for prompt in previous_category.get("prompts") or [] if prompt.get("id")]
+                != [str(prompt["id"]) for prompt in new_prompts if prompt.get("id")]):
+            changes.write_categories.append(category)
+        for prompt in new_prompts:
+            prompt_id = str(prompt.get("id") or "")
+            if prompt_id and previous_prompts.get(prompt_id) != prompt:
+                changes.upsert_prompts.append((category_id, prompt))
+    changes.delete_prompt_ids = sorted(
+        {str(prompt["id"]) for category in previous_categories
+         for prompt in category.get("prompts") or [] if prompt.get("id")} - new_prompt_ids)
+    known_categories = {identity(category) for category in categories}
+    changes.delete_category_ids = [category_id for category_id in previous_by_id
+                                   if category_id not in known_categories]
+    changed_meta = []
+    for key in document:
+        if key == "categories":
+            continue
+        if key not in previous or previous[key] != document[key]:
+            changed_meta.append(key)
+    for key in previous:
+        if key != "categories" and key not in document:
+            changed_meta.append(key)
+    changes.meta_keys = changed_meta
+    return changes
+
+
+def _commit_library_document(document, *, changes=None, previous=None, create_backup=True,
+                             store_backup=False, compact=True, sync_to_disk=True,
+                             expected_revision=None, schedule_warm=True):
+    """Persist a library document through the SQLite authority or the legacy JSON path."""
+    instance = _library_store_instance()
+    if instance is not None:
+        if changes is None:
+            changes = _diff_library_change_set(previous, document)
+        if changes is None:
+            changes = library_store.ChangeSet(full=True)
+        if store_backup:
+            changes.backup = True
+        revision = _library_store_commit(document, changes, expected_revision=expected_revision)
+        if schedule_warm and os.environ.get("UW_SKIP_LIBRARY_WARMUP") != "1":
+            _request_library_warm(delay=0.05)
+        return revision
+    _atomic_save_json(DATA_FILE, document, create_backup=create_backup, compact=compact,
+                      sync_to_disk=sync_to_disk, expected_revision=expected_revision,
+                      schedule_warm=schedule_warm)
+
+
+def _library_store_export_document():
+    """Export source: the in-memory document when it is loaded, else the authority rows."""
+    document = globals().get("_PROMPT_DATA_CACHE")
+    if isinstance(document, dict):
+        return document
+    instance = _LIBRARY_STORE_STATE.get("instance")
+    return instance.load_document() if instance is not None else None
+
+
+def _library_store_status():
+    state = _LIBRARY_STORE_STATE
+    maintenance = state.get("maintenance")
+    status = maintenance.status() if maintenance is not None else {"active": state.get("active") is True}
+    data_json_exists = os.path.exists(DATA_FILE)
+    status.update({
+        "mode": _LIBRARY_STORE_MODE,
+        "store_file": LIBRARY_STORE_FILE,
+        "store_exists": os.path.isfile(LIBRARY_STORE_FILE),
+        "data_json": DATA_FILE,
+        "data_json_exists": data_json_exists,
+        "data_json_mtime": os.path.getmtime(DATA_FILE) if data_json_exists else None,
+        "data_json_bytes": os.path.getsize(DATA_FILE) if data_json_exists else 0,
+        "backup_dir": LIBRARY_STORE_BACKUP_DIR,
+        "cache_loaded": isinstance(globals().get("_PROMPT_DATA_CACHE"), dict),
+        "env": {
+            "UW_LIBRARY_STORE": _LIBRARY_STORE_MODE,
+            "UW_LIBRARY_EXPORT_DEBOUNCE_S": maintenance.export_debounce_s if maintenance else None,
+            "UW_LIBRARY_EXPORT_INTERVAL_S": maintenance.export_interval_s if maintenance else None,
+            "UW_LIBRARY_BACKUP_INTERVAL_S": maintenance.backup_interval_s if maintenance else None,
+            "UW_LIBRARY_BACKUP_RETAIN": maintenance.backup_retain if maintenance else None,
+            "UW_DISABLE_LIBRARY_AUTOEXPORT": bool(maintenance and not maintenance.enable_export),
+            "UW_DISABLE_LIBRARY_AUTOBACKUP": bool(maintenance and not maintenance.enable_backup),
+        },
+    })
+    return status
+
+
+def _restore_library_journal_entry(payload):
+    instance = _library_store_instance()
+    if instance is None:
+        raise RuntimeError("library store is not active; journal restore is unavailable")
+    seq = payload.get("seq")
+    if isinstance(seq, bool) or not isinstance(seq, int):
+        raise ValueError("journal restore needs an integer seq")
+    global _PROMPT_DATA_CACHE, _PROMPT_DATA_CACHE_SIGNATURE
+    with _PROMPT_FILE_LOCK:
+        _require_revision(payload, _read_prompt_data_cached())
+        result = instance.restore_journal(seq)
+        _PROMPT_DATA_CACHE = None
+        _PROMPT_DATA_CACHE_SIGNATURE = None
+        _library_state_reset()
+        maintenance = _LIBRARY_STORE_STATE.get("maintenance")
+        if maintenance is not None:
+            maintenance.notify_write()
+    return {"success": True, **result, "status": _library_store_status()}
+
+
+@PromptServer.instance.routes.get("/prompt_selector/library/store-status")
+async def get_library_store_status(request):
+    return web.json_response(await asyncio.to_thread(_library_store_status))
+
+
+@PromptServer.instance.routes.get("/prompt_selector/library/journal")
+async def get_library_journal(request):
+    instance = _library_store_instance()
+    if instance is None:
+        return web.json_response({"enabled": False, "entries": []})
+    try:
+        limit = request.query.get("limit", 50)
+        prompt_id = request.query.get("prompt_id") or None
+        entries = await asyncio.to_thread(instance.journal_entries, limit, prompt_id)
+        return web.json_response({"enabled": True, **instance.journal_counts(), "entries": entries})
+    except Exception as error:  # noqa: BLE001 - a journal read must not fail the panel
+        return web.json_response({"error": str(error)}, status=500)
+
+
+@PromptServer.instance.routes.post("/prompt_selector/library/journal/restore")
+async def post_library_journal_restore(request):
+    try:
+        payload = await request.json()
+        if not isinstance(payload, dict):
+            raise ValueError("journal restore body must be an object")
+        payload["base_revision"] = _request_revision(request, payload)
+        async with _PROMPT_DATA_LOCK:
+            result = await asyncio.to_thread(_restore_library_journal_entry, payload)
+        return _success_response(result)
+    except RevisionConflict as error:
+        return web.json_response({"error": str(error), "conflict": True,
+                                  "expected_revision": error.expected,
+                                  "current_revision": error.actual}, status=409)
+    except (KeyError, ValueError) as error:
+        return web.json_response({"error": str(error)}, status=400)
+    except Exception as error:
+        return web.json_response({"error": str(error)}, status=500)
+
+
+def _library_store_export_on_exit():
+    """Fallback exit export when no maintenance thread was started."""
+    if not _LIBRARY_STORE_STATE.get("dirty"):
+        return
+    if os.environ.get("UW_LIBRARY_STORE_EXPORT_ON_EXIT") == "0":
+        return
+    instance = _LIBRARY_STORE_STATE.get("instance")
+    document = globals().get("_PROMPT_DATA_CACHE")
+    if instance is None or not isinstance(document, dict):
+        return
+    try:
+        started = time.perf_counter()
+        info = instance.export_json(DATA_FILE, document=document)
+        logger.info("[Workbench] data.json exported from library store in %.1f s (%.1f MB)",
+                    time.perf_counter() - started, info["bytes"] / 1e6)
+    except Exception as error:  # noqa: BLE001 - shutdown export is best effort
+        logger.warning("[Workbench] data.json export on shutdown failed: %s", error)
+
+
+def _library_store_shutdown():
+    """Stop the maintenance thread; it performs the final export and SQLite backup."""
+    with _SEMANTIC_CACHE_STORE_LOCK:
+        timer = _SEMANTIC_CACHE_STORE.get("timer")
+        _SEMANTIC_CACHE_STORE["timer"] = None
+        pending = timer is not None or (
+            _SEMANTIC_CACHE_STORE["last_write_at"] > _SEMANTIC_CACHE_STORE["last_flush_at"])
+    if timer is not None:
+        timer.cancel()
+    if pending:
+        _flush_semantic_cache_snapshot(force=True, sync=True)
+    maintenance = _LIBRARY_STORE_STATE.get("maintenance")
+    if maintenance is not None:
+        try:
+            maintenance.shutdown()
+        except Exception as error:  # noqa: BLE001 - shutdown must never raise
+            logger.warning("[Workbench] library store maintenance shutdown failed: %s", error)
+        return
+    _library_store_export_on_exit()
+
+
+atexit.register(_library_store_shutdown)
+
+_LIBRARY_SHUTDOWN_HOOK = {"app": None}
+
+
+def _register_library_shutdown_hook():
+    """Flush the library store when the host cleans its aiohttp application.
+
+    ComfyUI's ``main.py`` does not run ``AppRunner.cleanup`` on Ctrl+C today (atexit
+    covers the normal interpreter exit); registering on_cleanup is the documented
+    graceful path for hosts that do clean up and is a no-op otherwise.
+    """
+    try:
+        instance = getattr(PromptServer, "instance", None)
+        app = getattr(instance, "app", None)
+        if app is None or not hasattr(app, "on_cleanup"):
+            return False
+        if _LIBRARY_SHUTDOWN_HOOK.get("app") is app:
+            return False
+
+        async def flush_on_cleanup(_app):
+            await asyncio.to_thread(_library_store_shutdown)
+
+        app.on_cleanup.append(flush_on_cleanup)
+        _LIBRARY_SHUTDOWN_HOOK["app"] = app
+        logger.info("[Workbench] library store shutdown hook registered on app.on_cleanup")
+        return True
+    except Exception as error:  # noqa: BLE001 - the hook is best effort
+        logger.warning("[Workbench] library store shutdown hook unavailable: %s", error)
+        return False
+
+
+_register_library_shutdown_hook()
+
+
 class PromptSelector:
     """
     提示词选择器节点，用于管理和选择提示词。
@@ -493,7 +829,7 @@ class PromptSelector:
 
         # 从 data.json 加载设置以获取分隔符
         separator = ", "
-        if os.path.exists(DATA_FILE):
+        if _library_data_exists():
             # Node execution used to parse the whole 118 MB library just for the separator.
             data = _read_prompt_data_cached()
             separator = data.get("settings", {}).get("separator", ", ")
@@ -508,6 +844,9 @@ class PromptSelector:
         return (final_prompt,)
 
 def _prompt_data_signature():
+    instance = _library_store_instance()
+    if instance is not None:
+        return ("library.sqlite3",) + instance.data_signature()
     try:
         stat = os.stat(DATA_FILE)
     except OSError:
@@ -523,9 +862,208 @@ def _projection_signature():
     return (stat.st_mtime_ns, stat.st_ctime_ns, stat.st_size, stat.st_ino)
 
 
+_PROJECTION_CACHE = {"signature": None, "document": None}
+
+
+def _cached_projection():
+    """Parse the 14 MB projection once per revision instead of once per move/save.
+
+    The projection file is replaced as a whole when it changes, so a stat key is
+    enough; the writer paths that only need ``decision_for``/``rebind`` reuse it.
+    """
+    signature = _projection_signature()
+    cache = _PROJECTION_CACHE
+    if cache["signature"] != signature or cache["document"] is None:
+        cache["document"] = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+        cache["signature"] = signature
+    return cache["document"]
+
+
 def _library_signature():
     """Identity of everything the reviewed view is derived from."""
     return (_prompt_data_signature(), _projection_signature())
+
+
+_DATA_UPGRADE_CHECKED = False
+# ``_ensure_data_compatibility`` is a full pass over every row. It used to run on
+# every save; once the first read has upgraded the document (or proved it current)
+# the cached object carries the fields, so single-record writes can skip it.
+_DATA_COMPATIBLE = False
+
+# Per-row semantics are the expensive part of the read model: one binding hash,
+# the subcategory rules, the theme ids and the refinement regexes per prompt.
+# They only depend on the row's semantic binding and the projection document,
+# so derived_cache keeps them across restarts instead of recomputing them all.
+_SEMANTIC_ENTRIES = {}
+_SEMANTIC_CACHE = {"projection": (), "warned": False}
+_SEMANTIC_CACHE_STORE = {"timer": None, "last_write_at": 0.0, "last_flush_at": 0.0}
+_SEMANTIC_CACHE_STORE_LOCK = threading.Lock()
+
+
+def _semantic_cache_directory():
+    return os.path.join(PROMPT_STORE_DIR, "cache")
+
+
+def _semantic_cache_projection(signature=None):
+    """Projection identity stored in the cache payload: ``[size, mtime_ns]``."""
+    signature = _projection_signature() if signature is None else signature
+    if not signature:
+        return ()
+    return (signature[2], signature[0])
+
+
+def _semantic_cache_disabled():
+    """True when this process must use the uncached rebuild path."""
+    if os.environ.get("UW_DISABLE_SEMANTIC_CACHE") == "1":
+        if not _SEMANTIC_CACHE["warned"]:
+            logger.info("[Workbench] semantic cache disabled (UW_DISABLE_SEMANTIC_CACHE=1)")
+            _SEMANTIC_CACHE["warned"] = True
+        return True
+    if not derived_cache.AVAILABLE:
+        if not _SEMANTIC_CACHE["warned"]:
+            logger.warning("[Workbench] semantic cache disabled: msgpack/zstandard unavailable")
+            _SEMANTIC_CACHE["warned"] = True
+        return True
+    return False
+
+
+def _load_semantic_cache(projection_signature):
+    if _semantic_cache_disabled():
+        return None
+    return derived_cache.load(_semantic_cache_directory(), _semantic_cache_projection(projection_signature),
+                              REFINEMENT_VERSION)
+
+
+def _install_semantic_cache(entries, projection_signature):
+    _SEMANTIC_ENTRIES.clear()
+    _SEMANTIC_ENTRIES.update(entries)
+    _SEMANTIC_CACHE["projection"] = _semantic_cache_projection(projection_signature)
+
+
+def _flush_semantic_cache_snapshot(force=False, sync=False):
+    """Hand the (unsnapshotted) mapping to derived_cache once the library is idle.
+
+    ``derived_cache.store`` snapshots the 325k-entry dict and a later timer serialises
+    and writes 23MB; both compete with an in-flight save, which T16 measured as
+    70-110ms spikes. The write is therefore only armed after
+    ``UW_LIBRARY_SEMANTIC_STORE_IDLE_S`` (default 30s) without an edit: every edit
+    re-arms the timer and a late callback re-arms instead of writing. ``force`` is
+    used by the exit and small-library paths; ``sync`` writes the snapshot before
+    returning (graceful shutdown, where the 2s debounce timer would never fire).
+    """
+    with _SEMANTIC_CACHE_STORE_LOCK:
+        _SEMANTIC_CACHE_STORE["timer"] = None
+        last_write_at = _SEMANTIC_CACHE_STORE["last_write_at"]
+    if _semantic_cache_disabled():
+        return False
+    idle_seconds = _semantic_store_idle_seconds()
+    if not force and idle_seconds > 0 and time.monotonic() - last_write_at < idle_seconds:
+        _arm_semantic_cache_store_timer(
+            max(0.05, idle_seconds - (time.monotonic() - last_write_at)))
+        return False
+    try:
+        derived_cache.store(_semantic_cache_directory(), _SEMANTIC_CACHE["projection"],
+                            REFINEMENT_VERSION, _SEMANTIC_ENTRIES, flush_now=sync)
+    except Exception as error:  # noqa: BLE001 - persistence is best effort
+        logger.warning("[Workbench] semantic cache store scheduling failed: %s", error)
+        return False
+    with _SEMANTIC_CACHE_STORE_LOCK:
+        _SEMANTIC_CACHE_STORE["last_flush_at"] = time.monotonic()
+    return True
+
+
+_SEMANTIC_STORE_SNAPSHOT_LIMIT = 20000
+_SEMANTIC_STORE_IDLE_S = 30.0
+_SEMANTIC_STORE_IDLE_ENV = "UW_LIBRARY_SEMANTIC_STORE_IDLE_S"
+
+
+def _semantic_store_idle_seconds():
+    try:
+        return max(0.0, float(os.environ.get(_SEMANTIC_STORE_IDLE_ENV, _SEMANTIC_STORE_IDLE_S)))
+    except (TypeError, ValueError):
+        return _SEMANTIC_STORE_IDLE_S
+
+
+def _arm_semantic_cache_store_timer(delay):
+    with _SEMANTIC_CACHE_STORE_LOCK:
+        timer = _SEMANTIC_CACHE_STORE.get("timer")
+        if timer is not None:
+            timer.cancel()
+        timer = threading.Timer(delay, _flush_semantic_cache_snapshot)
+        timer.daemon = True
+        _SEMANTIC_CACHE_STORE["timer"] = timer
+        timer.start()
+
+
+def _schedule_semantic_cache_store(immediate=False):
+    """Persist the mapping only after the library has been idle long enough.
+
+    Small mappings (tests, fresh libraries) still snapshot synchronously so a
+    caller's ``derived_cache.flush()`` sees them; the 325k-row mapping is deferred
+    until ``UW_LIBRARY_SEMANTIC_STORE_IDLE_S`` seconds pass without another edit.
+    """
+    if _semantic_cache_disabled():
+        return
+    with _SEMANTIC_CACHE_STORE_LOCK:
+        _SEMANTIC_CACHE_STORE["last_write_at"] = time.monotonic()
+    if immediate or len(_SEMANTIC_ENTRIES) <= _SEMANTIC_STORE_SNAPSHOT_LIMIT:
+        _flush_semantic_cache_snapshot(force=True)
+        return
+    idle_seconds = _semantic_store_idle_seconds()
+    if idle_seconds <= 0:
+        _flush_semantic_cache_snapshot(force=False)
+    else:
+        _arm_semantic_cache_store_timer(idle_seconds)
+
+
+def _upgrade_data_file_once(data):
+    """Add the timestamp fields once, lazily, after the first parse of the library.
+
+    ``initialize_data_file`` used to parse the 440 MB library during plugin
+    import just for this upgrade. The file identity is re-checked before writing
+    so a replacement that landed after this read is never overwritten.
+    """
+    global _DATA_UPGRADE_CHECKED, _DATA_COMPATIBLE, _PROMPT_DATA_CACHE, _PROMPT_DATA_CACHE_SIGNATURE
+    if _DATA_UPGRADE_CHECKED:
+        return
+    _DATA_UPGRADE_CHECKED = True
+    try:
+        needs_upgrade = "last_modified" not in data
+        for category in data.get("categories", []):
+            if "updated_at" not in category:
+                needs_upgrade = True
+                break
+            for prompt in category.get("prompts", []):
+                if "updated_at" not in prompt:
+                    needs_upgrade = True
+                    break
+            if needs_upgrade:
+                break
+        if not needs_upgrade:
+            _DATA_COMPATIBLE = True
+            return
+        if _library_store_active():
+            # The SQLite authority owns the rows now; keep the one-time upgrade in
+            # a full transaction instead of rewriting a data.json.
+            upgraded_data = _ensure_data_compatibility(copy.deepcopy(data))
+            _library_store_commit(upgraded_data, library_store.ChangeSet(full=True))
+            _PROMPT_DATA_CACHE = upgraded_data
+            _PROMPT_DATA_CACHE_SIGNATURE = _prompt_data_signature()
+            _DATA_COMPATIBLE = True
+            return
+        if _prompt_data_signature() != _PROMPT_DATA_CACHE_SIGNATURE:
+            return
+        logger.info("📝 检测到数据文件缺少时间戳字段，正在升级...")
+        # Compatibility upgrades mutate their input; keep the read cache intact until commit.
+        upgraded_data = _ensure_data_compatibility(copy.deepcopy(data))
+        _atomic_save_json(DATA_FILE, upgraded_data, create_backup=True, compact=True)
+        logger.info("✅ 数据文件已升级，添加了时间戳字段")
+        _PROMPT_DATA_CACHE = upgraded_data
+        _PROMPT_DATA_CACHE_SIGNATURE = _prompt_data_signature()
+        _DATA_COMPATIBLE = True
+    except Exception as e:
+        logger.error(f"⚠️ 升级数据文件失败: {e}")
+        # 不影响启动，继续运行
 
 
 def _read_prompt_data_cached():
@@ -535,6 +1073,17 @@ def _read_prompt_data_cached():
         signature = _prompt_data_signature()
         if _PROMPT_DATA_CACHE is not None and _PROMPT_DATA_CACHE_SIGNATURE == signature:
             return _PROMPT_DATA_CACHE
+        instance = _library_store_instance()
+        if instance is not None:
+            data = instance.load_document()
+            _PROMPT_DATA_CACHE = data
+            _PROMPT_DATA_CACHE_SIGNATURE = _prompt_data_signature()
+            logger.info("[Workbench] library store loaded in %.2f s (%d categories)",
+                        instance.last_load_seconds, len(data.get("categories") or []))
+            _lib_trace("store_load", seconds=round(instance.last_load_seconds, 3),
+                       categories=len(data.get("categories") or []))
+            _upgrade_data_file_once(data)
+            return _PROMPT_DATA_CACHE
         # External replacement must not pair bytes from one file with another's signature.
         for _ in range(3):
             signature = _prompt_data_signature()
@@ -543,12 +1092,30 @@ def _read_prompt_data_cached():
                 _PROMPT_DATA_CACHE = data
                 _PROMPT_DATA_CACHE_SIGNATURE = signature
                 _lib_trace("parse_data", signature=list(signature))
-                return data
+                _upgrade_data_file_once(data)
+                return _PROMPT_DATA_CACHE
         raise RuntimeError("词库正在更新，请重试读取")
+
+
+def _prompt_data_for_write():
+    """The shared library document, schema-upgraded at most once, for single-record writers.
+
+    The compatibility pass adds missing fields in place, so it must not run again
+    after the cached document already carries them; writers copy the object
+    copy-on-write before touching anything.
+    """
+    global _DATA_COMPATIBLE
+    data = _read_prompt_data_cached()
+    if _DATA_COMPATIBLE:
+        return data
+    upgraded = _ensure_data_compatibility(data)
+    _DATA_COMPATIBLE = True
+    return upgraded
 
 
 def _library_state_reset():
     """Drop every derived read model; the next read rebuilds it from source."""
+    _SEMANTIC_ENTRIES.clear()
     state = _LIBRARY_STATE
     state["version"] = None
     state["data"] = None
@@ -560,9 +1127,10 @@ def _library_state_reset():
     state["ranges"].clear()
     state["matches"].clear()
     state["view_index"].clear()
-    state["row_index"].clear()
     state["filter_masks"].clear()
     state["filter_scopes"].clear()
+    state["locations"].clear()
+    state["total_prompts"] = 0
     state["index"] = None
 
 
@@ -579,25 +1147,56 @@ def _library_rebuild_locked():
     """Recompute the per-prompt projection once for the current source revision."""
     data = _read_prompt_data_cached()
     version = (_PROMPT_DATA_CACHE_SIGNATURE, _projection_signature())
-    document = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+    document = _cached_projection()
+    cached = _load_semantic_cache(version[1])
     _library_state_reset()
     entries = _LIBRARY_STATE["entries"]
+    semantic_entries = {}
+    locations = {}
+    total_prompts = 0
     indexed = True
-    for category in data.get("categories", []) or []:
-        for prompt in category.get("prompts", []) or []:
+    reused = 0
+    computed = 0
+    for category_position, category in enumerate(data.get("categories", []) or []):
+        for prompt_index, prompt in enumerate(category.get("prompts", []) or []):
+            total_prompts += 1
             identity = prompt.get("id")
-            entry = _library_entry(document, category, prompt)
-            if isinstance(identity, str) and identity and identity not in entries:
+            cacheable = isinstance(identity, str) and identity and identity not in entries
+            entry = None
+            binding = None
+            if cacheable and cached is not None:
+                stored = cached.get(identity)
+                if isinstance(stored, list) and len(stored) == 2 and isinstance(stored[1], dict):
+                    binding = semantic_binding(category, prompt)
+                    if stored[0] == binding:
+                        entry = {**prompt, "_semantic": stored[1]}
+                        reused += 1
+            if entry is None:
+                entry = _library_entry(document, category, prompt)
+                computed += 1
+                if cacheable:
+                    # ``_library_entry`` hashes the binding internally; the cache key needs it too.
+                    binding = semantic_binding(category, prompt)
+            if cacheable:
                 entries[identity] = entry
+                semantic_entries[identity] = [binding, entry["_semantic"]]
+                locations[identity] = (category_position, prompt_index)
             else:
                 # Duplicate or missing identity: fall back to computing every row inline.
                 indexed = False
+    _LIBRARY_STATE["locations"].update(locations)
+    _LIBRARY_STATE["total_prompts"] = total_prompts
     state = _LIBRARY_STATE
     state["version"] = version
     state["data"] = data
     state["document"] = document
     state["indexed"] = indexed
+    _install_semantic_cache(semantic_entries, version[1])
     _lib_trace("rebuild", signature=[list(version[0]), list(version[1])], indexed=indexed, entries=len(entries))
+    if not _semantic_cache_disabled():
+        logger.info("[Workbench] semantic cache rows: reused %d, recomputed %d", reused, computed)
+    if cached is None or computed:
+        _schedule_semantic_cache_store(immediate=True)
     return state
 
 
@@ -719,12 +1318,6 @@ def _library_rows_for(state, include_pending, view):
     if own_view:
         state["rows"][key] = rows
         state["ranges"][key] = ranges
-        state["row_index"][key] = {}
-        index = state["row_index"][key]
-        for position, row in enumerate(rows):
-            identity = row[0].get("id")
-            if isinstance(identity, str) and identity:
-                index[identity] = position
     return rows, ranges
 
 
@@ -736,13 +1329,34 @@ def _library_entry_in_view(entry, include_pending):
         and semantic.get("manual_search_eligible")))
 
 
-def _patch_derived_caches(state, data, changed_ids):
+def _index_patch_signature(entry):
+    """The row facts the cached index payload aggregates; equal means it stays valid."""
+    semantic = entry.get("_semantic") or {}
+    return (
+        semantic.get("primary_class"),
+        tuple(sorted(semantic.get("alternative_classes") or [])),
+        tuple(sorted(set(semantic.get("themes") or []))),
+        tuple(sorted(set(semantic.get("subcategories") or []))),
+        tuple(sorted(set(semantic.get("count_markers") or []))),
+        tuple(sorted(set(semantic.get("refinements") or []))),
+        tuple(sorted((semantic.get("subcategory_owners") or {}).items())),
+    )
+
+
+def _patch_derived_caches(state, data, changed_ids, refresh_index=False, locations=None):
     """Keep the cached views and row ordering when the changed rows stayed put.
 
     Only the safe shape is patched: every changed prompt must still exist, keep its
     category, keep its visibility, keep its disposition (so ``_review_counts`` stays
     right) and keep its position. Anything else returns False and the caller falls
     back to a full rebuild, which is always correct.
+
+    ``locations`` is the caller's ``{id: (category_position, identity, name)}`` map; when
+    omitted the rows are searched for (the old O(library) behaviour, used by tests/tools).
+
+    ``refresh_index`` additionally keeps the cached index payload when the caller
+    proved that no indexed statistic moved (``_index_patch_signature``); refreshed
+    category summaries and revision fields keep the ETag right.
 
     ``matches`` is dropped either way — it is a list of row positions filtered by
     usage/theme/collection, so a content edit can change it, and recomputing it costs
@@ -751,14 +1365,15 @@ def _patch_derived_caches(state, data, changed_ids):
     changed = {str(identity) for identity in changed_ids if identity}
     if not changed:
         return False
-    locations = {}
-    for category_position, category in enumerate(data.get("categories", []) or []):
-        identity = str(category.get("id") or category.get("name") or "")
-        name = str(category.get("name") or "")
-        for prompt in category.get("prompts", []) or []:
-            prompt_id = prompt.get("id")
-            if prompt_id in changed:
-                locations[prompt_id] = (category_position, identity, name)
+    if locations is None:
+        locations = {}
+        for category_position, category in enumerate(data.get("categories", []) or []):
+            identity = str(category.get("id") or category.get("name") or "")
+            name = str(category.get("name") or "")
+            for prompt in category.get("prompts", []) or []:
+                prompt_id = prompt.get("id")
+                if prompt_id in changed:
+                    locations[prompt_id] = (category_position, identity, name)
     if len(locations) != len(changed):
         return False
     entries = state["entries"]
@@ -771,8 +1386,8 @@ def _patch_derived_caches(state, data, changed_ids):
             continue
         view_index = state["view_index"].get(key)
         rows = state["rows"].get(key)
-        row_index = state["row_index"].get(key)
-        if view_index is None or rows is None or row_index is None:
+        ranges = state["ranges"].get(key)
+        if view_index is None or rows is None or ranges is None:
             return False
         view_categories = view["categories"]
         for prompt_id, (category_position, identity, name) in locations.items():
@@ -797,11 +1412,15 @@ def _patch_derived_caches(state, data, changed_ids):
                     (entry.get("_semantic") or {}).get("disposition"):
                 return False              # _review_counts would go stale
             category["prompts"][placement[1]] = entry
-            position = row_index.get(prompt_id)
-            if position is None:
-                return False
+            position = ranges[category_position][2] + placement[1]
             names, body = _search_terms(entry)
             rows[position] = (entry, identity, name, name.casefold(), names, body)
+        # Refresh the category metadata the view copies from the document too, so a
+        # rebuilt index/revision never reads a stale category timestamp.
+        data_categories = data.get("categories", []) or []
+        for position in {location[0] for location in locations.values()}:
+            view_categories[position] = {**data_categories[position],
+                                         "prompts": view_categories[position]["prompts"]}
         for name_of_field, value in data.items():
             if name_of_field not in derived:
                 view[name_of_field] = value
@@ -809,16 +1428,377 @@ def _patch_derived_caches(state, data, changed_ids):
     state["matches"].clear()
     state["filter_masks"].clear()
     state["filter_scopes"].clear()
-    state["index"] = None
+    touched_categories = {location[0] for location in locations.values()}
+    if not refresh_index or not _refresh_library_index(state, data, touched_categories):
+        state["index"] = None
     return True
 
 
-def _cache_prompt_data(data, changed_ids=None):
+def _refresh_library_index(state, data, category_positions):
+    """Refresh the cached index payload after a patch that moved no indexed statistic.
+
+    Returns False when the payload cannot be proven current, so the caller drops it
+    and the next read recomputes the whole index.
+    """
+    index = state["index"]
+    view = state["views"].get(False)
+    if index is None or view is None:
+        return False
+    categories = view.get("categories", []) or []
+    summaries = index.get("categories", [])
+    if len(summaries) != len(categories):
+        return False
+    if index.get("total_prompts") != sum(len(category.get("prompts", []) or [])
+                                          for category in categories):
+        return False
+    for position in sorted(category_positions):
+        category = categories[position]
+        summary = {key: value for key, value in category.items() if key != "prompts"}
+        summary["prompt_count"] = len(category.get("prompts", []) or [])
+        summary["prompts"] = []
+        summaries[position] = summary
+    index["version"] = view.get("version", "1.6")
+    index["settings"] = view.get("settings", {})
+    index["last_modified"] = view.get("last_modified")
+    index["review_counts"] = view["_review_counts"]
+    index["semantic_classes"] = view["_semantic_class_labels"]
+    return True
+
+
+def _same_selector_library(previous, data):
+    """The cached index groups come from the selector library; unchanged means safe."""
+    old = (previous or {}).get("selector_library")
+    new = data.get("selector_library")
+    return old is new or old == new
+
+
+def _adjust_count(counts, key, delta):
+    value = counts.get(key, 0) + delta
+    if value > 0:
+        counts[key] = value
+    else:
+        counts.pop(key, None)
+
+
+def _index_row_fragments(entry, delta, themes, facets, counts, refinements, label_owners, unknown):
+    """Apply (or remove) one visible row's contribution to the index tallies."""
+    semantic = entry.get("_semantic") or {}
+    for theme in semantic_themes(semantic):
+        if theme:
+            _adjust_count(themes, theme, delta)
+    for facet in set(semantic.get("themes") or []):
+        _adjust_count(facets, facet, delta)
+    for marker in set(semantic.get("count_markers") or []):
+        _adjust_count(counts, marker, delta)
+    for identity in set(semantic.get("refinements") or []):
+        _adjust_count(refinements, identity, delta)
+    for label in set(semantic.get("subcategories") or []):
+        owner = subcategory_owner(semantic, label)
+        if owner:
+            owners = label_owners.setdefault(label, Counter())
+            _adjust_count(owners, owner, delta)
+            if not owners:
+                label_owners.pop(label, None)
+        else:
+            _adjust_count(unknown, label, delta)
+
+
+def _patch_library_index_for_row(state, view, previous_entry, entry, old_visible, new_visible,
+                                 category_positions):
+    """Update the cached index payload for one changed row; False when it must rebuild."""
+    payload = state["index"]
+    if payload is None or view is None:
+        return False
+    pool = payload.get("filter_pool")
+    if not isinstance(pool, dict):
+        return False
+    themes = dict(pool.get("theme") or {})
+    facets = dict(pool.get("facet") or {})
+    counts = dict(pool.get("count") or {})
+    unknown = Counter(pool.get("unmapped_subcategories") or {})
+    refinements = Counter()
+    for children in (pool.get("refinements") or {}).values():
+        for node in children:
+            refinements[node["id"]] = node["count"]
+    label_owners = {}
+    for owner, labels in (pool.get("subcategory") or {}).items():
+        for label, count in labels.items():
+            label_owners.setdefault(label, Counter())[owner] += count
+    for label, owners in (pool.get("conflicting_subcategories") or {}).items():
+        label_owners.setdefault(label, Counter()).update(owners)
+    if old_visible and previous_entry is not None:
+        _index_row_fragments(previous_entry, -1, themes, facets, counts, refinements,
+                             label_owners, unknown)
+    if new_visible:
+        _index_row_fragments(entry, 1, themes, facets, counts, refinements,
+                             label_owners, unknown)
+    class_keys = list(view.get("_semantic_class_labels") or {})
+    semantic_subcategories, filter_pool = _index_sections(
+        themes, facets, counts, refinements, label_owners, unknown, class_keys)
+    categories = payload.get("categories") or []
+    view_categories = view.get("categories") or []
+    if len(categories) != len(view_categories):
+        return False
+    for position in sorted(category_positions):
+        category = view_categories[position]
+        summary = {key: value for key, value in category.items() if key != "prompts"}
+        summary["prompt_count"] = len(category.get("prompts", []) or [])
+        summary["prompts"] = []
+        categories[position] = summary
+    payload["semantic_subcategories"] = semantic_subcategories
+    payload["filter_pool"] = filter_pool
+    payload["total_prompts"] = sum(len(category.get("prompts", []) or [])
+                                   for category in view_categories)
+    payload["review_counts"] = view.get("_review_counts") or {}
+    payload["semantic_classes"] = view.get("_semantic_class_labels") or {}
+    payload["selector_groups"] = {kind: collection_groups(view) for kind in COLLECTION_KINDS}
+    payload["version"] = view.get("version", "1.6")
+    payload["settings"] = view.get("settings", {})
+    payload["last_modified"] = view.get("last_modified")
+    return True
+
+
+def _data_row_location(data, prompt_id):
+    for category_position, category in enumerate(data.get("categories", []) or []):
+        identity = str(category.get("id") or category.get("name") or "")
+        name = str(category.get("name") or "")
+        prompts = category.get("prompts", []) or []
+        for prompt in prompts:
+            if str(prompt.get("id") or "") == prompt_id:
+                return category_position, identity, name, prompts
+    return None
+
+
+def _state_row_location(state, data, prompt_id):
+    """O(1) prompt -> (category_position, prompt_index, identity, name, category, prompts).
+
+    The map is built by the rebuild and maintained by the single-row patches, so the
+    result is validated by the direct list lookup before it is trusted.
+    """
+    location = (state.get("locations") or {}).get(prompt_id)
+    if location is None:
+        return None
+    category_position, prompt_index = location
+    categories = data.get("categories") or []
+    if category_position < 0 or category_position >= len(categories):
+        return None
+    category = categories[category_position]
+    prompts = category.get("prompts") or []
+    if prompt_index < 0 or prompt_index >= len(prompts):
+        return None
+    if str(prompts[prompt_index].get("id") or "") != prompt_id:
+        return None
+    return (category_position, prompt_index,
+            str(category.get("id") or category.get("name") or ""),
+            str(category.get("name") or ""), category, prompts)
+
+
+def _scan_prompt_location(data, prompt_id):
+    for category_position, category in enumerate(data.get("categories", []) or []):
+        prompts = category.get("prompts") or []
+        for prompt_index, prompt in enumerate(prompts):
+            if str(prompt.get("id") or "") == prompt_id:
+                return (category_position, prompt_index,
+                        str(category.get("id") or category.get("name") or ""),
+                        str(category.get("name") or ""), category, prompts)
+    return None
+
+
+def _locate_prompt(current, prompt_id):
+    """Locate a prompt for the single-record writers: O(1) when the location map is current."""
+    with _PROMPT_CACHE_LOCK:
+        state = _LIBRARY_STATE
+        if state.get("data") is current and state.get("indexed"):
+            location = _state_row_location(state, current, prompt_id)
+            if location is not None:
+                return location
+    return _scan_prompt_location(current, prompt_id)
+
+
+def _reindex_prompt_locations(state, data, category_positions):
+    """Refresh the location map for categories whose prompt list changed (O(category))."""
+    locations = state["locations"]
+    categories = data.get("categories") or []
+    for position in category_positions:
+        if position < 0 or position >= len(categories):
+            continue
+        for prompt_index, prompt in enumerate(categories[position].get("prompts") or []):
+            identity = prompt.get("id")
+            if isinstance(identity, str) and identity:
+                locations[identity] = (position, prompt_index)
+
+
+def _shift_view_index(view, view_index, category_position, from_item, delta):
+    """Shift one category's visible item indices (O(category), not O(library))."""
+    items = (view["categories"][category_position].get("prompts") or [])
+    if delta > 0:
+        for position in range(len(items) - 1, from_item - 1, -1):
+            identity = items[position].get("id")
+            if isinstance(identity, str) and identity:
+                view_index[identity] = (category_position, position + delta)
+    else:
+        for position in range(from_item, len(items)):
+            identity = items[position].get("id")
+            if isinstance(identity, str) and identity:
+                view_index[identity] = (category_position, position)
+
+
+def _shift_ranges(ranges, category_position, delta):
+    identity, name, start, end = ranges[category_position]
+    ranges[category_position] = (identity, name, start, end + delta)
+    for position in range(category_position + 1, len(ranges)):
+        identity, name, start, end = ranges[position]
+        ranges[position] = (identity, name, start + delta, end + delta)
+
+
+def _patch_one_changed_row(state, data, prompt_id, previous_entry, entry, same_selector,
+                           location=None, position_unchanged=False):
+    """Install one committed row into views/rows/index without rebuilding them.
+
+    Handles the single-record shapes: a content edit in place, a row losing its
+    review eligibility (leaves the normal view) and a row gaining it (enters the
+    normal view). Returns True when the read model is fully current, False when the
+    views are current but the index payload needs a rebuild and None when the shape
+    is not safe to patch and the caller must drop the derived models.
+
+    ``location`` is the O(1) placement the caller already resolved; ``position_unchanged``
+    means the row is still at the same index, so the visible-position recount is skipped.
+    """
+    if location is None:
+        location = _scan_prompt_location(data, prompt_id)
+    if location is None or previous_entry is None or entry is None:
+        return None
+    category_position, _prompt_index, identity, name, data_category, data_prompts = location
+    plans = {}
+    for key in (False, True):
+        view = state["views"].get(key)
+        if view is None:
+            plans[key] = None
+            continue
+        view_index = state["view_index"].get(key)
+        rows = state["rows"].get(key)
+        if view_index is None:
+            return None
+        eligible = _library_entry_in_view(entry, key)
+        old_placement = view_index.get(prompt_id)
+        if old_placement is not None and old_placement[0] != category_position:
+            return None
+        expected_item = None
+        if eligible and position_unchanged and old_placement is not None:
+            expected_item = old_placement[1]
+        elif eligible:
+            expected_item = 0
+            for prompt in data_prompts:
+                candidate = str(prompt.get("id") or "")
+                if candidate == prompt_id:
+                    break
+                placement = view_index.get(candidate)
+                if placement is not None and placement[0] == category_position:
+                    expected_item += 1
+            if old_placement is not None and old_placement[1] != expected_item:
+                return None
+        plans[key] = {"view": view, "view_index": view_index, "rows": rows,
+                      "ranges": state["ranges"].get(key), "old_placement": old_placement,
+                      "eligible": eligible, "expected_item": expected_item}
+    if plans[False] is None:
+        return None
+    data_categories = data.get("categories", []) or []
+    if category_position >= len(data_categories):
+        return None
+    data_category = data_categories[category_position]
+    if str(data_category.get("id") or data_category.get("name") or "") != identity:
+        return None
+    derived = {"categories", "_review_counts", "_semantic_class_labels", "_selection_projection"}
+    old_disposition = (previous_entry.get("_semantic") or {}).get("disposition")
+    new_disposition = (entry.get("_semantic") or {}).get("disposition")
+    old_visible_normal = plans[False]["old_placement"] is not None
+    new_visible_normal = plans[False]["eligible"]
+    names, body = _search_terms(entry)
+    row_tuple = (entry, identity, name, name.casefold(), names, body)
+    for key in (False, True):
+        plan = plans[key]
+        if plan is None:
+            continue
+        view = plan["view"]
+        view_categories = view.get("categories") or []
+        if category_position >= len(view_categories):
+            return None
+        category = view_categories[category_position]
+        if str(category.get("id") or category.get("name") or "") != identity:
+            return None
+        view_index = plan["view_index"]
+        rows = plan["rows"]
+        ranges = plan["ranges"]
+        old_placement = plan["old_placement"]
+        eligible = plan["eligible"]
+        if old_placement is not None and eligible:
+            category["prompts"][old_placement[1]] = entry
+            if rows is not None:
+                rows[ranges[category_position][2] + old_placement[1]] = row_tuple
+        elif old_placement is not None:
+            item_position = old_placement[1]
+            del category["prompts"][item_position]
+            view_index.pop(prompt_id, None)
+            _shift_view_index(view, view_index, category_position, item_position, -1)
+            if rows is not None:
+                rows.pop(ranges[category_position][2] + item_position)
+                _shift_ranges(ranges, category_position, -1)
+        elif eligible:
+            item_position = plan["expected_item"]
+            row_position = ranges[category_position][2] + item_position
+            _shift_view_index(view, view_index, category_position, item_position, 1)
+            category["prompts"].insert(item_position, entry)
+            view_index[prompt_id] = (category_position, item_position)
+            if rows is not None:
+                rows.insert(row_position, row_tuple)
+                _shift_ranges(ranges, category_position, 1)
+        view_categories[category_position] = {
+            **data_category,
+            "prompts": view_categories[category_position]["prompts"]}
+        for name_of_field, value in data.items():
+            if name_of_field not in derived:
+                view[name_of_field] = value
+        if old_disposition != new_disposition:
+            counts = view.get("_review_counts")
+            if isinstance(counts, dict):
+                remaining = counts.get(old_disposition, 0) - 1
+                if remaining > 0:
+                    counts[old_disposition] = remaining
+                else:
+                    counts.pop(old_disposition, None)
+                counts[new_disposition] = counts.get(new_disposition, 0) + 1
+        state["views"][key] = view
+    state["matches"].clear()
+    state["filter_masks"].clear()
+    state["filter_scopes"].clear()
+    signature_changed = _index_patch_signature(previous_entry) != _index_patch_signature(entry)
+    refresh_needed = signature_changed or old_visible_normal != new_visible_normal \
+        or old_disposition != new_disposition
+    normal_view = plans[False]["view"]
+    if not refresh_needed and same_selector \
+            and _refresh_library_index(state, data, {category_position}):
+        return True
+    if _patch_library_index_for_row(state, normal_view, previous_entry, entry,
+                                    old_visible_normal, new_visible_normal,
+                                    {category_position}):
+        return True
+    state["index"] = None
+    return False
+
+
+def _cache_prompt_data(data, changed_ids=None, locations_hint=None, removed_hint=None):
     """Install a just-committed library document.
 
     ``changed_ids`` names every prompt the caller rewrote, so the derived projection
-    is patched instead of dropped: the next read reuses ~93k bindings and only
-    recomputes the touched rows. Anything ambiguous falls back to a full rebuild.
+    is patched instead of dropped: the next read reuses every unchanged binding and
+    only recomputes the touched rows. The maintained ``locations`` map resolves each
+    touched id to its (category, index) in the new document in O(1); the small
+    single-record writers pass the new placement through ``locations_hint``. Anything
+    ambiguous falls back to one scan or a full rebuild, which is always correct.
+
+    Returns True when the cached read model is already correct for the next request
+    (views patched and the index payload kept); False when a rebuild or a warm-up is
+    still needed.
     """
     global _PROMPT_DATA_CACHE, _PROMPT_DATA_CACHE_SIGNATURE
 
@@ -833,44 +1813,187 @@ def _cache_prompt_data(data, changed_ids=None):
                        has_data=state["data"] is not None, indexed=state["indexed"],
                        projection_changed=state["version"] is not None and state["version"][1] != version[1])
             _library_state_reset()
-            return
+            return False
+        previous_data = state["data"]
         entries = state["entries"]
         document = state["document"]
+        cache_enabled = not _semantic_cache_disabled()
         wanted = {str(identity) for identity in changed_ids if identity}
+        removed_ids = {str(identity) for identity in (removed_hint or ()) if identity}
+        previous_locations = state["locations"]
+        hinted = locations_hint or {}
+        categories = data.get("categories", []) or []
+        # A map that does not describe the whole previous document (legacy state, a
+        # lost write, a manual document edit) is not authoritative: rebuild it once.
+        locations_stale = len(previous_locations) != (state.get("total_prompts") or 0)
+
+        # Resolve each touched id to its placement in the new document without walking
+        # the whole library: explicit hint first, then the unchanged-map fast path,
+        # then a single scan for the ids that genuinely moved.
+        resolved = {}
+        unresolved = []
+        for identity in wanted:
+            if identity in removed_ids:
+                resolved[identity] = None
+                continue
+            if locations_stale:
+                unresolved.append(identity)
+                continue
+            hinted_location = hinted.get(identity)
+            if hinted_location is not None:
+                category_position, prompt_index = hinted_location
+                if category_position < len(categories) \
+                        and prompt_index < len(categories[category_position].get("prompts") or []) \
+                        and str(categories[category_position]["prompts"][prompt_index].get("id") or "") == identity:
+                    resolved[identity] = hinted_location
+                    continue
+            old_location = previous_locations.get(identity)
+            if old_location is not None:
+                category_position, prompt_index = old_location
+                if category_position < len(categories):
+                    prompts = categories[category_position].get("prompts") or []
+                    if prompt_index < len(prompts) \
+                            and str(prompts[prompt_index].get("id") or "") == identity:
+                        resolved[identity] = old_location
+                        continue
+            unresolved.append(identity)
+        scanned = None
+        if unresolved:
+            scanned = {}
+            for category_position, category in enumerate(categories):
+                for prompt_index, prompt in enumerate(category.get("prompts") or []):
+                    prompt_id = prompt.get("id")
+                    if isinstance(prompt_id, str) and prompt_id:
+                        scanned[prompt_id] = (category_position, prompt_index)
+            for identity in unresolved:
+                location = scanned.get(identity)
+                if location is not None:
+                    resolved[identity] = location
+
         found = set()
-        total = 0
-        for category in data.get("categories", []) or []:
-            for prompt in category.get("prompts", []) or []:
+        removed = set()
+        previous_entries = {}
+        index_patchable = True
+        reindex_positions = set()
+        total = state.get("total_prompts") or 0
+        for identity in wanted:
+            location = resolved.get(identity)
+            old_location = previous_locations.get(identity)
+            if location is None:
+                previous = entries.get(identity)
+                if previous is not None:
+                    total -= 1
+                    index_patchable = False
+                entries.pop(identity, None)
+                if cache_enabled:
+                    _SEMANTIC_ENTRIES.pop(identity, None)
+                state["locations"].pop(identity, None)
+                removed.add(identity)
+                if old_location is not None:
+                    reindex_positions.add(old_location[0])
+                continue
+            category_position, prompt_index = location
+            category = categories[category_position]
+            prompts = category.get("prompts") or []
+            prompt = prompts[prompt_index]
+            entry = _library_entry(document, category, prompt)
+            previous = entries.get(identity)
+            previous_entries[identity] = previous
+            if previous is None:
                 total += 1
-                identity = prompt.get("id")
-                if identity in wanted:
-                    entries[identity] = _library_entry(document, category, prompt)
-                    found.add(identity)
-        for identity in wanted - found:
-            entries.pop(identity, None)
+            if previous is None or _index_patch_signature(previous) != _index_patch_signature(entry):
+                index_patchable = False
+            entries[identity] = entry
+            if cache_enabled:
+                _SEMANTIC_ENTRIES[identity] = [semantic_binding(category, prompt), entry["_semantic"]]
+            state["locations"][identity] = location
+            found.add(identity)
+            if old_location != location:
+                if old_location is not None:
+                    reindex_positions.add(old_location[0])
+                reindex_positions.add(category_position)
+        if scanned is not None:
+            state["locations"] = scanned
+        elif reindex_positions:
+            _reindex_prompt_locations(state, data, reindex_positions)
         if len(entries) != total:
             # A caller under-reported its change set; rebuild rather than serve a stale view.
             _lib_trace("cache_reset", reason="count", entries=len(entries), total=total)
             _library_state_reset()
-            return
+            return False
+        state["total_prompts"] = total
         state["data"] = data
         state["version"] = version
-        # A favourite, a usage stamp, a note or a preview swap keeps its row in place,
-        # so the 100k-row ordering can be patched instead of rebuilt (measured 721 ms).
-        if _patch_derived_caches(state, data, found):
-            _lib_trace("cache_patch", changed=sorted(found), rows="patched",
-                       signature=[list(version[0]), list(version[1])])
-            return
+        if cache_enabled:
+            _SEMANTIC_CACHE["projection"] = _semantic_cache_projection(version[1])
+            _schedule_semantic_cache_store()
+        same_selector = _same_selector_library(previous_data, data)
+        # One changed row (every single-record writer) patches only the structures that
+        # depend on it: views, ordering, tallies and the cached index payload.
+        try:
+            if len(found) == 1:
+                prompt_id = next(iter(found))
+                previous = previous_entries.get(prompt_id)
+                if previous is not None:
+                    category_position, prompt_index = resolved[prompt_id]
+                    category = categories[category_position]
+                    status = _patch_one_changed_row(
+                        state, data, prompt_id, previous, entries[prompt_id], same_selector,
+                        location=(category_position, prompt_index,
+                                  str(category.get("id") or category.get("name") or ""),
+                                  str(category.get("name") or ""),
+                                  category, category.get("prompts") or []),
+                        position_unchanged=previous_locations.get(prompt_id) == resolved[prompt_id])
+                    if status is not None:
+                        _lib_trace("cache_patch", changed=sorted(found), rows="patched",
+                                   signature=[list(version[0]), list(version[1])])
+                        return bool(status)
+            patch_locations = {}
+            for identity in found:
+                category_position, _prompt_index = resolved[identity]
+                category = categories[category_position]
+                patch_locations[identity] = (
+                    category_position,
+                    str(category.get("id") or category.get("name") or ""),
+                    str(category.get("name") or ""))
+            # A favourite, a usage stamp, a note or a preview swap keeps its row in place,
+            # so the 100k-row ordering can be patched instead of rebuilt (measured 721 ms).
+            if _patch_derived_caches(state, data, found, refresh_index=index_patchable and same_selector,
+                                     locations=patch_locations):
+                _lib_trace("cache_patch", changed=sorted(found), rows="patched",
+                           signature=[list(version[0]), list(version[1])])
+                return state["index"] is not None
+        except Exception as error:  # noqa: BLE001 - a broken patch must never fail the save
+            logger.warning("[Workbench] derived read model patch failed; rebuilding lazily: %s", error)
+            _library_state_reset()
+            return False
         state["views"].clear()
         state["rows"].clear()
         state["ranges"].clear()
         state["matches"].clear()
         state["view_index"].clear()
-        state["row_index"].clear()
         state["filter_masks"].clear()
         state["filter_scopes"].clear()
         state["index"] = None
         _lib_trace("cache_patch", changed=sorted(found), signature=[list(version[0]), list(version[1])])
+        return False
+
+
+def _commit_prompt_data(file_data, changed_ids=None, locations_hint=None, removed_hint=None):
+    """Install a committed document and warm the read model only when it was dropped.
+
+    Single-record writers pass ``schedule_warm=False`` to ``_atomic_save_json`` and
+    call this instead: a patched view that kept the index payload is already correct
+    for the next request, while a dropped/rebuild-needed model keeps the previous
+    background warm-up so the next read is not the cold one. ``locations_hint`` maps
+    the changed ids to their already-known new (category_position, prompt_index) so
+    the patch never has to search the library.
+    """
+    patched = _cache_prompt_data(file_data, changed_ids, locations_hint=locations_hint,
+                                 removed_hint=removed_hint)
+    if not patched and os.environ.get("UW_SKIP_LIBRARY_WARMUP") != "1":
+        _request_library_warm(delay=0.05)
+    return patched
 
 
 def _reviewed_library_data(include_pending=False):
@@ -902,7 +2025,7 @@ def _selector_favorites_state():
     state = data.get('selector_library')
     if not state:
         raise ValueError('Selector library migration has not completed')
-    document = read_projection(os.path.join(PROMPT_STORE_DIR, 'semantic_projection.json'))
+    document = _cached_projection()
     view = favorites_view(data, document, state.get('legacy_favorites', {}))
     encoded = json.dumps([_revision(data), view], ensure_ascii=False, sort_keys=True, separators=(',', ':'))
     etag = hashlib.sha256(encoded.encode('utf-8')).hexdigest()
@@ -927,7 +2050,8 @@ def _save_selector_favorites(body, expected):
         for key, value in body.items():
             if key not in updated['selector_library']['kinds']:
                 updated['selector_library']['legacy_favorites'][key] = value
-        _atomic_save_json(DATA_FILE, updated, compact=True, create_backup=True, expected_revision=_revision(current))
+        _commit_library_document(updated, previous=current, compact=True, create_backup=True,
+                                 expected_revision=_revision(current))
         _cache_prompt_data(updated)
         return _selector_favorites_state()[3]
 
@@ -958,8 +2082,9 @@ def _apply_collection_update(payload):
         changed = update_collection(updated, payload)
         if changed:
             updated['last_modified'] = datetime.now().isoformat()
-            _atomic_save_json(DATA_FILE, updated, compact=True, create_backup=_should_create_route_branch_backup(),
-                expected_revision=_revision(current))
+            _commit_library_document(updated, previous=current, compact=True,
+                                     create_backup=_should_create_route_branch_backup(),
+                                     expected_revision=_revision(current))
             _cache_prompt_data(updated)
         return {'success': True, 'changed': changed, 'revision': _revision(updated),
             'groups': collection_groups(updated)}
@@ -1049,6 +2174,61 @@ def pool_filter_hit(semantic, filters, mode="any"):
     return True
 
 
+def _ordered_counts(counts):
+    """Most-common order with a deterministic tie break (count desc, key asc)."""
+    return {key: count for key, count in sorted(counts.items(), key=lambda item: (-item[1], item[0]))}
+
+
+def _refinement_sections(counts):
+    """Group refinement ids by parent, ordered by (count desc, id asc)."""
+    sections = {}
+    for identity, count in _ordered_counts(counts).items():
+        node = REFINEMENT_NODES[identity]
+        sections.setdefault(node["parent"], []).append({
+            "id": identity, "label": node["label"], "parent": node["parent"],
+            "owner": node["owner"], "count": count,
+            "tags": node["tags"],
+        })
+    return sections
+
+
+def _index_sections(themes, facets, counts, refinements, label_owners, unknown, class_keys):
+    """Build the index payload's aggregate sections with deterministic ordering.
+
+    ``label_owners`` maps a subcategory label to its {owner: row count} tally. The
+    full rebuild collects it in one pass and the single-row patch adjusts it in
+    place, so both paths produce the same payload.
+    """
+    subcategories = {key: set() for key in class_keys}
+    pool_subcategories = {}
+    conflicting = {}
+    values = {}
+    for label in sorted(label_owners):
+        owners = label_owners[label]
+        if len(owners) > 1:
+            conflicting[label] = {owner: owners[owner] for owner in sorted(owners)}
+            continue
+        owner = next(iter(owners))
+        subcategories.setdefault(owner, set()).add(label)
+        pool_subcategories.setdefault(owner, {})[label] = owners[owner]
+        if not subcategory_owner({}, label):
+            values[label] = owner + "::" + label
+    semantic_subcategories = {key: sorted(labels) for key, labels in subcategories.items()}
+    filter_pool = {
+        "theme": _ordered_counts(themes),
+        "subcategory": {owner: _ordered_counts(counter)
+                        for owner, counter in sorted(pool_subcategories.items())},
+        "subcategory_values": {label: values[label] for label in sorted(values)},
+        "facet": _ordered_counts(facets),
+        "count": _ordered_counts(counts),
+        "refinements": _refinement_sections(refinements),
+        "refinement_version": REFINEMENT_VERSION,
+        "unmapped_subcategories": _ordered_counts(unknown),
+        "conflicting_subcategories": {label: conflicting[label] for label in sorted(conflicting)},
+    }
+    return semantic_subcategories, filter_pool
+
+
 def _library_index_payload():
     with _PROMPT_FILE_LOCK, _PROMPT_CACHE_LOCK:
         data = _reviewed_library_data()
@@ -1064,15 +2244,14 @@ def _library_index_payload():
             categories.append(summary)
         # One pass collects the per-class subcategory vocabulary; the previous shape
         # walked every prompt once per class label.
-        subcategories = {key: set() for key in data.get("_semantic_class_labels", {})}
+        class_keys = list(data.get("_semantic_class_labels", {}))
         # 小主题只使用词表声明的归属，数据量变化不会让它换父主题。
         pool_themes = Counter()
-        pool_subcategories = {}
-        subcategory_owners = {}
-        unknown_subcategories = Counter()
         pool_facets = Counter()
         pool_counts = Counter()
         pool_refinements = Counter()
+        label_owners = {}
+        unknown_subcategories = Counter()
         for category in data.get("categories", []) or []:
             for prompt in category.get("prompts", []) or []:
                 semantic = prompt["_semantic"]
@@ -1082,9 +2261,7 @@ def _library_index_payload():
                 for label in set(semantic.get("subcategories") or []):
                     owner = subcategory_owner(semantic, label)
                     if owner:
-                        subcategory_owners.setdefault(label, set()).add(owner)
-                        subcategories.setdefault(owner, set()).add(label)
-                        pool_subcategories.setdefault(owner, Counter())[label] += 1
+                        label_owners.setdefault(label, Counter())[owner] += 1
                     else:
                         unknown_subcategories[label] += 1
                 for facet in set(semantic.get("themes") or []):
@@ -1092,23 +2269,9 @@ def _library_index_payload():
                 for marker in set(semantic.get("count_markers") or []):
                     pool_counts[marker] += 1
                 pool_refinements.update(set(semantic.get("refinements") or []))
-        conflicting_subcategories = {}
-        subcategory_values = {}
-        for label, owners in subcategory_owners.items():
-            if len(owners) > 1:
-                conflicting_subcategories[label] = {owner: pool_subcategories[owner].pop(label) for owner in sorted(owners)}
-                for owner in owners:
-                    subcategories[owner].discard(label)
-            elif not subcategory_owner({}, label):
-                subcategory_values[label] = next(iter(owners)) + "::" + label
-        refinements = {}
-        for identity, count in pool_refinements.most_common():
-            node = REFINEMENT_NODES[identity]
-            refinements.setdefault(node["parent"], []).append({
-                "id": identity, "label": node["label"], "parent": node["parent"],
-                "owner": node["owner"], "count": count,
-                "tags": node["tags"],
-            })
+        semantic_subcategories, filter_pool = _index_sections(
+            pool_themes, pool_facets, pool_counts, pool_refinements,
+            label_owners, unknown_subcategories, class_keys)
         payload = {
             "version": data.get("version", "1.6"),
             "settings": data.get("settings", {}),
@@ -1119,18 +2282,8 @@ def _library_index_payload():
             "semantic_classes": data.get("_semantic_class_labels", {}),
             "selector_groups": {kind: collection_groups(data) for kind in COLLECTION_KINDS},
             "selector_class_kinds": {key: route[0] for key, route in CLASS_ROUTES.items()},
-            "semantic_subcategories": {key: sorted(value) for key, value in subcategories.items()},
-            "filter_pool": {
-                "theme": dict(pool_themes.most_common()),
-                "subcategory": {key: dict(value.most_common()) for key, value in pool_subcategories.items()},
-                "subcategory_values": subcategory_values,
-                "facet": dict(pool_facets.most_common()),
-                "count": dict(pool_counts.most_common()),
-                "refinements": refinements,
-                "refinement_version": REFINEMENT_VERSION,
-                "unmapped_subcategories": dict(unknown_subcategories.most_common()),
-                "conflicting_subcategories": conflicting_subcategories,
-            },
+            "semantic_subcategories": semantic_subcategories,
+            "filter_pool": filter_pool,
         }
         if state["views"].get(False) is data:
             state["index"] = payload
@@ -1351,6 +2504,30 @@ def _safe_preview_source(filename):
     return source_path
 
 
+def _thumbnail_size(size):
+    """Exact size ``Image.thumbnail((480, 360))`` produces, or None when no resize is needed."""
+    box_x, box_y = 480, 360
+    if box_x >= size[0] and box_y >= size[1]:
+        return None
+    aspect = size[0] / size[1]
+
+    def round_aspect(number, key):
+        return max(min(math.floor(number), math.ceil(number), key=key), 1)
+
+    if box_x / box_y >= aspect:
+        box_x = round_aspect(box_y * aspect, lambda value: abs(aspect - value / box_y))
+    else:
+        box_y = round_aspect(box_x / aspect, lambda value: 0 if value == 0 else abs(aspect - box_x / value))
+    return box_x, box_y
+
+
+def _thumbnail_orientation(image):
+    try:
+        return image.getexif().get(274)
+    except Exception:  # noqa: BLE001 - malformed EXIF is treated as upright
+        return None
+
+
 def _ensure_preview_thumbnail(filename):
     source_path = _safe_preview_source(filename)
     if source_path is None:
@@ -1368,13 +2545,26 @@ def _ensure_preview_thumbnail(filename):
     try:
         with Image.open(source_path) as image:
             image.seek(0)
-            image = ImageOps.exif_transpose(image)
+            # AI previews rarely carry EXIF orientation, and exif_transpose copies the
+            # full decoded image; only rotate when the tag actually asks for it.
+            rotated = _thumbnail_orientation(image) not in (None, 0, 1)
+            if rotated:
+                image = ImageOps.exif_transpose(image)
+            original_size = image.size
+            final_size = _thumbnail_size(original_size)
+            if not rotated:
+                # ``Image.thumbnail`` drafts JPEGs to 2x the box, which misses the common
+                # 753x1100 previews; drafting to the final size halves the decoder work.
+                image.draft(None, final_size if final_size is not None else original_size)
             has_alpha = image.mode in ("RGBA", "LA") or (
                 image.mode == "P" and "transparency" in image.info
             )
-            image = image.convert("RGBA" if has_alpha else "RGB")
-            image.thumbnail((480, 360), Image.Resampling.LANCZOS)
-            image.save(temp_path, format="WEBP", quality=82, method=4)
+            mode = "RGBA" if has_alpha else "RGB"
+            if image.mode != mode:
+                image = image.convert(mode)
+            if final_size is not None and image.size != final_size:
+                image = image.resize(final_size, Image.Resampling.LANCZOS, reducing_gap=2.0)
+            image.save(temp_path, format="WEBP", quality=82, method=2)
         os.replace(temp_path, thumbnail_path)
         return thumbnail_path
     finally:
@@ -1527,7 +2717,7 @@ def _packed_library_payload():
 
 @PromptServer.instance.routes.get("/prompt_selector/data")
 async def get_data(request):
-    if not os.path.exists(DATA_FILE):
+    if not _library_data_exists():
         return web.json_response({"error": "Data file not found"}, status=404)
     try:
         revision, packed = await asyncio.to_thread(_packed_library_payload)
@@ -1590,7 +2780,7 @@ async def resolve_saved_selection(request):
 
 @PromptServer.instance.routes.get("/prompt_selector/library/index")
 async def get_library_index(request):
-    if not os.path.exists(DATA_FILE):
+    if not _library_data_exists():
         return web.json_response({"error": "Data file not found"}, status=404)
     try:
         payload = await asyncio.to_thread(_library_index_payload)
@@ -1615,7 +2805,7 @@ async def get_library_index(request):
 
 @PromptServer.instance.routes.get("/prompt_selector/library/prompts")
 async def get_library_prompts_page(request):
-    if not os.path.exists(DATA_FILE):
+    if not _library_data_exists():
         return web.json_response({"error": "Data file not found"}, status=404)
     category_id = request.query.get("category_id", "")
     if category_id.startswith("tagstr:"):
@@ -1661,10 +2851,10 @@ async def get_library_prompt(request):
     category_id = str(request.query.get("category_id") or "").strip()
     if not prompt_id:
         return web.json_response({"error": "Missing prompt_id"}, status=400)
-    if not os.path.exists(DATA_FILE):
+    if not _library_data_exists():
         return web.json_response({"error": "Data file not found"}, status=404)
     try:
-        data = _ensure_data_compatibility(_json_load_path(DATA_FILE))
+        data = _read_prompt_data_cached()
         requested_id = prompt_id
         mapped = merged_source(data, prompt_id, category_id)
         if mapped:
@@ -1677,7 +2867,7 @@ async def get_library_prompt(request):
             for prompt in category.get("prompts", []) or []:
                 if str(prompt.get("id") or "") == prompt_id:
                     if request.query.get("selection") == "1" or request.query.get("include_semantic") == "1":
-                        projection = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+                        projection = _cached_projection()
                         decision = decision_for(projection, category, prompt)
                         if request.query.get("selection") == "1" and (decision.get("disposition") not in ("reviewed", "classified") or not decision.get("manual_search_eligible")):
                             return web.json_response({"error": "Prompt changed or is not approved for selection"}, status=409)
@@ -1714,7 +2904,7 @@ async def get_metadata(request):
         "total_prompts": 120
     }
     """
-    if not os.path.exists(DATA_FILE):
+    if not _library_data_exists():
         # 返回空的元数据而非 404 错误，避免前端同步检查失败
         return web.json_response({
             "last_modified": None,
@@ -1746,15 +2936,15 @@ async def save_data(request):
 
         # 读取旧数据用于智能时间戳更新
         old_data = None
-        if os.path.exists(DATA_FILE):
+        if _library_data_exists():
             try:
-                old_data = _json_load_path(DATA_FILE)
+                old_data = _read_prompt_data_cached()
             except Exception as e:
                 logger.warning(f"读取旧数据失败，将跳过时间戳比较: {e}")
 
         _require_revision({"base_revision": base_revision}, old_data or {})
 
-        projection = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+        projection = _cached_projection()
         new_data = merge_selection_edit(old_data, projection, new_data)
 
         # 智能更新时间戳（检测变更并只更新修改的项）
@@ -1762,8 +2952,9 @@ async def save_data(request):
 
         # 使用原子保存机制，确保数据安全
         # 整库保存按紧凑格式写盘：缩进格式会把约 70MB 的库文件放大到约 145MB。
-        _atomic_save_json(DATA_FILE, updated_data, create_backup=True, compact=True,
-                          expected_revision=base_revision)
+        _commit_library_document(updated_data, changes=library_store.ChangeSet(full=True),
+                                 create_backup=True, store_backup=True,
+                                 expected_revision=base_revision)
 
         if request.query.get("minimal") == "1":
             return _with_etag(web.json_response({
@@ -2007,6 +3198,8 @@ def _update_timestamps(new_data, old_data=None):
     return _ensure_data_compatibility(new_data)
 
 def _import_local_snapshot():
+    if _library_store_active():
+        return copy.deepcopy(_read_prompt_data_cached())
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, 'r', encoding='utf-8') as stream:
             return json.load(stream)
@@ -2122,8 +3315,8 @@ async def import_zip(request):
         selected_categories = json.loads(selected_categories_str)
         
         # 加载本地数据
-        if os.path.exists(DATA_FILE):
-            local_data = _json_load_path(DATA_FILE)
+        if _library_data_exists():
+            local_data = _library_document_for_batch_write()
         else:
             # 如果本地文件不存在，则创建一个空的结构
             local_data = {
@@ -2194,8 +3387,9 @@ async def import_zip(request):
                 phase = "json_commit"
                 # Save JSON only after all preview side effects are prepared.
                 local_data["last_modified"] = datetime.now().isoformat()
-                _atomic_save_json(DATA_FILE, local_data, create_backup=True, compact=True,
-                                  expected_revision=_request_revision(request, post))
+                _commit_library_document(local_data, changes=library_store.ChangeSet(full=True),
+                                         create_backup=True, store_backup=True,
+                                         expected_revision=_request_revision(request, post))
             except Exception:
                 for created_path, created_dev, created_ino in created_preview_paths:
                     try:
@@ -2233,11 +3427,27 @@ def _export_preview_bytes():
     return total
 
 
+def _library_export_data_size():
+    if _library_store_active():
+        try:
+            return os.path.getsize(LIBRARY_STORE_FILE)
+        except OSError:
+            return 0
+    try:
+        return os.path.getsize(DATA_FILE)
+    except OSError:
+        return 0
+
+
 def _build_export_archive(target_path, include_previews=True):
     """Worker-thread body for the export route; never call this on the event loop."""
     with zipfile.ZipFile(target_path, 'w') as zf:
-        zf.write(DATA_FILE, arcname='data.json',
-                 compress_type=zipfile.ZIP_DEFLATED, compresslevel=1)
+        if _library_store_active():
+            zf.writestr('data.json', _json_dump_bytes(_read_prompt_data_cached()),
+                        compress_type=zipfile.ZIP_DEFLATED, compresslevel=1)
+        else:
+            zf.write(DATA_FILE, arcname='data.json',
+                     compress_type=zipfile.ZIP_DEFLATED, compresslevel=1)
         # 添加图片
         if include_previews and os.path.exists(PREVIEW_DIR):
             for root, _, files in os.walk(PREVIEW_DIR):
@@ -2258,7 +3468,7 @@ async def export_zip(request):
         # Callers that really need the images must ask for them explicitly.
         include_previews = str(request.query.get('include_previews', '0')).lower() in ('1', 'true', 'yes')
         if include_previews:
-            required = _export_preview_bytes() + os.path.getsize(DATA_FILE)
+            required = _export_preview_bytes() + _library_export_data_size()
             free = shutil.disk_usage(tempfile.gettempdir()).free
             if required > free * 0.8:
                 return web.json_response({
@@ -2318,7 +3528,7 @@ def _rename_category_branch(payload):
     if new_key != old_key and new_key.startswith(prefix):
         raise ValueError("不能把分类移动到它自己的子分类下")
     with _PROMPT_FILE_LOCK:
-        file_data = _json_load_path(DATA_FILE)
+        file_data = _library_document_for_batch_write()
         _require_revision(payload, file_data)
         categories = file_data.get("categories", [])
         normalized = [str(category.get("name") or "").lstrip("/") for category in categories]
@@ -2331,7 +3541,8 @@ def _rename_category_branch(payload):
                 raise ValueError("Category name already exists")
         now = datetime.now().isoformat()
         renamed = []
-        projection = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+        renamed_categories = []
+        projection = _cached_projection()
         for category, name in zip(categories, normalized):
             if name != old_key and not name.startswith(prefix):
                 continue
@@ -2343,9 +3554,14 @@ def _rename_category_branch(payload):
             for old_prompt, prompt in zip(previous_category.get("prompts", []), category.get("prompts", [])):
                 rebind_unchanged_prompt(projection, previous_category, old_prompt, category, prompt)
             renamed.append(new_key + rest)
+            renamed_categories.append(category)
         file_data["last_modified"] = now
-        _atomic_save_json(DATA_FILE, file_data, create_backup=True, compact=True,
-                          expected_revision=payload.get("base_revision"))
+        _commit_library_document(
+            file_data,
+            changes=library_store.ChangeSet(rewrite_categories=renamed_categories,
+                                            meta_keys=["last_modified"]),
+            create_backup=True, store_backup=True,
+            expected_revision=payload.get("base_revision"))
         _cache_prompt_data(file_data)
         return {"success": True, "renamed": renamed, "count": len(renamed),
                 "revision": _revision(file_data)}
@@ -2381,16 +3597,17 @@ async def delete_category(request):
         if not category_name_to_delete:
             return web.json_response({"error": "Missing category name"}, status=400)
 
-        if not os.path.exists(DATA_FILE):
+        if not _library_data_exists():
             return web.json_response({"success": True})
 
-        file_data = _json_load_path(DATA_FILE)
+        file_data = _library_document_for_batch_write()
         _require_revision(data, file_data)
         _require_revision(data, file_data)
 
         prefix_to_delete = category_name_to_delete + '/'
         categories_to_keep = []
         removed_prompt_ids = []
+        removed_category_ids = []
         for cat in file_data.get("categories", []):
             original_cat_name = cat.get("name", "")
             # Sanitize the name by removing any leading slashes before comparison
@@ -2401,6 +3618,7 @@ async def delete_category(request):
                 categories_to_keep.append(cat)
             else:
                 removed_prompt_ids.extend(prompt.get("id") for prompt in cat.get("prompts", []) or [])
+                removed_category_ids.append(_category_store_id(cat))
 
 
         file_data["categories"] = categories_to_keep
@@ -2410,12 +3628,17 @@ async def delete_category(request):
 
         file_data["last_modified"] = datetime.now().isoformat()
 
-        # 使用原子保存机制
         # Compact on every library write: the indented form doubles the 100 MB+ store and
         # the cold parse along with it.
-        _atomic_save_json(DATA_FILE, file_data, create_backup=True, compact=True,
-                          expected_revision=data.get("base_revision"))
-        _cache_prompt_data(file_data, removed_prompt_ids)
+        _commit_library_document(
+            file_data,
+            changes=library_store.ChangeSet(delete_category_ids=removed_category_ids,
+                                            update_positions=True,
+                                            meta_keys=["last_modified"]),
+            create_backup=True, store_backup=True,
+            expected_revision=data.get("base_revision"))
+        _cache_prompt_data(file_data, removed_prompt_ids,
+                           removed_hint=removed_prompt_ids)
 
         return _success_response({"success": True, "revision": _revision(file_data)})
     except RevisionConflict as e:
@@ -2441,7 +3664,7 @@ async def batch_delete_prompts(request):
         if not prompt_ids and not prompt_items:
             return web.json_response({"error": "Missing parameters"}, status=400)
 
-        file_data = _json_load_path(DATA_FILE)
+        file_data = _library_document_for_batch_write()
         _require_revision(data, file_data)
 
         categories = file_data.get("categories", [])
@@ -2491,6 +3714,7 @@ async def batch_delete_prompts(request):
 
         deleted_count = 0
         touched_categories = []
+        touched_category_objects = []
         deleted_prompt_ids = []
         now = datetime.now().isoformat()
 
@@ -2511,6 +3735,7 @@ async def batch_delete_prompts(request):
                 deleted_count += removed
                 category["updated_at"] = now
                 touched_categories.append(cat_name)
+                touched_category_objects.append(category)
                 deleted_prompt_ids.extend(ids_for_this_category)
 
         if deleted_count <= 0:
@@ -2522,9 +3747,15 @@ async def batch_delete_prompts(request):
         file_data["last_modified"] = now
 
         # 使用原子保存机制
-        _atomic_save_json(DATA_FILE, file_data, create_backup=True, compact=True,
-                          expected_revision=data.get("base_revision"))
-        _cache_prompt_data(file_data, deleted_prompt_ids)
+        _commit_library_document(
+            file_data,
+            changes=library_store.ChangeSet(delete_prompt_ids=deleted_prompt_ids,
+                                            write_categories=touched_category_objects,
+                                            meta_keys=["last_modified"]),
+            create_backup=True, store_backup=True,
+            expected_revision=data.get("base_revision"))
+        _cache_prompt_data(file_data, deleted_prompt_ids,
+                           removed_hint=deleted_prompt_ids)
 
         return _success_response({
             "success": True,
@@ -2537,19 +3768,6 @@ async def batch_delete_prompts(request):
     except Exception as e:
         return web.json_response({"error": str(e)}, status=500)
 
-def _get_or_create_category(categories, category_name, now):
-    for category in categories:
-        if category.get("name") == category_name:
-            return category
-    category = {
-        "id": str(uuid.uuid4()),
-        "name": category_name,
-        "updated_at": now,
-        "prompts": [],
-    }
-    categories.append(category)
-    return category
-
 def _category_summary(category):
     return {
         "id": category.get("id") or category.get("name"),
@@ -2560,60 +3778,76 @@ def _category_summary(category):
     }
 
 
-def _find_category_by_identity(categories, identity):
+def _category_for_write(categories, position):
+    """Copy one category and its prompt list into a locally-owned categories list."""
+    category = categories[position]
+    copied = {**category, "prompts": list(category.get("prompts", []) or [])}
+    categories[position] = copied
+    return copied
+
+
+def _category_position_by_identity(categories, identity):
     identity = str(identity or "")
-    for category in categories:
+    for position, category in enumerate(categories):
         if str(category.get("id") or category.get("name") or "") == identity:
-            return category
-    for category in categories:
+            return position
+    for position, category in enumerate(categories):
         if str(category.get("name") or "") == identity:
-            return category
+            return position
     return None
 
 
-def _apply_create_category(category_name, expected_revision):
-    file_data = _json_load_path(DATA_FILE)
-    _require_revision({"base_revision": expected_revision}, file_data)
-    file_data = _ensure_data_compatibility(file_data)
-    categories = file_data.get("categories", [])
-    now = datetime.now().isoformat()
-    existing = next(
-        (category for category in categories if category.get("name") == category_name),
-        None,
-    )
-    if existing is not None:
-        return {"success": True, "created": False, "category": _category_summary(existing),
-                "revision": _revision(file_data)}
+def _category_position_by_name(categories, category_name):
+    return next((position for position, category in enumerate(categories)
+                 if category.get("name") == category_name), None)
 
-    category = _get_or_create_category(categories, category_name, now)
-    file_data["last_modified"] = now
-    _atomic_save_json(
-        DATA_FILE,
+
+def _apply_create_category(category_name, expected_revision):
+    current = _prompt_data_for_write()
+    _require_revision({"base_revision": expected_revision}, current)
+    categories = list(current.get("categories", []) or [])
+    now = datetime.now().isoformat()
+    position = _category_position_by_name(categories, category_name)
+    if position is not None:
+        return {"success": True, "created": False, "category": _category_summary(categories[position]),
+                "revision": _revision(current)}
+
+    category = {
+        "id": str(uuid.uuid4()),
+        "name": category_name,
+        "updated_at": now,
+        "prompts": [],
+    }
+    categories.append(category)
+    file_data = {**current, "categories": categories, "last_modified": now}
+    _commit_library_document(
         file_data,
+        changes=library_store.ChangeSet(write_categories=[category],
+                                        meta_keys=["last_modified"]),
         create_backup=_should_create_route_branch_backup(),
-        compact=True,
         sync_to_disk=False,
         expected_revision=expected_revision,
+        schedule_warm=False,
     )
-    _cache_prompt_data(file_data, [])
+    _commit_prompt_data(file_data, [])
     return {"success": True, "created": True, "category": _category_summary(category), "revision": _revision(file_data)}
 
 
 def _apply_upsert_prompt(payload):
-    file_data = _json_load_path(DATA_FILE)
-    _require_revision(payload, file_data)
-    file_data = _ensure_data_compatibility(file_data)
-    categories = file_data.get("categories", [])
+    current = _prompt_data_for_write()
+    _require_revision(payload, current)
+    full_store_commit = False
+    if "selector_group_ids" in payload and "collections" not in (current.get("selector_library") or {}):
+        # The one-time selector-library migration rewrites every prompt record in
+        # place; that single commit keeps the historical batch rewrite path.
+        current = _ensure_data_compatibility(_library_document_for_batch_write())
+        _require_revision(payload, current)
+        full_store_commit = True
+    # Only the touched category and row are copied, so a conflict or a validation
+    # error after this point can never leak into the shared parsed document.
+    categories = list(current.get("categories", []) or [])
+    file_data = {**current, "categories": categories}
     now = datetime.now().isoformat()
-
-    new_category_name = str(payload.get("new_category_name") or "").strip()
-    target_identity = payload.get("target_category_id")
-    if new_category_name:
-        target_category = _get_or_create_category(categories, new_category_name, now)
-    else:
-        target_category = _find_category_by_identity(categories, target_identity)
-    if target_category is None:
-        target_category = _get_or_create_category(categories, "默认/其他", now)
 
     raw_prompt = payload.get("prompt") if isinstance(payload.get("prompt"), dict) else {}
     prompt_id = str(raw_prompt.get("id") or "").strip()
@@ -2621,22 +3855,16 @@ def _apply_upsert_prompt(payload):
     if mode not in {"create", "edit"}:
         raise ValueError("Invalid prompt save mode")
     existing_prompt = None
-    source_category = None
+    source_position = None
     source_index = None
 
     if prompt_id:
-        if prompt_id in file_data.get('_source_to_canonical', {}):
+        if prompt_id in current.get('_source_to_canonical', {}):
             raise ValueError('旧资料已合并，请通过原 ID 定位后编辑当前资料')
-        for category in categories:
-            prompts = category.get("prompts", []) or []
-            for index, prompt in enumerate(prompts):
-                if str(prompt.get("id") or "") == prompt_id:
-                    existing_prompt = prompt
-                    source_category = category
-                    source_index = index
-                    break
-            if existing_prompt is not None:
-                break
+        location = _locate_prompt(current, prompt_id)
+        if location is not None:
+            source_position, source_index, _source_identity, _source_name, _source_category, source_prompts = location
+            existing_prompt = source_prompts[source_index]
 
     draft_id = str(payload.get("draft_id") or "").strip()
     if mode == "create" and draft_id:
@@ -2644,18 +3872,53 @@ def _apply_upsert_prompt(payload):
             for prompt in category.get("prompts", []) or []:
                 if prompt.get("_draft_id") == draft_id:
                     return {"success": True, "created": False, "prompt": prompt,
-                            "category": _category_summary(category), "revision": _revision(file_data)}
+                            "category": _category_summary(category), "revision": _revision(current)}
     if mode == "create" and existing_prompt is not None:
         # An unrelated create must retain the existing identity.
         prompt_id = str(uuid.uuid4())
         existing_prompt = None
-        source_category = None
+        source_position = None
 
     if mode == "edit" and existing_prompt is None:
         raise KeyError(f"Prompt not found: {prompt_id}")
-    if mode == "create" and existing_prompt is None and any(prompt_id in event.get('source_ids', []) for event in file_data.get('_merge_history', [])):
+    if mode == "create" and existing_prompt is None and any(prompt_id in event.get('source_ids', []) for event in current.get('_merge_history', [])):
         raise ValueError('该历史身份已被合并或删除；请另存为新身份')
 
+    # Resolve the destination on the locally-owned list; only touched categories are copied.
+    new_category_name = str(payload.get("new_category_name") or "").strip()
+    if new_category_name:
+        target_position = _category_position_by_name(categories, new_category_name)
+        if target_position is None:
+            target_category = {
+                "id": str(uuid.uuid4()),
+                "name": new_category_name,
+                "updated_at": now,
+                "prompts": [],
+            }
+            categories.append(target_category)
+            target_position = len(categories) - 1
+        else:
+            target_category = _category_for_write(categories, target_position)
+    else:
+        target_position = _category_position_by_identity(categories, payload.get("target_category_id"))
+        if target_position is None:
+            target_position = _category_position_by_name(categories, "默认/其他")
+        if target_position is None:
+            target_category = {
+                "id": str(uuid.uuid4()),
+                "name": "默认/其他",
+                "updated_at": now,
+                "prompts": [],
+            }
+            categories.append(target_category)
+            target_position = len(categories) - 1
+        else:
+            target_category = _category_for_write(categories, target_position)
+
+    source_category = None
+    if source_position is not None:
+        source_category = target_category if source_position == target_position \
+            else _category_for_write(categories, source_position)
     if mode == "edit" and existing_prompt is not None and source_category is not target_category:
         source_category["prompts"].remove(existing_prompt)
 
@@ -2703,7 +3966,7 @@ def _apply_upsert_prompt(payload):
             raise ValueError('方案用途必须与正负向分段一致')
 
     if payload.get("classification") is not None:
-        projection = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+        projection = _cached_projection()
         prompt["_classification"] = confirm_classification(
             projection, target_category, prompt, payload["classification"],
             previous_category=source_category if mode == "edit" else None,
@@ -2713,35 +3976,52 @@ def _apply_upsert_prompt(payload):
         prompt["_classification"]["binding"] = semantic_binding(target_category, prompt)
 
     if mode == "edit" and source_category is not target_category and payload.get("classification") is None:
-        projection = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+        projection = _cached_projection()
         rebind_unchanged_prompt(projection, source_category, existing_prompt, target_category, prompt)
 
     if "selector_group_ids" in payload:
-        projection = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+        projection = _cached_projection()
         apply_collection(file_data, prompt, decision_for(projection, target_category, prompt), payload["selector_group_ids"], payload.get('selector_metadata'))
 
     if raw_prompt.get("is_user_plan") is True:
-        projection = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+        projection = _cached_projection()
         if decision_for(projection, target_category, prompt).get("manual_search_eligible") is not True:
             raise ValueError("请先确认资料主题后再保存为方案")
 
     if mode == "edit" and source_category is target_category:
-        target_category["prompts"][source_index] = prompt
+        target_index = source_index
+        target_category["prompts"][target_index] = prompt
     else:
         target_category.setdefault("prompts", []).append(prompt)
+        target_index = len(target_category["prompts"]) - 1
     target_category["updated_at"] = now
     if source_category is not None and source_category is not target_category:
         source_category["updated_at"] = now
     file_data["last_modified"] = now
-    _atomic_save_json(
-        DATA_FILE,
+    if full_store_commit:
+        store_changes = library_store.ChangeSet(full=True)
+    else:
+        affected_categories = [target_category]
+        if source_category is not None and source_category is not target_category:
+            affected_categories.append(source_category)
+        store_changes = library_store.ChangeSet(
+            upsert_prompts=[(_category_store_id(target_category), prompt)],
+            write_categories=affected_categories,
+            meta_keys=["last_modified"],
+        )
+    _commit_library_document(
         file_data,
+        changes=store_changes,
         create_backup=_should_create_route_branch_backup(),
-        compact=True,
         sync_to_disk=False,
         expected_revision=payload.get("base_revision"),
+        schedule_warm=False,
     )
-    _cache_prompt_data(file_data, [prompt["id"]])
+    if full_store_commit:
+        _commit_prompt_data(file_data)
+    else:
+        _commit_prompt_data(file_data, [prompt["id"]],
+                            locations_hint={prompt["id"]: (target_position, target_index)})
     outcome = {
         "success": True,
         "prompt": prompt,
@@ -2762,38 +4042,35 @@ def _apply_upsert_prompt(payload):
 
 
 def _apply_delete_prompt(prompt_id, expected_revision):
-    file_data = _json_load_path(DATA_FILE)
-    _require_revision({"base_revision": expected_revision}, file_data)
-    file_data = _ensure_data_compatibility(file_data)
-    categories = file_data.get("categories", [])
+    current = _prompt_data_for_write()
+    _require_revision({"base_revision": expected_revision}, current)
+    categories = list(current.get("categories", []) or [])
     now = datetime.now().isoformat()
 
     deleted = None
     source_category = None
-    for category in categories:
-        prompts = category.get("prompts", []) or []
-        for index, prompt in enumerate(prompts):
-            if str(prompt.get("id") or "") == prompt_id:
-                deleted = prompts.pop(index)
-                source_category = category
-                break
-        if deleted is not None:
-            break
+    location = _locate_prompt(current, prompt_id)
+    if location is not None:
+        position, index = location[0], location[1]
+        source_category = _category_for_write(categories, position)
+        deleted = source_category["prompts"].pop(index)
 
     if deleted is None:
         raise KeyError(f"Prompt not found: {prompt_id}")
 
     source_category["updated_at"] = now
-    file_data["last_modified"] = now
-    _atomic_save_json(
-        DATA_FILE,
+    file_data = {**current, "categories": categories, "last_modified": now}
+    _commit_library_document(
         file_data,
+        changes=library_store.ChangeSet(delete_prompt_ids=[prompt_id],
+                                        write_categories=[source_category],
+                                        meta_keys=["last_modified"]),
         create_backup=_should_create_route_branch_backup(),
-        compact=True,
         sync_to_disk=False,
         expected_revision=expected_revision,
+        schedule_warm=False,
     )
-    _cache_prompt_data(file_data, [prompt_id])
+    _commit_prompt_data(file_data, [prompt_id], removed_hint={prompt_id})
     return {
         "success": True,
         "deleted_id": prompt_id,
@@ -2820,28 +4097,37 @@ async def create_prompt_category(request):
 
 
 def _apply_plan_flag(payload):
-    data = _json_load_path(DATA_FILE)
-    _require_revision(payload, data)
+    current = _prompt_data_for_write()
+    _require_revision(payload, current)
     value = payload.get('is_user_plan')
     if type(value) is not bool:
         raise ValueError('方案标记必须为明确的是或否')
-    for category in data.get('categories', []):
-        for prompt in category.get('prompts', []):
-            if prompt.get('id') != payload.get('prompt_id'):
-                continue
-            if value:
-                projection = read_projection(os.path.join(PROMPT_STORE_DIR, 'semantic_projection.json'))
-                semantic = decision_for(projection, category, prompt)
-                if semantic.get('manual_search_eligible') is not True:
-                    raise ValueError('请先编辑并确认资料主题，再保存为方案')
-            prompt['is_user_plan'] = value
-            prompt['updated_at'] = datetime.now().isoformat()
-            data['last_modified'] = prompt['updated_at']
-            _atomic_save_json(DATA_FILE, data, create_backup=_should_create_route_branch_backup(), compact=True,
-                             expected_revision=payload.get('base_revision'))
-            _cache_prompt_data(data, [prompt['id']])
-            return {'success': True, 'prompt_id': prompt['id'], 'is_user_plan': value,
-                    'revision': _revision(data)}
+    categories = list(current.get('categories', []) or [])
+    location = _locate_prompt(current, str(payload.get('prompt_id') or ''))
+    if location is not None:
+        category_position, index, _identity, _name, category, prompts = location
+        prompt = prompts[index]
+        if value:
+            projection = _cached_projection()
+            semantic = decision_for(projection, category, prompt)
+            if semantic.get('manual_search_eligible') is not True:
+                raise ValueError('请先编辑并确认资料主题，再保存为方案')
+        now = datetime.now().isoformat()
+        updated_prompt = {**prompt, 'is_user_plan': value, 'updated_at': now}
+        updated_category = _category_for_write(categories, category_position)
+        updated_category['prompts'][index] = updated_prompt
+        file_data = {**current, 'categories': categories, 'last_modified': now}
+        _commit_library_document(
+            file_data,
+            changes=library_store.ChangeSet(
+                upsert_prompts=[(_category_store_id(updated_category), updated_prompt)],
+                meta_keys=['last_modified']),
+            create_backup=_should_create_route_branch_backup(), compact=True,
+            expected_revision=payload.get('base_revision'), schedule_warm=False)
+        _commit_prompt_data(file_data, [updated_prompt['id']],
+                            locations_hint={updated_prompt['id']: (category_position, index)})
+        return {'success': True, 'prompt_id': updated_prompt['id'], 'is_user_plan': value,
+                'revision': _revision(file_data)}
     raise KeyError('资料已不存在，请刷新列表')
 
 
@@ -2883,14 +4169,15 @@ async def upsert_prompt(request):
 
 
 def _apply_merge_request(payload):
-    data = _json_load_path(DATA_FILE)
+    data = _library_document_for_batch_write()
     _require_revision(payload, data)
-    projection = read_projection(os.path.join(PROMPT_STORE_DIR, 'semantic_projection.json'))
+    projection = _cached_projection()
     if payload.get('commit') is not True:
         return merge_preview(data, projection, payload.get('prompt_ids'), payload.get('canonical_id'))
     merged, preview = apply_merge(data, projection, payload, datetime.now().isoformat())
-    _atomic_save_json(DATA_FILE, merged, create_backup=True, compact=True,
-                      expected_revision=payload.get('base_revision'))
+    _commit_library_document(merged, changes=library_store.ChangeSet(full=True),
+                             create_backup=True, store_backup=True,
+                             expected_revision=payload.get('base_revision'))
     _cache_prompt_data(merged)
     return {'success': True, 'canonical_id': preview['canonical_id'],
         'mapped_ids': [x for x in preview['prompt_ids'] if x != preview['canonical_id']],
@@ -2921,7 +4208,7 @@ async def delete_prompt(request):
         prompt_id = str(payload.get("prompt_id") or "").strip()
         if not prompt_id:
             return web.json_response({"error": "Missing prompt id"}, status=400)
-        current = _json_load_path(DATA_FILE)
+        current = _read_prompt_data_cached()
         _require_revision(payload, current)
         async with _PROMPT_DATA_LOCK:
             result = await asyncio.to_thread(_apply_delete_prompt, prompt_id, payload.get("base_revision"))
@@ -2946,18 +4233,20 @@ async def update_prompt_order(request):
         if not category_name or not ordered_ids:
             return web.json_response({"error": "Missing parameters"}, status=400)
             
-        file_data = _json_load_path(DATA_FILE)
-        _require_revision(data, file_data)
+        current = _prompt_data_for_write()
+        _require_revision(data, current)
+        categories = list(current.get("categories", []) or [])
+        file_data = None
             
         # 查找分类并重新排序
-        for category in file_data["categories"]:
+        for category_position, category in enumerate(categories):
             if category["name"] == category_name:
-                prompts = category["prompts"]
+                prompts = list(category.get("prompts", []) or [])
                 if not isinstance(ordered_ids, list) or any(not isinstance(pid, str) for pid in ordered_ids):
                     return web.json_response({"error": "Invalid prompt IDs"}, status=400)
                 # A merged-away source id still resolves to its current canonical slot, so a page
                 # loaded before the merge can still reorder without dropping or duplicating records.
-                source_map = file_data.get("_source_to_canonical") or {}
+                source_map = current.get("_source_to_canonical") or {}
                 resolved_ids = []
                 for pid in ordered_ids:
                     record = source_map.get(pid)
@@ -2970,20 +4259,28 @@ async def update_prompt_order(request):
                     return web.json_response({"error": "Prompt IDs no longer belong to this category"}, status=409)
                 requested = set(resolved_ids)
                 ordered = iter(prompt_map[pid] for pid in resolved_ids)
-                category["prompts"] = [next(ordered) if p.get("id") in requested else p for p in prompts]
 
                 # 更新分类和全局时间戳（排序操作）
                 now = datetime.now().isoformat()
-                category["updated_at"] = now
-                file_data["last_modified"] = now
+                categories[category_position] = {
+                    **category,
+                    "prompts": [next(ordered) if p.get("id") in requested else p for p in prompts],
+                    "updated_at": now,
+                }
+                file_data = {**current, "categories": categories, "last_modified": now}
                 break
         else:
             return web.json_response({"error": "Category not found"}, status=404)
 
         # 使用原子保存机制
-        _atomic_save_json(DATA_FILE, file_data, create_backup=True, compact=True,
-                          expected_revision=data.get("base_revision"))
-        _cache_prompt_data(file_data, [])
+        _commit_library_document(
+            file_data,
+            changes=library_store.ChangeSet(
+                write_categories=[categories[category_position]],
+                meta_keys=["last_modified"]),
+            create_backup=_should_create_route_branch_backup(), compact=True,
+            expected_revision=data.get("base_revision"), schedule_warm=False)
+        _commit_prompt_data(file_data, [])
 
         return _success_response({"success": True, "revision": _revision(file_data)})
     except RevisionConflict as e:
@@ -3008,33 +4305,40 @@ async def toggle_favorite(request):
         # The 217 MB document is already in memory; copy the touched row instead of
         # parsing the file again, and keep the shared document untouched until commit.
         with _PROMPT_FILE_LOCK:
-            current = _read_prompt_data_cached()
+            current = _prompt_data_for_write()
             _require_revision(data, current)
-            categories = current.get("categories", [])
+            categories = list(current.get("categories", []) or [])
             file_data = None
-            for index, category in enumerate(categories):
-                if (category.get("id") == category_id if category_id else category.get("name") == category_name):
-                    prompts = list(category.get("prompts", []))
-                    for position, prompt in enumerate(prompts):
-                        if prompt.get("id") != prompt_id:
-                            continue
-                        # 更新提示词、分类和全局时间戳
-                        now = datetime.now().isoformat()
-                        prompts[position] = {**prompt, "updated_at": now,
-                            "favorite": data.get("favorite", not prompt.get("favorite", False))}
-                        rebuilt = list(categories)
-                        rebuilt[index] = {**category, "prompts": prompts, "updated_at": now}
-                        file_data = {**current, "categories": rebuilt, "last_modified": now}
-                        break
-                    break
+            index = position = None
+            location = _locate_prompt(current, prompt_id)
+            if location is not None:
+                index, position, _identity, _name, category, prompts = location
+                category_matches = (category.get("id") == category_id) if category_id \
+                    else (category.get("name") == category_name)
+                if category_matches:
+                    prompts = list(prompts)
+                    prompt = prompts[position]
+                    now = datetime.now().isoformat()
+                    prompts[position] = {**prompt, "updated_at": now,
+                        "favorite": data.get("favorite", not prompt.get("favorite", False))}
+                    rebuilt = list(categories)
+                    rebuilt[index] = {**category, "prompts": prompts, "updated_at": now}
+                    file_data = {**current, "categories": rebuilt, "last_modified": now}
 
             if file_data is None:
                 return web.json_response({"error": "资料已移动或不存在，请刷新后重试"}, status=404)
 
             # 使用原子保存机制
-            _atomic_save_json(DATA_FILE, file_data, create_backup=True, compact=True,
-                              expected_revision=data.get("base_revision"))
-            _cache_prompt_data(file_data, [prompt_id])
+            _commit_library_document(
+                file_data,
+                changes=library_store.ChangeSet(
+                    upsert_prompts=[(_category_store_id(rebuilt[index]), prompts[position])],
+                    write_categories=[rebuilt[index]],
+                    meta_keys=["last_modified"]),
+                create_backup=_should_create_route_branch_backup(), compact=True,
+                expected_revision=data.get("base_revision"), schedule_warm=False)
+            _commit_prompt_data(file_data, [prompt_id],
+                                locations_hint={prompt_id: (index, position)})
 
         return _success_response({"success": True, "revision": _revision(file_data)})
     except RevisionConflict as e:
@@ -3055,45 +4359,53 @@ async def mark_prompt_used(request):
             return web.json_response({"error": "Missing prompt_id"}, status=400)
         # Same copy-on-write rule as the favourite toggle: reuse the in-memory document.
         with _PROMPT_FILE_LOCK:
-            current = _read_prompt_data_cached()
+            current = _prompt_data_for_write()
             _require_revision(data, current)
-            categories = current.get("categories", [])
+            categories = list(current.get("categories", []) or [])
             file_data = None
-            for index, category in enumerate(categories):
-                category_identity = str(category.get("id") or category.get("name") or "")
-                if category_id and category_identity != category_id and str(category.get("name") or "") != category_id:
-                    continue
-                prompts = list(category.get("prompts", []) or [])
-                for position, prompt in enumerate(prompts):
-                    if str(prompt.get("id") or "") != prompt_id:
-                        continue
-                    now = datetime.now().isoformat()
+            now = datetime.now().isoformat()
+            index = position = None
+            location = _locate_prompt(current, prompt_id)
+            if location is not None:
+                index, position, category_identity, _name, category, prompts = location
+                category_matches = not category_id or category_identity == category_id \
+                    or str(category.get("name") or "") == category_id
+                if category_matches:
+                    prompts = list(prompts)
+                    prompt = prompts[position]
                     prompts[position] = {**prompt, "last_used": now,
                         "usage_count": int(prompt.get("usage_count") or 0) + 1}
                     rebuilt = list(categories)
                     rebuilt[index] = {**category, "prompts": prompts, "updated_at": now}
                     file_data = {**current, "categories": rebuilt, "last_modified": now}
-                    break
-                if file_data is not None:
-                    break
 
             if file_data is None:
                 return web.json_response({"error": "Prompt not found"}, status=404)
 
-            _atomic_save_json(DATA_FILE, file_data, create_backup=True, compact=True,
-                              expected_revision=data.get("base_revision"))
-            _cache_prompt_data(file_data, [prompt_id])
+            _commit_library_document(
+                file_data,
+                changes=library_store.ChangeSet(
+                    upsert_prompts=[(_category_store_id(rebuilt[index]), prompts[position])],
+                    write_categories=[rebuilt[index]],
+                    meta_keys=["last_modified"]),
+                create_backup=_should_create_route_branch_backup(), compact=True,
+                expected_revision=data.get("base_revision"), schedule_warm=False)
+            _commit_prompt_data(file_data, [prompt_id],
+                                locations_hint={prompt_id: (index, position)})
         return _success_response({"success": True, "prompt_id": prompt_id, "last_used": now, "revision": _revision(file_data)})
     except RevisionConflict as e:
         return web.json_response({"error": str(e), "conflict": True, "expected_revision": e.expected, "current_revision": e.actual, "draft_preserved": True}, status=409)
     except Exception as e:
         return web.json_response({"error": str(e)}, status=500)
 
-# 确保在启动时 data.json 文件存在，如果不存在则创建一个空的结构
+# 确保在启动时 data.json 文件存在；存在性检查保持廉价，词库解析推迟到第一次读取
 def initialize_data_file():
     # V52+: Prompt Selector has one canonical store owned by WeiLin. Legacy Gallery
     # folders are deliberately not scanned or modified. Copy data.json and preview/
     # into user_data/prompt_selector manually when migrating an existing install.
+    if _LIBRARY_STORE_MODE == "sqlite" and os.path.isfile(LIBRARY_STORE_FILE):
+        # The SQLite authority is already in place; data.json is only an export.
+        return
     # === 原有逻辑：创建默认数据 ===
     if not os.path.exists(DATA_FILE):
         if os.path.exists(DEFAULT_DATA_FILE):
@@ -3132,38 +4444,8 @@ def initialize_data_file():
             _atomic_save_json(DATA_FILE, fallback_data, create_backup=False)
             logger.error("⚠️ 默认词库文件不存在，已创建空词库结构")
 
-    # === 新增：升级现有数据文件，添加时间戳字段 ===
-    # 如果 data.json 已存在，检查并添加缺失的时间戳字段
-    if os.path.exists(DATA_FILE):
-        try:
-            existing_data = _read_prompt_data_cached()
-
-            # 检查是否缺少 last_modified 字段
-            needs_upgrade = "last_modified" not in existing_data
-
-            # 检查分类和提示词是否缺少时间戳
-            for category in existing_data.get("categories", []):
-                if "updated_at" not in category:
-                    needs_upgrade = True
-                    break
-                for prompt in category.get("prompts", []):
-                    if "updated_at" not in prompt:
-                        needs_upgrade = True
-                        break
-                if needs_upgrade:
-                    break
-
-            # 如果需要升级，使用 _ensure_data_compatibility 添加时间戳
-            if needs_upgrade:
-                logger.info("📝 检测到数据文件缺少时间戳字段，正在升级...")
-                # Compatibility upgrades mutate their input; keep the read cache intact until commit.
-                upgraded_data = _ensure_data_compatibility(copy.deepcopy(existing_data))
-                _atomic_save_json(DATA_FILE, upgraded_data, create_backup=True, compact=True)
-                logger.info("✅ 数据文件已升级，添加了时间戳字段")
-
-        except Exception as e:
-            logger.error(f"⚠️ 升级数据文件失败: {e}")
-            # 不影响启动，继续运行
+    # 解析与时间戳升级不在这里做：_upgrade_data_file_once 在第一次读取解析后
+    # 执行一次，避免在插件导入期解析 440 MB 词库。
 
 # 在插件加载时调用初始化
 initialize_data_file()
@@ -3172,9 +4454,9 @@ initialize_data_file()
 def _warm_library_caches(include_packed=True):
     """Precompute the reviewed library views so the first user request is not the cold one.
 
-    The gzip snapshot is only consumed by the node's whole-library fetch, so the
-    after-write warm-up skips it: compressing 172 MB costs seconds and no panel read
-    waits on it.
+    The gzip snapshot is only consumed by the node's whole-library fetch, so neither
+    the start-up nor the after-write warm-up builds it: compressing 172 MB costs
+    seconds and no panel read waits on it.
     """
     _tune_library_gc()
     _reviewed_library_data()
@@ -3240,19 +4522,22 @@ def _request_library_warm(delay=0.0, include_packed=False):
         thread.start()
 
 
-def _schedule_library_warmup(delay=0.0):
-    """Warm the read model as soon as the plugin loads.
+def _start_heavy_startup_tasks():
+    """Warm the read model once ComfyUI's HTTP application is starting.
 
-    The warm-up holds the read locks for the projection pass (~2-3 s on the current
-    100k-prompt library). Running it during ComfyUI's own start-up, before the HTTP port
-    opens, keeps that window off the user's path; the previous 8 s delay pushed it into
-    the first seconds of serving instead.
+    The projection pass is CPU-heavy and only serves the workbench itself, so it
+    stays off the plugin import path and runs from a registered start-up job.
+    The gzip snapshot is only read by the legacy whole-library fetch, so it is
+    not built here; ``_packed_library_payload`` still builds it on first use.
     """
-    _request_library_warm(delay=delay, include_packed=True)
+    started = time.perf_counter()
+    _warm_library_caches(include_packed=False)
+    logger.info("[Workbench] Library caches warmed in %.1f s; the next open is served from cache.",
+                time.perf_counter() - started)
 
 
 try:
     if os.environ.get("UW_SKIP_LIBRARY_WARMUP") != "1":
-        _schedule_library_warmup()
+        register_after_start(_start_heavy_startup_tasks, delay=1.0)
 except Exception as error:  # noqa: BLE001
     logger.warning(f"[Workbench] Library warm-up could not be scheduled: {error}")

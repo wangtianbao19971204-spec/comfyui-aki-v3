@@ -36,11 +36,13 @@
 
 | 路径 | 内容 |
 |---|---|
-| `json/` | 六份共享提示词/关联/语义投影等原文件的字节分片 |
-| `sql/` | 三个主库及 Gallery 辅助词库的完整逻辑 SQL 检查点 |
+| `json/` | 共享提示词/关联/语义投影等原文件的字节分片；其中 `data.json` 在提示词库已有 `library.sqlite3` 权威库时只是可选兼容导出 |
+| `sql/` | 三个主库、Gallery 辅助词库以及提示词库 SQLite 权威库的完整逻辑 SQL 检查点 |
 | `random_templates/` | 经审查的随机提示词模板 |
 | `legacy_selector/` | 旧独立选择器正文和编辑历史，保留独立身份 |
 | `prompt_assistant/` | 固定五份规则／预设／标签／选用状态的原字节 chunks，共 214,283 字节；不包含鉴权 `config/config.json`，缺失不重建 |
+
+提示词库（统一包内的 WeiLin Prompt Selector）已改为 SQLite 权威存储：`user_data/prompt_selector/library.sqlite3`（WAL，表 `library_meta` / `categories` / `category_orders` / `prompts`）。捕获时它与三个 tag DB 一样用在线一致备份生成逻辑 SQL dump，并额外记录 `prompt_library_store_v1` 语义摘要（行数、分类顺序覆盖、revision、SQL 哈希）；`data.json` 不再作为运行权威，仅在其仍存在时作为可选兼容导出一并捕获（manifest 的 `library_json_export` 标注 `authority` / `compatibility_export` / `absent`）。json 回退模式（未迁移运行区）仍以 `data.json` 为权威，捕获行为与之前一致。迁移、导出与回滚规则见[数据库说明](DATABASE.md)与[恢复指南](RESTORE.md)。
 
 这些资料是实际内容，不是虚构示例。不要手工拼改 `.part`，也不要把旧检查点直接覆盖在线库。Gallery 的恢复另有明确 FTS5 重建规则；详见[资料库技术入口](technical/library/README.md)和[恢复指南](RESTORE.md)。
 
