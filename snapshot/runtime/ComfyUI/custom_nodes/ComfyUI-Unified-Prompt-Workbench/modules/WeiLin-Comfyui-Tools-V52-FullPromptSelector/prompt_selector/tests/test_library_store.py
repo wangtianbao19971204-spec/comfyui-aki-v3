@@ -6,6 +6,7 @@ integration tests load the real module with a stub ``server`` and a temporary
 server is started and the production user_data directory is never touched.
 """
 
+import asyncio
 import copy
 import hashlib
 import importlib.util
@@ -709,6 +710,242 @@ class PromptSelectorStoreIntegrationTests(unittest.TestCase):
         module = _load_prompt_selector(uuid.uuid4().hex[:8], self.root, environment)
         self.addCleanup(_close_module, module)
         return module
+
+
+class _FakeJsonRequest:
+    def __init__(self, payload):
+        self._payload = payload
+        self.headers = {}
+
+    async def json(self):
+        return dict(self._payload)
+
+
+class EditPatchO1Tests(unittest.TestCase):
+    """The O(1) location map and single-row patch path (real writer functions)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.ls = _load_store_module()
+
+    def setUp(self):
+        self.directory = tempfile.TemporaryDirectory(prefix='wb-edit-patch-')
+        self.addCleanup(self.directory.cleanup)
+        self.root = Path(self.directory.name)
+        self.store_dir = _store_dir(self.root)
+        self.db = self.store_dir / 'library.sqlite3'
+        self.document = _document()
+        store = self.ls.open_store(self.db, create=True)
+        try:
+            store.initialize_from_document(self.document, receipt={'source_sha256': 'fixture'})
+        finally:
+            store.close()
+        _projection_file(self.store_dir)
+        self.environment = {
+            'UW_LIBRARY_STORE': 'sqlite', 'UW_SKIP_LIBRARY_WARMUP': '1',
+            'UW_DISABLE_SEMANTIC_CACHE': '1', **DISABLE_MAINTENANCE,
+        }
+
+    def _module(self):
+        module = _load_prompt_selector(uuid.uuid4().hex[:8], self.root, self.environment)
+        self.addCleanup(_close_module, module)
+        with mock.patch.dict(os.environ, self.environment):
+            module._warm_library_caches(include_packed=False)
+        return module
+
+    def _revision(self, module):
+        return module._revision(module._read_prompt_data_cached())
+
+    def _scan_locations(self, module):
+        data = module._read_prompt_data_cached()
+        scanned = {}
+        for category_position, category in enumerate(data.get('categories') or []):
+            for prompt_index, prompt in enumerate(category.get('prompts') or []):
+                scanned[prompt['id']] = (category_position, prompt_index)
+        return scanned, data
+
+    def _stored_document(self):
+        store = self.ls.open_store(self.db)
+        try:
+            return store.load_document()
+        finally:
+            store.close()
+
+    def test_location_map_matches_document(self):
+        module = self._module()
+        with mock.patch.dict(os.environ, self.environment):
+            state = module._LIBRARY_STATE
+            scanned, _ = self._scan_locations(module)
+            self.assertEqual(state['locations'], scanned)
+            self.assertEqual(state['total_prompts'], 3)
+
+    def test_body_edit_patches_one_row_without_full_scan(self):
+        module = self._module()
+        with mock.patch.dict(os.environ, self.environment):
+            calls = {'entry': 0}
+            original_entry = module._library_entry
+
+            def counted_entry(*args, **kwargs):
+                calls['entry'] += 1
+                return original_entry(*args, **kwargs)
+
+            with mock.patch.object(module, '_library_entry', counted_entry), \
+                    mock.patch.object(module, '_data_row_location',
+                                      side_effect=AssertionError('full document scan used')), \
+                    mock.patch.object(module, '_scan_prompt_location',
+                                      side_effect=AssertionError('scan used for an unchanged row')):
+                result = module._apply_upsert_prompt({
+                    'mode': 'edit', 'base_revision': self._revision(module),
+                    'target_category_id': 'cat-a',
+                    'prompt': {'id': 'p1', 'alias': 'a cat v2', 'prompt': 'a cat v2',
+                               'description': 'o1 patch', 'image': '', 'tags': []},
+                })
+            self.assertTrue(result['success'])
+            self.assertEqual(calls['entry'], 1)
+            scanned, data = self._scan_locations(module)
+            self.assertEqual(module._LIBRARY_STATE['locations'], scanned)
+            self.assertEqual(module._LIBRARY_STATE['total_prompts'], 3)
+            self.assertEqual(self._stored_document()['categories'][0]['prompts'][0]['description'],
+                             'o1 patch')
+            self.assertFalse((self.store_dir / 'data.json').exists())
+
+    def test_create_and_delete_maintain_the_map_without_scans(self):
+        module = self._module()
+        with mock.patch.dict(os.environ, self.environment), \
+                mock.patch.object(module, '_scan_prompt_location',
+                                  side_effect=AssertionError('scan used for hinted ids')):
+            created = module._apply_upsert_prompt({
+                'mode': 'create', 'base_revision': self._revision(module),
+                'target_category_id': 'cat-a',
+                'prompt': {'alias': 'created', 'prompt': 'created body',
+                           'description': '', 'image': '', 'tags': []},
+            })
+            self.assertTrue(created['success'])
+            created_id = created['prompt']['id']
+            scanned, _ = self._scan_locations(module)
+            self.assertEqual(module._LIBRARY_STATE['locations'], scanned)
+            self.assertEqual(module._LIBRARY_STATE['total_prompts'], 4)
+            module._apply_delete_prompt(created_id, self._revision(module))
+            scanned, _ = self._scan_locations(module)
+            self.assertEqual(module._LIBRARY_STATE['locations'], scanned)
+            self.assertEqual(module._LIBRARY_STATE['total_prompts'], 3)
+            module._apply_delete_prompt('p3', self._revision(module))
+            scanned, _ = self._scan_locations(module)
+            self.assertEqual(module._LIBRARY_STATE['locations'], scanned)
+            self.assertEqual(module._LIBRARY_STATE['total_prompts'], 2)
+            self.assertNotIn('p3', self._stored_document_flat())
+
+    def _stored_document_flat(self):
+        return {prompt['id'] for category in self._stored_document()['categories']
+                for prompt in category['prompts']}
+
+    def test_move_keeps_both_categories_locations_correct(self):
+        module = self._module()
+        with mock.patch.dict(os.environ, self.environment):
+            result = module._apply_upsert_prompt({
+                'mode': 'edit', 'base_revision': self._revision(module),
+                'target_category_id': 'cat-b',
+                'prompt': {'id': 'p2', 'alias': 'a dog', 'prompt': 'a dog',
+                           'description': 'moved', 'image': '', 'tags': []},
+            })
+            self.assertTrue(result['success'])
+            scanned, data = self._scan_locations(module)
+            self.assertEqual(module._LIBRARY_STATE['locations'], scanned)
+            self.assertEqual(module._LIBRARY_STATE['total_prompts'], 3)
+            category = data['categories'][1]
+            self.assertEqual(category['id'], 'cat-b')
+            self.assertEqual(category['prompts'][-1]['id'], 'p2')
+            self.assertNotIn('p2', [prompt['id'] for prompt in data['categories'][0]['prompts']])
+
+    def test_plan_and_favorite_use_the_location_map(self):
+        module = self._module()
+        with mock.patch.dict(os.environ, self.environment), \
+                mock.patch.object(module, '_scan_prompt_location',
+                                  side_effect=AssertionError('scan used for a known row')):
+            plan = module._apply_plan_flag({'prompt_id': 'p2', 'is_user_plan': False,
+                                            'base_revision': self._revision(module)})
+            self.assertTrue(plan['success'])
+            response = asyncio.run(module.toggle_favorite(_FakeJsonRequest({
+                'prompt_id': 'p1', 'category_id': 'cat-a', 'favorite': True,
+                'base_revision': self._revision(module),
+            })))
+            self.assertEqual(response.status, 200)
+        stored = self._stored_document()['categories']
+        self.assertTrue(stored[0]['prompts'][0]['favorite'])
+        self.assertFalse(stored[0]['prompts'][1]['is_user_plan'])
+        # The rows did not move: the journal/row order must be untouched.
+        self.assertEqual([prompt['id'] for prompt in stored[0]['prompts']], ['p1', 'p2'])
+        self.assertEqual([prompt['id'] for prompt in stored[1]['prompts']], ['p3'])
+
+    def test_map_falls_back_to_one_scan_when_missing(self):
+        module = self._module()
+        with mock.patch.dict(os.environ, self.environment):
+            module._LIBRARY_STATE['locations'].clear()
+            result = module._apply_upsert_prompt({
+                'mode': 'edit', 'base_revision': self._revision(module),
+                'target_category_id': 'cat-a',
+                'prompt': {'id': 'p1', 'alias': 'fallback', 'prompt': 'fallback',
+                           'description': 'fallback path', 'image': '', 'tags': []},
+            })
+            self.assertTrue(result['success'])
+            scanned, _ = self._scan_locations(module)
+            self.assertEqual(module._LIBRARY_STATE['locations'], scanned)
+            self.assertEqual(module._LIBRARY_STATE['total_prompts'], 3)
+            self.assertEqual(self._stored_document()['categories'][0]['prompts'][0]['description'],
+                             'fallback path')
+
+    def test_batch_removed_hint_avoids_scan(self):
+        module = self._module()
+        with mock.patch.dict(os.environ, self.environment), \
+                mock.patch.object(module, '_scan_prompt_location',
+                                  side_effect=AssertionError('scan used for removed ids')):
+            file_data = module._library_document_for_batch_write()
+            file_data['categories'][0]['prompts'] = [
+                prompt for prompt in file_data['categories'][0]['prompts'] if prompt['id'] == 'p1']
+            file_data['categories'][1]['prompts'] = []
+            result = module._cache_prompt_data(file_data, ['p2', 'p3'],
+                                               removed_hint={'p2', 'p3'})
+            self.assertFalse(result)
+            scanned, _ = self._scan_locations(module)
+            self.assertEqual(module._LIBRARY_STATE['locations'], scanned)
+            self.assertEqual(module._LIBRARY_STATE['total_prompts'], 1)
+
+    def test_patched_model_matches_full_rebuild(self):
+        module = self._module()
+        with mock.patch.dict(os.environ, self.environment):
+            module._apply_upsert_prompt({
+                'mode': 'edit', 'base_revision': self._revision(module),
+                'target_category_id': 'cat-a',
+                'prompt': {'id': 'p1', 'alias': 'patched', 'prompt': 'patched',
+                           'description': 'patched', 'image': '', 'tags': ['x']},
+            })
+            module._apply_plan_flag({'prompt_id': 'p1', 'is_user_plan': False,
+                                     'base_revision': self._revision(module)})
+            module._apply_upsert_prompt({
+                'mode': 'edit', 'base_revision': self._revision(module),
+                'target_category_id': 'cat-b',
+                'prompt': {'id': 'p2', 'alias': 'moved', 'prompt': 'moved',
+                           'description': '', 'image': '', 'tags': []},
+            })
+            created = module._apply_upsert_prompt({
+                'mode': 'create', 'base_revision': self._revision(module),
+                'target_category_id': 'cat-a',
+                'prompt': {'alias': 'temp', 'prompt': 'temp', 'description': '',
+                           'image': '', 'tags': []},
+            })
+            module._apply_delete_prompt(created['prompt']['id'], self._revision(module))
+            view_false = copy.deepcopy(module._reviewed_library_data(False))
+            view_true = copy.deepcopy(module._reviewed_library_data(True))
+            index_payload = copy.deepcopy(module._library_index_payload())
+            page = copy.deepcopy(module._library_page_payload('', '', 0, 30))
+            entries = copy.deepcopy(module._LIBRARY_STATE['entries'])
+            module._library_state_reset()
+            module._library_rebuild_locked()
+            self.assertEqual(module._library_state_locked()['entries'], entries)
+            self.assertEqual(module._reviewed_library_data(False), view_false)
+            self.assertEqual(module._reviewed_library_data(True), view_true)
+            self.assertEqual(module._library_index_payload(), index_payload)
+            self.assertEqual(module._library_page_payload('', '', 0, 30), page)
 
 
 if __name__ == '__main__':

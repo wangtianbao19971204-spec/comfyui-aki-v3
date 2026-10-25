@@ -107,7 +107,8 @@ _PROMPT_DATA_CACHE_SIGNATURE = None
 # guarded by the same lock as the parsed document, which is always taken first.
 _LIBRARY_STATE = {"version": None, "data": None, "document": None, "indexed": True,
                   "entries": {}, "views": {}, "rows": {}, "ranges": {}, "matches": {}, "index": None,
-                  "view_index": {}, "row_index": {}, "filter_masks": {}, "filter_scopes": {}}
+                  "view_index": {}, "row_index": {}, "filter_masks": {}, "filter_scopes": {},
+                  "locations": {}, "total_prompts": 0}
 _REVIEWED_LIBRARY_CACHE = _LIBRARY_STATE["views"]
 _LIBRARY_MATCH_CACHE_LIMIT = 24
 _LIBRARY_PAGE_SIZE = 30
@@ -741,6 +742,12 @@ def _library_store_export_on_exit():
 
 def _library_store_shutdown():
     """Stop the maintenance thread; it performs the final export and SQLite backup."""
+    with _SEMANTIC_CACHE_STORE_LOCK:
+        timer = _SEMANTIC_CACHE_STORE.get("timer")
+        _SEMANTIC_CACHE_STORE["timer"] = None
+    if timer is not None:
+        timer.cancel()
+        _flush_semantic_cache_snapshot()
     maintenance = _LIBRARY_STORE_STATE.get("maintenance")
     if maintenance is not None:
         try:
@@ -820,6 +827,23 @@ def _projection_signature():
     return (stat.st_mtime_ns, stat.st_ctime_ns, stat.st_size, stat.st_ino)
 
 
+_PROJECTION_CACHE = {"signature": None, "document": None}
+
+
+def _cached_projection():
+    """Parse the 14 MB projection once per revision instead of once per move/save.
+
+    The projection file is replaced as a whole when it changes, so a stat key is
+    enough; the writer paths that only need ``decision_for``/``rebind`` reuse it.
+    """
+    signature = _projection_signature()
+    cache = _PROJECTION_CACHE
+    if cache["signature"] != signature or cache["document"] is None:
+        cache["document"] = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+        cache["signature"] = signature
+    return cache["document"]
+
+
 def _library_signature():
     """Identity of everything the reviewed view is derived from."""
     return (_prompt_data_signature(), _projection_signature())
@@ -837,6 +861,8 @@ _DATA_COMPATIBLE = False
 # so derived_cache keeps them across restarts instead of recomputing them all.
 _SEMANTIC_ENTRIES = {}
 _SEMANTIC_CACHE = {"projection": (), "warned": False}
+_SEMANTIC_CACHE_STORE = {"timer": None}
+_SEMANTIC_CACHE_STORE_LOCK = threading.Lock()
 
 
 def _semantic_cache_directory():
@@ -879,12 +905,46 @@ def _install_semantic_cache(entries, projection_signature):
     _SEMANTIC_CACHE["projection"] = _semantic_cache_projection(projection_signature)
 
 
-def _schedule_semantic_cache_store():
-    """Persist the mapping after a short debounce; requests never wait for it."""
+def _flush_semantic_cache_snapshot():
+    """Hand the (unsnapshotted) mapping to derived_cache from a background timer.
+
+    ``derived_cache.store`` copies the 325k-entry dict as its snapshot; doing that
+    inside the save request would reintroduce an O(library) cost on every edit.
+    """
+    with _SEMANTIC_CACHE_STORE_LOCK:
+        _SEMANTIC_CACHE_STORE["timer"] = None
     if _semantic_cache_disabled():
         return
-    derived_cache.store(_semantic_cache_directory(), _SEMANTIC_CACHE["projection"],
-                        REFINEMENT_VERSION, _SEMANTIC_ENTRIES)
+    try:
+        derived_cache.store(_semantic_cache_directory(), _SEMANTIC_CACHE["projection"],
+                            REFINEMENT_VERSION, _SEMANTIC_ENTRIES)
+    except Exception as error:  # noqa: BLE001 - persistence is best effort
+        logger.warning("[Workbench] semantic cache store scheduling failed: %s", error)
+
+
+_SEMANTIC_STORE_SNAPSHOT_LIMIT = 20000
+
+
+def _schedule_semantic_cache_store(immediate=False):
+    """Persist the mapping after a short debounce; requests never wait for it.
+
+    `derived_cache.store` snapshots the whole mapping, which is ~8 ms for the
+    325k-row library: that copy is deferred to a timer. Small mappings (tests,
+    fresh libraries) snapshot synchronously so a caller's `flush()` sees them.
+    """
+    if _semantic_cache_disabled():
+        return
+    if immediate or len(_SEMANTIC_ENTRIES) <= _SEMANTIC_STORE_SNAPSHOT_LIMIT:
+        _flush_semantic_cache_snapshot()
+        return
+    with _SEMANTIC_CACHE_STORE_LOCK:
+        timer = _SEMANTIC_CACHE_STORE.get("timer")
+        if timer is not None:
+            timer.cancel()
+        timer = threading.Timer(1.0, _flush_semantic_cache_snapshot)
+        timer.daemon = True
+        _SEMANTIC_CACHE_STORE["timer"] = timer
+        timer.start()
 
 
 def _upgrade_data_file_once(data):
@@ -1001,6 +1061,8 @@ def _library_state_reset():
     state["row_index"].clear()
     state["filter_masks"].clear()
     state["filter_scopes"].clear()
+    state["locations"].clear()
+    state["total_prompts"] = 0
     state["index"] = None
 
 
@@ -1017,16 +1079,19 @@ def _library_rebuild_locked():
     """Recompute the per-prompt projection once for the current source revision."""
     data = _read_prompt_data_cached()
     version = (_PROMPT_DATA_CACHE_SIGNATURE, _projection_signature())
-    document = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+    document = _cached_projection()
     cached = _load_semantic_cache(version[1])
     _library_state_reset()
     entries = _LIBRARY_STATE["entries"]
     semantic_entries = {}
+    locations = {}
+    total_prompts = 0
     indexed = True
     reused = 0
     computed = 0
-    for category in data.get("categories", []) or []:
-        for prompt in category.get("prompts", []) or []:
+    for category_position, category in enumerate(data.get("categories", []) or []):
+        for prompt_index, prompt in enumerate(category.get("prompts", []) or []):
+            total_prompts += 1
             identity = prompt.get("id")
             cacheable = isinstance(identity, str) and identity and identity not in entries
             entry = None
@@ -1047,9 +1112,12 @@ def _library_rebuild_locked():
             if cacheable:
                 entries[identity] = entry
                 semantic_entries[identity] = [binding, entry["_semantic"]]
+                locations[identity] = (category_position, prompt_index)
             else:
                 # Duplicate or missing identity: fall back to computing every row inline.
                 indexed = False
+    _LIBRARY_STATE["locations"].update(locations)
+    _LIBRARY_STATE["total_prompts"] = total_prompts
     state = _LIBRARY_STATE
     state["version"] = version
     state["data"] = data
@@ -1060,7 +1128,7 @@ def _library_rebuild_locked():
     if not _semantic_cache_disabled():
         logger.info("[Workbench] semantic cache rows: reused %d, recomputed %d", reused, computed)
     if cached is None or computed:
-        _schedule_semantic_cache_store()
+        _schedule_semantic_cache_store(immediate=True)
     return state
 
 
@@ -1213,13 +1281,16 @@ def _index_patch_signature(entry):
     )
 
 
-def _patch_derived_caches(state, data, changed_ids, refresh_index=False):
+def _patch_derived_caches(state, data, changed_ids, refresh_index=False, locations=None):
     """Keep the cached views and row ordering when the changed rows stayed put.
 
     Only the safe shape is patched: every changed prompt must still exist, keep its
     category, keep its visibility, keep its disposition (so ``_review_counts`` stays
     right) and keep its position. Anything else returns False and the caller falls
     back to a full rebuild, which is always correct.
+
+    ``locations`` is the caller's ``{id: (category_position, identity, name)}`` map; when
+    omitted the rows are searched for (the old O(library) behaviour, used by tests/tools).
 
     ``refresh_index`` additionally keeps the cached index payload when the caller
     proved that no indexed statistic moved (``_index_patch_signature``); refreshed
@@ -1232,14 +1303,15 @@ def _patch_derived_caches(state, data, changed_ids, refresh_index=False):
     changed = {str(identity) for identity in changed_ids if identity}
     if not changed:
         return False
-    locations = {}
-    for category_position, category in enumerate(data.get("categories", []) or []):
-        identity = str(category.get("id") or category.get("name") or "")
-        name = str(category.get("name") or "")
-        for prompt in category.get("prompts", []) or []:
-            prompt_id = prompt.get("id")
-            if prompt_id in changed:
-                locations[prompt_id] = (category_position, identity, name)
+    if locations is None:
+        locations = {}
+        for category_position, category in enumerate(data.get("categories", []) or []):
+            identity = str(category.get("id") or category.get("name") or "")
+            name = str(category.get("name") or "")
+            for prompt in category.get("prompts", []) or []:
+                prompt_id = prompt.get("id")
+                if prompt_id in changed:
+                    locations[prompt_id] = (category_position, identity, name)
     if len(locations) != len(changed):
         return False
     entries = state["entries"]
@@ -1437,6 +1509,65 @@ def _data_row_location(data, prompt_id):
     return None
 
 
+def _state_row_location(state, data, prompt_id):
+    """O(1) prompt -> (category_position, prompt_index, identity, name, category, prompts).
+
+    The map is built by the rebuild and maintained by the single-row patches, so the
+    result is validated by the direct list lookup before it is trusted.
+    """
+    location = (state.get("locations") or {}).get(prompt_id)
+    if location is None:
+        return None
+    category_position, prompt_index = location
+    categories = data.get("categories") or []
+    if category_position < 0 or category_position >= len(categories):
+        return None
+    category = categories[category_position]
+    prompts = category.get("prompts") or []
+    if prompt_index < 0 or prompt_index >= len(prompts):
+        return None
+    if str(prompts[prompt_index].get("id") or "") != prompt_id:
+        return None
+    return (category_position, prompt_index,
+            str(category.get("id") or category.get("name") or ""),
+            str(category.get("name") or ""), category, prompts)
+
+
+def _scan_prompt_location(data, prompt_id):
+    for category_position, category in enumerate(data.get("categories", []) or []):
+        prompts = category.get("prompts") or []
+        for prompt_index, prompt in enumerate(prompts):
+            if str(prompt.get("id") or "") == prompt_id:
+                return (category_position, prompt_index,
+                        str(category.get("id") or category.get("name") or ""),
+                        str(category.get("name") or ""), category, prompts)
+    return None
+
+
+def _locate_prompt(current, prompt_id):
+    """Locate a prompt for the single-record writers: O(1) when the location map is current."""
+    with _PROMPT_CACHE_LOCK:
+        state = _LIBRARY_STATE
+        if state.get("data") is current and state.get("indexed"):
+            location = _state_row_location(state, current, prompt_id)
+            if location is not None:
+                return location
+    return _scan_prompt_location(current, prompt_id)
+
+
+def _reindex_prompt_locations(state, data, category_positions):
+    """Refresh the location map for categories whose prompt list changed (O(category))."""
+    locations = state["locations"]
+    categories = data.get("categories") or []
+    for position in category_positions:
+        if position < 0 or position >= len(categories):
+            continue
+        for prompt_index, prompt in enumerate(categories[position].get("prompts") or []):
+            identity = prompt.get("id")
+            if isinstance(identity, str) and identity:
+                locations[identity] = (position, prompt_index)
+
+
 def _shift_view_index(view_index, category_position, from_item, delta):
     for identity, placement in view_index.items():
         if placement[0] == category_position and placement[1] >= from_item:
@@ -1457,7 +1588,8 @@ def _shift_ranges(ranges, category_position, delta):
         ranges[position] = (identity, name, start + delta, end + delta)
 
 
-def _patch_one_changed_row(state, data, prompt_id, previous_entry, entry, same_selector):
+def _patch_one_changed_row(state, data, prompt_id, previous_entry, entry, same_selector,
+                           location=None, position_unchanged=False):
     """Install one committed row into views/rows/index without rebuilding them.
 
     Handles the single-record shapes: a content edit in place, a row losing its
@@ -1465,11 +1597,15 @@ def _patch_one_changed_row(state, data, prompt_id, previous_entry, entry, same_s
     normal view). Returns True when the read model is fully current, False when the
     views are current but the index payload needs a rebuild and None when the shape
     is not safe to patch and the caller must drop the derived models.
+
+    ``location`` is the O(1) placement the caller already resolved; ``position_unchanged``
+    means the row is still at the same index, so the visible-position recount is skipped.
     """
-    location = _data_row_location(data, prompt_id)
+    if location is None:
+        location = _scan_prompt_location(data, prompt_id)
     if location is None or previous_entry is None or entry is None:
         return None
-    category_position, identity, name, data_prompts = location
+    category_position, _prompt_index, identity, name, data_category, data_prompts = location
     plans = {}
     for key in (False, True):
         view = state["views"].get(key)
@@ -1489,7 +1625,9 @@ def _patch_one_changed_row(state, data, prompt_id, previous_entry, entry, same_s
             if rows is not None and row_index.get(prompt_id) is None:
                 return None
         expected_item = None
-        if eligible:
+        if eligible and position_unchanged and old_placement is not None:
+            expected_item = old_placement[1]
+        elif eligible:
             expected_item = 0
             for prompt in data_prompts:
                 candidate = str(prompt.get("id") or "")
@@ -1593,12 +1731,15 @@ def _patch_one_changed_row(state, data, prompt_id, previous_entry, entry, same_s
     return False
 
 
-def _cache_prompt_data(data, changed_ids=None):
+def _cache_prompt_data(data, changed_ids=None, locations_hint=None, removed_hint=None):
     """Install a just-committed library document.
 
     ``changed_ids`` names every prompt the caller rewrote, so the derived projection
     is patched instead of dropped: the next read reuses every unchanged binding and
-    only recomputes the touched rows. Anything ambiguous falls back to a full rebuild.
+    only recomputes the touched rows. The maintained ``locations`` map resolves each
+    touched id to its (category, index) in the new document in O(1); the small
+    single-record writers pass the new placement through ``locations_hint``. Anything
+    ambiguous falls back to one scan or a full rebuild, which is always correct.
 
     Returns True when the cached read model is already correct for the next request
     (views patched and the index payload kept); False when a rebuild or a warm-up is
@@ -1623,34 +1764,109 @@ def _cache_prompt_data(data, changed_ids=None):
         document = state["document"]
         cache_enabled = not _semantic_cache_disabled()
         wanted = {str(identity) for identity in changed_ids if identity}
+        removed_ids = {str(identity) for identity in (removed_hint or ()) if identity}
+        previous_locations = state["locations"]
+        hinted = locations_hint or {}
+        categories = data.get("categories", []) or []
+        # A map that does not describe the whole previous document (legacy state, a
+        # lost write, a manual document edit) is not authoritative: rebuild it once.
+        locations_stale = len(previous_locations) != (state.get("total_prompts") or 0)
+
+        # Resolve each touched id to its placement in the new document without walking
+        # the whole library: explicit hint first, then the unchanged-map fast path,
+        # then a single scan for the ids that genuinely moved.
+        resolved = {}
+        unresolved = []
+        for identity in wanted:
+            if identity in removed_ids:
+                resolved[identity] = None
+                continue
+            if locations_stale:
+                unresolved.append(identity)
+                continue
+            hinted_location = hinted.get(identity)
+            if hinted_location is not None:
+                category_position, prompt_index = hinted_location
+                if category_position < len(categories) \
+                        and prompt_index < len(categories[category_position].get("prompts") or []) \
+                        and str(categories[category_position]["prompts"][prompt_index].get("id") or "") == identity:
+                    resolved[identity] = hinted_location
+                    continue
+            old_location = previous_locations.get(identity)
+            if old_location is not None:
+                category_position, prompt_index = old_location
+                if category_position < len(categories):
+                    prompts = categories[category_position].get("prompts") or []
+                    if prompt_index < len(prompts) \
+                            and str(prompts[prompt_index].get("id") or "") == identity:
+                        resolved[identity] = old_location
+                        continue
+            unresolved.append(identity)
+        scanned = None
+        if unresolved:
+            scanned = {}
+            for category_position, category in enumerate(categories):
+                for prompt_index, prompt in enumerate(category.get("prompts") or []):
+                    prompt_id = prompt.get("id")
+                    if isinstance(prompt_id, str) and prompt_id:
+                        scanned[prompt_id] = (category_position, prompt_index)
+            for identity in unresolved:
+                location = scanned.get(identity)
+                if location is not None:
+                    resolved[identity] = location
+
         found = set()
-        total = 0
-        index_patchable = True
+        removed = set()
         previous_entries = {}
-        for category in data.get("categories", []) or []:
-            for prompt in category.get("prompts", []) or []:
+        index_patchable = True
+        reindex_positions = set()
+        total = state.get("total_prompts") or 0
+        for identity in wanted:
+            location = resolved.get(identity)
+            old_location = previous_locations.get(identity)
+            if location is None:
+                previous = entries.get(identity)
+                if previous is not None:
+                    total -= 1
+                    index_patchable = False
+                entries.pop(identity, None)
+                if cache_enabled:
+                    _SEMANTIC_ENTRIES.pop(identity, None)
+                state["locations"].pop(identity, None)
+                removed.add(identity)
+                if old_location is not None:
+                    reindex_positions.add(old_location[0])
+                continue
+            category_position, prompt_index = location
+            category = categories[category_position]
+            prompts = category.get("prompts") or []
+            prompt = prompts[prompt_index]
+            entry = _library_entry(document, category, prompt)
+            previous = entries.get(identity)
+            previous_entries[identity] = previous
+            if previous is None:
                 total += 1
-                identity = prompt.get("id")
-                if identity in wanted:
-                    entry = _library_entry(document, category, prompt)
-                    previous = entries.get(identity)
-                    previous_entries[identity] = previous
-                    if previous is None or _index_patch_signature(previous) != _index_patch_signature(entry):
-                        index_patchable = False
-                    entries[identity] = entry
-                    if cache_enabled:
-                        _SEMANTIC_ENTRIES[identity] = [semantic_binding(category, prompt), entry["_semantic"]]
-                    found.add(identity)
-        for identity in wanted - found:
-            entries.pop(identity, None)
+            if previous is None or _index_patch_signature(previous) != _index_patch_signature(entry):
+                index_patchable = False
+            entries[identity] = entry
             if cache_enabled:
-                _SEMANTIC_ENTRIES.pop(identity, None)
-            index_patchable = False
+                _SEMANTIC_ENTRIES[identity] = [semantic_binding(category, prompt), entry["_semantic"]]
+            state["locations"][identity] = location
+            found.add(identity)
+            if old_location != location:
+                if old_location is not None:
+                    reindex_positions.add(old_location[0])
+                reindex_positions.add(category_position)
+        if scanned is not None:
+            state["locations"] = scanned
+        elif reindex_positions:
+            _reindex_prompt_locations(state, data, reindex_positions)
         if len(entries) != total:
             # A caller under-reported its change set; rebuild rather than serve a stale view.
             _lib_trace("cache_reset", reason="count", entries=len(entries), total=total)
             _library_state_reset()
             return False
+        state["total_prompts"] = total
         state["data"] = data
         state["version"] = version
         if cache_enabled:
@@ -1662,16 +1878,33 @@ def _cache_prompt_data(data, changed_ids=None):
         try:
             if len(found) == 1:
                 prompt_id = next(iter(found))
-                status = _patch_one_changed_row(state, data, prompt_id,
-                                                previous_entries.get(prompt_id),
-                                                entries.get(prompt_id), same_selector)
-                if status is not None:
-                    _lib_trace("cache_patch", changed=sorted(found), rows="patched",
-                               signature=[list(version[0]), list(version[1])])
-                    return bool(status)
+                previous = previous_entries.get(prompt_id)
+                if previous is not None:
+                    category_position, prompt_index = resolved[prompt_id]
+                    category = categories[category_position]
+                    status = _patch_one_changed_row(
+                        state, data, prompt_id, previous, entries[prompt_id], same_selector,
+                        location=(category_position, prompt_index,
+                                  str(category.get("id") or category.get("name") or ""),
+                                  str(category.get("name") or ""),
+                                  category, category.get("prompts") or []),
+                        position_unchanged=previous_locations.get(prompt_id) == resolved[prompt_id])
+                    if status is not None:
+                        _lib_trace("cache_patch", changed=sorted(found), rows="patched",
+                                   signature=[list(version[0]), list(version[1])])
+                        return bool(status)
+            patch_locations = {}
+            for identity in found:
+                category_position, _prompt_index = resolved[identity]
+                category = categories[category_position]
+                patch_locations[identity] = (
+                    category_position,
+                    str(category.get("id") or category.get("name") or ""),
+                    str(category.get("name") or ""))
             # A favourite, a usage stamp, a note or a preview swap keeps its row in place,
             # so the 100k-row ordering can be patched instead of rebuilt (measured 721 ms).
-            if _patch_derived_caches(state, data, found, refresh_index=index_patchable and same_selector):
+            if _patch_derived_caches(state, data, found, refresh_index=index_patchable and same_selector,
+                                     locations=patch_locations):
                 _lib_trace("cache_patch", changed=sorted(found), rows="patched",
                            signature=[list(version[0]), list(version[1])])
                 return state["index"] is not None
@@ -1692,15 +1925,18 @@ def _cache_prompt_data(data, changed_ids=None):
         return False
 
 
-def _commit_prompt_data(file_data, changed_ids=None):
+def _commit_prompt_data(file_data, changed_ids=None, locations_hint=None, removed_hint=None):
     """Install a committed document and warm the read model only when it was dropped.
 
     Single-record writers pass ``schedule_warm=False`` to ``_atomic_save_json`` and
     call this instead: a patched view that kept the index payload is already correct
     for the next request, while a dropped/rebuild-needed model keeps the previous
-    background warm-up so the next read is not the cold one.
+    background warm-up so the next read is not the cold one. ``locations_hint`` maps
+    the changed ids to their already-known new (category_position, prompt_index) so
+    the patch never has to search the library.
     """
-    patched = _cache_prompt_data(file_data, changed_ids)
+    patched = _cache_prompt_data(file_data, changed_ids, locations_hint=locations_hint,
+                                 removed_hint=removed_hint)
     if not patched and os.environ.get("UW_SKIP_LIBRARY_WARMUP") != "1":
         _request_library_warm(delay=0.05)
     return patched
@@ -1735,7 +1971,7 @@ def _selector_favorites_state():
     state = data.get('selector_library')
     if not state:
         raise ValueError('Selector library migration has not completed')
-    document = read_projection(os.path.join(PROMPT_STORE_DIR, 'semantic_projection.json'))
+    document = _cached_projection()
     view = favorites_view(data, document, state.get('legacy_favorites', {}))
     encoded = json.dumps([_revision(data), view], ensure_ascii=False, sort_keys=True, separators=(',', ':'))
     etag = hashlib.sha256(encoded.encode('utf-8')).hexdigest()
@@ -2577,7 +2813,7 @@ async def get_library_prompt(request):
             for prompt in category.get("prompts", []) or []:
                 if str(prompt.get("id") or "") == prompt_id:
                     if request.query.get("selection") == "1" or request.query.get("include_semantic") == "1":
-                        projection = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+                        projection = _cached_projection()
                         decision = decision_for(projection, category, prompt)
                         if request.query.get("selection") == "1" and (decision.get("disposition") not in ("reviewed", "classified") or not decision.get("manual_search_eligible")):
                             return web.json_response({"error": "Prompt changed or is not approved for selection"}, status=409)
@@ -2654,7 +2890,7 @@ async def save_data(request):
 
         _require_revision({"base_revision": base_revision}, old_data or {})
 
-        projection = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+        projection = _cached_projection()
         new_data = merge_selection_edit(old_data, projection, new_data)
 
         # 智能更新时间戳（检测变更并只更新修改的项）
@@ -3252,7 +3488,7 @@ def _rename_category_branch(payload):
         now = datetime.now().isoformat()
         renamed = []
         renamed_categories = []
-        projection = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+        projection = _cached_projection()
         for category, name in zip(categories, normalized):
             if name != old_key and not name.startswith(prefix):
                 continue
@@ -3347,7 +3583,8 @@ async def delete_category(request):
                                             meta_keys=["last_modified"]),
             create_backup=True, store_backup=True,
             expected_revision=data.get("base_revision"))
-        _cache_prompt_data(file_data, removed_prompt_ids)
+        _cache_prompt_data(file_data, removed_prompt_ids,
+                           removed_hint=removed_prompt_ids)
 
         return _success_response({"success": True, "revision": _revision(file_data)})
     except RevisionConflict as e:
@@ -3463,7 +3700,8 @@ async def batch_delete_prompts(request):
                                             meta_keys=["last_modified"]),
             create_backup=True, store_backup=True,
             expected_revision=data.get("base_revision"))
-        _cache_prompt_data(file_data, deleted_prompt_ids)
+        _cache_prompt_data(file_data, deleted_prompt_ids,
+                           removed_hint=deleted_prompt_ids)
 
         return _success_response({
             "success": True,
@@ -3569,15 +3807,10 @@ def _apply_upsert_prompt(payload):
     if prompt_id:
         if prompt_id in current.get('_source_to_canonical', {}):
             raise ValueError('旧资料已合并，请通过原 ID 定位后编辑当前资料')
-        for category_position, category in enumerate(categories):
-            for index, prompt in enumerate(category.get("prompts", []) or []):
-                if str(prompt.get("id") or "") == prompt_id:
-                    existing_prompt = prompt
-                    source_position = category_position
-                    source_index = index
-                    break
-            if existing_prompt is not None:
-                break
+        location = _locate_prompt(current, prompt_id)
+        if location is not None:
+            source_position, source_index, _source_identity, _source_name, _source_category, source_prompts = location
+            existing_prompt = source_prompts[source_index]
 
     draft_id = str(payload.get("draft_id") or "").strip()
     if mode == "create" and draft_id:
@@ -3679,7 +3912,7 @@ def _apply_upsert_prompt(payload):
             raise ValueError('方案用途必须与正负向分段一致')
 
     if payload.get("classification") is not None:
-        projection = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+        projection = _cached_projection()
         prompt["_classification"] = confirm_classification(
             projection, target_category, prompt, payload["classification"],
             previous_category=source_category if mode == "edit" else None,
@@ -3689,22 +3922,24 @@ def _apply_upsert_prompt(payload):
         prompt["_classification"]["binding"] = semantic_binding(target_category, prompt)
 
     if mode == "edit" and source_category is not target_category and payload.get("classification") is None:
-        projection = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+        projection = _cached_projection()
         rebind_unchanged_prompt(projection, source_category, existing_prompt, target_category, prompt)
 
     if "selector_group_ids" in payload:
-        projection = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+        projection = _cached_projection()
         apply_collection(file_data, prompt, decision_for(projection, target_category, prompt), payload["selector_group_ids"], payload.get('selector_metadata'))
 
     if raw_prompt.get("is_user_plan") is True:
-        projection = read_projection(os.path.join(PROMPT_STORE_DIR, "semantic_projection.json"))
+        projection = _cached_projection()
         if decision_for(projection, target_category, prompt).get("manual_search_eligible") is not True:
             raise ValueError("请先确认资料主题后再保存为方案")
 
     if mode == "edit" and source_category is target_category:
-        target_category["prompts"][source_index] = prompt
+        target_index = source_index
+        target_category["prompts"][target_index] = prompt
     else:
         target_category.setdefault("prompts", []).append(prompt)
+        target_index = len(target_category["prompts"]) - 1
     target_category["updated_at"] = now
     if source_category is not None and source_category is not target_category:
         source_category["updated_at"] = now
@@ -3728,7 +3963,11 @@ def _apply_upsert_prompt(payload):
         expected_revision=payload.get("base_revision"),
         schedule_warm=False,
     )
-    _commit_prompt_data(file_data, [prompt["id"]])
+    if full_store_commit:
+        _commit_prompt_data(file_data)
+    else:
+        _commit_prompt_data(file_data, [prompt["id"]],
+                            locations_hint={prompt["id"]: (target_position, target_index)})
     outcome = {
         "success": True,
         "prompt": prompt,
@@ -3756,14 +3995,11 @@ def _apply_delete_prompt(prompt_id, expected_revision):
 
     deleted = None
     source_category = None
-    for position, category in enumerate(categories):
-        for index, prompt in enumerate(category.get("prompts", []) or []):
-            if str(prompt.get("id") or "") == prompt_id:
-                source_category = _category_for_write(categories, position)
-                deleted = source_category["prompts"].pop(index)
-                break
-        if deleted is not None:
-            break
+    location = _locate_prompt(current, prompt_id)
+    if location is not None:
+        position, index = location[0], location[1]
+        source_category = _category_for_write(categories, position)
+        deleted = source_category["prompts"].pop(index)
 
     if deleted is None:
         raise KeyError(f"Prompt not found: {prompt_id}")
@@ -3780,7 +4016,7 @@ def _apply_delete_prompt(prompt_id, expected_revision):
         expected_revision=expected_revision,
         schedule_warm=False,
     )
-    _commit_prompt_data(file_data, [prompt_id])
+    _commit_prompt_data(file_data, [prompt_id], removed_hint={prompt_id})
     return {
         "success": True,
         "deleted_id": prompt_id,
@@ -3813,30 +4049,31 @@ def _apply_plan_flag(payload):
     if type(value) is not bool:
         raise ValueError('方案标记必须为明确的是或否')
     categories = list(current.get('categories', []) or [])
-    for category_position, category in enumerate(categories):
-        for index, prompt in enumerate(category.get('prompts', [])):
-            if prompt.get('id') != payload.get('prompt_id'):
-                continue
-            if value:
-                projection = read_projection(os.path.join(PROMPT_STORE_DIR, 'semantic_projection.json'))
-                semantic = decision_for(projection, category, prompt)
-                if semantic.get('manual_search_eligible') is not True:
-                    raise ValueError('请先编辑并确认资料主题，再保存为方案')
-            now = datetime.now().isoformat()
-            updated_prompt = {**prompt, 'is_user_plan': value, 'updated_at': now}
-            updated_category = _category_for_write(categories, category_position)
-            updated_category['prompts'][index] = updated_prompt
-            file_data = {**current, 'categories': categories, 'last_modified': now}
-            _commit_library_document(
-                file_data,
-                changes=library_store.ChangeSet(
-                    upsert_prompts=[(_category_store_id(updated_category), updated_prompt)],
-                    meta_keys=['last_modified']),
-                create_backup=_should_create_route_branch_backup(), compact=True,
-                expected_revision=payload.get('base_revision'), schedule_warm=False)
-            _commit_prompt_data(file_data, [updated_prompt['id']])
-            return {'success': True, 'prompt_id': updated_prompt['id'], 'is_user_plan': value,
-                    'revision': _revision(file_data)}
+    location = _locate_prompt(current, str(payload.get('prompt_id') or ''))
+    if location is not None:
+        category_position, index, _identity, _name, category, prompts = location
+        prompt = prompts[index]
+        if value:
+            projection = _cached_projection()
+            semantic = decision_for(projection, category, prompt)
+            if semantic.get('manual_search_eligible') is not True:
+                raise ValueError('请先编辑并确认资料主题，再保存为方案')
+        now = datetime.now().isoformat()
+        updated_prompt = {**prompt, 'is_user_plan': value, 'updated_at': now}
+        updated_category = _category_for_write(categories, category_position)
+        updated_category['prompts'][index] = updated_prompt
+        file_data = {**current, 'categories': categories, 'last_modified': now}
+        _commit_library_document(
+            file_data,
+            changes=library_store.ChangeSet(
+                upsert_prompts=[(_category_store_id(updated_category), updated_prompt)],
+                meta_keys=['last_modified']),
+            create_backup=_should_create_route_branch_backup(), compact=True,
+            expected_revision=payload.get('base_revision'), schedule_warm=False)
+        _commit_prompt_data(file_data, [updated_prompt['id']],
+                            locations_hint={updated_prompt['id']: (category_position, index)})
+        return {'success': True, 'prompt_id': updated_prompt['id'], 'is_user_plan': value,
+                'revision': _revision(file_data)}
     raise KeyError('资料已不存在，请刷新列表')
 
 
@@ -3880,7 +4117,7 @@ async def upsert_prompt(request):
 def _apply_merge_request(payload):
     data = _library_document_for_batch_write()
     _require_revision(payload, data)
-    projection = read_projection(os.path.join(PROMPT_STORE_DIR, 'semantic_projection.json'))
+    projection = _cached_projection()
     if payload.get('commit') is not True:
         return merge_preview(data, projection, payload.get('prompt_ids'), payload.get('canonical_id'))
     merged, preview = apply_merge(data, projection, payload, datetime.now().isoformat())
@@ -4018,21 +4255,21 @@ async def toggle_favorite(request):
             _require_revision(data, current)
             categories = list(current.get("categories", []) or [])
             file_data = None
-            for index, category in enumerate(categories):
-                if (category.get("id") == category_id if category_id else category.get("name") == category_name):
-                    prompts = list(category.get("prompts", []))
-                    for position, prompt in enumerate(prompts):
-                        if prompt.get("id") != prompt_id:
-                            continue
-                        # 更新提示词、分类和全局时间戳
-                        now = datetime.now().isoformat()
-                        prompts[position] = {**prompt, "updated_at": now,
-                            "favorite": data.get("favorite", not prompt.get("favorite", False))}
-                        rebuilt = list(categories)
-                        rebuilt[index] = {**category, "prompts": prompts, "updated_at": now}
-                        file_data = {**current, "categories": rebuilt, "last_modified": now}
-                        break
-                    break
+            index = position = None
+            location = _locate_prompt(current, prompt_id)
+            if location is not None:
+                index, position, _identity, _name, category, prompts = location
+                category_matches = (category.get("id") == category_id) if category_id \
+                    else (category.get("name") == category_name)
+                if category_matches:
+                    prompts = list(prompts)
+                    prompt = prompts[position]
+                    now = datetime.now().isoformat()
+                    prompts[position] = {**prompt, "updated_at": now,
+                        "favorite": data.get("favorite", not prompt.get("favorite", False))}
+                    rebuilt = list(categories)
+                    rebuilt[index] = {**category, "prompts": prompts, "updated_at": now}
+                    file_data = {**current, "categories": rebuilt, "last_modified": now}
 
             if file_data is None:
                 return web.json_response({"error": "资料已移动或不存在，请刷新后重试"}, status=404)
@@ -4046,7 +4283,8 @@ async def toggle_favorite(request):
                     meta_keys=["last_modified"]),
                 create_backup=_should_create_route_branch_backup(), compact=True,
                 expected_revision=data.get("base_revision"), schedule_warm=False)
-            _commit_prompt_data(file_data, [prompt_id])
+            _commit_prompt_data(file_data, [prompt_id],
+                                locations_hint={prompt_id: (index, position)})
 
         return _success_response({"success": True, "revision": _revision(file_data)})
     except RevisionConflict as e:
@@ -4071,23 +4309,21 @@ async def mark_prompt_used(request):
             _require_revision(data, current)
             categories = list(current.get("categories", []) or [])
             file_data = None
-            for index, category in enumerate(categories):
-                category_identity = str(category.get("id") or category.get("name") or "")
-                if category_id and category_identity != category_id and str(category.get("name") or "") != category_id:
-                    continue
-                prompts = list(category.get("prompts", []) or [])
-                for position, prompt in enumerate(prompts):
-                    if str(prompt.get("id") or "") != prompt_id:
-                        continue
-                    now = datetime.now().isoformat()
+            now = datetime.now().isoformat()
+            index = position = None
+            location = _locate_prompt(current, prompt_id)
+            if location is not None:
+                index, position, category_identity, _name, category, prompts = location
+                category_matches = not category_id or category_identity == category_id \
+                    or str(category.get("name") or "") == category_id
+                if category_matches:
+                    prompts = list(prompts)
+                    prompt = prompts[position]
                     prompts[position] = {**prompt, "last_used": now,
                         "usage_count": int(prompt.get("usage_count") or 0) + 1}
                     rebuilt = list(categories)
                     rebuilt[index] = {**category, "prompts": prompts, "updated_at": now}
                     file_data = {**current, "categories": rebuilt, "last_modified": now}
-                    break
-                if file_data is not None:
-                    break
 
             if file_data is None:
                 return web.json_response({"error": "Prompt not found"}, status=404)
@@ -4100,7 +4336,8 @@ async def mark_prompt_used(request):
                     meta_keys=["last_modified"]),
                 create_backup=_should_create_route_branch_backup(), compact=True,
                 expected_revision=data.get("base_revision"), schedule_warm=False)
-            _commit_prompt_data(file_data, [prompt_id])
+            _commit_prompt_data(file_data, [prompt_id],
+                                locations_hint={prompt_id: (index, position)})
         return _success_response({"success": True, "prompt_id": prompt_id, "last_used": now, "revision": _revision(file_data)})
     except RevisionConflict as e:
         return web.json_response({"error": str(e), "conflict": True, "expected_revision": e.expected, "current_revision": e.actual, "draft_preserved": True}, status=409)

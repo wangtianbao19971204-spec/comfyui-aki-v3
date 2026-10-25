@@ -1,0 +1,7 @@
+# 单条编辑内存读模型 patch O(1) 化（2026-10-25）
+
+- 问题：SQLite 持久化已把单条编辑事务降到 1–3 ms，但隔离 HTTP 实测保存仍 169.3 ms；profile 显示瓶颈是内存读模型 patch 仍 O(库)：`_cache_prompt_data` 全量 324,891 条扫描找 changed_ids（146.3 ms）、`_patch_derived_caches` 再全量定位扫描（64 ms），另有 move 重复解析 projection（107 ms）与每次保存同步复制 32 万条语义缓存（~7–8 ms）。
+- 改动（仅 `prompt_selector.py`，+375/−138）：`_LIBRARY_STATE` 增 `locations`（id→(category_position, prompt_index)）与 `total_prompts`，rebuild 时一次构建、reset 清理；新增 O(1) 定位 `_locate_prompt`/`_state_row_location` 与分类级 `_reindex_prompt_locations` 维护 insert/delete/move 的索引平移；`_cache_prompt_data` 改为 hint→旧映射快路径→仅未解析 id 单次扫描→陈旧映射检测→无法定位回退 rebuild（含 `removed_hint` 删除零扫描）；`_patch_one_changed_row`/`_patch_derived_caches` 使用调用方定位，不再扫描；upsert/delete/plan/favorite/mark_used 全部接入；projection 缓存；大库语义缓存快照移到 1 s 后台 Timer（小库/rebuild 同步，兼容原测试）。
+- 实测（真实 462 MB / 324,891 条，暖态函数级）：正文编辑 **2.13–3.44 ms（中位 2.48）**、恢复 2.18–2.27 ms、move 3.66 ms、create 4.41 ms、plan 3.81 ms、favorite 4.34 ms、mark_used 3.97 ms（均含 SQLite 事务 1.6–3.6 ms）；`_cache_prompt_data` 146→0.8 ms；不再随库增长，远优于 <20 ms 目标。
+- 正确性：真实库编辑/移动/新建/plan/删除/分类增删后 `locations` 与全量扫描一致，entries/视图/pending 视图/index/page 与强制全量 rebuild 深相等（24 项全 ok）；新增 8 个测试（无全量扫描断言/映射维护/回退/rebuild 等价）；全测试目录 **196 OK / 1 skip**；`py_compile` OK；json 模式行为不变；无 EOL 噪声。
+- 遗留：删除/重置类仍约 100–150 ms（清空 8 个大型派生结构约 120 ms），不属正文编辑/恢复目标，另案评估；projection 缓存常驻约 14.5 MB、定位映射约 30–40 MB；大库语义缓存快照在 1 s Timer 内崩溃仅少缓存，不影响正确性。本轮未部署生产。
