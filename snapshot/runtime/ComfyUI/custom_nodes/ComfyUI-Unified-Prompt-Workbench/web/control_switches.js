@@ -136,6 +136,73 @@ export async function maskHasSelection(node) {
     return false;
 }
 
+function previewCanvas(scope) {
+    if (scope.kind !== 'krea2') return null;
+    const graph = scope.graph;
+    const lineart = named(scope.nodes, '[05B5]'), preview = named(scope.nodes, '[05V5]');
+    if (!lineart || !preview || lineart.graph !== graph || preview.graph !== graph) return null;
+    return preview;
+}
+
+async function previewImages(app, node) {
+    const request = await app.queuePrompt(0, 1, {queueNodeIds: [node.id]});
+    const promptId = request?.prompt_id || request?.promptId;
+    if (!promptId) throw new Error('无法提交线稿画布任务，请检查队列。');
+    const deadline = Date.now() + 180000;
+    while (Date.now() < deadline) {
+        let history = null;
+        try { const response = await api.fetchApi('/history/' + encodeURIComponent(promptId)); history = response.ok ? await response.json() : null; } catch {}
+        const entry = history?.[promptId] || Object.values(history || {})[0];
+        if (entry?.status?.status_str === 'error') throw new Error('线稿画布生成失败，请检查工作流报错。');
+        if (entry?.status?.completed === true || entry?.status?.status_str === 'success')
+            return entry.outputs?.[String(node.id)]?.images || [];
+        await new Promise(resolve => setTimeout(resolve, 500));
+    }
+    throw new Error('线稿画布生成超时，请查看队列。');
+}
+
+async function uploadPreview(image) {
+    const url = image.src || api.apiURL('/view?' + new URLSearchParams({filename: image.filename, subfolder: image.subfolder || '', type: image.type || 'temp'}));
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('无法读取线稿画布图片。');
+    const body = new FormData();
+    body.append('image', await response.blob(), `erase_canvas_${Date.now()}.png`);
+    body.append('type', 'input');
+    const uploaded = await (await api.fetchApi('/upload/image', {method: 'POST', body})).json();
+    const name = [uploaded.subfolder, uploaded.name].filter(Boolean).join('/');
+    if (!name) throw new Error('线稿画布上传失败。');
+    return name;
+}
+
+export async function prepareMaskCanvas(app, scope, status) {
+    const preview = previewCanvas(scope);
+    if (!preview) return false;
+    let images = preview.imgs?.length ? [...preview.imgs] : null;
+    if (!images) {
+        status.textContent = '正在生成当前线稿画布…';
+        const graph = scope.graph, saved = preview.mode;
+        graph.beforeChange?.();
+        setMode(scope, preview, 0);
+        graph.afterChange?.(); graph.setDirtyCanvas?.(true, true);
+        try {
+            images = await previewImages(app, preview);
+        } finally {
+            graph.beforeChange?.();
+            setMode(scope, preview, saved);
+            graph.afterChange?.(); graph.setDirtyCanvas?.(true, true);
+        }
+    }
+    if (!images?.length) return false;
+    if (!preview.imgs?.length) preview.imgs = images;
+    const name = await uploadPreview(images[0]);
+    const imageWidget = widget(scope.mask, 'image');
+    if (!imageWidget) throw new Error('找不到遮罩图片控件。');
+    const values = imageWidget.options?.values;
+    if (Array.isArray(values) && !values.includes(name)) values.push(name);
+    commitWidget(app, scope.mask, imageWidget, name);
+    return true;
+}
+
 export function mountControlSwitches(host, app, branch, isCurrent = () => true) {
     const graph = app.rootGraph || app.graph, scope = controlScope(graph, branch);
     if (!scope) return {sync() {}, dispose() {}};
@@ -173,11 +240,18 @@ export function mountControlSwitches(host, app, branch, isCurrent = () => true) 
     };
     edit.onclick = async () => {
         if (!current()) return;
+        edit.disabled = true;
         try {
+            let canvas = false;
+            try { canvas = await prepareMaskCanvas(app, scope, status); }
+            catch (error) { if (current()) status.textContent = error.message; }
+            if (!current()) return;
             app.canvas.deselectAllNodes(); app.canvas.selectNode(scope.mask);
             await app.extensionManager.command.execute('Comfy.MaskEditor.OpenMaskEditor');
-            status.textContent = '在编辑器里涂抹要擦掉的区域，保存后打开“启用擦线”。';
-        } catch {status.textContent = '无法打开蒙版编辑器，请检查遮罩图片是否存在。';}
+            status.textContent = canvas ? '画布已自动载入当前线稿，涂抹后保存，再打开“启用擦线”。'
+                : '在编辑器里涂抹要擦掉的区域，保存后打开“启用擦线”。';
+        } catch { status.textContent = '无法打开蒙版编辑器，请检查线稿预览与遮罩图片是否存在。'; }
+        finally { if (current()) { edit.disabled = false; sync(); } }
     };
     function sync() {
         if (disposed) return;
