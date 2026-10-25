@@ -675,9 +675,16 @@ class CachedObjectMismatch(ValueError):
     pass
 
 
-def scan_objects(repo, entries, staged=False, content_only=False, cache=None):
+def bytes_needed(entry):
+    """Cross-part order and the chunk manifest need real bytes even when cached."""
+    return any(path == 'snapshot/manifest.json' or path.endswith('.part') for path in entry['paths'])
+
+
+def scan_objects(repo, entries, staged=False, content_only=False, cache=None, incremental=False):
     if cache is not None and (content_only or cache.scope != ('staged' if staged else 'all-history')):
         raise ValueError('Cache scope must match the complete scan')
+    if incremental and cache is None:
+        raise ValueError('Incremental scanning needs a trusted cache')
     # Keep this here so independent SourceGraph/parallel callers cannot skip refs.
     findings = ref_name_findings(repo)
     training_reviews = git_training_trigger_reviews(repo, staged)
@@ -685,6 +692,8 @@ def scan_objects(repo, entries, staged=False, content_only=False, cache=None):
     compressed = []
     sensitive = []
     total = 0
+    resumed = 0
+    resumed_bytes = 0
     part_edges = collections.defaultdict(dict)
     manifest_boundaries = set()
     proc = subprocess.Popen(['git', '-C', str(repo), 'cat-file', '--batch'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -692,6 +701,31 @@ def scan_objects(repo, entries, staged=False, content_only=False, cache=None):
         for entry in entries:
             oid = entry['object']
             cached_digest = cache.lookup(entry) if cache is not None else None
+            if incremental and cached_digest is not None and not bytes_needed(entry):
+                # A Git object id is a hash of the bytes, so a cached clean verdict
+                # for this id covers this content. Names, path rules and size limits
+                # are still evaluated on every run.
+                resumed += 1
+                resumed_bytes += entry['bytes']
+                # Carry the trusted verdict forward, or the next save would drop it.
+                cache.remember(entry, cached_digest, reused=True)
+                for path in entry['paths']:
+                    findings.extend(name_findings(path, oid))
+                    path_rules = blocked_path(path) if entry['type'] == 'blob' and not content_only else []
+                    if entry['type'] == 'blob' and entry['bytes'] > MAX_BLOB and not content_only:
+                        path_rules.append('oversize_git_blob')
+                    historical_review = REVIEWED_HISTORICAL_PATHS.get((path, cached_digest))
+                    if historical_review and path_rules and not staged:
+                        # Same reviewed-alias exception as the reading path; these
+                        # objects themselves are never cached, only reused digests.
+                        reviewed.append({'paths': [path], 'object': oid, 'sha256': cached_digest,
+                                         'rule': historical_review, 'matched_rules': path_rules})
+                        path_rules = []
+                    if SENSITIVE_PATH.search(path):
+                        sensitive.append({'path': path, 'object': oid, 'bytes': entry['bytes']})
+                    for rule in sorted(set(path_rules)):
+                        findings.append({'path': path, 'object': oid, 'rule': rule})
+                continue
             proc.stdin.write(oid.encode('ascii') + b'\n')
             proc.stdin.flush()
             header = proc.stdout.readline().decode('ascii').strip().split()
@@ -855,12 +889,20 @@ def scan_objects(repo, entries, staged=False, content_only=False, cache=None):
                     findings.append({'path': left + ' -> ' + right, 'object': left_oid + ':' + right_oid, 'rule': 'cross_part_' + rule})
     if git_training_trigger_reviews(repo, staged)['sha256'] != training_reviews['sha256']:
         findings.append({'path': '<training review registry>', 'object': '', 'rule': 'training_review_registry_changed_during_scan'})
+    if incremental:
+        # Skipped bytes are trusted because a Git object id fixes its content; keep
+        # an independent object-graph check so a damaged repository still fails.
+        integrity = subprocess.run(['git', '-C', str(repo), 'fsck', '--connectivity-only', '--no-dangling'],
+                                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if integrity.returncode:
+            findings.append({'path': '<git object graph>', 'object': '', 'rule': 'connectivity_check_failed'})
     return sanitize_report_names({'findings': findings, 'reviewed_fixtures': reviewed, 'compressed_objects': compressed,
                                   'sensitive_named_objects': sensitive, 'scanned_bytes': total, 'cross_part_boundaries': boundaries,
+                                  'resumed_objects': resumed, 'resumed_bytes': resumed_bytes,
                                   'training_trigger_registry_sha256': training_reviews['sha256']})
 
 
-def cache_policy_fingerprint(training_sha, scope='staged', git_dir=None):
+def cache_policy_fingerprint(training_sha, scope='staged', git_dir=None, *, cache_file=None, repo=None):
     """Bind cache hits to scanner code, effective rules and exception registries."""
     module = Path(__file__).with_name('staged_scan_cache.py')
     state = {
@@ -878,7 +920,20 @@ def cache_policy_fingerprint(training_sha, scope='staged', git_dir=None):
         'limits': [CHUNK, OVERLAP, MAX_BLOB, MAX_INFLATED],
         'patterns': [[p.pattern.hex(), p.flags] for p in (ASSIGN, SQL_PAIR, UNQUOTED, QUERY, BEARER, UNESCAPE)],
     }
-    if git_dir is not None:
+    if cache_file is not None:
+        # Portable binding for CI carry-over: same repository and root commits,
+        # same optional salt. Local filesystem identity is deliberately absent, so
+        # a cache only travels when a caller chose the portable mode explicitly.
+        url = ''
+        roots = []
+        if repo is not None:
+            try:
+                url = git(repo, 'config', '--get', 'remote.origin.url').decode('utf-8', 'surrogateescape').strip()
+            except RuntimeError:
+                url = ''
+            roots = sorted(git(repo, 'rev-list', '--max-parents=0', 'HEAD').decode('ascii').split())
+        state['repository'] = ['portable-cache-file', url, roots, os.environ.get('COMFYUI_SCAN_SALT', '')]
+    elif git_dir is not None:
         directory = Path(git_dir).resolve()
         identity = directory.stat()
         # A copied cache from a clone or another worktree grants no reuse.
@@ -886,29 +941,42 @@ def cache_policy_fingerprint(training_sha, scope='staged', git_dir=None):
     return hashlib.sha256(json.dumps(state, sort_keys=True, ensure_ascii=True).encode()).hexdigest()
 
 
-def run(repo=REPO, staged=False, content_only=False, use_cache=False, *, cache_history=False):
+def run(repo=REPO, staged=False, content_only=False, use_cache=False, *, cache_history=False,
+        cache_file=None, incremental=False):
     if use_cache and (not staged or content_only):
         raise ValueError('Cache cannot be used for publication or content-only scans')
     if cache_history and (staged or content_only or use_cache):
         raise ValueError('History cache requires the complete history gate')
+    if cache_file is not None and (staged or content_only or use_cache or cache_history):
+        raise ValueError('A portable history cache is a separate history-gate mode')
+    if incremental and cache_file is None:
+        raise ValueError('Incremental scanning requires an explicit cache file')
     repo = Path(repo).resolve()
     refs_before = refs(repo)
     index_before = git(repo, 'ls-files', '--stage', '-z') if staged else None
     entries, gitlinks = inventory(repo, staged)
     cache = None
-    if use_cache or cache_history:
-        # Opt-in only. Release, bundle and CI callers retain the uncached default.
+    portable = cache_file is not None
+    if use_cache or cache_history or portable:
+        # Opt-in only. Release, bundle and plain --all-history callers stay uncached.
         import importlib.util
         spec = importlib.util.spec_from_file_location('comfyui_staged_cache', Path(__file__).with_name('staged_scan_cache.py'))
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         scope = 'staged' if staged else 'all-history'
         git_dir = git(repo, 'rev-parse', '--absolute-git-dir').decode().strip()
-        policy = cache_policy_fingerprint(git_training_trigger_reviews(repo, staged)['sha256'], scope, git_dir)
-        cache_class = module.StagedCache if staged else module.HistoryCache
-        cache = cache_class(git_dir, policy)
+        policy = cache_policy_fingerprint(git_training_trigger_reviews(repo, staged)['sha256'], scope, git_dir,
+                                          cache_file=cache_file if portable else None,
+                                          repo=repo if portable else None)
+        if staged:
+            cache = module.StagedCache(git_dir, policy)
+        elif portable:
+            cache = module.PortableHistoryCache(git_dir, policy, path=cache_file)
+        else:
+            cache = module.HistoryCache(git_dir, policy)
     try:
-        result = scan_objects(repo, entries, staged=staged, content_only=content_only, cache=cache)
+        result = scan_objects(repo, entries, staged=staged, content_only=content_only, cache=cache,
+                              incremental=incremental)
     except CachedObjectMismatch:
         if cache is None:
             raise
@@ -916,7 +984,7 @@ def run(repo=REPO, staged=False, content_only=False, use_cache=False, *, cache_h
         cache.pending.clear()
         cache.hits = cache.reused_bytes = 0
         cache.state = 'digest_mismatch_full_rescan'
-        result = scan_objects(repo, entries, staged=staged, cache=cache)
+        result = scan_objects(repo, entries, staged=staged, cache=cache, incremental=incremental)
     result['findings'].extend(item for item in gitlinks if not content_only or item['rule'] != 'nested_gitlink')
     refs_after = refs(repo)
     if refs_before != refs_after:
@@ -924,14 +992,23 @@ def run(repo=REPO, staged=False, content_only=False, use_cache=False, *, cache_h
     if staged and index_before != git(repo, 'ls-files', '--stage', '-z'):
         result['findings'].append({'path': '<git index>', 'object': '', 'rule': 'index_changed_during_scan'})
     if cache is not None:
-        if cache_policy_fingerprint(git_training_trigger_reviews(repo, staged)['sha256'], scope, git_dir) != cache.policy:
+        if cache_policy_fingerprint(git_training_trigger_reviews(repo, staged)['sha256'], scope, git_dir,
+                                    cache_file=cache_file if portable else None,
+                                    repo=repo if portable else None) != cache.policy:
             result['findings'].append({'path': '<scanner policy>', 'object': '', 'rule': 'policy_changed_during_scan'})
         if not result['findings']:
             cache.save()
         result['cache'] = cache.report()
         result['cache'].update(content_scanned_objects=len(entries) - cache.hits,
-                               content_scanned_bytes=result['scanned_bytes'] - cache.reused_bytes)
-    result.update({'schema': 1, 'mode': 'staged' if staged else 'all-history', 'pass': not result['findings'],
+                               content_scanned_bytes=(result['scanned_bytes'] if incremental else
+                                                      result['scanned_bytes'] - cache.reused_bytes),
+                               resumed_objects=result.get('resumed_objects', 0),
+                               resumed_bytes=result.get('resumed_bytes', 0),
+                               read_bytes=result['scanned_bytes'],
+                               all_object_bytes_rehashed=not incremental)
+    result.update({'schema': 1, 'mode': ('all-history-incremental' if incremental else
+                                        'staged' if staged else 'all-history'),
+                   'pass': not result['findings'],
                    'scanned_objects': len(entries), 'scanned_blobs': sum(e['type'] == 'blob' for e in entries),
                    'refs': refs_before, 'offline': True,
                    'content_only': content_only,
@@ -1011,6 +1088,8 @@ def main():
     parser.add_argument('--names-only', action='store_true', help='Supplemental strong filename/refname check without reading payloads; not a publication gate')
     parser.add_argument('--cache-staged', action='store_true', help='Local staged content-scan reuse; still rehashes all bytes and checks names/boundaries')
     parser.add_argument('--cache-history', action='store_true', help='Local history content-scan reuse; still checks all reachable history and rehashes every object')
+    parser.add_argument('--cache-file', type=Path, help='Portable history cache carried between clean clones; requires --all-history')
+    parser.add_argument('--incremental', action='store_true', help='Trust portable-cache verdicts without re-reading cached bytes; requires --cache-file')
     args = parser.parse_args()
     try:
         if args.pre_push and (args.audit_content_only or args.names_only):
@@ -1021,9 +1100,16 @@ def main():
             raise ValueError('Cache only supports the full staged gate')
         if args.cache_history and (args.staged or args.cache_staged or args.names_only or args.audit_content_only):
             raise ValueError('History cache only supports the full history gate')
+        if args.cache_file is not None and (args.staged or args.cache_staged or args.cache_history
+                                            or args.names_only or args.audit_content_only):
+            raise ValueError('A portable cache only supports the full history gate')
+        if args.incremental and args.cache_file is None:
+            raise ValueError('Incremental scanning requires --cache-file')
         report = (scan_names(args.repo, args.staged) if args.names_only else
                   run_pre_push(args.repo, sys.stdin.read(), cache_history=args.cache_history) if args.pre_push else
-                  run(args.repo, args.staged, args.audit_content_only, args.cache_staged, cache_history=args.cache_history))
+                  run(args.repo, args.staged, args.audit_content_only, args.cache_staged,
+                      cache_history=args.cache_history, cache_file=args.cache_file,
+                      incremental=args.incremental))
     except Exception as exc:
         # Exception text can originate in a malformed object; never echo it.
         print(json.dumps({'pass': False, 'error': type(exc).__name__, 'rule': 'scan_failed_closed'}))

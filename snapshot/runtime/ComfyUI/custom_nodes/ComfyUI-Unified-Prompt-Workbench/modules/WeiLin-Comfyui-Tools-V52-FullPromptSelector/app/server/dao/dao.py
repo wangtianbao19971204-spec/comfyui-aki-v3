@@ -57,6 +57,18 @@ danbooru_db_path = os.path.join(
 )
 old_db_path = os.path.join(current_dir, "../../../user_data_old/")
 
+# 权威用户数据必须“提交即落盘”：WAL 下 synchronous=NORMAL 只保证进程崩溃后一致，
+# 断电/系统崩溃仍可能丢掉最后一次已提交事务。tags 用户库承担提示词库的持久写入，
+# 用 FULL；history/danbooru 可从历史记录/上游字典重建且写入频繁，维持 NORMAL。
+# 只读/校验/迁移用的临时 sqlite3 连接不设置 synchronous（SQLite 默认 FULL），不在此改动。
+_WRITE_SYNCHRONOUS = {"tags": "FULL", "history": "NORMAL", "danbooru": "NORMAL"}
+
+
+def write_synchronous_pragma(db_type: str) -> str:
+    """连接级 synchronous 模式：只有权威用户库 tags 要求 FULL，未知库安全退回 NORMAL。"""
+    return _WRITE_SYNCHRONOUS.get(db_type, "NORMAL")
+
+
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
     "Accept": "application/json",
@@ -161,9 +173,9 @@ async def _get_connection(db_type: str) -> aiosqlite.Connection:
             # 检查数据库完整性
             check_and_repair_db(db_path, db_type)
             conn = await aiosqlite.connect(db_path)
-            # 设置连接池参数
+            # 设置连接池参数；写连接的 durability 按库区分（tags = FULL，提交即落盘）。
             await conn.execute("PRAGMA journal_mode=WAL")
-            await conn.execute("PRAGMA synchronous=NORMAL")
+            await conn.execute(f"PRAGMA synchronous={write_synchronous_pragma(db_type)}")
             await conn.execute("PRAGMA cache_size=-2000")
             _connection_pool[db_type] = conn
         return _connection_pool[db_type]
@@ -1100,7 +1112,7 @@ async def _reconnect_after_error(db_type: str) -> aiosqlite.Connection:
     os.makedirs(os.path.dirname(db_path), exist_ok=True)
     conn = await aiosqlite.connect(db_path)
     await conn.execute("PRAGMA journal_mode=WAL")
-    await conn.execute("PRAGMA synchronous=NORMAL")
+    await conn.execute(f"PRAGMA synchronous={write_synchronous_pragma(db_type)}")
     await conn.execute("PRAGMA cache_size=-2000")
     _connection_pool[db_type] = conn
     return conn

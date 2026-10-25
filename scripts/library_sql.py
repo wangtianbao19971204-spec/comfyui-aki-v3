@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import contextlib
 import hashlib
+import json
 import math
 import re
 import sqlite3
@@ -15,6 +16,20 @@ import sqlite3
 ITERDUMP = 'sqlite_iterdump_v1'
 GALLERY_FTS5 = 'gallery_fts5_v1'
 FORMATS = frozenset({ITERDUMP, GALLERY_FTS5})
+# Prompt-library SQLite authority (library_store.py): plain tables whose payloads are
+# JSON text. It is captured with ITERDUMP plus this semantic profile; the maintenance
+# tools must not import runtime plugin code, so the contract is pinned here.
+LIBRARY_STORE_PROFILE = 'prompt_library_store_v1'
+LIBRARY_PROFILES = frozenset({LIBRARY_STORE_PROFILE})
+LIBRARY_SCHEMA_VERSIONS = frozenset({'1'})
+LIBRARY_STORE_TABLES = {
+    'library_meta': ('key', 'value'),
+    'categories': ('id', 'name', 'position', 'payload'),
+    'category_orders': ('category_id', 'order_json'),
+    'prompts': ('id', 'category_id', 'payload'),
+}
+LIBRARY_STORE_META_SCHEMA = '__schema_version__'
+LIBRARY_STORE_META_TOP_LEVEL_ORDER = '__top_level_order__'
 GALLERY_FTS_DDL = """CREATE VIRTUAL TABLE hot_tags_fts USING fts5(
     tag, translation_cn, content='hot_tags', content_rowid='rowid',
     tokenize='unicode61'
@@ -183,6 +198,119 @@ def summary(conn, sql_format=ITERDUMP, *, allow_stale_fts=False):
         result['fts_source_consistent'] = _check_fts_content_integrity(conn)
         result['fts_restore_policy'] = 'rebuild_from_preserved_content'
     return result
+
+
+def _library_json(text, context):
+    try:
+        return json.loads(text)
+    except (TypeError, ValueError):
+        raise ValueError('Prompt library store has invalid JSON in ' + context)
+
+
+def library_store_summary(conn):
+    """Validate the prompt-library SQLite contract and summarise it.
+
+    Capture records the summary next to the logical SQL dump and restore compares it
+    against the rebuilt database, so a dump that silently loses rows, order or the
+    revision cannot be restored as if it were current. Raises ``ValueError`` for a
+    schema that is missing tables/columns, carries another schema version or breaks
+    the order/reference invariants.
+    """
+    tables = {row[0] for row in conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table'")}
+    missing = [name for name in LIBRARY_STORE_TABLES if name not in tables]
+    if missing:
+        raise ValueError('Prompt library store is missing tables: ' + ', '.join(missing))
+    columns = {}
+    for name, required in LIBRARY_STORE_TABLES.items():
+        present = {row[1] for row in conn.execute('PRAGMA table_info(' + quote_name(name) + ')')}
+        missing_columns = [column for column in required if column not in present]
+        if missing_columns:
+            raise ValueError('Prompt library table %s is missing columns: %s'
+                             % (name, ', '.join(missing_columns)))
+        columns[name] = sorted(present)
+    meta = {str(key): value for key, value in conn.execute('SELECT key, value FROM library_meta')}
+    schema_version = _library_json(meta[LIBRARY_STORE_META_SCHEMA],
+                                   'library_meta.' + LIBRARY_STORE_META_SCHEMA) \
+        if LIBRARY_STORE_META_SCHEMA in meta else None
+    if schema_version not in LIBRARY_SCHEMA_VERSIONS:
+        raise ValueError('Unsupported prompt library schema version: %r' % (schema_version,))
+    if 'last_modified' not in meta:
+        raise ValueError('Prompt library store is missing library_meta.last_modified')
+    revision = _library_json(meta['last_modified'], 'library_meta.last_modified')
+    if not isinstance(revision, str) or not revision:
+        raise ValueError('Prompt library last_modified is not a non-empty string')
+    category_rows = conn.execute('SELECT id, position, payload FROM categories').fetchall()
+    category_ids = []
+    category_positions = []
+    for category_id, position, payload in category_rows:
+        if not isinstance(category_id, str) or not category_id:
+            raise ValueError('Prompt library category id is invalid')
+        if not isinstance(position, int):
+            raise ValueError('Prompt library category position is invalid')
+        if not isinstance(_library_json(payload, 'categories.payload'), dict):
+            raise ValueError('Prompt library category payload is not an object')
+        category_ids.append(category_id)
+        category_positions.append(position)
+    if len(set(category_ids)) != len(category_ids):
+        raise ValueError('Prompt library category ids are not unique')
+    if len(set(category_positions)) != len(category_positions):
+        raise ValueError('Prompt library category positions are not unique')
+    category_set = set(category_ids)
+    prompt_category = {}
+    for prompt_id, category_id, payload in conn.execute(
+            'SELECT id, category_id, payload FROM prompts'):
+        if not isinstance(prompt_id, str) or not prompt_id:
+            raise ValueError('Prompt library prompt id is invalid')
+        if category_id not in category_set:
+            raise ValueError('Prompt library prompt %r references an unknown category' % prompt_id)
+        prompt = _library_json(payload, 'prompts.payload')
+        if not isinstance(prompt, dict) or str(prompt.get('id') or '') != prompt_id:
+            raise ValueError('Prompt library prompt payload does not match its row id: %r' % prompt_id)
+        prompt_category[prompt_id] = category_id
+    order_rows = conn.execute('SELECT category_id, order_json FROM category_orders').fetchall()
+    ordered_categories = [category_id for category_id, _ in order_rows]
+    if len(set(ordered_categories)) != len(ordered_categories):
+        raise ValueError('Prompt library category order rows are not unique')
+    if set(ordered_categories) != category_set:
+        raise ValueError('Prompt library category order rows do not match categories')
+    covered = {}
+    for category_id, raw_order in order_rows:
+        order = _library_json(raw_order, 'category_orders.order_json')
+        if not isinstance(order, list) or any(not isinstance(value, str) or not value for value in order):
+            raise ValueError('Prompt library category order is not a string list')
+        if len(set(order)) != len(order):
+            raise ValueError('Prompt library category order has duplicate prompt ids')
+        for prompt_id in order:
+            if prompt_category.get(prompt_id) != category_id:
+                raise ValueError('Prompt library order references a prompt of another category: %r' % prompt_id)
+            if prompt_id in covered:
+                raise ValueError('Prompt library prompt is listed more than once: %r' % prompt_id)
+            covered[prompt_id] = category_id
+    if set(covered) != set(prompt_category):
+        raise ValueError('Prompt library prompts are not all covered by category_orders')
+    if conn.execute('PRAGMA foreign_key_check').fetchall():
+        raise ValueError('Prompt library foreign key check failed')
+    if conn.execute('PRAGMA integrity_check').fetchone()[0] != 'ok':
+        raise ValueError('Prompt library SQLite integrity check failed')
+    top_level_order = _library_json(meta[LIBRARY_STORE_META_TOP_LEVEL_ORDER],
+                                    'library_meta.' + LIBRARY_STORE_META_TOP_LEVEL_ORDER) \
+        if LIBRARY_STORE_META_TOP_LEVEL_ORDER in meta else []
+    if not isinstance(top_level_order, list) or any(not isinstance(value, str) for value in top_level_order):
+        raise ValueError('Prompt library top-level key order is invalid')
+    return {
+        'profile': LIBRARY_STORE_PROFILE,
+        'schema_version': schema_version,
+        'counts': {name: conn.execute('SELECT count(*) FROM ' + quote_name(name)).fetchone()[0]
+                   for name in LIBRARY_STORE_TABLES},
+        'prompt_count': len(prompt_category),
+        'category_count': len(category_rows),
+        'last_modified': revision,
+        'top_level_order': top_level_order,
+        'columns': columns,
+        'order_covers_all_prompts': True,
+        'foreign_key_violations': 0,
+    }
 
 
 def restore_sql(conn, lines, sql_format=ITERDUMP):

@@ -25,32 +25,53 @@ from . import tag_links
 logger = logging.getLogger("weilin.prompt_selector")
 
 
-def _warm_tag_catalog(delay=0.0):
-    """Build the folder tree and the default page before the first Tag panel opens.
+def _warm_default_tag_views(tag_library):
+    """Prime ``_PAGE_CACHE`` with the exact keys ``/tags/page`` uses for its default views.
 
-    The tree is one 289k-row count pass and the default 基础 Tag view counts the
-    comma-free rows; both used to land on the user's first click after a restart.
+    The old pre-warm ran ``page()`` with ``known_collections=()`` while real requests fill
+    in every 收藏组 id, so their cache keys never matched and each warm-up only paid another
+    full-table scan.  Here the ids come from the same ``catalog()`` call ``/tags/page`` uses.
     """
-    def runner():
-        try:
-            if delay:
-                time.sleep(delay)
-            started = time.perf_counter()
-            library().categories()
-            # Every shape option in the 正文形状 dropdown costs a full count pass the
-            # first time it is chosen (220 ms / 950 ms / 1057 ms measured); pay it here
-            # instead of on the user's click.
-            for shape in ("atomic", "group", "string"):
-                library().page(shape=shape, offset=0, limit=120)
-            # The 标签串 split is the default 基础 Tag view, so warm both sides of it.
-            library().page(scope="tags", offset=0, limit=120)
-            library().page(scope="strings", offset=0, limit=120)
-            logger.info("[Workbench] Tag catalog warmed in %.1f s; the Tag manager opens from cache.",
-                        time.perf_counter() - started)
-        except Exception as error:  # noqa: BLE001
-            logger.warning(f"[Workbench] Tag catalog warm-up skipped: {error}")
+    known = tuple(group['id'] for group in catalog()['collections'])
+    warmed = 0
+    # 列表视图 limit=100、卡片视图 limit=120（web/tag_manager.js pageSize），
+    # 两种首屏都按真实缓存键预热，避免第一次切换视图时再付一次查询。
+    for limit in (100, 120):
+        for scope in ('tags', 'strings'):
+            for shape in ('', 'atomic', 'group', 'string'):
+                tag_library.page('', '', '', 0, limit, False, '', known, shape, scope)
+                warmed += 1
+    return warmed
 
-    threading.Thread(target=runner, name="uw-tag-catalog-warmup", daemon=True).start()
+
+def _warm_tag_catalog():
+    """Build the folder tree, the Tag read indexes, the search cache and the default pages.
+
+    ``categories()`` is the one expensive read (all tag rows grouped by folder plus the
+    标签串 layout), and TagLibrary persists it, so after the first run this costs almost
+    nothing.  ``warm_read_index()`` builds the expression indexes/derived tables once, then
+    the default views are pre-warmed under the same cache keys the panel will request.
+    ``warm_search_index()`` builds/syncs the trigram FTS cache for ``q`` searches; it is
+    optional (a missing cache or a failed build just keeps the old LIKE fallback).
+    """
+    started = time.perf_counter()
+    tag_library = library()
+    tag_library.categories()
+    warm_reads = getattr(tag_library, 'warm_read_index', None)
+    if warm_reads is not None:
+        try:
+            if warm_reads():
+                _warm_default_tag_views(tag_library)
+        except Exception as error:  # noqa: BLE001 - a failed warm-up must not break the panel
+            logger.warning("[Workbench] Tag 读取预热失败，将在首次打开时重试: %s", error)
+    warm_search = getattr(tag_library, 'warm_search_index', None)
+    if warm_search is not None:
+        try:
+            warm_search()
+        except Exception as error:  # noqa: BLE001 - a failed warm-up must not break the panel
+            logger.warning("[Workbench] Tag 搜索预热失败，将在首次搜索时重试: %s", error)
+    logger.info("[Workbench] Tag catalog warmed in %.1f s; the Tag manager opens from cache.",
+                time.perf_counter() - started)
 
 
 # Stable, repository-relative evidence location for the audited candidate
@@ -445,9 +466,12 @@ async def item_metadata_get(request):
 # Scheduled from the end of the module: the worker calls library(), which only exists
 # once every definition above has executed. Triggering it earlier lost the race and the
 # warm-up silently never ran ("name 'library' is not defined" in the boot log).
+# The work itself is deferred to the HTTP app start so it no longer competes with
+# ComfyUI's import phase; partial-source test harnesses import the helper inline.
 try:
     if os.environ.get("UW_SKIP_LIBRARY_WARMUP") != "1":
-        _warm_tag_catalog()
+        from .startup_hooks import register_after_start
+        register_after_start(_warm_tag_catalog, delay=2.0)
 except Exception as error:  # noqa: BLE001
     logger.warning(f"[Workbench] Tag catalog warm-up could not be scheduled: {error}")
 

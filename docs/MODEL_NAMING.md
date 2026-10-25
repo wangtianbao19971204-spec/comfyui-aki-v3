@@ -17,6 +17,8 @@
 
 2026-10-11 增量导入 4 个服装 LoRA（Anima 2 个、Krea2 2 个），当前共 **313 个用户 LoRA**，含 2026-10-09 导入的 3 个。新文件均已分类、改名、登记卡片和预览；本批 Downloads 原件保留。见[本批收据](receipts/lora_download_import_20261011.json)。
 
+2026-10-19 增量导入 9 个新下载 LoRA（Anima 7 个、Krea2 2 个），当前共 **322 个用户 LoRA**：Anima 219、Anima 2.9B 2、Krea2 101。用途为画风与画师 3 个（@ZIYUEYUE、油画湿润厚涂二次元 nai5 其三、mystyle）、角色与人物 5 个（光之美少女森亚露露卡 Krea2 三合一与 Anima 七合一、eternal return seres、Mystic Pure Bunny Sua、ISEGYE IDOL VIichan）、服装与配饰 1 个（np_sheer_taut 连裤袜质感）。9 项完整 SHA 均与 Civitai 确切版本文件一致，卡片与加载器枚举逐项通过，预览全部取到；同批另有 4 个 2026-10-11 已导入的重复下载，未重复导入。按用户确认，本批成功后把 9 个下载原件移走，与上一批保留原件的做法不同。见[本批收据](receipts/lora_download_import_20261019.json)。
+
 ## 分类
 
 保留 ComfyUI 加载器的目录边界，在其中按“家族／用途”整理：
@@ -89,3 +91,4 @@ LoRA Manager 的常规与排除缓存须同时核验：本轮 286 个用户 LoRA
 - 2026-10-07：实际完成 286 LoRA／19 图像底模／1 SAM 的规范分类与改名，连同 690 配套迁移；41 个主仓引用文件与 5 个运行配置同步。修正 Platinum 的 Anima 家族归属，独立区分 2.9B、自训成品和 SAM 工具；保留上游下载身份、原 inventory、4 个成品和个人字段。常规／排除缓存及摘要核验的实际范围见[标准化收据](receipts/model_standardization_20261007.json)，未重新执行 GPU 任务。
 
 - 2026-10-09：新增下载使用[一行快速整理入口](technical/runtime/lora-quick-import.md)，避免全库迁移；本批 3 个新权重分类为 Anima 服装／画风和 Krea2 画风，确切来源及完整摘要均登记。
+- 2026-10-19：沿用同一规则导入 9 个新下载（7 Anima、2 Krea2），逐项核对完整 SHA 与 Civitai 确切版本／文件 ID，按已审查用途表落位并登记卡片与预览；9 个下载原件在核验后移走，4 个重复件保留。加载器枚举与 32 项导入回归、26 项来源回归、47 项命名回归、36 项目录回归通过；未做 GPU 推理或全库重扫，见[收据](receipts/lora_download_import_20261019.json)。

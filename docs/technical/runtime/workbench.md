@@ -25,6 +25,14 @@
 
 ## 更新记录
 
+- 2026-10-25：提示词库改 SQLite 权威存储（WAL + `synchronous=FULL`），读模型/API/语义不变，data.json 降级为按需导出快照；单条编辑只提交 1 行 + revision 小事务（**中位 1.59 ms**，原 ~1033 ms 且不再随库增长），批量事务化并事务前 backup；后台自动导出/备份 + 行级 journal + `store-status` 告警；迁移 8.81 s/逐字段 equal，启动加载 2.17–2.71 s；`UW_LIBRARY_STORE=json|sqlite` 灰度；snapshot/restore 将 library DB 纳入 SQL dump。测试 188 OK/1 skip，详见[说明](../changes/runtime-workbench/2026-10-25-library-store-sqlite.md)。本轮未部署生产。
+
+- 2026-10-25：工作台交互第二轮：Tag 子串搜索/自动补全走 trigram FTS 缓存库（q=hair 178→18.6 ms、complete 168.6→19.5 ms、空结果 326→3.9 ms；1–2 字符仍回退旧 LIKE）；正文编辑后走单行增量 index patch，保存后首次 index 3.0–3.5 s→<0.1 s、prompts 1.1 s→0.13 s，不再触发整库 warm。Tag 语义 165 组 query 逐字段 0 mismatch、编辑后结构与全量重建 ALL EQUAL；测试 156 OK/1 skip，详见[第二轮说明](../changes/runtime-workbench/2026-10-25-interaction-round2.md)。本轮未部署生产。
+
+- 2026-10-24：工作台交互延迟优化：单条提示词编辑保存复用已解析缓存并跳过整库 warm（3.9–5.2 s→0.8–0.9 s，可补丁写后首次 index 0 ms）；Tag 面板加表达式索引/派生表并按真实缓存键预热默认视图（shape 首次 508→6.5 ms、q 搜索 189→11.5 ms）；缩略图管线 1.64×、16 张首屏 3.14×。测试 138 OK/1 skip，完整数据与边界见[交互延迟优化](../changes/runtime-workbench/2026-10-24-workbench-interaction-latency.md)。本轮未部署生产。
+
+- 2026-10-24：词库与 Tag 预热移出插件导入期：派生 `_semantic` 按 `id+binding` 持久化（msgpack+zstd），热启动只重算变更行；Tag 目录树按 revision 缓存落盘，并删除 5 次与真实请求缓存键不符的 `page()` 全表预热。单测与隔离 A/B 见[启动期零重活与派生语义缓存](../changes/runtime-workbench/2026-10-24-startup-warmup-cache.md)。本轮未部署生产。
+
 - 2026-10-14：新增 UAP 与独立 01/02/03 共用的「控制与擦线」开关；自动启用控制来源，直接打开原生蒙版编辑器，空选区提示，并保持切分支/重载状态。操作与验证边界见[本轮说明](../changes/runtime-workbench/2026-10-14-control-one-click.md)。
 
 - 2026-10-11：主工作台与修复页的任务选择器均将丝袜纹理修复排在 2× / 4× 放大之后，提示先精修、放大，再导入最终尺寸图片补纹理。仅调整入口顺序和说明，工作流切换与运行参数保持；验证和部署记录见[工作流说明](workflows.md)。

@@ -33,6 +33,15 @@ python -B -m unittest discover -s tests -p test_database_contract.py -v
 
 `--against-snapshot` 流式检查 SQL 分片及完整 SQL 哈希，仅在内存执行 CREATE 定义，不执行生产 INSERT。空库全部表行数为零；带 fixtures 的库只含虚构内容。`schema_version` 和真实更新时间不从生产复制，因此这些库是开发契约样例，**不能直接覆盖运行库，也不代表插件完整冷启动已验收**。
 
+## 提示词库 SQLite 权威库
+
+提示词库（`WeiLin-Comfyui-Tools-V52-FullPromptSelector/user_data/prompt_selector/`）正在从 462 MB `data.json` 换成 SQLite 权威存储：`library.sqlite3`（WAL + `synchronous=FULL`），表 `library_meta(key,value)`、`categories(id,name,position,payload)`、`category_orders(category_id,order_json)`、`prompts(id,category_id,payload)`，payload 为 JSON 文本；分类内提示词顺序由 `category_orders.order_json` 的 id 列表决定。它不是 `database/contract.json` 的 v1 三库契约，也不能用三库 contract 工具验证。
+
+- 捕获/恢复：`scripts/snapshot.py` 把该库按普通 `sqlite_iterdump_v1` 逻辑 SQL 捕获（与三个 tag DB 同一套在线一致备份流程），并记录 `prompt_library_store_v1` 摘要（schema 版本、表行数、分类顺序覆盖、外键、revision、完整逻辑 SQL 哈希）。恢复时重建数据库后逐项核对，不一致即失败。
+- `data.json` 在 SQLite 权威模式下只是可选兼容导出：捕获时若仍存在则一并保存（manifest `library_json_export=compatibility_export`），恢复后也仅用于 json 回退模式；正常编辑不再写它。
+- 未迁移的 json 模式运行区仍以 `data.json` 为权威（manifest `library_authority=json`、`library_json_export=authority`），捕获行为与旧版本一致。
+- 迁移工具、导出与回滚细节见提示词库专项任务的技术说明；本页只登记维护捕获/恢复边界。不要用旧 SQL 检查点直接覆盖在线 `library.sqlite3`，也不要把该库二进制、WAL/SHM 纳入 Git。
+
 ## 后续修改入口
 
 ### Gallery 辅助词典检查点

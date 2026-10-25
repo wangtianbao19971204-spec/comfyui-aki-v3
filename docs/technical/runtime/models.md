@@ -1,6 +1,6 @@
 # 模型、LoRA 管理与资源配套
 
-文档修订：2026-10-11。
+文档修订：2026-10-19。
 
 
 2026-10-11 更新：Anima 2.9B 控制图简化后，仅刷新 model_sources.json 的 UAP 文件摘要绑定，并重新生成下载表；对比基线确认 UAP 模型引用集合、23 项目录关联与所有资产身份保持。权重没有移动、下载或转换；[专用加载器](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/native_loader.py)继续读取原 controlnet 目录。见 [简化收据](../../receipts/anima_control_simple_20261011.json)。
@@ -17,13 +17,15 @@
 
 ## 实现与资源
 
+2026-10-19：按同一规则增量导入下载的 9 个 LoRA（Anima 7 个、Krea2 2 个），现有 322 个用户 LoRA。用途按已审查表落位为画风与画师 3、角色与人物 5、服装与配饰 1；9 项完整 SHA 与 Civitai 确切版本文件一致，卡片、`LoraLoader` 枚举和 9 张预览均通过，原有 329 条缓存行保持不变，成功后移走 9 个下载原件（同批 4 个重复件保留）。32 项导入回归、26 项来源回归、47 项命名回归、36 项目录回归通过；运行区服务为本批登记启动并保持空队列，未重启、全库重扫或做 GPU 生图。见[本批收据](../../receipts/lora_download_import_20261019.json)。
+
 2026-10-11：增量导入昨晚下载的 4 个服装 LoRA（Anima 2 个、Krea2 2 个），现有 313 个用户 LoRA。补齐分类、规范名、来源、触发词与 4 张官方预览，保留全部下载原件；326 条旧缓存身份／个人字段和既有索引保持。整理工具接纳 Civitai LoCon 类型，仍严格核对完整摘要与版本／文件身份，并新增 `--keep-originals`。32 项导入回归、26 项来源回归、47 项命名回归及在线卡片／加载器核验通过；未重启、全库重扫或做 GPU 生图。回滚依赖保留原件与本批路径／摘要日志，不覆盖在线库。见[本批收据](../../receipts/lora_download_import_20261011.json)。
 
 统一包内 `modules/comfyui-lora-manager/` 是当前管理实现；模块入口通过 [modules.json](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules.json)登记。[模型说明](../../MODELS.md)、[模型清单](../../../snapshot/inventory/models.json)和 [工作流模型引用](../../../snapshot/inventory/workflow_models.json)提供路径、用途及捕获时依赖。
 
 模型/LoRA 的实际权重、预览和大型 Civitai 缓存保持仓外；清单的 `sha256: null` 不表示已校验。目录模型还需 config/tokenizer/processor/index 等同版本伴随文件，不能只搬单个权重。
 
-[公开来源目录](../../../snapshot/inventory/model_sources.json)覆盖 384 个已捕获权重、11 个特殊配套及后来新增的 9 个 LoRA；[易读下载表](../../MODEL_SOURCES.md)由 [model_sources.py](../../../scripts/model_sources.py)离线生成。每项记录相对运行根路径、来源页／版本／文件身份、上游声明摘要、实际本机摘要、家族、目录配套和备注。来源字段从公开元数据和节点／发布说明提取，原始插件缓存、登录值、私密备注正文与权重不入库。
+[公开来源目录](../../../snapshot/inventory/model_sources.json)覆盖 384 个已捕获权重、11 个特殊配套及后来新增的 36 个 LoRA；[易读下载表](../../MODEL_SOURCES.md)由 [model_sources.py](../../../scripts/model_sources.py)离线生成。每项记录相对运行根路径、来源页／版本／文件身份、上游声明摘要、实际本机摘要、家族、目录配套和备注。来源字段从公开元数据和节点／发布说明提取，原始插件缓存、登录值、私密备注正文与权重不入库。
 
 来源目录绑定旧 inventory 与当前正式 UAP v2 摘要，当前 23 个静态引用资产均有候选。目录型／节点默认模型另在配套项登记；历史 workflow_models 继续保留捕获身份。本地训练项删除前是 19 个文件路径、17 份内容：4 个成品使用版本与 15 个评估检查点；当前只保留 4 个成品，15 个评估项已删。逐项训练头、输出／发布记录与历史复制关系见[计数复核](../../receipts/model_source_recount_20261007.json)，当前事实以[清理收据](../../receipts/model_checkpoint_cleanup_20261007.json)为准。4 个历史 intrinsic 转换文件当前上游已不含同文件；旧 T5 词表仅确认家族参考，保持来源待核对并迁移原件。网址、父模型和源码都不能代替这些文件备份。
 

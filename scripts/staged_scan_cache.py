@@ -52,8 +52,11 @@ class StagedCache:
     limit = LIMIT
     max_records = 100000
 
-    def __init__(self, git_dir, policy):
-        self.path = Path(git_dir).absolute() / self.name
+    def __init__(self, git_dir, policy, path=None):
+        # An explicit path lets CI carry this metadata store between clean clones.
+        # The default stays inside one Git directory, so a copied file grants no
+        # reuse unless the caller also selected the portable policy binding.
+        self.path = Path(path).absolute() if path is not None else Path(git_dir).absolute() / self.name
         self.policy = policy
         self.records = {}
         self.pending = {}
@@ -121,6 +124,7 @@ class StagedCache:
         temporary = None
         try:
             plain_path(self.path)
+            self.path.parent.mkdir(parents=True, exist_ok=True)
             fd, temporary = tempfile.mkstemp(prefix='comfyui-scan-', suffix='.tmp', dir=self.path.parent)
             with os.fdopen(fd, 'wb') as stream:
                 stream.write(raw)
@@ -153,3 +157,14 @@ class HistoryCache(StagedCache):
     mode = 'local-history-content-reuse'
     limit = 64 * 1024 * 1024
     max_records = 400000
+
+
+class PortableHistoryCache(HistoryCache):
+    """Metadata store carried between clean CI clones, never a publication proof.
+
+    Identity is the repository (remote URL and root commits) plus an optional
+    salt, not the local filesystem. A cache written under different scanner code,
+    rules, Python version, repository or salt is discarded and rescanned in full.
+    """
+
+    mode = 'portable-history-content-reuse'
