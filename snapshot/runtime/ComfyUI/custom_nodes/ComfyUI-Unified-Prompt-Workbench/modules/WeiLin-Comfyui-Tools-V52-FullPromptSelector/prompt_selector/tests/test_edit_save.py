@@ -250,8 +250,6 @@ class EditSaveTests(unittest.TestCase):
             'review_ranges': state['ranges'].get(True),
             'view_index': dict(state['view_index'].get(False) or {}),
             'review_view_index': dict(state['view_index'].get(True) or {}),
-            'row_index': dict(state['row_index'].get(False) or {}),
-            'review_row_index': dict(state['row_index'].get(True) or {}),
         }
         return snapshot
 
@@ -284,9 +282,6 @@ class EditSaveTests(unittest.TestCase):
         self.assertEqual(canonical(snapshot['view_index']), canonical(fresh['view_index'][False]))
         self.assertEqual(canonical(snapshot['review_view_index']),
                          canonical(fresh['view_index'][True]))
-        self.assertEqual(canonical(snapshot['row_index']), canonical(fresh['row_index'][False]))
-        self.assertEqual(canonical(snapshot['review_row_index']),
-                         canonical(fresh['row_index'][True]))
         self.assertEqual(canonical(snapshot['page']),
                          canonical(module._library_page_payload('', '', 0, 30)))
         self.assertEqual(canonical(snapshot['review_page']),

@@ -107,7 +107,7 @@ _PROMPT_DATA_CACHE_SIGNATURE = None
 # guarded by the same lock as the parsed document, which is always taken first.
 _LIBRARY_STATE = {"version": None, "data": None, "document": None, "indexed": True,
                   "entries": {}, "views": {}, "rows": {}, "ranges": {}, "matches": {}, "index": None,
-                  "view_index": {}, "row_index": {}, "filter_masks": {}, "filter_scopes": {},
+                  "view_index": {}, "filter_masks": {}, "filter_scopes": {},
                   "locations": {}, "total_prompts": 0}
 _REVIEWED_LIBRARY_CACHE = _LIBRARY_STATE["views"]
 _LIBRARY_MATCH_CACHE_LIMIT = 24
@@ -745,9 +745,12 @@ def _library_store_shutdown():
     with _SEMANTIC_CACHE_STORE_LOCK:
         timer = _SEMANTIC_CACHE_STORE.get("timer")
         _SEMANTIC_CACHE_STORE["timer"] = None
+        pending = timer is not None or (
+            _SEMANTIC_CACHE_STORE["last_write_at"] > _SEMANTIC_CACHE_STORE["last_flush_at"])
     if timer is not None:
         timer.cancel()
-        _flush_semantic_cache_snapshot()
+    if pending:
+        _flush_semantic_cache_snapshot(force=True)
     maintenance = _LIBRARY_STORE_STATE.get("maintenance")
     if maintenance is not None:
         try:
@@ -861,7 +864,7 @@ _DATA_COMPATIBLE = False
 # so derived_cache keeps them across restarts instead of recomputing them all.
 _SEMANTIC_ENTRIES = {}
 _SEMANTIC_CACHE = {"projection": (), "warned": False}
-_SEMANTIC_CACHE_STORE = {"timer": None}
+_SEMANTIC_CACHE_STORE = {"timer": None, "last_write_at": 0.0, "last_flush_at": 0.0}
 _SEMANTIC_CACHE_STORE_LOCK = threading.Lock()
 
 
@@ -905,46 +908,79 @@ def _install_semantic_cache(entries, projection_signature):
     _SEMANTIC_CACHE["projection"] = _semantic_cache_projection(projection_signature)
 
 
-def _flush_semantic_cache_snapshot():
-    """Hand the (unsnapshotted) mapping to derived_cache from a background timer.
+def _flush_semantic_cache_snapshot(force=False):
+    """Hand the (unsnapshotted) mapping to derived_cache once the library is idle.
 
-    ``derived_cache.store`` copies the 325k-entry dict as its snapshot; doing that
-    inside the save request would reintroduce an O(library) cost on every edit.
+    ``derived_cache.store`` snapshots the 325k-entry dict and a later timer serialises
+    and writes 23MB; both compete with an in-flight save, which T16 measured as
+    70-110ms spikes. The write is therefore only armed after
+    ``UW_LIBRARY_SEMANTIC_STORE_IDLE_S`` (default 30s) without an edit: every edit
+    re-arms the timer and a late callback re-arms instead of writing. ``force`` is
+    used by the exit and small-library paths.
     """
     with _SEMANTIC_CACHE_STORE_LOCK:
         _SEMANTIC_CACHE_STORE["timer"] = None
+        last_write_at = _SEMANTIC_CACHE_STORE["last_write_at"]
     if _semantic_cache_disabled():
-        return
+        return False
+    idle_seconds = _semantic_store_idle_seconds()
+    if not force and idle_seconds > 0 and time.monotonic() - last_write_at < idle_seconds:
+        _arm_semantic_cache_store_timer(
+            max(0.05, idle_seconds - (time.monotonic() - last_write_at)))
+        return False
     try:
         derived_cache.store(_semantic_cache_directory(), _SEMANTIC_CACHE["projection"],
                             REFINEMENT_VERSION, _SEMANTIC_ENTRIES)
     except Exception as error:  # noqa: BLE001 - persistence is best effort
         logger.warning("[Workbench] semantic cache store scheduling failed: %s", error)
+        return False
+    with _SEMANTIC_CACHE_STORE_LOCK:
+        _SEMANTIC_CACHE_STORE["last_flush_at"] = time.monotonic()
+    return True
 
 
 _SEMANTIC_STORE_SNAPSHOT_LIMIT = 20000
+_SEMANTIC_STORE_IDLE_S = 30.0
+_SEMANTIC_STORE_IDLE_ENV = "UW_LIBRARY_SEMANTIC_STORE_IDLE_S"
 
 
-def _schedule_semantic_cache_store(immediate=False):
-    """Persist the mapping after a short debounce; requests never wait for it.
+def _semantic_store_idle_seconds():
+    try:
+        return max(0.0, float(os.environ.get(_SEMANTIC_STORE_IDLE_ENV, _SEMANTIC_STORE_IDLE_S)))
+    except (TypeError, ValueError):
+        return _SEMANTIC_STORE_IDLE_S
 
-    `derived_cache.store` snapshots the whole mapping, which is ~8 ms for the
-    325k-row library: that copy is deferred to a timer. Small mappings (tests,
-    fresh libraries) snapshot synchronously so a caller's `flush()` sees them.
-    """
-    if _semantic_cache_disabled():
-        return
-    if immediate or len(_SEMANTIC_ENTRIES) <= _SEMANTIC_STORE_SNAPSHOT_LIMIT:
-        _flush_semantic_cache_snapshot()
-        return
+
+def _arm_semantic_cache_store_timer(delay):
     with _SEMANTIC_CACHE_STORE_LOCK:
         timer = _SEMANTIC_CACHE_STORE.get("timer")
         if timer is not None:
             timer.cancel()
-        timer = threading.Timer(1.0, _flush_semantic_cache_snapshot)
+        timer = threading.Timer(delay, _flush_semantic_cache_snapshot)
         timer.daemon = True
         _SEMANTIC_CACHE_STORE["timer"] = timer
         timer.start()
+
+
+def _schedule_semantic_cache_store(immediate=False):
+    """Persist the mapping only after the library has been idle long enough.
+
+    Small mappings (tests, fresh libraries) still snapshot synchronously so a
+    caller's ``derived_cache.flush()`` sees them; the 325k-row mapping is deferred
+    until ``UW_LIBRARY_SEMANTIC_STORE_IDLE_S`` seconds pass without another edit.
+    """
+    if _semantic_cache_disabled():
+        return
+    with _SEMANTIC_CACHE_STORE_LOCK:
+        _SEMANTIC_CACHE_STORE["last_write_at"] = time.monotonic()
+    if immediate or len(_SEMANTIC_ENTRIES) <= _SEMANTIC_STORE_SNAPSHOT_LIMIT:
+        _flush_semantic_cache_snapshot(force=True)
+        return
+    idle_seconds = _semantic_store_idle_seconds()
+    if idle_seconds <= 0:
+        _flush_semantic_cache_snapshot(force=False)
+    else:
+        _arm_semantic_cache_store_timer(idle_seconds)
 
 
 def _upgrade_data_file_once(data):
@@ -1058,7 +1094,6 @@ def _library_state_reset():
     state["ranges"].clear()
     state["matches"].clear()
     state["view_index"].clear()
-    state["row_index"].clear()
     state["filter_masks"].clear()
     state["filter_scopes"].clear()
     state["locations"].clear()
@@ -1250,12 +1285,6 @@ def _library_rows_for(state, include_pending, view):
     if own_view:
         state["rows"][key] = rows
         state["ranges"][key] = ranges
-        state["row_index"][key] = {}
-        index = state["row_index"][key]
-        for position, row in enumerate(rows):
-            identity = row[0].get("id")
-            if isinstance(identity, str) and identity:
-                index[identity] = position
     return rows, ranges
 
 
@@ -1324,8 +1353,8 @@ def _patch_derived_caches(state, data, changed_ids, refresh_index=False, locatio
             continue
         view_index = state["view_index"].get(key)
         rows = state["rows"].get(key)
-        row_index = state["row_index"].get(key)
-        if view_index is None or rows is None or row_index is None:
+        ranges = state["ranges"].get(key)
+        if view_index is None or rows is None or ranges is None:
             return False
         view_categories = view["categories"]
         for prompt_id, (category_position, identity, name) in locations.items():
@@ -1350,9 +1379,7 @@ def _patch_derived_caches(state, data, changed_ids, refresh_index=False, locatio
                     (entry.get("_semantic") or {}).get("disposition"):
                 return False              # _review_counts would go stale
             category["prompts"][placement[1]] = entry
-            position = row_index.get(prompt_id)
-            if position is None:
-                return False
+            position = ranges[category_position][2] + placement[1]
             names, body = _search_terms(entry)
             rows[position] = (entry, identity, name, name.casefold(), names, body)
         # Refresh the category metadata the view copies from the document too, so a
@@ -1568,16 +1595,19 @@ def _reindex_prompt_locations(state, data, category_positions):
                 locations[identity] = (position, prompt_index)
 
 
-def _shift_view_index(view_index, category_position, from_item, delta):
-    for identity, placement in view_index.items():
-        if placement[0] == category_position and placement[1] >= from_item:
-            view_index[identity] = (placement[0], placement[1] + delta)
-
-
-def _shift_row_positions(row_index, from_position, delta):
-    for identity, position in row_index.items():
-        if position >= from_position:
-            row_index[identity] = position + delta
+def _shift_view_index(view, view_index, category_position, from_item, delta):
+    """Shift one category's visible item indices (O(category), not O(library))."""
+    items = (view["categories"][category_position].get("prompts") or [])
+    if delta > 0:
+        for position in range(len(items) - 1, from_item - 1, -1):
+            identity = items[position].get("id")
+            if isinstance(identity, str) and identity:
+                view_index[identity] = (category_position, position + delta)
+    else:
+        for position in range(from_item, len(items)):
+            identity = items[position].get("id")
+            if isinstance(identity, str) and identity:
+                view_index[identity] = (category_position, position)
 
 
 def _shift_ranges(ranges, category_position, delta):
@@ -1614,16 +1644,12 @@ def _patch_one_changed_row(state, data, prompt_id, previous_entry, entry, same_s
             continue
         view_index = state["view_index"].get(key)
         rows = state["rows"].get(key)
-        row_index = state["row_index"].get(key)
-        if view_index is None or (rows is not None and row_index is None):
+        if view_index is None:
             return None
         eligible = _library_entry_in_view(entry, key)
         old_placement = view_index.get(prompt_id)
-        if old_placement is not None:
-            if old_placement[0] != category_position:
-                return None
-            if rows is not None and row_index.get(prompt_id) is None:
-                return None
+        if old_placement is not None and old_placement[0] != category_position:
+            return None
         expected_item = None
         if eligible and position_unchanged and old_placement is not None:
             expected_item = old_placement[1]
@@ -1639,7 +1665,7 @@ def _patch_one_changed_row(state, data, prompt_id, previous_entry, entry, same_s
             if old_placement is not None and old_placement[1] != expected_item:
                 return None
         plans[key] = {"view": view, "view_index": view_index, "rows": rows,
-                      "row_index": row_index, "old_placement": old_placement,
+                      "ranges": state["ranges"].get(key), "old_placement": old_placement,
                       "eligible": eligible, "expected_item": expected_item}
     if plans[False] is None:
         return None
@@ -1669,34 +1695,30 @@ def _patch_one_changed_row(state, data, prompt_id, previous_entry, entry, same_s
             return None
         view_index = plan["view_index"]
         rows = plan["rows"]
-        row_index = plan["row_index"]
+        ranges = plan["ranges"]
         old_placement = plan["old_placement"]
         eligible = plan["eligible"]
         if old_placement is not None and eligible:
             category["prompts"][old_placement[1]] = entry
             if rows is not None:
-                rows[row_index[prompt_id]] = row_tuple
+                rows[ranges[category_position][2] + old_placement[1]] = row_tuple
         elif old_placement is not None:
             item_position = old_placement[1]
             del category["prompts"][item_position]
             view_index.pop(prompt_id, None)
-            _shift_view_index(view_index, category_position, item_position, -1)
+            _shift_view_index(view, view_index, category_position, item_position, -1)
             if rows is not None:
-                row_position = row_index.pop(prompt_id)
-                rows.pop(row_position)
-                _shift_row_positions(row_index, row_position, -1)
-                _shift_ranges(state["ranges"][key], category_position, -1)
+                rows.pop(ranges[category_position][2] + item_position)
+                _shift_ranges(ranges, category_position, -1)
         elif eligible:
             item_position = plan["expected_item"]
-            _shift_view_index(view_index, category_position, item_position, 1)
+            row_position = ranges[category_position][2] + item_position
+            _shift_view_index(view, view_index, category_position, item_position, 1)
             category["prompts"].insert(item_position, entry)
             view_index[prompt_id] = (category_position, item_position)
             if rows is not None:
-                row_position = state["ranges"][key][category_position][2] + item_position
                 rows.insert(row_position, row_tuple)
-                _shift_row_positions(row_index, row_position, 1)
-                row_index[prompt_id] = row_position
-                _shift_ranges(state["ranges"][key], category_position, 1)
+                _shift_ranges(ranges, category_position, 1)
         view_categories[category_position] = {
             **data_category,
             "prompts": view_categories[category_position]["prompts"]}
@@ -1917,7 +1939,6 @@ def _cache_prompt_data(data, changed_ids=None, locations_hint=None, removed_hint
         state["ranges"].clear()
         state["matches"].clear()
         state["view_index"].clear()
-        state["row_index"].clear()
         state["filter_masks"].clear()
         state["filter_scopes"].clear()
         state["index"] = None

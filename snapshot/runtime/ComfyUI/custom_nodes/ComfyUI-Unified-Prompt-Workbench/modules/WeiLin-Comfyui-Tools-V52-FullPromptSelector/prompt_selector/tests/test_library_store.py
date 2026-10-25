@@ -461,6 +461,7 @@ class JournalAndMaintenanceTests(unittest.TestCase):
                     startup_backup_age_s=0, startup_delay_s=0)
         self.assertTrue(_wait_for(lambda: len(list((self.root / 'backups').glob('library_*.sqlite3'))) >= 1),
                         'startup backup appeared')
+        self.assertTrue(_wait_for(lambda: self.store.last_backup_at > 0), 'backup timestamp persisted')
         self.assertGreater(self.store.last_backup_at, 0)
         self.assertGreater(self.maintenance.status()['backup']['last_success_at'], 0)
         self.assertIsNone(self.maintenance.status()['backup']['error'])
@@ -746,10 +747,11 @@ class EditPatchO1Tests(unittest.TestCase):
             'UW_DISABLE_SEMANTIC_CACHE': '1', **DISABLE_MAINTENANCE,
         }
 
-    def _module(self):
-        module = _load_prompt_selector(uuid.uuid4().hex[:8], self.root, self.environment)
+    def _module(self, environment=None):
+        environment = environment or self.environment
+        module = _load_prompt_selector(uuid.uuid4().hex[:8], self.root, environment)
         self.addCleanup(_close_module, module)
-        with mock.patch.dict(os.environ, self.environment):
+        with mock.patch.dict(os.environ, environment):
             module._warm_library_caches(include_packed=False)
         return module
 
@@ -946,6 +948,98 @@ class EditPatchO1Tests(unittest.TestCase):
             self.assertEqual(module._reviewed_library_data(True), view_true)
             self.assertEqual(module._library_index_payload(), index_payload)
             self.assertEqual(module._library_page_payload('', '', 0, 30), page)
+
+    def test_semantic_store_waits_for_idle_and_resets_timer(self):
+        module = self._module({key: value for key, value in self.environment.items()
+                              if key != 'UW_DISABLE_SEMANTIC_CACHE'})
+        calls = []
+        original_flush = module._flush_semantic_cache_snapshot
+
+        def counted_flush(*args, **kwargs):
+            calls.append(time.monotonic())
+            return original_flush(*args, **kwargs)
+
+        timers = []
+        cache_environment = {key: value for key, value in self.environment.items()
+                             if key != 'UW_DISABLE_SEMANTIC_CACHE'}
+        environment = {**cache_environment, 'UW_LIBRARY_SEMANTIC_STORE_IDLE_S': '0.4'}
+        with mock.patch.dict(os.environ, environment), \
+                mock.patch.object(module, '_SEMANTIC_STORE_SNAPSHOT_LIMIT', 0), \
+                mock.patch.object(module, '_flush_semantic_cache_snapshot', counted_flush):
+            for index in range(3):
+                module._apply_upsert_prompt({
+                    'mode': 'edit', 'base_revision': self._revision(module),
+                    'target_category_id': 'cat-a',
+                    'prompt': {'id': 'p1', 'alias': 'idle', 'prompt': 'idle body',
+                               'description': 'idle %d' % index, 'image': '', 'tags': []},
+                })
+                timers.append(module._SEMANTIC_CACHE_STORE['timer'])
+                time.sleep(0.1)
+            self.assertIsNotNone(timers[0])
+            self.assertIsNot(timers[0], timers[1])
+            self.assertIsNot(timers[1], timers[2])
+            time.sleep(0.15)
+            self.assertEqual(calls, [], 'the idle timer must not fire after an edit')
+            self.assertTrue(_wait_for(lambda: len(calls) >= 1, timeout=5.0),
+                            'snapshot runs once the library has been idle long enough')
+            self.assertEqual(len(calls), 1)
+            self.assertIsNone(module._SEMANTIC_CACHE_STORE['timer'])
+
+    def test_shutdown_forces_pending_semantic_store(self):
+        module = self._module({key: value for key, value in self.environment.items()
+                              if key != 'UW_DISABLE_SEMANTIC_CACHE'})
+        calls = []
+        original_flush = module._flush_semantic_cache_snapshot
+
+        def counted_flush(*args, **kwargs):
+            calls.append(kwargs.get('force'))
+            return original_flush(*args, **kwargs)
+
+        cache_environment = {key: value for key, value in self.environment.items()
+                             if key != 'UW_DISABLE_SEMANTIC_CACHE'}
+        environment = {**cache_environment, 'UW_LIBRARY_SEMANTIC_STORE_IDLE_S': '60'}
+        with mock.patch.dict(os.environ, environment), \
+                mock.patch.object(module, '_SEMANTIC_STORE_SNAPSHOT_LIMIT', 0), \
+                mock.patch.object(module, '_flush_semantic_cache_snapshot', counted_flush):
+            module._apply_upsert_prompt({
+                'mode': 'edit', 'base_revision': self._revision(module),
+                'target_category_id': 'cat-a',
+                'prompt': {'id': 'p1', 'alias': 'shutdown', 'prompt': 'shutdown body',
+                           'description': 'shutdown', 'image': '', 'tags': []},
+            })
+            self.assertIsNotNone(module._SEMANTIC_CACHE_STORE['timer'])
+            module._library_store_shutdown()
+            self.assertIn(True, calls, 'shutdown forces the pending snapshot')
+
+    def test_edit_patch_matches_rebuild_without_row_index(self):
+        module = self._module()
+        categories_seen = []
+        original_shift = module._shift_view_index
+
+        def counted_shift(view, view_index, category_position, from_item, delta):
+            categories_seen.append(category_position)
+            return original_shift(view, view_index, category_position, from_item, delta)
+
+        with mock.patch.dict(os.environ, self.environment), \
+                mock.patch.object(module, '_shift_view_index', counted_shift):
+            module._apply_upsert_prompt({
+                'mode': 'edit', 'base_revision': self._revision(module),
+                'target_category_id': 'cat-a',
+                'prompt': {'id': 'p1', 'alias': 'a cat', 'prompt': 'a completely different body',
+                           'description': '', 'image': '', 'tags': []},
+            })
+            snapshot = {
+                'view': copy.deepcopy(module._LIBRARY_STATE['views'].get(False)),
+                'rows': copy.deepcopy(module._LIBRARY_STATE['rows'].get(False)),
+                'view_index': dict(module._LIBRARY_STATE['view_index'].get(False) or {}),
+            }
+            module._library_state_reset()
+            module._library_rebuild_locked()
+            module._reviewed_library_data(False)
+            module._library_page_payload('', '', 0, 30)
+        self.assertEqual(module._LIBRARY_STATE['views'].get(False), snapshot['view'])
+        self.assertEqual(module._LIBRARY_STATE['rows'].get(False), snapshot['rows'])
+        self.assertEqual(module._LIBRARY_STATE['view_index'].get(False), snapshot['view_index'])
 
 
 if __name__ == '__main__':

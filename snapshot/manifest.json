@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-25T00:53:37.972010+00:00",
+  "created_at": "2026-10-25T01:39:29.102479+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -14314,8 +14314,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/prompt_selector.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/prompt_selector.py",
-      "sha256": "9060a0579dc77a8be2cec48be4ad0a6439e4d12292b5ec39875c65a18e06a79e",
-      "bytes": 216156,
+      "sha256": "c6fa892c079067d2ce5eb0648baa15749727ca01f240e3d89025d9d13f629117",
+      "bytes": 217280,
       "kind": "file"
     },
     {
@@ -14468,8 +14468,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_edit_save.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_edit_save.py",
-      "sha256": "47326ed92f54629de104b18ae1d5b14eea974767a79eb39c792b26d41faa5741",
-      "bytes": 41364,
+      "sha256": "16f0bec5903310972aceba29783794bc5abdc4c6f37f5d3459bb67c3c3ed1cfb",
+      "bytes": 40997,
       "kind": "file"
     },
     {
@@ -14482,8 +14482,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_library_store.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_library_store.py",
-      "sha256": "586ab28ed44c18f39e3fcd7d37357f57190456c03ae0bd334a68b391d8f5517d",
-      "bytes": 45148,
+      "sha256": "e31e5110298440e11666a3c2c36842ccfb9d5097e48e7fdd538c2b304ac1f306",
+      "bytes": 50382,
       "kind": "file"
     },
     {
@@ -68275,13 +68275,14 @@
     }
   ],
   "development_revision": {
-    "note": "O(1) single-edit read-model patch: id location map replaces full scans (169 ms -> 2.5 ms)",
-    "previous_manifest_sha256": "b9475e9222d463a005e700a4a2f1b91b9f5b00914a9159f2c95b898efd73b3f0",
+    "note": "Edit-save spikes removed: semantic cache snapshot deferred to 30s idle window",
+    "previous_manifest_sha256": "05d8acb6ad23bee8ae25bb7c5ef35ee369ec55824cf0081256caff6c705b7d58",
     "source_changes": {
       "added": [],
       "removed": [],
       "changed": [
         "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/prompt_selector.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_edit_save.py",
         "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tests/test_library_store.py"
       ]
     },
