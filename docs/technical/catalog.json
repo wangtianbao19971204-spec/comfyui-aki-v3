@@ -1045,7 +1045,8 @@
         "docs/receipts/stocking_gpu_production_20261011.json",
         "docs/receipts/full_suite_audit_20261014.json",
         "docs/receipts/stocking_upstream_sync_20261014.json",
-        "docs/receipts/stocking_highlights_sync_20261016.json"
+        "docs/receipts/stocking_highlights_sync_20261016.json",
+        "docs/receipts/stocking_upstream_sync_20261025.json"
       ],
       "acceptance": "checked-source",
       "watch": [

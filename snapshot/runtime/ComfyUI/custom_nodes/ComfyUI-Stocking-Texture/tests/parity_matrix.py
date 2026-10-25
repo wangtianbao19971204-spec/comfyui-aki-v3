@@ -154,7 +154,8 @@ def test_fixture(f, out, engine, look, document):
         for style in look.STYLES:
             for bright in (0, 100):
                 q = dict(style=style, density=65, strength=100, strength_auto=True, tilt=32,
-                         sparkle_link=False, sparkle_depth=100 if depth is not None else 0,
+                         sparkle_on=True, sparkle_link=False,
+                         sparkle_depth=100 if depth is not None else 0,
                          sparkle_bright=bright, sparkle_even=0, sparkle_painted=0)
                 original = scene.render(q)[0][..., ::-1]
                 for adapt in (False, True):

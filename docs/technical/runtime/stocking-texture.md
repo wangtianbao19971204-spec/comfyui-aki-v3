@@ -1,8 +1,16 @@
 # 丝袜纹理节点与引导编辑
 
-文档修订：2026-10-16。
+文档修订：2026-10-25。
 
-## 当前上游同步（2026-10-16）
+## 当前上游同步（2026-10-25）
+
+当前 pin 为 `204a1b8e36dabb0ca11aa3720113be17877fa245`，较 `bcc4e89` 前进 3 个提交：亮点改为默认关闭的总开关并折叠其滑杆，「标出问题」移到纹理减弱面板，预设下拉隐藏空的占位项，服务端钉住 `.js`／`.json`／`.css` 的 MIME 以压过 Windows HKCR 覆盖。29 份上游依赖仍按 Git 原始 blob 保存，MIT 原件不变；本地适配继续独立维护。
+
+本地适配三处，节点接口与工作流不变：原渲染节点继续以三个亮点滑杆为唯一开关（参数内固定开启）；PSD 手绘亮点层同样固定开启；`studio_store.clean_look` 只在缺少 `sparkle_on` 键时按「有亮点量即开启」迁移旧草稿与旧预设，键存在时尊重开关。使用与验收见[亮点开关同步](../changes/runtime-stocking-texture/2026-10-25-upstream-sparkle-switch.md)及[收据](../../receipts/stocking_upstream_sync_20261025.json)。
+
+新增回归入口为 `tests/test_studio.py` 的旧数据迁移断言。`test_nodes.py`、`test_upstream_rendering.py`、`parity_matrix.py`、`compare_upstream.py`、`feature_acceptance.py` 的亮点用例改为显式开启开关，并新增关闭对照；否则开关上线后这些用例会静默空转。
+
+## 上一轮高光与走向同步（2026-10-16）
 
 当前 pin 为 `bcc4e89d7319ca59f521dd1c5557db457cde6d92`，较 `e6aeaeb` 前进 13 个提交。新增默认关闭的高光粒子、默认开启的纹理减弱开关、手绘走向中心线平滑，以及摩尔纹面积从鼓起顶部向外展开的调整。本地同步逐层渐隐参数和带种子的粒子随机场，并保留严格写入校验及损坏已存纹理设置的恢复能力。schema 2、现有节点接口、工作流、UAP 次序与用户资料均保留，使用与验收见[高光与走向同步](../changes/runtime-stocking-texture/2026-10-16-highlights-and-guides.md)及[收据](../../receipts/stocking_highlights_sync_20261016.json)。
 

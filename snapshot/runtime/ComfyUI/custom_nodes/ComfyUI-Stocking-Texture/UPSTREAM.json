@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/silvermoong/stocking-texture-tool",
-  "commit": "bcc4e89d7319ca59f521dd1c5557db457cde6d92",
+  "commit": "204a1b8e36dabb0ca11aa3720113be17877fa245",
   "license": "MIT",
   "snapshot_format": 2,
   "license_sha256": "12b3a43416cfda4d524b8d781639e33ea3c7862cc2200d7f61300f98bbfa91fe",
@@ -43,7 +43,7 @@
     },
     {
       "file": "look.py",
-      "sha256": "ec3212cde68791e8db8e6a4fe3a6adcfe61ede11d7bed104f415c90c9eab8fcb"
+      "sha256": "08a0a97a9d77081db732b7fa55a601cb65c36c0107078ab885689c4de664dbce"
     },
     {
       "file": "oily.py",
@@ -63,7 +63,7 @@
     },
     {
       "file": "server.py",
-      "sha256": "d18d7f78e76671b9c6ee496806e8f7821552d94ec8cbf7486442066a146dd4d9"
+      "sha256": "943be19e5f5680619fa902f9ca464891d11844d09de20b8e9d2bdb13e6b62cc0"
     },
     {
       "file": "session.py",
@@ -87,19 +87,19 @@
     },
     {
       "file": "static/i18n/en.json",
-      "sha256": "c94e4585ccdc26db486bec58554e42071f3ce59d5337956768939be3d5f50a3d"
+      "sha256": "28065127e557acb5c0eb1d98345016e74166ecb266172fd5f0461320dd5079ae"
     },
     {
       "file": "static/index.html",
-      "sha256": "8e12b50a9f82f5eb1d4c12fc937d139ba34c838050a5392021a6206ea7ab9c2c"
+      "sha256": "2b3886282d0e687af9d80d029e04cc1e02d124d164f94a6012ef3a0c86eea856"
     },
     {
       "file": "static/look.js",
-      "sha256": "cad2ff4019810af315f3f3cfe57fbb22c03a7fc32799ae87250ece826caf5e39"
+      "sha256": "9b8a79280a3ab5e8879237371d5a425246ef1046b0074967327b44345c4fb8fe"
     },
     {
       "file": "static/style.css",
-      "sha256": "b6e774dcd476e255553b6fb48030f7c7d203ac5d33e52b81c4aa716f0199cd5c"
+      "sha256": "883c466d665ac13d4a0be9a58ce0c39f7f92e742112448c3b8b66fb02bbc6907"
     },
     {
       "file": "symmetry.py",

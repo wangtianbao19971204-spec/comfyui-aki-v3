@@ -18,7 +18,7 @@ def base_params(doc):
     if doc.look is not None:
         return dict(doc.look)
     if doc.sparkle is not None:
-        return {"sparkle_depth": 0., "sparkle_bright": 0., "sparkle_painted": 100.}
+        return {"sparkle_on": True, "sparkle_depth": 0., "sparkle_bright": 0., "sparkle_painted": 100.}
     return {}
 
 

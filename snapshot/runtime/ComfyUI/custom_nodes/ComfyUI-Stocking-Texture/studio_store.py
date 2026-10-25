@@ -90,7 +90,7 @@ def clean_look(value):
     dumps(value)
     def finite_fields(item):
         for key, raw in item.items():
-            if key in look.DEFAULTS and key not in ("style", "strength_auto", "sparkle_link", "particle_on", "moire_on", "fade", "lock_total", "layers"):
+            if key in look.DEFAULTS and key not in ("style", "strength_auto", "sparkle_on", "sparkle_link", "particle_on", "moire_on", "fade", "lock_total", "layers"):
                 if raw not in (None, "", "null") and not math.isfinite(float(raw)):
                     raise ValueError("纹理参数必须为有限数值")
     if isinstance(value, dict):
@@ -103,6 +103,10 @@ def clean_look(value):
             for layer in layers:
                 if isinstance(layer, dict):
                     finite_fields(layer)
+    if isinstance(value, dict) and "sparkle_on" not in value:
+        # Looks, drafts and preset files saved before upstream's switch asked for sparkles by amount alone.
+        if any(float(value.get(f"sparkle_{kind}") or 0) > 0 for kind in look.SPARKLE_KINDS):
+            value = {**value, "sparkle_on": True}
     params = look.clean_params(value)
     dumps(params)  # Reject nonfinite nested layer values before changing a document.
     return params

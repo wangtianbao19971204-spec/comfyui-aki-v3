@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-16T00:39:20.087151+00:00",
+  "created_at": "2026-10-25T04:18:52.652102+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -11297,7 +11297,7 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
-      "sha256": "87d80f599a3f4e76adf0c07667bbfb350e72ff2fd71bfa0708501c5366a01f85",
+      "sha256": "2cea74be0aa895823a1085358670564ec959449d2f7fc48a0a3835b2acbcf47a",
       "bytes": 4130,
       "kind": "file"
     },
@@ -11332,8 +11332,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/nodes.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/nodes.py",
-      "sha256": "3dc957706ac2a520bee0d863d7537649ac2ab51901209430c68ed0c846df5405",
-      "bytes": 10468,
+      "sha256": "92b7ed1593061dc359a0f94a81545981344e16bec26e4fe4e1f50d8bafc8dd85",
+      "bytes": 10603,
       "kind": "file"
     },
     {
@@ -11360,8 +11360,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py",
-      "sha256": "fd4942bd4d070422c93cc86d91a8a0859f90e88f9c4bb333a0fdac35c233f1d5",
-      "bytes": 14338,
+      "sha256": "92870836274e2704ad9b902e09787b0440f7b02f51857e27eea18294182b8848",
+      "bytes": 14358,
       "kind": "file"
     },
     {
@@ -11402,8 +11402,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
-      "sha256": "358a1c6e737afd12a42981aeb19a5520a89454e8daf6c451eb48f76d6db33493",
-      "bytes": 18000,
+      "sha256": "d143260b72c36bc26fe0eb8694de506b16ebed4b9ad35544073fcaa02b9e3b54",
+      "bytes": 18327,
       "kind": "file"
     },
     {
@@ -11430,15 +11430,15 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/compare_upstream.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/compare_upstream.py",
-      "sha256": "4df0d3c82ab00f44a9cf558b7021ce5632895017dbe9072abe98ded43a9c3b96",
-      "bytes": 7219,
+      "sha256": "8321ca9295f4f33d90ed4fa9b6624807c953ddcfdf4540cd1b4e84e651b4c435",
+      "bytes": 7261,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/feature_acceptance.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/feature_acceptance.py",
-      "sha256": "d8d5561706ed7ff4d0e3e6dfdd15d82cc5db29fbf5e70c92ee1fed6228dbdf93",
-      "bytes": 11587,
+      "sha256": "ce827e11198e2528af6fef917847c53f0540dd1149445e4bd69ddaa448358046",
+      "bytes": 11691,
       "kind": "file"
     },
     {
@@ -11479,8 +11479,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/parity_matrix.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/parity_matrix.py",
-      "sha256": "d282771fc42284e1fcf6967f33eb690d3c6f97ae2f3980be39018c5dc65d00c1",
-      "bytes": 13637,
+      "sha256": "d5af818597b6f293d0ac77058ef0aa6b51de0fde814307f9615758b5885f33cf",
+      "bytes": 13679,
       "kind": "file"
     },
     {
@@ -11528,8 +11528,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py",
-      "sha256": "32728634a050f663508de1a23c06813dfbccd2447cb8113ae952044a2940b372",
-      "bytes": 21231,
+      "sha256": "bd9504b6ce1729c46b104036825808f410c321129dba5b3b6f34debd108a6e74",
+      "bytes": 21265,
       "kind": "file"
     },
     {
@@ -11549,8 +11549,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio.py",
-      "sha256": "3082b3d89299a143d0f7cec1809a1788f975ec76c17ad193ad22480430837dc9",
-      "bytes": 26642,
+      "sha256": "4120131211911c4ece2c8f7e6f6020278de11754f501f8d6284fbb4ddfe54279",
+      "bytes": 27288,
       "kind": "file"
     },
     {
@@ -11570,8 +11570,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_rendering.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_rendering.py",
-      "sha256": "7edb7cb80d4406c37c0c53b2ea40ab43f85ba6d2fe0f759488a91f4ff41f9689",
-      "bytes": 15895,
+      "sha256": "662bd478e1b3e73ca553730ec07a436cb9464e8286ef78fcd6b623da730b92f3",
+      "bytes": 15963,
       "kind": "file"
     },
     {
@@ -11661,8 +11661,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/look.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/look.py",
-      "sha256": "ec3212cde68791e8db8e6a4fe3a6adcfe61ede11d7bed104f415c90c9eab8fcb",
-      "bytes": 52655,
+      "sha256": "08a0a97a9d77081db732b7fa55a601cb65c36c0107078ab885689c4de664dbce",
+      "bytes": 52766,
       "kind": "file"
     },
     {
@@ -11696,8 +11696,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/server.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/server.py",
-      "sha256": "d18d7f78e76671b9c6ee496806e8f7821552d94ec8cbf7486442066a146dd4d9",
-      "bytes": 33377,
+      "sha256": "943be19e5f5680619fa902f9ca464891d11844d09de20b8e9d2bdb13e6b62cc0",
+      "bytes": 33693,
       "kind": "file"
     },
     {
@@ -11738,29 +11738,29 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n/en.json",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n/en.json",
-      "sha256": "c94e4585ccdc26db486bec58554e42071f3ce59d5337956768939be3d5f50a3d",
-      "bytes": 36871,
+      "sha256": "28065127e557acb5c0eb1d98345016e74166ecb266172fd5f0461320dd5079ae",
+      "bytes": 36869,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/index.html",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/index.html",
-      "sha256": "8e12b50a9f82f5eb1d4c12fc937d139ba34c838050a5392021a6206ea7ab9c2c",
-      "bytes": 26160,
+      "sha256": "2b3886282d0e687af9d80d029e04cc1e02d124d164f94a6012ef3a0c86eea856",
+      "bytes": 26374,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/look.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/look.js",
-      "sha256": "cad2ff4019810af315f3f3cfe57fbb22c03a7fc32799ae87250ece826caf5e39",
-      "bytes": 56156,
+      "sha256": "9b8a79280a3ab5e8879237371d5a425246ef1046b0074967327b44345c4fb8fe",
+      "bytes": 56534,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/style.css",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/style.css",
-      "sha256": "b6e774dcd476e255553b6fb48030f7c7d203ac5d33e52b81c4aa716f0199cd5c",
-      "bytes": 29972,
+      "sha256": "883c466d665ac13d4a0be9a58ce0c39f7f92e742112448c3b8b66fb02bbc6907",
+      "bytes": 30097,
       "kind": "file"
     },
     {
@@ -68212,23 +68212,24 @@
     }
   ],
   "development_revision": {
-    "note": "Stocking bcc4e89 highlights fade and smoothed guides; workflows retained",
-    "previous_manifest_sha256": "ab77c4a60605ccce316b02e940b0e90272f8a56bf1463b2a0ee52c5947892c2d",
+    "note": "Stocking texture upstream sync to 204a1b8: sparkles switch, preset placeholder, static MIME. Local adapters keep node and painted-layer sparkles on and migrate old looks; not deployed.",
+    "previous_manifest_sha256": "c63877e5e56247fca3c1d46fb6d984e552fdac3dad360ef229e276a3c31609b5",
     "source_changes": {
-      "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_highlight_update.py"
-      ],
+      "added": [],
       "removed": [],
       "changed": [
         "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/engine.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/rendering.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/nodes.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py",
         "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/document.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/guide_fields.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/knit.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/compare_upstream.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/feature_acceptance.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/parity_matrix.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_rendering.py",
         "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/look.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/oily.py",
+        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/server.py",
         "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n/en.json",
         "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/index.html",
         "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/look.js",

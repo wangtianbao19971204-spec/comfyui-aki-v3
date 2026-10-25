@@ -34,7 +34,7 @@ async def run(args):
     art[left|right]=np.stack([80+20*np.sin(y[left|right]/31)]*3,axis=1).astype(np.uint8)
     art[:,126:130]=12
     Image.fromarray(art).save(args.out/'synthetic.png')
-    params=dict(look.DEFAULTS, density=65, sparkle_depth=0, sparkle_bright=0, sparkle_even=0,
+    params=dict(look.DEFAULTS, density=65, sparkle_on=True, sparkle_depth=0, sparkle_bright=0, sparkle_even=0,
                 sparkle_link=False, strength_auto=False)
     ref=original.Document.from_snapshot(art,'synthetic.png',None,
         [('左腿',original.PALETTE[0],left),('右腿',original.PALETTE[1],right)],
@@ -132,6 +132,7 @@ async def run(args):
             ('manual maximum strength',{'strength':200}),('depth sparkles',{'sparkle_depth':150}),
             ('bright sparkles',{'sparkle_bright':150}),('even sparkles',{'sparkle_even':150}),
             ('painted PSD sparkles',{'sparkle_painted':150}),
+            ('sparkles switched off',{'sparkle_on':False,'sparkle_bright':150}),
             ('linked sparkles',{'sparkle_depth':150,'sparkle_bright':50,'sparkle_link':True})]]
         scene=look.scene_from_doc(ref,disparity=lambda:ref.disparity)
         for name,p in variants:

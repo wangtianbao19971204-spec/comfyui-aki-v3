@@ -64,7 +64,8 @@ def run(upstream, image_path, guides_path, out):
         for style in look.STYLES:
             for bright in (0, 100):
                 q = dict(style=style, density=100, strength=100, strength_auto=True, tilt=32,
-                         sparkle_link=False, sparkle_depth=0, sparkle_bright=bright, sparkle_even=0)
+                         sparkle_on=True, sparkle_link=False, sparkle_depth=0,
+                         sparkle_bright=bright, sparkle_even=0)
                 original = scene.render(q)[0][..., ::-1]
                 legacy = engine.render_texture(rgb, data, geometry, None, q, look.SEED, False)
                 legacy8 = np.round(legacy[0] * 255).astype(np.uint8)

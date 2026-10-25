@@ -148,8 +148,10 @@ class StockingTextureRender:
             raise ValueError("按深度亮点或自动隔开线需要接入深度 IMAGE；也可关闭这两项")
         if depths is None and moire_on and moire > 0:
             raise ValueError("摩尔纹效果需要接入深度 IMAGE；也可关闭摩尔纹效果")
+        # Upstream gates sparkles on sparkle_on; this node's three sliders stay its only switch.
         params = {"style": STYLE_IDS[style], "density": density, "strength": strength,
                   "strength_auto": bool(auto_strength), "tilt": tilt, "sparkle_link": False,
+                  "sparkle_on": True,
                   "sparkle_bright": sparkle_bright, "sparkle_even": sparkle_even,
                   "sparkle_depth": sparkle_depth, "sparkle_painted": 0,
                   "moire_on": bool(moire_on), "moire": moire, "moire_area": moire_area}

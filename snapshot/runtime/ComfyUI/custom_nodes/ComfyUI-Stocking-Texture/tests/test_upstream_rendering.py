@@ -193,7 +193,7 @@ class UpstreamRenderingContracts(unittest.TestCase):
             for locked in (False, True):
                 with self.subTest(dark=dark, locked=locked):
                     scene = make_scene()
-                    p = params(items[0], items[1:], locked=locked, sparkle_even=170,
+                    p = params(items[0], items[1:], locked=locked, sparkle_on=True, sparkle_even=170,
                                moire_on=True, moire=60, moire_area=65)
                     full = rendering.render_scene(scene, p, dark)[0]
                     owner = editor_renderer(scene, p, dark)
@@ -209,7 +209,7 @@ class UpstreamRenderingContracts(unittest.TestCase):
                 scene = make_scene()
                 p = params(layer("knit", weight=0),
                            [layer("lines", weight=25), layer("loops", weight=25), layer("grain", weight=50)],
-                           sparkle_even=200, moire_on=True, moire=70, moire_area=60)
+                           sparkle_on=True, sparkle_even=200, moire_on=True, moire=70, moire_area=60)
                 events, outputs = [], {}
                 blend, moire, sparkle = look.blend_layers, look.apply_moire, knit.add_sparkles
 
@@ -263,7 +263,7 @@ class UpstreamRenderingContracts(unittest.TestCase):
                     self._randoms[style] = (rng.random((self.h, self.w)), rng.random((self.h, self.w)))
                 return self._randoms[style]
 
-        p = params(layer("lines", strength=0), [layer("lines", strength=0)], sparkle_even=300)
+        p = params(layer("lines", strength=0), [layer("lines", strength=0)], sparkle_on=True, sparkle_even=300)
         for dark in (False, True):
             results = []
             for seed in (17, 17, 19):
@@ -280,7 +280,7 @@ class UpstreamRenderingContracts(unittest.TestCase):
                 scene = make_scene(depth=False)
                 holder = {"depth": None}
                 scene._disparity = lambda: holder["depth"]
-                p = params(layer("knit"), [layer("lines")], sparkle_depth=150,
+                p = params(layer("knit"), [layer("lines")], sparkle_on=True, sparkle_depth=150,
                            moire_on=True, moire=70, moire_area=80)
                 pending, info = rendering.render_scene(scene, p, dark)
                 self.assertFalse(info["sparkles_ready"])

@@ -223,8 +223,8 @@ class TextureContracts(unittest.TestCase):
         active = (g["labels"] > 0) & g["stock"] & (g["alpha"] > 0)
         for style in ENGINE.STYLES:
             for bright in (0, 100):
-                q = dict(style=ENGINE.STYLE_IDS[style], strength_auto=False, sparkle_link=False,
-                         sparkle_bright=bright, sparkle_depth=0)
+                q = dict(style=ENGINE.STYLE_IDS[style], strength_auto=False, sparkle_on=True,
+                         sparkle_link=False, sparkle_bright=bright, sparkle_depth=0)
                 original = scene.render(q)[0][..., ::-1]
                 adapted = self.run_render(image=image, style=style, dark_adapt=False,
                                           sparkle_bright=bright, seed=look.SEED)[0][0].numpy()
@@ -309,7 +309,7 @@ class TextureContracts(unittest.TestCase):
         active = (g["labels"] > 0) & g["stock"] & (g["alpha"] > 0)
         for style in ENGINE.STYLES:
             q = dict(style=ENGINE.STYLE_IDS[style], density=65, strength=160, strength_auto=False,
-                     sparkle_link=False, sparkle_depth=0, sparkle_bright=100)
+                     sparkle_on=True, sparkle_link=False, sparkle_depth=0, sparkle_bright=100)
             original = scene.render(q)[0][..., ::-1]
             out = self.run_render(image=image, style=style, density=65, strength=160,
                                   dark_adapt=False, sparkle_bright=100, seed=look.SEED)[0][0].numpy()
