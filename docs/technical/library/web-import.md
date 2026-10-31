@@ -1,6 +1,6 @@
 # 网页、所长法典与 Word 导入
 
-版本：2026-10-05.2；状态：通用门禁和历史执行链均已入主仓，历史链保存在技术归档而非部署源码中。此页不是可直接执行的生产发布教程。
+版本：2026-10-31.1；状态：通用门禁和历史执行链均已入主仓，历史链保存在技术归档而非部署源码中。此页不是可直接执行的生产发布教程。
 
 ## 用途与入口
 
@@ -41,10 +41,12 @@ NovelAI-Tag 的 LICENSE 对软件采用 MIT，但明确排除法典原文、原�
 - 主仓已有 `historical_replay_result.json` 和 `current_scope_rejection.json`：证明门禁能接受固定旧版、拒绝以旧版冒充当前全站；不是当前网站状态证明。
 - 已归档 [stage_validation.json](../archive/benchmark_reports/2026-09-28_raven_increment/stage_validation.json)：816 张图片验证、811 个目标、445 新 Tag、366 已有主记录更新，回滚演练通过。
 - 同批 [live_acceptance.json](../archive/benchmark_reports/2026-09-28_raven_increment/live_acceptance.json)：2026-09-28 的 811 个 Tag API、816 个图片 HTTP 与 stage/live 逻辑指纹通过；[release_receipt.json](../archive/benchmark_reports/2026-09-28_raven_increment/release_receipt.json)是当时正式发布证据。
-- 冻结版为 `r-9a4bf4049f141be7d4d9`。未重新请求今天的网站指针，不声称当前网站全部同步。
+- 冻结版为 `r-9a4bf4049f141be7d4d9`。未重新请求当时的网站指针，不声称该批已覆盖全部后续网站内容。
+- 2026-10-31 全站差量：固定版 `r-e75e0d77a17fc5e27211`，新增 20,522、修订 10,358 条来源，新增 12,645 Tag 与 2,130 条资源、21,807 张图（4.20 GB）已上线；12,645 个 Tag API、21,807 个图片 HTTP 与双库逻辑指纹通过。脚本与收据在运行区 `benchmark_reports/2026-10-31_site_sync/`，未随 Git 归档（含 4.2 GB 图片、生产库与备份），不能当作可移植输入。
 
 ## 更新记录
 
 - 2026-09-27：完成全站/Word 对照与来源更新批次。
 - 2026-09-28：固定版渡鸦 816 条增量正式验收，连接关闭故障的首次回滚单独保留。
 - 2026-10-05：补齐历史采集/解析/发布链及验证回执的实际归档链接；原件不改写，完整输入与环境仍需外部准备，未再次执行导入。
+- 2026-10-31：首次把网页差量同时写入 `library.sqlite3`（权威库）与 `tags.db`，并重新导出 `data.json`、重建 `shared_pairs.json`。首次在线验收因每请求新建连接耗尽临时端口失败，按发布收据命令重启后以持久连接复验通过；自动回滚在 WAL 非空断言处中止，恢复为人工重启，脚本已改为回滚前先 checkpoint。固定版与验收数字见上。
