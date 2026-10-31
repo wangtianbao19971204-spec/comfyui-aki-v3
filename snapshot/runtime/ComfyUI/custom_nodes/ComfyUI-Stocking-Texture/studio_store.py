@@ -24,6 +24,7 @@ from .studio_document import Document
 
 MAX_PIXELS = 24_000_000
 MAX_PROJECT_BYTES = 24 * 1024 * 1024
+UI_SCALES = (100, 115, 125, 150, 175)          # 界面大小, percent: the options the pinned page lists
 ID = re.compile(r"[0-9a-f]{64}\Z")
 DRAFT_ID = re.compile(r"[0-9a-f]{32}\Z")
 _settings_lock = threading.RLock()

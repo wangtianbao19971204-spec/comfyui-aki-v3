@@ -1,0 +1,94 @@
+{
+  "schema": 1,
+  "date": "2026-10-31",
+  "feature": "runtime-stocking-texture",
+  "upstream_repository": "https://github.com/silvermoong/stocking-texture-tool",
+  "old_pin": "204a1b8e36dabb0ca11aa3720113be17877fa245",
+  "pin": "c38be2fe1d3f0b9d768edc78f1ee35ebf6118186",
+  "commits_ahead": 5,
+  "raw_dependency_files": 31,
+  "added_dependency_files": [
+    "stocking/_glint_position.py",
+    "stocking/_oily_absorption.py"
+  ],
+  "removed_dependency_files": [],
+  "raw_git_blobs_equal_new_pin": true,
+  "license": "MIT",
+  "tests": {
+    "plugin_passed": 124,
+    "plugin_skipped": 2,
+    "plugin_skipped_reason": "explicit CUDA acceptance tests, enabled separately",
+    "plugin_before_this_round": 120,
+    "new_tests": 4,
+    "frontend_passed": 17,
+    "export_contracts_passed": 6,
+    "request_contract_route_added": "POST /api/ui-scale"
+  },
+  "upstream_parity": {
+    "tool": "tests/parity_matrix.py",
+    "pristine_tree": "c38be2fe materialized from raw Git blobs; every vendored file SHA256 matches",
+    "synthetic_fixtures": 38,
+    "real_fixtures": 0,
+    "render_cases": 912,
+    "matched_active_cases": 456,
+    "pass_all": true,
+    "geometry_errors": "labels/coverage/cut equal; v, across and alpha max error 0.0"
+  },
+  "author_suite": {
+    "passed": 568,
+    "skipped": 52,
+    "failed": 11,
+    "failed_files": ["tests/test_glint_position.py"],
+    "finding": "The 11 failures are the author's own assertions that two glint tracks should be joined; the code takes the conservative branch no_supported_transition_extent, which refine_curve catches and returns as an unchanged path. Rendering is unaffected and stays pixel-identical to the pin.",
+    "likely_cause": "numpy 2.3.2 / scipy 1.17.0 here vs the author's pinned 2.5.3 / 1.18.1; geometric tolerances differ",
+    "not_done": "The machine's scientific stack was not upgraded for this."
+  },
+  "isolated_instance": {
+    "port": 8288,
+    "cpu": true,
+    "custom_nodes": "whitelist ComfyUI-Stocking-Texture only; --disable-all-custom-nodes",
+    "separate": ["user", "input", "output", "temp", "sqlite database"],
+    "node_render": {
+      "executed_by_comfyui_executor": true,
+      "changed_pixels_vs_source": 12778,
+      "rgba_layer_alpha_max": 255
+    },
+    "ui_scale": {
+      "post_100_then_150": true,
+      "page_scale_after": "--k: 1.5",
+      "kept_in": "user/default/stocking_texture/preferences.json",
+      "rejected_values": [0, 120, 200, "150", null],
+      "rejected_status": 400,
+      "other_methods": 405
+    },
+    "texture_export": {
+      "kind": "texture",
+      "matches_documented_formula": true,
+      "linear_light_max_error": 1,
+      "changed_pixels": 20480
+    }
+  },
+  "deployment": {
+    "runtime_written": false,
+    "restarted": false,
+    "queue_touched": false,
+    "production_instance_8188_touched": false,
+    "note": "Maintenance source only. Deployment to the runtime is a separate, explicit step."
+  },
+  "git_note": "upstream/stocking/_glint_position.py and _oily_absorption.py live under the ignored custom_nodes/ path and are committed with an explicit git add -f; without it a fresh clone would fail to import oily.py.",
+  "evidence_id": "stocking-upstream-sync-20261031-01",
+  "evidence_outside_repo": "G:\\ComfyUI-local\\validation\\stocking-upstream-sync-20261031",
+  "evidence_sha256": {
+    "parity.log": "b572e118ae0ac324a7d0cc2a973cd6276dabf9c4055b4710fb52278036af5c42",
+    "author-tests.log": "8fae86289817b758a2bc9141d4a7375f452c59eba7e696549a03c1ba4d052056",
+    "iso-server.log": "71e56828e76a6f9b0676f833a3e844afa754c06ce1e57e93d1f033d7d35fdecd",
+    "ISO_ACCEPTANCE.json": "92523ffba3f604fc01287a754a5d40d227fb789736e0369c7fc974a06e218293"
+  },
+  "limitations": [
+    "Synthetic fixtures only; no picture-quality claim for arbitrary art.",
+    "The 11 author self-test failures are reported, not fixed; they are inside upstream's own code and assertions.",
+    "SAM/depth model quality was not re-audited; their code and dependencies did not change.",
+    "The 仅纹理 layer is computed on the art it is exported from, so it is exact for that art and approximate for a repainted one."
+  ],
+  "rollback": "Revert this branch's plugin changes; user drafts, presets and assets are untouched and no runtime files were written."
+}

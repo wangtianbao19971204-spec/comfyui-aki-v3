@@ -150,11 +150,10 @@ def solve_geometry(rgb8, data, base_mask, color_exclude, disparity, auto_walls):
         if min(mc.shape) < 8 or int(mc.sum()) < 16:
             fields = None
         else:
-            try:
-                fields = gf.solve_region(mc, guides, walls=wall if wall.any() else None, info=info)
-            except ZeroDivisionError:
-                # A wall can remove every sampled guide point; upstream's mean anchor is then undefined.
-                fields = None
+            fields = gf.solve_region(mc, guides, walls=wall if wall.any() else None, info=info)
+            if fields is None and wall.any() and guides.any() and gf.solve_region(mc, guides) is not None:
+                # A wall can cut every guide off the solver's grid, which it reports as no field at all; only
+                # re-solving without the wall tells that apart from a region that had no usable stroke to begin with.
                 messages.append(f'{region["name"]}：隔开线遮住走向约束，请调整走向或隔开线')
         if fields is None:
             solved[sl][mc] = 0
