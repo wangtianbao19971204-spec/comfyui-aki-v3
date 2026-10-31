@@ -2,6 +2,8 @@
 from .vendor import SOURCE_ROOT
 import re
 
+from .studio_store import UI_SCALES
+
 ROOT = SOURCE_ROOT / "static"
 FILES = {"app.js": "text/javascript", "look.js": "text/javascript", "i18n.js": "text/javascript",
          "style.css": "text/css", "i18n/en.json": "application/json"}
@@ -13,11 +15,15 @@ def replace_once(text, before, after):
     return text.replace(before, after, 1)
 
 
-def page(base, lang="zh"):
+def page(base, lang="zh", scale=100):
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     english = lang == "en"
     if english:
         html = html.replace('lang="zh-CN"', 'lang="en"', 1)
+    # 界面大小: upstream writes the choice on <html>; the pinned style.css sizes everything by --k.
+    if scale not in UI_SCALES:
+        scale = 100
+    html = html.replace('<html ', f'<html style="--k: {scale / 100:g}" ', 1)
     html = re.sub(r'<link rel="icon"[^>]*>\s*', "", html)
     apply, close = ("Apply to node", "Close") if english else ("应用到节点", "关闭")
     depth, dark = ("Built-in depth", "Dark adaptation") if english else ("内置深度", "暗部适配")

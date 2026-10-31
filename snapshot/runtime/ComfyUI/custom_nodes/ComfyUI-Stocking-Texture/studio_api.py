@@ -246,9 +246,11 @@ class StudioServer:
                 raise web.HTTPForbidden(text="该编辑器属于另一个 ComfyUI 用户")
             path = request.match_info.get("tail", "")
             base = f"{PREFIX}/{sid}"
-            lang = entry.studio.preferences.read().get("lang", "zh")
+            preferences = entry.studio.preferences.read()
+            lang = preferences.get("lang", "zh")
             if path == "" and request.method == "GET":
-                return web.Response(text=page(base, lang), content_type="text/html", headers=NO_STORE)
+                return web.Response(text=page(base, lang, preferences.get("ui_scale", 100)),
+                                    content_type="text/html", headers=NO_STORE)
             if path.startswith("static/") and request.method == "GET":
                 name = path[len("static/"):]
                 content, mime = static_asset(name, base)
@@ -320,6 +322,15 @@ class StudioServer:
                 raise web.HTTPMethodNotAllowed(method, ["GET", "POST"])
             lang = studio.preferences.read().get("lang", "zh")
             return {"lang": lang, "chosen": lang, "system": "zh"}
+        if path == "api/ui-scale":
+            if method == "POST":
+                # 界面大小: like the language, the choice is kept here and the page is served with it.
+                scale = body.get("scale")
+                if scale not in store.UI_SCALES:
+                    raise ValueError("界面大小只能是 " + " / ".join(f"{s}%" for s in store.UI_SCALES))
+                studio.preferences.update(ui_scale=scale)
+                return {"scale": scale, "choices": list(store.UI_SCALES)}
+            raise web.HTTPMethodNotAllowed(method, ["POST"])
         if path == "api/look/blend-auto" and method == "PUT":
             on = boolean(body.get("on"))
             studio.preferences.update(blend_auto=on)
@@ -549,7 +560,8 @@ class StudioServer:
             d.set_look(params)
         result = export.export(d, s, params, str(target), kind)
         if kind == "guides":
-            d.mark_guides_saved()
+            # The token names the state written, so edits made while the file was written stay unsaved.
+            d.mark_guides_saved(result["saved"])
         entry.downloads[key] = target
         return {"kind": kind, "file": target.name, "folder": "浏览器下载", "seconds": result["seconds"],
                 "notes": [], "url": base + "/api/download/" + key}

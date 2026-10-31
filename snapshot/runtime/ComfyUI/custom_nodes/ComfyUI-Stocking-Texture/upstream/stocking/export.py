@@ -4,17 +4,20 @@ user's own file is never written.
   png     <name>-丝袜成品.png   the finished picture (成品图)
   cutout  <name>-仅丝袜.png     the stockings alone, everything else transparent: laid over the art it gives the
                                finished picture
+  texture <name>-仅纹理.png     the texture alone on neutral grey: laid over the art in Linear Light it gives the
+                               finished picture, and over stockings painted anew it lays the same texture on them
   guides  <name>-丝袜引导.psd   the guides (regions, 走向, 亮点, 隔开), which reopen in the tool or Photoshop
 
 Those are the names the dialog suggests, numbered ' (2)', ' (3)' … past any file already there, so exporting a
 second variant never takes the first one's place unless the user picks that file. The names follow the page's
-language (English: -finished.png, -stockings-only.png, -stocking-guides.psd); either language's suffix is stripped
+language (English: -finished.png, -stockings-only.png, -texture-only.png, -stocking-guides.psd); either language's suffix is stripped
 from a source that is one of our exports.
 
 Each file is written beside its final name and then moved over it, so a failure (a file open in another program,
 a full disk) never leaves a half-written file behind, and an earlier export stays intact.
 """
 import os
+import tempfile
 import time
 
 import cv2
@@ -23,8 +26,10 @@ import numpy as np
 from . import knit, psd_io
 from .i18n import both, tr
 
-KINDS = ('png', 'cutout', 'guides')
-NAMES = {'png': '丝袜成品.png', 'cutout': '仅丝袜.png', 'guides': '丝袜引导.psd'}   # in Chinese; written via tr()
+KINDS = ('png', 'cutout', 'texture', 'guides')
+NAMES = {'png': '丝袜成品.png', 'cutout': '仅丝袜.png', 'texture': '仅纹理.png',
+         'guides': '丝袜引导.psd'}                                    # in Chinese; written via tr()
+NEUTRAL = 128                                                       # 仅纹理's grey where the texture changes nothing
 EXTS = {k: os.path.splitext(n)[1] for k, n in NAMES.items()}
 EARLIER = (psd_io.TEXTURE_MARK,)                                    # 丝袜纹理: what earlier exports were named
 
@@ -80,15 +85,22 @@ def _drop(path):
 
 
 def _replace(final, write):
-    stem, ext = os.path.splitext(final)
-    tmp = f'{stem}.导出中{ext}'
+    """Have write(path) write a new file in final's folder, then move it over `final`. The file written is created
+    afresh with a name no file has (it is never the source, or any other file already there)."""
+    folder = os.path.dirname(final)
+    stem, ext = os.path.splitext(os.path.basename(final))
+    tmp = None
     try:
+        fd, tmp = tempfile.mkstemp(dir=folder, prefix=f'{stem}.导出中.', suffix=ext)
+        os.close(fd)                                    # write() opens it by name (Windows wants it closed)
         write(tmp)
     except PermissionError as e:
-        _drop(tmp)
-        raise ValueError(tr('不能在这个文件夹里写文件：{folder}（{why}）', folder=os.path.dirname(final), why=e.strerror)) from e
+        if tmp:
+            _drop(tmp)
+        raise ValueError(tr('不能在这个文件夹里写文件：{folder}（{why}）', folder=folder, why=e.strerror)) from e
     except BaseException:
-        _drop(tmp)
+        if tmp:
+            _drop(tmp)
         raise
     try:
         os.replace(tmp, final)
@@ -113,26 +125,42 @@ def stocking_layer(art_rgb, out_rgb, alpha):
     return np.dstack([np.clip(np.round(rgb), 0, 255), a8]).astype(np.uint8)
 
 
+def texture_layer(art_rgb, out_rgb):
+    """RGB uint8 of the texture alone, for Linear Light: NEUTRAL plus half of what the render changed. Linear Light
+    (base + 2 * (layer - NEUTRAL)) over the art gives the finished picture back (to within a level), the layer's
+    opacity scales the texture, and over stockings painted anew it adds the same change. Every texture is worked
+    out on the art, so on a very different colour the result is close, not exact; where the render changed
+    nothing the layer is the neutral grey."""
+    d = out_rgb.astype(np.int16) - art_rgb.astype(np.int16)
+    return np.clip(NEUTRAL + np.round(d / 2), 0, 255).astype(np.uint8)
+
+
 def export(doc, scene, params, path, kind='png'):
-    """Write one file of `kind` (KINDS) to `path` (see destination), replacing any file there. png and cutout render
-    with `params` (look.clean_params) on `scene`; guides need neither. Returns {'file', 'seconds', 'sparkles_ready'}.
-    Raises ValueError with a message for the user."""
+    """Write one file of `kind` (KINDS) to `path` (see destination), replacing any file there. png, cutout and texture render
+    with `params` (look.clean_params) on `scene`; guides need neither. Returns {'file', 'seconds', 'sparkles_ready'},
+    and for guides 'saved': the document's guides_token for the state written, for doc.mark_guides_saved (edits
+    made while the file is written are not in it). Raises ValueError with a message for the user."""
     t0 = time.perf_counter()
     path = destination(path, kind, source=doc.path)
     ready = True
+    extra = {}
     if kind == 'guides':
-        with doc.lock:
-            regions = {r.name: r.mask.copy() for r in doc.regions}
+        with doc.lock:                              # one state: everything written, and the token naming it
+            regions = {r.name: r.mask.copy() for r in doc.regions}     # names are unique (Document)
             colors = {r.name: r.color for r in doc.regions}
-            sparkle = doc.sparkle
-        strokes, dividers = doc.stroke_alpha(), doc.divider_alpha()
+            sparkle = None if doc.sparkle is None else np.array(doc.sparkle, np.uint8)
+            strokes, dividers = doc.guide_stroke_alpha(), doc.divider_alpha()
+            extra['saved'] = doc.guides_token()
         _replace(path, lambda p: psd_io.write_guides(p, doc.art, regions, strokes, colors, sparkle, dividers))
     else:
         out_bgr, info = scene.render(params)
         ready = info['sparkles_ready']
         if kind == 'png':
             _replace(path, lambda p: knit.write(p, out_bgr))
+        elif kind == 'texture':
+            layer = texture_layer(doc.art, cv2.cvtColor(out_bgr, cv2.COLOR_BGR2RGB))
+            _replace(path, lambda p: knit.write(p, cv2.cvtColor(layer, cv2.COLOR_RGB2BGR)))
         else:
             layer = stocking_layer(doc.art, cv2.cvtColor(out_bgr, cv2.COLOR_BGR2RGB), doc.coverage()[1])
             _replace(path, lambda p: knit.write(p, cv2.cvtColor(layer, cv2.COLOR_RGBA2BGRA)))
-    return {'file': path, 'seconds': round(time.perf_counter() - t0, 2), 'sparkles_ready': ready}
+    return dict(extra, file=path, seconds=round(time.perf_counter() - t0, 2), sparkles_ready=ready)

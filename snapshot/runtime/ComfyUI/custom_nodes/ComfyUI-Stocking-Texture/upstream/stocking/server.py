@@ -8,6 +8,7 @@ import subprocess
 import threading
 import time
 from typing import Literal
+from urllib.parse import urlsplit
 
 import cv2
 import numpy as np
@@ -24,6 +25,11 @@ from .version import code_version
 STATIC = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 NO_STORE = {'Cache-Control': 'no-store'}
 VERSION = code_version()
+
+# Any web page the user visits can send requests to 127.0.0.1. The Host check stops DNS rebinding (a foreign domain
+# pointed at this computer); the Origin check stops other sites' changes. Other sites cannot read the answers anyway.
+LOCAL_HOSTS = ('127.0.0.1', 'localhost')
+CHANGES = ('POST', 'PUT', 'PATCH', 'DELETE')
 
 
 class Bus:
@@ -122,6 +128,36 @@ async def _no_cache_ui(request: Request, call_next):
     return resp
 
 
+def _host_and_port(host):
+    try:
+        u = urlsplit('//' + (host or ''))
+        return u.hostname, u.port
+    except ValueError:
+        return None, None
+
+
+def _own_origin(origin, port):
+    try:
+        u = urlsplit(origin)
+        return (u.scheme == 'http' and u.hostname in LOCAL_HOSTS and u.port == port
+                and not u.path and not u.query and not u.username)
+    except ValueError:
+        return False
+
+
+@app.middleware('http')
+async def _guard(request: Request, call_next):
+    """Answer only requests addressed to this computer by name (not a rebound domain), and changes only from the tool's
+    own page or from no page at all (the launcher sends no Origin)."""
+    host, port = _host_and_port(request.headers.get('host'))
+    if host not in LOCAL_HOSTS:
+        return JSONResponse({'detail': tr('只接受发给本机地址的请求')}, status_code=400)
+    origin = request.headers.get('origin')
+    if request.method in CHANGES and origin is not None and not _own_origin(origin, port):
+        return JSONResponse({'detail': tr('这个请求不是从工具自己的页面发出的，已拒绝')}, status_code=403)
+    return await call_next(request)
+
+
 @app.exception_handler(KeyError)
 async def _not_found(request, exc):
     return JSONResponse({'detail': tr('找不到这个对象，可能已被删除；按 F5 刷新一下再试')}, status_code=404)
@@ -190,7 +226,34 @@ def index():
         html = f.read()
     if i18n.lang() == 'en':
         html = html.replace('<html lang="zh-CN">', '<html lang="en">', 1)
+    html = html.replace('<html ', f'<html style="--k: {ui_scale() / 100:g}" ', 1)
     return Response(html, media_type='text/html; charset=utf-8')
+
+
+UI_SCALES = (100, 115, 125, 150, 175)     # 界面大小, percent
+
+
+def ui_scale():
+    v = settings.get('ui_scale')
+    return v if v in UI_SCALES else 100
+
+
+class UiScaleIn(BaseModel):
+    scale: int
+
+
+@app.get('/api/ui-scale')
+def get_ui_scale():
+    return {'scale': ui_scale(), 'choices': list(UI_SCALES)}
+
+
+@app.post('/api/ui-scale')
+def set_ui_scale(body: UiScaleIn):
+    """The 界面大小 menu; the page reloads to show it."""
+    if body.scale not in UI_SCALES:
+        raise HTTPException(400, tr('界面大小只能是 {choices}', choices=' / '.join(f'{s}%' for s in UI_SCALES)))
+    settings.update(ui_scale=body.scale)
+    return get_ui_scale()
 
 
 class LangIn(BaseModel):
@@ -805,7 +868,8 @@ EXPORT_WAIT = 180                   # s: longest an export waits for solves and 
 def _ask_save_path(kind, suggested):
     import tkinter as tk
     from tkinter import filedialog
-    title = {'png': tr('导出成品图'), 'cutout': tr('导出仅丝袜'), 'guides': tr('导出丝袜引导.psd')}[kind]
+    title = {'png': tr('导出成品图'), 'cutout': tr('导出仅丝袜'), 'texture': tr('导出仅纹理'),
+             'guides': tr('导出丝袜引导.psd')}[kind]
     types = [(tr('Photoshop 文件'), '*.psd')] if kind == 'guides' else [(tr('PNG 图片'), '*.png')]
     with _dialog_lock:
         root = tk.Tk()
@@ -836,7 +900,7 @@ def _check_exportable(d, kind):
 
 
 class KindIn(BaseModel):
-    kind: str = 'png'                   # export.KINDS: 成品图, 仅丝袜, 丝袜引导.psd
+    kind: str = 'png'                   # export.KINDS: 成品图, 仅丝袜, 仅纹理, 丝袜引导.psd
 
 
 @app.post('/api/doc/{doc_id}/export/ask')
@@ -851,7 +915,7 @@ def ask_export_path(doc_id: str, body: KindIn):
 
 
 class ExportIn(BaseModel):
-    kind: str = 'png'                   # export.KINDS: 成品图, 仅丝袜, 丝袜引导.psd
+    kind: str = 'png'                   # export.KINDS: 成品图, 仅丝袜, 仅纹理, 丝袜引导.psd
     path: str                           # the file to write, as chosen in the save dialog (export/ask)
     params: dict | None = None          # the look being shown; None = the document's saved look
 
@@ -868,7 +932,7 @@ def export_doc(doc_id: str, body: ExportIn):
     with _export_lock:
         if body.kind == 'guides':
             res = export.export(d, None, None, path, 'guides')
-            d.mark_guides_saved()
+            d.mark_guides_saved(res['saved'])
         else:
             q = look.clean_params(body.params if body.params is not None else _base_look(d))
             if body.params is not None:
