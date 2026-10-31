@@ -35,4 +35,14 @@
 
 ## 数据与回滚
 
-源码入口为 `snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/`，本轮只改维护源码，未写运行区、未重启、未排队。两份新原件位于被 `.gitignore` 忽略的 `custom_nodes/` 下，已用显式 `git add -f` 纳入，避免新克隆缺文件导致 `oily` 导入失败。原始证据、隔离实例与渲染中间文件留在仓外，仓内只登记摘要与哈希，见[本轮收据](../../../receipts/stocking_upstream_sync_20261031.json)。
+源码入口为 `snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/`。两份新原件位于被 `.gitignore` 忽略的 `custom_nodes/` 下，已用显式 `git add -f` 纳入，避免新克隆缺文件导致 `oily` 导入失败。原始证据、隔离实例与渲染中间文件留在仓外，仓内只登记摘要与哈希，见[本轮收据](../../../receipts/stocking_upstream_sync_20261031.json)。
+
+## 生产部署与现场验收
+
+用户明确要求维护后再部署。走 `project.py deploy-plan --scope ComfyUI/custom_nodes/ComfyUI-Stocking-Texture` 只读计划，实际写回 **23 份**（21 替换、2 新增），逐份在写入前后核对 SHA256；部署后插件 **83 份文件与维护源码逐哈希一致**，无缺失、无多余。部署只动该插件目录，不改工作流、提示词、数据库或用户资料。
+
+现场保护：部署前记录生产进程身份（PID 28660）、完整 argv、队列与 81 份插件哈希；用 SQLite backup API 留 5 份一致副本，`quick_check` 均为 ok（6 张表）。29 份用户文件（14 份工作流、15 份 `stocking_studio` 素材与偏好）在部署前后清单**逐字节相同**。
+
+重启：原绘世启动器的父进程（PID 26616）已先退出，实例处于孤立状态，因此按记录的 argv 与原工作目录以分离进程拉起（新 PID 31924）。规范化比较 argv 一致（仅差 PowerShell 给可执行文件加的引号）；启动后 1946 个节点、三个丝绒节点就绪，队列为空。
+
+生产实测：同一份合成夹具与参数在 8188 上真实出图，**结果与隔离实例逐字节相同**（改动 12778 像素）；实页 `--k` 读到 1，`/api/ui-scale` 100→150 生效、5 类非法值均 400、再改回 100；测试会话已关闭。本轮新建的输入夹具、输出图、测试草稿与测试素材已全部删除，`preferences.json` 经回写后与部署前**逐字节相同**。回滚只需恢复 `FILES_DEPLOYED.json` 记录的 23 份原文件并用同样参数重启，不覆盖用户草稿、预设、素材或在线数据库。

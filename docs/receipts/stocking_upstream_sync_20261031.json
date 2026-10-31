@@ -69,11 +69,41 @@
     }
   },
   "deployment": {
-    "runtime_written": false,
-    "restarted": false,
-    "queue_touched": false,
-    "production_instance_8188_touched": false,
-    "note": "Maintenance source only. Deployment to the runtime is a separate, explicit step."
+    "runtime": "G:\\ComfyUI-aki-v3",
+    "scope": "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture",
+    "plan": "project.py deploy-plan --scope, read-only",
+    "files_written": 23,
+    "replaced": 21,
+    "added": 2,
+    "files_verified_after_write": 23,
+    "plugin_files_equal_source": 83,
+    "plugin_tree_sha256": "c7471b17c412c357683bf08ee176fdbb0339d39726504e892a766a4abfdceac0",
+    "before_pid": 28660,
+    "after_pid": 31924,
+    "argv_equal_normalized": true,
+    "launcher": "The 绘世 launcher parent (pid 26616) had already exited, leaving the instance orphaned; the restart used the recorded argv and cwd and started detached.",
+    "node_types": 1946,
+    "stocking_nodes": ["StockingTextureGuides", "StockingTextureRender", "StockingTextureStudio"],
+    "queue_empty_before_and_after": true,
+    "database_consistent_backups": 5,
+    "database_quick_check": "ok",
+    "protected_user_files": 29,
+    "protected_user_files_changed": 0,
+    "test_artifacts_removed": [
+      "input/stocking-qa-20261031",
+      "output/stocking-qa-20261031",
+      "user/default/stocking_texture/drafts/ad9e3a59deab4fb7a021cccf37a956fb.json",
+      "input/stocking_studio/assets/a884249fe41d0d632ce3775db9d597754c61cf9e1a2b9cb0dc237ac2a12cb239.png"
+    ],
+    "preferences_restored_to_before_bytes": true,
+    "production_render_equal_isolated": true,
+    "production_acceptance": {
+      "render_equal_to_isolated_instance": true,
+      "changed_pixels_vs_source": 12778,
+      "ui_scale_100_to_150_and_back": true,
+      "invalid_ui_scales_rejected": 5,
+      "editor_session_closed": true
+    }
   },
   "git_note": "upstream/stocking/_glint_position.py and _oily_absorption.py live under the ignored custom_nodes/ path and are committed with an explicit git add -f; without it a fresh clone would fail to import oily.py.",
   "evidence_id": "stocking-upstream-sync-20261031-01",
@@ -82,7 +112,15 @@
     "parity.log": "b572e118ae0ac324a7d0cc2a973cd6276dabf9c4055b4710fb52278036af5c42",
     "author-tests.log": "8fae86289817b758a2bc9141d4a7375f452c59eba7e696549a03c1ba4d052056",
     "iso-server.log": "71e56828e76a6f9b0676f833a3e844afa754c06ce1e57e93d1f033d7d35fdecd",
-    "ISO_ACCEPTANCE.json": "92523ffba3f604fc01287a754a5d40d227fb789736e0369c7fc974a06e218293"
+    "ISO_ACCEPTANCE.json": "92523ffba3f604fc01287a754a5d40d227fb789736e0369c7fc974a06e218293",
+    "deploy/before/PRODUCTION_BEFORE.json": "9b930cbb3a0db8e7d199384b498110db76ac7a516b75e39771b0d2ed6c4e94a1",
+    "deploy/FILES_DEPLOYED.json": "417c91c0591adeaebb5522d0c9771ef90f8233ac056dba95a1cd5796732cf7b6",
+    "deploy/PRODUCTION_VERIFIED.json": "5363aa5355205756c58dbf1659b795694af1b8d14e41fc8473a98a6facf29923",
+    "deploy/user-data-before.json": "4c2d2dc1685848604d136b87ba5d6a28cb79057bd2a877877cfa6a6b34aea6a2",
+    "deploy/user-data-after.json": "4c2d2dc1685848604d136b87ba5d6a28cb79057bd2a877877cfa6a6b34aea6a2",
+    "deploy/restart-args.txt": "4607122e1bc8b47b695f678dae5f626a17e47b8097d1ffd4953db1ee0326268c",
+    "deploy/production/PRODUCTION_ACCEPTANCE.json": "98c8eb6878f73b872ccda140248741e1cc0110ead28f28a6b344c4ab1cfd4a88",
+    "deploy/production/production-finished.png": "ff091e3cacb5fb66c309e2c0f95d3029e226ff060cdf42fadd11c9935466e085"
   },
   "limitations": [
     "Synthetic fixtures only; no picture-quality claim for arbitrary art.",
@@ -90,5 +128,5 @@
     "SAM/depth model quality was not re-audited; their code and dependencies did not change.",
     "The 仅纹理 layer is computed on the art it is exported from, so it is exact for that art and approximate for a repainted one."
   ],
-  "rollback": "Revert this branch's plugin changes; user drafts, presets and assets are untouched and no runtime files were written."
+  "rollback": "Restore the 23 before-hashes recorded in deploy/FILES_DEPLOYED.json (they equal the previous pin's files in Git at commit 1ad00b7b0), restart with the same argv, and leave user drafts, presets, assets and the online database alone."
 }
