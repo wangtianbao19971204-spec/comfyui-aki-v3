@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-25T05:44:53.704097+00:00",
+  "created_at": "2026-11-01T06:19:57.425063+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -14118,8 +14118,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/dist/javascript/zz_tb_shared_preset_manager.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/dist/javascript/zz_tb_shared_preset_manager.js",
-      "sha256": "a5b7ede9bae5703ddd42489eb2536c46078a6857851c4fc72484a171e0ee92eb",
-      "bytes": 212241,
+      "sha256": "d11f8c08a73a0dc6bd2477b21fb28586cdbe75408e83de29d482f6f9cd7c351a",
+      "bytes": 212654,
       "kind": "file"
     },
     {
@@ -14382,6 +14382,13 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/source_notes.py",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/source_notes.py",
+      "sha256": "2dc0f204ca1e7c5b3b9aaf7a4e14d231c01e36734a4a7c19033e911136813df5",
+      "bytes": 5115,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/startup_hooks.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/startup_hooks.py",
       "sha256": "c471c27fbceb6d4da44d8848a0e654bfc8b9d6a5bfa3051345fc5ca295a0e297",
@@ -14391,8 +14398,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_api.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_api.py",
-      "sha256": "d7b8bb4a474d26e77aab3ce33f5423b0b8b4c07b6f487bc66d982ff84e9941d5",
-      "bytes": 27453,
+      "sha256": "5d4230be6f5751566178eeedb3e5f5081518894c1624430e7eeec56dba98160c",
+      "bytes": 28173,
       "kind": "file"
     },
     {
@@ -24070,6 +24077,13 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/source_notes.js",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/source_notes.js",
+      "sha256": "bfc3a54a05da1db2e4ebe69d0f5c526311a0cb1f16dd6939e5ec98441b2f02f3",
+      "bytes": 3273,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/static_prompt_inspector.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/static_prompt_inspector.js",
       "sha256": "12e56837ad2f2026acb7386869f44b765505e05ca500c37f8804c0e85d51b014",
@@ -24086,8 +24100,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/tag_manager.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/tag_manager.js",
-      "sha256": "1215eda0d1c948d16305e48c383429952770f4f4a5345333b5c9aa228213eadd",
-      "bytes": 84141,
+      "sha256": "5172861397cd3089d43394d1420235d7bcc26c9f9515a5b6c90dccbda4abd7e8",
+      "bytes": 84431,
       "kind": "file"
     },
     {
@@ -57537,10 +57551,31 @@
       "kind": "file"
     },
     {
+      "source": "benchmark_reports/source_update_flow/accept_current.py",
+      "path": "runtime/benchmark_reports/source_update_flow/accept_current.py",
+      "sha256": "6a9af4e9ef031b96555f73c17123103e31ecd985b64f70fd1d55458545a37d0a",
+      "bytes": 16385,
+      "kind": "file"
+    },
+    {
+      "source": "benchmark_reports/source_update_flow/audit_current.py",
+      "path": "runtime/benchmark_reports/source_update_flow/audit_current.py",
+      "sha256": "8563fe6526d5e0972f54eb57ebe6e68056ed2ba9ec7ce877b299d33983946c91",
+      "bytes": 8406,
+      "kind": "file"
+    },
+    {
       "source": "benchmark_reports/source_update_flow/current_scope_rejection.json",
       "path": "runtime/benchmark_reports/source_update_flow/current_scope_rejection.json",
       "sha256": "9ad36f9ceff6bdbb2df954aa86f22a31f3af654f62ebcc106a62c3f92f809948",
       "bytes": 940,
+      "kind": "file"
+    },
+    {
+      "source": "benchmark_reports/source_update_flow/fetch_current_images.py",
+      "path": "runtime/benchmark_reports/source_update_flow/fetch_current_images.py",
+      "sha256": "2d76dd1729857e37ca90bd33d5bce885e1757713b74c41a7a951dd8ea47b9541",
+      "bytes": 5265,
       "kind": "file"
     },
     {
@@ -57576,6 +57611,41 @@
       "path": "runtime/benchmark_reports/source_update_flow/newer_source_policy.py",
       "sha256": "83beda07ca359396b5e12e4fef4fab91c98505091890912e134d910213620207",
       "bytes": 1765,
+      "kind": "file"
+    },
+    {
+      "source": "benchmark_reports/source_update_flow/publish_current.py",
+      "path": "runtime/benchmark_reports/source_update_flow/publish_current.py",
+      "sha256": "3804cfd20f9e29be6dbef870b2cda99f26ba297b31d3394115333aacca8dd6a8",
+      "bytes": 22009,
+      "kind": "file"
+    },
+    {
+      "source": "benchmark_reports/source_update_flow/stage_body_maintenance.py",
+      "path": "runtime/benchmark_reports/source_update_flow/stage_body_maintenance.py",
+      "sha256": "1eba943f9a0c9fae2c27184931d2705357f6a344446de626d740da0b4644e8ac",
+      "bytes": 37676,
+      "kind": "file"
+    },
+    {
+      "source": "benchmark_reports/source_update_flow/stage_current.py",
+      "path": "runtime/benchmark_reports/source_update_flow/stage_current.py",
+      "sha256": "a4a01e3e08a73e9063caed23e4d81b407f9361f07b4af7d67f60dc2822f9f5a0",
+      "bytes": 36939,
+      "kind": "file"
+    },
+    {
+      "source": "benchmark_reports/source_update_flow/stage_display_maintenance.py",
+      "path": "runtime/benchmark_reports/source_update_flow/stage_display_maintenance.py",
+      "sha256": "f5204f1ae5902f1552bab56c554bbd14bbc9a2acef3322f9faec178e47383ef4",
+      "bytes": 32298,
+      "kind": "file"
+    },
+    {
+      "source": "benchmark_reports/source_update_flow/stage_maintenance.py",
+      "path": "runtime/benchmark_reports/source_update_flow/stage_maintenance.py",
+      "sha256": "07c1a40d5335c5cd78321658206b86dff9d623a09716b86a22364121d4426a82",
+      "bytes": 23190,
       "kind": "file"
     },
     {
@@ -68282,36 +68352,14 @@
     }
   ],
   "development_revision": {
-    "note": "Merge origin/main into the stocking upstream sync; regenerated manifest after conflict resolution.",
-    "previous_manifest_sha256": "c3c7686160da766c5a834380bc0cbcac0bacb4e3a6026c28bd72b17ce7c75e7e",
+    "note": "Review-bound remaining body and original-name reconciliation; data deployment tracked privately",
+    "previous_manifest_sha256": "a291aaea6cb54f680f97f8f2c3642237d7f2754f89155f36c86a41941819c6d8",
     "source_changes": {
-      "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_highlight_update.py"
-      ],
+      "added": [],
       "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/engine.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/nodes.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/rendering.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/compare_upstream.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/feature_acceptance.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/parity_matrix.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_upstream_rendering.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/document.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/guide_fields.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/knit.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/look.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/oily.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/server.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n/en.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/index.html",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/look.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/style.css"
+        "benchmark_reports/source_update_flow/stage_body_maintenance.py",
+        "benchmark_reports/source_update_flow/stage_display_maintenance.py"
       ]
     },
     "live_deployed": false,

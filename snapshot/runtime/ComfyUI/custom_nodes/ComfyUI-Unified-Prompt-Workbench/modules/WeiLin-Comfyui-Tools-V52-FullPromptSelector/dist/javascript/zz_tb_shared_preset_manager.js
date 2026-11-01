@@ -1832,7 +1832,10 @@
     const openDetails = async (event, selectBody = false) => {
       const returnFocus = event?.currentTarget || document.activeElement;
       const version = ++detailsOpenVersion;
-      const {manageModal}=await import("/extensions/ComfyUI-Unified-Prompt-Workbench/modal_focus.js");
+      const [{manageModal}, {mountSourceNotes}] = await Promise.all([
+        import("/extensions/ComfyUI-Unified-Prompt-Workbench/modal_focus.js"),
+        import("/extensions/ComfyUI-Unified-Prompt-Workbench/source_notes.js"),
+      ]);
       if (version !== detailsOpenVersion || !card.isConnected || card.closest('[inert]')) return;
       closeResourceDetails?.();
       const overlay = document.createElement('section'); overlay.id = 'tb-shared-resource-details';
@@ -1841,7 +1844,8 @@
       const head = document.createElement('header'); panel.append(head);
       const title = document.createElement('h2'); title.textContent = item.alias || '资料详情'; head.append(title);
       const close = document.createElement('button'); close.textContent = '返回列表'; head.append(close);
-      const closeDetails = () => {overlay.remove(); releaseModal(); if (closeResourceDetails === closeDetails) closeResourceDetails = null;};
+      let sourceNotes = null;
+      const closeDetails = () => {sourceNotes?.dispose(); overlay.remove(); releaseModal(); if (closeResourceDetails === closeDetails) closeResourceDetails = null;};
       close.onclick = closeDetails;
       const imageSrc = item.image ? '/prompt_selector/preview/' + encodeURIComponent(item.image) : (/^https?:\/\//i.test(item.preview_url || '') ? item.preview_url : '');
       const content = document.createElement('div'); content.className = 'tb-spm-details-body';
@@ -1856,6 +1860,7 @@
         ${Array.isArray(item._merge_sources) && item._merge_sources.length ? `<details class="tb-spm-history"><summary>合并来源与历史版本（${item._merge_sources.length}）</summary><div></div></details>` : ''}
         ${item._import_quarantine ? `<div>导入位置：${escapeHtml(item._import_quarantine.source || '')}</div><button class="tb-spm-small-btn" data-act="export-original">导出原始记录</button>` : ''}`;
       panel.append(content);
+      const sourceHost = document.createElement('div'); content.append(sourceHost);
       const body = content.querySelector('pre');
       const selectText = () => {body.focus({preventScroll:true});const range=document.createRange();range.selectNodeContents(body);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);};
       body.onkeydown = event => {if (!event.isComposing && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'a') {event.preventDefault();event.stopPropagation();selectText();}};
@@ -1877,6 +1882,7 @@
       copy.onclick = async () => {try {await navigator.clipboard.writeText(String(item.prompt || '')); copy.textContent='已复制';} catch {copy.textContent='复制失败，已选中正文，请手动复制';selectText();}};
       const select = document.createElement('button');select.textContent='全选正文';select.onclick=selectText;tools.append(select);
       document.body.append(overlay);
+      sourceNotes = mountSourceNotes(sourceHost, item.id, {isCurrent: () => version === detailsOpenVersion && overlay.isConnected});
       const releaseModal=manageModal(overlay,{initialFocus:selectBody ? body : close,onClose:closeDetails,returnFocus});
       closeResourceDetails = closeDetails;
       if (selectBody) selectText();

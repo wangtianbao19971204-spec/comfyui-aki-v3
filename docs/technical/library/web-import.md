@@ -1,6 +1,6 @@
 # 网页、所长法典与 Word 导入
 
-版本：2026-10-05.2；状态：通用门禁和历史执行链均已入主仓，历史链保存在技术归档而非部署源码中。此页不是可直接执行的生产发布教程。
+版本：2026-11-01.3；状态：参数化网站差量与历史来源维护分别审查、暂存和验收；历史执行链仍只作参考。此页不是对任意生产库的覆盖授权。
 
 ## 用途与入口
 
@@ -9,6 +9,18 @@
 主仓入口：[网站与 Word 导入交付流程](../../../snapshot/runtime/benchmark_reports/source_update_flow/网站与Word导入交付流程.md)。旧文档内部相对路径按原件保留；对应批次现在位于下列技术归档入口，分类入口见 [分类工作入口](../archive/benchmark_reports/分类工作入口.md)、[分类标准](../archive/benchmark_reports/分类标准.md)及[变更记录](../archive/benchmark_reports/分类标准变更记录.md)。不要把旧相对路径直接当作当前部署路径。
 
 ## 实现链
+
+当前纯网站差量入口为 `source_update_flow/{audit_current,fetch_current_images,stage_current,publish_current,accept_current}.py`，对应测试为 `tests/test_current_source_{audit,stage,publish}.py`。实际操作、来源范围与限制见 [2026-11-01 更新记录](../changes/library-web-import/2026-11-01-current-source-delta.md)。旧 `freeze_batch.py` / `flow_gate.py` 仍是网站与 Word 联合批次门禁；本轮没有 Word 输入，不伪造 Word 覆盖收据，也不把该旧门禁称为已通过。
+
+历史维护另用 `stage_maintenance.py` 补齐经逐项批准的完整来源说明、逐图参数及负面词快照；`stage_body_maintenance.py` 只接受绑定旧来源 A、当前来源 B、本地正文 C 的明确表示形式及 `C == A` 见证。默认尾清理调用冻结的原站实现，编码和分类例外逐项审阅；不把规范化相似、同名或缺失来源元数据当作正文覆盖许可。旧来源、个人字段、原始 ID、图片及非目标数据保持，分类变化单独声明。来源说明的实际显示由[只读详情功能](source-notes.md)负责，不拼入个人备注。
+
+`stage_display_maintenance.py` 处理仍逐字等于旧来源标题的显示名称，重新审查所有当前来源归属与新标题一致性；资源 `alias` 与 Tag `desc` 是各自的显示字段，正文和个人备注独立保留。来源路径只存入完整原文，不按原站重排本地分类。缺少当前来源证明的唯一已绑定记录可单独补当前快照，既有当前快照不重复追加；标题冲突、不同的本地命名和其他身份保留不自动覆盖。
+
+用户明确要求继续逐条裁决时，可使用两个严格的审阅分支：正文的 `legacy_url_cleaned_main` 需要原始维护函数/逐 ID 清单和物理旧库证明，采用当前源时保留同一去链接处理；显示名的 `origin-naming-authority/v1` 需要冻结上游、独立检查点、真实导入边及保留 journal，按已证明的原始命名来源维护 alias，不能按后来自动变化的 primary 决定名称。两者均不降低默认规则；裁决、验证及保留边界见[剩余项逐条复核](../changes/library-web-import/2026-11-01-remaining-reconciliation.md)。
+
+受控发布可在同一回滚组内携带主仓 seal 中明确批准的少量源码：逐文件绑定当前线上旧哈希、新哈希和清单哈希，新文件回滚恢复为缺席。异常改动先留私有证据再恢复；安装和验收均核对已审查哈希。未部署的 Tag/词典也可声明为只读数据库，接口检查后取一致副本确认未变。资源库验收比较全部表，唯一允许的启动差异为原生备份操作时间戳。对应测试包括 `test_historical_{source,body}_maintenance.py`、`test_source_companion_publish.py` 和 `test_current_source_accept.py`。
+
+Tag 名称修订产生的两条原生搜索日志可被启动索引正常消费。验收只允许显式批准的两行完整原文删除，其余 Tag 表、修订和序列严格相等；有消费时核对一致缓存副本的格式、已应用序列及 FTS 词项位置与列 token 数。缓存为 contentless FTS，不声称读取了不存在的正文列。既存搜索缓存另作仅回滚备份，失败时与旧 Tag 库一起恢复，防止新索引游标越过已恢复的旧库。
 
 | 环节 | 当前维护入口/边界 | 已归档的历史实现 |
 |---|---|---|
@@ -44,6 +56,8 @@ NovelAI-Tag 的 LICENSE 对软件采用 MIT，但明确排除法典原文、原�
 - 冻结版为 `r-9a4bf4049f141be7d4d9`。未重新请求今天的网站指针，不声称当前网站全部同步。
 
 ## 更新记录
+
+- 2026-11-01：按已验收的 2026-10-31 来源检查点逐字段比对当前 v2 网站与联动 legacy 发布，新增 25 条资源对应 29 条来源、5 条缺失译名；349 条评级/更新标记变化逐条处置，329 条可定位更新，15 条沿用排除，5 条身份歧义保留。离线门禁、完整来源/个人字段保护及线上状态见[本轮记录](../changes/library-web-import/2026-11-01-current-source-delta.md)。
 
 - 2026-09-27：完成全站/Word 对照与来源更新批次。
 - 2026-09-28：固定版渡鸦 816 条增量正式验收，连接关闭故障的首次回滚单独保留。

@@ -403,6 +403,14 @@
         "snapshot/runtime/benchmark_reports/source_update_flow/freeze_batch.py",
         "snapshot/runtime/benchmark_reports/source_update_flow/flow_gate.py",
         "snapshot/runtime/benchmark_reports/source_update_flow/newer_source_policy.py",
+        "snapshot/runtime/benchmark_reports/source_update_flow/audit_current.py",
+        "snapshot/runtime/benchmark_reports/source_update_flow/fetch_current_images.py",
+        "snapshot/runtime/benchmark_reports/source_update_flow/stage_current.py",
+        "snapshot/runtime/benchmark_reports/source_update_flow/stage_maintenance.py",
+        "snapshot/runtime/benchmark_reports/source_update_flow/stage_body_maintenance.py",
+        "snapshot/runtime/benchmark_reports/source_update_flow/stage_display_maintenance.py",
+        "snapshot/runtime/benchmark_reports/source_update_flow/publish_current.py",
+        "snapshot/runtime/benchmark_reports/source_update_flow/accept_current.py",
         "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/acquire_web.py",
         "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/fetch_catalog.py",
         "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/extract_documents.py",
@@ -422,7 +430,16 @@
         "docs/technical/archive/benchmark_reports/2026-09-15_tag_folder_classification/repo_src/NovelAI-Tag-main/tools/codex_update_match.py",
         "docs/technical/archive/benchmark_reports/2026-09-15_tag_folder_classification/repo_src/NovelAI-Tag-main/tools/migrate_suozhang_char_prompts.py"
       ],
-      "tests": [],
+      "tests": [
+        "tests/test_current_source_audit.py",
+        "tests/test_current_source_stage.py",
+        "tests/test_current_source_publish.py",
+        "tests/test_current_source_accept.py",
+        "tests/test_historical_source_maintenance.py",
+        "tests/test_historical_body_maintenance.py",
+        "tests/test_historical_display_maintenance.py",
+        "tests/test_source_companion_publish.py"
+      ],
       "evidence": [
         "snapshot/runtime/benchmark_reports/source_update_flow/historical_replay_result.json",
         "snapshot/runtime/benchmark_reports/source_update_flow/current_scope_rejection.json",
@@ -441,6 +458,34 @@
       "examples": [
         "snapshot/runtime/benchmark_reports/source_update_flow/historical_batch.json",
         "examples/external-assets/annotations.example.json"
+      ]
+    },
+    {
+      "id": "library-source-notes",
+      "document": "docs/technical/library/source-notes.md",
+      "implementation": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/source_notes.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_api.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/source_notes.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/tag_manager.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/dist/javascript/zz_tb_shared_preset_manager.js"
+      ],
+      "tests": [
+        "tests/test_source_notes.py",
+        "tests/test_source_notes_ui.mjs"
+      ],
+      "evidence": [],
+      "acceptance": "checked-source",
+      "watch": [
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/source_notes.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/source_notes.js",
+        "tests/test_source_notes.py",
+        "tests/test_source_notes_ui.mjs",
+        "examples/source-notes/preview.html"
+      ],
+      "examples": [
+        "examples/source-notes/preview.html",
+        "docs/technical/library/source-notes.md"
       ]
     },
     {

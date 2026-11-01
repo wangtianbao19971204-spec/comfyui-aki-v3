@@ -9,6 +9,7 @@
 | 功能 | 技术档案 | 当前实现与证据边界 |
 |---|---|---|
 | 网页/所长法典/Word 采集与增量导入 | [web-import.md](web-import.md) | 通用门禁与维护实现已在主仓；历史采集、Word 解析及发布链已归档 |
+| 原站说明与个人备注分开展示 | [source-notes.md](source-notes.md) | 单一只读投影及共用详情组件；不自动修改个人字段 |
 | Tag 预览补齐、绑定、缩略图与图库消费 | [tag-previews.md](tag-previews.md) | 生产服务、批次图片验证代码和图库回执已在主仓；真实图片仍在外部 |
 | 主题、父归属、细分与身份边界 | [taxonomy.md](taxonomy.md) | 生产引擎及历史回放/全量契约代码已归档；完整冻结输入仍需外部资料 |
 | 六类选择器共享分类与来源筛选 | [selectors.md](selectors.md) | 当前实现、2026-10-02 专项测试/回执已归档；旧 before、数据 fixture 和环境未随附 |
