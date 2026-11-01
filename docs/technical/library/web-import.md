@@ -1,6 +1,6 @@
 # 网页、所长法典与 Word 导入
 
-版本：2026-10-05.2；状态：通用门禁和历史执行链均已入主仓，历史链保存在技术归档而非部署源码中。此页不是可直接执行的生产发布教程。
+版本：2026-11-01.1；状态：新增受测的参数化网站差量审计、离线暂存及数据发布入口；历史执行链仍只作参考。此页不是对任意生产库的覆盖授权。
 
 ## 用途与入口
 
@@ -9,6 +9,8 @@
 主仓入口：[网站与 Word 导入交付流程](../../../snapshot/runtime/benchmark_reports/source_update_flow/网站与Word导入交付流程.md)。旧文档内部相对路径按原件保留；对应批次现在位于下列技术归档入口，分类入口见 [分类工作入口](../archive/benchmark_reports/分类工作入口.md)、[分类标准](../archive/benchmark_reports/分类标准.md)及[变更记录](../archive/benchmark_reports/分类标准变更记录.md)。不要把旧相对路径直接当作当前部署路径。
 
 ## 实现链
+
+当前纯网站差量入口为 `source_update_flow/{audit_current,fetch_current_images,stage_current,publish_current,accept_current}.py`，对应测试为 `tests/test_current_source_{audit,stage,publish}.py`。实际操作、来源范围与限制见 [2026-11-01 更新记录](../changes/library-web-import/2026-11-01-current-source-delta.md)。旧 `freeze_batch.py` / `flow_gate.py` 仍是网站与 Word 联合批次门禁；本轮没有 Word 输入，不伪造 Word 覆盖收据，也不把该旧门禁称为已通过。
 
 | 环节 | 当前维护入口/边界 | 已归档的历史实现 |
 |---|---|---|
@@ -44,6 +46,8 @@ NovelAI-Tag 的 LICENSE 对软件采用 MIT，但明确排除法典原文、原�
 - 冻结版为 `r-9a4bf4049f141be7d4d9`。未重新请求今天的网站指针，不声称当前网站全部同步。
 
 ## 更新记录
+
+- 2026-11-01：按已验收的 2026-10-31 来源检查点逐字段比对当前 v2 网站与联动 legacy 发布，新增 25 条资源对应 29 条来源、5 条缺失译名；349 条评级/更新标记变化逐条处置，329 条可定位更新，15 条沿用排除，5 条身份歧义保留。离线门禁、完整来源/个人字段保护及线上状态见[本轮记录](../changes/library-web-import/2026-11-01-current-source-delta.md)。
 
 - 2026-09-27：完成全站/Word 对照与来源更新批次。
 - 2026-09-28：固定版渡鸦 816 条增量正式验收，连接关闭故障的首次回滚单独保留。

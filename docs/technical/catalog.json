@@ -403,6 +403,11 @@
         "snapshot/runtime/benchmark_reports/source_update_flow/freeze_batch.py",
         "snapshot/runtime/benchmark_reports/source_update_flow/flow_gate.py",
         "snapshot/runtime/benchmark_reports/source_update_flow/newer_source_policy.py",
+        "snapshot/runtime/benchmark_reports/source_update_flow/audit_current.py",
+        "snapshot/runtime/benchmark_reports/source_update_flow/fetch_current_images.py",
+        "snapshot/runtime/benchmark_reports/source_update_flow/stage_current.py",
+        "snapshot/runtime/benchmark_reports/source_update_flow/publish_current.py",
+        "snapshot/runtime/benchmark_reports/source_update_flow/accept_current.py",
         "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/acquire_web.py",
         "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/fetch_catalog.py",
         "docs/technical/archive/benchmark_reports/2026-09-27_codex_update/extract_documents.py",
@@ -422,7 +427,11 @@
         "docs/technical/archive/benchmark_reports/2026-09-15_tag_folder_classification/repo_src/NovelAI-Tag-main/tools/codex_update_match.py",
         "docs/technical/archive/benchmark_reports/2026-09-15_tag_folder_classification/repo_src/NovelAI-Tag-main/tools/migrate_suozhang_char_prompts.py"
       ],
-      "tests": [],
+      "tests": [
+        "tests/test_current_source_audit.py",
+        "tests/test_current_source_stage.py",
+        "tests/test_current_source_publish.py"
+      ],
       "evidence": [
         "snapshot/runtime/benchmark_reports/source_update_flow/historical_replay_result.json",
         "snapshot/runtime/benchmark_reports/source_update_flow/current_scope_rejection.json",
