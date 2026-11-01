@@ -21,6 +21,7 @@ from .tag_identity_bridge import TagIdentityBridge
 from . import item_maintenance
 from . import item_batch
 from . import tag_links
+from .source_notes import read_source_notes
 
 logger = logging.getLogger("weilin.prompt_selector")
 
@@ -461,6 +462,20 @@ async def item_metadata_get(request):
         return response({'error': str(error)}, 404)
     except (ValueError, TypeError) as error:
         return response({'error': str(error)}, 400)
+
+
+@PromptServer.instance.routes.get('/prompt_selector/source-notes')
+async def source_notes_get(request):
+    try:
+        payload = await asyncio.to_thread(read_source_notes, request.query.get('resource_id'),
+                                          prompt_store._read_prompt_data_cached, dao.tags_db_path)
+        return web.json_response(payload, headers={'Cache-Control': 'no-store'})
+    except KeyError:
+        return response({'error': '资料已不存在'}, 404)
+    except (ValueError, TypeError):
+        return response({'error': '资料身份无效'}, 400)
+    except Exception:
+        return response({'error': '来源说明暂不可读'}, 503)
 
 
 # Scheduled from the end of the module: the worker calls library(), which only exists

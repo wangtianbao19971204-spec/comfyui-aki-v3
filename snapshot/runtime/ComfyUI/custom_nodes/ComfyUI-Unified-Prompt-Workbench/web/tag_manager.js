@@ -1,5 +1,6 @@
 import {mountInsertionActions} from './prompt_target.js';
 import {mountFunctionIcon} from './ui_identity.js';
+import {mountSourceNotes} from './source_notes.js';
 const ROOT_ID = 'unified-tag-manager';
 const API = '/prompt_selector/tags';
 let activeManager = null;
@@ -431,7 +432,7 @@ export async function openTagManager(options = {}) {
             status.textContent = `已插入 ${latest.length} 条 Tag。`;
         } catch (error) { report(error); }
     };
-    const modal = title => {
+    const modal = (title, onDismiss = () => {}) => {
         if (editorOpen) throw new Error('请先关闭当前编辑窗口。');
         editorOpen = true;
         const returnFocus = document.activeElement;
@@ -445,7 +446,7 @@ export async function openTagManager(options = {}) {
         const cancel = element('button', '取消', buttons), reload = element('button', '读取最新版本', buttons), save = element('button', '保存', buttons);
         reload.hidden = true;
         let saving = false, baseRevision = revision, baseCollectionRevision = collectionRevision;
-        const dismiss = () => { if (saving) return; overlay.remove(); editorOpen = false; dismissEditor = null; restoreFocus(returnFocus); };
+        const dismiss = () => { if (saving) return; onDismiss(); overlay.remove(); editorOpen = false; dismissEditor = null; restoreFocus(returnFocus); };
         dismissEditor = dismiss;
         cancel.onclick = dismiss;
         queueMicrotask(() => { if (overlay.isConnected) focusable(form)[0]?.focus(); });
@@ -506,7 +507,8 @@ export async function openTagManager(options = {}) {
     };
     const editTag = async (item, readOnly = false) => {
         if (item) { const data = await get('/item?id=' + encodeURIComponent(item.resource_id)); item = data.item; revision = data.revision; collections = data.collections || collections; collectionRevision = data.collection_revision || collectionRevision; }
-        const dialog = modal(item ? '编辑共享 Tag' : '新建共享 Tag');
+        let sourceNotes = null;
+        const dialog = modal(item ? '编辑共享 Tag' : '新建共享 Tag', () => sourceNotes?.dispose());
         const text = dialog.field('Tag 正文', 'textarea', item?.text || '');
         const description = dialog.field('描述', 'textarea', item?.desc || '');
         const category = dialog.field('分类', 'select'); categoryOptions(category, item?.g_uuid || subgroup.value);
@@ -515,6 +517,8 @@ export async function openTagManager(options = {}) {
         const favorite = dialog.field('收藏此 Tag'); favorite.type = 'checkbox'; favorite.checked = item?.favorite === true;
         const membership = collectionChoices(dialog.field, collections, item?.collection_ids || []);
         if (item) {
+            const sourceHost = element('div', null, dialog.fields);
+            sourceNotes = mountSourceNotes(sourceHost, item.resource_id);
             const links = element('div', null, dialog.fields);
             const loadLinks = () => import('./historical_links.js').then(module => {
                 if (links.isConnected) return module.mountHistoricalLinks(links, {kind:'tag', id:item.resource_id}, {readOnly});

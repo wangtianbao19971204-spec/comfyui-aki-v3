@@ -34,6 +34,8 @@ Git 源码与文字检查点、图库和权重、Python/CUDA 环境、最新在�
 
 - 2026-11-01：为网站资料差量登记五个参数化主仓维护入口及专项测试，见[法典同步记录](../changes/library-web-import/2026-11-01-current-source-delta.md)。代码通过源码 seal；真实来源、SQLite 一致副本、图片与回滚收据保留仓外，运行数据按单独范围验收，未刷新 Git 的旧库分片，不以 seal 冒充数据上线。
 
+- 同日：历史维护暂存按逐条来源和三方正文见证限定写入；资料更新需要的五个只读详情源码作为显式 seal companion 纳入数据发布组。旧源码及新增文件缺席状态分别备份，安装/上线均验已审查哈希；回滚前保留意外源码漂移。原生唯一服务身份、空队列、全表一致副本和未部署只读库一并核验，不能以 Git 提交状态代替实际部署收据。
+
 - 2026-10-11：`project.py` 的本地 status/seal/deploy-plan 复用 [snapshot_cache.py](../../../scripts/snapshot_cache.py) 的文件身份与目录指纹。未变文件不再重复读取正文／SHA，分片顺序及内容身份不变时复用拼接验证；运行比较支持 `--scope`。显式全读、CI、恢复、release 与历史上传门禁边界保持独立；见[实现和失效条件](../changes/operations-source-of-truth/2026-10-11-snapshot-fingerprints.md)及[回归](../../../tests/test_snapshot_cache.py)。
 
 - 2026-10-10：日常上传复用已验证的历史对象内容扫描，保留完整历史覆盖与 SHA-256 复核；历史／暂存缓存相互隔离，复制到另一个克隆或工作树会失效。新增历史风险回归和实际冷／热扫描对照，见[增量检查说明](../changes/operations-source-of-truth/2026-10-10-incremental-security.md)。LoRA 等仓外资源整理不触发 Git 上传门禁，部署同哈希文件继续跳过。

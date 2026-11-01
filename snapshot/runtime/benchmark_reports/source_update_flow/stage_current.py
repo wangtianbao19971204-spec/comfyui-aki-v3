@@ -99,7 +99,11 @@ def add_history(payload, variants, underscore=True, preserve_primary=False):
     prefix = "_" if underscore else ""
     key, current = prefix + "external_sources", prefix + "external_source"
     history = list(result.get(key) or [])
-    if result.get(current) and packed(result[current]) not in {packed(x) for x in history}:
+    prior = result.get(current)
+    matching_primary = [v for v in variants if isinstance(prior, dict)
+                        and (v.get("dataset"), v.get("entry_id")) == (prior.get("dataset"), prior.get("entry_id"))]
+    replaces_primary = not preserve_primary or bool(matching_primary and packed(matching_primary[-1]) != packed(prior))
+    if prior and replaces_primary and packed(prior) not in {packed(x) for x in history}:
         history.append(copy.deepcopy(result[current]))
     seen = {packed(x) for x in history}
     for item in variants:
@@ -564,7 +568,10 @@ def validate_history(before, after, underscore):
         raise AssertionError("prior source history changed or truncated")
     prior_main = before.get(primary)
     if prior_main:
-        if packed(prior_main) not in {packed(v) for v in history}:
+        # An unchanged primary is still retained in place. Archiving it at the
+        # history tail merely to satisfy this guard could make an older source
+        # appear newer than an already-current historical revision.
+        if packed(prior_main) != packed(after.get(primary)) and packed(prior_main) not in {packed(v) for v in history}:
             raise AssertionError("prior primary source revision lost")
         if (after[primary].get("dataset"), after[primary].get("entry_id")) != (prior_main.get("dataset"), prior_main.get("entry_id")):
             raise AssertionError("metadata update changed primary source identity")

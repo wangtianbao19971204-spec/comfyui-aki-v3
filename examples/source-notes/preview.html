@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<title>来源说明隔离预览（虚构资料）</title>
+<style>
+body{font:16px/1.6 system-ui,sans-serif;margin:32px;background:#eef1f7;color:#202738}main{max-width:900px;margin:auto}article{background:white;padding:24px;border-radius:16px;box-shadow:0 8px 24px #25334d18;margin-block:20px}label{display:block;font-weight:600}textarea{box-sizing:border-box;width:100%;min-height:72px;font:inherit;padding:10px;border:1px solid #b6bfd0;border-radius:8px}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f2f5fb;padding:14px;border-radius:10px}button{font:inherit;padding:8px 14px;border:1px solid #aeb9cb;border-radius:8px;background:#f9fbff;cursor:pointer}a{color:#3a4aa0}small{color:#59647a}#sources{border-top:1px solid #e0e5ef;margin-top:22px}h1{font-size:24px}h2{font-size:20px}h3{font-size:18px}
+</style>
+<main><h1>来源说明隔离预览</h1><p>本页全部内容为虚构测试资料，不连接生产库。</p>
+<article aria-label="资料详情"><h2>中性场景示例</h2><pre id="prompt-body" tabindex="0">gentle rain, soft light</pre>
+<button id="select-body">全选正文</button>
+<label for="memo">个人备注</label><textarea id="memo">个人备注：保留原样。</textarea>
+<div id="sources"></div></article></main>
+<script type="module">
+import {mountSourceNotes} from './source_notes.js';
+const body=document.querySelector('#prompt-body');
+document.querySelector('#select-body').onclick=()=>{const r=document.createRange();r.selectNodeContents(body);const s=window.getSelection();s.removeAllRanges();s.addRange(r);body.focus();};
+const request=async(url,options)=>{if(options.method!=='GET')throw Error('只允许只读测试');return {ok:true,json:async()=>({source_notes:[{title:'示例资料',entry_title:'中性场景',note:'这是原站的使用说明。\n来源说明与个人备注分开保存。\n<img src=x onerror=alert(1)> 只作文字显示。',url:'https://novelai.quicktagcloud.com/'}]})};};
+mountSourceNotes(document.querySelector('#sources'),'synthetic-resource',{request});
+</script>
+</html>

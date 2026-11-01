@@ -62,8 +62,9 @@ class CurrentStageTests(unittest.TestCase):
         self.assertEqual(local["prompt"], "USER EDIT")
         self.assertTrue(local["favorite"])
         self.assertEqual(local["_collection"], {"notes": "mine"})
-        self.assertEqual(local["_external_source"]["dataset"], "different")
-        self.assertEqual(len(local["_external_sources"]), 15)
+        self.assertEqual(local["_external_source"], {"dataset": "different", "entry_id": "keep", "release": "old"})
+        self.assertEqual(local["_external_sources"][:12], [{"historical": i} for i in range(12)])
+        self.assertEqual(len(local["_external_sources"]), 14)
         self.assertEqual(local["_external_sources"][-2]["raw_entry"], self.old)
         self.assertEqual(local["_external_sources"][-1]["raw_entry"], self.new)
         self.assertEqual(prompts["codex-enter-2"]["prompt"], "Exact Case\ngirl: Blue Eyes")
@@ -157,6 +158,24 @@ class CurrentStageTests(unittest.TestCase):
             store.initialize_from_document(document)
         finally:
             store.close()
+
+    def test_unchanged_primary_is_preserved_without_reordering_current_history(self):
+        primary = {"dataset": "book", "entry_id": "one", "note": "old"}
+        current = {**primary, "note": "current"}
+        before = {"_external_source": primary, "_external_sources": [current]}
+        after = stage.add_history(before, [{"dataset": "other", "entry_id": "two"}], preserve_primary=True)
+        stage.validate_history(before, after, True)
+        self.assertEqual(after["_external_source"], primary)
+        self.assertEqual([v for v in after["_external_sources"] if v["dataset"] == "book"], [current])
+
+    def test_changed_primary_requires_exact_prior_revision_to_be_archived(self):
+        primary = {"dataset": "book", "entry_id": "one", "note": "old", "custom": "preserve"}
+        before = {"_external_source": primary, "_external_sources": []}
+        after = {"_external_source": {**primary, "note": "new"}, "_external_sources": []}
+        with self.assertRaisesRegex(AssertionError, "prior primary source revision lost"):
+            stage.validate_history(before, after, True)
+        after["_external_sources"].append(copy.deepcopy(primary))
+        stage.validate_history(before, after, True)
 
     def test_native_alias_rejects_review_that_updates_legacy_physical_row(self):
         self.native_alias_fixture()

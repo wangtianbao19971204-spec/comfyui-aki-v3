@@ -1,6 +1,7 @@
-"""Prepare/apply an explicitly scoped data-only release with complete rollback.
+"""Prepare/apply scoped data and sealed companion source with group rollback.
 
-No source deployment, generation, queue clearing or model downloads are performed.
+Source companions require this tool's sealed main-Git manifest and exact scope.
+Generation, queue clearing and model downloads are never performed.
 The spec, backups and receipts are private batch evidence, never Git payloads.
 """
 from __future__ import annotations
@@ -156,12 +157,36 @@ def check_sources(spec):
             require(hashlib.sha256(response.read()).hexdigest() == item["sha256"], "Website release changed")
 
 
+def approved_companions(spec):
+    """Source companions must be exact files from the current sealed main Git."""
+    approved = spec.get("approved_sources", {})
+    if not approved:
+        require(not any(r["kind"] == "source" for r in spec["files"]), "Source files lack explicit approval")
+        return {}
+    manifest_path = Path(spec["source_manifest"]).resolve()
+    require(manifest_path == (Path(__file__).resolve().parents[3] / "manifest.json"),
+            "Source manifest must belong to this main-Git maintenance checkout")
+    require(sha(manifest_path) == spec["source_manifest_sha256"], "Source seal changed")
+    manifest = read(manifest_path)
+    entries = {row["source"]: row for row in manifest["files"] if row["kind"] == "file"}
+    rows = {row["runtime_relative"]: row for row in spec["files"] if row["kind"] == "source"}
+    require(set(rows) == set(approved), "Source scope differs from the explicit plan")
+    for relative, approval in approved.items():
+        entry = entries.get(relative)
+        require(entry is not None and entry["sha256"] == approval["after_sha256"], "Source is absent from seal")
+        path = safe_file(manifest_path.parent, entry["path"])
+        require(path.resolve() == Path(rows[relative]["stage_path"]).resolve()
+                and sha(path) == approval["after_sha256"], "Companion source is not the sealed file")
+    return approved
+
+
 def prepare(runtime, batch, spec):
     runtime = runtime.resolve()
     require(not batch.resolve().is_relative_to(runtime), "Release evidence must stay outside runtime")
     process, identity = owner(runtime, spec["port"])
     empty(spec["port"])
     check_sources(spec)
+    approved = approved_companions(spec)
     batch.mkdir(parents=True, exist_ok=False)
     backup = batch / "backup"
     backup.mkdir()
@@ -169,27 +194,57 @@ def prepare(runtime, batch, spec):
     targets = [str(safe_file(runtime, item["runtime_relative"]).resolve()).casefold()
                for item in spec["files"]]
     require(len(set(targets)) == len(targets), "Duplicate deployment target")
+    caches = []
+    cache_targets = set(targets)
+    for item in spec.get("native_cache_rollback", []):
+        relative = item["runtime_relative"]
+        target = safe_file(runtime, relative)
+        key = str(target.resolve()).casefold()
+        require("/user_data/" in relative and "/cache/" in relative and target.suffix == ".db"
+                and target.is_file(), "Only existing native user-data cache databases may be bound")
+        require(key not in cache_targets, "Duplicate or overlapping native cache rollback target")
+        cache_targets.add(key)
+        baseline = Path(item["baseline_path"]).resolve()
+        require(baseline.is_file() and not baseline.is_relative_to(runtime), "Native cache baseline must be an isolated database")
+        caches.append({**item, "baseline_path": str(baseline), "baseline_sha256": sha(baseline)})
     for index, item in enumerate(spec["files"]):
         target = safe_file(runtime, item["runtime_relative"])
-        require("/user_data/" in item["runtime_relative"] and target.is_file(), "Only existing user-data files may be replaced")
+        require(item["kind"] in {"sqlite", "file", "json", "source"}, "Unsupported release file kind")
+        before_exists = target.is_file()
+        if item["kind"] == "source":
+            expected = approved[item["runtime_relative"]]["before_sha256"]
+            require((not target.exists()) if expected is None else (before_exists and sha(target) == expected),
+                    "Unreviewed live source drift")
+        else:
+            require("/user_data/" in item["runtime_relative"] and before_exists, "Only existing user-data files may be replaced")
         source = Path(item["stage_path"]).resolve()
-        require(source.is_file() and not source.is_relative_to(runtime), "Stage must be isolated")
-        base = backup / (str(index) + "_" + target.name)
+        require(source.is_file() and (item["kind"] == "source" or not source.is_relative_to(runtime)), "Stage must be isolated")
+        base = backup / (str(index) + "_" + target.name) if before_exists else None
         if item["kind"] == "sqlite":
             backup_sqlite(target, base)
             require(fingerprint(base) == fingerprint(Path(item["baseline_path"])), "Live database changed since staging")
-        else:
+        elif before_exists:
             shutil.copy2(target, base)
             require(sha(target) == sha(base), "Live file changed during backup")
-            require(sha(base) == sha(Path(item["baseline_path"])), "Live JSON changed since staging")
-        rows.append({**item, "stage_sha256": sha(source), "backup_path": str(base),
-                     "backup_sha256": sha(base),
+            if item["kind"] != "source":
+                require(sha(base) == sha(Path(item["baseline_path"])), "Live JSON changed since staging")
+        rows.append({**item, "before_exists": before_exists,
+                     "stage_sha256": sha(source), "backup_path": str(base) if base else None,
+                     "backup_sha256": sha(base) if base else None,
                      "before_fingerprint": fingerprint(base) if item["kind"] == "sqlite" else None,
                      "stage_fingerprint": fingerprint(source) if item["kind"] == "sqlite" else None})
+    for index, item in enumerate(caches):
+        target = safe_file(runtime, item["runtime_relative"])
+        base = backup / (str(len(rows) + index) + "_native_cache_" + target.name)
+        backup_sqlite(target, base)
+        before = fingerprint(base)
+        require(before == fingerprint(Path(item["baseline_path"])), "Native cache changed since its reviewed baseline")
+        require(sha(Path(item["baseline_path"])) == item["baseline_sha256"], "Native cache baseline changed during preparation")
+        item.update(backup_path=str(base), backup_sha256=sha(base), before_fingerprint=before)
     owner(runtime, spec["port"], identity)
     empty(spec["port"])
     plan = {"schema": "data-source-release/v1", "prepared_at": now(), "runtime": str(runtime),
-            "owner": identity, "spec": spec, "files": rows,
+            "owner": identity, "spec": spec, "files": rows, "native_cache_rollback": caches,
             "baseline_index": get(spec["port"], "/prompt_selector/library/index"), "applied": False}
     save(batch / "plan.json", plan)
     print(json.dumps({"prepared": True, "files": len(rows), "plan_sha256": sha(batch / "plan.json")}))
@@ -199,10 +254,17 @@ def apply(batch, reviewed_sha):
     require(sha(batch / "plan.json") == reviewed_sha, "Plan review hash mismatch")
     plan = read(batch / "plan.json")
     runtime, spec = Path(plan["runtime"]), plan["spec"]
+    approved_companions(spec)
     require(not (batch / "release_receipt.json").exists(), "Release already attempted; retain its evidence")
     for row in plan["files"]:
         require(sha(Path(row["stage_path"])) == row["stage_sha256"], "Stage changed")
-        require(sha(Path(row["backup_path"])) == row["backup_sha256"], "Rollback backup changed")
+        if row["backup_path"]:
+            require(sha(Path(row["backup_path"])) == row["backup_sha256"], "Rollback backup changed")
+        else:
+            require(row["kind"] == "source" and not row.get("before_exists", True), "Missing rollback backup")
+    for row in plan.get("native_cache_rollback", []):
+        require(sha(Path(row["backup_path"])) == row["backup_sha256"], "Native cache rollback backup changed")
+        require(sha(Path(row["baseline_path"])) == row["baseline_sha256"], "Native cache reviewed baseline changed")
     for path, expected in spec["bound_receipts"].items():
         require(sha(Path(path)) == expected, "Bound stage evidence changed")
     process, identity = owner(runtime, spec["port"], plan["owner"])
@@ -270,12 +332,20 @@ def apply(batch, reviewed_sha):
             if row["kind"] == "sqlite":
                 checkpoint(target)
                 require(fingerprint(target) == row["before_fingerprint"], "Database drift before release")
-            else:
+            elif row.get("before_exists", True):
                 require(sha(target) == row["backup_sha256"], "File drift before release")
+            else:
+                require(not target.exists(), "New source appeared after preparation")
+        for row in plan.get("native_cache_rollback", []):
+            target = safe_file(runtime, row["runtime_relative"])
+            checkpoint(target)
+            require(fingerprint(target) == row["before_fingerprint"], "Native cache drift before release")
         for row in plan["files"]:
             # Mark before first replacement so partial failures always restore the group.
             replaced = True
+            require(sha(Path(row["stage_path"])) == row["stage_sha256"], "Stage changed before installation")
             atomic_copy(Path(row["stage_path"]), safe_file(runtime, row["runtime_relative"]))
+            require(sha(safe_file(runtime, row["runtime_relative"])) == row["stage_sha256"], "Installed file differs from reviewed stage")
         state("data_installed", applied=True)
         record = start("production")
         state("awaiting_acceptance", service=record)
@@ -308,9 +378,30 @@ def apply(batch, reviewed_sha):
             if replaced:
                 for row in plan["files"]:
                     target = safe_file(runtime, row["runtime_relative"])
+                    if row["kind"] == "source" and target.exists() and sha(target) != row["stage_sha256"]:
+                        # Preserve unexpected post-install edits before restoring
+                        # the reviewed baseline, including an absent new file.
+                        drift = batch / "rollback_source_drift"
+                        drift.mkdir(exist_ok=True)
+                        saved = drift / (str(plan["files"].index(row)) + "_" + target.name)
+                        atomic_copy(target, saved)
+                        save(saved.with_name(saved.name + ".receipt.json"), {
+                            "runtime_relative": row["runtime_relative"], "sha256": sha(saved), "at": now()})
                     if row["kind"] == "sqlite":
                         checkpoint(target)
+                    if row.get("before_exists", True):
+                        atomic_copy(Path(row["backup_path"]), target)
+                    elif target.exists():
+                        target.unlink()
+                # A native FTS cache may have consumed the new Tag upserts even
+                # when its built_revision stayed old. Restore it with the Tag
+                # database, while every service process is stopped.
+                for row in plan.get("native_cache_rollback", []):
+                    target = safe_file(runtime, row["runtime_relative"])
+                    if target.exists():
+                        checkpoint(target)
                     atomic_copy(Path(row["backup_path"]), target)
+                    require(fingerprint(target) == row["before_fingerprint"], "Restored native cache differs from baseline")
             record = start("rollback")
             state("rolled_back", applied=False, service=record)
         raise

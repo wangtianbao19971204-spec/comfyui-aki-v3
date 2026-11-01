@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-11-01T03:16:25.023388+00:00",
+  "created_at": "2026-11-01T05:06:09.318920+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -14118,8 +14118,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/dist/javascript/zz_tb_shared_preset_manager.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/dist/javascript/zz_tb_shared_preset_manager.js",
-      "sha256": "a5b7ede9bae5703ddd42489eb2536c46078a6857851c4fc72484a171e0ee92eb",
-      "bytes": 212241,
+      "sha256": "d11f8c08a73a0dc6bd2477b21fb28586cdbe75408e83de29d482f6f9cd7c351a",
+      "bytes": 212654,
       "kind": "file"
     },
     {
@@ -14382,6 +14382,13 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/source_notes.py",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/source_notes.py",
+      "sha256": "2dc0f204ca1e7c5b3b9aaf7a4e14d231c01e36734a4a7c19033e911136813df5",
+      "bytes": 5115,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/startup_hooks.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/startup_hooks.py",
       "sha256": "c471c27fbceb6d4da44d8848a0e654bfc8b9d6a5bfa3051345fc5ca295a0e297",
@@ -14391,8 +14398,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_api.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/WeiLin-Comfyui-Tools-V52-FullPromptSelector/prompt_selector/tag_api.py",
-      "sha256": "d7b8bb4a474d26e77aab3ce33f5423b0b8b4c07b6f487bc66d982ff84e9941d5",
-      "bytes": 27453,
+      "sha256": "5d4230be6f5751566178eeedb3e5f5081518894c1624430e7eeec56dba98160c",
+      "bytes": 28173,
       "kind": "file"
     },
     {
@@ -24070,6 +24077,13 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/source_notes.js",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/source_notes.js",
+      "sha256": "bfc3a54a05da1db2e4ebe69d0f5c526311a0cb1f16dd6939e5ec98441b2f02f3",
+      "bytes": 3273,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/static_prompt_inspector.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/static_prompt_inspector.js",
       "sha256": "12e56837ad2f2026acb7386869f44b765505e05ca500c37f8804c0e85d51b014",
@@ -24086,8 +24100,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/tag_manager.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/tag_manager.js",
-      "sha256": "1215eda0d1c948d16305e48c383429952770f4f4a5345333b5c9aa228213eadd",
-      "bytes": 84141,
+      "sha256": "5172861397cd3089d43394d1420235d7bcc26c9f9515a5b6c90dccbda4abd7e8",
+      "bytes": 84431,
       "kind": "file"
     },
     {
@@ -57539,8 +57553,8 @@
     {
       "source": "benchmark_reports/source_update_flow/accept_current.py",
       "path": "runtime/benchmark_reports/source_update_flow/accept_current.py",
-      "sha256": "d7c88d4868086b6d3c8b06ea2885cbaf4f24012c4a5b0313d327a4a6ff60b6ae",
-      "bytes": 7407,
+      "sha256": "6a9af4e9ef031b96555f73c17123103e31ecd985b64f70fd1d55458545a37d0a",
+      "bytes": 16385,
       "kind": "file"
     },
     {
@@ -57602,15 +57616,36 @@
     {
       "source": "benchmark_reports/source_update_flow/publish_current.py",
       "path": "runtime/benchmark_reports/source_update_flow/publish_current.py",
-      "sha256": "4557fd7463c9c67fd1015dc7894eade74706b1f91f93e3fb9ebd3c3233eccf12",
-      "bytes": 15773,
+      "sha256": "3804cfd20f9e29be6dbef870b2cda99f26ba297b31d3394115333aacca8dd6a8",
+      "bytes": 22009,
+      "kind": "file"
+    },
+    {
+      "source": "benchmark_reports/source_update_flow/stage_body_maintenance.py",
+      "path": "runtime/benchmark_reports/source_update_flow/stage_body_maintenance.py",
+      "sha256": "0c7eb63634989c2ff2d84aecc625123c7cb5fb02415eb177904ec12dafd14d11",
+      "bytes": 30171,
       "kind": "file"
     },
     {
       "source": "benchmark_reports/source_update_flow/stage_current.py",
       "path": "runtime/benchmark_reports/source_update_flow/stage_current.py",
-      "sha256": "a027f33ac4a33866af55a01f923c166e031ddc8891322322b083fa539ad1415a",
-      "bytes": 36324,
+      "sha256": "a4a01e3e08a73e9063caed23e4d81b407f9361f07b4af7d67f60dc2822f9f5a0",
+      "bytes": 36939,
+      "kind": "file"
+    },
+    {
+      "source": "benchmark_reports/source_update_flow/stage_display_maintenance.py",
+      "path": "runtime/benchmark_reports/source_update_flow/stage_display_maintenance.py",
+      "sha256": "a97cb54ded92376b8bfb8178ca5eebb217a0664e6ad448f7219e319ee5c0dd7c",
+      "bytes": 25086,
+      "kind": "file"
+    },
+    {
+      "source": "benchmark_reports/source_update_flow/stage_maintenance.py",
+      "path": "runtime/benchmark_reports/source_update_flow/stage_maintenance.py",
+      "sha256": "07c1a40d5335c5cd78321658206b86dff9d623a09716b86a22364121d4426a82",
+      "bytes": 23190,
       "kind": "file"
     },
     {
@@ -68317,14 +68352,13 @@
     }
   ],
   "development_revision": {
-    "note": "Validate native source ownership before website metadata sync",
-    "previous_manifest_sha256": "693f9fb889861d3ede1efece76e926d4c9bbd7c19143daf81c95e64a773c733b",
+    "note": "Finalize exact historical body/display maintenance and native cache rollback protections",
+    "previous_manifest_sha256": "4e7877963874112b24299e8c3f6a8339699983f3bcacc19ee66d749b5a25632a",
     "source_changes": {
       "added": [],
       "removed": [],
       "changed": [
-        "benchmark_reports/source_update_flow/accept_current.py",
-        "benchmark_reports/source_update_flow/stage_current.py"
+        "benchmark_reports/source_update_flow/publish_current.py"
       ]
     },
     "live_deployed": false,
