@@ -3,6 +3,7 @@ import argparse
 import copy
 from contextlib import closing
 import importlib.util
+import hashlib
 import json
 from pathlib import Path
 import sqlite3
@@ -95,6 +96,7 @@ class DisplayMaintenanceTests(unittest.TestCase):
                 "new_source_title": "New " + key, "global_current_bindings": [{"source": "book:" + key, "raw_sha256": C.digest(self.current[key])}]})
         self.args = argparse.Namespace(review=self.approval, library=self.library, tags=self.tags,
             web=self.web, source_ledger=self.ledger, identity_plan=self.plan, output=self.root / "new-stage", review_sha256=None)
+        self.origin_paths = []
         self.write_inputs()
 
     def write_inputs(self):
@@ -109,9 +111,13 @@ class DisplayMaintenanceTests(unittest.TestCase):
                     "before_raw": self.old[key], "after_raw": value, "old_raw_sha256": C.digest(self.old[key]),
                     "new_raw_sha256": C.digest(value), "new_release": "r-current", "new_file_sha256": C.file_hash(self.web / "book.json")}
                    for key, value in self.current.items()]
+        frozen = self.root / "origin-source/book.json"
+        if frozen.exists():
+            for row in history:
+                row["old_file_sha256"] = C.file_hash(frozen)
         for path, rows in ((self.ledger, history), (self.plan, self.identities)):
             path.write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
-        paths = [self.library, self.tags, self.ledger, self.plan, self.registries,
+        paths = [self.library, self.tags, self.ledger, self.plan, self.registries, *self.origin_paths,
                  *(self.web / name for name in ("manifest.json", "codexes.json", "current.json"))]
         self.review["inputs"] = {str(path): C.file_hash(path) for path in paths}
         C.save(self.approval, self.review)
@@ -233,6 +239,120 @@ class DisplayMaintenanceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "invalid baseline native source alias"):
             self.run_stage()
         self.assertFalse(self.args.output.exists())
+
+    def original_name_authority(self, existing=False):
+        self.old["b"] = {"id": "b", "title": "Other old source", "tags": "other body"}
+        self.current["b"] = {"id": "b", "title": "Different current source title", "tags": "other body"}
+        self.identities.append({"source": "book:b", "owner": {"store": "library", "target_id": "codex-a"}, "source_hold": False})
+        item = self.review["display_sources"][0]
+        item["global_current_bindings"].append({"source": "book:b", "raw_sha256": C.digest(self.current["b"])})
+        with closing(C.connect(self.library)) as connection, connection:
+            connection.execute("INSERT OR REPLACE INTO library_meta VALUES ('_source_to_canonical',?)",
+                (C.packed({"codex-b": {"canonical_id": "codex-a", "source_category_id": "cat"}}),))
+            before = self.payload(self.library)
+            raw = C.packed(before)
+            connection.execute("INSERT INTO library_journal(at,op,prompt_id,category_id,before,after) VALUES ('origin-checkpoint','update','codex-a','cat',?,?)", (raw, raw))
+        folder = self.root / "origin-source"
+        folder.mkdir()
+        frozen, manifest = folder / "book.json", folder / "manifest.json"
+        C.save(frozen, {"entries": list(self.old.values())})
+        C.save(manifest, {"release": "r-old", "files": {"book.json": {"size": frozen.stat().st_size, "sha256": C.file_hash(frozen)}}})
+        first, last, edge = self.root / "original-import.json", self.root / "checkpoint.sqlite3", self.root / "import-operations.json"
+        C.save(first, {"categories": [{"prompts": [before]}]})
+        C.backup(self.library, last)
+        if existing:
+            C.save(edge, [{"source": "book:a", "target_id": "codex-a", "disposition": "library_existing"}])
+        else:
+            C.save(edge, [{"source": "book:a", "id": "codex-a", "store": "library", "action": ["add"]}])
+        item["origin_naming_authority"] = {"schema": "origin-naming-authority/v1", "origin_source": "book:a", "native_origin_id": "codex-a",
+            "frozen_source": {"path": str(frozen), "manifest_path": str(manifest), "name": "book.json", "release": "r-old"},
+            "old_source_entry_sha256": C.digest(self.old["a"]),
+            "checkpoints": [{"path": str(first), "kind": "document", "payload_sha256": C.digest(before)},
+                            {"path": str(last), "kind": "sqlite", "payload_sha256": C.digest(before)}],
+            "import_edge": {"path": str(edge), "kind": "accepted_existing_import" if existing else "direct_add"},
+            "journal_checkpoint": {"path": str(last), "rows": [{"seq": 1, "at": "origin-checkpoint", "op": "update",
+                "before_alias": "Old a", "after_alias": "Old a", "before_sha256": hashlib.sha256(raw.encode()).hexdigest(),
+                "after_sha256": hashlib.sha256(raw.encode()).hexdigest()}]}}
+        self.origin_paths = [frozen, manifest, first, last, edge]
+        self.review["expected"]["original_import_names"] = 1
+        return item["origin_naming_authority"]
+
+    def test_proven_original_import_name_can_update_despite_other_current_titles(self):
+        self.original_name_authority()
+        result = self.run_stage()
+        self.assertEqual(result["verified_original_import_names"], 1)
+        after = self.payload(self.args.output / "library.sqlite3")
+        self.assertEqual(after["alias"], "New a")
+        self.assertEqual(after["prompt"], self.payloads["a"]["prompt"])
+        self.assertEqual(after["_external_source"], self.payloads["a"]["_external_source"])
+        self.assertEqual(after["_external_sources"], self.payloads["a"]["_external_sources"])
+        self.assertEqual(result["source_versions_appended"], 1)  # Ordinary Tag case only.
+
+    def test_accepted_existing_import_has_separate_exact_name_proof(self):
+        self.original_name_authority(existing=True)
+        self.assertEqual(self.run_stage()["verified_original_import_names"], 1)
+
+    def test_conflicting_titles_still_fail_without_original_import_authority(self):
+        self.original_name_authority()
+        self.review["display_sources"][0].pop("origin_naming_authority")
+        self.review["expected"].pop("original_import_names")
+        with self.assertRaisesRegex(ValueError, "current titles conflict"):
+            self.run_stage()
+        self.assertFalse(self.args.output.exists())
+
+    def test_approval_boolean_is_not_original_naming_evidence(self):
+        self.original_name_authority()
+        self.review["display_sources"][0]["origin_naming_authority"] = {"approved": True}
+        with self.assertRaisesRegex(ValueError, "explicit original naming evidence"):
+            self.run_stage()
+
+    def test_original_name_checkpoint_with_local_rename_is_rejected(self):
+        authority = self.original_name_authority()
+        first = Path(authority["checkpoints"][0]["path"])
+        document = C.read(first)
+        document["categories"][0]["prompts"][0]["alias"] = "A personal renamed title"
+        C.save(first, document)
+        with self.assertRaisesRegex(ValueError, "checkpoint is missing, renamed or changed"):
+            self.run_stage()
+
+    def test_retained_journal_rename_is_not_overruled_by_original_name_claim(self):
+        authority = self.original_name_authority()
+        with closing(C.connect(authority["journal_checkpoint"]["path"])) as connection, connection:
+            payload = copy.deepcopy(self.payloads["a"])
+            payload["alias"] = "A personal renamed title"
+            connection.execute("UPDATE library_journal SET before=?", (C.packed(payload),))
+        with self.assertRaisesRegex(ValueError, "local rename or deletion"):
+            self.run_stage()
+
+    def test_later_primary_cannot_replace_the_selected_original_source(self):
+        authority = self.original_name_authority()
+        authority["origin_source"] = "book:b"
+        with self.assertRaisesRegex(ValueError, "direct canonical import"):
+            self.run_stage()
+
+    def test_original_import_operation_must_really_match_source_and_owner(self):
+        authority = self.original_name_authority()
+        C.save(Path(authority["import_edge"]["path"]), [{"source": "book:b", "id": "codex-a", "store": "library", "action": ["add"]}])
+        with self.assertRaisesRegex(ValueError, "direct add does not establish"):
+            self.run_stage()
+
+    def test_origin_name_does_not_require_old_history_for_secondary_sources(self):
+        self.original_name_authority()
+        self.identities = [row for row in self.identities if row["source"] != "book:b"]
+        self.assertEqual(self.run_stage()["verified_original_import_names"], 1)
+
+    def test_later_primary_is_preserved_but_does_not_choose_canonical_name(self):
+        self.original_name_authority()
+        with closing(C.connect(self.library)) as connection, connection:
+            before = self.payload(self.library)
+            before["_external_source"] = C.variant("book", self.current["b"], "r-current")
+            before["_classification"]["binding"] = C.binding(self.category, before)
+            connection.execute("UPDATE prompts SET payload=? WHERE id='codex-a'", (C.packed(before),))
+        self.run_stage()
+        after = self.payload(self.args.output / "library.sqlite3")
+        self.assertEqual(after["alias"], "New a")
+        self.assertEqual(after["_external_source"], before["_external_source"])
+        self.assertEqual(after["_external_sources"], before["_external_sources"])
 
     def test_changed_review_bound_input_is_rejected_before_output(self):
         self.ledger.write_text("unreviewed", encoding="utf-8")

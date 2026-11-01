@@ -10,6 +10,7 @@ from collections import defaultdict
 from contextlib import closing
 import copy
 from datetime import datetime, timezone
+import hashlib
 import json
 from pathlib import Path
 
@@ -124,6 +125,99 @@ def verify_payload(before, after, category=None, renamed=False, tag=False):
     require(equal(a, b), "classification decision or eligibility changed")
 
 
+def prove_origin_name(item, historical, bound, cache, wanted):
+    """An original import name can be maintained independently of later primaries.
+
+    This exception needs exact frozen upstream text, native checkpoints, an
+    actual direct-import/accepted-registry edge and the retained journal. A
+    boolean approval, current primary or similar spelling is never evidence.
+    """
+    authority = item.get("origin_naming_authority")
+    require(isinstance(authority, dict) and authority.get("schema") == "origin-naming-authority/v1",
+            "missing explicit original naming evidence")
+    source, owner = item["source"], identity(item)
+    dataset, eid = source.split(":", 1)
+    old_title = historical["before_raw"].get("title")
+    require(owner[0] == "library" and owner[1] == "codex-" + eid
+            and authority.get("origin_source") == source and authority.get("native_origin_id") == owner[1],
+            "original naming identity is not the direct canonical import")
+
+    def path(value):
+        resolved = Path(value).resolve()
+        require(str(resolved) in bound, "original naming evidence is not review-bound")
+        return resolved
+
+    upstream = authority["frozen_source"]
+    frozen = path(upstream["path"])
+    manifest_path = path(upstream["manifest_path"])
+    manifest = C.read(manifest_path)
+    require(manifest.get("release") == upstream["release"], "original upstream release differs")
+    require(frozen.name == upstream["name"] and C.file_hash(frozen) == historical["old_file_sha256"],
+            "original naming source differs from historical source bytes")
+    key = (str(frozen), "upstream")
+    if key not in cache:
+        document, _ = M.verified_file(frozen.parent, manifest, upstream["name"])
+        cache[key] = {entry["id"]: entry for entry in document["entries"]}
+    original = cache[key].get(eid)
+    require(equal(original, historical["before_raw"]) and C.digest(original) == authority["old_source_entry_sha256"]
+            and original.get("title") == old_title == item["old_source_title"], "original upstream title evidence differs")
+    checkpoints = authority["checkpoints"]
+    require(len(checkpoints) >= 2 and len({str(Path(r["path"]).resolve()) for r in checkpoints}) == len(checkpoints),
+            "original name needs independent native continuity checkpoints")
+    actual = []
+    for record in checkpoints:
+        checkpoint = path(record["path"])
+        key = (str(checkpoint), record["kind"])
+        if key not in cache:
+            if record["kind"] == "document":
+                document = C.read(checkpoint)
+                cache[key] = {p["id"]: p for category in document["categories"]
+                              for p in category["prompts"] if p.get("id") in wanted}
+                del document
+            else:
+                require(record["kind"] == "sqlite", "unsupported original naming checkpoint")
+                with closing(C.connect(checkpoint, True)) as connection:
+                    marks = ",".join("?" for _ in wanted)
+                    cache[key] = {pid: json.loads(raw) for pid, raw in connection.execute(
+                        "SELECT id,payload FROM prompts WHERE id IN (" + marks + ")", sorted(wanted))}
+        payload = cache[key].get(owner[1])
+        require(isinstance(payload, dict) and payload.get("id") == owner[1] and payload.get("alias") == old_title
+                and C.digest(payload) == record["payload_sha256"], "native naming checkpoint is missing, renamed or changed")
+        actual.append(payload)
+    edge = authority["import_edge"]
+    edge_path = path(edge["path"])
+    key = (str(edge_path), "import-edge")
+    if key not in cache:
+        cache[key] = C.read(edge_path)
+    if edge["kind"] == "direct_add":
+        matching = [row for row in cache[key] if row.get("store") == "library" and row.get("id") == owner[1]
+                    and row.get("source") == source and row.get("action") == ["add"]]
+        primary = actual[0].get("_external_source") or {}
+        require(len(matching) == 1 and source_key(primary) == source, "direct add does not establish the original naming source")
+    else:
+        require(edge["kind"] == "accepted_existing_import", "unsupported original naming import edge")
+        matching = [row for row in cache[key] if row.get("target_id") == owner[1]
+                    and row.get("source") == source and row.get("disposition") == "library_existing"]
+        require(len(matching) == 1, "accepted existing import does not establish naming identity")
+    journal = authority["journal_checkpoint"]
+    journal_path = path(journal["path"])
+    observed = []
+    with closing(C.connect(journal_path, True)) as connection:
+        for seq, at, op, before, after in connection.execute(
+                "SELECT seq,at,op,before,after FROM library_journal WHERE prompt_id=? ORDER BY seq", (owner[1],)):
+            a, b = json.loads(before) if before else None, json.loads(after) if after else None
+            alias_a = a.get("alias") if isinstance(a, dict) else None
+            alias_b = b.get("alias") if isinstance(b, dict) else None
+            require(alias_b == old_title and (a is None or alias_a == old_title), "retained journal contains a local rename or deletion")
+            observed.append({"seq": seq, "at": at, "op": op, "before_alias": alias_a, "after_alias": alias_b,
+                             "before_sha256": hashlib.sha256(before.encode()).hexdigest() if before else None,
+                             "after_sha256": hashlib.sha256(after.encode()).hexdigest() if after else None})
+    require(observed and equal(observed, journal["rows"]), "retained naming journal evidence changed")
+    require(any(Path(record["path"]).resolve() == journal_path for record in checkpoints),
+            "latest journal evidence has no native alias checkpoint")
+    return "verified_original_import_name"
+
+
 def validate_library(base, staged, changes, categories, stamp):
     with closing(C.connect(base, True)) as a, closing(C.connect(staged, True)) as b:
         require(M.schema(a) == M.schema(b) and M.tables(a) == M.tables(b), "library schema changed")
@@ -229,6 +323,9 @@ def stage(args):
     release, books, web_receipts = M.load_web(web, review, {r["id"] for r in catalog})
     stamp = datetime.now(timezone.utc).isoformat()
     changes, tag_changes, registry = {}, {}, []
+    origin_cache = {}
+    origin_owners = {r["owner"]["target_id"] for r in display if r.get("origin_naming_authority")}
+    origin_names = 0
     with closing(C.connect(args.library, True)) as lib, closing(C.connect(args.tags, True)) as tags:
         entries, owners, ambiguous, source_map = resolve_all(lib, tags, books, registries)
         categories = {cid: json.loads(raw) for cid, raw in lib.execute("SELECT id,payload FROM categories")}
@@ -259,9 +356,14 @@ def stage(args):
             require(bindings == {r["source"] for r in item["global_current_bindings"]}, "all-current-source display binding set changed")
             require(all(C.digest(entries[r["source"]]) == r["raw_sha256"] for r in item["global_current_bindings"]),
                     "reviewed current source binding content changed")
-            require(bindings and all(not plan.get(s, {}).get("source_hold", False)
+            require(bindings and source in bindings and all(not plan.get(s, {}).get("source_hold", False)
                     and registries.get(s, {}).get("disposition") not in {"hold", "excluded", "no_prompt_content"}
-                    and entries[s].get("title") == e.get("title") for s in bindings), "current titles conflict or bound source is held")
+                    for s in bindings), "bound source is held or naming source is absent")
+            if item.get("origin_naming_authority"):
+                prove_origin_name(item, h, bound, origin_cache, origin_owners)
+                origin_names += 1
+            else:
+                require(all(entries[s].get("title") == e.get("title") for s in bindings), "current titles conflict")
             require(isinstance(e.get("title"), str) and e["title"].strip()
                     and h["before_raw"].get("title") == item["old_source_title"]
                     and e["title"] == item["new_source_title"] != item["old_source_title"], "reviewed literal title revision differs")
@@ -271,6 +373,11 @@ def stage(args):
                 require(before.get("alias") == item["old_source_title"], "local name is not the exact old source title")
                 changes[owner[1]] = {"category_id": cid, "before_raw": raw, "before": before,
                                      "after": {**copy.deepcopy(before), "alias": e["title"]}, "renamed": True}
+                if item.get("origin_naming_authority"):
+                    registry.append({"source": source, "dataset": dataset, "entry_id": eid, "store": "library",
+                                     "target_id": owner[1], "disposition": "origin_display_name_updated",
+                                     "old_alias": before["alias"], "new_alias": e["title"],
+                                     "current_raw_sha256": C.digest(e)})
             else:
                 require(owner[0] == "tags", "unsupported display owner store")
                 columns = [r[1] for r in tags.execute("PRAGMA table_info(tag_tags)")]
@@ -287,6 +394,11 @@ def stage(args):
             proof(item)
             require(identity(item)[0] == "library", "metadata-only scope must be library")
         for item in display:
+            if item.get("origin_naming_authority"):
+                # Naming authority does not adopt, merge or reorder any source
+                # variants. Other bindings may be later entries with no old
+                # changed-entry ledger at all; their titles remain independent.
+                continue
             for source in current_bindings[identity(item)]:
                 require(source in plan and not plan[source]["source_hold"], "display binding has no reviewed nonheld source identity")
                 scope.setdefault(source, {"source": source, "owner": item["owner"]})
@@ -321,7 +433,8 @@ def stage(args):
                 decision["binding"] = C.binding(category, change["after"])
             verify_payload(change["before"], change["after"], category, change["renamed"])
         require(sum(c["renamed"] for c in changes.values()) == expected["library_names"]
-                and len(tag_changes) == expected["tag_names"], "display owner counts differ")
+                and len(tag_changes) == expected["tag_names"]
+                and origin_names == expected.get("original_import_names", 0), "display owner counts differ")
     # No writable output is opened until source, owner and old-name guards pass.
     output.mkdir(parents=True)
     C.backup(args.library, output / "library.sqlite3")
@@ -353,6 +466,7 @@ def stage(args):
     require(all(C.file_hash(path) == digest for path, digest in bound.items()), "read-only input changed while staging")
     result = {"passed": True, "revision": stamp, "source_release": release, "updated_library": len(changes),
               "library_names": sum(c["renamed"] for c in changes.values()), "tag_names": len(tag_changes),
+              "verified_original_import_names": origin_names,
               "explicit_metadata_scope": len(metadata), "source_versions_appended": sum(r["disposition"] == "current_source_appended" for r in registry),
               "source_versions_already_current": sum(r["disposition"] == "current_source_already_present" for r in registry),
               "classification_decisions_unchanged": True, "body_personal_fields_categories_images_unchanged": True,

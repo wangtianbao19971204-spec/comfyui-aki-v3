@@ -1,11 +1,12 @@
 """Review-bound three-way source-body adoption into a new private SQLite stage.
 
 No live writes, identity merges, source-map cleanup, image changes or server
-operations. The approved current source's raw main text is used byte-for-byte.
+operations. A separately approved legacy representation retains proven edits.
 """
 from __future__ import annotations
 
 import argparse
+import ast
 import copy
 from contextlib import closing
 from datetime import datetime, timezone
@@ -24,8 +25,95 @@ QUALITY = "default_tail_only_quality_node_removed_nonquality_primary"
 MANUAL_KEEP = "adopt_current_source_body_preserve_classification"
 MANUAL_CHANGE = "adopt_current_source_body_with_agent_reviewed_classification"
 SPACE = "explicit_ascii_spaces_after_comma_only"
+LEGACY_URL = "legacy_url_cleaned_main"
+LEGACY_URL_PURE_SHA256 = "03f92cbc04f119d3d4d8b2b5a0b19095c4f072aad2ba8d1127f1aa2da7ad2ce8"
+URL_CLAUSE = re.compile(r"\d+(?:\.\d+)?::artist:\s*[\"']?https?://[^\"',]*[\"']?::\s*,?\s*", re.I)
+URL_BARE = re.compile(r"[\"']?https?://[^\"',\s]*[\"']?,?\s*", re.I)
 SCHEMA = "historical-body-maintenance-review/v1"
 require = M.require
+
+
+def clean_legacy_url_main(text: str) -> str:
+    """Exact 2026-09-19 maintenance operation; never an implicit normalizer."""
+    cleaned = URL_CLAUSE.sub("", text or "")
+    if "http" in cleaned:
+        cleaned = URL_BARE.sub("", cleaned)
+    cleaned = re.sub(r",\s*,+", ",", cleaned)
+    return re.sub(r"\s{2,}", " ", cleaned).strip().strip(",").strip()
+
+
+def checkpoint_prompts(path):
+    """Read one physical prompt at a time from the approved older native export."""
+    decoder, pattern = json.JSONDecoder(), re.compile(r'"prompts"\s*:\s*\[')
+    buffer, position, inside, ended = "", 0, False, False
+    with Path(path).open(encoding="utf-8-sig") as stream:
+        while True:
+            if not inside:
+                found = pattern.search(buffer, position)
+                if found:
+                    position, inside = found.end(), True
+                elif ended:
+                    return
+                else:
+                    chunk = stream.read(65536)
+                    buffer, position, ended = buffer[max(position, len(buffer) - 128):] + chunk, 0, not chunk
+                    continue
+            while position < len(buffer) and buffer[position] in " \t\r\n,":
+                position += 1
+            if position < len(buffer) and buffer[position] == "]":
+                position, inside = position + 1, False
+                continue
+            try:
+                prompt, position = decoder.raw_decode(buffer, position)
+            except json.JSONDecodeError:
+                chunk = stream.read(65536)
+                require(bool(chunk), "older physical checkpoint is truncated")
+                buffer, position = buffer[position:] + chunk, 0
+                continue
+            if isinstance(prompt, dict):
+                yield prompt
+
+
+def prepare_legacy_url_proofs(selected, bound):
+    """Pin original code/manifest and prove the maintained C in a real old store."""
+    checkpoints = {}
+    for pid, item in selected.items():
+        proof = item.get("proof") or {}
+        if proof.get("representation", "raw_main_tags") != LEGACY_URL:
+            require(proof.get("representation", "raw_main_tags") == "raw_main_tags", "unknown body representation")
+            continue
+        require(item["cohort"] == MANUAL_KEEP and item.get("manual", {}).get("representation") == LEGACY_URL,
+                "legacy URL representation requires an explicit preserve-decision manual review")
+        evidence = proof.get("legacy_url_cleanup")
+        require(isinstance(evidence, dict), "legacy URL proof is missing")
+        for key in ("source_script", "source_manifest", "physical_checkpoint"):
+            require(isinstance(evidence.get(key), str) and bool(evidence[key]), "legacy URL evidence path is missing")
+            path = str(Path(evidence[key]).resolve())
+            require(path in bound and bound[path] == evidence.get(key + "_sha256"), "legacy URL evidence is not review-bound")
+        text = Path(evidence["source_script"]).read_text(encoding="utf-8")
+        tree = ast.parse(text)
+        nodes = [n for n in tree.body if
+                 (isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id in {"URL_CLAUSE", "URL_BARE"} for t in n.targets))
+                 or (isinstance(n, ast.FunctionDef) and n.name == "clean_url")]
+        pure = "\n\n".join(ast.get_source_segment(text, n) for n in nodes)
+        require(len(nodes) == 3 and text_hash(pure) == evidence.get("pure_function_sha256") == LEGACY_URL_PURE_SHA256,
+                "legacy URL transform differs from the exact approved original function")
+        # Original top-level code is never imported or executed.
+        manifest = C.read(evidence["source_manifest"])
+        matches = [r for r in manifest.get("url_cleanup", {}).get("resource", []) if r.get("id") == pid]
+        require(len(matches) == 1 and matches[0].get("after") == proof["before_body"]
+                and clean_legacy_url_main(matches[0].get("before")) == proof["before_body"], "legacy cleanup manifest does not prove this maintained body")
+        item["legacy_manifest"] = matches[0]
+        path = str(Path(evidence["physical_checkpoint"]).resolve())
+        checkpoints.setdefault(path, {})[pid] = proof["before_body"]
+    for path, expected in checkpoints.items():
+        found = set()
+        for prompt in checkpoint_prompts(path):
+            pid = prompt.get("id")
+            if pid in expected:
+                require(pid not in found and prompt.get("prompt") == expected[pid], "older physical checkpoint does not retain the exact maintained body")
+                found.add(pid)
+        require(found == set(expected), "older physical checkpoint owner is missing")
 
 
 def text_hash(text):
@@ -175,6 +263,10 @@ def check_inputs(args):
     require(selected and len(selected) == review["expected"]["owners"], "approved owner count differs")
     require(sum(v["cohort"] == QUALITY for v in selected.values()) == review["expected"]["quality_node_losses"], "approved quality-loss count differs")
     require(sum(v["cohort"] == MANUAL_CHANGE for v in selected.values()) == review["expected"]["manual_classification_updates"], "manual classification count differs")
+    legacy = review.get("approved_legacy_url_cleaned_owners") or []
+    require(len(legacy) == len(set(legacy)) and set(legacy) == {
+        pid for pid, item in selected.items() if item.get("proof", {}).get("representation") == LEGACY_URL
+    }, "legacy URL representation lacks an exact independent owner approval")
     return review, selected
 
 
@@ -192,7 +284,7 @@ def source_index(books):
     return {dataset + ":" + eid: (dataset, eid, entry) for dataset, book in books.items() for eid, entry in book["entries"].items()}
 
 
-def prove_sources(conn, selected, books, historical, release):
+def prove_sources(conn, selected, books, historical, release, bound=None):
     """Independently examine every current source, never select by equal body."""
     entries = source_index(books)
     physical = {pid: cid for pid, cid in conn.execute("SELECT id,category_id FROM prompts")}
@@ -220,6 +312,7 @@ def prove_sources(conn, selected, books, historical, release):
                 require(len(choices) == 1, "ambiguous actual source provenance affects a body owner")
                 actual[next(iter(choices))].add(source)
     categories = {cid: json.loads(raw) for cid, raw in conn.execute("SELECT id,payload FROM categories")}
+    prepare_legacy_url_proofs(selected, bound or {})
     for pid, item in selected.items():
         if item["cohort"] == SPACE:
             row = item["additional"]; source = row["source"]
@@ -240,6 +333,7 @@ def prove_sources(conn, selected, books, historical, release):
         require(not proof.get("eligible_other_source_main_conflicts") and not proof.get("held_other_source_main_conflicts")
                 and not proof.get("ambiguous_provenance_bindings"), "three-way evidence contains unresolved ownership conflicts")
         a, b = proof["before_body"], proof["after_candidate_body"]
+        legacy = proof.get("representation") == LEGACY_URL
         require(isinstance(a, str) and isinstance(b, str) and b.strip(), "invalid approved source body")
         if item.get("cohort_row"):
             cr = item["cohort_row"]
@@ -253,20 +347,32 @@ def prove_sources(conn, selected, books, historical, release):
             C.require_native_owner(conn, mapping, categories, entries[source][1],
                 {"store": "library", "target_id": pid, "match": "explicit"})
             require(equal(h["after_raw"], current) and h["new_release"] == release, "historical ledger does not match current source")
-            require(component["before"] == a == h["before_raw"].get("tags")
-                    and component["after"] == b == current.get("tags")
+            old_main, current_main = h["before_raw"].get("tags"), current.get("tags")
+            require(component["before"] == old_main and component["after"] == current_main
                     and component["old_raw_sha256"] == h["old_raw_sha256"]
                     and component["current_raw_sha256"] == C.digest(current), "adoption is not the exact same historical/current raw main field")
+            if legacy:
+                require(item["legacy_manifest"]["before"] == old_main and a == clean_legacy_url_main(old_main)
+                        and b == clean_legacy_url_main(current_main) and "http" not in b.casefold(),
+                        "legacy URL adoption does not preserve the exact maintained representation")
+            else:
+                require(component["before"] == a and component["after"] == b,
+                        "adoption is not the exact same historical/current raw main field")
             require(source in actual[pid], "historical component is not owned by this native record")
         require(actual[pid], "body owner has no current source identity")
         for source in actual[pid]:
-            require(entries[source][2].get("tags") == b, "another current source bound to this owner has a different main body")
+            main = entries[source][2].get("tags")
+            require((clean_legacy_url_main(main) if legacy else main) == b,
+                    "another current source bound to this owner has a different main body representation")
         if item["cohort"] != SPACE:
             bound = proof["current_bound_sources"]
             require({r["source"] for r in bound} == actual[pid], "all-source ownership evidence is incomplete or changed")
             for r in bound:
-                require(r["main_tags"] == b and r["main_sha256"] == text_hash(b)
+                raw_main = entries[r["source"]][2].get("tags")
+                require(r["main_tags"] == raw_main and r["main_sha256"] == text_hash(raw_main)
                         and r["source_raw_sha256"] == C.digest(entries[r["source"]][2]), "current bound-source proof is stale")
+                require((r.get("stored_main_text") == b and r.get("stored_main_sha256") == text_hash(b)) if legacy else r["main_tags"] == b,
+                        "stored body representation is not explicitly bound")
         item["source_ids"] = sorted(actual[pid])
     return entries, categories
 
@@ -328,7 +434,8 @@ def stage(args):
     historical = load_historical(args.source_ledger)
     changes, registry, signal_receipts = {}, [], []
     with closing(C.connect(args.library, True)) as conn:
-        entries, categories = prove_sources(conn, selected, books, historical, release)
+        entries, categories = prove_sources(conn, selected, books, historical, release,
+            {str(Path(p).resolve()): digest for p, digest in review["inputs"].items()})
         parser_ids = [pid for pid, item in selected.items() if item["cohort"] in (SAFE, QUALITY)]
         stripped = strip_with_approved_module(getattr(args, "node", None), args.strip_module,
                     [selected[pid]["proof"]["before_body"] for pid in parser_ids])
@@ -347,6 +454,8 @@ def stage(args):
                         and manual["before_body_sha256"] == text_hash(a) and manual["after_body_sha256"] == text_hash(b), "manual source bodies differ from bound evidence")
             decision, delta = classify_guard(categories[cid], before, b, item["cohort"], manual,
                 item.get("additional", {}).get("review_status"))
+            if item["proof"].get("representation") == LEGACY_URL:
+                require(delta["before"] == delta["after"], "legacy URL representation must preserve all native signals")
             # Keep current snapshots and the primary in their original order;
             # an unchanged primary remains retained in place.
             after = copy.deepcopy(before)
@@ -355,11 +464,20 @@ def stage(args):
             for source in item["source_ids"]:
                 dataset, eid, entry = entries[source]
                 existing = [v for v in M.source_refs(after) if M.same_source(v, dataset, eid) and equal(v.get("raw_entry"), entry)]
-                if not existing:
+                legacy = item["proof"].get("representation") == LEGACY_URL
+                if not existing or legacy:
                     v = C.variant(dataset, entry, release); v["dataset_title"] = books[dataset]["meta"].get("title") or "原站说明"
+                    if legacy:
+                        v["stored_body_maintenance"] = {"representation": LEGACY_URL, "before_body": a, "after_body": b,
+                            "transform_pure_sha256": LEGACY_URL_PURE_SHA256,
+                            "legacy_cleanup": copy.deepcopy(item["proof"]["legacy_url_cleanup"]),
+                            "historical_raw_sources": [{"source": c["source"], "raw_entry": copy.deepcopy(historical[c["source"]]["before_raw"])}
+                                for c in item["proof"]["old_component_sources"]]}
                     after = M.append_variant(after, v); appended += 1
                 registry.append({"source": source, "dataset": dataset, "entry_id": eid, "target_id": pid, "store": "library",
-                                 "source_sha256": C.digest(entry), "body_sha256": text_hash(b), "current_raw_snapshot_verified": True})
+                                 "source_sha256": C.digest(entry), "body_sha256": text_hash(b), "current_raw_snapshot_verified": True,
+                                 "stored_body_representation": LEGACY_URL if legacy else "raw_main_tags",
+                                 "stored_body_equals_raw_main": b == entry.get("tags")})
             after["_classification"] = copy.deepcopy(decision)
             after["_classification"]["binding"] = C.binding(categories[cid], after)
             verify_payload(before, after, categories[cid], decision, b)

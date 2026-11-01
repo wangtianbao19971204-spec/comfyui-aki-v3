@@ -1,8 +1,10 @@
 """Synthetic exact-field, ownership and semantic regressions for body adoption."""
 import argparse
+import ast
 import copy
 from contextlib import closing
 import importlib.util
+import inspect
 import json
 from pathlib import Path
 import sqlite3
@@ -28,6 +30,7 @@ class HistoricalBodyTests(unittest.TestCase):
         temp = tempfile.TemporaryDirectory()
         self.addCleanup(temp.cleanup)
         self.root = Path(temp.name)
+        self.extra_bound = []
         self.web = self.root / "web"; self.web.mkdir()
         self.library = self.root / "metadata_stage.sqlite3"
         self.tags = self.root / "tags.sqlite3"
@@ -134,7 +137,62 @@ class HistoricalBodyTests(unittest.TestCase):
         C.save(self.manual_file, self.manual_doc)
         self.review["inputs"] = {str(p): C.file_hash(p) for p in (self.library, self.tags, self.cohorts, self.candidates, self.ledger, self.manual_file, self.strip,
                                                                  self.web / "manifest.json", self.web / "codexes.json", self.web / "current.json")}
+        self.review["inputs"].update({str(p): C.file_hash(p) for p in self.extra_bound})
         C.save(self.review_path, self.review)
+
+    def configure_legacy_url_case(self):
+        """Synthetic prompts; exact historical pure code, with no release entrypoint."""
+        text = inspect.getsource(body)
+        tree = ast.parse(text)
+        constants = [ast.get_source_segment(text, n) for n in tree.body if isinstance(n, ast.Assign)
+                     and any(isinstance(t, ast.Name) and t.id in {"URL_CLAUSE", "URL_BARE"} for t in n.targets)]
+        function = inspect.getsource(body.clean_legacy_url_main).replace("def clean_legacy_url_main", "def clean_url")
+        function = "\n".join(line for line in function.splitlines() if '"""Exact 2026-09-19' not in line)
+        pure = "\n\n".join([*constants, function])
+        self.assertEqual(body.text_hash(pure), body.LEGACY_URL_PURE_SHA256)
+        self.legacy_script = self.root / "historical_script.py"
+        self.legacy_script.write_text("import re\n\n" + pure + "\n\nraise RuntimeError('entrypoint must not run')\n", encoding="utf-8")
+        self.cleanup_manifest = self.root / "cleanup_manifest.json"
+        self.checkpoint = self.root / "older_native_export.json"
+        current_c, stored_d = self.before["safe"], self.after["safe"]
+        clause = '0.6::artist:"https://example.invalid/artist"::, '
+        self.source_a = current_c.replace("red hair", clause + "red hair")
+        self.source_b = stored_d.replace("red hair", clause + "red hair")
+        self.assertEqual(body.clean_legacy_url_main(self.source_a), current_c)
+        self.assertEqual(body.clean_legacy_url_main(self.source_b), stored_d)
+        self.old["safe"]["tags"] = self.source_a
+        self.current["safe"]["tags"] = self.source_b
+        p = self.payloads["safe"]
+        p["_external_sources"][-1] = C.variant("book", self.current["safe"], "r-current")
+        p["_classification"]["binding"] = C.binding(self.category, p)
+        with closing(sqlite3.connect(self.library)) as conn, conn:
+            conn.execute("UPDATE prompts SET payload=? WHERE id='codex-safe'", (C.packed(p),))
+        C.save(self.cleanup_manifest, {"url_cleanup": {"resource": [{"id": "codex-safe", "before": self.source_a, "after": current_c}]}})
+        C.save(self.checkpoint, {"categories": [{"id": "old-cat", "prompts": [{"id": "codex-safe", "prompt": current_c}]}]})
+        proof = self.proofs[0]
+        proof["representation"] = body.LEGACY_URL
+        proof["legacy_url_cleanup"] = {
+            "source_script": str(self.legacy_script), "source_script_sha256": C.file_hash(self.legacy_script),
+            "source_manifest": str(self.cleanup_manifest), "source_manifest_sha256": C.file_hash(self.cleanup_manifest),
+            "physical_checkpoint": str(self.checkpoint), "physical_checkpoint_sha256": C.file_hash(self.checkpoint),
+            "pure_function_sha256": body.LEGACY_URL_PURE_SHA256}
+        component = proof["old_component_sources"][0]
+        component.update(before=self.source_a, after=self.source_b, old_raw_sha256=C.digest(self.old["safe"]), current_raw_sha256=C.digest(self.current["safe"]))
+        proof["current_bound_sources"][0].update(main_tags=self.source_b, main_sha256=body.text_hash(self.source_b),
+            source_raw_sha256=C.digest(self.current["safe"]), stored_main_text=stored_d, stored_main_sha256=body.text_hash(stored_d))
+        self.history[0].update(before_raw=self.old["safe"], after_raw=self.current["safe"], old_raw_sha256=C.digest(self.old["safe"]), new_raw_sha256=C.digest(self.current["safe"]))
+        self.review["approved_cohorts"].pop(body.SAFE)
+        self.review["approved_manual_owners"].append("codex-safe")
+        self.review["approved_legacy_url_cleaned_owners"] = ["codex-safe"]
+        self.cohort_rows[0]["cohort"] = "requires_explicit_manual_review"
+        proposed = copy.deepcopy(p["_classification"]); proposed.pop("binding", None)
+        self.manual_doc["rows"].append({"owner": {"store": "library", "target_id": "codex-safe"},
+            "representation": body.LEGACY_URL, "recommendation": body.MANUAL_KEEP,
+            "before_body": current_c, "after_candidate_body": stored_d,
+            "before_body_sha256": body.text_hash(current_c), "after_body_sha256": body.text_hash(stored_d),
+            "classification_before": copy.deepcopy(p["_classification"]), "proposed_classification_without_binding": proposed,
+            "native_signal_nodes_removed": [], "agent_fulltext_manual_review_performed": True, "human_user_confirmation": False})
+        self.extra_bound = [self.legacy_script, self.cleanup_manifest, self.checkpoint]
 
     def run_stage(self):
         self.write_inputs()
@@ -175,6 +233,95 @@ class HistoricalBodyTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "actual maintained body"):
             self.run_stage()
         self.assertFalse(self.args.output.exists())
+
+    def test_legacy_url_representation_preserves_proven_edit_and_full_raw_history(self):
+        self.configure_legacy_url_case()
+        self.run_stage()
+        after = self.payload(self.args.output / "library.sqlite3", "codex-safe")
+        self.assertEqual(after["prompt"], self.after["safe"])
+        self.assertNotIn("http", after["prompt"])
+        current = after["_external_sources"][-1]
+        self.assertEqual(current["raw_entry"]["tags"], self.source_b)
+        maintenance = current["stored_body_maintenance"]
+        self.assertEqual(maintenance["before_body"], self.before["safe"])
+        self.assertEqual(maintenance["historical_raw_sources"][0]["raw_entry"]["tags"], self.source_a)
+        registry = C.read(self.args.output / "source_registry.json")
+        row = next(r for r in registry if r["source"] == "book:safe")
+        self.assertEqual(row["stored_body_representation"], body.LEGACY_URL)
+        self.assertFalse(row["stored_body_equals_raw_main"])
+
+    def test_legacy_url_representation_requires_independent_owner_scope(self):
+        self.configure_legacy_url_case()
+        self.review.pop("approved_legacy_url_cleaned_owners")
+        with self.assertRaisesRegex(ValueError, "independent owner approval"):
+            self.run_stage()
+        self.assertFalse(self.args.output.exists())
+
+    def test_legacy_url_transform_must_be_exact_original_pure_function(self):
+        self.configure_legacy_url_case()
+        self.legacy_script.write_text(self.legacy_script.read_text(encoding="utf-8").replace('if "http" in cleaned:', 'if "https" in cleaned:'), encoding="utf-8")
+        self.proofs[0]["legacy_url_cleanup"]["source_script_sha256"] = C.file_hash(self.legacy_script)
+        with self.assertRaisesRegex(ValueError, "exact approved original function"):
+            self.run_stage()
+        self.assertFalse(self.args.output.exists())
+
+    def test_legacy_url_manifest_and_physical_checkpoint_are_required(self):
+        self.configure_legacy_url_case()
+        C.save(self.cleanup_manifest, {"url_cleanup": {"resource": [{"id": "wrong-owner", "before": self.source_a, "after": self.before["safe"]}]}})
+        self.proofs[0]["legacy_url_cleanup"]["source_manifest_sha256"] = C.file_hash(self.cleanup_manifest)
+        with self.assertRaisesRegex(ValueError, "manifest does not prove"):
+            self.run_stage()
+        C.save(self.cleanup_manifest, {"url_cleanup": {"resource": [{"id": "codex-safe", "before": self.source_a, "after": self.before["safe"]}]}})
+        self.proofs[0]["legacy_url_cleanup"]["source_manifest_sha256"] = C.file_hash(self.cleanup_manifest)
+        C.save(self.checkpoint, {"categories": [{"prompts": [{"id": "codex-safe", "prompt": "different old body"}]}]})
+        self.proofs[0]["legacy_url_cleanup"]["physical_checkpoint_sha256"] = C.file_hash(self.checkpoint)
+        with self.assertRaisesRegex(ValueError, "checkpoint does not retain"):
+            self.run_stage()
+        self.assertFalse(self.args.output.exists())
+
+    def test_legacy_url_evidence_cannot_be_unbound_or_cross_representation(self):
+        self.configure_legacy_url_case()
+        self.extra_bound.remove(self.checkpoint)
+        with self.assertRaisesRegex(ValueError, "evidence is not review-bound"):
+            self.run_stage()
+        self.extra_bound.append(self.checkpoint)
+        self.manual_doc["rows"][-1]["representation"] = "raw_main_tags"
+        with self.assertRaisesRegex(ValueError, "preserve-decision manual review"):
+            self.run_stage()
+        self.assertFalse(self.args.output.exists())
+
+    def test_legacy_url_cannot_revive_url_or_absorb_personal_body_edits(self):
+        self.configure_legacy_url_case()
+        self.proofs[0]["after_candidate_body"] = self.source_b
+        self.proofs[0]["after_candidate_body_sha256"] = body.text_hash(self.source_b)
+        self.cohort_rows[0]["after_body_sha256"] = body.text_hash(self.source_b)
+        with self.assertRaisesRegex(ValueError, "exact maintained representation"):
+            self.run_stage()
+        self.proofs[0]["after_candidate_body"] = self.after["safe"]
+        self.proofs[0]["after_candidate_body_sha256"] = body.text_hash(self.after["safe"])
+        self.cohort_rows[0]["after_body_sha256"] = body.text_hash(self.after["safe"])
+        with closing(sqlite3.connect(self.library)) as conn, conn:
+            p = copy.deepcopy(self.payloads["safe"]); p["prompt"] += ", user custom"
+            conn.execute("UPDATE prompts SET payload=? WHERE id='codex-safe'", (C.packed(p),))
+        with self.assertRaisesRegex(ValueError, "actual maintained body"):
+            self.run_stage()
+        self.assertFalse(self.args.output.exists())
+
+    def test_legacy_url_other_current_binding_must_have_same_transformed_D(self):
+        self.configure_legacy_url_case()
+        self.current["conflict"] = {"id": "conflict", "tags": "different B"}
+        with closing(sqlite3.connect(self.library)) as conn, conn:
+            conn.execute("UPDATE library_meta SET value=? WHERE key='_source_to_canonical'", (C.packed({"codex-conflict": {"canonical_id": "codex-safe", "source_category_id": "cat"}}),))
+        with self.assertRaisesRegex(ValueError, "different main body representation"):
+            self.run_stage()
+        self.assertFalse(self.args.output.exists())
+
+    def test_older_checkpoint_stream_handles_large_records_and_multiple_categories(self):
+        path = self.root / "large_checkpoint.json"
+        C.save(path, {"categories": [{"prompts": [{"id": "first", "prompt": "x" * 150000}]},
+                                      {"prompts": [{"id": "second", "prompt": "small"}]}]})
+        self.assertEqual([(r["id"], len(r["prompt"])) for r in body.checkpoint_prompts(path)],
+                         [("first", 150000), ("second", 5)])
 
     def test_current_body_cannot_concatenate_character_segments(self):
         self.proofs[0]["after_candidate_body"] += "\nchar1: separate character segment"
