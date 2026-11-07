@@ -2,7 +2,7 @@
   "id": "krea2-img2img-edit-v1-local",
   "revision": 32,
   "last_node_id": 577,
-  "last_link_id": 667,
+  "last_link_id": 668,
   "nodes": [
     {
       "id": 139,
@@ -715,7 +715,9 @@
           "localized_name": "images",
           "name": "images",
           "type": "IMAGE",
-          "links": null
+          "links": [
+            668
+          ]
         }
       ],
       "title": "[00W-6] 保存 Krea2 最终图（当前最高层级）",
@@ -918,7 +920,7 @@
           "localized_name": "图像",
           "name": "images",
           "type": "IMAGE",
-          "link": 661
+          "link": 668
         }
       ],
       "outputs": [
@@ -6901,7 +6903,6 @@
           "name": "output",
           "type": "*",
           "links": [
-            661,
             662
           ]
         }
@@ -8521,8 +8522,8 @@
       "IMAGE"
     ],
     [
-      661,
-      572,
+      668,
+      89,
       0,
       13,
       0,

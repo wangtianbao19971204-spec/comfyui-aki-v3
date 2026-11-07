@@ -1,6 +1,6 @@
 # UAP、子图、部位细化与二放
 
-文档修订：2026-10-11。
+文档修订：2026-11-07。
 
 2026-10-11 Krea2 默认底模：上一轮对照证明深度 ControlNet-LoRA 在非蒸馏底模上生效、在当前 Turbo 底模上不可用（Turbo 强度 4 还会把成图打散成噪声），因此把 K2 分支默认底模换成 `Krea2-Anime v2.0 BF16` 并把该底模需要的采样档位一并写入（步数 8→24、CFG 1→3.5、scheduler simple→normal；sampler 与 denoise 不变）。其余参数、LoRA 栈、提示词、种子、尺寸、控制强度与所有开关默认值保持。隔离验收：新默认配置下"关控制"与"开控制（姿势深度）"平均绝对差 89.12、变化 97.3% 像素；两文件已限定部署并重启（运行区 SHA `ceeeee13…`、进程 15244），运行区实页以默认提示词跑通一次完整生产链路（控制开、姿势档，输出 `_codex_qa/krea2_default_base_20261011/krea2_00001_.png`）。见[底模变更](../changes/runtime-workflows/2026-10-11-krea2-anime-default-base.md)。
 
@@ -86,6 +86,8 @@ A29 手阶段：原手部 YOLO 检测框已经纳入画面左侧裸脚区，SAM 
 区域 A1/A29 标准／快速四组通过正规 UI 开关与各自导出实际执行，所选 16 个 child 节点无缓存；四蒙版全空、最终 RGB 与输入相同，仅认证真实 no-hit 检测／透传路径。有命中重绘和画质仍未覆盖。内建手工蒙版编辑器已实际打开、载图并取消；画笔保存往返未测，旧 Impact 自动 SAM 编辑器仍因缺失依赖未修复。各项剩余边界继续在[已知问题](../../KNOWN_ISSUES.md)维护。
 
 ## 更新记录
+
+- 2026-11-07：Krea2 最终预览与保存改为串联。`[00W-6] 保存` 由 `[12]` 的并列下游改为 `[00W-5] 预览` 的上游（`[12] → [00W-6] → [00W-5]`，03 为 `572 → 89 → 13`），只动一条连接，节点、提示词、LoRA、种子、参数、开关与分组保持。原因是前端「执行到选定的输出节点」会提交 `partial_execution_targets`，后端只把名单内的输出节点计入 `outputs_to_execute`；单点 `[00W-5]` 时原来的 `[00W-6]` 不进闭包，保存节点从不执行，资产/输出里仍是更早的成品（2026-11-07 08:19–08:25 四次提交的 `outputs_to_execute` 均为 `['1138']`，`output/` 最新仍是 11-02 的 `Production_Krea2_Integrated_00033_`）。改后任何以 `[00W-5]` 为唯一目标的执行都会先跑保存节点，落盘图与预览图是同一个 tensor。六份文件（运行区 UAP/03、主仓正式图与模板各两份）按原序列化原位改写，结构校验通过，未生图。见[本轮说明](../changes/runtime-workflows/2026-11-07-krea2-preview-save-chain.md)与[收据](../../receipts/krea2_preview_save_chain_20261107.json)。
 
 - 2026-10-13：修复独立 03 与对应模板的控制接线，参考图/VNCCS 经统一来源与可选擦线进入 Encode→Apply，保留原模型、提示词、种子和采样设置。17 项相关回归和实际原生出图核对通过，擦线直接控制图在蒙版支持域外零变化；原 Turbo 的服装与姿态质量限制、配套非 Turbo 的有限改善，以及旧 UAP K2 QA 提示词错误和 A1 高强度模糊分别记录。源验收当时未部署；随后仅两份 03 已部署，中性输入现场两例通过。见[本轮说明](../changes/runtime-workflows/2026-10-13-standalone-krea2-control-routing.md)、[源验收收据](../../receipts/control_erase_routing_repair_20261013.json)与[部署收据](../../receipts/control_erase_deployment_20261013.json)。
 

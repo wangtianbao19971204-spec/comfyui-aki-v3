@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-14T18:14:00.961929+00:00",
+  "created_at": "2026-11-07T00:47:22.071612+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -51526,8 +51526,8 @@
     {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-      "sha256": "c4eb1072b8742afb55675e1bb0f9136a10a01c99921bb53d6e9fd1173ad80267",
-      "bytes": 849423,
+      "sha256": "2f85a35d25db381c6780b5683b69abc005a9e763ec5a8d4df2a28853a89d767b",
+      "bytes": 849424,
       "kind": "file"
     },
     {
@@ -51603,8 +51603,8 @@
     {
       "source": "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
-      "sha256": "30cf66fe43ca785b902aa679373fa6ca4355f88f350ae1a2e65368c9da6d6935",
-      "bytes": 249689,
+      "sha256": "cf3c1aa746ff7a264e508513984e2025a6b3494b1f4b690b6a487af2e7149898",
+      "bytes": 249696,
       "kind": "file"
     },
     {
@@ -58113,8 +58113,8 @@
     {
       "source": "production_tools/templates/UAP统一生产工作台_v2.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v2.json",
-      "sha256": "c4eb1072b8742afb55675e1bb0f9136a10a01c99921bb53d6e9fd1173ad80267",
-      "bytes": 849423,
+      "sha256": "2f85a35d25db381c6780b5683b69abc005a9e763ec5a8d4df2a28853a89d767b",
+      "bytes": 849424,
       "kind": "file"
     },
     {
@@ -58134,8 +58134,8 @@
     {
       "source": "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
       "path": "runtime/production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
-      "sha256": "440498398d0d27b796399c3c0d701426d21aed8ed07cbbf508570a3fef881538",
-      "bytes": 204212,
+      "sha256": "3a0b1553885ca97152cde6cce3942babe1985207b343759d6c8c6018f0a7b6d0",
+      "bytes": 204219,
       "kind": "file"
     },
     {
@@ -68240,18 +68240,16 @@
     }
   ],
   "development_revision": {
-    "note": "Add frozen local Anima checkpoint evaluation and audited partial-rescue continuation preparation; candidate source only, not deployed",
-    "previous_manifest_sha256": "4845a50233047589b73b8693d742fd5513cdf5035825f1d460fcbf29c1a96575",
+    "note": "Krea2 [00W-6] 保存改为 [00W-5] 预览的上游，单点预览也会落盘；UAP 与独立 03 的正式图/模板共四处",
+    "previous_manifest_sha256": "beb92c69f8b713a1c3c2a7e69c75cee9f201fab8d870c68ea26c2044461c31ce",
     "source_changes": {
-      "added": [
-        "anima_lora_forge/tests/test_evaluate_checkpoint_plan.py",
-        "anima_lora_forge/tools/evaluate_checkpoint_plan.py"
-      ],
+      "added": [],
       "removed": [],
       "changed": [
-        "anima_lora_forge/tests/test_colab_trial.py",
-        "anima_lora_forge/tests/test_trainer_resume_step_accounting.py",
-        "anima_lora_forge/tools/colab_trial.py"
+        "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+        "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
+        "production_tools/templates/UAP统一生产工作台_v2.json",
+        "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json"
       ]
     },
     "live_deployed": false,

@@ -1,0 +1,153 @@
+{
+  "schema": 1,
+  "date": "2026-11-07",
+  "status": "deployed-workflow-files-no-gpu-sampling",
+  "feature": "runtime-workflows",
+  "scope": [
+    "UAP k2 [00W-5]/[00W-6]",
+    "standalone 03 [00W-5]/[00W-6]"
+  ],
+  "problem": {
+    "summary": "00W-5 PreviewImage 与 00W-6 SaveImage 原为 [12] 的两个并列下游；只以 00W-5 为 partial execution 目标时 00W-6 不进入执行闭包，保存节点从不执行，资产/输出里仍是更早的成品。",
+    "backend_rule": "comfy execution.validate_prompt keeps only OUTPUT_NODE ids listed in partial_execution_targets; the execution list is built from that target closure.",
+    "frontend_route": "ComfyUI frontend 1.49.6 selection toolbox execute button / Comfy.QueueSelectedOutputNodes sends queueNodeIds as partial_execution_targets; the workbench guard only injects its own target list when no array is supplied.",
+    "observed_runs": [
+      {
+        "prompt_id": "04591509-b6cd-463c-91f3-5bf6968e3015",
+        "create_time": "2026-11-07T08:19:30+08:00",
+        "graph_nodes": 46,
+        "outputs_to_execute": ["1138"],
+        "file": "ComfyUI_temp_gqxad_00001_.png",
+        "size": "1344x768",
+        "steps": 8
+      },
+      {
+        "prompt_id": "abcc7267-9613-4786-b948-1443b2748ed2",
+        "create_time": "2026-11-07T08:24:05+08:00",
+        "graph_nodes": 46,
+        "outputs_to_execute": ["1138"],
+        "file": "ComfyUI_temp_gqxad_00002_.png",
+        "size": "768x1344",
+        "steps": 8
+      },
+      {
+        "prompt_id": "eea8458c-5f17-4b8b-b720-accd9c42612d",
+        "create_time": "2026-11-07T08:24:39+08:00",
+        "graph_nodes": 46,
+        "outputs_to_execute": ["1138"],
+        "file": "ComfyUI_temp_gqxad_00003_.png",
+        "size": "768x1344",
+        "steps": 12
+      },
+      {
+        "prompt_id": "dbc353b4-bb50-4886-b024-af980517e8ed",
+        "create_time": "2026-11-07T08:25:33+08:00",
+        "graph_nodes": 46,
+        "outputs_to_execute": ["1138"],
+        "file": "ComfyUI_temp_gqxad_00004_.png",
+        "size": "768x1344",
+        "steps": 12,
+        "note": "pixel identical to _00003_ (mean abs diff 0), served from the node cache"
+      }
+    ],
+    "stale_asset": {
+      "file": "ComfyUI/output/Production_Krea2_Integrated_00033_.png",
+      "written_at": "2026-11-02T22:54:19+08:00",
+      "size": "1344x768",
+      "steps": 8,
+      "prompt_sha256_prefix": "8a7d41b9620f",
+      "note": "newest saved Krea2 final image in output/; no Krea2 save happened after 2026-11-02"
+    }
+  },
+  "change": {
+    "kind": "single link rewire, save node moved upstream of the preview node",
+    "before": "[12] 1226 -> 1136 SaveImage and [12] 1226 -> 1138 PreviewImage (siblings)",
+    "after": "[12] 1226 -> 1136 SaveImage -> 1138 PreviewImage",
+    "standalone": "[12] 572 -> 89 SaveImage -> 13 PreviewImage",
+    "preserved": "nodes, widgets, prompts, LoRA stacks, seeds, sizes, switches, groups and extra blocks unchanged; only the six fields listed in the change note differ",
+    "files": [
+      {
+        "role": "runtime",
+        "path": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+        "sha256_before": "7986e55ae5c116463278ac5c1a2250177a4703536c1ad3b8dcf70645c7b0c85c",
+        "sha256_after": "342c6ca728695bec17714a8d5dd6c48d350aed3632f5be8bfcd17ce6a716272e",
+        "bytes": [206767, 206769],
+        "variant": "k2-only rebuild, 113 nodes / 118 links"
+      },
+      {
+        "role": "runtime",
+        "path": "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
+        "sha256_before": "d44eb8d07abcb45f2d8ac48d9990adf0cc22070840b8f43c94b86076b318bacd",
+        "sha256_after": "3125f69da2c615ec1b6531f1eca307b8c9519c1a997c7d37a44cf7c18637024e",
+        "bytes": [235985, 235995],
+        "variant": "96 nodes / 109 links"
+      },
+      {
+        "role": "git-workflow",
+        "path": "snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+        "sha256_before": "c4eb1072b8742afb55675e1bb0f9136a10a01c99921bb53d6e9fd1173ad80267",
+        "sha256_after": "2f85a35d25db381c6780b5683b69abc005a9e763ec5a8d4df2a28853a89d767b",
+        "bytes": [849423, 849424],
+        "variant": "nine-branch, 272 nodes / 363 links"
+      },
+      {
+        "role": "git-template",
+        "path": "snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json",
+        "sha256_before": "c4eb1072b8742afb55675e1bb0f9136a10a01c99921bb53d6e9fd1173ad80267",
+        "sha256_after": "2f85a35d25db381c6780b5683b69abc005a9e763ec5a8d4df2a28853a89d767b",
+        "bytes": [849423, 849424],
+        "variant": "byte-identical to the git workflow copy"
+      },
+      {
+        "role": "git-workflow",
+        "path": "snapshot/runtime/ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
+        "sha256_before": "30cf66fe43ca785b902aa679373fa6ca4355f88f350ae1a2e65368c9da6d6935",
+        "sha256_after": "cf3c1aa746ff7a264e508513984e2025a6b3494b1f4b690b6a487af2e7149898",
+        "bytes": [249689, 249696],
+        "variant": "103 nodes"
+      },
+      {
+        "role": "git-template",
+        "path": "snapshot/runtime/production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
+        "sha256_before": "440498398d0d27b796399c3c0d701426d21aed8ed07cbbf508570a3fef881538",
+        "sha256_after": "3a0b1553885ca97152cde6cce3942babe1985207b343759d6c8c6018f0a7b6d0",
+        "bytes": [204212, 204219],
+        "variant": "103 nodes"
+      }
+    ]
+  },
+  "verification": {
+    "applied_by": "local/k2_preview_save_chain_20261107/apply.py (idempotent guard: refuses unexpected link rows, existing save consumers and non-reproducible serialization)",
+    "serialization_roundtrip": "each file was re-emitted in its original variant (compact / default / pretty, LF / CRLF) and the pre-change bytes were reproduced exactly",
+    "graph_integrity": "every link back-referenced from both endpoints; unique link ids; node and link counts unchanged",
+    "closure": "upstream closure of [00W-5] contains [00W-6] and [12]",
+    "semantic_diff": "six fields per file (last_link_id, preview link row, save output table, preview input slot, [12] output table)",
+    "validator": {
+      "tool": "production_tools/validate_uap_workflow.py",
+      "result": "passed",
+      "errors": [],
+      "receipt": "external-local://temp/uap_validation_20261107.json"
+    },
+    "not_verified": [
+      "no GPU execution: the post-change graph has not produced an image",
+      "live page confirmation that single-target [00W-5] now also writes an output PNG"
+    ]
+  },
+  "deployment": {
+    "performed": true,
+    "scope": "two runtime workflow JSON files only",
+    "restarted_service": false,
+    "cleared_queue": false,
+    "submitted_generation": false,
+    "reload_required": "the workflow file is read on page load; close and reopen the workflow tab to pick up the rewire",
+    "rollback": {
+      "external": "G:/ComfyUI-local/production-backups/2026-11-07-k2-preview-save-chain/",
+      "local_copy": "maintenance/comfyui/local/k2_preview_save_chain_20261107/before/"
+    }
+  },
+  "boundaries": [
+    "runtime UAP v2 and the git UAP v2 are different exports of the same branch layout; both were patched by node id and neither overwrote the other's layout or user data",
+    "the standalone 03 workflow keeps three divergent exports (runtime, git workflow, git template); all three were patched by node id only",
+    "a full run (main Queue or the workbench generate task) behaves exactly as before: one save and one preview of the same image"
+  ]
+}

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 2026-11-07：Krea2 的 `[00W-6] 保存` 改为 `[00W-5] 预览` 的上游（`[12] → 保存 → 预览`，独立 03 为 `572 → 89 → 13`），只改一条连接；单点执行 `[00W-5]` 时不再漏掉保存，资产里的成品与预览为同一张图。六份文件按原序列化原位改写，结构校验通过，未生图。见[本轮说明](docs/technical/changes/runtime-workflows/2026-11-07-krea2-preview-save-chain.md)与[收据](docs/receipts/krea2_preview_save_chain_20261107.json)。
+
 - 2026-10-14：丝袜纹理同步作者 `e6aeaeb`，新增四层融合、自动 100%／独立份额、浏览器预设文件交换和独立纹理撤销；修复首层份额缓存与非有限值输入，保留旧工作流及用户资料。见[同步与验收](docs/technical/changes/runtime-stocking-texture/2026-10-14-upstream-multilayer.md)。
 
 - 2026-10-14：UAP 三种生产分支与独立 01/02/03 增加「控制与擦线」按钮，自动接通控制来源并检查实际擦线选区，无需换线；详见[操作与验收](docs/technical/changes/runtime-workbench/2026-10-14-control-one-click.md)。
