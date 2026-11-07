@@ -87,6 +87,8 @@ A29 手阶段：原手部 YOLO 检测框已经纳入画面左侧裸脚区，SAM 
 
 ## 更新记录
 
+- 2026-11-07：`uap_model_contracts` 登记 4 个已安装 Krea2 底模（Anime v3.0 BF16/FP8、LUSTIFY v10 BF16/INT8，均 28 块、family=krea2），运行区 7→11 条、主仓 17→21 条；此前它们被清单判为未核验，工作台下拉禁用。见[变更](../changes/runtime-workbench/2026-11-07-k2-base-model-quick-switch.md)与[收据](../../receipts/krea2_base_model_switch_20261107.json)。
+
 - 2026-11-07：Krea2 最终预览与保存改为串联。`[00W-6] 保存` 由 `[12]` 的并列下游改为 `[00W-5] 预览` 的上游（`[12] → [00W-6] → [00W-5]`，03 为 `572 → 89 → 13`），只动一条连接，节点、提示词、LoRA、种子、参数、开关与分组保持。原因是前端「执行到选定的输出节点」会提交 `partial_execution_targets`，后端只把名单内的输出节点计入 `outputs_to_execute`；单点 `[00W-5]` 时原来的 `[00W-6]` 不进闭包，保存节点从不执行，资产/输出里仍是更早的成品（2026-11-07 08:19–08:25 四次提交的 `outputs_to_execute` 均为 `['1138']`，`output/` 最新仍是 11-02 的 `Production_Krea2_Integrated_00033_`）。改后任何以 `[00W-5]` 为唯一目标的执行都会先跑保存节点，落盘图与预览图是同一个 tensor。六份文件（运行区 UAP/03、主仓正式图与模板各两份）按原序列化原位改写，结构校验通过，未生图。见[本轮说明](../changes/runtime-workflows/2026-11-07-krea2-preview-save-chain.md)与[收据](../../receipts/krea2_preview_save_chain_20261107.json)。
 
 - 2026-10-13：修复独立 03 与对应模板的控制接线，参考图/VNCCS 经统一来源与可选擦线进入 Encode→Apply，保留原模型、提示词、种子和采样设置。17 项相关回归和实际原生出图核对通过，擦线直接控制图在蒙版支持域外零变化；原 Turbo 的服装与姿态质量限制、配套非 Turbo 的有限改善，以及旧 UAP K2 QA 提示词错误和 A1 高强度模糊分别记录。源验收当时未部署；随后仅两份 03 已部署，中性输入现场两例通过。见[本轮说明](../changes/runtime-workflows/2026-10-13-standalone-krea2-control-routing.md)、[源验收收据](../../receipts/control_erase_routing_repair_20261013.json)与[部署收据](../../receipts/control_erase_deployment_20261013.json)。

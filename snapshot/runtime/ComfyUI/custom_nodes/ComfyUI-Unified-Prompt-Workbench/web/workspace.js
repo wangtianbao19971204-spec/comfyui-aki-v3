@@ -2,6 +2,7 @@ import {commitWidget, isEnabledTarget} from './prompt_target.js';
 import {listPromptTargets,attachPromptAutocomplete,promptDirection} from './resource_actions.js';
 import {mountRunControls} from './run_controls.js';
 import {mountTaskActivity} from './task_activity.js';
+import {mountModelSwitch} from './runtime_controls.js';
 import {inspectStaticPromptInputs} from './static_prompt_inspector.js';
 import {workflowChoices, isWorkflowChoice, openWorkflowChoice} from './repair_workflow.js';
 
@@ -126,6 +127,7 @@ export function mountWorkspace(host, {app, element, button, browse, selectTarget
         },viewBar);tab.setAttribute('aria-pressed',String(value==='controls'));viewButtons.push([value,tab]);
     }
     const controls=element('div',null,layout,{className:'uw-workspace-controls'});
+    const modelHost=element('div',null,controls,{className:'uw-model-switch-host'});
     const prompts=element('div',null,controls,{className:'uw-prompt-grid'});
     const native=element('div',null,controls,{className:'uw-native-daily',hidden:true});
     const tools=element('details',null,controls,{className:'uw-tools'});
@@ -137,6 +139,7 @@ export function mountWorkspace(host, {app, element, button, browse, selectTarget
     const editors=element('div',null,tools,{className:'uw-toolbar'});
     const parameters=element('div',null,tools,{className:'uw-parameter-grid'});
     let graph=null, signature='', inputs=[],parameterInputs=[],restoreDaily=null,dailyBranch=null,dailyGraph=null,dailyNodes=[];
+    let modelSwitch=null,modelGraph=null,modelBranch=null;
     const detachInputs=()=>{for(const {input}of inputs)for(const owner of new Set([input._promptAutocompleteOwner,input._promptAutocompleteFallback]))owner?.destroy?.();};
     const attachInputs=()=>inputs.forEach(({input})=>attachPromptAutocomplete(input));window.addEventListener('lora-manager:autocomplete-ready',attachInputs);
     const valid=(node,widget)=>graph===app.graph && isEnabledTarget(app,node) && node.widgets?.includes(widget);
@@ -150,7 +153,12 @@ export function mountWorkspace(host, {app, element, button, browse, selectTarget
         activity.refresh();
         const branchState=app.graph?.extra?.uap_workbench;
         const branch=branchState?.branches?.find(item=>item.id===branchState.activeBranch);
-        if(branch && window.unifiedDailyControls) {
+const branchNodes=branch?branch.nodeIds.map(id=>app.graph.getNodeById(id)).filter(Boolean):[];
+        if(branch&&branchNodes.some(node=>node.type==='UNETLoader')){
+            if(modelGraph!==app.graph||modelBranch!==branch){modelSwitch?.dispose();modelSwitch=mountModelSwitch(modelHost,app,branch,branchNodes,()=>app.graph?.extra?.uap_workbench?.activeBranch===branch.id);modelGraph=app.graph;modelBranch=branch;}
+            modelSwitch?.sync();modelHost.hidden=!modelHost.childElementCount;
+        }else{modelSwitch?.dispose();modelSwitch=null;modelGraph=null;modelBranch=null;modelHost.hidden=true;}
+                if(branch && window.unifiedDailyControls) {
             const members=branch.nodeIds.map(id=>app.graph.getNodeById(id));
             if(dailyGraph!==app.graph || dailyBranch!==branch || members.length!==dailyNodes.length || members.some((node,i)=>node!==dailyNodes[i]) || !native.firstElementChild) {
                 restoreDaily?.();restoreDaily=window.unifiedDailyControls.mount(native,branch,close);dailyGraph=app.graph;dailyBranch=branch;dailyNodes=members;

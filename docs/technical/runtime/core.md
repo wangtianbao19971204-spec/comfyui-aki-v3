@@ -27,6 +27,12 @@ VNCCS 子图执行同步现按冒号路径定位节点，后端与上传 API 复
 
 ## 更新记录
 
+- 2026-11-07：底模选择改为“文件夹即来源”：未登记在 `uap_model_contracts` 的底模不再被禁用，只有显式登记为其它架构的文件仍被拒；列表仍取自 ComfyUI 的 `unet_name` 枚举，放文件刷新即可。仅前端模块，未重启、未生图。
+
+- 2026-11-07：修复工作台空白——底模切换宿主在 `controlHost` 声明之前被 `insertBefore`，抛 `ReferenceError` 使整页不渲染；改为先声明再插入，并新增 `production_tools/test_workspace_mount.cjs` 桩件挂载用例（在坏版本上确实失败）。仅前端两文件，未重启、未生图。
+
+- 2026-11-07：工作台 `web/runtime_controls.js` 的模型区新增“底模快切 · 当前分支”，只改前端模块与工作流数据；本体、插件白名单与启动参数未动。运行区已写入，刷新页面并重新载入 UAP 后生效，未生图。见[变更](../changes/runtime-workbench/2026-11-07-k2-base-model-quick-switch.md)。
+
 - 2026-10-11：K2 控制链维护工具整理：保留 `production_tools/keep_krea2_control_enabled.py`（分支模式表修正，用 `--write` 应用），移除仅用于比对的过渡脚本`production_tools/align_krea2_branch_modes.py`；两者都不改变运行逻辑，也不触碰权重。见[分支模式修复](../changes/runtime-workflows/2026-10-11-krea2-branch-mode-fix.md)。
 
 - 2026-10-11：K2 分支模式表漂移修复：ranches[k2].modes 曾把 Depth 控制链与姿势工作室（1160/1161/1172/1149）记为静音，而文件里它们是启用态。前端 ctivateBranch 在切分支时按表写 mode，于是从别的分支切到 Krea2 后 Krea2ControlApply 被静音、DazzleSwitch 1187 在 priority 下静默回退到原始模型——控制消失且无报错。现把该链在表里改为启用（其余节点记录不变，预览类仍保持关闭），并同步节点自身 mode 防止再次漂移。见[分支模式修复](../changes/runtime-workflows/2026-10-11-krea2-branch-mode-fix.md)。

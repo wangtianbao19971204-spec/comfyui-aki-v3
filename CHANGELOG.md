@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 2026-11-07：统一工作台「模型」区新增「底模快切 · 当前分支」，下拉即切换本分支 `UNETLoader` 的底模并可刷新本机列表；同时把已安装的 4 个 Krea2 底模（Anime v3.0 BF16/FP8、LUSTIFY v10 BF16/INT8）登记进 `uap_model_contracts`，此前它们被清单判为未核验而在下拉中被禁用。6 项离线 DOM 用例通过，未生图。见[本轮说明](docs/technical/changes/runtime-workbench/2026-11-07-k2-base-model-quick-switch.md)与[收据](docs/receipts/krea2_base_model_switch_20261107.json)。
+
 - 2026-11-07：Krea2 的 `[00W-6] 保存` 改为 `[00W-5] 预览` 的上游（`[12] → 保存 → 预览`，独立 03 为 `572 → 89 → 13`），只改一条连接；单点执行 `[00W-5]` 时不再漏掉保存，资产里的成品与预览为同一张图。六份文件按原序列化原位改写，结构校验通过，未生图。见[本轮说明](docs/technical/changes/runtime-workflows/2026-11-07-krea2-preview-save-chain.md)与[收据](docs/receipts/krea2_preview_save_chain_20261107.json)。
 
 - 2026-10-14：丝袜纹理同步作者 `e6aeaeb`，新增四层融合、自动 100%／独立份额、浏览器预设文件交换和独立纹理撤销；修复首层份额缓存与非有限值输入，保留旧工作流及用户资料。见[同步与验收](docs/technical/changes/runtime-stocking-texture/2026-10-14-upstream-multilayer.md)。

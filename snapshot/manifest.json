@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-11-07T00:47:22.071612+00:00",
+  "created_at": "2026-11-07T01:49:50.011183+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -23974,8 +23974,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
-      "sha256": "8035456d5b36a0375805f125c01c85622167476ffc0812fcee0f2b4cbaf85186",
-      "bytes": 12246,
+      "sha256": "9ad162a6a9e3dc5d855b479e773873e24e4ee7116f4c6f36cc86bb017a6c5a1f",
+      "bytes": 16682,
       "kind": "file"
     },
     {
@@ -24065,8 +24065,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
-      "sha256": "7e4b65407314b2c70cdbd5d62443966d85bda9965b9971dafa8266bc89310499",
-      "bytes": 19569,
+      "sha256": "6496c07966ee97a9b9b4ec02aa7d2967301a5f3f093e90dae3597b51bd6d0f73",
+      "bytes": 20383,
       "kind": "file"
     },
     {
@@ -51526,8 +51526,8 @@
     {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-      "sha256": "2f85a35d25db381c6780b5683b69abc005a9e763ec5a8d4df2a28853a89d767b",
-      "bytes": 849424,
+      "sha256": "d9a0529d0481056a18dc7435494d474ef06b1436b45ad7b46019c588d685558b",
+      "bytes": 849961,
       "kind": "file"
     },
     {
@@ -58113,8 +58113,8 @@
     {
       "source": "production_tools/templates/UAP统一生产工作台_v2.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v2.json",
-      "sha256": "2f85a35d25db381c6780b5683b69abc005a9e763ec5a8d4df2a28853a89d767b",
-      "bytes": 849424,
+      "sha256": "d9a0529d0481056a18dc7435494d474ef06b1436b45ad7b46019c588d685558b",
+      "bytes": 849961,
       "kind": "file"
     },
     {
@@ -58237,6 +58237,13 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/test_model_quick_switch.cjs",
+      "path": "runtime/production_tools/test_model_quick_switch.cjs",
+      "sha256": "89d697f7aae54d43c62a7b3d07dd6b7d6c9dde75295630d93f43ccc9d9a7a0d9",
+      "bytes": 6766,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/test_pending_faults.cjs",
       "path": "runtime/production_tools/test_pending_faults.cjs",
       "sha256": "f011a00b93f69e214c7a1fd8ec57d8d1a6f37fe984bced02023759c6030a74ee",
@@ -58304,6 +58311,13 @@
       "path": "runtime/production_tools/test_vnccs_pose_sync.cjs",
       "sha256": "055fe958544150743a98c0383ee6cf6370446b82d18abbbcd0e138db48fad95a",
       "bytes": 1572,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/test_workspace_mount.cjs",
+      "path": "runtime/production_tools/test_workspace_mount.cjs",
+      "sha256": "7742e8f3f36dde363c2ceb11cb139f17e891cabaf72134833c04dcd0a4a21d3c",
+      "bytes": 4302,
       "kind": "file"
     },
     {
@@ -68240,16 +68254,14 @@
     }
   ],
   "development_revision": {
-    "note": "Krea2 [00W-6] 保存改为 [00W-5] 预览的上游，单点预览也会落盘；UAP 与独立 03 的正式图/模板共四处",
-    "previous_manifest_sha256": "beb92c69f8b713a1c3c2a7e69c75cee9f201fab8d870c68ea26c2044461c31ce",
+    "note": "底模改为文件夹即来源：未登记底模可直接选中，仅显式异架构被拒",
+    "previous_manifest_sha256": "0478fc9ab0b1971a34c229c713831cb1f3d746ad63becc082d2363039349809c",
     "source_changes": {
       "added": [],
       "removed": [],
       "changed": [
-        "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-        "ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
-        "production_tools/templates/UAP统一生产工作台_v2.json",
-        "production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json"
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
+        "production_tools/test_model_quick_switch.cjs"
       ]
     },
     "live_deployed": false,

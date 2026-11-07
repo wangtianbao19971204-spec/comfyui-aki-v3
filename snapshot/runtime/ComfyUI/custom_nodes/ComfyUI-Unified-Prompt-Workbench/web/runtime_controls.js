@@ -8,7 +8,7 @@ export function modelOptionIssue(name,value,branch,contracts){
     if(!branch?.modelFamily||!['unet_name','clip_name','vae_name'].includes(name))return '';
     const family=contracts?.families?.[branch.modelFamily],path=modelPath(value);
     if(!family)return '当前工作流缺少已核验的模型配套清单，请保存未完成编辑后加载最新版 UAP。';
-    if(name==='unet_name')return contracts.models?.[path]?.family===branch.modelFamily?'':`${family.label} 分支只接受本地清单中已核验的同架构底模；此文件未匹配。`;
+    if(name==='unet_name'){const known=contracts?.models?.[path];return !known||known.family===branch.modelFamily?'':`${family.label} 分支只能加载同架构底模；此文件登记为 ${known.family}。`;}
     return family[name==='clip_name'?'clip':'vae'].includes(path)?'':`${family.label} 的${name==='clip_name'?'文本编码器':'VAE'}不匹配已核验组合。`;
 }
 
@@ -90,6 +90,68 @@ export function cleanupMode(nodes) {
     return values.every(v=>v===false)?'resident':values.every(v=>v===true)?'release':'custom';
 }
 
+export function mountModelSwitch(host,app,branch,nodes,isCurrent){
+    const graph=app.graph, graphId=graph.id;
+    const modelNode=nodes.find(node=>node.type==='UNETLoader'&&node.mode===0);
+    if(!modelNode)return null;
+    const element=(tag,text,parent,attrs={})=>{const el=document.createElement(tag);if(text)el.textContent=text;Object.assign(el,attrs);parent.append(el);return el;};
+    let disposed=false, signature='';
+    const current=()=>!disposed&&isCurrent()&&app.graph===graph&&graph.id===graphId&&graph.extra?.uap_workbench?.activeBranch===branch.id;
+    const widget=()=>modelNode.widgets?.find(item=>item.name==='unet_name');
+    const writable=()=>current()&&app.graph.getNodeById(modelNode.id)===modelNode&&modelNode.mode===0&&!modelNode.inputs?.some(input=>input.name==='unet_name'&&input.link!=null);
+    const box=element('section','',host);box.dataset.deskArea='models';
+    const heading=element('h3','底模快切 · 当前分支',box);
+    const refresh=element('button','刷新列表',heading,{type:'button',className:'jump'});
+    const row=element('div','',box,{className:'plugin-tools'});
+    const label=element('label','基础模型',row,{className:'switch'});
+    const select=element('select','',label);
+    select.setAttribute('aria-label','切换当前分支底模');
+    const note=element('small','',box);note.setAttribute('role','status');
+    element('small','只改本分支 UNETLoader 的 unet_name；步数、CFG、编码器与 LoRA 不随之变化。放进 models/diffusion_models 的底模刷新后即可选中。',box);
+    select.onchange=()=>{
+        const item=widget();
+        if(!writable()||!item){sync();note.textContent='分支未启用或模型名由连线控制，请在原节点调整。';return;}
+        if(select.value===String(item.value))return;
+        const issue=modelOptionIssue('unet_name',select.value,branch,graph.extra?.uap_model_contracts);
+        if(issue){select.value=String(item.value);note.textContent=issue;return;}
+        commitWidget(app,modelNode,item,select.value);
+        sync();note.textContent='已切换到 '+select.value+'；采样参数不随底模自动调整。';
+    };
+    refresh.onclick=async()=>{
+        try{
+            const response=await fetch('/object_info/UNETLoader',{cache:'no-store'});
+            if(!response.ok)throw new Error('HTTP '+response.status);
+            const values=(await response.json())?.UNETLoader?.input?.required?.unet_name?.[0];
+            if(!Array.isArray(values)||!values.length)throw new Error('模型列表为空');
+            const item=widget();
+            if(item)item.options={...item.options,values};
+            signature='';sync();
+            note.textContent='已刷新：本机列表 '+values.length+' 个底模。';
+        }catch(error){note.textContent='刷新失败：'+error.message;}
+    };
+    function sync(){
+        if(disposed)return;
+        const item=widget();
+        if(!item){select.disabled=true;note.textContent='当前分支的底模节点缺少 unet_name 控件。';return;}
+        const raw=typeof item.options?.values==='function'?item.options.values():item.options?.values;
+        const available=Array.isArray(raw)?raw.map(String):[],value=String(item.value??'');
+        const key=available.join('\u0000')+'\u0001'+value;
+        if(key!==signature){
+            signature=key;select.replaceChildren();
+            if(value&&!available.includes(value)){const option=element('option',value+'（当前文件不可用）',select,{value});option.disabled=true;}
+            for(const item2 of available){
+                const option=element('option',item2,select,{value:item2});
+                if(modelOptionIssue('unet_name',item2,branch,graph.extra?.uap_model_contracts)){option.disabled=true;option.textContent=item2+'（架构不符）';}
+            }
+        }
+        select.value=value;
+        select.disabled=!available.length||!writable();
+        note.textContent=!current()?'浏览未启用分支；启用后可切换。':!available.length?'本地模型列表为空，请点“刷新列表”。':modelOptionIssue('unet_name',value,branch,graph.extra?.uap_model_contracts)||'当前：'+value;
+    }
+    sync();
+    return {sync,dispose(){disposed=true;}};
+}
+
 export function mountRuntimeControls(host, app, branch, nodes, isCurrent) {
     const animaControl=mountAnimaControl(host,app,branch,nodes,isCurrent);
     const kreaControl=nodes.some(node=>node.properties?.uap_anima_control)?null:mountControlSwitches(host,app,branch,isCurrent);
@@ -144,6 +206,7 @@ export function mountRuntimeControls(host, app, branch, nodes, isCurrent) {
         const box=element('section','',host);box.dataset.deskArea='models';
         element('h3','模型配套检查',box);modelStatus=element('small','',box);modelStatus.setAttribute('role','status');
     }
+    const modelSwitch=mountModelSwitch(host,app,branch,nodes,isCurrent);
     if(nodes.some(node=>node.properties?.uap_refinement)){
         const box=element('section','',host);box.dataset.deskArea='parameters';
         element('h3','细化与二放 · 参数范围',box);
@@ -153,7 +216,8 @@ export function mountRuntimeControls(host, app, branch, nodes, isCurrent) {
         if(disposed)return;
         animaControl.sync();
         kreaControl?.sync();
-        if(modelStatus){const issue=modelCompatibilityIssue(nodes,branch,graph.extra?.uap_model_contracts);modelStatus.textContent=!current()?'浏览未启用分支；启用后检查实际模型组合。':issue||'底模架构、编码器文件/type 与 VAE 符合本分支已核验清单。新模型需更新清单；此检查不保证 LoRA 兼容性或画质。';modelStatus.dataset.valid=String(!issue);}
+        if(modelStatus){const issue=modelCompatibilityIssue(nodes,branch,graph.extra?.uap_model_contracts);modelStatus.textContent=!current()?'浏览未启用分支；启用后检查实际模型组合。':issue||'底模与 VAE 属于本分支家族；编码器文件/type 与 VAE 需配套。新底模只需放进 models/diffusion_models，刷新即可选中；此检查不保证 LoRA 兼容性或画质。';modelStatus.dataset.valid=String(!issue);}
+        modelSwitch?.sync();
         if(unload){
             const mode=cleanupMode(cleanups);
             unload.checked=mode==='release';unload.indeterminate=mode==='custom';
@@ -167,5 +231,5 @@ export function mountRuntimeControls(host, app, branch, nodes, isCurrent) {
             hint.textContent=known29&&nodes.some(node=>node.properties?.uap_native_lllite)?'此流程使用原生控制链与自动层映射；需要启用 Anima LoRA/ControlNet 兼容补丁。控制效果取决于参考图、方式和强度。':known29?'当前为 Anima 2.9B（40 层）；此旧流程仍使用原版 28 层 LLLite。请加载已适配的控制流程，或关闭线稿/姿态和 VNCCS 控制。':'LLLite 必须与实际基模的层数及权重版本匹配。当前模型未在此确认；请核对基模与控制权重，不据此认定兼容。';
         }
     }
-    sync();return {sync,dispose(){disposed=true;animaControl.dispose();kreaControl?.dispose();}};
+    sync();return {sync,dispose(){disposed=true;animaControl.dispose();kreaControl?.dispose();modelSwitch?.dispose();}};
 }

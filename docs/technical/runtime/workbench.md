@@ -25,6 +25,8 @@
 
 ## 更新记录
 
+- 2026-11-07：完整工作台「参数与输入」栏顶部新增「底模快切 · 当前分支」；选择器从 `[02C]` UNETLoader 的 `unet_name` 读取候选，切换即写回该节点，模型名由连线控制、分支未启用或文件未登记时禁用并提示，另附“刷新列表”从 `/object_info/UNETLoader` 重读。实现为 `runtime_controls.js` 导出的 `mountModelSwitch`，`workspace.js` 与 `mountRuntimeControls` 共用；6 项离线 DOM 用例通过，未生图。见[变更](../changes/runtime-workbench/2026-11-07-k2-base-model-quick-switch.md)。
+
 - 2026-10-14：新增 UAP 与独立 01/02/03 共用的「控制与擦线」开关；自动启用控制来源，直接打开原生蒙版编辑器，空选区提示，并保持切分支/重载状态。操作与验证边界见[本轮说明](../changes/runtime-workbench/2026-10-14-control-one-click.md)。
 
 - 2026-10-11：主工作台与修复页的任务选择器均将丝袜纹理修复排在 2× / 4× 放大之后，提示先精修、放大，再导入最终尺寸图片补纹理。仅调整入口顺序和说明，工作流切换与运行参数保持；验证和部署记录见[工作流说明](workflows.md)。

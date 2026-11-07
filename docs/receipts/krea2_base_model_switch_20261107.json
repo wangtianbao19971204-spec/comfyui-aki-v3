@@ -1,0 +1,124 @@
+{
+  "schema": 1,
+  "date": "2026-11-07",
+  "status": "deployed-frontend-and-workflow-data-no-gpu-sampling",
+  "feature": "runtime-workbench",
+  "scope": [
+    "workbench panel 底模快切",
+    "uap_model_contracts 已安装底模登记"
+  ],
+  "problem": {
+    "missing_switch": "mountRuntimeControls 的模型区只有只读的“模型配套检查”，没有底模切换器",
+    "blocked_models": "uap_model_contracts 是 2026-10-05 的 7 条清单，本机 8 个 UNETLoader 底模中 4 个不在清单内；常用控制台把它们标为“不兼容/未核验”并禁用，当前在用的 Krea2-Anime v3.0 FP8 正是其中之一",
+    "evidence": "modelOptionIssue('unet_name', …) 对未登记文件返回拒绝；before 状态清单 7 条、可选项 8 个、通过 3 个"
+  },
+  "change": {
+    "ui": {
+      "file": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
+      "added": [
+        "底模快切 · 当前分支：列出分支内启用 UNETLoader 的 unet_name 候选，选中即 commitWidget",
+        "未登记/连线控制/非启用分支均有明确提示且不写入",
+        "刷新列表：从 /object_info/UNETLoader 重读本机底模",
+        "sync() 中重建选项并绑定当前值"
+      ],
+      "unchanged": "既有显存释放、模型配套检查、细化提示与 workflow guard 均未改动",
+      "placement": "完整工作台 workspace.js 直接挂载在「参数与输入」栏最上方；mountRuntimeControls 内部也调用同一个 mountModelSwitch"
+    },
+    "contracts": {
+      "added_models": [
+        "krea2/图像生成/Krea2__Krea2-Anime__v3.0__BF16__cv3435333__f3334576.safetensors",
+        "krea2/图像生成/Krea2__Krea2-Anime__v3.0__FP8__cv3435333__f3334536.safetensors",
+        "krea2/图像生成/Krea2__LUSTIFY! [NSFW checkpoint]__v10 (Krea 2)__BF16__cv3112728__f3015315.safetensors",
+        "krea2/图像生成/Krea2__LUSTIFY! [NSFW checkpoint]__v10 (Krea 2)__INT8-ConvRot__cv3112728__f2996235.safetensors"
+      ],
+      "method": "safetensors 头读取键数与块上限；四份均为 28 块、family=krea2（keys 430/878/430/686）",
+      "verified_at": "2026-11-07",
+      "entries": {
+        "runtime": "7 -> 11",
+        "git": "17 -> 21"
+      }
+    }
+  },
+  "files": [
+    {
+      "role": "runtime",
+      "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
+      "sha256_before": "5850dece1ed86518d59d6dec50e01722c390a13091e1c74660d376aa0d0a12b0",
+      "sha256_after": "a49ef31015802a6053e48637f43cb500b0d13a75d0f2fd8c5e3bf947dec1c9de",
+      "bytes": [
+        13922,
+        14309
+      ]
+    },
+    {
+      "role": "runtime",
+      "path": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+      "sha256_before": "342c6ca728695bec17714a8d5dd6c48d350aed3632f5be8bfcd17ce6a716272e",
+      "sha256_after": "bf92f26adf98e74822b9fd9d8bf0f9fe0f52b47db0f6c8da6bb5bebf7c5f1e31"
+    },
+    {
+      "role": "git-workflow",
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
+      "sha256_before": "8035456d5b36a0375805f125c01c85622167476ffc0812fcee0f2b4cbaf85186",
+      "sha256_after": "02e27dd51e9db5db78bf136c0a601f3aea95aa7b6b3974215624d45bd3cbe370",
+      "bytes": [
+        16174,
+        16609
+      ],
+      "note": "git copy is the pre-retirement variant; only the feature block differs from the runtime file's own history"
+    },
+    {
+      "role": "git-workflow",
+      "path": "snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
+      "sha256_before": "2f85a35d25db381c6780b5683b69abc005a9e763ec5a8d4df2a28853a89d767b",
+      "sha256_after": "d9a0529d0481056a18dc7435494d474ef06b1436b45ad7b46019c588d685558b",
+      "note": "template carries the same bytes as this file"
+    },
+    {
+      "role": "runtime",
+      "path": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
+      "sha256_after": "a7a63a522a4db4f24e64563ec8800fdf577fe062c8f1674de9c40ae50d376d32",
+      "bytes": [
+        0,
+        23687
+      ],
+      "note": "mount point for 底模快切"
+    },
+    {
+      "role": "git-workflow",
+      "path": "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
+      "sha256_after": "6496c07966ee97a9b9b4ec02aa7d2967301a5f3f093e90dae3597b51bd6d0f73",
+      "bytes": [
+        0,
+        20383
+      ],
+      "note": "mount point for 底模快切"
+    }
+  ],
+  "verification": {
+    "automated": "production_tools/test_model_quick_switch.cjs: 6 cases passed (list/current, unregistered marked and not written, verified switch commits once, linked name disables, inactive branch disables, refresh reloads list)",
+    "syntax": "node --check both runtime_controls.js files: ok",
+    "coverage": "/object_info/UNETLoader 返回 8 个底模，全部通过 uap_model_contracts 校验（before: 3/8）",
+    "not_verified": [
+      "no GPU run: model switching has not produced an image",
+      "live page: the panel section and refresh button have not been exercised in the browser"
+    ]
+  },
+  "deployment": {
+    "performed": true,
+    "files": 4,
+    "restarted_service": false,
+    "cleared_queue": false,
+    "submitted_generation": false,
+    "reload_required": "Ctrl+F5 刷新页面（插件 JS 与 workspace.js），再重新载入工作流（contracts 在 JSON 里）",
+    "rollback": {
+      "external": "G:/ComfyUI-local/production-backups/2026-11-07-k2-model-switch/",
+      "local_copy": "maintenance/comfyui/local/k2_preview_save_chain_20261107/before/"
+    }
+  },
+  "boundaries": [
+    "底模切换只改 UNETLoader 的 unet_name；步数、CFG、CLIP、VAE 与 LoRA 不随底模自动调整",
+    "登记只证明文件是 28 块 Krea2 架构，不代表画质或 LoRA 兼容性已验收",
+    "常用控制台的“当前分支模型”下拉复用同一份 contracts，因此同时恢复可用"
+  ]
+}
