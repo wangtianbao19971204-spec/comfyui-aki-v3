@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 2026-11-14：本体升级 0.33.0 → 0.42.0 并同步 `snapshot/runtime/ComfyUI`（887 改/增、7 删，不含 `custom_nodes`、`user`、`models`、`input`、`output`、`temp`）；新增 MOSS 文生图工作流两份（LoRA 管理器选 LoRA 版与核心节点版）。目的是让 MOSS-Image 与 Krea2 共用 8188，不再依赖第二个 0.42 运行时。隔离 8190 全量白名单 26 插件导入、Krea2 与 MOSS 出图通过；升级后 8188 现场同样通过。`environment.json` 未刷新（由 `snapshot.py` 生成，手工改会被 seal 拒绝）。白名单外插件未验，前端需刷新缓存。回滚依赖源码备份 zip 与 `回滚到0.33.ps1`。见[升级说明](docs/technical/changes/comfyui-core-042-upgrade/2026-11-14-core-042-upgrade.md)。
+
 - 2026-10-25：丝袜纹理同步作者 `204a1b8`：亮点改为默认关闭的总开关并折叠滑杆、预设下拉隐藏空占位项、静态资源钉住 MIME。本地节点与手绘亮点层保持开启，旧草稿／预设仅在缺少 `sparkle_on` 键时按亮点量迁移；节点接口、schema 2 与工作流不变。插件 120 项（2 项真实 CUDA 跳过）、前端 17、导出 6、维护仓 703 通过；已按授权部署运行区，两张现场渲染证明开关与纹理仍生效。见[同步与部署](docs/technical/changes/runtime-stocking-texture/2026-10-25-upstream-sparkle-switch.md)与[收据](docs/receipts/stocking_upstream_sync_20261025.json)。
 
 - 2026-10-25：提示词库改 SQLite 权威存储（WAL + `synchronous=FULL`，读模型/API 不变、data.json 降级为按需导出）：单条编辑 1.59 ms 中位（原 ~1033 ms 且 O(库)），批量事务化+事务前 backup，后台自动导出/备份+行级 journal+`store-status` 告警；迁移 8.81 s 逐字段 equal、启动加载 2.17–2.71 s；`UW_LIBRARY_STORE=json|sqlite` 灰度；snapshot/restore 纳入 library DB SQL dump；Tag 池写连接升 synchronous=FULL。测试 203 OK/1 skip（含 O(1) patch、编辑尖峰与退出 flush 修复），见[说明](docs/technical/changes/runtime-workbench/2026-10-25-library-store-sqlite.md)。未部署生产。

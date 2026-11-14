@@ -1,0 +1,622 @@
+{
+  "last_node_id": 13,
+  "last_link_id": 11,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UNETLoader",
+      "pos": [
+        40,
+        120
+      ],
+      "size": [
+        420,
+        82
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "moss\\图像生成\\Moss__MOSS Image__Base__BF16__cv3409868__f3301907.safetensors",
+        "default"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "pos": [
+        40,
+        260
+      ],
+      "size": [
+        420,
+        106
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            4,
+            5
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "Moss__Qwen3.5 9B Text Encoder__v1__BF16__sha__7E6E9F08D598.safetensors",
+        "moss_image",
+        "default"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "VAELoader",
+      "pos": [
+        40,
+        420
+      ],
+      "size": [
+        420,
+        58
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            10
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "Moss__Flux2 VAE__v1__FP32__cv3409867__f3301980.safetensors"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "LoraLoaderModelOnly",
+      "pos": [
+        40,
+        540
+      ],
+      "size": [
+        420,
+        82
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoraLoaderModelOnly"
+      },
+      "widgets_values": [
+        "moss\\画风与画师\\Moss__Moss_Anima-油画湿润厚涂二次元（nai5其三）__Moss-base-V1.0__BF16__cv3437536__f3334771.safetensors",
+        1.1
+      ]
+    },
+    {
+      "id": 5,
+      "type": "LoraLoaderModelOnly",
+      "pos": [
+        40,
+        660
+      ],
+      "size": [
+        420,
+        82
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoraLoaderModelOnly"
+      },
+      "widgets_values": [
+        "moss\\角色与人物\\Moss__Tsaritsa 冰之女皇_冰神 安娜丝塔夏 原神 Genshin Impact__v1.0__BF16__cv3454327__f3354976.safetensors",
+        0.75
+      ]
+    },
+    {
+      "id": 6,
+      "type": "CLIPTextEncode",
+      "pos": [
+        520,
+        120
+      ],
+      "size": [
+        470,
+        300
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            6
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "@painterly cine, Tsaritsa, an oil-painted anime illustration, an extreme close-up on the lap of a single adult woman sitting up on a hotel bed at night.\n\nThe Tsaritsa is cropped from just under her bare breasts down to mid-thigh, her long pale grey hair falling across one shoulder into the top of the frame, her knees pulled up and spread wide. Her right hand fills the middle of the picture, the index and middle fingers buried to the second knuckle inside herself, the lips stretched and glistening around them, her thumb pressed to her clit and the other fingers curled away; her left hand pulls her own thigh wider. Sweat runs down her stomach and the insides of her pale thighs, a thin strand of hair sticks to her hip. Her skin carries a flushed pink under the warm light.\n\nA warm lamp from the left, cold blue shadow to the right, thick palette-knife paint across the linen, dry-brush gaps showing the underdrawing, canvas grain in the flat shadows, muted amber and gray-blue."
+      ]
+    },
+    {
+      "id": 7,
+      "type": "CLIPTextEncode",
+      "pos": [
+        520,
+        470
+      ],
+      "size": [
+        470,
+        180
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            7
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "worst quality, bad anatomy, extra fingers, fused fingers, watermark, jpeg artifact, censored, text"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "EmptyFlux2LatentImage",
+      "pos": [
+        520,
+        700
+      ],
+      "size": [
+        300,
+        106
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            8
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyFlux2LatentImage"
+      },
+      "widgets_values": [
+        1024,
+        1280,
+        1
+      ]
+    },
+    {
+      "id": 9,
+      "type": "KSampler",
+      "pos": [
+        1030,
+        120
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 3
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 6
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 7
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            9
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        100002,
+        "randomize",
+        40,
+        3.0,
+        "euler",
+        "simple",
+        1
+      ]
+    },
+    {
+      "id": 10,
+      "type": "VAEDecode",
+      "pos": [
+        1390,
+        120
+      ],
+      "size": [
+        210,
+        46
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 9
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            11
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 11,
+      "type": "SaveImage",
+      "pos": [
+        1640,
+        120
+      ],
+      "size": [
+        420,
+        480
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 11
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "painterly_cine/moss_painterly_cine"
+      ]
+    },
+    {
+      "id": 12,
+      "type": "Note",
+      "pos": [
+        40,
+        800
+      ],
+      "size": [
+        470,
+        300
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "text": ""
+      },
+      "widgets_values": [
+        "# 采样与模型\n\n- 底模：MOSS Image **Base** BF16（社区 LoRA 贴合最好；换 SFT 版会更\"油亮\"）\n- 文本编码：Qwen3.5 9B BF16，`CLIPLoader` 的 type 必须是 `moss_image`\n- VAE：Moss Flux2 VAE FP32\n- 采样：40 步 / CFG 3.0 / euler / simple / denoise 1（官方档 50 步 / CFG 3，可再加）\n- 尺寸：1024×1280（16 的倍数；1024²、1024×1536 同样稳）\n- 负面里的 `censored` 别删，否则容易出打码\n\n# 画风 LoRA\n\n`Moss_Anima-油画湿润厚涂二次元（nai5其三）`，触发词 `@painterly cine`，强度 1.1。\n笔触太脏就降到 0.9；想要更厚的堆色可以推到 1.2，再高会吃掉人体结构。"
+      ]
+    },
+    {
+      "id": 13,
+      "type": "Note",
+      "pos": [
+        540,
+        900
+      ],
+      "size": [
+        520,
+        300
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "text": ""
+      },
+      "widgets_values": [
+        "# 换角色 / 换构图\n\n角色 LoRA 换成 `models\\loras\\moss\\角色与人物\\` 里的任意一个，同时把提示词开头的触发词换掉：\n\n| LoRA 片段 | 触发词 |\n|---|---|\n| `HSRkafka` | `HSRkafka` |\n| `洛茜` | `Rossi，` |\n| `祀` | `Si` |\n| `心月狐` | `Hsin` |\n| `Lacrimosa` (NTE) | `lacrimosa \\(neverness to everness\\)` |\n| `Shantae` | `sh4nt4` |\n| `Mal0` | `Mal0` |\n| `坎特蕾拉` | `Cantarella` |\n| `Genshin Sandrone` | `Sandrone` |\n\n角色强度 0.6–0.8：太高会把画风压掉，太低会丢脸。\n\n# 构图小抄\n\n- 近景/特写（手部动作清楚）：`extreme close-up ... cropped from just under her bare breasts down to mid-thigh`，1024×1280\n- 全身（电影感）：`low three-quarter angle at the foot of the bed` + `her hips sit closest to the lens`，1024×1536\n- 动作写不清时加：`the fingers clearly separated and wet`、`her knuckles wet and shining`\n\n改完记得把种子调到 `randomize` 再跑。"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      4,
+      0,
+      "MODEL"
+    ],
+    [
+      2,
+      4,
+      0,
+      5,
+      0,
+      "MODEL"
+    ],
+    [
+      3,
+      5,
+      0,
+      9,
+      0,
+      "MODEL"
+    ],
+    [
+      4,
+      2,
+      0,
+      6,
+      0,
+      "CLIP"
+    ],
+    [
+      5,
+      2,
+      0,
+      7,
+      0,
+      "CLIP"
+    ],
+    [
+      6,
+      6,
+      0,
+      9,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      7,
+      7,
+      0,
+      9,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      8,
+      8,
+      0,
+      9,
+      3,
+      "LATENT"
+    ],
+    [
+      9,
+      9,
+      0,
+      10,
+      0,
+      "LATENT"
+    ],
+    [
+      10,
+      3,
+      0,
+      10,
+      1,
+      "VAE"
+    ],
+    [
+      11,
+      10,
+      0,
+      11,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [
+    {
+      "title": "01 底模 / 编码器 / VAE",
+      "bounding": [
+        20,
+        80,
+        460,
+        410
+      ],
+      "color": "#3f789e",
+      "font_size": 22,
+      "flags": {}
+    },
+    {
+      "title": "02 LoRA：painterly cine → 角色",
+      "bounding": [
+        20,
+        500,
+        460,
+        270
+      ],
+      "color": "#a1309b",
+      "font_size": 22,
+      "flags": {}
+    },
+    {
+      "title": "03 提示词（Krea/MOSS 散文体）",
+      "bounding": [
+        500,
+        80,
+        510,
+        750
+      ],
+      "color": "#3f9e6d",
+      "font_size": 22,
+      "flags": {}
+    },
+    {
+      "title": "04 采样",
+      "bounding": [
+        1010,
+        80,
+        360,
+        340
+      ],
+      "color": "#b58b2a",
+      "font_size": 22,
+      "flags": {}
+    },
+    {
+      "title": "05 解码与保存",
+      "bounding": [
+        1370,
+        80,
+        710,
+        560
+      ],
+      "color": "#888888",
+      "font_size": 22,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.7,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}
