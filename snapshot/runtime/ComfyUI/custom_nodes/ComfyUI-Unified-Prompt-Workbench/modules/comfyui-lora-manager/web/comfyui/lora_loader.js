@@ -18,7 +18,7 @@ import {
   getWidgetSerializedValue,
 } from "./utils.js";
 import { applyLoraValuesToText, debounce } from "./lora_syntax_utils.js";
-import { isWorkflowTargetEnabled } from "./workflow_targets.js";
+import { isWorkflowTargetEnabled, openLoraBrowserForNode } from "./workflow_targets.js";
 
 // Node classes whose "text" widget uses the loras autocomplete. Kept in sync
 // with the broadcast-compatible classes in handleLoraCodeUpdate below.
@@ -39,6 +39,24 @@ function addActiveFiltersSearchMenuOption(nodeType) {
     getExtraMenuOptions?.apply?.(this, arguments);
 
     options.push(null);
+
+    // Browsing with the manager's grid + previews is the only way to look at
+    // every LoRA at once; the field itself is a search box (minChars 1).
+    options.push({
+      content: "打开 LoRA 管理器（写入本节点）",
+      callback: () => {
+        try {
+          openLoraBrowserForNode(this);
+        } catch (error) {
+          showToast({
+            severity: "error",
+            summary: "无法打开 LoRA 管理器",
+            detail: error?.message || "请先启用该节点所在分支",
+            life: 3000,
+          });
+        }
+      },
+    });
 
     const filtersSearchEnabled = getLoraActiveFiltersAutocompletePreference();
     options.push({

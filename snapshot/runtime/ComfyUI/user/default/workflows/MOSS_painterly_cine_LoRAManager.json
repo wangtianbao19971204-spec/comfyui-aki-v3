@@ -1,0 +1,657 @@
+{
+  "last_node_id": 12,
+  "last_link_id": 12,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Unet Loader (LoraManager)",
+      "pos": [
+        40,
+        120
+      ],
+      "size": [
+        420,
+        110
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Unet Loader (LoraManager)"
+      },
+      "widgets_values": [
+        "moss\\图像生成\\Moss__MOSS Image__Base__BF16__cv3409868__f3301907.safetensors",
+        "default",
+        "Any"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "pos": [
+        40,
+        270
+      ],
+      "size": [
+        420,
+        106
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            2,
+            5
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "Moss__Qwen3.5 9B Text Encoder__v1__BF16__sha__7E6E9F08D598.safetensors",
+        "moss_image",
+        "default"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "VAELoader",
+      "pos": [
+        40,
+        420
+      ],
+      "size": [
+        420,
+        58
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            10
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "Moss__Flux2 VAE__v1__FP32__cv3409867__f3301980.safetensors"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "Lora Loader (LoraManager)",
+      "pos": [
+        520,
+        120
+      ],
+      "size": [
+        560,
+        300
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        },
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            3
+          ]
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            4
+          ]
+        },
+        {
+          "name": "trigger_words",
+          "type": "STRING",
+          "links": [
+            11
+          ]
+        },
+        {
+          "name": "loaded_loras",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Lora Loader (LoraManager)"
+      },
+      "widgets_values": [
+        {
+          "version": 1,
+          "textWidgetName": "text"
+        },
+        "<lora:moss/画风与画师/Moss__Moss_Anima-油画湿润厚涂二次元（nai5其三）__Moss-base-V1.0__BF16__cv3437536__f3334771:1.1> <lora:moss/角色与人物/Moss__Tsaritsa 冰之女皇_冰神 安娜丝塔夏 原神 Genshin Impact__v1.0__BF16__cv3454327__f3354976:0.75>",
+        {
+          "value": [
+            {
+              "name": "moss/画风与画师/Moss__Moss_Anima-油画湿润厚涂二次元（nai5其三）__Moss-base-V1.0__BF16__cv3437536__f3334771",
+              "strength": 1.1,
+              "active": true,
+              "expanded": false,
+              "clipStrength": 0.0,
+              "selected": true,
+              "locked": false
+            },
+            {
+              "name": "moss/角色与人物/Moss__Tsaritsa 冰之女皇_冰神 安娜丝塔夏 原神 Genshin Impact__v1.0__BF16__cv3454327__f3354976",
+              "strength": 0.75,
+              "active": true,
+              "expanded": false,
+              "clipStrength": 0.0,
+              "selected": false,
+              "locked": false
+            }
+          ],
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "Prompt (LoraManager)",
+      "pos": [
+        520,
+        470
+      ],
+      "size": [
+        560,
+        300
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 4
+        },
+        {
+          "name": "trigger_words1",
+          "type": "STRING",
+          "link": 11
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            6
+          ]
+        },
+        {
+          "name": "PROMPT",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Prompt (LoraManager)"
+      },
+      "widgets_values": [
+        {
+          "version": 1,
+          "textWidgetName": "text"
+        },
+        "an oil-painted anime illustration, an extreme close-up on the lap of a single adult woman sitting up on a hotel bed at night.\n\nShe is fully nude: her white dress, long gloves, stockings and heels are already pulled off and lie in a heap at the left edge of the frame. She is cropped from just under her bare breasts down to mid-thigh, her long pale grey hair falling across one shoulder into the top of the frame, her knees pulled up and spread wide. Her right hand fills the middle of the picture, the index and middle fingers buried to the second knuckle inside herself, the lips stretched and glistening around them, her thumb pressed to her clit and the other fingers curled away; her left hand pulls her own thigh wider. Sweat runs down her stomach and the insides of her pale thighs, a thin strand of hair sticks to her hip. Her skin carries a flushed pink under the warm light.\n\nA warm lamp from the left, cold blue shadow to the right, thick palette-knife paint across the linen, dry-brush gaps showing the underdrawing, canvas grain in the flat shadows, muted amber and gray-blue."
+      ]
+    },
+    {
+      "id": 6,
+      "type": "CLIPTextEncode",
+      "pos": [
+        520,
+        800
+      ],
+      "size": [
+        560,
+        160
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            7
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "worst quality, bad anatomy, extra fingers, fused fingers, watermark, jpeg artifact, censored, text"
+      ]
+    },
+    {
+      "id": 7,
+      "type": "EmptyFlux2LatentImage",
+      "pos": [
+        1130,
+        120
+      ],
+      "size": [
+        300,
+        106
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            8
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyFlux2LatentImage"
+      },
+      "widgets_values": [
+        1024,
+        1280,
+        1
+      ]
+    },
+    {
+      "id": 8,
+      "type": "KSampler",
+      "pos": [
+        1130,
+        260
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 3
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 6
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 7
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            9
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        100002,
+        "randomize",
+        40,
+        3.0,
+        "euler",
+        "simple",
+        1
+      ]
+    },
+    {
+      "id": 9,
+      "type": "VAEDecode",
+      "pos": [
+        1490,
+        260
+      ],
+      "size": [
+        210,
+        46
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 9
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            12
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 10,
+      "type": "SaveImage",
+      "pos": [
+        1720,
+        120
+      ],
+      "size": [
+        400,
+        450
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 12
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "painterly_cine/moss_lora_manager"
+      ]
+    },
+    {
+      "id": 11,
+      "type": "Note",
+      "pos": [
+        40,
+        500
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "text": ""
+      },
+      "widgets_values": [
+        "# LoRA 管理器这个节点怎么选\n\n这栏是**搜索+浏览混合**：点进空栏就会按库顺序列出 LoRA（每次 20 条，往下滚继续加载），也可以直接打字过滤（`moss`、`Tsaritsa`、`女皇`）。\n\n- 候选行**鼠标悬停**会弹出该 LoRA 的预览图（读管理器缓存的预览）\n- 点候选即加入本节点，触发词自动接到 `Prompt (LoraManager)` 的 `trigger_words1`\n- 想“先筛选、再挑”：去管理器页面 `/loras` 按 Base Model = `MOSS Image` 过滤 → 回到本节点在 LoRA 栏输入 `/activefilters`（或在设置里开 \"Search LoRA autocomplete within active filters\"），候选就只出筛过的那些\n- 行尾 `+` 再加一行；行内数字是强度；`clipStrength` 保持 0（MOSS 只改 model 分支）\n- **浏览大图**：节点右键 → `打开 LoRA 管理器（写入本节点）`，在页面里按缩略图挑，点卡片加入只会写回这个节点（页面底部有“写入目标”提示）\n- 行内右键只有 View on Citivai / Delete，删除和外部信息在那里\n"
+      ]
+    },
+    {
+      "id": 12,
+      "type": "Note",
+      "pos": [
+        1490,
+        400
+      ],
+      "size": [
+        700,
+        320
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "text": ""
+      },
+      "widgets_values": [
+        "# 采样与坑位\n\n- 底模：MOSS Image **Base** BF16（社区 LoRA 贴合最好）\n- 文本编码：Qwen3.5 9B BF16，type 必须是 `moss_image`\n- VAE：Moss Flux2 VAE FP32\n- 采样：40 步 / CFG 3.0 / euler / simple / denoise 1（官方档 50 步）\n- 尺寸：1024 × 1280（16 的倍数）\n- 两个 LoRA 的 clipStrength 都写 0：MOSS 风格 LoRA 走 model-only，别动文本编码器\n- 负面要删掉自带的 `nsfw`，否则和内容打架；这里用 `censored` 去码\n\n# 换角色\n\n把角色那行的 name 换成别的 LoRA 即��（下拉里搜），触发词会自动跟着变：\n\n| LoRA | 触发词 |\n|---|---|\n| HSRkafka | HSRkafka |\n| 洛茜 / Rossi | Rossi， |\n| 祀 / Si | Si |\n| 心月狐 / Hsin | Hsin |\n| Cantarella 坎特蕾拉 | Cantarella |\n| Lacrimosa (NTE) | lacrimosa (neverness to everness) |\n| Shantae | sh4nt4 |\n| Mal0 | Mal0 |\n"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      4,
+      0,
+      "MODEL"
+    ],
+    [
+      2,
+      2,
+      0,
+      4,
+      1,
+      "CLIP"
+    ],
+    [
+      3,
+      4,
+      0,
+      8,
+      0,
+      "MODEL"
+    ],
+    [
+      4,
+      4,
+      1,
+      5,
+      0,
+      "CLIP"
+    ],
+    [
+      5,
+      2,
+      0,
+      6,
+      0,
+      "CLIP"
+    ],
+    [
+      6,
+      5,
+      0,
+      8,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      7,
+      6,
+      0,
+      8,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      8,
+      7,
+      0,
+      8,
+      3,
+      "LATENT"
+    ],
+    [
+      9,
+      8,
+      0,
+      9,
+      0,
+      "LATENT"
+    ],
+    [
+      10,
+      3,
+      0,
+      9,
+      1,
+      "VAE"
+    ],
+    [
+      11,
+      4,
+      2,
+      5,
+      1,
+      "STRING"
+    ],
+    [
+      12,
+      9,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [
+    {
+      "title": "01 底模 + 文本编码 + VAE",
+      "bounding": [
+        20,
+        80,
+        460,
+        420
+      ],
+      "color": "#3f789e",
+      "font_size": 22,
+      "flags": {}
+    },
+    {
+      "title": "02 LoRA 管理器选择器（预览图 + 触发词）",
+      "bounding": [
+        500,
+        80,
+        600,
+        360
+      ],
+      "color": "#a1309b",
+      "font_size": 22,
+      "flags": {}
+    },
+    {
+      "title": "03 提示词（触发词自动接入）",
+      "bounding": [
+        500,
+        450,
+        600,
+        340
+      ],
+      "color": "#3f9e6d",
+      "font_size": 22,
+      "flags": {}
+    },
+    {
+      "title": "04 尺寸与采样",
+      "bounding": [
+        1110,
+        80,
+        360,
+        480
+      ],
+      "color": "#b58b2a",
+      "font_size": 22,
+      "flags": {}
+    },
+    {
+      "title": "05 解码与保存",
+      "bounding": [
+        1470,
+        80,
+        660,
+        520
+      ],
+      "color": "#888888",
+      "font_size": 22,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.7,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}

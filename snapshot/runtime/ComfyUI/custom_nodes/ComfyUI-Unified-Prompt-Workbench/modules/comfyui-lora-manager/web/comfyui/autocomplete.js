@@ -785,7 +785,16 @@ class AutoComplete {
             this.blurTimer = setTimeout(() => this.hide(), 150);
         };
         this.inputElement.addEventListener('blur', this.onBlur);
-        this.onFocus = () => clearTimeout(this.blurTimer);
+        // LoRA fields double as a picker: focusing an empty field lists the
+        // library instead of waiting for the first keystroke (minChars 0).
+        this.onFocus = () => {
+            clearTimeout(this.blurTimer);
+            if (this.modelType !== 'loras' || (this.options.minChars ?? 1) > 0) return;
+            const value = this.inputElement.value ?? '';
+            if (this.getSearchTerm(value) === '') {
+                this.handleInput(value);
+            }
+        };
         this.inputElement.addEventListener('focus', this.onFocus);
 
         // Handle clicks outside to hide dropdown
@@ -1518,10 +1527,16 @@ class AutoComplete {
             // Generate multiple query variations for better matching, but avoid
             // sending duplicate-equivalent requests that normalize to the same
             // backend search term.
-            const queriesToExecute =
-                this.searchType === 'wildcards' && term.length === 0
-                    ? ['']
-                    : this._getQueriesToExecute(term);
+            // LoRA fields with minChars 0 browse the library on empty input, so an
+            // empty term is a real query (the backend returns the first page)
+            // rather than "nothing to search for".
+            const allowEmptyBrowse =
+                term.length === 0 &&
+                (this.searchType === 'wildcards' ||
+                    (this.modelType === 'loras' && this.options.minChars === 0));
+            const queriesToExecute = allowEmptyBrowse
+                ? ['']
+                : this._getQueriesToExecute(term);
 
             if (queriesToExecute.length === 0) {
                 this.items = [];
@@ -2403,7 +2418,9 @@ class AutoComplete {
                 }
             }
 
-            const queriesToExecute = this._getQueriesToExecute(this.currentSearchTerm);
+            const queriesToExecute = (this.currentSearchTerm ?? '').length === 0
+                ? ['']
+                : this._getQueriesToExecute(this.currentSearchTerm);
             const offset = this.items.length;
 
             // Active-filter query params for loras (null when setting off)
