@@ -29,13 +29,14 @@ Rollup failed to resolve import "/extensions/ComfyUI-Unified-Prompt-Workbench/pr
 
 1. `vue-widgets/vite.config.mts`：在 `lora-manager:keep-runtime-modules-external` 插件里增加一条规则——以 `/extensions/` 开头的 specifier 直接 `external: true`。这类地址本来就应该由浏览器在运行时解析（工作台那份 `prompt_target.js` 只在运行期存在），构建期不该解析。
 2. 加 `output.inlineDynamicImports: true`：这份产物是作为单个扩展脚本被加载的，不能拆出需要相对路径再取一次的 async chunk。产物恢复为单文件 `lora-manager-widgets.js`（705 KB）+ sourcemap。
-3. `vue-widgets/src/composables/useAutocomplete.ts`：`minChars` 按 modelType 区分——`loras` 用 **0**（点进空栏即列出库，缩略图悬停可见，每页 20 条、滚动续载），`prompt` 保持 **1**（不影响标签补全的打字手感）。
+3. `vue-widgets/src/composables/useAutocomplete.ts`：`minChars` 按 modelType 区分——`loras` 用 **0**，`prompt` 保持 **1**（不影响标签补全的打字手感）。
+4. `web/comfyui/autocomplete.js`：只改 `minChars` 还不够——原 `onFocus` 只清 blur 定时器，不会触发搜索。现在当 `modelType === 'loras'` 且 `minChars === 0`、且当前 token 为空时，focus 直接调 `handleInput()` 打开候选列表。这条同时进了外部模块和内联产物，两条加载路径行为一致。
 
 验证：
 
-- `npm run build` 成功：118 modules，单文件 705 KB；产物里存在 `minChars: modelType === "loras" ? 0 : 1`
+- `npm run build` 成功；产物单文件 725 KB，含 `minChars: modelType === "loras" ? 0 : 1` 与 focus 触发逻辑
 - `vue-widgets` 单测 **96 passed (7 files)**（含 `AutocompleteTextWidget.test.ts`）
-- 8188 实际返回的 `/extensions/comfyui-lora-manager/vue-widgets/lora-manager-widgets.js` 为 705414 字节，且字节级包含上述三元表达式——重建产物已被服务端加载
+- 8188 返回的 `/extensions/comfyui-lora-manager/autocomplete.js`（130352 字节）与 `vue-widgets/lora-manager-widgets.js` 都字节级包含 focus 触发逻辑
 - `node --check` 通过（右键菜单那处改动）
 
 ## 未验证 / 限制

@@ -785,7 +785,16 @@ class AutoComplete {
             this.blurTimer = setTimeout(() => this.hide(), 150);
         };
         this.inputElement.addEventListener('blur', this.onBlur);
-        this.onFocus = () => clearTimeout(this.blurTimer);
+        // LoRA fields double as a picker: focusing an empty field lists the
+        // library instead of waiting for the first keystroke (minChars 0).
+        this.onFocus = () => {
+            clearTimeout(this.blurTimer);
+            if (this.modelType !== 'loras' || (this.options.minChars ?? 1) > 0) return;
+            const value = this.inputElement.value ?? '';
+            if (this.getSearchTerm(value) === '') {
+                this.handleInput(value);
+            }
+        };
         this.inputElement.addEventListener('focus', this.onFocus);
 
         // Handle clicks outside to hide dropdown
