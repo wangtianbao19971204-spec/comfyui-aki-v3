@@ -456,7 +456,7 @@
         "text": ""
       },
       "widgets_values": [
-        "# LoRA 管理器这个节点怎么选\n\n这栏是**搜索框**，不是可浏览的下拉：必须输入 1 个字符（例如 `moss`、`Tsaritsa`、`女皇`）才会出候选。\n\n- 候选行**鼠标悬停**会弹出该 LoRA 的预览图（读管理器缓存的预览）\n- 点候选即加入本节点，触发词自动接到 `Prompt (LoraManager)` 的 `trigger_words1`\n- 想“先筛选、再挑”：去管理器页面 `/loras` 按 Base Model = `MOSS Image` 过滤 → 回到本节点在 LoRA 栏输入 `/activefilters`（或在设置里开 \"Search LoRA autocomplete within active filters\"），候选就只出筛过的那些\n- 行尾 `+` 再加一行；行内数字是强度；`clipStrength` 保持 0（MOSS 只改 model 分支）\n- 右键行内名字只有 View on Civitai / Delete；浏览大图请用管理器页面\n"
+        "# LoRA 管理器这个节点怎么选\n\n这栏是**搜索框**，不是可浏览的下拉：必须输入 1 个字符（例如 `moss`、`Tsaritsa`、`女皇`）才会出候选。\n\n- 候选行**鼠标悬停**会弹出该 LoRA 的预览图（读管理器缓存的预览）\n- 点候选即加入本节点，触发词自动接到 `Prompt (LoraManager)` 的 `trigger_words1`\n- 想“先筛选、再挑”：去管理器页面 `/loras` 按 Base Model = `MOSS Image` 过滤 → 回到本节点在 LoRA 栏输入 `/activefilters`（或在设置里开 \"Search LoRA autocomplete within active filters\"），候选就只出筛过的那些\n- 行尾 `+` 再加一行；行内数字是强度；`clipStrength` 保持 0（MOSS 只改 model 分支）\n- **浏览大图**：节点右键 → `打开 LoRA 管理器（写入本节点）`，在页面里按缩略图挑，点卡片加入只会写回这个节点（页面底部有“写入目标”提示）\n- 行内右键只有 View on Citivai / Delete，删除和外部信息在那里\n"
       ]
     },
     {

@@ -30,3 +30,13 @@ MOSS 的画面风格由 `@painterly cine` 触发词对应的画风 LoRA 决定�
 ## 回滚依赖
 
 删除上述两个 JSON 即可；不涉及核心代码与数据库。构建与验证脚本在仓外 `G:\ComfyUI-aki-v3\temp\build_lora_manager_workflow.py`、`build_painterly_workflow.py`。
+
+## 2026-11-14 补充：说明写清楚"怎么选 LoRA"
+
+工作流里的 Note 原先写的是"下拉看预览"，与实际行为不符：节点里的 LoRA 栏是搜索框（`minChars: 1`），必须输入至少 1 个字符才出候选。本次把说明改成三条可执行路径：
+
+1. 输入 1 个字符 → 候选行悬停看预览图 → 点选写入；
+2. 先在 `/loras` 页面按 Base Model 过滤，再在节点输入 `/activefilters`，候选只出筛过的；
+3. 右键节点 → 「打开 LoRA 管理器（写入本节点）」，在页面里看大图挑，点卡片只写回该节点。
+
+第 3 条的入口是本次在 `lora_loader.js` 新增的，见 [LoRA 浏览入口](2026-11-14-lora-browse-menu.md)。
