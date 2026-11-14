@@ -30,6 +30,7 @@ Rollup failed to resolve import "/extensions/ComfyUI-Unified-Prompt-Workbench/pr
 1. `vue-widgets/vite.config.mts`：在 `lora-manager:keep-runtime-modules-external` 插件里增加一条规则——以 `/extensions/` 开头的 specifier 直接 `external: true`。这类地址本来就应该由浏览器在运行时解析（工作台那份 `prompt_target.js` 只在运行期存在），构建期不该解析。
 2. 加 `output.inlineDynamicImports: true`：这份产物是作为单个扩展脚本被加载的，不能拆出需要相对路径再取一次的 async chunk。产物恢复为单文件 `lora-manager-widgets.js`（705 KB）+ sourcemap。
 3. `vue-widgets/src/composables/useAutocomplete.ts`：`minChars` 按 modelType 区分——`loras` 用 **0**，`prompt` 保持 **1**（不影响标签补全的打字手感）。
+5. `web/comfyui/autocomplete.js`（第二轮）：空 term 在 `search()` 里原本被 `_getQueriesToExecute('')` 过滤成空数组，于是 `queriesToExecute.length === 0` 直接 `hide()`——所以 focus 有反应也看不到列表。现在空 term 且 `minChars === 0` 时按 `['']` 发一次请求（沿用代码里 wildcards 已有的空搜索先例），分页 `loadMoreItems()` 同样按空 term 续载。
 4. `web/comfyui/autocomplete.js`：只改 `minChars` 还不够——原 `onFocus` 只清 blur 定时器，不会触发搜索。现在当 `modelType === 'loras'` 且 `minChars === 0`、且当前 token 为空时，focus 直接调 `handleInput()` 打开候选列表。这条同时进了外部模块和内联产物，两条加载路径行为一致。
 
 验证：

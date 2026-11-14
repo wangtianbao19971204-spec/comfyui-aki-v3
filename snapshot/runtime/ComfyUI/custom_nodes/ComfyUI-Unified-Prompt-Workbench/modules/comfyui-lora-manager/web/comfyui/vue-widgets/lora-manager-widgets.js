@@ -17660,7 +17660,8 @@ class AutoComplete {
         endpoint = `/lm/${this.modelType}/relative-paths`;
       }
       const activeFiltersQuery = this._getActiveLoraFilters();
-      const queriesToExecute = this.searchType === "wildcards" && term.length === 0 ? [""] : this._getQueriesToExecute(term);
+      const allowEmptyBrowse = term.length === 0 && (this.searchType === "wildcards" || this.modelType === "loras" && this.options.minChars === 0);
+      const queriesToExecute = allowEmptyBrowse ? [""] : this._getQueriesToExecute(term);
       if (queriesToExecute.length === 0) {
         this.items = [];
         this.hide();
@@ -18358,7 +18359,7 @@ class AutoComplete {
           }
         }
       }
-      const queriesToExecute = this._getQueriesToExecute(this.currentSearchTerm);
+      const queriesToExecute = (this.currentSearchTerm ?? "").length === 0 ? [""] : this._getQueriesToExecute(this.currentSearchTerm);
       const offset = this.items.length;
       const activeFiltersQuery = this._getActiveLoraFilters();
       const searchPromises = queriesToExecute.map(async (query) => {
