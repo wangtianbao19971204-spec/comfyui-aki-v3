@@ -37,7 +37,10 @@ export function useAutocomplete(
 
   const defaultOptions: AutocompleteOptions = {
     maxItems: 20,
-    minChars: 1,
+    // LoRA fields are pickers: focusing an empty field should list the library
+    // (thumbnails in the dropdown) instead of requiring a character first.
+    // Prompt/tag autocomplete keeps minChars 1 so typing is not interrupted.
+    minChars: modelType === 'loras' ? 0 : 1,
     debounceDelay: 200,
     showPreview: true,
     ...options

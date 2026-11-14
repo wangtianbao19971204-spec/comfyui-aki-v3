@@ -43,6 +43,12 @@ export default defineConfig({
             name: 'lora-manager:keep-runtime-modules-external',
             enforce: 'pre',
             resolveId(source, importer) {
+                // Absolute extension URLs are resolved by the browser at runtime
+                // (e.g. the workbench shim at /extensions/ComfyUI-Unified-Prompt-
+                // Workbench/prompt_target.js). They cannot be resolved on disk.
+                if (source.startsWith('/extensions/')) {
+                    return { id: source, external: true }
+                }
                 const scriptsMatch = source.match(/^(\.\.\/)+scripts\/(app|api)\.js$/)
                 if (scriptsMatch) {
                     return { id: `../../../scripts/${scriptsMatch[2]}.js`, external: true }
@@ -97,6 +103,10 @@ export default defineConfig({
             external: EXTERNAL_SPECIFIERS,
             output: {
                 dir: '../web/comfyui/vue-widgets',
+                // The runtime loads this bundle as one plain extension script;
+                // keep it a single file instead of emitting async chunks that
+                // would need their own relative-path fetch at load time.
+                inlineDynamicImports: true,
                 entryFileNames: 'lora-manager-widgets.js',
                 chunkFileNames: 'assets/[name]-[hash].js',
                 assetFileNames: 'assets/[name]-[hash][extname]'

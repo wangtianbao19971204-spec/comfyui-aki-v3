@@ -2480,10 +2480,17 @@ to { transform: rotate(360deg);
     console.error("vite-plugin-css-injected-by-js", e);
   }
 })();
-var _a;
+var __typeError = (msg) => {
+  throw TypeError(msg);
+};
+var __accessCheck = (obj, member, msg) => member.has(obj) || __typeError("Cannot " + msg);
+var __privateAdd = (obj, member, value) => member.has(obj) ? __typeError("Cannot add the same private member more than once") : member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+var __privateMethod = (obj, member, method) => (__accessCheck(obj, member, "access private method"), method);
+var _TextAreaCaretHelper_instances, calculateElementOffset_fn, isDigit_fn, getLineHeightPx_fn, calculateLineHeightPx_fn, getElScroll_fn, getCursorPosition_fn, _a;
 import { app } from "../../../scripts/app.js";
+import { replaceInputRange, formatEmbeddingReference } from "/extensions/ComfyUI-Unified-Prompt-Workbench/prompt_target.js";
 import { api } from "../../../scripts/api.js";
-import "../settings.js";
+import { getAutocompleteAutoFormatPreference, getPromptTagAutocompletePreference, getAutocompleteAppendCommaPreference, getLoraActiveFiltersAutocompletePreference, setLoraManagerSettingValue, getAutocompleteAcceptKeyPreference, getTagSpaceReplacementPreference } from "../settings.js";
 /**
 * @vue/shared v3.5.26
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
@@ -14262,11 +14269,11 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
     };
     const getPreviewTooltip = async () => {
       if (!previewTooltip) {
-        const { PreviewTooltip } = await import(
+        const { PreviewTooltip: PreviewTooltip2 } = await import(
           /* @vite-ignore */
           `${"../preview_tooltip.js"}`
         );
-        previewTooltip = new PreviewTooltip({
+        previewTooltip = new PreviewTooltip2({
           modelType: "loras",
           displayNameFormatter: (name) => name,
           previewUrlResolver: customPreviewUrlResolver
@@ -15084,7 +15091,10 @@ function useAutocomplete(textareaRef, modelType = "loras", options = {}) {
   const isInitialized = ref(false);
   const defaultOptions2 = {
     maxItems: 20,
-    minChars: 1,
+    // LoRA fields are pickers: focusing an empty field should list the library
+    // (thumbnails in the dropdown) instead of requiring a character first.
+    // Prompt/tag autocomplete keeps minChars 1 so typing is not interrupted.
+    minChars: modelType === "loras" ? 0 : 1,
     debounceDelay: 200,
     showPreview: true,
     ...options
@@ -15103,8 +15113,8 @@ function useAutocomplete(textareaRef, modelType = "loras", options = {}) {
         /* @vite-ignore */
         `${"../autocomplete.js"}`
       );
-      const AutoComplete = module.AutoComplete;
-      autocompleteInstance.value = new AutoComplete(
+      const AutoComplete2 = module.AutoComplete;
+      autocompleteInstance.value = new AutoComplete2(
         textareaRef.value,
         modelType,
         defaultOptions2
@@ -15216,9 +15226,9 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
       }
     };
     const onWheel = (event) => {
-      const textarea = textareaRef.value;
-      if (!textarea) return;
-      const canScrollY = textarea.scrollHeight > textarea.clientHeight;
+      const textarea2 = textareaRef.value;
+      if (!textarea2) return;
+      const canScrollY = textarea2.scrollHeight > textarea2.clientHeight;
       const deltaX = event.deltaX;
       const deltaY = event.deltaY;
       const isHorizontal = Math.abs(deltaX) > Math.abs(deltaY);
@@ -15715,8 +15725,389 @@ function createVueWidgetCleanup(vueApp, onCleanup) {
     onCleanup == null ? void 0 : onCleanup();
   };
 }
+const getCaretCoordinates = (function() {
+  var properties = [
+    "direction",
+    // RTL support
+    "boxSizing",
+    "width",
+    // on Chrome and IE, exclude the scrollbar, so the mirror div wraps exactly as the textarea does
+    "height",
+    "overflowX",
+    "overflowY",
+    // copy the scrollbar for IE
+    "borderTopWidth",
+    "borderRightWidth",
+    "borderBottomWidth",
+    "borderLeftWidth",
+    "borderStyle",
+    "paddingTop",
+    "paddingRight",
+    "paddingBottom",
+    "paddingLeft",
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/font
+    "fontStyle",
+    "fontVariant",
+    "fontWeight",
+    "fontStretch",
+    "fontSize",
+    "fontSizeAdjust",
+    "lineHeight",
+    "fontFamily",
+    "textAlign",
+    "textTransform",
+    "textIndent",
+    "textDecoration",
+    // might not make a difference, but better be safe
+    "letterSpacing",
+    "wordSpacing",
+    "tabSize",
+    "MozTabSize"
+  ];
+  var isBrowser = typeof window !== "undefined";
+  var isFirefox = isBrowser && window.mozInnerScreenX != null;
+  return function getCaretCoordinates2(element, position, options) {
+    if (!isBrowser) {
+      throw new Error("textarea-caret-position#getCaretCoordinates should only be called in a browser");
+    }
+    var debug = options && options.debug || false;
+    if (debug) {
+      var el = document.querySelector("#input-textarea-caret-position-mirror-div");
+      if (el) el.parentNode.removeChild(el);
+    }
+    var div = document.createElement("div");
+    div.id = "input-textarea-caret-position-mirror-div";
+    document.body.appendChild(div);
+    var style2 = div.style;
+    var computed2 = window.getComputedStyle ? window.getComputedStyle(element) : element.currentStyle;
+    var isInput = element.nodeName === "INPUT";
+    style2.whiteSpace = "pre-wrap";
+    if (!isInput) style2.wordWrap = "break-word";
+    style2.position = "absolute";
+    if (!debug) style2.visibility = "hidden";
+    properties.forEach(function(prop) {
+      if (isInput && prop === "lineHeight") {
+        if (computed2.boxSizing === "border-box") {
+          var height = parseInt(computed2.height);
+          var outerHeight = parseInt(computed2.paddingTop) + parseInt(computed2.paddingBottom) + parseInt(computed2.borderTopWidth) + parseInt(computed2.borderBottomWidth);
+          var targetHeight = outerHeight + parseInt(computed2.lineHeight);
+          if (height > targetHeight) {
+            style2.lineHeight = height - outerHeight + "px";
+          } else if (height === targetHeight) {
+            style2.lineHeight = computed2.lineHeight;
+          } else {
+            style2.lineHeight = 0;
+          }
+        } else {
+          style2.lineHeight = computed2.height;
+        }
+      } else {
+        style2[prop] = computed2[prop];
+      }
+    });
+    if (isFirefox) {
+      if (element.scrollHeight > parseInt(computed2.height)) style2.overflowY = "scroll";
+    } else {
+      style2.overflow = "hidden";
+    }
+    div.textContent = element.value.substring(0, position);
+    if (isInput) div.textContent = div.textContent.replace(/\s/g, " ");
+    var span = document.createElement("span");
+    span.textContent = element.value.substring(position) || ".";
+    div.appendChild(span);
+    var coordinates = {
+      top: span.offsetTop + parseInt(computed2["borderTopWidth"]),
+      left: span.offsetLeft + parseInt(computed2["borderLeftWidth"]),
+      height: parseInt(computed2["lineHeight"])
+    };
+    if (debug) {
+      span.style.backgroundColor = "#aaa";
+    } else {
+      document.body.removeChild(div);
+    }
+    return coordinates;
+  };
+})();
+const CHAR_CODE_ZERO = "0".charCodeAt(0);
+const CHAR_CODE_NINE = "9".charCodeAt(0);
+class TextAreaCaretHelper {
+  constructor(el, getScale) {
+    __privateAdd(this, _TextAreaCaretHelper_instances);
+    this.el = el;
+    this.getScale = getScale;
+  }
+  getCursorOffset() {
+    const scale = this.getScale();
+    const elOffset = __privateMethod(this, _TextAreaCaretHelper_instances, calculateElementOffset_fn).call(this);
+    const elScroll = __privateMethod(this, _TextAreaCaretHelper_instances, getElScroll_fn).call(this);
+    const cursorPosition = __privateMethod(this, _TextAreaCaretHelper_instances, getCursorPosition_fn).call(this);
+    const lineHeight = __privateMethod(this, _TextAreaCaretHelper_instances, getLineHeightPx_fn).call(this);
+    const top = elOffset.top - elScroll.top * scale + (cursorPosition.top + lineHeight) * scale;
+    const left = elOffset.left - elScroll.left + cursorPosition.left;
+    const clientTop = this.el.getBoundingClientRect().top;
+    if (this.el.dir !== "rtl") {
+      return { top, left, lineHeight, clientTop };
+    } else {
+      const right = document.documentElement ? document.documentElement.clientWidth - left : 0;
+      return { top, right, lineHeight, clientTop };
+    }
+  }
+  getBeforeCursor() {
+    return this.el.selectionStart !== this.el.selectionEnd ? null : this.el.value.substring(0, this.el.selectionEnd);
+  }
+  getAfterCursor() {
+    return this.el.value.substring(this.el.selectionEnd);
+  }
+  insertAtCursor(value, offset, finalOffset) {
+    if (this.el.selectionStart != null) {
+      const startPos = this.el.selectionStart;
+      this.el.selectionEnd;
+      this.el.selectionStart = this.el.selectionStart + offset;
+      let pasted = true;
+      try {
+        if (!document.execCommand("insertText", false, value)) {
+          pasted = false;
+        }
+      } catch (e) {
+        console.error("Error caught during execCommand:", e);
+        pasted = false;
+      }
+      if (!pasted) {
+        console.error(
+          "execCommand unsuccessful; not supported. Adding text manually, no undo support."
+        );
+        textarea.setRangeText(modifiedText, this.el.selectionStart, this.el.selectionEnd, "end");
+      }
+      this.el.selectionEnd = this.el.selectionStart = startPos + value.length + offset + (finalOffset ?? 0);
+    } else {
+      let pasted = true;
+      try {
+        if (!document.execCommand("insertText", false, value)) {
+          pasted = false;
+        }
+      } catch (e) {
+        console.error("Error caught during execCommand:", e);
+        pasted = false;
+      }
+      if (!pasted) {
+        console.error(
+          "execCommand unsuccessful; not supported. Adding text manually, no undo support."
+        );
+        this.el.value += value;
+      }
+    }
+  }
+}
+_TextAreaCaretHelper_instances = new WeakSet();
+calculateElementOffset_fn = function() {
+  const rect = this.el.getBoundingClientRect();
+  const owner = this.el.ownerDocument;
+  if (owner == null) {
+    throw new Error("Given element does not belong to document");
+  }
+  const { defaultView, documentElement } = owner;
+  if (defaultView == null) {
+    throw new Error("Given element does not belong to window");
+  }
+  const offset = {
+    top: rect.top + defaultView.pageYOffset,
+    left: rect.left + defaultView.pageXOffset
+  };
+  if (documentElement) {
+    offset.top -= documentElement.clientTop;
+    offset.left -= documentElement.clientLeft;
+  }
+  return offset;
+};
+isDigit_fn = function(charCode) {
+  return CHAR_CODE_ZERO <= charCode && charCode <= CHAR_CODE_NINE;
+};
+getLineHeightPx_fn = function() {
+  const computedStyle = getComputedStyle(this.el);
+  const lineHeight = computedStyle.lineHeight;
+  if (__privateMethod(this, _TextAreaCaretHelper_instances, isDigit_fn).call(this, lineHeight.charCodeAt(0))) {
+    const floatLineHeight = parseFloat(lineHeight);
+    return __privateMethod(this, _TextAreaCaretHelper_instances, isDigit_fn).call(this, lineHeight.charCodeAt(lineHeight.length - 1)) ? floatLineHeight * parseFloat(computedStyle.fontSize) : floatLineHeight;
+  }
+  return __privateMethod(this, _TextAreaCaretHelper_instances, calculateLineHeightPx_fn).call(this, this.el.nodeName, computedStyle);
+};
+/**
+ * Returns calculated line-height of the given node in pixels.
+ */
+calculateLineHeightPx_fn = function(nodeName, computedStyle) {
+  const body = document.body;
+  if (!body) return 0;
+  const tempNode = document.createElement(nodeName);
+  tempNode.innerHTML = "&nbsp;";
+  Object.assign(tempNode.style, {
+    fontSize: computedStyle.fontSize,
+    fontFamily: computedStyle.fontFamily,
+    padding: "0",
+    position: "absolute"
+  });
+  body.appendChild(tempNode);
+  if (tempNode instanceof HTMLTextAreaElement) {
+    tempNode.rows = 1;
+  }
+  const height = tempNode.offsetHeight;
+  body.removeChild(tempNode);
+  return height;
+};
+getElScroll_fn = function() {
+  return { top: this.el.scrollTop, left: this.el.scrollLeft };
+};
+getCursorPosition_fn = function() {
+  return getCaretCoordinates(this.el, this.el.selectionEnd);
+};
+const WILDCARD_COMMANDS = {
+  "/wildcard": { type: "wildcard", label: "Wildcards" }
+};
+const WILDCARD_INFO_ITEM_TYPES = {
+  EMPTY_STATE: "wildcard_empty_state",
+  NO_MATCHES: "wildcard_no_matches"
+};
+function isWildcardCommand(command) {
+  return (command == null ? void 0 : command.type) === "wildcard";
+}
+function getWildcardSearchEndpoint() {
+  return "/lm/wildcards/search";
+}
+function getWildcardInsertText(relativePath = "") {
+  const trimmed = typeof relativePath === "string" ? relativePath.trim() : "";
+  if (!trimmed) {
+    return "";
+  }
+  return `__${trimmed}__`;
+}
+function isWildcardInfoItem(item) {
+  return Boolean(
+    item && typeof item === "object" && Object.values(WILDCARD_INFO_ITEM_TYPES).includes(item.type)
+  );
+}
+function createWildcardEmptyStateItem(meta = {}) {
+  return {
+    type: WILDCARD_INFO_ITEM_TYPES.EMPTY_STATE,
+    title: "No wildcards found yet",
+    description: "Create wildcard files in your wildcards folder, then use /wildcard to search and insert keys.",
+    wildcardsDir: meta.wildcards_dir || "",
+    supportedFormats: Array.isArray(meta.supported_formats) ? meta.supported_formats : []
+  };
+}
+function createWildcardNoMatchesItem(searchTerm = "", meta = {}) {
+  return {
+    type: WILDCARD_INFO_ITEM_TYPES.NO_MATCHES,
+    title: "No wildcard matches",
+    description: searchTerm ? `No wildcard keys matched "${searchTerm}".` : "No wildcard keys matched your search.",
+    wildcardsDir: meta.wildcards_dir || "",
+    supportedFormats: Array.isArray(meta.supported_formats) ? meta.supported_formats : []
+  };
+}
+const FIRST_RUN_HINT_DISMISSED_KEY = "lm:autocomplete-disable-tip-dismissed";
+const ACTIVE_FILTERS_HINT_DISMISSED_KEY = "lm:activefilters-tip-dismissed";
+const TAG_COMMANDS = {
+  "/library": { type: "shared_library", label: "共享 Tag 库" },
+  "/character": { categories: [4, 11], label: "Character" },
+  "/artist": { categories: [1, 8], label: "Artist" },
+  "/general": { categories: [0, 7], label: "General" },
+  "/copyright": { categories: [3, 10], label: "Copyright" },
+  "/meta": { categories: [5, 14], label: "Meta" },
+  "/species": { categories: [12], label: "Species" },
+  "/lore": { categories: [15], label: "Lore" },
+  "/emb": { type: "embedding", label: "Embeddings" },
+  "/embedding": { type: "embedding", label: "Embeddings" },
+  ...WILDCARD_COMMANDS,
+  // Autocomplete toggle commands - only show one based on current state
+  "/autocomplete": {
+    type: "toggle_setting",
+    settingId: "loramanager.prompt_tag_autocomplete",
+    value: true,
+    label: "Turn autocomplete ON",
+    condition: () => !getPromptTagAutocompletePreference()
+  },
+  "/noautocomplete": {
+    type: "toggle_setting",
+    settingId: "loramanager.prompt_tag_autocomplete",
+    value: false,
+    label: "Turn autocomplete OFF",
+    condition: () => getPromptTagAutocompletePreference()
+  }
+};
+const LORAS_COMMANDS = {
+  "/activefilters": {
+    type: "toggle_setting",
+    settingId: "loramanager.lora_active_filters_autocomplete",
+    value: true,
+    label: "Turn active filters search ON",
+    feedbackSummary: "Active Filters Search: ON",
+    feedbackDetail: "LoRA autocomplete now searches within the active filters of the LoRA Manager page.",
+    condition: () => !getLoraActiveFiltersAutocompletePreference()
+  },
+  "/noactivefilters": {
+    type: "toggle_setting",
+    settingId: "loramanager.lora_active_filters_autocomplete",
+    value: false,
+    label: "Turn active filters search OFF",
+    feedbackSummary: "Active Filters Search: OFF",
+    feedbackDetail: "LoRA autocomplete searches the full library again.",
+    condition: () => getLoraActiveFiltersAutocompletePreference()
+  }
+};
+const CATEGORY_INFO = {
+  0: { bg: "rgba(0, 155, 230, 0.2)", text: "#4bb4ff", label: "General" },
+  1: { bg: "rgba(255, 138, 139, 0.2)", text: "#ffc3c3", label: "Artist" },
+  3: { bg: "rgba(199, 151, 255, 0.2)", text: "#ddc9fb", label: "Copyright" },
+  4: { bg: "rgba(53, 198, 74, 0.2)", text: "#93e49a", label: "Character" },
+  5: { bg: "rgba(234, 208, 132, 0.2)", text: "#f7e7c3", label: "Meta" },
+  7: { bg: "rgba(0, 155, 230, 0.2)", text: "#4bb4ff", label: "General" },
+  8: { bg: "rgba(255, 138, 139, 0.2)", text: "#ffc3c3", label: "Artist" },
+  10: { bg: "rgba(199, 151, 255, 0.2)", text: "#ddc9fb", label: "Copyright" },
+  11: { bg: "rgba(53, 198, 74, 0.2)", text: "#93e49a", label: "Character" },
+  12: { bg: "rgba(237, 137, 54, 0.2)", text: "#f6ad55", label: "Species" },
+  14: { bg: "rgba(234, 208, 132, 0.2)", text: "#f7e7c3", label: "Meta" },
+  15: { bg: "rgba(72, 187, 120, 0.2)", text: "#68d391", label: "Lore" }
+};
+function formatPostCount(count) {
+  if (count >= 1e6) {
+    return (count / 1e6).toFixed(1).replace(/\.0$/, "") + "M";
+  } else if (count >= 1e3) {
+    return (count / 1e3).toFixed(1).replace(/\.0$/, "") + "K";
+  }
+  return count.toString();
+}
+function parseUsageTipNumber(value) {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value;
+  }
+  if (typeof value === "string") {
+    const parsed = parseFloat(value);
+    if (Number.isFinite(parsed)) {
+      return parsed;
+    }
+  }
+  return null;
+}
+function splitRelativePath(relativePath = "") {
+  const parts = relativePath.split(/[/\\]+/).filter(Boolean);
+  const fileName = parts.pop() ?? "";
+  return {
+    directories: parts,
+    fileName
+  };
+}
+function removeGeneralExtension(fileName = "") {
+  return fileName.replace(/\.[^.]+$/, "");
+}
+function removeLoraExtension(fileName = "") {
+  return fileName.replace(/\.(safetensors|ckpt|pt|bin)$/i, "");
+}
 let _loraSyntaxFormatCache = null;
 let _loraSyntaxFormatRefreshPromise = null;
+function _getLoraSyntaxFormat() {
+  if (_loraSyntaxFormatCache !== null) {
+    return _loraSyntaxFormatCache;
+  }
+  return "legacy";
+}
 async function _fetchLoraSyntaxFormat() {
   try {
     const response = await api.fetchApi("/lm/settings");
@@ -15758,6 +16149,68 @@ function _initLoraSyntaxFormatReactive() {
   });
 }
 _initLoraSyntaxFormatReactive();
+function parseSearchTokens(term = "") {
+  const include = [];
+  const exclude = [];
+  term.split(/\s+/).forEach((rawTerm) => {
+    const token = rawTerm.trim();
+    if (!token) {
+      return;
+    }
+    if (token.startsWith("-") && token.length > 1) {
+      exclude.push(token.slice(1).toLowerCase());
+    } else {
+      include.push(token.toLowerCase());
+    }
+  });
+  return { include, exclude };
+}
+function escapePromptParentheses(text) {
+  return text.replace(/\(/g, "\\(").replace(/\)/g, "\\)");
+}
+function formatAutocompleteInsertion(text = "") {
+  const trimmed = typeof text === "string" ? text.trim() : "";
+  if (!trimmed) {
+    return "";
+  }
+  return getAutocompleteAppendCommaPreference() ? `${trimmed},` : `${trimmed} `;
+}
+const LORA_TAG_PATTERN = /(<lora:[^:>]+:[^:>]+(?::[^:>]+)?>)/gi;
+function normalizeAutocompleteSegment(segment = "") {
+  return segment.split(LORA_TAG_PATTERN).map((part, index) => index % 2 === 1 ? part : part.replace(/\s+/g, " ")).join("").trim();
+}
+function formatAutocompleteTextOnBlur(text = "") {
+  if (typeof text !== "string") {
+    return "";
+  }
+  return text.split("\n").map((line) => {
+    if (!line.trim()) {
+      return "";
+    }
+    const cleanedSegments = line.split(",").map(normalizeAutocompleteSegment).filter(Boolean);
+    return cleanedSegments.join(", ");
+  }).join("\n");
+}
+function shouldAcceptAutocompleteKey(key) {
+  const mode = getAutocompleteAcceptKeyPreference();
+  if (mode === "tab_only") {
+    return key === "Tab";
+  }
+  if (mode === "enter_only") {
+    return key === "Enter";
+  }
+  return key === "Tab" || key === "Enter";
+}
+function normalizeAutocompleteMatchText(text = "") {
+  return text.toLowerCase().replace(/[-_\s']/g, "");
+}
+const AUTOCOMPLETE_METADATA_VERSION$1 = 1;
+function createAutocompleteMetadataBase(textWidgetName = "text") {
+  return {
+    version: AUTOCOMPLETE_METADATA_VERSION$1,
+    textWidgetName
+  };
+}
 const AUTOCOMPLETE_METADATA_WIDGET_PREFIX = "__lm_autocomplete_meta_";
 const LORA_MANAGER_WIDGET_IDS_PROPERTY$1 = "__lm_widget_ids";
 function stripAutocompleteLastAccepted(value) {
@@ -15829,6 +16282,2282 @@ function stripAutocompleteMetadataFromPromptResult(result) {
   }
   return result;
 }
+function createDefaultBehavior(modelType) {
+  return {
+    enablePreview: false,
+    async getInsertText(_instance, relativePath) {
+      const trimmed = (relativePath == null ? void 0 : relativePath.trim()) ?? "";
+      if (!trimmed) {
+        return "";
+      }
+      return formatAutocompleteInsertion(escapePromptParentheses(trimmed));
+    }
+  };
+}
+const MODEL_BEHAVIORS = {
+  loras: {
+    enablePreview: true,
+    init(instance) {
+      if (!instance.options.showPreview) {
+        return;
+      }
+      instance.initPreviewTooltip({ modelType: instance.modelType });
+    },
+    showPreview(instance, relativePath, itemElement) {
+      if (!instance.previewTooltip) {
+        return;
+      }
+      instance.showPreviewForItem(relativePath, itemElement);
+    },
+    hidePreview(instance) {
+      if (!instance.previewTooltip) {
+        return;
+      }
+      instance.previewTooltip.hide();
+    },
+    destroy(instance) {
+      if (instance.previewTooltip) {
+        instance.previewTooltip.cleanup();
+        instance.previewTooltip = null;
+      }
+    },
+    async getInsertText(_instance, relativePath) {
+      const { directories, fileName } = splitRelativePath(relativePath);
+      const baseName = removeLoraExtension(fileName);
+      const folder = directories.length ? directories.join("/") + "/" : "";
+      const loraName = folder + baseName;
+      const resultName = _getLoraSyntaxFormat() === "legacy" ? baseName : loraName;
+      if (_getLoraSyntaxFormat() === "legacy") {
+        const identity = await api.fetchApi(`/lm/loras/get-trigger-words?name=${encodeURIComponent(baseName)}`);
+        if (identity.status === 409) {
+          throw new Error("存在同名 LoRA；请在 LoRA Manager 开启完整路径语法后再插入。");
+        }
+        if (!identity.ok) throw new Error("暂时无法确认 LoRA 路径，请刷新后重试。");
+      }
+      let strength = 1;
+      let hasStrength = false;
+      let clipStrength = null;
+      try {
+        const response = await api.fetchApi(`/lm/loras/usage-tips-by-path?relative_path=${encodeURIComponent(relativePath)}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.usage_tips) {
+            try {
+              const usageTips = JSON.parse(data.usage_tips);
+              const parsedStrength = parseUsageTipNumber(usageTips.strength);
+              if (parsedStrength !== null) {
+                strength = parsedStrength;
+                hasStrength = true;
+              }
+              const clipSource = usageTips.clip_strength ?? usageTips.clipStrength;
+              const parsedClipStrength = parseUsageTipNumber(clipSource);
+              if (parsedClipStrength !== null) {
+                clipStrength = parsedClipStrength;
+                if (!hasStrength) {
+                  strength = 1;
+                }
+              }
+            } catch (parseError) {
+              console.warn("Failed to parse usage tips JSON:", parseError);
+            }
+          }
+        }
+      } catch (error) {
+        console.warn("Failed to fetch usage tips:", error);
+      }
+      if (clipStrength !== null) {
+        return formatAutocompleteInsertion(`<lora:${resultName}:${strength}:${clipStrength}>`);
+      }
+      return formatAutocompleteInsertion(`<lora:${resultName}:${strength}>`);
+    }
+  },
+  embeddings: {
+    enablePreview: true,
+    init(instance) {
+      if (!instance.options.showPreview) {
+        return;
+      }
+      instance.initPreviewTooltip({ modelType: instance.modelType });
+    },
+    async getInsertText(_instance, relativePath) {
+      return formatAutocompleteInsertion(formatEmbeddingReference(relativePath));
+    }
+  },
+  custom_words: {
+    enablePreview: false,
+    async getInsertText(_instance, relativePath) {
+      return formatAutocompleteInsertion(escapePromptParentheses(relativePath));
+    }
+  },
+  prompt: {
+    enablePreview: true,
+    init(instance) {
+      if (!instance.options.showPreview) {
+        return;
+      }
+      instance.initPreviewTooltip({ modelType: "embeddings" });
+    },
+    showPreview(instance, relativePath, itemElement) {
+      if (!instance.previewTooltip || instance.searchType !== "embeddings") {
+        return;
+      }
+      instance.showPreviewForItem(relativePath, itemElement);
+    },
+    hidePreview(instance) {
+      if (!instance.previewTooltip) {
+        return;
+      }
+      instance.previewTooltip.hide();
+    },
+    destroy(instance) {
+      if (instance.previewTooltip) {
+        instance.previewTooltip.cleanup();
+        instance.previewTooltip = null;
+      }
+    },
+    async getInsertText(instance, relativePath) {
+      const rawSearchTerm = instance.getSearchTerm(instance.inputElement.value);
+      const match = rawSearchTerm.match(/^emb:(.*)$/i);
+      if (match || instance.searchType === "embeddings") {
+        return formatAutocompleteInsertion(formatEmbeddingReference(relativePath));
+      } else if (instance.searchType === "wildcards" || isWildcardCommand(instance.activeCommand)) {
+        return formatAutocompleteInsertion(getWildcardInsertText(relativePath));
+      } else {
+        let tagText = relativePath;
+        if (getTagSpaceReplacementPreference()) {
+          tagText = tagText.replace(/_/g, " ");
+        }
+        tagText = escapePromptParentheses(tagText);
+        return formatAutocompleteInsertion(tagText);
+      }
+    }
+  }
+};
+function getModelBehavior(modelType) {
+  return MODEL_BEHAVIORS[modelType] ?? createDefaultBehavior();
+}
+class AutoComplete {
+  constructor(inputElement, modelType = "loras", options = {}) {
+    var _a2;
+    this.inputElement = inputElement;
+    this.destroyed = false;
+    this.composing = false;
+    this.querySequence = 0;
+    this.selectionSequence = 0;
+    const previous = inputElement._promptAutocompleteOwner;
+    if (previous && previous !== inputElement._promptAutocompleteFallback) previous.destroy();
+    (_a2 = inputElement._promptAutocompleteFallback) == null ? void 0 : _a2.hide();
+    inputElement._promptAutocompleteOwner = this;
+    this.modelType = modelType;
+    this.behavior = getModelBehavior(modelType);
+    this.options = {
+      maxItems: 100,
+      pageSize: 20,
+      visibleItems: 15,
+      // Fixed at 15 items for balanced UX
+      itemHeight: 40,
+      minChars: 1,
+      debounceDelay: 200,
+      showPreview: this.behavior.enablePreview ?? false,
+      enableVirtualScroll: true,
+      ...options
+    };
+    this.dropdown = null;
+    this.selectedIndex = -1;
+    this.hasManualSelection = false;
+    this.items = [];
+    this.debounceTimer = null;
+    this.isVisible = false;
+    this.currentSearchTerm = "";
+    this.wildcardMeta = null;
+    this.previewTooltip = null;
+    this.previewTooltipPromise = null;
+    this.searchType = null;
+    this.suppressAutocompleteOnce = false;
+    this.commandListFooter = null;
+    this.firstRunHint = null;
+    this.virtualScrollOffset = 0;
+    this.hasMoreItems = true;
+    this.isLoadingMore = false;
+    this.currentPage = 0;
+    this.scrollContainer = null;
+    this.contentContainer = null;
+    this.totalHeight = 0;
+    this.activeCommand = null;
+    this.showingCommands = false;
+    this.helper = new TextAreaCaretHelper(inputElement, this.options.getScale ?? (() => app.canvas.ds.scale));
+    this.onInput = null;
+    this.onKeyDown = null;
+    this.onBlur = null;
+    this.onDocumentClick = null;
+    this.onScroll = null;
+    this.init();
+  }
+  init() {
+    this.createDropdown();
+    this.bindEvents();
+  }
+  createDropdown() {
+    this.dropdown = document.createElement("div");
+    this.dropdown.className = "comfy-autocomplete-dropdown";
+    this.dropdown.style.cssText = `
+            position: absolute;
+            z-index: 10000;
+            overflow: hidden;
+            background-color: rgba(40, 44, 52, 0.95);
+            border: 1px solid rgba(226, 232, 240, 0.2);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: none;
+            min-width: 200px;
+            width: auto;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        `;
+    if (this.options.enableVirtualScroll) {
+      this.scrollContainer = document.createElement("div");
+      this.scrollContainer.className = "comfy-autocomplete-scroll-container";
+      this.scrollContainer.style.cssText = `
+                overflow-y: auto;
+                max-height: ${this.options.visibleItems * this.options.itemHeight}px;
+                position: relative;
+            `;
+      this.contentContainer = document.createElement("div");
+      this.contentContainer.className = "comfy-autocomplete-content";
+      this.contentContainer.style.cssText = `
+                position: relative;
+                width: 100%;
+            `;
+      this.scrollContainer.appendChild(this.contentContainer);
+      this.dropdown.appendChild(this.scrollContainer);
+    }
+    const style2 = document.createElement("style");
+    style2.textContent = `
+            .comfy-autocomplete-dropdown::-webkit-scrollbar {
+                width: 8px;
+            }
+            .comfy-autocomplete-dropdown::-webkit-scrollbar-track {
+                background: rgba(40, 44, 52, 0.3);
+                border-radius: 4px;
+            }
+            .comfy-autocomplete-dropdown::-webkit-scrollbar-thumb {
+                background: rgba(226, 232, 240, 0.2);
+                border-radius: 4px;
+            }
+            .comfy-autocomplete-dropdown::-webkit-scrollbar-thumb:hover {
+                background: rgba(226, 232, 240, 0.4);
+            }
+            .comfy-autocomplete-scroll-container::-webkit-scrollbar {
+                width: 8px;
+            }
+            .comfy-autocomplete-scroll-container::-webkit-scrollbar-track {
+                background: rgba(40, 44, 52, 0.3);
+                border-radius: 4px;
+            }
+            .comfy-autocomplete-scroll-container::-webkit-scrollbar-thumb {
+                background: rgba(226, 232, 240, 0.2);
+                border-radius: 4px;
+            }
+            .comfy-autocomplete-scroll-container::-webkit-scrollbar-thumb:hover {
+                background: rgba(226, 232, 240, 0.4);
+            }
+            .comfy-autocomplete-loading {
+                padding: 12px;
+                text-align: center;
+                color: rgba(226, 232, 240, 0.5);
+                font-size: 12px;
+            }
+        `;
+    document.head.appendChild(style2);
+    document.body.appendChild(this.dropdown);
+    if (typeof this.behavior.init === "function") {
+      this.behavior.init(this);
+    }
+  }
+  initPreviewTooltip(options = {}) {
+    if (this.previewTooltip || this.previewTooltipPromise) {
+      return;
+    }
+    this.previewTooltipPromise = Promise.resolve().then(() => preview_tooltip).then((module) => {
+      const config = { modelType: this.modelType, ...options };
+      this.previewTooltip = new module.PreviewTooltip(config);
+    }).catch((err) => {
+      console.warn("Failed to load preview tooltip:", err);
+    }).finally(() => {
+      this.previewTooltipPromise = null;
+    });
+  }
+  bindEvents() {
+    this.unbindEvents();
+    this.onCompositionStart = () => {
+      this.composing = true;
+      this.hide();
+    };
+    this.onCompositionEnd = () => {
+      this.composing = false;
+      this.handleInput(this.inputElement.value);
+    };
+    this.inputElement.addEventListener("compositionstart", this.onCompositionStart);
+    this.inputElement.addEventListener("compositionend", this.onCompositionEnd);
+    this.onInput = (e) => {
+      if (this.blocked(e)) return;
+      if (this.suppressAutocompleteOnce) {
+        this.suppressAutocompleteOnce = false;
+        this.hide();
+        return;
+      }
+      this.handleInput(e.target.value);
+    };
+    this.inputElement.addEventListener("input", this.onInput);
+    this.onKeyDown = (e) => {
+      this.handleKeyDown(e);
+    };
+    this.inputElement.addEventListener("keydown", this.onKeyDown);
+    this.onBlur = () => {
+      if (!this.blocked() && this.options.formatOnBlur !== false && getAutocompleteAutoFormatPreference()) {
+        const formattedValue = formatAutocompleteTextOnBlur(this.inputElement.value);
+        if (formattedValue !== this.inputElement.value) {
+          this.inputElement.value = formattedValue;
+          this.suppressAutocompleteOnce = true;
+          this.inputElement.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+      }
+      clearTimeout(this.blurTimer);
+      this.blurTimer = setTimeout(() => this.hide(), 150);
+    };
+    this.inputElement.addEventListener("blur", this.onBlur);
+    this.onFocus = () => clearTimeout(this.blurTimer);
+    this.inputElement.addEventListener("focus", this.onFocus);
+    this.onDocumentClick = (e) => {
+      if (!this.dropdown) {
+        return;
+      }
+      const target = e.target;
+      if (!(target instanceof Node)) {
+        return;
+      }
+      if (!this.dropdown.contains(target) && target !== this.inputElement) {
+        this.hide();
+      }
+    };
+    document.addEventListener("click", this.onDocumentClick);
+    this.inputElement._autocompleteEventsBound = true;
+    if (this.options.enableVirtualScroll && this.scrollContainer) {
+      this.onScroll = () => {
+        this.handleScroll();
+      };
+      this.scrollContainer.addEventListener("scroll", this.onScroll);
+    }
+  }
+  /**
+   * Check if the autocomplete is valid (input element is in DOM and events are bound)
+   */
+  isValid() {
+    return this.inputElement && document.body.contains(this.inputElement) && this.inputElement._autocompleteEventsBound === true;
+  }
+  /**
+   * Check if events need to be rebound (element exists but events not bound)
+   */
+  needsRebind() {
+    return this.inputElement && document.body.contains(this.inputElement) && this.inputElement._autocompleteEventsBound !== true;
+  }
+  /**
+   * Rebind events to the input element (useful after Vue moves the element)
+   */
+  rebindEvents() {
+    if (this.onInput) {
+      this.inputElement.removeEventListener("input", this.onInput);
+    }
+    if (this.onKeyDown) {
+      this.inputElement.removeEventListener("keydown", this.onKeyDown);
+    }
+    if (this.onBlur) {
+      this.inputElement.removeEventListener("blur", this.onBlur);
+    }
+    this.bindEvents();
+    console.log("[Lora Manager] Autocomplete events rebound");
+  }
+  /**
+   * Refresh the TextAreaCaretHelper (useful after element properties change)
+   */
+  refreshHelper() {
+    if (this.inputElement && document.body.contains(this.inputElement)) {
+      this.helper = new TextAreaCaretHelper(this.inputElement, this.options.getScale ?? (() => app.canvas.ds.scale));
+    }
+  }
+  blocked(e) {
+    return this.destroyed || this.composing || (e == null ? void 0 : e.isComposing) || (e == null ? void 0 : e.keyCode) === 229 || (e == null ? void 0 : e.defaultPrevented) || this.inputElement._promptAutocompleteOwner !== this;
+  }
+  unbindEvents() {
+    clearTimeout(this.blurTimer);
+    for (const [type, name] of [
+      ["input", "onInput"],
+      ["keydown", "onKeyDown"],
+      ["blur", "onBlur"],
+      ["focus", "onFocus"],
+      ["compositionstart", "onCompositionStart"],
+      ["compositionend", "onCompositionEnd"]
+    ]) {
+      if (this[name]) this.inputElement.removeEventListener(type, this[name]);
+      this[name] = null;
+    }
+    if (this.onDocumentClick) document.removeEventListener("click", this.onDocumentClick);
+    if (this.onScroll && this.scrollContainer) this.scrollContainer.removeEventListener("scroll", this.onScroll);
+    this.onDocumentClick = this.onScroll = null;
+    this.inputElement._autocompleteEventsBound = false;
+  }
+  handleInput(value = "") {
+    var _a2, _b;
+    this.hide();
+    if (this.blocked()) return;
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+    }
+    const rawSearchTerm = this.getSearchTerm(value);
+    let searchTerm = rawSearchTerm;
+    let endpoint = `/lm/${this.modelType}/relative-paths`;
+    if (this.modelType === "embeddings") {
+      const match = rawSearchTerm.match(/^emb:(.*)$/i);
+      if (!match) {
+        this.hide();
+        return;
+      }
+      searchTerm = (match[1] || "").trim();
+    }
+    if (this.modelType === "loras") {
+      const commandResult = this._parseCommandInput(rawSearchTerm);
+      if (commandResult.showCommands) {
+        this.showingCommands = true;
+        this.activeCommand = null;
+        this.searchType = "commands";
+        this._showCommandList(commandResult.commandFilter);
+        return;
+      } else if (((_a2 = commandResult.command) == null ? void 0 : _a2.type) === "toggle_setting") {
+        this._handleToggleSettingCommand(commandResult.command);
+        return;
+      } else if (commandResult.command) {
+        this.showingCommands = false;
+        this.activeCommand = null;
+        this.searchType = null;
+        searchTerm = commandResult.searchTerm || rawSearchTerm;
+      } else {
+        this.showingCommands = false;
+        this.activeCommand = null;
+        this.searchType = null;
+        searchTerm = rawSearchTerm;
+      }
+    }
+    if (this.modelType === "prompt") {
+      const match = rawSearchTerm.match(/^emb:(.*)$/i);
+      if (match) {
+        endpoint = "/lm/embeddings/relative-paths";
+        searchTerm = (match[1] || "").trim();
+        this.searchType = "embeddings";
+        this.activeCommand = null;
+        this.showingCommands = false;
+      } else {
+        const commandResult = this._parseCommandInput(rawSearchTerm);
+        if (commandResult.showCommands) {
+          this.showingCommands = true;
+          this.activeCommand = null;
+          this.searchType = "commands";
+          this._showCommandList(commandResult.commandFilter);
+          return;
+        } else if (((_b = commandResult.command) == null ? void 0 : _b.type) === "toggle_setting") {
+          this._handleToggleSettingCommand(commandResult.command);
+          return;
+        } else if (commandResult.command) {
+          this.showingCommands = false;
+          this.activeCommand = commandResult.command;
+          searchTerm = commandResult.searchTerm;
+          if (commandResult.command.type === "shared_library") {
+            endpoint = "/prompt_selector/tags/complete";
+            this.searchType = "custom_words";
+          } else if (commandResult.command.type === "embedding") {
+            endpoint = "/lm/embeddings/relative-paths";
+            this.searchType = "embeddings";
+          } else if (isWildcardCommand(commandResult.command)) {
+            endpoint = getWildcardSearchEndpoint();
+            this.searchType = "wildcards";
+          } else {
+            const categories = commandResult.command.categories.join(",");
+            endpoint = `/lm/custom-words/search?category=${categories}`;
+            this.searchType = "custom_words";
+          }
+        } else if (getPromptTagAutocompletePreference()) {
+          this.showingCommands = false;
+          this.activeCommand = null;
+          endpoint = "/lm/custom-words/search?enriched=true";
+          searchTerm = rawSearchTerm;
+          this.searchType = "custom_words";
+        } else {
+          this.hide();
+          return;
+        }
+      }
+    }
+    const allowEmptyWildcardSearch = this.modelType === "prompt" && this.searchType === "wildcards" && searchTerm.length === 0;
+    if (!allowEmptyWildcardSearch && searchTerm.length < this.options.minChars) {
+      this.hide();
+      return;
+    }
+    this.debounceTimer = setTimeout(() => {
+      this.search(searchTerm, endpoint);
+    }, this.options.debounceDelay);
+  }
+  getSearchTerm(value) {
+    return this.getActiveSearchRange(value).text;
+  }
+  getActiveSearchRange(value = null) {
+    const currentValue = typeof value === "string" ? value : this.inputElement.value;
+    const caretPos = this.getCaretPosition();
+    const beforeCursor = this.helper.getBeforeCursor() ?? currentValue.substring(0, caretPos);
+    let start = this._getHardBoundaryStart(beforeCursor);
+    if (!getAutocompleteAppendCommaPreference()) {
+      const persistedBoundaryEnd = this._getPersistedBoundaryEnd(currentValue, caretPos);
+      if (persistedBoundaryEnd !== null && persistedBoundaryEnd > start) {
+        start = persistedBoundaryEnd;
+      }
+    }
+    const rawText = beforeCursor.substring(start);
+    const leadingWhitespaceLength = rawText.length - rawText.trimStart().length;
+    const trimmedStart = start + leadingWhitespaceLength;
+    const text = rawText.trim();
+    if (this.modelType === "prompt") {
+      const tokenRange = this._getPromptTokenRange(rawText, trimmedStart, caretPos);
+      if (tokenRange) {
+        return {
+          start: tokenRange.start,
+          trimmedStart: tokenRange.trimmedStart,
+          end: caretPos,
+          beforeCursor,
+          rawText: tokenRange.rawText,
+          text: tokenRange.text,
+          tokenType: tokenRange.tokenType
+        };
+      }
+    }
+    return {
+      start,
+      trimmedStart,
+      end: caretPos,
+      beforeCursor,
+      rawText,
+      text
+    };
+  }
+  _getPromptTokenRange(rawText = "", trimmedStart = 0, caretPos = 0) {
+    const trimmedText = rawText.trim();
+    if (!trimmedText) {
+      return {
+        start: trimmedStart,
+        trimmedStart,
+        rawText: "",
+        text: "",
+        tokenType: "empty"
+      };
+    }
+    const commandOffset = trimmedText.startsWith("/") ? 0 : trimmedText.lastIndexOf(" /");
+    if (commandOffset !== -1) {
+      const normalizedCommandOffset = commandOffset === 0 ? 0 : commandOffset + 1;
+      const commandText = trimmedText.slice(normalizedCommandOffset);
+      const commandStart = trimmedStart + normalizedCommandOffset;
+      return {
+        start: commandStart,
+        trimmedStart: commandStart,
+        rawText: commandText,
+        text: commandText,
+        tokenType: commandText === "/" ? "empty_command_trigger" : "command"
+      };
+    }
+    const wildcardMatch = trimmedText.match(/(?:^|\s)(__[\w\s.\-+/*\\]+?__)$/);
+    if (wildcardMatch) {
+      const wildcardText = wildcardMatch[1];
+      const wildcardOffset = trimmedText.lastIndexOf(wildcardText);
+      const wildcardStart = trimmedStart + wildcardOffset;
+      return {
+        start: wildcardStart,
+        trimmedStart: wildcardStart,
+        rawText: wildcardText,
+        text: "",
+        tokenType: "wildcard_literal"
+      };
+    }
+    const embeddingOffset = trimmedText.search(/(?:^|\s)emb:[^\s]*$/i);
+    if (embeddingOffset !== -1) {
+      const normalizedEmbeddingOffset = trimmedText.slice(embeddingOffset).startsWith(" ") ? embeddingOffset + 1 : embeddingOffset;
+      const embeddingText = trimmedText.slice(normalizedEmbeddingOffset);
+      const embeddingStart = trimmedStart + normalizedEmbeddingOffset;
+      return {
+        start: embeddingStart,
+        trimmedStart: embeddingStart,
+        rawText: embeddingText,
+        text: embeddingText,
+        tokenType: "embedding_literal"
+      };
+    }
+    return {
+      start: trimmedStart,
+      trimmedStart,
+      rawText,
+      text: trimmedText,
+      tokenType: "tag_text"
+    };
+  }
+  _getHardBoundaryStart(beforeCursor = "") {
+    const lastComma = beforeCursor.lastIndexOf(",");
+    const lastAngle = beforeCursor.lastIndexOf(">");
+    const lastNewline = Math.max(beforeCursor.lastIndexOf("\n"), beforeCursor.lastIndexOf("\r"));
+    return Math.max(lastComma, lastAngle, lastNewline) + 1;
+  }
+  _getMetadataWidget() {
+    var _a2, _b, _c;
+    return ((_a2 = this.inputElement) == null ? void 0 : _a2._autocompleteMetadataWidget) ?? ((_c = (_b = this.inputElement) == null ? void 0 : _b._autocompleteHostWidget) == null ? void 0 : _c.metadataWidget) ?? null;
+  }
+  _getMetadataBase() {
+    var _a2;
+    return createAutocompleteMetadataBase(((_a2 = this.inputElement) == null ? void 0 : _a2._autocompleteTextWidgetName) ?? "text");
+  }
+  _getAutocompleteMetadata() {
+    const metadataWidget = this._getMetadataWidget();
+    const value = metadataWidget == null ? void 0 : metadataWidget.value;
+    if (!value || typeof value !== "object" || Array.isArray(value)) {
+      return this._getMetadataBase();
+    }
+    return {
+      ...this._getMetadataBase(),
+      ...value
+    };
+  }
+  _setAutocompleteMetadata(metadata = {}) {
+    const metadataWidget = this._getMetadataWidget();
+    if (!metadataWidget) {
+      return;
+    }
+    metadataWidget.value = {
+      ...this._getMetadataBase(),
+      ...metadata
+    };
+  }
+  _clearLastAcceptedBoundary() {
+    const metadataWidget = this._getMetadataWidget();
+    if (!metadataWidget) {
+      return;
+    }
+    const metadata = this._getAutocompleteMetadata();
+    delete metadata.lastAccepted;
+    metadataWidget.value = metadata;
+  }
+  _storeLastAcceptedBoundary(boundary) {
+    this._setAutocompleteMetadata({ lastAccepted: boundary });
+  }
+  _getPersistedBoundaryEnd(currentValue, caretPos) {
+    const metadata = this._getAutocompleteMetadata();
+    const boundary = metadata == null ? void 0 : metadata.lastAccepted;
+    if (!boundary || typeof boundary !== "object") {
+      return null;
+    }
+    const { start, end, insertedText, textSnapshot } = boundary;
+    if (!Number.isInteger(start) || !Number.isInteger(end) || start < 0 || end < start) {
+      this._clearLastAcceptedBoundary();
+      return null;
+    }
+    if (end > currentValue.length || end > caretPos) {
+      this._clearLastAcceptedBoundary();
+      return null;
+    }
+    if (typeof insertedText !== "string" || insertedText.length === 0) {
+      this._clearLastAcceptedBoundary();
+      return null;
+    }
+    if (currentValue.slice(start, end) !== insertedText) {
+      this._clearLastAcceptedBoundary();
+      return null;
+    }
+    if (typeof textSnapshot !== "string" || currentValue.slice(0, end) !== textSnapshot) {
+      this._clearLastAcceptedBoundary();
+      return null;
+    }
+    return end;
+  }
+  /**
+   * Extract the last space-separated token from a search term
+   * Tag names don't contain spaces, so for tag autocomplete we only need the last token
+   * @param {string} term - The full search term (e.g., "hello 1gi")
+   * @returns {string} - The last token (e.g., "1gi"), or the original term if no spaces
+   */
+  _getLastSpaceToken(term) {
+    const tokens = term.trim().split(/\s+/);
+    return tokens[tokens.length - 1] || term;
+  }
+  /**
+   * Generate query variations for better autocomplete matching
+   * Includes original query and normalized versions (spaces to underscores, etc.)
+   * @param {string} term - Original search term
+   * @returns {string[]} - Array of query variations
+   */
+  _generateQueryVariations(term) {
+    if (!term || term.length < this.options.minChars) {
+      return [];
+    }
+    const variations = /* @__PURE__ */ new Set();
+    const trimmed = term.trim();
+    variations.add(trimmed);
+    variations.add(trimmed.toLowerCase());
+    if (trimmed.includes(" ")) {
+      const underscoreVersion = trimmed.replace(/ /g, "_");
+      variations.add(underscoreVersion);
+      variations.add(underscoreVersion.toLowerCase());
+    }
+    if (trimmed.includes(" ") || trimmed.includes("_")) {
+      const noSpaceVersion = trimmed.replace(/[ _]/g, "");
+      variations.add(noSpaceVersion);
+      variations.add(noSpaceVersion.toLowerCase());
+    }
+    const lastToken = this._getLastSpaceToken(trimmed);
+    if (lastToken !== trimmed) {
+      variations.add(lastToken);
+      variations.add(lastToken.toLowerCase());
+    }
+    return Array.from(variations).filter((v2) => v2.length >= this.options.minChars);
+  }
+  _normalizeQueryForRequest(term = "") {
+    return term.trim().toLowerCase();
+  }
+  _getQueriesToExecute(term = "") {
+    const queryVariations = this._generateQueryVariations(term);
+    const uniqueQueries = [];
+    const seen = /* @__PURE__ */ new Set();
+    for (const query of queryVariations) {
+      const normalized = this._normalizeQueryForRequest(query);
+      if (!normalized || seen.has(normalized)) {
+        continue;
+      }
+      seen.add(normalized);
+      uniqueQueries.push(query);
+      if (uniqueQueries.length >= 4) {
+        break;
+      }
+    }
+    return uniqueQueries;
+  }
+  _containsInformationalItems() {
+    return this.items.some((item) => isWildcardInfoItem(item));
+  }
+  _isSelectableInfoItem(item) {
+    if (isWildcardInfoItem(item)) {
+      return true;
+    }
+    return item && typeof item === "object" && "command" in item;
+  }
+  /**
+   * Get display text for an item (without extension for models)
+   * @param {string|Object} item - Item to get display text from
+   * @returns {string} - Display text without extension
+   */
+  _getDisplayText(item) {
+    if (isWildcardInfoItem(item)) {
+      return item.title || item.description || "Wildcards";
+    }
+    const itemText = typeof item === "object" && item.tag_name ? item.tag_name : String(item);
+    if (this.modelType === "loras" || this.searchType === "embeddings") {
+      return removeLoraExtension(itemText);
+    } else if (this.modelType === "embeddings") {
+      return removeGeneralExtension(itemText);
+    }
+    return itemText;
+  }
+  /**
+   * Check if an item matches a search term
+   * Supports both string items and enriched items with tag_name property
+   * @param {string|Object} item - Item to check
+   * @param {string} searchTerm - Search term to match against
+   * @returns {Object} - { matched: boolean, isExactMatch: boolean }
+   */
+  _matchItem(item, searchTerm) {
+    const itemText = this._getDisplayText(item);
+    const itemTextLower = itemText.toLowerCase();
+    const searchTermLower = searchTerm.toLowerCase();
+    if (itemTextLower === searchTermLower) {
+      return { matched: true, isExactMatch: true };
+    }
+    if (itemTextLower.includes(searchTermLower)) {
+      return { matched: true, isExactMatch: false };
+    }
+    const normalizedItem = itemTextLower.replace(/[-_\s']/g, "");
+    const normalizedSearch = searchTermLower.replace(/[-_\s']/g, "");
+    if (normalizedItem.includes(normalizedSearch)) {
+      return { matched: true, isExactMatch: false };
+    }
+    return { matched: false, isExactMatch: false };
+  }
+  _getLiveSearchTermForAcceptance() {
+    const rawSearchTerm = this.getSearchTerm(this.inputElement.value);
+    if (this.modelType === "embeddings") {
+      const match = rawSearchTerm.match(/^emb:(.*)$/i);
+      return ((match == null ? void 0 : match[1]) || "").trim();
+    }
+    if (this.modelType === "loras") {
+      const commandResult = this._parseCommandInput(rawSearchTerm);
+      return commandResult.searchTerm ?? rawSearchTerm;
+    }
+    if (this.modelType === "prompt") {
+      const embeddingMatch = rawSearchTerm.match(/^emb:(.*)$/i);
+      if (embeddingMatch) {
+        return (embeddingMatch[1] || "").trim();
+      }
+      const commandResult = this._parseCommandInput(rawSearchTerm);
+      return commandResult.searchTerm ?? rawSearchTerm;
+    }
+    return rawSearchTerm;
+  }
+  _getPreferredSelectedIndex(searchTerm = "") {
+    var _a2;
+    if (!((_a2 = this.items) == null ? void 0 : _a2.length)) {
+      return -1;
+    }
+    if (this.showingCommands) {
+      if (this.selectedIndex >= 0 && this.selectedIndex < this.items.length) {
+        return this.selectedIndex;
+      }
+      return 0;
+    }
+    const trimmedSearchTerm = searchTerm.trim();
+    if (!trimmedSearchTerm) {
+      if (this.selectedIndex >= 0 && this.selectedIndex < this.items.length) {
+        return this.selectedIndex;
+      }
+      return 0;
+    }
+    const searchLower = trimmedSearchTerm.toLowerCase();
+    const normalizedSearch = normalizeAutocompleteMatchText(trimmedSearchTerm);
+    let bestIndex = -1;
+    let bestScore = -Infinity;
+    this.items.forEach((item, index) => {
+      const displayText = this._getDisplayText(item);
+      const textLower = displayText.toLowerCase();
+      const normalizedText = normalizeAutocompleteMatchText(displayText);
+      let score = -1;
+      if (textLower === searchLower) {
+        score = 5e3;
+      } else if (normalizedText === normalizedSearch) {
+        score = 4500;
+      } else if (textLower.startsWith(searchLower)) {
+        score = 4e3;
+      } else if (normalizedText.startsWith(normalizedSearch)) {
+        score = 3500;
+      } else if (textLower.includes(searchLower)) {
+        score = 3e3;
+      } else if (normalizedText.includes(normalizedSearch)) {
+        score = 2500;
+      }
+      if (score > -1) {
+        score -= index;
+        if (score > bestScore) {
+          bestScore = score;
+          bestIndex = index;
+        }
+      }
+    });
+    if (bestIndex !== -1) {
+      return bestIndex;
+    }
+    if (this.selectedIndex >= 0 && this.selectedIndex < this.items.length) {
+      return this.selectedIndex;
+    }
+    return 0;
+  }
+  _getAcceptSelectionIndex(searchTerm = "") {
+    if (this.hasManualSelection && this.selectedIndex >= 0 && this.selectedIndex < this.items.length) {
+      return this.selectedIndex;
+    }
+    return this._getPreferredSelectedIndex(searchTerm);
+  }
+  /**
+   * Return the query flag that tells the backend to inject the LoRA Manager
+   * page's active filters (stored server-side) into the search, or null when
+   * not applicable. The filters themselves are synced to the backend by the
+   * manager page, so this works across browsers/origins where localStorage
+   * is not shared.
+   */
+  _getActiveLoraFilters() {
+    if (this.modelType !== "loras" || !getLoraActiveFiltersAutocompletePreference()) {
+      return null;
+    }
+    return "use_active_filters=true";
+  }
+  async search(term = "", endpoint = null) {
+    if (this.blocked()) return;
+    const sequence = ++this.querySequence;
+    try {
+      this.currentSearchTerm = term;
+      const searchTypeAtStart = this.searchType;
+      this.items = [];
+      this.wildcardMeta = null;
+      if (!endpoint) {
+        endpoint = `/lm/${this.modelType}/relative-paths`;
+      }
+      const activeFiltersQuery = this._getActiveLoraFilters();
+      const queriesToExecute = this.searchType === "wildcards" && term.length === 0 ? [""] : this._getQueriesToExecute(term);
+      if (queriesToExecute.length === 0) {
+        this.items = [];
+        this.hide();
+        return;
+      }
+      const searchPromises = queriesToExecute.map(async (query) => {
+        const url = endpoint.includes("?") ? `${endpoint}&search=${encodeURIComponent(query)}&limit=${this.options.maxItems}` : `${endpoint}?search=${encodeURIComponent(query)}&limit=${this.options.maxItems}`;
+        const finalUrl = activeFiltersQuery ? `${url}&${activeFiltersQuery}` : url;
+        try {
+          const response = await (url.startsWith("/prompt_selector/") ? api.fetchApi(finalUrl, { cache: "no-store" }) : api.fetchApi(finalUrl));
+          const data = await response.json();
+          return {
+            items: data.success ? data.relative_paths || data.words || [] : [],
+            meta: (data == null ? void 0 : data.meta) || null
+          };
+        } catch (error) {
+          console.warn(`Search query failed for "${query}":`, error);
+          return {
+            items: [],
+            meta: null
+          };
+        }
+      });
+      const resultsArrays = await Promise.all(searchPromises);
+      if (sequence !== this.querySequence || this.blocked() || this.searchType !== searchTypeAtStart) {
+        console.log("[Lora Manager] Search type changed during search, skipping update");
+        return;
+      }
+      const seen = /* @__PURE__ */ new Set();
+      const mergedItems = [];
+      for (const result of resultsArrays) {
+        if (!this.wildcardMeta && (result == null ? void 0 : result.meta)) {
+          this.wildcardMeta = result.meta;
+        }
+        const resultArray = (result == null ? void 0 : result.items) || [];
+        for (const item of resultArray) {
+          const itemKey = typeof item === "object" && item.tag_name ? item.tag_name.toLowerCase() : String(item).toLowerCase();
+          if (!seen.has(itemKey)) {
+            seen.add(itemKey);
+            mergedItems.push(item);
+          }
+        }
+      }
+      if (this.searchType === "wildcards" && mergedItems.length === 0) {
+        const meta = this.wildcardMeta || {};
+        this.items = meta.has_wildcards ? [createWildcardNoMatchesItem(term, meta)] : [createWildcardEmptyStateItem(meta)];
+        this.hasMoreItems = false;
+        this.render();
+        this.show();
+        return;
+      }
+      if (mergedItems.length > 0) {
+        this.items = mergedItems;
+        this.render();
+        this.show();
+      } else {
+        this.items = [];
+        this.hide();
+      }
+    } catch (error) {
+      if (sequence !== this.querySequence || this.blocked()) return;
+      console.error("Autocomplete search error:", error);
+      this.items = [];
+      this.hide();
+    }
+  }
+  /**
+   * Return the command map for the current model type.
+   * Lora model types get the active-filters toggle commands, all others
+   * keep the prompt tag commands.
+   */
+  _getCommands() {
+    return this.modelType === "loras" ? LORAS_COMMANDS : TAG_COMMANDS;
+  }
+  /**
+   * Parse command input to detect command mode
+   * @param {string} rawInput - Raw input text
+   * @returns {Object} - { showCommands, commandFilter, command, searchTerm }
+   */
+  _parseCommandInput(rawInput) {
+    const trimmed = rawInput.trim();
+    if (!trimmed.startsWith("/")) {
+      return { showCommands: false, command: null, searchTerm: trimmed };
+    }
+    const spaceIndex = trimmed.indexOf(" ");
+    if (spaceIndex === -1) {
+      const partialCommand = trimmed.toLowerCase();
+      if (this._getCommands()[partialCommand]) {
+        const cmd = this._getCommands()[partialCommand];
+        if (cmd.type === "toggle_setting" && cmd.condition && !cmd.condition()) {
+          return { showCommands: false, command: null, searchTerm: "" };
+        }
+        return {
+          showCommands: false,
+          command: cmd,
+          searchTerm: ""
+        };
+      }
+      return {
+        showCommands: true,
+        commandFilter: partialCommand.slice(1),
+        // Remove leading "/"
+        command: null,
+        searchTerm: ""
+      };
+    }
+    const commandPart = trimmed.slice(0, spaceIndex).toLowerCase();
+    const searchPart = trimmed.slice(spaceIndex + 1).trim();
+    if (this._getCommands()[commandPart]) {
+      const cmd = this._getCommands()[commandPart];
+      if (cmd.type === "toggle_setting" && cmd.condition && !cmd.condition()) {
+        return { showCommands: false, command: null, searchTerm: trimmed };
+      }
+      return {
+        showCommands: false,
+        command: cmd,
+        searchTerm: searchPart
+      };
+    }
+    return { showCommands: false, command: null, searchTerm: trimmed };
+  }
+  /**
+   * Show the command list dropdown
+   * @param {string} filter - Optional filter for commands
+   */
+  _showCommandList(filter = "") {
+    if (this.searchType !== "commands" && this.showingCommands !== true) {
+      return;
+    }
+    const filterLower = filter.toLowerCase();
+    const commands = [];
+    for (const [cmd, info] of Object.entries(this._getCommands())) {
+      if (info.type === "toggle_setting" && info.condition) {
+        if (!info.condition()) continue;
+      }
+      if (!filter || cmd.slice(1).startsWith(filterLower)) {
+        commands.push({ command: cmd, ...info });
+      }
+    }
+    if (commands.length === 0) {
+      this.hide();
+      return;
+    }
+    this.items = commands;
+    this._renderCommandList();
+    this.show();
+  }
+  /**
+   * Render the command list dropdown
+   */
+  _renderCommandList() {
+    if (this.contentContainer) {
+      this.contentContainer.innerHTML = "";
+    } else {
+      this.dropdown.innerHTML = "";
+    }
+    this.selectedIndex = -1;
+    this.hasManualSelection = false;
+    this.items.forEach((item, index) => {
+      const itemEl = document.createElement("div");
+      itemEl.className = "comfy-autocomplete-item comfy-autocomplete-command";
+      itemEl.dataset.index = index.toString();
+      const cmdSpan = document.createElement("span");
+      cmdSpan.className = "lm-autocomplete-command-name";
+      cmdSpan.textContent = item.command;
+      const labelSpan = document.createElement("span");
+      labelSpan.className = "lm-autocomplete-command-label";
+      labelSpan.textContent = item.label;
+      itemEl.appendChild(cmdSpan);
+      itemEl.appendChild(labelSpan);
+      itemEl.style.cssText = `
+                padding: 8px 12px;
+                cursor: pointer;
+                color: rgba(226, 232, 240, 0.8);
+                border-bottom: 1px solid rgba(226, 232, 240, 0.1);
+                transition: all 0.2s ease;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 12px;
+                height: ${this.options.itemHeight}px;
+                box-sizing: border-box;
+            `;
+      itemEl.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+      });
+      itemEl.addEventListener("mouseenter", () => {
+        this.selectItem(index, { manual: true });
+      });
+      itemEl.addEventListener("click", () => {
+        this._insertCommand(item.command);
+      });
+      if (this.contentContainer) {
+        this.contentContainer.appendChild(itemEl);
+      } else {
+        this.dropdown.appendChild(itemEl);
+      }
+    });
+    const lastChild = this.contentContainer ? this.contentContainer.lastChild : this.dropdown.lastChild;
+    if (lastChild) {
+      lastChild.style.borderBottom = "none";
+    }
+    if (this.items.length > 0) {
+      this.selectedIndex = 0;
+      this.hasManualSelection = false;
+      if (this.contentContainer) {
+        this._applyItemSelection(0);
+      } else {
+        this.selectItem(0);
+      }
+    }
+    this._renderCommandListFooter();
+    if (this.contentContainer) {
+      this.updateVirtualScrollHeight();
+    }
+  }
+  /**
+   * Render a state hint below the slash command list so the toggle commands
+   * explain themselves. Prompt nodes advertise /autocomplete, loras nodes
+   * advertise /activefilters.
+   */
+  _renderCommandListFooter() {
+    this._removeCommandListFooter();
+    let text = null;
+    if (this.modelType === "prompt") {
+      const enabled = getPromptTagAutocompletePreference();
+      text = enabled ? "Tag autocomplete is ON — /noautocomplete to disable" : "Tag autocomplete is OFF — /autocomplete to enable";
+    } else if (this.modelType === "loras") {
+      const enabled = getLoraActiveFiltersAutocompletePreference();
+      text = enabled ? "Active Filters Search: ON — /noactivefilters to disable" : "Active Filters Search: OFF — /activefilters to enable";
+    } else {
+      return;
+    }
+    const footer = document.createElement("div");
+    footer.className = "lm-autocomplete-command-footer";
+    footer.textContent = text;
+    footer.style.cssText = `
+            padding: 6px 12px;
+            font-size: 11px;
+            color: rgba(226, 232, 240, 0.5);
+            border-top: 1px solid rgba(226, 232, 240, 0.1);
+            white-space: nowrap;
+        `;
+    footer.addEventListener("mousedown", (e) => e.preventDefault());
+    this.dropdown.appendChild(footer);
+    this.commandListFooter = footer;
+  }
+  _removeCommandListFooter() {
+    if (this.commandListFooter) {
+      this.commandListFooter.remove();
+      this.commandListFooter = null;
+    }
+  }
+  /**
+   * Show a one-time, dismissible hint inside the dropdown surfacing the
+   * toggle commands: prompt nodes advertise /noautocomplete, loras nodes
+   * advertise /activefilters. Dismissal is persisted in localStorage.
+   */
+  _maybeShowFirstRunHint() {
+    if (this.firstRunHint) {
+      return;
+    }
+    let hintText = null;
+    let storageKey = null;
+    if (this.modelType === "prompt") {
+      if (this.showingCommands || this.searchType !== "custom_words" || this.activeCommand) {
+        return;
+      }
+      hintText = "Tip: type /noautocomplete to turn off these suggestions";
+      storageKey = FIRST_RUN_HINT_DISMISSED_KEY;
+    } else if (this.modelType === "loras") {
+      if (this.showingCommands || this.activeCommand) {
+        return;
+      }
+      if (getLoraActiveFiltersAutocompletePreference()) {
+        return;
+      }
+      hintText = "Tip: type /activefilters to search within the LoRA Manager page filters";
+      storageKey = ACTIVE_FILTERS_HINT_DISMISSED_KEY;
+    } else {
+      return;
+    }
+    let dismissed = false;
+    try {
+      dismissed = localStorage.getItem(storageKey) === "1";
+    } catch (e) {
+    }
+    if (dismissed) {
+      return;
+    }
+    const hint = document.createElement("div");
+    hint.className = "lm-autocomplete-first-run-hint";
+    hint.style.cssText = `
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 6px 12px;
+            font-size: 11px;
+            color: rgba(226, 232, 240, 0.6);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.1);
+        `;
+    const text = document.createElement("span");
+    text.textContent = hintText;
+    const closeBtn = document.createElement("button");
+    closeBtn.type = "button";
+    closeBtn.textContent = "×";
+    closeBtn.title = "Dismiss";
+    closeBtn.style.cssText = `
+            background: none;
+            border: none;
+            color: rgba(226, 232, 240, 0.5);
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1;
+            padding: 0 2px;
+        `;
+    closeBtn.addEventListener("click", () => {
+      try {
+        localStorage.setItem(storageKey, "1");
+      } catch (e) {
+      }
+      this._removeFirstRunHint();
+    });
+    hint.appendChild(text);
+    hint.appendChild(closeBtn);
+    hint.addEventListener("mousedown", (e) => e.preventDefault());
+    this.dropdown.insertBefore(hint, this.dropdown.firstChild);
+    this.firstRunHint = hint;
+  }
+  _removeFirstRunHint() {
+    if (this.firstRunHint) {
+      this.firstRunHint.remove();
+      this.firstRunHint = null;
+    }
+  }
+  /**
+   * Insert a command into the input
+   * @param {string} command - The command to insert (e.g., "/character")
+   */
+  _insertCommand(command) {
+    const currentValue = this.inputElement.value;
+    const activeRange = this.getActiveSearchRange(currentValue);
+    const commandStartPos = activeRange.trimmedStart;
+    const insertText = command + " ";
+    const newValue = currentValue.substring(0, commandStartPos) + insertText + currentValue.substring(activeRange.end);
+    const newCaretPos = commandStartPos + insertText.length;
+    this.inputElement.value = newValue;
+    const event = new Event("input", { bubbles: true });
+    this.inputElement.dispatchEvent(event);
+    this.hide();
+    this.inputElement.focus();
+    this.inputElement.setSelectionRange(newCaretPos, newCaretPos);
+  }
+  render() {
+    this.selectedIndex = -1;
+    this.hasManualSelection = false;
+    this._removeCommandListFooter();
+    this.virtualScrollOffset = 0;
+    this.currentPage = 0;
+    this.hasMoreItems = true;
+    this.isLoadingMore = false;
+    if (!this.items || this.items.length === 0) {
+      if (this.contentContainer) {
+        this.contentContainer.innerHTML = "";
+      } else {
+        this.dropdown.innerHTML = "";
+      }
+      return;
+    }
+    if (this.options.enableVirtualScroll && this.contentContainer) {
+      this.updateVirtualScrollHeight();
+      this.updateVisibleItems();
+    } else {
+      this.dropdown.innerHTML = "";
+      const isEnriched = this.items[0] && typeof this.items[0] === "object" && "tag_name" in this.items[0];
+      const isCommand = this.items[0] && typeof this.items[0] === "object" && "command" in this.items[0];
+      this.items.forEach((itemData, index) => {
+        const item = this.createItemElement(itemData, index, isEnriched, isCommand);
+        this.dropdown.appendChild(item);
+      });
+      if (this.dropdown.lastChild) {
+        this.dropdown.lastChild.style.borderBottom = "none";
+      }
+    }
+    if (this.items.length > 0) {
+      this.selectItem(0);
+    }
+  }
+  /**
+   * Render an enriched autocomplete item with category badge and post count
+   * @param {HTMLElement} itemEl - The item element to populate
+   * @param {Object} itemData - The enriched item data { tag_name, category, post_count, matched_alias? }
+   * @param {string} searchTerm - The current search term for highlighting
+   */
+  _renderEnrichedItem(itemEl, itemData, searchTerm) {
+    const nameSpan = document.createElement("span");
+    nameSpan.className = "lm-autocomplete-name";
+    if (itemData.matched_alias) {
+      const tagText = document.createTextNode(itemData.tag_name + " ");
+      nameSpan.appendChild(tagText);
+      const aliasSpan = document.createElement("span");
+      aliasSpan.className = "lm-matched-alias";
+      aliasSpan.innerHTML = "← " + this.highlightMatch(itemData.matched_alias, searchTerm);
+      aliasSpan.style.cssText = `
+                font-size: 11px;
+                color: rgba(226, 232, 240, 0.5);
+            `;
+      nameSpan.appendChild(aliasSpan);
+    } else {
+      nameSpan.innerHTML = this.highlightMatch(itemData.tag_name, searchTerm);
+    }
+    nameSpan.style.cssText = `
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        `;
+    const metaSpan = document.createElement("span");
+    metaSpan.className = "lm-autocomplete-meta";
+    metaSpan.style.cssText = `
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        `;
+    if (itemData.post_count > 0) {
+      const countSpan = document.createElement("span");
+      countSpan.className = "lm-autocomplete-count";
+      countSpan.textContent = formatPostCount(itemData.post_count);
+      countSpan.style.cssText = `
+                font-size: 11px;
+                color: rgba(226, 232, 240, 0.5);
+            `;
+      metaSpan.appendChild(countSpan);
+    }
+    const categoryInfo = CATEGORY_INFO[itemData.category];
+    if (categoryInfo) {
+      const badgeSpan = document.createElement("span");
+      badgeSpan.className = "lm-autocomplete-category";
+      badgeSpan.textContent = categoryInfo.label;
+      badgeSpan.style.cssText = `
+                font-size: 10px;
+                padding: 2px 6px;
+                border-radius: 10px;
+                background: ${categoryInfo.bg};
+                color: ${categoryInfo.text};
+                white-space: nowrap;
+            `;
+      metaSpan.appendChild(badgeSpan);
+    }
+    itemEl.appendChild(nameSpan);
+    itemEl.appendChild(metaSpan);
+  }
+  _renderInformationalItem(itemEl, itemData) {
+    itemEl.classList.add("comfy-autocomplete-info-item");
+    itemEl.style.cssText = `
+            padding: 12px;
+            color: rgba(226, 232, 240, 0.88);
+            border-bottom: none;
+            cursor: default;
+            display: block;
+            white-space: normal;
+            height: auto;
+        `;
+    const title = document.createElement("div");
+    title.className = "lm-autocomplete-info-title";
+    title.textContent = itemData.title || "Wildcards";
+    title.style.cssText = `
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        `;
+    itemEl.appendChild(title);
+    const description = document.createElement("div");
+    description.className = "lm-autocomplete-info-description";
+    description.textContent = itemData.description || "";
+    description.style.cssText = `
+            font-size: 12px;
+            line-height: 1.45;
+            color: rgba(226, 232, 240, 0.72);
+        `;
+    itemEl.appendChild(description);
+    if (itemData.type === "wildcard_no_matches") {
+      return;
+    }
+    const pathBlock = document.createElement("div");
+    pathBlock.style.cssText = `
+            margin-top: 10px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            background: rgba(15, 23, 42, 0.6);
+            font-size: 11px;
+            line-height: 1.5;
+        `;
+    pathBlock.innerHTML = [
+      '<div style="font-weight: 600; margin-bottom: 4px;">Wildcards folder</div>',
+      `<code style="word-break: break-all; color: #dbeafe;">${itemData.wildcardsDir || "(unavailable)"}</code>`,
+      `<div style="margin-top: 6px; color: rgba(226, 232, 240, 0.68);">Supported formats: ${(itemData.supportedFormats || []).join(", ")}</div>`
+    ].join("");
+    itemEl.appendChild(pathBlock);
+    const examples = document.createElement("div");
+    examples.style.cssText = `
+            margin-top: 10px;
+            font-size: 11px;
+            line-height: 1.55;
+            color: rgba(226, 232, 240, 0.72);
+        `;
+    examples.innerHTML = [
+      '<div style="font-weight: 600; color: rgba(226, 232, 240, 0.88); margin-bottom: 4px;">Examples</div>',
+      "<div><code>animals/cat.txt</code> -> use <code>__animals/cat__</code></div>",
+      "<div><code>colors.yaml</code> with <code>palette: { warm: [red, orange] }</code> -> use <code>__palette/warm__</code></div>",
+      '<div style="margin-top: 6px;">Text files use one option per line. YAML/JSON use nested keys ending in string arrays.</div>'
+    ].join("");
+    itemEl.appendChild(examples);
+    const actions = document.createElement("div");
+    actions.style.cssText = `
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        `;
+    const openButton = document.createElement("button");
+    openButton.type = "button";
+    openButton.dataset.action = "open-wildcards-folder";
+    openButton.textContent = "Open wildcards folder";
+    openButton.style.cssText = `
+            border: 1px solid rgba(96, 165, 250, 0.45);
+            background: rgba(37, 99, 235, 0.18);
+            color: #dbeafe;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 11px;
+            cursor: pointer;
+        `;
+    openButton.addEventListener("click", async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      await this._openWildcardsFolder();
+    });
+    actions.appendChild(openButton);
+    const copyButton = document.createElement("button");
+    copyButton.type = "button";
+    copyButton.dataset.action = "copy-wildcards-path";
+    copyButton.textContent = "Copy path";
+    copyButton.style.cssText = `
+            border: 1px solid rgba(226, 232, 240, 0.2);
+            background: rgba(148, 163, 184, 0.12);
+            color: rgba(226, 232, 240, 0.88);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 11px;
+            cursor: pointer;
+        `;
+    copyButton.addEventListener("click", async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      await this._copyWildcardPath(itemData.wildcardsDir || "");
+    });
+    actions.appendChild(copyButton);
+    itemEl.appendChild(actions);
+  }
+  highlightMatch(text, searchTerm) {
+    const { include } = parseSearchTokens(searchTerm);
+    const sanitizedTokens = include.filter(Boolean).map((token) => token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+    if (!sanitizedTokens.length) {
+      return text;
+    }
+    const regex = new RegExp(`(${sanitizedTokens.join("|")})`, "gi");
+    return text.replace(
+      regex,
+      '<span style="background-color: rgba(66, 153, 225, 0.3); color: white; padding: 1px 2px; border-radius: 2px;">$1</span>'
+    );
+  }
+  async _openWildcardsFolder() {
+    try {
+      const response = await api.fetchApi("/lm/wildcards/open-location", { method: "POST" });
+      const data = await response.json();
+      if (!response.ok || (data == null ? void 0 : data.success) === false) {
+        throw new Error((data == null ? void 0 : data.error) || "Failed to open wildcards folder");
+      }
+      if ((data == null ? void 0 : data.mode) === "clipboard" && (data == null ? void 0 : data.path)) {
+        await this._copyWildcardPath(data.path);
+        return;
+      }
+      showToast({
+        severity: "success",
+        summary: "Wildcards folder",
+        detail: "Opened wildcards folder.",
+        life: 2500
+      });
+    } catch (error) {
+      console.error("[Lora Manager] Failed to open wildcards folder:", error);
+      showToast({
+        severity: "error",
+        summary: "Error",
+        detail: (error == null ? void 0 : error.message) || "Failed to open wildcards folder",
+        life: 3e3
+      });
+    }
+  }
+  async _copyWildcardPath(path) {
+    var _a2;
+    if (!path) {
+      return;
+    }
+    try {
+      if ((_a2 = navigator == null ? void 0 : navigator.clipboard) == null ? void 0 : _a2.writeText) {
+        await navigator.clipboard.writeText(path);
+      }
+      showToast({
+        severity: "info",
+        summary: "Wildcards path",
+        detail: path,
+        life: 3e3
+      });
+    } catch (error) {
+      console.error("[Lora Manager] Failed to copy wildcards path:", error);
+      showToast({
+        severity: "warn",
+        summary: "Wildcards path",
+        detail: path,
+        life: 4e3
+      });
+    }
+  }
+  showPreviewForItem(relativePath, itemElement) {
+    if (!this.options.showPreview || !this.previewTooltip) return;
+    if (typeof relativePath !== "string" || !relativePath) return;
+    const fileName = relativePath.split(/[/\\]/).pop();
+    const loraName = fileName.replace(/\.(safetensors|ckpt|pt|bin)$/i, "");
+    const rect = itemElement.getBoundingClientRect();
+    const x = rect.right + 10;
+    const y2 = rect.top;
+    this.previewTooltip.show(loraName, x, y2, true);
+  }
+  hidePreview() {
+    if (!this.options.showPreview) {
+      return;
+    }
+    if (typeof this.behavior.hidePreview === "function") {
+      this.behavior.hidePreview(this);
+    } else if (this.previewTooltip) {
+      this.previewTooltip.hide();
+    }
+  }
+  /**
+   * Handle scroll event for virtual scrolling and loading more items
+   */
+  handleScroll() {
+    if (!this.scrollContainer || this.isLoadingMore) {
+      return;
+    }
+    const { scrollTop, scrollHeight, clientHeight } = this.scrollContainer;
+    const scrollBottom = scrollTop + clientHeight;
+    const threshold = this.options.itemHeight * 2;
+    if (scrollBottom >= scrollHeight - threshold && this.hasMoreItems) {
+      this.loadMoreItems();
+    }
+    if (this.options.enableVirtualScroll) {
+      this.updateVisibleItems();
+    }
+  }
+  /**
+   * Load more items (pagination)
+   */
+  async loadMoreItems() {
+    var _a2, _b;
+    if (this.blocked()) return;
+    const sequence = this.querySequence;
+    if (this.isLoadingMore || !this.hasMoreItems || this.showingCommands) {
+      return;
+    }
+    this.isLoadingMore = true;
+    this.currentPage++;
+    try {
+      this.showLoadingIndicator();
+      let endpoint = `/lm/${this.modelType}/relative-paths`;
+      if (this.modelType === "prompt") {
+        if (this.searchType === "embeddings") {
+          endpoint = "/lm/embeddings/relative-paths";
+        } else if (this.searchType === "wildcards") {
+          endpoint = getWildcardSearchEndpoint();
+        } else if (this.searchType === "custom_words") {
+          if (((_a2 = this.activeCommand) == null ? void 0 : _a2.type) === "shared_library") {
+            endpoint = "/prompt_selector/tags/complete";
+          } else if ((_b = this.activeCommand) == null ? void 0 : _b.categories) {
+            const categories = this.activeCommand.categories.join(",");
+            endpoint = `/lm/custom-words/search?category=${categories}`;
+          } else {
+            endpoint = "/lm/custom-words/search?enriched=true";
+          }
+        }
+      }
+      const queriesToExecute = this._getQueriesToExecute(this.currentSearchTerm);
+      const offset = this.items.length;
+      const activeFiltersQuery = this._getActiveLoraFilters();
+      const searchPromises = queriesToExecute.map(async (query) => {
+        const url = endpoint.includes("?") ? `${endpoint}&search=${encodeURIComponent(query)}&limit=${this.options.pageSize}&offset=${offset}` : `${endpoint}?search=${encodeURIComponent(query)}&limit=${this.options.pageSize}&offset=${offset}`;
+        const finalUrl = activeFiltersQuery ? `${url}&${activeFiltersQuery}` : url;
+        try {
+          const response = await (url.startsWith("/prompt_selector/") ? api.fetchApi(finalUrl, { cache: "no-store" }) : api.fetchApi(finalUrl));
+          const data = await response.json();
+          return data.success ? data.relative_paths || data.words || [] : [];
+        } catch (error) {
+          console.warn(`Search query failed for "${query}":`, error);
+          return [];
+        }
+      });
+      const resultsArrays = await Promise.all(searchPromises);
+      if (sequence !== this.querySequence || this.blocked()) return;
+      const seen = new Set(this.items.map((item) => {
+        const itemKey = typeof item === "object" && item.tag_name ? item.tag_name.toLowerCase() : String(item).toLowerCase();
+        return itemKey;
+      }));
+      const newItems = [];
+      for (const resultArray of resultsArrays) {
+        for (const item of resultArray) {
+          const itemKey = typeof item === "object" && item.tag_name ? item.tag_name.toLowerCase() : String(item).toLowerCase();
+          if (!seen.has(itemKey)) {
+            seen.add(itemKey);
+            newItems.push(item);
+          }
+        }
+      }
+      if (newItems.length < this.options.pageSize) {
+        this.hasMoreItems = false;
+      }
+      if (newItems.length > 0) {
+        this.items.push(...newItems);
+        if (this.options.enableVirtualScroll) {
+          this.updateVirtualScrollHeight();
+          this.updateVisibleItems();
+        } else {
+          this.render();
+        }
+      } else {
+        this.hasMoreItems = false;
+      }
+    } catch (error) {
+      if (sequence !== this.querySequence || this.blocked()) return;
+      console.error("Error loading more items:", error);
+      this.hasMoreItems = false;
+    } finally {
+      if (sequence === this.querySequence && !this.destroyed) {
+        this.isLoadingMore = false;
+        this.hideLoadingIndicator();
+      }
+    }
+  }
+  /**
+   * Show loading indicator at the bottom of the list
+   */
+  showLoadingIndicator() {
+    if (!this.contentContainer) return;
+    let loadingEl = this.contentContainer.querySelector(".comfy-autocomplete-loading");
+    if (!loadingEl) {
+      loadingEl = document.createElement("div");
+      loadingEl.className = "comfy-autocomplete-loading";
+      loadingEl.textContent = "Loading more...";
+      loadingEl.style.cssText = `
+                padding: 12px;
+                text-align: center;
+                color: rgba(226, 232, 240, 0.5);
+                font-size: 12px;
+            `;
+      this.contentContainer.appendChild(loadingEl);
+    }
+  }
+  /**
+   * Hide loading indicator
+   */
+  hideLoadingIndicator() {
+    if (!this.contentContainer) return;
+    const loadingEl = this.contentContainer.querySelector(".comfy-autocomplete-loading");
+    if (loadingEl) {
+      loadingEl.remove();
+    }
+  }
+  /**
+   * Update the total height of the virtual scroll container
+   */
+  updateVirtualScrollHeight() {
+    if (!this.contentContainer || !this.scrollContainer) return;
+    if (this._containsInformationalItems()) {
+      this.totalHeight = 0;
+      this.contentContainer.style.height = "auto";
+      this.scrollContainer.style.maxHeight = `${this.options.visibleItems * this.options.itemHeight}px`;
+      this.scrollContainer.style.overflowY = "hidden";
+      return;
+    }
+    this.totalHeight = this.items.length * this.options.itemHeight;
+    this.contentContainer.style.height = `${this.totalHeight}px`;
+    const maxHeight = this.options.visibleItems * this.options.itemHeight;
+    const shouldShowScrollbar = this.totalHeight > maxHeight;
+    this.scrollContainer.style.maxHeight = shouldShowScrollbar ? `${maxHeight}px` : `${this.totalHeight}px`;
+    this.scrollContainer.style.overflowY = shouldShowScrollbar ? "auto" : "hidden";
+  }
+  /**
+   * Update which items are visible based on scroll position
+   */
+  updateVisibleItems() {
+    if (!this.scrollContainer || !this.contentContainer) return;
+    if (this._containsInformationalItems()) {
+      this.contentContainer.innerHTML = "";
+      if (this.items[0]) {
+        this.contentContainer.appendChild(
+          this.createItemElement(this.items[0], 0, false, false)
+        );
+      }
+      return;
+    }
+    const scrollTop = this.scrollContainer.scrollTop;
+    const containerHeight = this.scrollContainer.clientHeight;
+    const startIndex = Math.max(0, Math.floor(scrollTop / this.options.itemHeight) - 5);
+    const endIndex = Math.min(
+      this.items.length - 1,
+      Math.ceil((scrollTop + containerHeight) / this.options.itemHeight) + 5
+    );
+    this.contentContainer.innerHTML = "";
+    if (startIndex > 0) {
+      const topSpacer = document.createElement("div");
+      topSpacer.style.height = `${startIndex * this.options.itemHeight}px`;
+      this.contentContainer.appendChild(topSpacer);
+    }
+    const isEnriched = this.items[0] && typeof this.items[0] === "object" && "tag_name" in this.items[0];
+    const isCommand = this.items[0] && typeof this.items[0] === "object" && "command" in this.items[0];
+    for (let i2 = startIndex; i2 <= endIndex; i2++) {
+      const itemData = this.items[i2];
+      const itemEl = this.createItemElement(itemData, i2, isEnriched, isCommand);
+      this.contentContainer.appendChild(itemEl);
+    }
+    if (endIndex < this.items.length - 1) {
+      const bottomSpacer = document.createElement("div");
+      bottomSpacer.style.height = `${(this.items.length - 1 - endIndex) * this.options.itemHeight}px`;
+      this.contentContainer.appendChild(bottomSpacer);
+    }
+    if (this.selectedIndex >= startIndex && this.selectedIndex <= endIndex) {
+      const selectedEl = this.contentContainer.querySelector(`.comfy-autocomplete-item[data-index="${this.selectedIndex}"]`);
+      if (selectedEl) {
+        selectedEl.classList.add("comfy-autocomplete-item-selected");
+        selectedEl.style.backgroundColor = "rgba(66, 153, 225, 0.2)";
+      }
+    }
+  }
+  /**
+   * Create a single item element
+   */
+  createItemElement(itemData, index, isEnriched, isCommand = false) {
+    const item = document.createElement("div");
+    item.className = "comfy-autocomplete-item";
+    item.dataset.index = index.toString();
+    item.style.cssText = `
+            height: ${this.options.itemHeight}px;
+            padding: 8px 12px;
+            cursor: pointer;
+            color: rgba(226, 232, 240, 0.8);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.1);
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            box-sizing: border-box;
+        `;
+    if (!isCommand && itemData && typeof itemData === "object" && "command" in itemData) {
+      isCommand = true;
+    }
+    if (isWildcardInfoItem(itemData)) {
+      this._renderInformationalItem(item, itemData);
+    } else if (isCommand) {
+      const cmdSpan = document.createElement("span");
+      cmdSpan.className = "lm-autocomplete-command-name";
+      cmdSpan.textContent = itemData.command;
+      const labelSpan = document.createElement("span");
+      labelSpan.className = "lm-autocomplete-command-label";
+      labelSpan.textContent = itemData.label;
+      item.appendChild(cmdSpan);
+      item.appendChild(labelSpan);
+      item.style.gap = "12px";
+    } else if (isEnriched) {
+      this._renderEnrichedItem(item, itemData, this.currentSearchTerm);
+    } else {
+      const nameSpan = document.createElement("span");
+      nameSpan.className = "lm-autocomplete-name";
+      const displayTextWithoutExt = this._getDisplayText(itemData);
+      nameSpan.innerHTML = this.highlightMatch(displayTextWithoutExt, this.currentSearchTerm);
+      nameSpan.style.cssText = `
+                flex: 1;
+                min-width: 0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            `;
+      item.appendChild(nameSpan);
+    }
+    item.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+    });
+    item.addEventListener("mouseenter", () => {
+      this.selectItem(index, { manual: true });
+    });
+    item.addEventListener("mouseleave", () => {
+      this.hidePreview();
+    });
+    item.addEventListener("click", () => {
+      if (isWildcardInfoItem(itemData)) {
+        return;
+      }
+      if (isCommand) {
+        this._insertCommand(itemData.command);
+      } else {
+        const insertPath = isEnriched ? itemData.tag_name : itemData;
+        this.insertSelection(insertPath);
+      }
+    });
+    return item;
+  }
+  show() {
+    if (!this.items || this.items.length === 0) {
+      this.hide();
+      return;
+    }
+    this._maybeShowFirstRunHint();
+    if (this.options.enableVirtualScroll && this.contentContainer) {
+      this.dropdown.style.display = "block";
+      this.isVisible = true;
+      if (!this.showingCommands) {
+        this.updateVisibleItems();
+      }
+      this.positionAtCursor();
+    } else {
+      this.positionAtCursor();
+      this.dropdown.style.display = "block";
+      this.isVisible = true;
+    }
+  }
+  positionAtCursor() {
+    const position = this.helper.getCursorOffset();
+    this.dropdown.style.left = (position.left ?? 0) + "px";
+    this.dropdown.style.top = (position.top ?? 0) + "px";
+    this.dropdown.style.maxHeight = window.innerHeight - position.top + "px";
+    const originalDisplay = this.dropdown.style.display;
+    this.dropdown.style.display = "block";
+    this.dropdown.style.visibility = "hidden";
+    this.dropdown.style.width;
+    this.dropdown.style.width = "auto";
+    this.dropdown.style.minWidth = "200px";
+    let maxWidth = 200;
+    const container = this.options.enableVirtualScroll && this.contentContainer ? this.contentContainer : this.dropdown;
+    const items = container.querySelectorAll(".comfy-autocomplete-item");
+    items.forEach((item) => {
+      const itemWidth = item.scrollWidth + 24;
+      maxWidth = Math.max(maxWidth, itemWidth);
+    });
+    this.dropdown.style.width = Math.min(maxWidth, 400) + "px";
+    this.dropdown.style.minWidth = "";
+    this.dropdown.style.visibility = "visible";
+    this.dropdown.style.display = originalDisplay;
+  }
+  getCaretPosition() {
+    return this.inputElement.selectionStart || 0;
+  }
+  hide() {
+    this.querySequence++;
+    this.selectionSequence++;
+    clearTimeout(this.debounceTimer);
+    this.debounceTimer = null;
+    if (!this.dropdown) {
+      return;
+    }
+    this.dropdown.style.display = "none";
+    this.isVisible = false;
+    this.selectedIndex = -1;
+    this.hasManualSelection = false;
+    this.showingCommands = false;
+    this._removeCommandListFooter();
+    this._removeFirstRunHint();
+    this.items = [];
+    this.wildcardMeta = null;
+    if (this.contentContainer) {
+      this.contentContainer.innerHTML = "";
+    } else {
+      this.dropdown.innerHTML = "";
+    }
+    this.virtualScrollOffset = 0;
+    this.currentPage = 0;
+    this.hasMoreItems = true;
+    this.isLoadingMore = false;
+    this.totalHeight = 0;
+    if (this.scrollContainer) {
+      this.scrollContainer.scrollTop = 0;
+    }
+    this.hidePreview();
+    const items = this.dropdown.querySelectorAll(".comfy-autocomplete-item");
+    items.forEach((item) => {
+      item.classList.remove("comfy-autocomplete-item-selected");
+      item.style.backgroundColor = "";
+    });
+  }
+  selectItem(index, { manual = false } = {}) {
+    const container = this.options.enableVirtualScroll && this.contentContainer ? this.contentContainer : this.dropdown;
+    const prevSelected = container.querySelector(".comfy-autocomplete-item-selected");
+    if (prevSelected) {
+      prevSelected.classList.remove("comfy-autocomplete-item-selected");
+      prevSelected.style.backgroundColor = "";
+    }
+    if (index >= 0 && index < this.items.length) {
+      this.selectedIndex = index;
+      this.hasManualSelection = manual;
+      if (this.options.enableVirtualScroll && this.scrollContainer) {
+        const itemTop = index * this.options.itemHeight;
+        const itemBottom = itemTop + this.options.itemHeight;
+        const scrollTop = this.scrollContainer.scrollTop;
+        const containerHeight = this.scrollContainer.clientHeight;
+        const scrollBottom = scrollTop + containerHeight;
+        if (itemTop < scrollTop || itemBottom > scrollBottom) {
+          const targetScrollTop = Math.max(0, itemTop - containerHeight / 3);
+          this.scrollContainer.scrollTop = targetScrollTop;
+          this.updateVisibleItems();
+          setTimeout(() => {
+            this._applyItemSelection(index);
+          }, 0);
+        } else {
+          this._applyItemSelection(index);
+        }
+      } else {
+        const item = container.children[index];
+        if (item) {
+          item.classList.add("comfy-autocomplete-item-selected");
+          item.style.backgroundColor = "rgba(66, 153, 225, 0.2)";
+          item.scrollIntoView({ block: "nearest" });
+          if (this.options.showPreview && !this._isSelectableInfoItem(this.items[index])) {
+            if (typeof this.behavior.showPreview === "function") {
+              this.behavior.showPreview(this, this.items[index], item);
+            } else if (this.previewTooltip) {
+              this.showPreviewForItem(this.items[index], item);
+            }
+          }
+        }
+      }
+    }
+  }
+  /**
+   * Apply selection styling to an item (used after virtual scroll re-render)
+   * @param {number} index - Index of item to select
+   */
+  _applyItemSelection(index) {
+    if (!this.contentContainer) return;
+    const selectedEl = this.contentContainer.querySelector(`.comfy-autocomplete-item[data-index="${index}"]`);
+    if (selectedEl) {
+      selectedEl.classList.add("comfy-autocomplete-item-selected");
+      selectedEl.style.backgroundColor = "rgba(66, 153, 225, 0.2)";
+      if (this.options.showPreview && !this._isSelectableInfoItem(this.items[index])) {
+        if (typeof this.behavior.showPreview === "function") {
+          this.behavior.showPreview(this, this.items[index], selectedEl);
+        } else if (this.previewTooltip) {
+          this.showPreviewForItem(this.items[index], selectedEl);
+        }
+      }
+    }
+  }
+  handleKeyDown(e) {
+    if (this.blocked(e) || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (!this.isVisible) {
+      return;
+    }
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        if (this.options.enableVirtualScroll && this.scrollContainer) {
+          if (this.selectedIndex >= this.items.length - 1) {
+            if (this.hasMoreItems && !this.isLoadingMore) {
+              this.loadMoreItems().then(() => {
+                if (this.selectedIndex < this.items.length - 1) {
+                  this.selectItem(this.selectedIndex + 1, { manual: true });
+                }
+              });
+            }
+          } else {
+            this.selectItem(this.selectedIndex + 1, { manual: true });
+          }
+        } else {
+          this.selectItem(Math.min(this.selectedIndex + 1, this.items.length - 1), { manual: true });
+        }
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        if (this.options.enableVirtualScroll && this.scrollContainer) {
+          if (this.selectedIndex <= 0) {
+            this.selectItem(0, { manual: true });
+          } else {
+            this.selectItem(this.selectedIndex - 1, { manual: true });
+          }
+        } else {
+          this.selectItem(Math.max(this.selectedIndex - 1, 0), { manual: true });
+        }
+        break;
+      case "Enter":
+      case "Tab":
+        if (!shouldAcceptAutocompleteKey(e.key)) {
+          break;
+        }
+        {
+          const liveSearchTerm = this._getLiveSearchTermForAcceptance();
+          const acceptIndex = this._getAcceptSelectionIndex(liveSearchTerm);
+          if (acceptIndex !== -1 && acceptIndex !== this.selectedIndex) {
+            this.selectItem(acceptIndex);
+          }
+        }
+        if (this.selectedIndex >= 0 && this.selectedIndex < this.items.length) {
+          e.preventDefault();
+          if (this.showingCommands) {
+            this._insertCommand(this.items[this.selectedIndex].command);
+          } else {
+            const selectedItem = this.items[this.selectedIndex];
+            if (isWildcardInfoItem(selectedItem)) {
+              if (selectedItem.type === "wildcard_empty_state") {
+                this._openWildcardsFolder();
+              }
+              break;
+            }
+            const insertPath = typeof selectedItem === "object" && "tag_name" in selectedItem ? selectedItem.tag_name : selectedItem;
+            this.insertSelection(insertPath);
+          }
+        }
+        break;
+      case "Escape":
+        e.preventDefault();
+        this.hide();
+        break;
+    }
+  }
+  async insertSelection(relativePath) {
+    var _a2, _b;
+    if (this.blocked()) return;
+    const input = this.inputElement;
+    const snapshot = [input.value, input.selectionStart, input.selectionEnd];
+    const sequence = ++this.selectionSequence;
+    let insertText;
+    try {
+      if (((_a2 = this.activeCommand) == null ? void 0 : _a2.type) === "shared_library") {
+        const selected = this.items.find((item) => item.tag_name === relativePath && item.resource_id);
+        if (!selected) return;
+        const response = await fetch("/prompt_selector/tags/item?id=" + encodeURIComponent(selected.resource_id), { cache: "no-store" });
+        const data = await response.json();
+        if (!response.ok || typeof ((_b = data.item) == null ? void 0 : _b.text) !== "string" || !data.item.text.trim()) {
+          throw new Error("这条资料暂时不可读，请刷新补全列表后重试。");
+        }
+        insertText = data.item.text;
+      } else insertText = await this.getInsertText(relativePath);
+    } catch (error) {
+      if (sequence !== this.selectionSequence || this.blocked() || snapshot[0] !== input.value || snapshot[1] !== input.selectionStart || snapshot[2] !== input.selectionEnd) return;
+      showToast({ severity: "warn", summary: "未插入", detail: "读取资料失败，原提示词已保留。请检查服务连接后重试。", life: 5e3 });
+      return;
+    }
+    if (sequence !== this.selectionSequence || this.blocked() || snapshot[0] !== input.value || snapshot[1] !== input.selectionStart || snapshot[2] !== input.selectionEnd) return;
+    if (!insertText) {
+      this.hide();
+      return;
+    }
+    const currentValue = this.inputElement.value;
+    const activeRange = this.getActiveSearchRange(currentValue);
+    const caretPos = activeRange.end;
+    const fullSearchTerm = activeRange.text;
+    let replaceStartPos = activeRange.trimmedStart;
+    let searchTerm = fullSearchTerm;
+    if (this.modelType === "prompt" && this.searchType === "custom_words" && !this.activeCommand) {
+      const selectedItem = this.selectedIndex >= 0 ? this.items[this.selectedIndex] : null;
+      const selectedTagName = selectedItem && typeof selectedItem === "object" && "tag_name" ? selectedItem.tag_name : null;
+      const underscoreVersion = fullSearchTerm.replace(/ +/g, "_").toLowerCase();
+      const selectedTagLower = (selectedTagName == null ? void 0 : selectedTagName.toLowerCase()) ?? "";
+      if (fullSearchTerm.includes(" ") && (selectedTagLower.startsWith(underscoreVersion) || selectedTagLower.endsWith(underscoreVersion) || underscoreVersion === selectedTagLower)) {
+        searchTerm = fullSearchTerm;
+        replaceStartPos = activeRange.trimmedStart;
+      } else {
+        searchTerm = this._getLastSpaceToken(fullSearchTerm);
+        replaceStartPos = searchTerm === fullSearchTerm ? activeRange.trimmedStart : caretPos - searchTerm.length;
+      }
+    }
+    const newValue = currentValue.substring(0, replaceStartPos) + insertText + currentValue.substring(caretPos);
+    const newCaretPos = replaceStartPos + insertText.length;
+    this.suppressAutocompleteOnce = true;
+    if (!replaceInputRange(this.inputElement, insertText, replaceStartPos, caretPos)) return;
+    this._storeLastAcceptedBoundary({
+      start: replaceStartPos,
+      end: newCaretPos,
+      insertedText: insertText,
+      textSnapshot: newValue.substring(0, newCaretPos)
+    });
+    this.hide();
+    this.inputElement.focus();
+    this.inputElement.setSelectionRange(newCaretPos, newCaretPos);
+  }
+  async getInsertText(relativePath) {
+    if (typeof this.behavior.getInsertText === "function") {
+      try {
+        const result = await this.behavior.getInsertText(this, relativePath);
+        if (typeof result === "string" && result.length > 0) {
+          return result;
+        }
+      } catch (error) {
+        console.warn("Failed to format autocomplete insertion:", error);
+        showToast({ severity: "warn", summary: "未插入", detail: error.message, life: 5e3 });
+        return "";
+      }
+    }
+    const trimmed = typeof relativePath === "string" ? relativePath.trim() : "";
+    if (!trimmed) {
+      return "";
+    }
+    return formatAutocompleteInsertion(trimmed);
+  }
+  /**
+   * Check if the autocomplete instance is still valid
+   * (input element exists and is in the DOM)
+   * @returns {boolean}
+   */
+  isValid() {
+    return this.inputElement && document.body.contains(this.inputElement);
+  }
+  /**
+   * Refresh the TextAreaCaretHelper to update cached measurements
+   * Useful after element is moved in DOM (e.g., Vue mode switch)
+   */
+  refreshCaretHelper() {
+    if (this.inputElement && document.body.contains(this.inputElement)) {
+      this.helper = new TextAreaCaretHelper(this.inputElement, () => app.canvas.ds.scale);
+    }
+  }
+  /**
+   * Handle toggle setting command (e.g., /autocomplete, /activefilters)
+   * @param {Object} command - The toggle command with settingId and value
+   */
+  async _handleToggleSettingCommand(command) {
+    const { settingId, value } = command;
+    try {
+      const success = await setLoraManagerSettingValue(settingId, value);
+      if (success) {
+        this._showToggleFeedback(command, value);
+        this._clearCurrentToken();
+      } else {
+        throw new Error("settings API unavailable");
+      }
+    } catch (error) {
+      console.error("[Lora Manager] Failed to toggle setting:", error);
+      showToast({
+        severity: "error",
+        summary: "Error",
+        detail: "Failed to toggle autocomplete setting",
+        life: 3e3
+      });
+    }
+    this.hide();
+  }
+  /**
+   * Show visual feedback for toggle action using toast
+   * @param {Object} command - The toggle command that was executed
+   * @param {boolean} enabled - New autocomplete state
+   */
+  _showToggleFeedback(command, enabled) {
+    showToast({
+      severity: enabled ? "success" : "secondary",
+      summary: command.feedbackSummary || (enabled ? "Autocomplete Enabled" : "Autocomplete Disabled"),
+      detail: command.feedbackDetail || (enabled ? "Tag autocomplete is now ON. Type to see suggestions." : "Tag autocomplete is now OFF. Use /autocomplete or the node right-click menu to re-enable."),
+      life: 3e3
+    });
+  }
+  /**
+   * Clear the current command token from input
+   * Preserves leading spaces after delimiters (e.g., "1girl, /emb" -> "1girl, ")
+   */
+  _clearCurrentToken() {
+    const currentValue = this.inputElement.value;
+    const activeRange = this.getActiveSearchRange(currentValue);
+    const caretPos = activeRange.end;
+    const lastSegment = activeRange.rawText;
+    const commandMatch = lastSegment.match(/^(\s*)(\/\w+)/);
+    if (commandMatch) {
+      const leadingSpaces = commandMatch[1].length;
+      const commandStartPos = activeRange.start + leadingSpaces;
+      let endPos = caretPos;
+      while (endPos < currentValue.length && currentValue[endPos] === " ") {
+        endPos++;
+      }
+      const newValue = currentValue.substring(0, commandStartPos) + currentValue.substring(endPos);
+      const newCaretPos = commandStartPos;
+      this.inputElement.value = newValue;
+      const event = new Event("input", { bubbles: true });
+      this.inputElement.dispatchEvent(event);
+      this.inputElement.focus();
+      this.inputElement.setSelectionRange(newCaretPos, newCaretPos);
+    } else {
+      const commandStartPos = activeRange.start;
+      let endPos = caretPos;
+      while (endPos < currentValue.length && currentValue[endPos] === " ") {
+        endPos++;
+      }
+      const newValue = currentValue.substring(0, commandStartPos) + currentValue.substring(endPos);
+      const newCaretPos = commandStartPos;
+      this.inputElement.value = newValue;
+      const event = new Event("input", { bubbles: true });
+      this.inputElement.dispatchEvent(event);
+      this.inputElement.focus();
+      this.inputElement.setSelectionRange(newCaretPos, newCaretPos);
+    }
+  }
+  destroy() {
+    if (this.destroyed) return;
+    this.destroyed = true;
+    this.hide();
+    this.unbindEvents();
+    if (this.inputElement._promptAutocompleteOwner === this) {
+      this.inputElement._promptAutocompleteOwner = this.inputElement._promptAutocompleteFallback;
+    }
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+    }
+    if (this.onInput) {
+      this.inputElement.removeEventListener("input", this.onInput);
+      this.onInput = null;
+    }
+    if (this.onKeyDown) {
+      this.inputElement.removeEventListener("keydown", this.onKeyDown);
+      this.onKeyDown = null;
+    }
+    if (this.onBlur) {
+      this.inputElement.removeEventListener("blur", this.onBlur);
+      this.onBlur = null;
+    }
+    if (this.onDocumentClick) {
+      document.removeEventListener("click", this.onDocumentClick);
+      this.onDocumentClick = null;
+    }
+    if (this.onScroll && this.scrollContainer) {
+      this.scrollContainer.removeEventListener("scroll", this.onScroll);
+      this.onScroll = null;
+    }
+    if (typeof this.behavior.destroy === "function") {
+      this.behavior.destroy(this);
+    } else if (this.previewTooltip) {
+      this.previewTooltip.cleanup();
+      this.previewTooltip = null;
+    }
+    this.previewTooltipPromise = null;
+    if (this.dropdown && this.dropdown.parentNode) {
+      this.dropdown.parentNode.removeChild(this.dropdown);
+      this.dropdown = null;
+    }
+  }
+}
+window.loraManagerCreateAutocomplete = (input, modelType = "prompt", options = {}) => new AutoComplete(input, modelType, options);
+window.dispatchEvent(new Event("lora-manager:autocomplete-ready"));
 function getComfyUIBasePath() {
   const { pathname } = window.location;
   return pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
@@ -15935,6 +18664,40 @@ function interceptModeChange(node, onModeChange) {
       }
     }
   });
+}
+function showToast(options, type = "info") {
+  if (typeof options === "string") {
+    options = {
+      detail: options,
+      severity: type
+    };
+  }
+  const toastOptions = {
+    severity: options.severity || "info",
+    summary: options.summary,
+    detail: options.detail,
+    closable: options.closable !== false,
+    // default to true
+    life: options.life,
+    group: options.group,
+    styleClass: options.styleClass,
+    contentStyleClass: options.contentStyleClass
+  };
+  Object.keys(toastOptions).forEach((key) => {
+    if (toastOptions[key] === void 0) {
+      delete toastOptions[key];
+    }
+  });
+  if (app && app.extensionManager && app.extensionManager.toast) {
+    app.extensionManager.toast.add(toastOptions);
+  } else {
+    const message = toastOptions.detail || toastOptions.summary || "No message";
+    const severity = toastOptions.severity.toUpperCase();
+    console.log(`${severity}: ${message}`);
+    if (toastOptions.severity === "error") {
+      alert(message);
+    }
+  }
 }
 function isLoraStackInput(input) {
   return (input == null ? void 0 : input.type) === "LORA_STACK";
@@ -16910,6 +19673,395 @@ app.registerExtension({
     }
   }
 });
+const STYLE_ID = "lm-lora-shared-styles";
+let stylePromise = null;
+function injectStyles(cssText) {
+  let styleEl = document.getElementById(STYLE_ID);
+  if (!styleEl) {
+    styleEl = document.createElement("style");
+    styleEl.id = STYLE_ID;
+    document.head.appendChild(styleEl);
+  }
+  styleEl.textContent = cssText;
+}
+async function loadCssText() {
+  const cssUrl = new URL("data:text/css;base64,LyogU2hhcmVkIHN0eWxpbmcgZm9yIHRoZSBMb1JBIE1hbmFnZXIgZnJvbnRlbmQgd2lkZ2V0cyAqLw0KLmxtLXRvb2x0aXAgew0KICBwb3NpdGlvbjogZml4ZWQ7DQogIHotaW5kZXg6IDEwMDAxOw0KICBiYWNrZ3JvdW5kOiByZ2JhKDAsIDAsIDAsIDAuODUpOw0KICBib3JkZXItcmFkaXVzOiA2cHg7DQogIGJveC1zaGFkb3c6IDAgNHB4IDEycHggcmdiYSgwLCAwLCAwLCAwLjMpOw0KICBkaXNwbGF5OiBub25lOw0KICBvdmVyZmxvdzogaGlkZGVuOw0KICBtYXgtd2lkdGg6IDMwMHB4Ow0KICBwb2ludGVyLWV2ZW50czogbm9uZTsNCiAgdHJhbnNpdGlvbjogb3BhY2l0eSAwLjE1cyBlYXNlOw0KfQ0KDQoubG0tdG9vbHRpcF9fbWVkaWEtY29udGFpbmVyIHsNCiAgcG9zaXRpb246IHJlbGF0aXZlOw0KICBtYXgtd2lkdGg6IDMwMHB4Ow0KICBtYXgtaGVpZ2h0OiAzMDBweDsNCn0NCg0KLmxtLXRvb2x0aXBfX21lZGlhIHsNCiAgbWF4LXdpZHRoOiAxMDAlOw0KICBtYXgtaGVpZ2h0OiAzMDBweDsNCiAgb2JqZWN0LWZpdDogY29udGFpbjsNCiAgZGlzcGxheTogYmxvY2s7DQp9DQoNCi5sbS10b29sdGlwX19sYWJlbCB7DQogIHBvc2l0aW9uOiBhYnNvbHV0ZTsNCiAgYm90dG9tOiAwOw0KICBsZWZ0OiAwOw0KICByaWdodDogMDsNCiAgcGFkZGluZzogOHB4Ow0KICBjb2xvcjogd2hpdGU7DQogIGZvbnQtc2l6ZTogMTNweDsNCiAgZm9udC1mYW1pbHk6ICJJbnRlciIsICJTZWdvZSBVSSIsIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZjsNCiAgYmFja2dyb3VuZDogbGluZWFyLWdyYWRpZW50KHRyYW5zcGFyZW50LCByZ2JhKDAsIDAsIDAsIDAuOCkpOw0KICB0ZXh0LWFsaWduOiBjZW50ZXI7DQogIGJhY2tkcm9wLWZpbHRlcjogYmx1cig0cHgpOw0KICAtd2Via2l0LWJhY2tkcm9wLWZpbHRlcjogYmx1cig0cHgpOw0KICBsaW5lLWhlaWdodDogMS40Ow0KICBvdmVyZmxvdy13cmFwOiBicmVhay13b3JkOw0KICB3b3JkLWJyZWFrOiBicmVhay13b3JkOw0KICBkaXNwbGF5OiAtd2Via2l0LWJveDsNCiAgLXdlYmtpdC1saW5lLWNsYW1wOiAzOw0KICAtd2Via2l0LWJveC1vcmllbnQ6IHZlcnRpY2FsOw0KICBvdmVyZmxvdzogaGlkZGVuOw0KfQ0KDQoubG0tdG9vbHRpcF9fbGljZW5zZS1vdmVybGF5IHsNCiAgcG9zaXRpb246IGFic29sdXRlOw0KICB0b3A6IDhweDsNCiAgbGVmdDogOHB4Ow0KICBkaXNwbGF5OiBmbGV4Ow0KICBmbGV4LXdyYXA6IHdyYXA7DQogIGdhcDogNnB4Ow0KICBwYWRkaW5nOiA0cHggOHB4Ow0KICBib3JkZXItcmFkaXVzOiA5OTlweDsNCiAgYmFja2dyb3VuZDogcmdiYSgxMCwgMTAsIDE0LCAwLjc4KTsNCiAgYm9yZGVyOiAxcHggc29saWQgcmdiYSgyNTUsIDI1NSwgMjU1LCAwLjEyKTsNCiAgYm94LXNoYWRvdzogMCA4cHggMTZweCByZ2JhKDAsIDAsIDAsIDAuNDUpOw0KICBiYWNrZHJvcC1maWx0ZXI6IGJsdXIoOHB4KTsNCiAgLXdlYmtpdC1iYWNrZHJvcC1maWx0ZXI6IGJsdXIoOHB4KTsNCiAgbWF4LXdpZHRoOiBjYWxjKDEwMCUgLSAxNnB4KTsNCn0NCg0KLmxtLXRvb2x0aXBfX2xpY2Vuc2UtaWNvbiB7DQogIHdpZHRoOiAxOHB4Ow0KICBoZWlnaHQ6IDE4cHg7DQogIGRpc3BsYXk6IGlubGluZS1ibG9jazsNCiAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSgyNTUsIDI1NSwgMjU1LCAwLjkpOw0KICAtd2Via2l0LW1hc2s6IHZhcigtLWxpY2Vuc2UtaWNvbi1pbWFnZSkgY2VudGVyL2NvbnRhaW4gbm8tcmVwZWF0Ow0KICBtYXNrOiB2YXIoLS1saWNlbnNlLWljb24taW1hZ2UpIGNlbnRlci9jb250YWluIG5vLXJlcGVhdDsNCn0NCg0KLyogU2V0IDIg4oCUIG5ldyBzdHlsZSBsaWNlbnNlIG92ZXJsYXkgKi8NCi5sbS10b29sdGlwX19saWNlbnNlLW92ZXJsYXktbmV3IHsNCiAgcG9zaXRpb246IGFic29sdXRlOw0KICB0b3A6IDhweDsNCiAgbGVmdDogOHB4Ow0KICBkaXNwbGF5OiBmbGV4Ow0KICBmbGV4LXdyYXA6IHdyYXA7DQogIGdhcDogNHB4Ow0KICBwYWRkaW5nOiA1cHggOHB4Ow0KICBib3JkZXItcmFkaXVzOiA5OTlweDsNCiAgYmFja2dyb3VuZDogcmdiYSgxMCwgMTAsIDE0LCAwLjc4KTsNCiAgYm9yZGVyOiAxcHggc29saWQgcmdiYSgyNTUsIDI1NSwgMjU1LCAwLjEyKTsNCiAgYmFja2Ryb3AtZmlsdGVyOiBibHVyKDhweCk7DQogIC13ZWJraXQtYmFja2Ryb3AtZmlsdGVyOiBibHVyKDhweCk7DQogIG1heC13aWR0aDogY2FsYygxMDAlIC0gMTZweCk7DQp9DQoNCi5sbS10b29sdGlwX19saWNlbnNlLWljb24tbmV3IHsNCiAgd2lkdGg6IDE2cHg7DQogIGhlaWdodDogMTZweDsNCiAgZGlzcGxheTogaW5saW5lLWJsb2NrOw0KICBib3JkZXItcmFkaXVzOiAzcHg7DQogIC13ZWJraXQtbWFzazogdmFyKC0tbGljZW5zZS1pY29uLWltYWdlKSBjZW50ZXIvY29udGFpbiBuby1yZXBlYXQ7DQogIG1hc2s6IHZhcigtLWxpY2Vuc2UtaWNvbi1pbWFnZSkgY2VudGVyL2NvbnRhaW4gbm8tcmVwZWF0Ow0KfQ0KDQoubG0tdG9vbHRpcF9fbGljZW5zZS1pY29uLW5ldy5hbGxvd2VkIHsNCiAgYmFja2dyb3VuZC1jb2xvcjogIzQwYzA1NzsNCn0NCg0KLmxtLXRvb2x0aXBfX2xpY2Vuc2UtaWNvbi1uZXcuZGVuaWVkIHsNCiAgYmFja2dyb3VuZC1jb2xvcjogI2ZhNTI1MjsNCn0NCg0KLmxtLWxvcmFzLWNvbnRhaW5lciB7DQogIGRpc3BsYXk6IGZsZXg7DQogIGZsZXgtZGlyZWN0aW9uOiBjb2x1bW47DQogIGdhcDogNXB4Ow0KICBwYWRkaW5nOiA2cHg7DQogIGJhY2tncm91bmQtY29sb3I6IHJnYmEoNDAsIDQ0LCA1MiwgMC42KTsNCiAgYm9yZGVyLXJhZGl1czogNnB4Ow0KICB3aWR0aDogMTAwJTsNCiAgYm94LXNpemluZzogYm9yZGVyLWJveDsNCiAgb3ZlcmZsb3c6IGF1dG87DQogIG91dGxpbmU6IG5vbmU7DQp9DQoNCi8qIFZ1ZSBub2RlIG1vZGU6IHByZXZlbnQgY29udGVudCBmcm9tIHB1c2hpbmcgbm9kZSBzaXplIHZpYSBSZXNpemVPYnNlcnZlci4NCiAgIGNvbnRhaW46c2l6ZSBicmVha3MgdGhlIGZlZWRiYWNrIGxvb3Ag4oCUIHRoZSBjb250YWluZXIncyBpbnRyaW5zaWMgc2l6ZQ0KICAgaXMgZGV0ZXJtaW5lZCBzb2xlbHkgYnkgQ1NTLCBub3QgYnkgaG93IG1hbnkgTG9SQXMgYXJlIGluc2lkZS4gKi8NCi5sbS1sb3Jhcy1jb250YWluZXIubG0tdnVlLW5vZGUgew0KICBoZWlnaHQ6IDEwMCU7DQogIG1pbi1oZWlnaHQ6IHZhcigtLWNvbWZ5LXdpZGdldC1taW4taGVpZ2h0LCAyMDBweCk7DQogIGNvbnRhaW46IGxheW91dCBzaXplOw0KfQ0KDQoubG0tbG9yYXMtY29udGFpbmVyOmZvY3VzIHsNCiAgb3V0bGluZTogbm9uZTsNCn0NCg0KLmxtLWxvcmFzLWNvbnRhaW5lci51YXAtY29tcGFjdC1sb3JhcyB7DQogIGdhcDogM3B4Ow0KICBwYWRkaW5nOiA0cHg7DQp9DQoNCi51YXAtY29tcGFjdC1sb3JhcyAubG0tbG9yYS1lbXB0eS1zdGF0ZSB7DQogIHBhZGRpbmc6IDJweCAwOw0KICBsaW5lLWhlaWdodDogMjBweDsNCiAgZm9udC1zaXplOiAxMnB4Ow0KfQ0KDQovKiBWdWUgbm9kZSBtb2RlOiBwcmV2ZW50IGNvbnRlbnQgZnJvbSBwdXNoaW5nIG5vZGUgc2l6ZSB2aWEgUmVzaXplT2JzZXJ2ZXIuDQogICBTYW1lIHRlY2huaXF1ZSBhcyAubG0tbG9yYXMtY29udGFpbmVyLmxtLXZ1ZS1ub2RlIGFib3ZlLiAqLw0KLmNvbWZ5LXRhZ3MtY29udGFpbmVyLmxtLXZ1ZS1ub2RlIHsNCiAgaGVpZ2h0OiAxMDAlOw0KICBtaW4taGVpZ2h0OiB2YXIoLS1jb21meS13aWRnZXQtbWluLWhlaWdodCwgMTUwcHgpOw0KICBjb250YWluOiBsYXlvdXQgc2l6ZTsNCn0NCg0KLmxtLWxvcmEtZW1wdHktc3RhdGUgew0KICB0ZXh0LWFsaWduOiBjZW50ZXI7DQogIHBhZGRpbmc6IDIwcHggMDsNCiAgY29sb3I6IHJnYmEoMjI2LCAyMzIsIDI0MCwgMC44KTsNCiAgZm9udC1zdHlsZTogaXRhbGljOw0KICB1c2VyLXNlbGVjdDogbm9uZTsNCiAgLXdlYmtpdC11c2VyLXNlbGVjdDogbm9uZTsNCiAgLW1vei11c2VyLXNlbGVjdDogbm9uZTsNCiAgLW1zLXVzZXItc2VsZWN0OiBub25lOw0KICB3aWR0aDogMTAwJTsNCn0NCg0KLmxtLWxvcmFzLWhlYWRlciB7DQogIGRpc3BsYXk6IGZsZXg7DQogIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjsNCiAgYWxpZ24taXRlbXM6IGNlbnRlcjsNCiAgcGFkZGluZzogNHB4IDhweDsNCiAgYm9yZGVyLWJvdHRvbTogMXB4IHNvbGlkIHJnYmEoMjI2LCAyMzIsIDI0MCwgMC4yKTsNCiAgbWFyZ2luLWJvdHRvbTogNXB4Ow0KICBwb3NpdGlvbjogcmVsYXRpdmU7DQogIGN1cnNvcjogZXctcmVzaXplOw0KICB0b3VjaC1hY3Rpb246IG5vbmU7DQp9DQoNCi5sbS10b2dnbGUtY29udGFpbmVyIHsNCiAgZGlzcGxheTogZmxleDsNCiAgYWxpZ24taXRlbXM6IGNlbnRlcjsNCn0NCg0KLmxtLXRvZ2dsZS1sYWJlbCwNCi5sbS1zdHJlbmd0aC1sYWJlbCB7DQogIGNvbG9yOiByZ2JhKDIyNiwgMjMyLCAyNDAsIDAuOCk7DQogIGZvbnQtc2l6ZTogMTNweDsNCiAgdXNlci1zZWxlY3Q6IG5vbmU7DQogIC13ZWJraXQtdXNlci1zZWxlY3Q6IG5vbmU7DQogIC1tb3otdXNlci1zZWxlY3Q6IG5vbmU7DQogIC1tcy11c2VyLXNlbGVjdDogbm9uZTsNCn0NCg0KLmxtLXRvZ2dsZS1sYWJlbCB7DQogIG1hcmdpbi1sZWZ0OiA4cHg7DQp9DQoNCi5sbS1zdHJlbmd0aC1sYWJlbCB7DQogIG1hcmdpbi1yaWdodDogOHB4Ow0KICBkaXNwbGF5OiBmbGV4Ow0KICBhbGlnbi1pdGVtczogY2VudGVyOw0KfQ0KDQoubG0tZHJhZy1oaW50IHsNCiAgbWFyZ2luLWxlZnQ6IDVweDsNCiAgZm9udC1zaXplOiAxMXB4Ow0KICBvcGFjaXR5OiAwLjY7DQogIHRyYW5zaXRpb246IG9wYWNpdHkgMC4ycyBlYXNlOw0KfQ0KDQoubG0tbG9yYXMtaGVhZGVyOmhvdmVyIC5sbS1kcmFnLWhpbnQgew0KICBvcGFjaXR5OiAxOw0KfQ0KDQoubG0tbG9yYS1lbnRyeSB7DQogIGRpc3BsYXk6IGZsZXg7DQogIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjsNCiAgYWxpZ24taXRlbXM6IGNlbnRlcjsNCiAgcGFkZGluZzogNnB4Ow0KICBib3JkZXItcmFkaXVzOiA2cHg7DQogIHRyYW5zaXRpb246IGFsbCAwLjJzIGVhc2U7DQogIG1hcmdpbi1ib3R0b206IDRweDsNCiAgYm9yZGVyOiAxcHggc29saWQgdHJhbnNwYXJlbnQ7DQogIGJhY2tncm91bmQtY29sb3I6IHJnYmEoNDUsIDU1LCA3MiwgMC43KTsNCiAgdG91Y2gtYWN0aW9uOiBub25lOw0KICBjdXJzb3I6IHBvaW50ZXIgIWltcG9ydGFudDsNCn0NCg0KLmxtLWxvcmEtZW50cnlbZGF0YS1hY3RpdmU9ImZhbHNlIl0gew0KICBiYWNrZ3JvdW5kLWNvbG9yOiByZ2JhKDM1LCA0MCwgNTAsIDAuNSk7DQp9DQoNCi5sbS1sb3JhLWVudHJ5OmhvdmVyIHsNCiAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSg1MCwgNjAsIDgwLCAwLjgpOw0KfQ0KDQoubG0tbG9yYS1lbnRyeVtkYXRhLWFjdGl2ZT0iZmFsc2UiXTpob3ZlciB7DQogIGJhY2tncm91bmQtY29sb3I6IHJnYmEoNDAsIDQ1LCA1NSwgMC42KTsNCn0NCg0KLmxtLWxvcmEtZW50cnlbZGF0YS1zZWxlY3RlZD0idHJ1ZSJdIHsNCiAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSg2NiwgMTUzLCAyMjUsIDAuMykgIWltcG9ydGFudDsNCiAgYm9yZGVyOiAxcHggc29saWQgcmdiYSg2NiwgMTUzLCAyMjUsIDAuNikgIWltcG9ydGFudDsNCiAgYm94LXNoYWRvdzogMCAwIDAgMXB4IHJnYmEoNjYsIDE1MywgMjI1LCAwLjMpICFpbXBvcnRhbnQ7DQp9DQoNCi5sbS1sb3JhLWVudHJ5W2RhdGEtc2VsZWN0ZWQ9InRydWUiXVtkYXRhLWxvY2tlZD0idHJ1ZSJdIHsNCiAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSg2NiwgMTUzLCAyMjUsIDAuMikgIWltcG9ydGFudDsNCiAgYm9yZGVyLWxlZnQ6IDNweCBzb2xpZCByZ2JhKDI0NSwgMTU4LCAxMSwgMC44KSAhaW1wb3J0YW50Ow0KICBib3JkZXItcmlnaHQ6IDFweCBzb2xpZCByZ2JhKDY2LCAxNTMsIDIyNSwgMC42KSAhaW1wb3J0YW50Ow0KICBib3JkZXItdG9wOiAxcHggc29saWQgcmdiYSg2NiwgMTUzLCAyMjUsIDAuNikgIWltcG9ydGFudDsNCiAgYm9yZGVyLWJvdHRvbTogMXB4IHNvbGlkIHJnYmEoNjYsIDE1MywgMjI1LCAwLjYpICFpbXBvcnRhbnQ7DQogIGJveC1zaGFkb3c6IDAgMCAwIDFweCByZ2JhKDY2LCAxNTMsIDIyNSwgMC4zKSwgaW5zZXQgMCAwIDIwcHggcmdiYSgyNDUsIDE1OCwgMTEsIDAuMDQpICFpbXBvcnRhbnQ7DQp9DQoNCi5sbS1sb3JhLWVudHJ5W2RhdGEtc2VsZWN0ZWQ9InRydWUiXVtkYXRhLWxvY2tlZD0idHJ1ZSJdW2RhdGEtYWN0aXZlPSJmYWxzZSJdIHsNCiAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSg0OCwgNDIsIDM2LCAwLjUpICFpbXBvcnRhbnQ7DQogIGJvcmRlci1sZWZ0OiAzcHggc29saWQgcmdiYSgyNDUsIDE1OCwgMTEsIDAuNikgIWltcG9ydGFudDsNCn0NCg0KLmxtLWxvcmEtZW50cnlbZGF0YS1taXNzaW5nPSJ0cnVlIl0gew0KICBiYWNrZ3JvdW5kLWNvbG9yOiByZ2JhKDIyMCwgMzgsIDM4LCAwLjE2KTsNCiAgYm9yZGVyOiAxcHggc29saWQgcmdiYSgyMjAsIDM4LCAzOCwgMC41KTsNCn0NCg0KLmxtLWxvcmEtZW50cnlbZGF0YS1taXNzaW5nPSJ0cnVlIl0gLmxtLWxvcmEtbmFtZSB7DQogIGNvbG9yOiByZ2JhKDI1MiwgMTY1LCAxNjUsIDAuOTUpOw0KfQ0KDQoubG0tbG9yYS1jbGlwLWVudHJ5W2RhdGEtbWlzc2luZz0idHJ1ZSJdIHsNCiAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSgyMjAsIDM4LCAzOCwgMC4xMik7DQogIGJvcmRlcjogMXB4IHNvbGlkIHJnYmEoMjIwLCAzOCwgMzgsIDAuNCk7DQogIGJvcmRlci1sZWZ0OiAycHggc29saWQgcmdiYSgyMjAsIDM4LCAzOCwgMC42KTsNCn0NCg0KLmxtLWxvcmEtY2xpcC1lbnRyeVtkYXRhLW1pc3Npbmc9InRydWUiXSAubG0tbG9yYS1uYW1lIHsNCiAgY29sb3I6IHJnYmEoMjUyLCAxNjUsIDE2NSwgMC45NSk7DQp9DQoNCi5sbS1sb3JhLW5hbWUgew0KICBtYXJnaW4tbGVmdDogNHB4Ow0KICBmbGV4OiAxOw0KICBvdmVyZmxvdzogaGlkZGVuOw0KICB0ZXh0LW92ZXJmbG93OiBlbGxpcHNpczsNCiAgd2hpdGUtc3BhY2U6IG5vd3JhcDsNCiAgY29sb3I6IHJnYmEoMjI2LCAyMzIsIDI0MCwgMC45KTsNCiAgZm9udC1zaXplOiAxM3B4Ow0KICB1c2VyLXNlbGVjdDogbm9uZTsNCiAgLXdlYmtpdC11c2VyLXNlbGVjdDogbm9uZTsNCiAgLW1vei11c2VyLXNlbGVjdDogbm9uZTsNCiAgLW1zLXVzZXItc2VsZWN0OiBub25lOw0KfQ0KDQoubG0tbG9yYS1lbnRyeVtkYXRhLWFjdGl2ZT0iZmFsc2UiXSAubG0tbG9yYS1uYW1lIHsNCiAgY29sb3I6IHJnYmEoMjI2LCAyMzIsIDI0MCwgMC42KTsNCn0NCg0KLmxtLWxvcmEtc3RyZW5ndGgtY29udHJvbCB7DQogIGRpc3BsYXk6IGZsZXg7DQogIGFsaWduLWl0ZW1zOiBjZW50ZXI7DQogIGdhcDogOHB4Ow0KfQ0KDQoubG0tbG9yYS1zdHJlbmd0aC1pbnB1dCB7DQogIHdpZHRoOiA1MHB4Ow0KICBtaW4td2lkdGg6IDUwcHg7DQogIHBhZGRpbmc6IDJweCA0cHg7DQogIGJvcmRlci1yYWRpdXM6IDRweDsNCiAgYm9yZGVyOiAxcHggc29saWQgcmdiYSgyMjYsIDIzMiwgMjQwLCAwLjIpOw0KICBiYWNrZ3JvdW5kOiByZ2JhKDI2LCAzMiwgNDQsIDAuOSk7DQogIGNvbG9yOiByZ2JhKDIyNiwgMjMyLCAyNDAsIDAuOSk7DQogIHRleHQtYWxpZ246IGNlbnRlcjsNCiAgZm9udC1zaXplOiAxM3B4Ow0KICB0cmFuc2l0aW9uOiBib3JkZXItY29sb3IgMC4ycyBlYXNlLCBib3gtc2hhZG93IDAuMnMgZWFzZTsNCn0NCg0KLmxtLWxvcmEtc3RyZW5ndGgtaW5wdXQ6Zm9jdXMgew0KICBvdXRsaW5lOiBub25lOw0KICBib3JkZXItY29sb3I6IHJnYmEoNjYsIDE1MywgMjI1LCAwLjkpOw0KICBib3gtc2hhZG93OiAwIDAgMCAycHggcmdiYSg2NiwgMTUzLCAyMjUsIDAuMyk7DQp9DQoNCi8qIEFkdmlzb3J5IGN1ZTogc3RyZW5ndGggaXMgb3V0c2lkZSB0aGUgdXNhZ2UtdGlwcyByZWNvbW1lbmRlZCByYW5nZS4NCiAgIEFtYmVyIHRvIGRpc3Rpbmd1aXNoIGl0IGZyb20gdGhlIHJlZCAibWlzc2luZyBMb1JBIiBlcnJvciBzdGF0ZS4gKi8NCi5sbS1sb3JhLXN0cmVuZ3RoLWlucHV0LmxtLXN0cmVuZ3RoLW91dC1vZi1yYW5nZSB7DQogIGJvcmRlci1jb2xvcjogcmdiYSgyNDUsIDE1OCwgMTEsIDAuNzUpOw0KICBjb2xvcjogcmdiYSgyNTIsIDIxMSwgNzcsIDAuOTUpOw0KfQ0KDQoubG0tbG9yYS1zdHJlbmd0aC1pbnB1dC5sbS1zdHJlbmd0aC1vdXQtb2YtcmFuZ2U6Zm9jdXMgew0KICBib3JkZXItY29sb3I6IHJnYmEoMjQ1LCAxNTgsIDExLCAwLjkpOw0KICBib3gtc2hhZG93OiAwIDAgMCAycHggcmdiYSgyNDUsIDE1OCwgMTEsIDAuMyk7DQp9DQoNCi5sbS1sb3JhLXN0cmVuZ3RoLWJ1dHRvbnMgew0KICBkaXNwbGF5OiBmbGV4Ow0KICBmbGV4LWRpcmVjdGlvbjogY29sdW1uOw0KICBnYXA6IDJweDsNCn0NCg0KLmxtLWxvcmEtZW50cnlbZGF0YS1hY3RpdmU9ImZhbHNlIl0gLmxtLWxvcmEtc3RyZW5ndGgtaW5wdXQgew0KICBjb2xvcjogcmdiYSgyMjYsIDIzMiwgMjQwLCAwLjYpOw0KfQ0KDQoubG0tbG9yYS1hcnJvdyB7DQogIHdpZHRoOiAxNnB4Ow0KICBoZWlnaHQ6IDE2cHg7DQogIGRpc3BsYXk6IGZsZXg7DQogIGFsaWduLWl0ZW1zOiBjZW50ZXI7DQogIGp1c3RpZnktY29udGVudDogY2VudGVyOw0KICBjdXJzb3I6IHBvaW50ZXI7DQogIHVzZXItc2VsZWN0OiBub25lOw0KICBjb2xvcjogcmdiYSgyMjYsIDIzMiwgMjQwLCAwLjgpOw0KICB0cmFuc2l0aW9uOiBhbGwgMC4ycyBlYXNlOw0KfQ0KDQoubG0tbG9yYS1hcnJvdzpob3ZlciB7DQogIGNvbG9yOiB3aGl0ZTsNCiAgdHJhbnNmb3JtOiBzY2FsZSgxLjIpOw0KfQ0KDQoubG0tbG9yYS1hcnJvdyBzdmcgew0KICB3aWR0aDogMTJweDsNCiAgaGVpZ2h0OiAxMnB4Ow0KfQ0KDQoubG0tbG9yYS1leHBhbmQtYnV0dG9uIHsNCiAgd2lkdGg6IDIwcHg7DQogIGhlaWdodDogMjBweDsNCiAgZGlzcGxheTogZmxleDsNCiAgYWxpZ24taXRlbXM6IGNlbnRlcjsNCiAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7DQogIGN1cnNvcjogcG9pbnRlcjsNCiAgdXNlci1zZWxlY3Q6IG5vbmU7DQogIGNvbG9yOiByZ2JhKDIyNiwgMjMyLCAyNDAsIDAuNyk7DQogIGJhY2tncm91bmQtY29sb3I6IHJnYmEoNDUsIDU1LCA3MiwgMC4zKTsNCiAgYm9yZGVyOiAxcHggc29saWQgcmdiYSgyMjYsIDIzMiwgMjQwLCAwLjIpOw0KICBib3JkZXItcmFkaXVzOiAzcHg7DQogIHRyYW5zaXRpb246IGFsbCAwLjJzIGVhc2U7DQogIGZsZXgtc2hyaW5rOiAwOw0KICBwYWRkaW5nOiAwOw0KICBib3gtc2l6aW5nOiBib3JkZXItYm94Ow0KfQ0KDQoubG0tbG9yYS1leHBhbmQtYnV0dG9uOmhvdmVyIHsNCiAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSg2NiwgMTUzLCAyMjUsIDAuMik7DQogIGJvcmRlci1jb2xvcjogcmdiYSg2NiwgMTUzLCAyMjUsIDAuNCk7DQogIGNvbG9yOiByZ2JhKDIyNiwgMjMyLCAyNDAsIDAuOSk7DQogIHRyYW5zZm9ybTogc2NhbGUoMS4wNSk7DQp9DQoNCi5sbS1sb3JhLWV4cGFuZC1idXR0b246YWN0aXZlIHsNCiAgdHJhbnNmb3JtOiBzY2FsZSgwLjk1KTsNCiAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSg2NiwgMTUzLCAyMjUsIDAuMyk7DQp9DQoNCi5sbS1sb3JhLWV4cGFuZC1idXR0b246Zm9jdXMgew0KICBvdXRsaW5lOiBub25lOw0KfQ0KDQoubG0tbG9yYS1leHBhbmQtYnV0dG9uOmZvY3VzLXZpc2libGUgew0KICBib3gtc2hhZG93OiAwIDAgMCAycHggcmdiYSg2NiwgMTUzLCAyMjUsIDAuNSk7DQp9DQoNCi5sbS1sb3JhLXRvZ2dsZSB7DQogIHdpZHRoOiAxOHB4Ow0KICBoZWlnaHQ6IDE4cHg7DQogIGJvcmRlci1yYWRpdXM6IDRweDsNCiAgY3Vyc29yOiBwb2ludGVyOw0KICB0cmFuc2l0aW9uOiBhbGwgMC4ycyBlYXNlOw0KICBiYWNrZ3JvdW5kLWNvbG9yOiByZ2JhKDQ1LCA1NSwgNzIsIDAuNyk7DQogIGJvcmRlcjogMXB4IHNvbGlkIHJnYmEoMjI2LCAyMzIsIDI0MCwgMC4yKTsNCn0NCg0KLmxtLWxvcmEtdG9nZ2xlLS1hY3RpdmUgew0KICBiYWNrZ3JvdW5kLWNvbG9yOiByZ2JhKDY2LCAxNTMsIDIyNSwgMC45KTsNCiAgYm9yZGVyLWNvbG9yOiByZ2JhKDY2LCAxNTMsIDIyNSwgMC45KTsNCn0NCg0KLmxtLWxvcmEtdG9nZ2xlOmhvdmVyIHsNCiAgdHJhbnNmb3JtOiBzY2FsZSgxLjA1KTsNCiAgYm94LXNoYWRvdzogMCAycHggNHB4IHJnYmEoMCwgMCwgMCwgMC4xNSk7DQp9DQoNCi5sbS1sb3JhLWRyYWctaGFuZGxlIHsNCiAgd2lkdGg6IDE2cHg7DQogIGhlaWdodDogMTZweDsNCiAgZGlzcGxheTogZmxleDsNCiAgYWxpZ24taXRlbXM6IGNlbnRlcjsNCiAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7DQogIGN1cnNvcjogZ3JhYjsNCiAgdXNlci1zZWxlY3Q6IG5vbmU7DQogIGNvbG9yOiByZ2JhKDIyNiwgMjMyLCAyNDAsIDAuNik7DQogIHRyYW5zaXRpb246IGFsbCAwLjJzIGVhc2U7DQogIG1hcmdpbi1yaWdodDogOHB4Ow0KICBmbGV4LXNocmluazogMDsNCn0NCg0KLmxtLWxvcmEtZHJhZy1oYW5kbGUgc3ZnIHsNCiAgd2lkdGg6IDE0cHg7DQogIGhlaWdodDogMTRweDsNCn0NCg0KLmxtLWxvcmEtZHJhZy1oYW5kbGU6aG92ZXIgew0KICBjb2xvcjogcmdiYSgyMjYsIDIzMiwgMjQwLCAwLjkpOw0KICB0cmFuc2Zvcm06IHNjYWxlKDEuMSk7DQp9DQoNCi5sbS1sb3JhLWRyYWctaGFuZGxlOmFjdGl2ZSB7DQogIGN1cnNvcjogZ3JhYmJpbmc7DQp9DQoNCi5sbS1sb3JhLWxvY2stYnV0dG9uIHsNCiAgd2lkdGg6IDIwcHg7DQogIGhlaWdodDogMjBweDsNCiAgZGlzcGxheTogZmxleDsNCiAgYWxpZ24taXRlbXM6IGNlbnRlcjsNCiAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7DQogIGN1cnNvcjogcG9pbnRlcjsNCiAgdXNlci1zZWxlY3Q6IG5vbmU7DQogIGJhY2tncm91bmQtY29sb3I6IHJnYmEoNDUsIDU1LCA3MiwgMC4zKTsNCiAgYm9yZGVyOiAxcHggc29saWQgcmdiYSgyMjYsIDIzMiwgMjQwLCAwLjIpOw0KICBib3JkZXItcmFkaXVzOiAzcHg7DQogIHRyYW5zaXRpb246IGFsbCAwLjJzIGVhc2U7DQogIGZsZXgtc2hyaW5rOiAwOw0KICBwYWRkaW5nOiAwOw0KICBib3gtc2l6aW5nOiBib3JkZXItYm94Ow0KICBtYXJnaW4tcmlnaHQ6IDhweDsNCiAgY29sb3I6IHJnYmEoMjI2LCAyMzIsIDI0MCwgMC44KTsNCn0NCg0KLmxtLWxvcmEtbG9jay1idXR0b24gc3ZnIHsNCiAgd2lkdGg6IDE0cHg7DQogIGhlaWdodDogMTRweDsNCn0NCg0KLmxtLWxvcmEtbG9jay1idXR0b246aG92ZXIgew0KICBiYWNrZ3JvdW5kLWNvbG9yOiByZ2JhKDY2LCAxNTMsIDIyNSwgMC4yKTsNCiAgYm9yZGVyLWNvbG9yOiByZ2JhKDY2LCAxNTMsIDIyNSwgMC40KTsNCiAgY29sb3I6IHJnYmEoMjI2LCAyMzIsIDI0MCwgMC45NSk7DQogIHRyYW5zZm9ybTogc2NhbGUoMS4wNSk7DQp9DQoNCi5sbS1sb3JhLWxvY2stYnV0dG9uOmFjdGl2ZSB7DQogIHRyYW5zZm9ybTogc2NhbGUoMC45NSk7DQp9DQoNCi5sbS1sb3JhLWxvY2stYnV0dG9uOmZvY3VzIHsNCiAgb3V0bGluZTogbm9uZTsNCn0NCg0KLmxtLWxvcmEtbG9jay1idXR0b246Zm9jdXMtdmlzaWJsZSB7DQogIGJveC1zaGFkb3c6IDAgMCAwIDJweCByZ2JhKDY2LCAxNTMsIDIyNSwgMC41KTsNCn0NCg0KLmxtLWxvcmEtbG9jay1idXR0b24tLWxvY2tlZCB7DQogIGJhY2tncm91bmQtY29sb3I6IHJnYmEoMjQ1LCAxNTgsIDExLCAwLjI1KTsNCiAgYm9yZGVyLWNvbG9yOiByZ2JhKDI0NSwgMTU4LCAxMSwgMC43KTsNCiAgY29sb3I6IHJnYmEoMjUxLCAxOTEsIDM2LCAwLjk1KTsNCiAgYm94LXNoYWRvdzogMCAwIDhweCByZ2JhKDI0NSwgMTU4LCAxMSwgMC4xNSk7DQp9DQoNCi5sbS1sb3JhLWxvY2stYnV0dG9uLS1sb2NrZWQ6aG92ZXIgew0KICBiYWNrZ3JvdW5kLWNvbG9yOiByZ2JhKDI0NSwgMTU4LCAxMSwgMC4zNSk7DQogIGJvcmRlci1jb2xvcjogcmdiYSgyNDUsIDE1OCwgMTEsIDAuODUpOw0KICBib3gtc2hhZG93OiAwIDAgMTJweCByZ2JhKDI0NSwgMTU4LCAxMSwgMC4yNSk7DQp9DQoNCi8qIFZpc3VhbCBzdHlsaW5nIGZvciBsb2NrZWQgbG9yYSBlbnRyaWVzICovDQoubG0tbG9yYS1lbnRyeVtkYXRhLWxvY2tlZD0idHJ1ZSJdIHsNCiAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSg2MCwgNTAsIDQwLCAwLjc1KTsNCiAgYm9yZGVyLWxlZnQ6IDNweCBzb2xpZCByZ2JhKDI0NSwgMTU4LCAxMSwgMC43KTsNCiAgYm94LXNoYWRvdzogaW5zZXQgMCAwIDIwcHggcmdiYSgyNDUsIDE1OCwgMTEsIDAuMDQpOw0KfQ0KDQoubG0tbG9yYS1lbnRyeVtkYXRhLWxvY2tlZD0idHJ1ZSJdOmhvdmVyIHsNCiAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSg2NSwgNTUsIDQ1LCAwLjg1KTsNCiAgYm94LXNoYWRvdzogaW5zZXQgMCAwIDI0cHggcmdiYSgyNDUsIDE1OCwgMTEsIDAuMDYpOw0KfQ0KDQoubG0tbG9yYS1lbnRyeVtkYXRhLWxvY2tlZD0idHJ1ZSJdW2RhdGEtYWN0aXZlPSJmYWxzZSJdIHsNCiAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSg0OCwgNDIsIDM2LCAwLjYpOw0KICBib3JkZXItbGVmdDogM3B4IHNvbGlkIHJnYmEoMjQ1LCAxNTgsIDExLCAwLjUpOw0KfQ0KDQoubG0tbG9yYS1lbnRyeVtkYXRhLWxvY2tlZD0idHJ1ZSJdW2RhdGEtYWN0aXZlPSJmYWxzZSJdOmhvdmVyIHsNCiAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSg1MiwgNDYsIDQwLCAwLjcpOw0KfQ0KDQpib2R5LmxtLWxvcmEtc3RyZW5ndGgtZHJhZ2dpbmcsDQpib2R5LmxtLWxvcmEtc3RyZW5ndGgtZHJhZ2dpbmcgKiB7DQogIGN1cnNvcjogZXctcmVzaXplICFpbXBvcnRhbnQ7DQogIHVzZXItc2VsZWN0OiBub25lICFpbXBvcnRhbnQ7DQp9DQoNCmJvZHkubG0tbG9yYS1yZW9yZGVyaW5nLA0KYm9keS5sbS1sb3JhLXJlb3JkZXJpbmcgKiB7DQogIGN1cnNvcjogZ3JhYmJpbmcgIWltcG9ydGFudDsNCiAgdXNlci1zZWxlY3Q6IG5vbmUgIWltcG9ydGFudDsNCn0NCg0KLmxtLWxvcmEtZW50cnktLWRyYWdnaW5nIHsNCiAgb3BhY2l0eTogMC41Ow0KICB0cmFuc2Zvcm06IHNjYWxlKDAuOTgpOw0KfQ0KDQoubG0tbG9yYS1kcm9wLWluZGljYXRvciB7DQogIHBvc2l0aW9uOiBhYnNvbHV0ZTsNCiAgbGVmdDogMDsNCiAgcmlnaHQ6IDA7DQogIGhlaWdodDogM3B4Ow0KICBiYWNrZ3JvdW5kLWNvbG9yOiByZ2JhKDY2LCAxNTMsIDIyNSwgMC45KTsNCiAgYm9yZGVyLXJhZGl1czogMnB4Ow0KICBvcGFjaXR5OiAwOw0KICB0cmFuc2l0aW9uOiBvcGFjaXR5IDAuMnMgZWFzZTsNCiAgYm94LXNoYWRvdzogMCAwIDZweCByZ2JhKDY2LCAxNTMsIDIyNSwgMC44KTsNCiAgei1pbmRleDogMTA7DQogIHBvaW50ZXItZXZlbnRzOiBub25lOw0KfQ0KDQoubG0tbG9yYS1zdHJlbmd0aC13cmFwcGVyIHsNCiAgZGlzcGxheTogZmxleDsNCiAgYWxpZ24taXRlbXM6IGNlbnRlcjsNCiAgZ2FwOiA2cHg7DQp9DQoNCi5sbS1sb3JhLWVudHJ5LWxlZnQgew0KICBkaXNwbGF5OiBmbGV4Ow0KICBhbGlnbi1pdGVtczogY2VudGVyOw0KICBmbGV4OiAxOw0KICBtaW4td2lkdGg6IDA7DQogIGdhcDogNnB4Ow0KfQ0KDQoubG0tbG9yYS1jbGlwLWVudHJ5IHsNCiAgbWFyZ2luLWxlZnQ6IDEwcHg7DQogIG1hcmdpbi1ib3R0b206IDRweDsNCiAgcGFkZGluZzogNnB4Ow0KICBwYWRkaW5nLWxlZnQ6IDIwcHg7DQogIGJvcmRlci1yYWRpdXM6IDZweDsNCiAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSg2NSwgNzAsIDkwLCAwLjYpOw0KICBib3JkZXI6IDFweCBzb2xpZCByZ2JhKDY2LCAxNTMsIDIyNSwgMC4yKTsNCiAgYm9yZGVyLWxlZnQ6IDJweCBzb2xpZCByZ2JhKDcyLCAxMTgsIDI1NSwgMC42KTsNCiAgZGlzcGxheTogZmxleDsNCiAganVzdGlmeS1jb250ZW50OiBzcGFjZS1iZXR3ZWVuOw0KICBhbGlnbi1pdGVtczogY2VudGVyOw0KICB0cmFuc2l0aW9uOiBhbGwgMC4ycyBlYXNlOw0KICBtYXJnaW4tdG9wOiAtMnB4Ow0KICB0b3VjaC1hY3Rpb246IG5vbmU7DQogIGN1cnNvcjogcG9pbnRlciAhaW1wb3J0YW50Ow0KfQ0KDQoubG0tbG9yYS1jbGlwLWVudHJ5W2RhdGEtYWN0aXZlPSJmYWxzZSJdIHsNCiAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSg1MCwgNTUsIDY1LCAwLjUpOw0KICBib3JkZXItY29sb3I6IHJnYmEoNjYsIDE1MywgMjI1LCAwLjEpOw0KICBib3JkZXItbGVmdC1jb2xvcjogcmdiYSg2NiwgMTUzLCAyMjUsIDAuMyk7DQp9DQoNCi5sbS1sb3JhLWNsaXAtZW50cnk6aG92ZXIgew0KICBiYWNrZ3JvdW5kLWNvbG9yOiByZ2JhKDcwLCA3NSwgOTUsIDAuNyk7DQp9DQoNCi5sbS1sb3JhLWNsaXAtZW50cnlbZGF0YS1hY3RpdmU9ImZhbHNlIl06aG92ZXIgew0KICBiYWNrZ3JvdW5kLWNvbG9yOiByZ2JhKDU1LCA2MCwgNzAsIDAuNik7DQp9DQoNCi5sbS1sb3JhLWNsaXAtZW50cnkgLmxtLWxvcmEtbmFtZSB7DQogIGZvbnQtc2l6ZTogMTNweDsNCiAgY29sb3I6IHJnYmEoMjAwLCAyMTUsIDI0MCwgMC45KTsNCiAgbWFyZ2luLWxlZnQ6IDA7DQp9DQoNCi5sbS1sb3JhLWNsaXAtZW50cnlbZGF0YS1hY3RpdmU9ImZhbHNlIl0gLmxtLWxvcmEtbmFtZSB7DQogIGNvbG9yOiByZ2JhKDIwMCwgMjE1LCAyNDAsIDAuNik7DQp9DQoNCi5sbS1sb3JhLWNsaXAtZW50cnkgLmxtLWxvcmEtc3RyZW5ndGgtaW5wdXQgew0KICBjb2xvcjogcmdiYSgyMDAsIDIxNSwgMjQwLCAwLjkpOw0KfQ0KDQoubG0tbG9yYS1jbGlwLWVudHJ5W2RhdGEtYWN0aXZlPSJmYWxzZSJdIC5sbS1sb3JhLXN0cmVuZ3RoLWlucHV0IHsNCiAgY29sb3I6IHJnYmEoMjAwLCAyMTUsIDI0MCwgMC42KTsNCn0NCg0KLmxtLWxvcmEtYmFkZ2Ugew0KICBwYWRkaW5nOiAycHggNnB4Ow0KICBib3JkZXItcmFkaXVzOiAxMnB4Ow0KICBiYWNrZ3JvdW5kOiByZ2JhKDY2LCAxNTMsIDIyNSwgMC4yKTsNCiAgY29sb3I6IHJnYmEoMjI2LCAyMzIsIDI0MCwgMC44NSk7DQogIGZvbnQtc2l6ZTogMTFweDsNCiAgdGV4dC10cmFuc2Zvcm06IHVwcGVyY2FzZTsNCiAgbGV0dGVyLXNwYWNpbmc6IDAuMDVlbTsNCn0NCg0KLmxtLWxvcmEtY29udGV4dC1tZW51IHsNCiAgcG9zaXRpb246IGZpeGVkOw0KICBiYWNrZ3JvdW5kOiByZ2JhKDI2LCAzMiwgNDQsIDAuOTUpOw0KICBib3JkZXItcmFkaXVzOiA4cHg7DQogIGJveC1zaGFkb3c6IDAgMTBweCAyNXB4IHJnYmEoMCwgMCwgMCwgMC4zNSk7DQogIHBhZGRpbmc6IDhweCAwOw0KICB6LWluZGV4OiAxMDAwMDsNCiAgbWluLXdpZHRoOiAxODBweDsNCiAgYm9yZGVyOiAxcHggc29saWQgcmdiYSg2NiwgMTUzLCAyMjUsIDAuMyk7DQogIGJhY2tkcm9wLWZpbHRlcjogYmx1cig2cHgpOw0KfQ0KDQoubG0tbG9yYS1tZW51LWl0ZW0gew0KICBwYWRkaW5nOiA2cHggMjBweDsNCiAgY3Vyc29yOiBwb2ludGVyOw0KICBjb2xvcjogcmdiYSgyMjYsIDIzMiwgMjQwLCAwLjkpOw0KICBmb250LXNpemU6IDEzcHg7DQogIHVzZXItc2VsZWN0OiBub25lOw0KICBkaXNwbGF5OiBmbGV4Ow0KICBhbGlnbi1pdGVtczogY2VudGVyOw0KICBnYXA6IDhweDsNCn0NCg0KLmxtLWxvcmEtbWVudS1pdGVtOmhvdmVyIHsNCiAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSg2NiwgMTUzLCAyMjUsIDAuMik7DQp9DQoNCi5sbS1sb3JhLW1lbnUtaXRlbS1pY29uIHsNCiAgd2lkdGg6IDE0cHg7DQogIGhlaWdodDogMTRweDsNCiAgZGlzcGxheTogZmxleDsNCiAgYWxpZ24taXRlbXM6IGNlbnRlcjsNCiAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7DQp9DQoNCi5sbS1sb3JhLWNvbnRleHQtbWVudSBociB7DQogIGJvcmRlcjogbm9uZTsNCiAgYm9yZGVyLXRvcDogMXB4IHNvbGlkIHJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wNSk7DQogIG1hcmdpbjogNnB4IDA7DQp9DQoNCi5sbS10cmlnZ2VyLWNvdW50LWJhZGdlIHsNCiAgZm9udC12YXJpYW50LW51bWVyaWM6IHRhYnVsYXItbnVtczsNCn0NCg0KLmxtLXRyaWdnZXItY291bnQtYmFkZ2UtLWVkaXRlZCB7DQogIGNvbG9yOiByZ2JhKDIyNiwgMjMyLCAyNDAsIDAuOTIpOw0KfQ0KDQoubG0tdHJpZ2dlci1ncm91cC1lZGl0LWJ1dHRvbiB7DQogIHRyYW5zaXRpb246IG9wYWNpdHkgMC4xOHMgZWFzZSwgY29sb3IgMC4xOHMgZWFzZTsNCn0NCg0KLmxtLXRyaWdnZXItZ3JvdXAtZWRpdC1idXR0b246aG92ZXIgew0KICBjb2xvcjogcmdiYSgyNTUsIDI1NSwgMjU1LCAwLjk4KTsNCn0NCg0KLmxtLXRyaWdnZXItZ3JvdXAtZWRpdG9yIHsNCiAgYmFja2dyb3VuZDogcmdiYSgyNiwgMzIsIDQ0LCAwLjk1KTsNCiAgYm9yZGVyOiAxcHggc29saWQgcmdiYSg2NiwgMTUzLCAyMjUsIDAuMjQpOw0KICBib3gtc2hhZG93OiAwIDEwcHggMjVweCByZ2JhKDAsIDAsIDAsIDAuMzUpOw0KICBiYWNrZHJvcC1maWx0ZXI6IGJsdXIoNnB4KTsNCn0NCg0KLmxtLXRyaWdnZXItZ3JvdXAtZWRpdG9yX190aXRsZSB7DQogIGNvbG9yOiByZ2JhKDIyNiwgMjMyLCAyNDAsIDAuOTYpOw0KfQ0KDQoubG0tdHJpZ2dlci1ncm91cC1lZGl0b3JfX3N1YnRpdGxlLA0KLmxtLXRyaWdnZXItZ3JvdXAtZWRpdG9yX19lbXB0eSB7DQogIGNvbG9yOiByZ2JhKDIyNiwgMjMyLCAyNDAsIDAuNzIpOw0KfQ0KDQovKiBBdXRvY29tcGxldGUgc3R5bGluZyAqLw0KLmxtLWF1dG9jb21wbGV0ZS1uYW1lIHsNCiAgZmxleDogMTsNCiAgbWluLXdpZHRoOiAwOw0KICBvdmVyZmxvdzogaGlkZGVuOw0KICB0ZXh0LW92ZXJmbG93OiBlbGxpcHNpczsNCn0NCg0KLmxtLWF1dG9jb21wbGV0ZS1tZXRhIHsNCiAgZGlzcGxheTogZmxleDsNCiAgYWxpZ24taXRlbXM6IGNlbnRlcjsNCiAgZ2FwOiA4cHg7DQogIGZsZXgtc2hyaW5rOiAwOw0KfQ0KDQoubG0tYXV0b2NvbXBsZXRlLWNvdW50IHsNCiAgZm9udC1zaXplOiAxMXB4Ow0KICBjb2xvcjogcmdiYSgyMjYsIDIzMiwgMjQwLCAwLjUpOw0KfQ0KDQoubG0tYXV0b2NvbXBsZXRlLWNhdGVnb3J5IHsNCiAgZm9udC1zaXplOiAxMHB4Ow0KICBwYWRkaW5nOiAycHggNnB4Ow0KICBib3JkZXItcmFkaXVzOiAxMHB4Ow0KICB3aGl0ZS1zcGFjZTogbm93cmFwOw0KfQ0KDQovKiBDYXRlZ29yeS1zcGVjaWZpYyBiYWRnZSBjb2xvcnMgKi8NCi5sbS1hdXRvY29tcGxldGUtY2F0ZWdvcnktLWdlbmVyYWwgew0KICBiYWNrZ3JvdW5kOiByZ2JhKDAsIDE1NSwgMjMwLCAwLjIpOw0KICBjb2xvcjogIzRiYjRmZjsNCn0NCg0KLmxtLWF1dG9jb21wbGV0ZS1jYXRlZ29yeS0tYXJ0aXN0IHsNCiAgYmFja2dyb3VuZDogcmdiYSgyNTUsIDEzOCwgMTM5LCAwLjIpOw0KICBjb2xvcjogI2ZmYzNjMzsNCn0NCg0KLmxtLWF1dG9jb21wbGV0ZS1jYXRlZ29yeS0tY29weXJpZ2h0IHsNCiAgYmFja2dyb3VuZDogcmdiYSgxOTksIDE1MSwgMjU1LCAwLjIpOw0KICBjb2xvcjogI2RkYzlmYjsNCn0NCg0KLmxtLWF1dG9jb21wbGV0ZS1jYXRlZ29yeS0tY2hhcmFjdGVyIHsNCiAgYmFja2dyb3VuZDogcmdiYSg1MywgMTk4LCA3NCwgMC4yKTsNCiAgY29sb3I6ICM5M2U0OWE7DQp9DQoNCi5sbS1hdXRvY29tcGxldGUtY2F0ZWdvcnktLW1ldGEgew0KICBiYWNrZ3JvdW5kOiByZ2JhKDIzNCwgMjA4LCAxMzIsIDAuMik7DQogIGNvbG9yOiAjZjdlN2MzOw0KfQ0KDQoubG0tYXV0b2NvbXBsZXRlLWNhdGVnb3J5LS1zcGVjaWVzIHsNCiAgYmFja2dyb3VuZDogcmdiYSgyMzcsIDEzNywgNTQsIDAuMik7DQogIGNvbG9yOiAjZjZhZDU1Ow0KfQ0KDQoubG0tYXV0b2NvbXBsZXRlLWNhdGVnb3J5LS1sb3JlIHsNCiAgYmFja2dyb3VuZDogcmdiYSg3MiwgMTg3LCAxMjAsIDAuMik7DQogIGNvbG9yOiAjNjhkMzkxOw0KfQ0KDQovKiBDb21tYW5kIGxpc3Qgc3R5bGluZyAqLw0KLmNvbWZ5LWF1dG9jb21wbGV0ZS1jb21tYW5kIHsNCiAgZGlzcGxheTogZmxleDsNCiAganVzdGlmeS1jb250ZW50OiBzcGFjZS1iZXR3ZWVuOw0KICBhbGlnbi1pdGVtczogY2VudGVyOw0KICBnYXA6IDEycHg7DQp9DQoNCi5sbS1hdXRvY29tcGxldGUtY29tbWFuZC1uYW1lIHsNCiAgZm9udC1mYW1pbHk6ICdDb25zb2xhcycsICdNb25hY28nLCBtb25vc3BhY2U7DQogIGNvbG9yOiByZ2JhKDY2LCAxNTMsIDIyNSwgMC45KTsNCn0NCg0KLmxtLWF1dG9jb21wbGV0ZS1jb21tYW5kLWxhYmVsIHsNCiAgZm9udC1zaXplOiAxMnB4Ow0KICBjb2xvcjogcmdiYSgyMjYsIDIzMiwgMjQwLCAwLjYpOw0KfQ0KDQovKiAtLS0tIFdpZGdldCBmbGFzaCBoaWdobGlnaHQgKHZpc3VhbCBjdWUgYWZ0ZXIgYSB2YWx1ZSBpcyBzZW50IHRvIGEgbm9kZSkgLS0tLSAqLw0KLyogQXBwbGllZCB0byBhIHdpZGdldCByb3cgZWxlbWVudCB3aGVuIGl0cyB2YWx1ZSBpcyB1cGRhdGVkIGJ5IExvUkEgTWFuYWdlci4NCiAgIFNoaWZ0cyB0aGUgdmFsdWUgdGV4dCBjb2xvciB0byB0aGUgTE0gYnJhbmQgYWNjZW50IHdpdGggYSBDU1MgdHJhbnNpdGlvbg0KICAgZm9yIGZhZGUtaW4vZmFkZS1vdXQuIFJlbW92YWwgKHRpbWVvdXQgLyBob3ZlcikgaXMgaGFuZGxlZCBieSBKUy4NCg0KICAgVGhlIHRyYW5zaXRpb24gaXMgZGVjbGFyZWQgb24gLmxtLWZsYXNoLWhvc3QgKGFkZGVkIGFsb25nc2lkZSAubG0tZmxhc2gpDQogICByYXRoZXIgdGhhbiBvbiBDb21meVVJJ3MgLmxnLW5vZGUtd2lkZ2V0LCBzbyB3ZSBkb24ndCBpbXBvc2UgYSBnbG9iYWwNCiAgIGNvbG9yIHRyYW5zaXRpb24gb24gZXZlcnkgd2lkZ2V0IGlucHV0LiBUaGUgaG9zdCBjbGFzcyBwZXJzaXN0cyB1bnRpbA0KICAgY2xlYW51cCBzbyBmYWRlLW91dCBzdGlsbCBhcHBsaWVzIGFmdGVyIC5sbS1mbGFzaCBpcyByZW1vdmVkLiAqLw0KLmxtLWZsYXNoLWhvc3QgaW5wdXQsDQoubG0tZmxhc2gtaG9zdCB0ZXh0YXJlYSwNCi5sbS1mbGFzaC1ob3N0IFtyb2xlPSJjb21ib2JveCJdIHsNCiAgdHJhbnNpdGlvbjogY29sb3IgMC4yNXMgZWFzZSwgLXdlYmtpdC10ZXh0LWZpbGwtY29sb3IgMC4yNXMgZWFzZTsNCn0NCg0KLmxtLWZsYXNoIGlucHV0LA0KLmxtLWZsYXNoIHRleHRhcmVhLA0KLmxtLWZsYXNoIFtyb2xlPSJjb21ib2JveCJdIHsNCiAgY29sb3I6ICM0Mjk5RTAgIWltcG9ydGFudDsNCiAgLXdlYmtpdC10ZXh0LWZpbGwtY29sb3I6ICM0Mjk5RTAgIWltcG9ydGFudDsNCn0NCg==", import.meta.url);
+  const response = await fetch(cssUrl);
+  if (!response.ok) {
+    throw new Error(`Failed to load ${cssUrl}`);
+  }
+  return await response.text();
+}
+function ensureLmStyles() {
+  if (!stylePromise) {
+    stylePromise = loadCssText().then((cssText) => {
+      injectStyles(cssText);
+      return true;
+    }).catch((error) => {
+      console.warn("Failed to load LoRA Manager styles", error);
+      stylePromise = null;
+      return false;
+    });
+  }
+  return stylePromise;
+}
+const LICENSE_ICON_PATH = lmUrl("/loras_static/images/tabler/");
+const LICENSE_FLAG_BITS = {
+  allowNoCredit: 1 << 0,
+  allowOnImages: 1 << 1,
+  allowOnCivitai: 1 << 2,
+  allowRental: 1 << 3,
+  allowSellingModels: 1 << 4,
+  allowDerivatives: 1 << 5,
+  allowRelicense: 1 << 6
+};
+const LICENSE_ICON_COPY = {
+  credit: "Creator credit required",
+  image: "No selling generated content",
+  rentcivit: "No Civitai generation",
+  rent: "No generation services",
+  sell: "No selling models",
+  derivatives: "No sharing merges",
+  relicense: "Same permissions required"
+};
+const COMMERCIAL_ICON_CONFIG = [
+  { bit: LICENSE_FLAG_BITS.allowOnImages, icon: "photo-off.svg", label: LICENSE_ICON_COPY.image },
+  { bit: LICENSE_FLAG_BITS.allowOnCivitai, icon: "brush-off.svg", label: LICENSE_ICON_COPY.rentcivit },
+  { bit: LICENSE_FLAG_BITS.allowRental, icon: "world-off.svg", label: LICENSE_ICON_COPY.rent },
+  { bit: LICENSE_FLAG_BITS.allowSellingModels, icon: "shopping-cart-off.svg", label: LICENSE_ICON_COPY.sell }
+];
+const NEW_LICENSE_ICON_COPY = {
+  commercial: { allowed: "Commercial use allowed", denied: "No commercial use" },
+  genServices: { allowed: "Generation services allowed", denied: "No generation services" },
+  credit: { allowed: "No credit required", denied: "Creator credit required" },
+  derivatives: { allowed: "Merges allowed", denied: "No merges allowed" },
+  relicense: { allowed: "Different permissions allowed on merges", denied: "Same permissions required on merges" }
+};
+const NEW_ICON_CONFIG = [
+  {
+    bitCombo: [LICENSE_FLAG_BITS.allowOnImages, LICENSE_FLAG_BITS.allowSellingModels],
+    icon: "currency-dollar.svg",
+    labelKey: "commercial",
+    allowedFn: (flags) => (flags & LICENSE_FLAG_BITS.allowOnImages) !== 0 || (flags & LICENSE_FLAG_BITS.allowSellingModels) !== 0
+  },
+  {
+    bitCombo: [LICENSE_FLAG_BITS.allowOnCivitai, LICENSE_FLAG_BITS.allowRental],
+    icon: "brush.svg",
+    labelKey: "genServices",
+    allowedFn: (flags) => (flags & LICENSE_FLAG_BITS.allowOnCivitai) !== 0 || (flags & LICENSE_FLAG_BITS.allowRental) !== 0
+  },
+  {
+    bitCombo: [LICENSE_FLAG_BITS.allowNoCredit],
+    icon: "user.svg",
+    labelKey: "credit",
+    allowedFn: (flags) => (flags & LICENSE_FLAG_BITS.allowNoCredit) !== 0
+  },
+  {
+    bitCombo: [LICENSE_FLAG_BITS.allowDerivatives],
+    icon: "git-merge.svg",
+    labelKey: "derivatives",
+    allowedFn: (flags) => (flags & LICENSE_FLAG_BITS.allowDerivatives) !== 0
+  },
+  {
+    bitCombo: [LICENSE_FLAG_BITS.allowRelicense],
+    icon: "license.svg",
+    labelKey: "relicense",
+    allowedFn: (flags) => (flags & LICENSE_FLAG_BITS.allowRelicense) !== 0
+  }
+];
+function parseLicenseFlags(value) {
+  if (typeof value === "number") {
+    return Number.isFinite(value) ? value : null;
+  }
+  if (typeof value === "string" && value.trim() !== "") {
+    const parsed = Number.parseInt(value, 10);
+    return Number.isNaN(parsed) ? null : parsed;
+  }
+  return null;
+}
+function buildLicenseIconData(licenseFlags) {
+  if (licenseFlags == null) {
+    return [];
+  }
+  const icons = [];
+  if ((licenseFlags & LICENSE_FLAG_BITS.allowNoCredit) === 0) {
+    icons.push({ icon: "user-check.svg", label: LICENSE_ICON_COPY.credit });
+  }
+  COMMERCIAL_ICON_CONFIG.forEach((config) => {
+    if ((licenseFlags & config.bit) === 0) {
+      icons.push({ icon: config.icon, label: config.label });
+    }
+  });
+  if ((licenseFlags & LICENSE_FLAG_BITS.allowDerivatives) === 0) {
+    icons.push({ icon: "exchange-off.svg", label: LICENSE_ICON_COPY.derivatives });
+  }
+  if ((licenseFlags & LICENSE_FLAG_BITS.allowRelicense) === 0) {
+    icons.push({ icon: "rotate-2.svg", label: LICENSE_ICON_COPY.relicense });
+  }
+  return icons;
+}
+function createLicenseIconElement({ icon, label }) {
+  const element = document.createElement("span");
+  element.className = "lm-tooltip__license-icon";
+  element.setAttribute("role", "img");
+  element.setAttribute("aria-label", label);
+  element.title = label;
+  element.style.setProperty("--license-icon-image", `url('${LICENSE_ICON_PATH}${icon}')`);
+  return element;
+}
+function buildNewLicenseIconData(licenseFlags) {
+  if (licenseFlags == null) {
+    return [];
+  }
+  return NEW_ICON_CONFIG.map((config) => {
+    const allowed = config.allowedFn(licenseFlags);
+    const label = allowed ? NEW_LICENSE_ICON_COPY[config.labelKey].allowed : NEW_LICENSE_ICON_COPY[config.labelKey].denied;
+    return {
+      icon: config.icon,
+      label,
+      allowed
+    };
+  });
+}
+function createNewLicenseIconElement({ icon, label, allowed }) {
+  const element = document.createElement("span");
+  element.className = `lm-tooltip__license-icon-new ${allowed ? "allowed" : "denied"}`;
+  element.setAttribute("role", "img");
+  element.setAttribute("aria-label", label);
+  element.title = label;
+  element.style.setProperty("--license-icon-image", `url('${LICENSE_ICON_PATH}${icon}')`);
+  return element;
+}
+const LICENSE_ICON_STORAGE_KEY = "lm_license_icon_new_style";
+let _useNewIconsCached = null;
+async function _fetchLicenseIconSetting() {
+  try {
+    const response = await api.fetchApi("/lm/settings");
+    if (response.ok) {
+      const data = await response.json();
+      const value = data.use_new_license_icons !== false;
+      _useNewIconsCached = value;
+      try {
+        localStorage.setItem(LICENSE_ICON_STORAGE_KEY, String(value));
+      } catch (_) {
+      }
+    }
+  } catch (_) {
+  }
+}
+function getUseNewLicenseIcons() {
+  if (_useNewIconsCached !== null) {
+    return _useNewIconsCached;
+  }
+  try {
+    const stored = localStorage.getItem(LICENSE_ICON_STORAGE_KEY);
+    if (stored !== null) {
+      _useNewIconsCached = stored === "true";
+      _fetchLicenseIconSetting();
+      return _useNewIconsCached;
+    }
+  } catch (_) {
+  }
+  _fetchLicenseIconSetting();
+  return true;
+}
+class PreviewTooltip {
+  constructor(options = {}) {
+    const {
+      modelType = "loras",
+      previewUrlResolver,
+      displayNameFormatter
+    } = options;
+    this.modelType = modelType;
+    this.previewUrlResolver = typeof previewUrlResolver === "function" ? previewUrlResolver : (name) => this.defaultPreviewUrlResolver(name);
+    this.displayNameFormatter = typeof displayNameFormatter === "function" ? displayNameFormatter : (name) => name;
+    ensureLmStyles();
+    _fetchLicenseIconSetting();
+    this.element = document.createElement("div");
+    this.element.className = "lm-tooltip";
+    document.body.appendChild(this.element);
+    this.hideTimeout = null;
+    this.isFromAutocomplete = false;
+    this.currentModelName = null;
+    this.globalClickHandler = (event) => {
+      if (!event.target.closest(".comfy-autocomplete-dropdown")) {
+        this.hide();
+      }
+    };
+    document.addEventListener("click", this.globalClickHandler);
+    this.globalScrollHandler = () => this.hide();
+    document.addEventListener("scroll", this.globalScrollHandler, true);
+  }
+  async defaultPreviewUrlResolver(modelName) {
+    const response = await api.fetchApi(
+      `/lm/${this.modelType}/preview-url?name=${encodeURIComponent(modelName)}&license_flags=true`,
+      { method: "GET" }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch preview URL");
+    }
+    const data = await response.json();
+    if (!data.success || !data.preview_url) {
+      throw new Error("No preview available");
+    }
+    return {
+      previewUrl: data.preview_url,
+      displayName: data.display_name ?? modelName,
+      licenseFlags: parseLicenseFlags(data.license_flags),
+      useNewLicenseIcons: data.use_new_license_icons
+    };
+  }
+  async resolvePreviewData(modelName) {
+    const raw = await this.previewUrlResolver(modelName);
+    if (!raw) {
+      throw new Error("No preview data returned");
+    }
+    if (typeof raw === "string") {
+      return {
+        previewUrl: raw,
+        displayName: this.displayNameFormatter(modelName)
+      };
+    }
+    const { previewUrl, displayName, licenseFlags, useNewLicenseIcons } = raw;
+    if (!previewUrl) {
+      throw new Error("No preview URL available");
+    }
+    return {
+      previewUrl,
+      displayName: displayName !== void 0 ? displayName : this.displayNameFormatter(modelName),
+      licenseFlags: parseLicenseFlags(licenseFlags),
+      useNewLicenseIcons
+    };
+  }
+  async show(modelName, x, y2, fromAutocomplete = false) {
+    try {
+      if (this.hideTimeout) {
+        clearTimeout(this.hideTimeout);
+        this.hideTimeout = null;
+      }
+      this.isFromAutocomplete = fromAutocomplete;
+      if (this.element.style.display === "block" && this.currentModelName === modelName) {
+        this.position(x, y2);
+        return;
+      }
+      this.currentModelName = modelName;
+      const { previewUrl, displayName, licenseFlags, useNewLicenseIcons } = await this.resolvePreviewData(
+        modelName
+      );
+      while (this.element.firstChild) {
+        this.element.removeChild(this.element.firstChild);
+      }
+      const mediaContainer = document.createElement("div");
+      mediaContainer.className = "lm-tooltip__media-container";
+      const isVideo = previewUrl.endsWith(".mp4");
+      const mediaElement = isVideo ? document.createElement("video") : document.createElement("img");
+      mediaElement.classList.add("lm-tooltip__media");
+      if (isVideo) {
+        mediaElement.autoplay = true;
+        mediaElement.loop = true;
+        mediaElement.muted = true;
+        mediaElement.controls = false;
+      }
+      const nameLabel = document.createElement("div");
+      nameLabel.textContent = displayName;
+      nameLabel.className = "lm-tooltip__label";
+      mediaContainer.appendChild(mediaElement);
+      this.renderLicenseOverlay(mediaContainer, licenseFlags, useNewLicenseIcons);
+      mediaContainer.appendChild(nameLabel);
+      this.element.appendChild(mediaContainer);
+      this.element.style.opacity = "0";
+      this.element.style.display = "block";
+      const waitForLoad = () => new Promise((resolve2) => {
+        if (isVideo) {
+          if (mediaElement.readyState >= 2) {
+            resolve2();
+          } else {
+            mediaElement.addEventListener("loadeddata", resolve2, {
+              once: true
+            });
+            mediaElement.addEventListener("error", resolve2, { once: true });
+          }
+        } else if (mediaElement.complete) {
+          resolve2();
+        } else {
+          mediaElement.addEventListener("load", resolve2, { once: true });
+          mediaElement.addEventListener("error", resolve2, { once: true });
+        }
+        setTimeout(resolve2, 1e3);
+      });
+      mediaElement.src = previewUrl;
+      await waitForLoad();
+      requestAnimationFrame(() => {
+        this.position(x, y2);
+        this.element.style.transition = "opacity 0.15s ease";
+        this.element.style.opacity = "1";
+      });
+    } catch (error) {
+      console.warn("Failed to load preview:", error);
+    }
+  }
+  position(x, y2) {
+    const rect = this.element.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    let left = x + 10;
+    let top = y2 + 10;
+    if (left + rect.width > viewportWidth) {
+      left = x - rect.width - 10;
+    }
+    if (top + rect.height > viewportHeight) {
+      top = y2 - rect.height - 10;
+    }
+    left = Math.max(10, Math.min(left, viewportWidth - rect.width - 10));
+    top = Math.max(10, Math.min(top, viewportHeight - rect.height - 10));
+    Object.assign(this.element.style, {
+      left: `${left}px`,
+      top: `${top}px`
+    });
+  }
+  hide() {
+    if (this.element.style.display === "block") {
+      this.element.style.opacity = "0";
+      this.hideTimeout = setTimeout(() => {
+        this.element.style.display = "none";
+        this.currentModelName = null;
+        this.isFromAutocomplete = false;
+        const video = this.element.querySelector("video");
+        if (video) {
+          video.pause();
+        }
+        this.hideTimeout = null;
+      }, 150);
+    }
+  }
+  renderLicenseOverlay(container, licenseFlags, useNewLicenseIcons) {
+    const useNew = useNewLicenseIcons !== void 0 ? useNewLicenseIcons : getUseNewLicenseIcons();
+    const icons = useNew ? buildNewLicenseIconData(licenseFlags) : buildLicenseIconData(licenseFlags);
+    if (!icons.length) {
+      return;
+    }
+    const overlay = document.createElement("div");
+    overlay.className = useNew ? "lm-tooltip__license-overlay-new" : "lm-tooltip__license-overlay";
+    icons.forEach((descriptor) => {
+      overlay.appendChild(
+        useNew ? createNewLicenseIconElement(descriptor) : createLicenseIconElement(descriptor)
+      );
+    });
+    container.appendChild(overlay);
+  }
+  cleanup() {
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+    }
+    document.removeEventListener("click", this.globalClickHandler);
+    document.removeEventListener("scroll", this.globalScrollHandler, true);
+    this.element.remove();
+  }
+}
+const preview_tooltip = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  PreviewTooltip
+}, Symbol.toStringTag, { value: "Module" }));
 export {
   createAutocompleteTextWidgetInstanceId
 };
