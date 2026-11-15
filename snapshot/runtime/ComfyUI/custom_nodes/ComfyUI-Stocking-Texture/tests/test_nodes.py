@@ -144,6 +144,20 @@ class TextureContracts(unittest.TestCase):
         self.assertTrue(torch.equal(out, image))
         self.assertTrue(any("走向约束" in item for item in json.loads(report)["images"][0]["messages"]))
 
+    def test_region_without_guide_strokes_does_not_blame_a_wall(self):
+        data = {"schema": 1, "width": 64, "height": 64, "regions": [
+            {"id": "bare", "name": "空部位", "strokes": [],
+             "polygons": [[[30, 10], [38, 10], [38, 50], [30, 50]]]}],
+            "dividers": [[[31, 8], [31, 55]]]}
+        image = torch.full((1, 64, 64, 3), 0.4)
+        mask = torch.zeros((1, 64, 64)); mask[:, 8:56, 30:38] = 1
+        out, _, _, _, report = NODES.StockingTextureRender().render(
+            image, json.dumps(data), mask=mask, color_exclude=False, auto_strength=False)
+        messages = json.loads(report)["images"][0]["messages"]
+        self.assertTrue(torch.equal(out, image))
+        self.assertTrue(any("没有有效走向线" in item for item in messages))
+        self.assertFalse(any("走向约束" in item for item in messages))
+
     def test_manual_wall_reaches_solver(self):
         self.data["dividers"] = [[[64, 55], [64, 90]]]
         from stocking_plugin_tests.vendor import guide_fields

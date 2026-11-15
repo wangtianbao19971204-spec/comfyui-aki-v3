@@ -976,6 +976,8 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/LICENSE",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/__init__.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/__main__.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/_glint_position.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/_oily_absorption.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/coverage.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/depth.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/document.py",

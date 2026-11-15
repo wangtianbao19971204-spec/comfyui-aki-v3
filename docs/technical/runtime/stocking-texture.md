@@ -1,10 +1,18 @@
 # 丝袜纹理节点与引导编辑
 
-文档修订：2026-10-25。
+文档修订：2026-10-31。
 
-## 当前上游同步（2026-10-25）
+## 当前上游同步（2026-10-31）
 
-当前 pin 为 `204a1b8e36dabb0ca11aa3720113be17877fa245`，较 `bcc4e89` 前进 3 个提交：亮点改为默认关闭的总开关并折叠其滑杆，「标出问题」移到纹理减弱面板，预设下拉隐藏空的占位项，服务端钉住 `.js`／`.json`／`.css` 的 MIME 以压过 Windows HKCR 覆盖。29 份上游依赖仍按 Git 原始 blob 保存，MIT 原件不变；本地适配继续独立维护。
+当前 pin 为 `c38be2fe1d3f0b9d768edc78f1ee35ebf6118186`，较 `204a1b8` 前进 5 个提交：油光高光路径稳定化（新增 `_glint_position`／`_oily_absorption`）、导出新增「仅纹理」的 Linear Light 层、界面大小 100–175%、引导导出按写入时的撤销令牌标记已保存且区域名唯一、会话格式升到 2。31 份上游依赖仍按 Git 原始 blob 保存，MIT 原件不变；本地适配继续独立维护。使用与本轮实际验收见[油光路径与仅纹理导出同步](../changes/runtime-stocking-texture/2026-10-31-upstream-oil-gloss.md)及[收据](../../receipts/stocking_upstream_sync_20261031.json)。
+
+本地适配两处，节点接口与工作流不变：`guide_fields.solve_v` 改为返回 `None` 后，`engine.solve_geometry` 用去掉隔开线重解一次来区分「隔开线遮住走向约束」与「本就没有可用走向」，保留原提示；完整编辑器接入界面大小，取值由 `studio_store.UI_SCALES` 约束，`studio_assets.page` 写入 `<html style="--k: …">`，`studio_api` 新增 `POST /api/ui-scale`（非法值 400 且不改已存偏好，其它方法 405）。引导导出改用 `export.export` 的 `saved` 令牌。两份新原件位于 Git 忽略的 `custom_nodes/` 下，须显式 `git add -f` 纳入。
+
+新增回归入口为 `tests/test_studio.py` 的界面大小与仅纹理断言、`tests/test_nodes.py` 的无走向不误报隔开线断言，以及 `tests/test_request_contract.py` 的新路由登记。作者自带测试 568 通过、52 跳过、11 失败，失败全部在其新增 `test_glint_position.py` 的接轨断言（本机 numpy／scipy 低于作者固定版本，走保守分支返回原路径，不影响出图）。
+
+## 上一轮上游同步（2026-10-25）
+
+该轮 pin 为 `204a1b8e36dabb0ca11aa3720113be17877fa245`，较 `bcc4e89` 前进 3 个提交：亮点改为默认关闭的总开关并折叠其滑杆，「标出问题」移到纹理减弱面板，预设下拉隐藏空的占位项，服务端钉住 `.js`／`.json`／`.css` 的 MIME 以压过 Windows HKCR 覆盖。29 份上游依赖仍按 Git 原始 blob 保存，MIT 原件不变；本地适配继续独立维护。
 
 本地适配三处，节点接口与工作流不变：原渲染节点继续以三个亮点滑杆为唯一开关（参数内固定开启）；PSD 手绘亮点层同样固定开启；`studio_store.clean_look` 只在缺少 `sparkle_on` 键时按「有亮点量即开启」迁移旧草稿与旧预设，键存在时尊重开关。使用与验收见[亮点开关同步](../changes/runtime-stocking-texture/2026-10-25-upstream-sparkle-switch.md)及[收据](../../receipts/stocking_upstream_sync_20261025.json)。
 
@@ -115,6 +123,8 @@ node snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_e
 油光保持试验标识；抗摩尔纹是局部频率减弱与多级贴图过滤，不保证任意输入或后续缩放零摩尔纹。合成样例／接口成功不代表真实插画跨姿态画质通过。
 
 ## 更新记录
+
+- 2026-10-31（油光路径与仅纹理导出）：上游固定提交前进到 `c38be2fe`，新增油光高光路径稳定化、导出「仅纹理」Linear Light 层、界面大小 100–175%、引导导出按写入令牌标记已保存、区域名唯一与会话格式 2。本地适配改为在求解失败时做一次无隔开线重解以区分两种 `None` 成因，并把界面大小接进完整编辑器；引导导出透传 `saved` 令牌。插件 124 项 Python、17 项前端、6 项导出合同通过；38 组夹具、912 个渲染用例与固定上游逐像素一致；隔离 CPU 实例 8288 上完成真实出图、实页界面大小与仅纹理导出验收，未触碰 8188 生产实例。详见[本轮说明](../changes/runtime-stocking-texture/2026-10-31-upstream-oil-gloss.md)。
 
 - 2026-10-10（完整编辑器）：新增六样式原版界面与独立文档、SAM／深度离线推理、PSD、预设和像素编辑。适配浏览器文件下载与 ComfyUI 工作流；流式 JSON 有界读取、会话数量串行检查、预览绑定输入哈希、父节点确认后才更新草稿基线。实页发现嵌入 iframe 的表单限制导致预设按钮无反应，补齐编辑器所需表单能力后保存／载入复验成功；问题覆盖图按原版先缩放掩码再合成。草稿身份摘要规范化整数浮点数与对象键顺序，避免浏览器 JSON 往返丢失草稿恢复关系。模型身份见插件 MODEL_SOURCES.json，样例见 studio.workflow.json。
 

@@ -275,6 +275,17 @@ class StudioContracts(unittest.TestCase):
         self.assertIn("options.depth_inference?.device || options.models.device", app_js)
         with self.assertRaises(ValueError): assets_ui.static_asset("../../engine.py", base)
 
+    def test_page_carries_the_ui_scale_the_style_scales_everything_with(self):
+        base = "/stocking_texture/studio/" + "f" * 32
+        page = assets_ui.page(base)
+        self.assertIn('<html style="--k: 1" ', page)
+        self.assertIn('id="ui-scale"', page)
+        for scale in store.UI_SCALES:
+            with self.subTest(scale=scale):
+                self.assertIn(f'<html style="--k: {scale / 100:g}" ', assets_ui.page(base, "zh", scale))
+        self.assertIn('<html style="--k: 1.75" lang="en">', assets_ui.page(base, "en", 175))
+        self.assertIn('<html style="--k: 1" ', assets_ui.page(base, "zh", 999))
+
 
 class StudioHTTP(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
@@ -471,6 +482,42 @@ class StudioHTTP(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(response.status, 404)
         response = await self.client.post(self.base + "/api/apply", json={}, headers={"Origin": "https://elsewhere.invalid"})
         self.assertEqual(response.status, 403)
+
+    async def test_ui_scale_is_kept_served_and_validated(self):
+        page = await (await self.client.get(self.base + "/")).text()
+        self.assertIn('<html style="--k: 1" ', page)
+        result = await self.call("POST", "/api/ui-scale", {"scale": 150})
+        self.assertEqual(result["scale"], 150)
+        self.assertEqual(list(result["choices"]), list(store.UI_SCALES))
+        self.assertIn('<html style="--k: 1.5" ', await (await self.client.get(self.base + "/")).text())
+        s = self.manager.sessions[self.opened["session"]].studio
+        self.assertEqual(s.preferences.read()["ui_scale"], 150)
+        reopened = await (await self.client.post(api.PREFIX, json={"project": self.project})).json()
+        self.assertIn('<html style="--k: 1.5" ', await (await self.client.get(reopened["url"])).text())
+        for bad in (0, 120, 175.5, "150", None, True):
+            response = await self.client.post(self.base + "/api/ui-scale", json={"scale": bad})
+            self.assertEqual(response.status, 400, bad)
+        response = await self.client.get(self.base + "/api/ui-scale")
+        self.assertEqual(response.status, 405)
+        self.assertEqual(s.preferences.read()["ui_scale"], 150)
+
+    async def test_texture_only_export_is_the_linear_light_layer(self):
+        s = self.manager.sessions[self.opened["session"]].studio
+        await asyncio.to_thread(s.wait_ready)
+        response = await self.client.post(self.docbase + "/export", json={"kind": "texture"})
+        self.assertEqual(response.status, 200, await response.text())
+        result = await response.json()
+        layer = cv2.imdecode(np.frombuffer(await (await self.client.get(result["url"])).read(), np.uint8),
+                             cv2.IMREAD_COLOR)[..., ::-1].astype(np.int16)
+        art = s.doc.art
+        finished = cv2.cvtColor(s.render()[0], cv2.COLOR_BGR2RGB)
+        self.assertEqual(layer.shape, art.shape)
+        # Linear Light (base + 2 * (layer - 128)) over the art gives the finished picture back to within a level.
+        rebuilt = np.clip(art.astype(np.int16) + 2 * (layer - 128), 0, 255)
+        self.assertLessEqual(int(np.abs(rebuilt - finished).max()), 1)
+        unchanged = np.all(finished == art, axis=2)
+        self.assertTrue(unchanged.any())
+        self.assertTrue(np.all(layer[unchanged] == 128))
 
 
 if __name__ == "__main__":
