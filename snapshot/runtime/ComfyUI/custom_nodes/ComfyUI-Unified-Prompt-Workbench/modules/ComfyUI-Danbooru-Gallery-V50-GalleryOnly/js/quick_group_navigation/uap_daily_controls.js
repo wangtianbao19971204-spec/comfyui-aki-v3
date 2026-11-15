@@ -658,7 +658,7 @@ export function createDailyControls(jump) {
             if (positiveSource && positiveTextArea) bindInsertionTarget(positiveSource, positiveTextArea);
             const target = positiveSource ? {node:positiveSource.node, widget:positiveSource.widget, direction:'positive', label:`${branch.label} / 正向 #${positiveSource.node.id}`} : null;
             const workbench = await openWorkbench({page:'library', target, inputElement:positiveSource?.inputElement, reset:true, openPending:true});
-            await workbench.showPending();
+            await workbench?.showPending?.();
         }, animaTools);
         const size = find("EmptyLatentImage") || find("EmptySD3LatentImage");
         const sampler = find("KSampler"), seed = find("easy seed");
@@ -904,18 +904,20 @@ export function createDailyControls(jump) {
         },
         mount(host, branch, onClose) {
             const marker=document.createComment('daily-controls-return'),previousShown=shown,previousStyle=panel.style.cssText;
+            const previousMounted=panel.dataset.workbenchMounted,previousClose=panel._workbenchClose;
             const reuse=isCurrent()&&currentBranch===branch&&active;
             panel.parentNode.insertBefore(marker,panel);host.append(panel);panel.dataset.workbenchMounted='true';panel._workbenchClose=onClose;shown=true;
             if(reuse){panel.hidden=false;position();}else render(branch,true);
             fitEmbeddedTools();
             return () => {
                 if(marker.parentNode)marker.replaceWith(panel);
-                delete panel.dataset.workbenchMounted;delete panel._workbenchClose;
+                if(previousMounted!==undefined)panel.dataset.workbenchMounted=previousMounted;else delete panel.dataset.workbenchMounted;
+                if(previousClose!==undefined)panel._workbenchClose=previousClose;else delete panel._workbenchClose;
                 fitEmbeddedTools();
                 panel.style.cssText=previousStyle;shown=previousShown;panel.hidden=!shown;
                 const config=app.graph?.extra?.uap_workbench;
                 const viewed=config?.branches?.find(item=>item.id===config.viewBranch);
-                if(viewed&&isCurrent()&&(currentBranch!==viewed||active!==(viewed.id===config.activeBranch)))
+                if(!panel.dataset.workbenchMounted&&viewed&&isCurrent()&&(currentBranch!==viewed||active!==(viewed.id===config.activeBranch)))
                     render(viewed,viewed.id===config.activeBranch);
                 else position();
             };

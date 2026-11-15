@@ -61,7 +61,7 @@ export function mountRunControls(host,{app,element,button,report,prepareTask,onS
             const queue=await api.getQueue({throwOnError:true});if(disposed)return;
             hasRunning=queue.Running.length>0;
             if(!hasRunning){report('当前没有正在运行的任务。');return;}
-            const item=queue.Running[0],id=item.prompt?.[1]||item[1]||item.prompt_id;
+            const item=queue.Running[0],id=item.prompt?.[1]||item[1]||item.prompt_id||item.id;
             if(typeof id!=='string'||!id)throw new Error('无法确认正在运行的任务，请在 ComfyUI 队列中停止。');
             await api.interrupt(id);if(!disposed)await refresh();
         }finally{

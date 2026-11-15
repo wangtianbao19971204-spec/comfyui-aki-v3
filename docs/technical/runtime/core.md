@@ -1,6 +1,6 @@
 # 本体、插件装配与启动
 
-文档修订：2026-10-11。
+文档修订：2026-11-15。
 
 
 2026-10-11 更新：源码 production / diagnostic / anima 白名单用 `ComfyUI-Anima-LoRA-ControlNet-Patch` 替换旧 `ComfyUI-Anima-2.9B-loraPatch`，避免 LoRA 双重映射；其他启动参数保持。隔离 CPU 服务确认 LoRA 与原生 ControlNet 两个 hook 安装。新增原生权重加载器无需搬动模型；已完成限定部署与生产重启，见 [GPU/部署收据](../../receipts/anima_control_gpu_deployment_20261011.json)及 [兼容说明](../training/anima-compat.md)。
@@ -26,6 +26,8 @@ VNCCS 子图执行同步现按冒号路径定位节点，后端与上传 API 复
 旧 `.git` 退休后的静态探测回退已审计，但不据此声称所有插件都完成重启验收。Anima 2.9B LoRA Patch 已完成独立任务的限定部署与对照交接，见 [兼容层档案](../training/anima-compat.md)；其服务身份与 A/B 结果只代表记录时的现场和样本，后续操作仍须重新核对当前状态。
 
 ## 更新记录
+
+- 2026-11-15：修复 `ComfyUI-Olm-JoyCaption` 在 ComfyUI 生图模型驻留显存时直接 `device_map="auto"` 退化为磁盘卸载假死且无法响应中断的问题：加载前按精度阈值自动调用 `comfy.model_management.unload_all_models()` 腾退显存，对仍落入 `"disk"` 的异常映射快速报错拦截，并通过 `StoppingCriteria` 逐 token 接入 `processing_interrupted()` 与 `unload_after` 清理保护。新增 `tests/test_olm_joycaption_vram_interrupt.py` 隔离单测通过；源码已写回运行区，待生产服务重启后生效。见[JoyCaption 显存与中断保护](../changes/runtime-core/2026-11-15-joycaption-vram-and-interrupt-guard.md)。
 
 - 2026-10-11：K2 控制链维护工具整理：保留 `production_tools/keep_krea2_control_enabled.py`（分支模式表修正，用 `--write` 应用），移除仅用于比对的过渡脚本`production_tools/align_krea2_branch_modes.py`；两者都不改变运行逻辑，也不触碰权重。见[分支模式修复](../changes/runtime-workflows/2026-10-11-krea2-branch-mode-fix.md)。
 

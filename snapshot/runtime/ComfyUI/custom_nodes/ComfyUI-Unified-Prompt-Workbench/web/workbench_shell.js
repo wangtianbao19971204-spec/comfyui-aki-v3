@@ -68,7 +68,7 @@ let lastPage=localStorage.getItem('uw-last-page')||'';if(!pages[lastPage])lastPa
 const pendingDraft=[];
 
 export async function openWorkbench(options={}) {
-    if(current?.root.isConnected){current.root.hidden=false;await current.open(options);return current;}
+    if(current?.root.isConnected){const active=current;active.root.hidden=false;await active.open(options);return active;}
     const previousFocus=document.activeElement;
     const root=element('section',null,document.body,{id:'unified-workbench'});
     root.setAttribute('role','dialog');root.setAttribute('aria-label','统一工作台');
@@ -136,7 +136,8 @@ export async function openWorkbench(options={}) {
     const undoResource=button('撤销本次写入','undo-resource',()=>{const success=writer?.undoLast?.();undoResource.hidden=true;report(success?'已撤销本次写入。':'目标已变化，无法撤销旧操作。');},footer);undoResource.hidden=true;
     const contextBack=button('返回浏览结果','context-back',()=>{if(!canLeave())return;contextBack.hidden=true;return browseReturn?.();},main);contextBack.hidden=true;main.prepend(contextBack);
     const canLeave=()=>{if(document.querySelector('#tb-shared-preset-editor, #unified-tag-manager .ut-dialog, #uw-reference-groups, #uw-replacement-review, .danbooru-settings-dialog, .danbooru-tag-catalog-dialog')){report('请先保存或关闭当前编辑。');return false;}try{if(!sections.models.hidden&&frame?.contentWindow?.modalManager?.isAnyModalOpen()){report('请先关闭模型详情或设置，再切换页面。');return false;}}catch{}return true;};
-    const pendingButton=button('待用列表 · 0','pending',()=>{if(utilityPage('待用列表')){pending.render(element('div',null,utility));updateTargetActions=pending.refreshTarget;}},header);
+    const openPendingPanel=()=>{if(closed||!root.isConnected)return false;if(!utility.hidden&&utility.dataset.utilityKind==='pending')return true;if(utilityPage('待用列表')){utility.dataset.utilityKind='pending';pending.render(element('div',null,utility));updateTargetActions=pending.refreshTarget;return true;}return false;};
+    const pendingButton=button('待用列表 · 0','pending',()=>openPendingPanel(),header);
     const pending=createPendingPrompts({element,button,insertionOptions,report,draft:pendingDraft,onCount:count=>{pendingButton.textContent='待用列表 · '+count;},openSource:item=>{
         if(item.provider==='library'){promptId=item.id;return chooseLibrary('prompts','all');}
         if(item.provider==='tag'){tagId=item.id;return chooseLibrary('tags','all');}
@@ -419,7 +420,7 @@ export async function openWorkbench(options={}) {
         if(focus){const item=[...utility.querySelectorAll('button')].find(b=>b.dataset.uw===focus.key&&b.dataset.resourceKey===focus.resource);if(item&&!item.closest('[hidden]'))item.focus({preventScroll:true});}
         main.scrollTop=state.scrollTop||0;
     }
-    function cleanUtility(){updateTargetActions=null;const clean=utilityCleanup;utilityCleanup=null;clean?.();restoreSelector?.();}
+    function cleanUtility(){delete utility.dataset.utilityKind;updateTargetActions=null;const clean=utilityCleanup;utilityCleanup=null;clean?.();restoreSelector?.();}
     function utilityPage(title,back){if(!canLeave())return false;workspace.setActive(false);animeIntro.hidden=true;selectorToolHost.hidden=true;saveBrowsePosition();browseState=null;if(utility.hidden)utilityReturnFocus=document.activeElement;const searching=document.activeElement===search;searchVersion++;results?.dispose();results=null;cleanUtility();Object.values(sections).forEach(s=>{s.hidden=true;});utility.hidden=false;utility.replaceChildren();const bar=element('div',null,utility,{className:'uw-toolbar'});const backButton=button(back?'返回浏览结果':'返回 '+pageLabels[page],'back',back||(()=>navigate(page)),bar);element('h2',title,bar);if(!searching)backButton.focus();return true;}
     function resourceResults(scope,extraSections=[]){
         results=mountResourceResults(element('div',null,utility),{element,button,scope,extraSections,state:browseState||{},open:async(kind,item,context)=>{
@@ -530,6 +531,7 @@ export async function openWorkbench(options={}) {
         const sidebarReady=opts.openSelector?Promise.resolve():renderSidebar();
         if(page==='workspace')workspace.refresh();
         if(page==='library'&&!opts.openSelector&&!opts.openPending)await loadLibrary(!!opts.reset);
+        if(opts.openPending)openPendingPanel();
         if(page==='models')await openModels(opts.provider,opts.modelTool,opts.modelSettings);if(page==='gallery')await openGallery(opts.node);await sidebarReady;
         if(returnFocus&&!closed&&utility.hidden&&(document.activeElement===document.body||utility.contains(document.activeElement))){(returnFocus.isConnected&&!returnFocus.closest('[hidden]')?returnFocus:nav.querySelector('[aria-current=page]'))?.focus();}
     }
@@ -551,10 +553,11 @@ export async function openWorkbench(options={}) {
     }
     const targetTimer=setInterval(()=>{if(document.hidden||root.hidden||!root.isConnected)return;refreshTargets();if(!utility.hidden)return;if(page==='workspace')workspace.refresh();if(page==='canvas')refreshCanvasPage();if(page==='gallery'){const nodes=(app.graph?._nodes||[]).filter(n=>n.unifiedGalleryActions);if(nodes.length!==galleryNodes.length||nodes.some((node,i)=>node!==galleryNodes[i]))void run(()=>openGallery())();}},750);
     root.dataset.density=localStorage.getItem('uw-density')||'comfortable';
-    current={root,close,useResource,addPending:pending.add,addPendingMany:pending.addMany,showPending:()=>pendingButton.onclick(),open:async opts=>{if(opts.returnTo){returnTo=opts.returnTo;returnButton.textContent='← 返回'+returnTo.label;returnButton.title='回到打开前的'+returnTo.label;returnButton.hidden=false;}allowedTargets=opts.targetOptions||null;if(opts.targetOptions)selectTarget(null);if(opts.target)selectTarget(opts.target,opts.inputElement);if(opts.theme!=null){theme=opts.theme;group='';query='';if(opts.selector){sourceCategory='';subcategory='';search.value='';clearPoolOnce=true;removePoolThemeOnce='';}}if(opts.type)type=opts.type;if(opts.view)view=opts.view;selector=opts.selector||null;selectorTools.hidden=!selector;await navigate(opts.page||page||lastPage||(listPromptTargets(app).length?'workspace':'library'),{...opts,reset:opts.reset||opts.theme!=null||!!opts.view});if(opts.openSelector&&selector)await showSelectorTools({returnTo:opts.returnTo});}};
+    const instance={root,close,useResource,addPending:pending.add,addPendingMany:pending.addMany,showPending:()=>pendingButton.onclick(),open:async opts=>{if(opts.returnTo){returnTo=opts.returnTo;returnButton.textContent='← 返回'+returnTo.label;returnButton.title='回到打开前的'+returnTo.label;returnButton.hidden=false;}allowedTargets=opts.targetOptions||null;if(opts.targetOptions)selectTarget(null);if(opts.target)selectTarget(opts.target,opts.inputElement);if(opts.theme!=null){theme=opts.theme;group='';query='';if(opts.selector){sourceCategory='';subcategory='';search.value='';clearPoolOnce=true;removePoolThemeOnce='';}}if(opts.type)type=opts.type;if(opts.view)view=opts.view;selector=opts.selector||null;selectorTools.hidden=!selector;await navigate(opts.page||page||lastPage||(listPromptTargets(app).length?'workspace':'library'),{...opts,reset:opts.reset||opts.theme!=null||!!opts.view});if(opts.openSelector&&selector)await showSelectorTools({returnTo:opts.returnTo});}};
+    current=instance;
     window.unifiedWorkbenchOpenProvider=value=>current?.open({page:value==='gallery'?'gallery':'models',provider:value});window.unifiedWorkbenchReturn=()=>{if(current)current.root.hidden=false;};
     void checkComponents();
-    try{await current.open(options);}catch(error){report(error);}if(!closed&&!root.hidden&&(document.activeElement===previousFocus||document.activeElement===document.body))search.focus();return current;
+    try{await instance.open(options);}catch(error){report(error);}if(!closed&&!root.hidden&&(document.activeElement===previousFocus||document.activeElement===document.body))search.focus();return instance;
 }
 
 app.registerExtension({name:'UnifiedPromptWorkbench',afterConfigureGraph(){

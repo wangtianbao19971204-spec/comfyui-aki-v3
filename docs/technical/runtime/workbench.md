@@ -1,6 +1,6 @@
 # 工作台 UI、主题与交互
 
-文档修订：2026-10-05.1。
+文档修订：2026-11-15。
 
 
 2026-10-11 更新：原 `anima_control.js` 曾给 UAP 2.9B 提供参考图、四种控制方式、强度和最终预览；高级区保留擦线、分辨率、时段、权重与子图入口。直接编辑子图原节点，异步上传检查当前图/分支/节点身份。擦线旁路同时静音内部输出节点，保存原 mode 后再恢复，防止不用擦线仍读遮罩/导出图片。原生菜单 API 导出及保存重载已在独立 CPU 页面核验；原控件测试 `test_anima_control.cjs` 的范围与限制见 [收据](../../receipts/anima_control_simple_20261011.json)。后续 GPU 实测补齐最终预览目标与原生输出缓存刷新，已按限定范围部署并重启；见 [GPU/部署收据](../../receipts/anima_control_gpu_deployment_20261011.json)。深度模式建议关闭擦线，原默认值保留。
@@ -25,7 +25,7 @@
 
 ## 更新记录
 
-- 2026-11-15：修复 UAP 常用控制台与工作台内嵌控制在 Krea2 / 指令编辑分支下主正向提示词缺失问题（支持沿输入连线回溯上游 `CR Prompt Text.prompt`、排除 `ShowText|pysssss` 等只读节点、优先绑定 `[00W-1]` / `[00W-1N]`，兼容 `WeiLinPromptUI` 与 `Krea2EditGroundedEncode` 及 V3 `COMBO` `/object_info`）；增强 `runtime_controls.js` 底模目录前缀家族拦截（禁用异构 `moss\` 底模）；同步阶段 1~3.2 前端（`canvas_write.js`、`uap_erase_ui_v2.js`、`uap_selfcheck.js`、`uap_rewrite_guard.py`）并退休旧单体 `workbench.js` / `anima_control.js`。详见[本轮说明](../changes/runtime-workbench/2026-11-15-krea2-uap-prompt-and-workflow-sync.md)。
+- 2026-11-15：修复 UAP 常用控制台与工作台内嵌控制在 Krea2 / 指令编辑分支下主正向提示词缺失问题（支持沿输入连线回溯上游 `CR Prompt Text.prompt`、排除 `ShowText|pysssss` 等只读节点、优先绑定 `[00W-1]` / `[00W-1N]`，兼容 `WeiLinPromptUI` 与 `Krea2EditGroundedEncode` 及 V3 `COMBO` `/object_info`）；增强 `runtime_controls.js` 底模目录前缀家族拦截（禁用异构 `moss\` 底模）；同步阶段 1~3.2 前端（`canvas_write.js`、`uap_erase_ui_v2.js`、`uap_selfcheck.js`、`uap_rewrite_guard.py`）并退休旧单体 `workbench.js` / `anima_control.js`；实机全按钮与 Krea2 四条 GPU 链路点检同步修复「待用列表 · 组合预览」`openPending` 空引用竞态、`run_controls.js` 在 ComfyUI `0.42.0` `/jobs` API 下 `item.id` 中断识别及 `uap_daily_controls.js` 嵌套 `mount()` 释放状态恢复。详见[本轮说明](../changes/runtime-workbench/2026-11-15-krea2-uap-prompt-and-workflow-sync.md)。
 
 - 2026-10-25：提示词库改 SQLite 权威存储（WAL + `synchronous=FULL`），读模型/API/语义不变，data.json 降级为按需导出快照；单条编辑只提交 1 行 + revision 小事务（**中位 1.59 ms**，原 ~1033 ms 且不再随库增长），批量事务化并事务前 backup；后台自动导出/备份 + 行级 journal + `store-status` 告警；迁移 8.81 s/逐字段 equal，启动加载 2.17–2.71 s；`UW_LIBRARY_STORE=json|sqlite` 灰度；snapshot/restore 将 library DB 纳入 SQL dump。测试 188 OK/1 skip，详见[说明](../changes/runtime-workbench/2026-10-25-library-store-sqlite.md)。本轮未部署生产。
 

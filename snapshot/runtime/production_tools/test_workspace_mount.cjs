@@ -86,4 +86,83 @@ walk(host);
 assert.equal(modelHosts.length, 1, 'exactly one model-switch host is created');
 assert.equal(host.children.length > 0, true, 'the shell renders content');
 view.dispose();
-console.log('PASS: workspace shell mounts, hosts the model switcher once and disposes');
+
+(async () => {
+    const shellSource = fs.readFileSync(path.join(runtime, 'ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js'), 'utf8')
+        .replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, '');
+    class ShellEl extends El {
+        constructor(tag) {super(tag); this.style = {}; this.options = []; this.isConnected = true;}
+        after(sibling) {if (this.parent) {const i = this.parent.children.indexOf(this); this.parent.children.splice(i + 1, 0, sibling); sibling.parent = this.parent;}}
+        prepend(child) {this.children.unshift(child); child.parent = this; return child;}
+        remove() {this.isConnected = false; if (this.parent) {const i = this.parent.children.indexOf(this); if (i >= 0) this.parent.children.splice(i, 1); this.parent = null;}}
+        focus() {}
+        select() {}
+        closest() {return null;}
+        getClientRects() {return [];}
+        querySelector(sel) {
+            const all = this.querySelectorAll(sel);
+            return all[0] || null;
+        }
+        querySelectorAll(sel) {
+            const out = [];
+            const visit = item => {
+                for (const child of item.children || []) {
+                    if (sel === 'h2' && child.tagName === 'h2') out.push(child);
+                    else if (sel === '[data-uw="close"]' && child.dataset?.uw === 'close') out.push(child);
+                    else if (sel === '[aria-current=page]' && child.attributes?.['aria-current'] === 'page') out.push(child);
+                    visit(child);
+                }
+            };
+            visit(this);
+            return out;
+        }
+    }
+    const body = new ShellEl('body'), head = new ShellEl('head');
+    let pendingRenders = 0, gateResolve = null;
+    const shellCtx = vm.createContext({
+        app: {...app, registerExtension() {}},
+        document: {body, head, activeElement: body, hidden: false, createElement: tag => new ShellEl(tag), createComment: () => new ShellEl('#comment'), getElementById: () => null, querySelector: () => null},
+        window: {location: {origin: 'http://127.0.0.1:8188'}, addEventListener() {}, removeEventListener() {}},
+        location: {origin: 'http://127.0.0.1:8188'},
+        localStorage: {getItem: () => null, setItem() {}},
+        AbortController, URL, URLSearchParams,
+        setTimeout: () => 1, clearTimeout() {}, setInterval: () => 1, clearInterval() {},
+        openTagManager: async () => {}, closeTagManager: () => true,
+        createWidgetInserter: () => ({dispose() {}, supportsActions: []}), captureSelection: () => null, mountInsertionActions() {},
+        installResourceActions() {}, listPromptTargets: () => [], sourceForTarget: t => t,
+        getReferenceCollections: async () => ({items: []}), openReferenceCollections() {},
+        mountWorkspace: () => ({setActive() {}, refresh() {}, dispose() {}, selectorHost: new ShellEl('div')}),
+        createPendingPrompts: ({onCount}) => {onCount(0); return {add() {}, addMany() {}, render() {pendingRenders++;}, refreshTarget() {}};},
+        installBrowserImportReceiver() {}, mountResourceResults: () => ({ready: Promise.resolve(), dispose() {}}),
+        openNativeSettings() {}, installUiTheme() {}, mountThemeToggle() {}, installCanvasTheme() {}, mountCanvasThemeSetting() {},
+        toolIdentity: {workspace: {title: 'w', purpose: 'p'}, library: {title: 'l', purpose: 'p'}},
+        mountFunctionCard() {}, mountFunctionIcon() {},
+        mountSelectorTools: () => ({refresh() {}}), openPromptSelector: async () => {},
+        mountSystemStats: () => ({dispose() {}}),
+        fetch: async url => {
+            if (String(url).includes('/collections/index') && gateResolve) await new Promise(r => {gateResolve = r;});
+            return {ok: true, status: 200, json: async () => ({modules: [], groups: []})};
+        },
+    });
+    vm.runInContext(shellSource, shellCtx);
+    const wb = await shellCtx.openWorkbench({page: 'library', openPending: true});
+    assert.ok(wb, 'openWorkbench returns workbench instance');
+    assert.equal(pendingRenders, 1, 'openPending renders pending view immediately');
+    assert.ok(wb.root.querySelectorAll('h2').some(item => item.textContent === '待用列表'), 'pending heading is rendered');
+    await wb.showPending();
+    assert.equal(pendingRenders, 1, 'subsequent showPending is idempotent while pending utility is active');
+    wb.close();
+
+    gateResolve = true;
+    const opening = shellCtx.openWorkbench({page: 'library', openPending: true});
+    await Promise.resolve();
+    const liveRoot = body.children.find(child => child.id === 'unified-workbench');
+    assert.ok(liveRoot, 'workbench mounted before sidebar fetch settles');
+    await liveRoot.querySelector('[data-uw="close"]').onclick();
+    gateResolve();
+    gateResolve = null;
+    const closedInstance = await opening;
+    assert.ok(closedInstance, 'openWorkbench never resolves to null when closed mid-open');
+    assert.equal(await closedInstance.showPending(), false, 'showPending safely no-ops after mid-open close');
+    console.log('PASS: workspace shell mounts, hosts the model switcher once, and openPending survives mid-open close');
+})().catch(error => {console.error(error); process.exitCode = 1;});

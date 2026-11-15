@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-11-15T02:46:43.244141+00:00",
+  "created_at": "2026-11-15T05:45:19.778282+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -8644,8 +8644,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Olm-JoyCaption/olm_joycaption.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Olm-JoyCaption/olm_joycaption.py",
-      "sha256": "13b4a6cda6ed41b9376f715c08557ecd7a46e4094adf8c34f8ead09b4d5bc9a3",
-      "bytes": 13123,
+      "sha256": "c2e03475df71dd3a8e0f07f84c38be793b980e9410125e8f93b1c0df69c0d0e6",
+      "bytes": 16407,
       "kind": "file"
     },
     {
@@ -12466,8 +12466,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
-      "sha256": "609f4c7e606cd4baf241b1505708b67fd65b8dd06289715d16200e69fac732a0",
-      "bytes": 68898,
+      "sha256": "51eaf6b9afdbd33e0d1416ac4a4c9a3d7dd07f7a13eb8e3e1c27cdf5df7dd9eb",
+      "bytes": 69206,
       "kind": "file"
     },
     {
@@ -24065,8 +24065,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/run_controls.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/run_controls.js",
-      "sha256": "bfa054a05631e1ff607d67d7cb78cb3837e499c5ad5ff51221740cd941718f9c",
-      "bytes": 10878,
+      "sha256": "4c88d8746b5e6a9979062d036bf20b317e303ca382c4880d982874643e5d641a",
+      "bytes": 10887,
       "kind": "file"
     },
     {
@@ -24170,8 +24170,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
-      "sha256": "521808a53b201008281afb7fb1b47851602be321ea21003f521474903b4fa358",
-      "bytes": 62061,
+      "sha256": "381783ec14bd4069907cfb6d46b1e74a0b1ae81c956a2e15e389860466e16470",
+      "bytes": 62421,
       "kind": "file"
     },
     {
@@ -58337,8 +58337,8 @@
     {
       "source": "production_tools/test_run_controls.cjs",
       "path": "runtime/production_tools/test_run_controls.cjs",
-      "sha256": "ab54917c0ca9e5dfbd3519a099251d2762a6b228f3b5d49cf952aa24e5536105",
-      "bytes": 12919,
+      "sha256": "de3efc48468f2e8cb521623f1c1852e69637edc432d3b6db162cc0a35a748352",
+      "bytes": 13069,
       "kind": "file"
     },
     {
@@ -58393,8 +58393,8 @@
     {
       "source": "production_tools/test_workspace_mount.cjs",
       "path": "runtime/production_tools/test_workspace_mount.cjs",
-      "sha256": "7742e8f3f36dde363c2ceb11cb139f17e891cabaf72134833c04dcd0a4a21d3c",
-      "bytes": 4302,
+      "sha256": "6f99e0cca1688ef52a7549af28e4bfae28c95f98861ba89ca80d51e7d09adaae",
+      "bytes": 9454,
       "kind": "file"
     },
     {
@@ -68331,54 +68331,18 @@
     }
   ],
   "development_revision": {
-    "note": "Fix Krea2 UAP main prompt target resolution, default Krea2 Depth control off, and sync 5-branch UAP workflows",
-    "previous_manifest_sha256": "0f73885523ca540fd7225bf753a1f05c5847f837c2fbcd116932eb5a8826a012",
+    "note": "Fix UAP live QA findings and OlmJoyCaption VRAM/interrupt guard",
+    "previous_manifest_sha256": "d45622d81e6847a071bd41044d8f434ce64da4f5975ed481235fa14b5fef0525",
     "source_changes": {
-      "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/scripts/uap_rewrite_guard.py",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/canvas_write.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/system_stats.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/uap_erase_ui_v2.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/uap_selfcheck.js",
-        "ComfyUI/user/default/workflows/Krea2_精简生产_v1.json",
-        "production_tools/test_model_quick_switch.cjs",
-        "production_tools/test_workspace_mount.cjs"
-      ],
-      "removed": [
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.js",
-        "production_tools/test_anima_control.cjs"
-      ],
+      "added": [],
+      "removed": [],
       "changed": [
+        "ComfyUI/custom_nodes/ComfyUI-Olm-JoyCaption/olm_joycaption.py",
         "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime_preview.html",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_panel.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_switches.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_inspector.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
         "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/run_controls.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/studio.css",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_theme.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.css",
         "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
-        "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-        "ComfyUI/user/default/workflows/生产扩展_04_Krea2_指令编辑.json",
-        "production_tools/UAP统一工作台说明.md",
-        "production_tools/layout_uap_workbench.py",
-        "production_tools/merge_unified_workflow.py",
-        "production_tools/simplify_anima_control.py",
-        "production_tools/templates/UAP统一生产工作台_v2.json",
-        "production_tools/templates/生产扩展_04_Krea2_指令编辑.json",
-        "production_tools/test_control_switches.cjs",
         "production_tools/test_run_controls.cjs",
-        "production_tools/test_uap_browser_retirement.py",
-        "production_tools/test_uap_daily_controls.cjs",
-        "production_tools/test_uap_navigation.cjs",
-        "production_tools/validate_uap_workflow.py"
+        "production_tools/test_workspace_mount.cjs"
       ]
     },
     "live_deployed": false,

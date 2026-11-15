@@ -81,6 +81,7 @@ async function main() {
         const h = harness(); await settle(); await h.stop.onclick(); assert.equal(h.calls.length, 0);
         h.queue.Running = [{}]; await assert.rejects(() => h.stop.onclick(), /无法确认/); assert.equal(h.calls.length, 0);
         h.queue.Running = [{prompt_id: 'own-running'}]; await h.stop.onclick(); assert.equal(h.calls[0][1], 'own-running');
+        h.queue.Running = [{id: 'jobs-api-running', status: 'in_progress'}]; await h.stop.onclick(); assert.equal(h.calls[1][1], 'jobs-api-running');
     });
     await test('repeated stop and dispose during queue read cause no repeated interruption', async () => {
         const gate = deferred(), h = harness(); await settle();
