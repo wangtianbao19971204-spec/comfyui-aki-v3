@@ -38,7 +38,6 @@ const targets = [
     ['production_tools/templates', 'UAP统一生产工作台_v2.json', 'k2'],
     ['ComfyUI/user/default/workflows', '生产套件_03_Krea2_一体化生产_v2.json', null],
     ['production_tools/templates', '生产套件_03_Krea2_一体化生产_v2.json', null],
-    ['ComfyUI/user/default/workflows', 'Krea2_精简生产_v1.json', null],
 ];
 let cases = 0, eraseCycles = 0;
 for (const [folder, file, id] of targets) {
@@ -119,7 +118,15 @@ for (const [folder, file, id] of targets) {
     cases++;
 }
 assert.equal(context.controlScope({_nodes: [], getNodeById() {}}), null);
-console.log(`PASS: ${cases} real workflow scopes; default-off Krea2 Depth control, strict routing, zero rewiring and ${eraseCycles} erase on/off cycles.`);
+for (const folder of ['ComfyUI/user/default/workflows', 'production_tools/templates']) {
+    const leanData = read(path.join(runtime, folder, 'Krea2_精简生产_v1.json'));
+    assert.deepEqual(leanData.definitions?.subgraphs || [], [], `${folder}/Krea2_精简生产_v1.json must have zero depth-control subgraphs`);
+    assert.equal(leanData.nodes.some(n => ['Krea2ControlLoRALoader', 'Krea2ControlApply', 'DazzleSwitch'].includes(n.type)), false);
+    const leanGraph = load(leanData);
+    const leanBranch = leanGraph.extra?.uap_workbench?.branches?.[0];
+    assert.equal(context.controlScope(leanGraph, leanBranch), null, `${folder}/Krea2_精简生产_v1.json must return null controlScope`);
+}
+console.log(`PASS: ${cases} real workflow scopes + retired depth-control verification on Krea2_精简生产_v1; default-off Krea2 Depth control, strict routing, zero rewiring and ${eraseCycles} erase on/off cycles.`);
 
 class Element {
     constructor(tag) {this.tagName = tag; this.children = []; this.attributes = {}; this.dataset = {}; this.style = {};}

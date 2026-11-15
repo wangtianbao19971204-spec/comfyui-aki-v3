@@ -1,0 +1,2355 @@
+{
+  "id": "uap-standalone-caption-extract",
+  "revision": 0,
+  "last_node_id": 130172,
+  "last_link_id": 10240,
+  "nodes": [
+    {
+      "id": 1206,
+      "type": "LoadImage",
+      "pos": [
+        40,
+        140
+      ],
+      "size": [
+        440,
+        350
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "图像",
+          "name": "image",
+          "type": "COMBO",
+          "widget": {
+            "name": "image"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "选择文件上传",
+          "name": "upload",
+          "type": "IMAGEUPLOAD",
+          "widget": {
+            "name": "upload"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "图像",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            10191,
+            10192,
+            10194,
+            10196,
+            10213
+          ]
+        },
+        {
+          "localized_name": "遮罩",
+          "name": "MASK",
+          "type": "MASK",
+          "links": []
+        }
+      ],
+      "title": "[01A] 待反推参考图输入",
+      "properties": {
+        "Node name for S&R": "LoadImage",
+        "cnr_id": "comfy-core",
+        "ver": "0.19.3",
+        "uap_layout_group": "CORE-01A 参考图输入与提示词整理 · 反推",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        "civitai_134722333.jpg",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "civitai_134722333.jpg",
+        "upload": "image"
+      },
+      "color": "#3F6A78",
+      "bgcolor": "#182B34"
+    },
+    {
+      "id": 1203,
+      "type": "ImageScaleToMaxDimension",
+      "pos": [
+        520,
+        140
+      ],
+      "size": [
+        380,
+        100
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 47,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "图像",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 10213
+        },
+        {
+          "localized_name": "放大方法",
+          "name": "upscale_method",
+          "type": "COMBO",
+          "widget": {
+            "name": "upscale_method"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "最大尺寸",
+          "name": "largest_size",
+          "type": "INT",
+          "widget": {
+            "name": "largest_size"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "图像",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            10214
+          ]
+        }
+      ],
+      "title": "[01B] 在线识图长边缩放 · 1024",
+      "properties": {
+        "Node name for S&R": "ImageScaleToMaxDimension",
+        "cnr_id": "comfy-core",
+        "ver": "0.22.0",
+        "uap_layout_group": "CORE-01A 参考图输入与提示词整理 · 反推",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        "lanczos",
+        1024
+      ],
+      "widgets_values_named": {
+        "upscale_method": "lanczos",
+        "largest_size": 1024
+      }
+    },
+    {
+      "id": 1227,
+      "type": "Fast Groups Muter (rgthree)",
+      "pos": [
+        520,
+        280
+      ],
+      "size": [
+        380,
+        210
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 21,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "OPT_CONNECTION",
+          "type": "*",
+          "links": []
+        }
+      ],
+      "title": "CTRL-00 反推引擎开关（PixAI 默认开启）",
+      "properties": {
+        "matchColors": "",
+        "matchTitle": "^SW-.*·\\ K2\\ Krea2$",
+        "showNav": true,
+        "showAllGraphs": false,
+        "sort": "custom alphabet",
+        "customSortAlphabet": "SW-03A 创意图库与提示词模板 · K2 Krea2,SW-01B 在线五模型反推 · K2 Krea2,SW-01C PixAI 标签反推 · K2 Krea2,SW-01D JoyCaption 三路反推 · K2 Krea2,SW-05V 参考预处理阶段检查与临时保存 · K2 Krea2,SW-05K Krea2 Depth ControlNet-LoRA · K2 Krea2,SW-10V 仅预览：输入 / 基础 / 二放对比 · K2 Krea2",
+        "toggleRestriction": "default",
+        "uap_layout_group": "CORE-01A 参考图输入与提示词整理 · 反推",
+        "uap_default_mode": 0
+      },
+      "color": "#9A7040",
+      "bgcolor": "#2A2118"
+    },
+    {
+      "id": 1156,
+      "type": "PixAITagger",
+      "pos": [
+        1000,
+        140
+      ],
+      "size": [
+        390,
+        340
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 43,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 10191
+        },
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "COMBO",
+          "widget": {
+            "name": "model"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "threshold",
+          "name": "threshold",
+          "type": "FLOAT",
+          "widget": {
+            "name": "threshold"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "character_threshold",
+          "name": "character_threshold",
+          "type": "FLOAT",
+          "widget": {
+            "name": "character_threshold"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "replace_underscore",
+          "name": "replace_underscore",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "replace_underscore"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "trailing_comma",
+          "name": "trailing_comma",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "trailing_comma"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "exclude_tags",
+          "name": "exclude_tags",
+          "type": "STRING",
+          "widget": {
+            "name": "exclude_tags"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "categories",
+          "name": "categories",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "categories"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "style_threshold",
+          "name": "style_threshold",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "style_threshold"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "copyright_threshold",
+          "name": "copyright_threshold",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "copyright_threshold"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "meta_threshold",
+          "name": "meta_threshold",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "meta_threshold"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "rating_threshold",
+          "name": "rating_threshold",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "rating_threshold"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "tags",
+          "name": "tags",
+          "shape": 6,
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            10240
+          ]
+        },
+        {
+          "localized_name": "scores_json",
+          "name": "scores_json",
+          "shape": 6,
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "[01C-PixAI] PixAI 本地 Tag 反推",
+      "properties": {
+        "Node name for S&R": "PixAITagger",
+        "label": "本地运行，不经过 API。负责基础 Danbooru/Gelbooru tag，包括主体、外观、服装、姿势、背景和可见 NSFW booru 标签。输出只作为候选，不直接进主链。",
+        "uap_layout_group": "SW-01C PixAI 标签反推 · 反推",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        "pixai-tagger-v1.0",
+        0.17,
+        0.27,
+        true,
+        false,
+        "commentary_request, commentary, watermark, signature, artist_name, username, text, logo",
+        "character,general",
+        0.15,
+        0.24,
+        0.17,
+        0.41
+      ],
+      "widgets_values_named": {
+        "model": "pixai-tagger-v1.0",
+        "threshold": 0.17,
+        "character_threshold": 0.27,
+        "replace_underscore": true,
+        "trailing_comma": false,
+        "exclude_tags": "commentary_request, commentary, watermark, signature, artist_name, username, text, logo",
+        "categories": "character,general",
+        "style_threshold": 0.15,
+        "copyright_threshold": 0.24,
+        "meta_threshold": 0.17,
+        "rating_threshold": 0.41
+      },
+      "color": "#3F6A78",
+      "bgcolor": "#182B34"
+    },
+    {
+      "id": 1171,
+      "type": "ShowText|pysssss",
+      "pos": [
+        1430,
+        140
+      ],
+      "size": [
+        390,
+        340
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 59,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "text",
+          "name": "text",
+          "type": "STRING",
+          "link": 10240
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "字符串",
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "[01C2] PixAI 标签候选（复制到 00W-1）",
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss",
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "1.2.5",
+        "uap_layout_group": "SW-01C PixAI 标签反推 · 反推",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        ""
+      ],
+      "widgets_values_named": {
+        "text_0": "1girl, long hair, breasts, looking at viewer, blush, blue eyes, blonde hair, 1boy, dress, bow, ribbon, closed mouth, medium breasts, standing, nipples, hair ribbon, ass, short sleeves, hetero, sweat, small breasts, hairband, censored, penis, pussy, solo focus, indoors, puffy sleeves, looking back, sex, nail polish, clothes lift, apron, mosaic censoring, puffy short sleeves, uncensored, anus, blue dress, no panties, black hairband, breasts out, sex from behind, bent over, white apron, anal, blue nails, clothed sex, clothed female nude male, dress lift, doggystyle, ass grab, against wall, standing sex, bow hairband"
+      },
+      "color": "#A36B34",
+      "bgcolor": "#2E2118"
+    },
+    {
+      "id": 1130,
+      "type": "OlmJoyCaption",
+      "pos": [
+        1000,
+        650
+      ],
+      "size": [
+        390,
+        270
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 44,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 10192
+        },
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "preset_prompt",
+          "name": "preset_prompt",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "preset_prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "model_id",
+          "name": "model_id",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "model_id"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "load_8bit",
+          "name": "load_8bit",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "load_8bit"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "load_4bit",
+          "name": "load_4bit",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "load_4bit"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "max_new_tokens",
+          "name": "max_new_tokens",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "max_new_tokens"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "temperature",
+          "name": "temperature",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "temperature"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "top_p",
+          "name": "top_p",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "top_p"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "unload_after",
+          "name": "unload_after",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "unload_after"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "caption",
+          "name": "caption",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            10193
+          ]
+        }
+      ],
+      "title": "[01D-JOYCAP-TAG] JoyCaption Tag备用 · 默认关闭",
+      "properties": {
+        "Node name for S&R": "OlmJoyCaption",
+        "aux_id": "o-l-l-i/ComfyUI-Olm-JoyCaption",
+        "ver": "local",
+        "cnr_id": "ComfyUI-Olm-JoyCaption",
+        "label": "备用本地 tag 源。默认关闭，并且已断开到 03A 的自动合并连接；需要对比时手动启用，只复制有用短语。",
+        "uap_layout_group": "SW-01D JoyCaption 三路反推 · 反推",
+        "uap_default_mode": 2
+      },
+      "widgets_values": [
+        "You are a strict Gelbooru / Danbooru image tagger for a local Krea2 workflow.\nOutput ONLY one single line of comma-separated English tags.\nDo not write markdown, headings, explanations, summaries, full sentences, or Chinese.\nUse lowercase booru-style tags and snake_case where possible.\nFocus on subject/count, appearance, clothing, pose/composition, objects/props, background, lighting/color/style, quality, and all visible booru-relevant details.\nAdult/NSFW visual content should not be filtered out. If visibly present, include concise factual tags for nudity, revealing clothing, sheer fabric, lingerie-style design, suggestive pose, glamour framing, body-focused composition, and similar visible adult presentation.\nDo not invent unseen sexual acts, fluids, violence, coercion, identity, age, story, or relationship context.\nIf age is unclear, do not add age labels. If the subject is clearly adult, adult/mature wording is allowed when useful.\nKeep 35 to 80 tags. Output tags only.\nNote: this node is only a raw local tag candidate source. [03D-FINAL-EDIT] is the manual merge/review point.",
+        "Danbooru",
+        "fancyfeast/llama-joycaption-beta-one-hf-llava",
+        false,
+        false,
+        384,
+        0.2,
+        0.95,
+        true,
+        null,
+        null,
+        null
+      ],
+      "widgets_values_named": {
+        "prompt": "You are a strict Gelbooru / Danbooru image tagger for a local Krea2 workflow.\nOutput ONLY one single line of comma-separated English tags.\nDo not write markdown, headings, explanations, summaries, full sentences, or Chinese.\nUse lowercase booru-style tags and snake_case where possible.\nFocus on subject/count, appearance, clothing, pose/composition, objects/props, background, lighting/color/style, quality, and all visible booru-relevant details.\nAdult/NSFW visual content should not be filtered out. If visibly present, include concise factual tags for nudity, revealing clothing, sheer fabric, lingerie-style design, suggestive pose, glamour framing, body-focused composition, and similar visible adult presentation.\nDo not invent unseen sexual acts, fluids, violence, coercion, identity, age, story, or relationship context.\nIf age is unclear, do not add age labels. If the subject is clearly adult, adult/mature wording is allowed when useful.\nKeep 35 to 80 tags. Output tags only.\nNote: this node is only a raw local tag candidate source. [03D-FINAL-EDIT] is the manual merge/review point.",
+        "preset_prompt": "Danbooru",
+        "model_id": "fancyfeast/llama-joycaption-beta-one-hf-llava",
+        "load_8bit": false,
+        "load_4bit": false,
+        "max_new_tokens": 384,
+        "temperature": 0.2,
+        "top_p": 0.95,
+        "unload_after": true,
+        "Apply Preset": null,
+        "Clear Model Cache": null,
+        "Cache Status": null
+      },
+      "color": "#6A5A72",
+      "bgcolor": "#25212C"
+    },
+    {
+      "id": 1133,
+      "type": "ShowText|pysssss",
+      "pos": [
+        1430,
+        650
+      ],
+      "size": [
+        390,
+        270
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 60,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "text",
+          "name": "text",
+          "type": "STRING",
+          "link": 10193
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "字符串",
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "slot_index": 0,
+          "links": []
+        }
+      ],
+      "title": "[01D-JOYCAP-TAG-VIEW] JoyCaption Tag预览",
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss",
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "1.2.5",
+        "uap_layout_group": "SW-01D JoyCaption 三路反推 · 反推",
+        "uap_default_mode": 2
+      },
+      "color": "#6A5A72",
+      "bgcolor": "#25212C",
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 1129,
+      "type": "OlmJoyCaption",
+      "pos": [
+        1000,
+        960
+      ],
+      "size": [
+        390,
+        270
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 45,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 10194
+        },
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "preset_prompt",
+          "name": "preset_prompt",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "preset_prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "model_id",
+          "name": "model_id",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "model_id"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "load_8bit",
+          "name": "load_8bit",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "load_8bit"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "load_4bit",
+          "name": "load_4bit",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "load_4bit"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "max_new_tokens",
+          "name": "max_new_tokens",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "max_new_tokens"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "temperature",
+          "name": "temperature",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "temperature"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "top_p",
+          "name": "top_p",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "top_p"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "unload_after",
+          "name": "unload_after",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "unload_after"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "caption",
+          "name": "caption",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            10195
+          ]
+        }
+      ],
+      "title": "[01E-JOYCAP-DESIGN] JoyCaption设计语言备用 · 默认关闭",
+      "properties": {
+        "Node name for S&R": "OlmJoyCaption",
+        "aux_id": "o-l-l-i/ComfyUI-Olm-JoyCaption",
+        "ver": "local",
+        "cnr_id": "ComfyUI-Olm-JoyCaption",
+        "label": "备用设计语言分析。默认关闭，已断开到 03B；默认由 Prompt Assistant 在线反推 承担构图/材质/光影/短句分析。",
+        "uap_layout_group": "SW-01D JoyCaption 三路反推 · 反推",
+        "uap_default_mode": 2
+      },
+      "widgets_values": [
+        "Analyze the image's visual design language for a local Krea2 workflow. Do NOT write the final prompt.\nReturn concise English only, with three sections:\n1. Core visual design logic\n2. Reusable short prompt phrases\n3. Checklist for judging whether a new image matches this design language\n\nFocus on composition, camera angle, lighting, material rendering, color palette, costume/prop system, body/clothing state, background logic, and genre influence.\nAdult/NSFW design elements should not be filtered out. Describe visible adult presentation neutrally as design language: pose, silhouette, framing, fabric transparency, revealing clothing, nudity, glamour/boudoir lighting, body focus, and styling.\nDo not invent unseen sexual acts, fluids, violence, coercion, age, identity, story, or unrelated fetish details.\nNatural language is allowed because Krea2 supports mixed tags + captions, but keep phrases reusable and short.\nThis output is for review only; [03D-FINAL-EDIT] is the manual merge point.",
+        "Art critic + length",
+        "fancyfeast/llama-joycaption-beta-one-hf-llava",
+        false,
+        false,
+        512,
+        0.25,
+        0.95,
+        true,
+        null,
+        null,
+        null
+      ],
+      "widgets_values_named": {
+        "prompt": "Analyze the image's visual design language for a local Krea2 workflow. Do NOT write the final prompt.\nReturn concise English only, with three sections:\n1. Core visual design logic\n2. Reusable short prompt phrases\n3. Checklist for judging whether a new image matches this design language\n\nFocus on composition, camera angle, lighting, material rendering, color palette, costume/prop system, body/clothing state, background logic, and genre influence.\nAdult/NSFW design elements should not be filtered out. Describe visible adult presentation neutrally as design language: pose, silhouette, framing, fabric transparency, revealing clothing, nudity, glamour/boudoir lighting, body focus, and styling.\nDo not invent unseen sexual acts, fluids, violence, coercion, age, identity, story, or unrelated fetish details.\nNatural language is allowed because Krea2 supports mixed tags + captions, but keep phrases reusable and short.\nThis output is for review only; [03D-FINAL-EDIT] is the manual merge point.",
+        "preset_prompt": "Art critic + length",
+        "model_id": "fancyfeast/llama-joycaption-beta-one-hf-llava",
+        "load_8bit": false,
+        "load_4bit": false,
+        "max_new_tokens": 512,
+        "temperature": 0.25,
+        "top_p": 0.95,
+        "unload_after": true,
+        "Apply Preset": null,
+        "Clear Model Cache": null,
+        "Cache Status": null
+      },
+      "color": "#6A5A72",
+      "bgcolor": "#25212C"
+    },
+    {
+      "id": 1132,
+      "type": "ShowText|pysssss",
+      "pos": [
+        1430,
+        960
+      ],
+      "size": [
+        390,
+        270
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 61,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "text",
+          "name": "text",
+          "type": "STRING",
+          "link": 10195
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "字符串",
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "slot_index": 0,
+          "links": []
+        }
+      ],
+      "title": "[01E-JOYCAP-DESIGN-VIEW] 设计语言预览",
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss",
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "1.2.5",
+        "uap_layout_group": "SW-01D JoyCaption 三路反推 · 反推",
+        "uap_default_mode": 2
+      },
+      "color": "#6A5A72",
+      "bgcolor": "#25212C",
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 1131,
+      "type": "OlmJoyCaption",
+      "pos": [
+        1000,
+        1270
+      ],
+      "size": [
+        390,
+        270
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 46,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 10196
+        },
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "preset_prompt",
+          "name": "preset_prompt",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "preset_prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "model_id",
+          "name": "model_id",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "model_id"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "load_8bit",
+          "name": "load_8bit",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "load_8bit"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "load_4bit",
+          "name": "load_4bit",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "load_4bit"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "max_new_tokens",
+          "name": "max_new_tokens",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "max_new_tokens"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "temperature",
+          "name": "temperature",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "temperature"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "top_p",
+          "name": "top_p",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "top_p"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "unload_after",
+          "name": "unload_after",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "unload_after"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "caption",
+          "name": "caption",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            10197
+          ]
+        }
+      ],
+      "title": "[01F-JOYCAP-DRAFT] JoyCaption自然语言草稿备用 · 默认关闭",
+      "properties": {
+        "Node name for S&R": "OlmJoyCaption",
+        "aux_id": "o-l-l-i/ComfyUI-Olm-JoyCaption",
+        "ver": "local",
+        "cnr_id": "ComfyUI-Olm-JoyCaption",
+        "label": "备用自然语言草稿。默认关闭，已断开到 03B2；默认由 Prompt Assistant 在线反推 生成短 caption 与设计短语。",
+        "uap_layout_group": "SW-01D JoyCaption 三路反推 · 反推",
+        "uap_default_mode": 2
+      },
+      "widgets_values": [
+        "Describe the image as a Krea2-friendly natural language draft for a local workflow.\nOutput English only. Do not write markdown, headings, bullet points, or Chinese.\nWrite 2 concise sentences.\nSentence 1: describe subject count, character/identity if visible, appearance, clothing, pose, and main objects.\nSentence 2: describe composition, camera angle, background, lighting, color palette, material rendering, and mood.\nKeep it concrete and visually grounded. Do not invent new characters, objects, costumes, backgrounds, or styles.\nIf NSFW/adult elements are visible, keep wording concise and visual; avoid age-ambiguous, coercive, violent, or invented explicit details.\nThis is a local draft caption only; [03D-LOCAL-EDIT] is the default manual merge/review point.",
+        "Strict, length",
+        "fancyfeast/llama-joycaption-beta-one-hf-llava",
+        false,
+        false,
+        512,
+        0.25,
+        0.95,
+        true,
+        null,
+        null,
+        null
+      ],
+      "widgets_values_named": {
+        "prompt": "Describe the image as a Krea2-friendly natural language draft for a local workflow.\nOutput English only. Do not write markdown, headings, bullet points, or Chinese.\nWrite 2 concise sentences.\nSentence 1: describe subject count, character/identity if visible, appearance, clothing, pose, and main objects.\nSentence 2: describe composition, camera angle, background, lighting, color palette, material rendering, and mood.\nKeep it concrete and visually grounded. Do not invent new characters, objects, costumes, backgrounds, or styles.\nIf NSFW/adult elements are visible, keep wording concise and visual; avoid age-ambiguous, coercive, violent, or invented explicit details.\nThis is a local draft caption only; [03D-LOCAL-EDIT] is the default manual merge/review point.",
+        "preset_prompt": "Strict, length",
+        "model_id": "fancyfeast/llama-joycaption-beta-one-hf-llava",
+        "load_8bit": false,
+        "load_4bit": false,
+        "max_new_tokens": 512,
+        "temperature": 0.25,
+        "top_p": 0.95,
+        "unload_after": true,
+        "Apply Preset": null,
+        "Clear Model Cache": null,
+        "Cache Status": null
+      },
+      "color": "#6A5A72",
+      "bgcolor": "#25212C"
+    },
+    {
+      "id": 1134,
+      "type": "ShowText|pysssss",
+      "pos": [
+        1430,
+        1270
+      ],
+      "size": [
+        390,
+        270
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 62,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "text",
+          "name": "text",
+          "type": "STRING",
+          "link": 10197
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "字符串",
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "slot_index": 0,
+          "links": []
+        }
+      ],
+      "title": "[01F-JOYCAP-DRAFT-VIEW] 自然语言草稿预览",
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss",
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "1.2.5",
+        "uap_layout_group": "SW-01D JoyCaption 三路反推 · 反推",
+        "uap_default_mode": 2
+      },
+      "color": "#6A5A72",
+      "bgcolor": "#25212C",
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 1151,
+      "type": "MarkdownNote",
+      "pos": [
+        1920,
+        140
+      ],
+      "size": [
+        420,
+        200
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 2,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [],
+      "title": "[01G-README] 五模型候选链说明",
+      "properties": {
+        "Node name for S&R": "MarkdownNote",
+        "uap_layout_group": "SW-01B 在线五模型反推 · 反推",
+        "uap_default_mode": 2
+      },
+      "widgets_values": [
+        "# SW-01G 五模型并发 / 综合候选链\n\n- `RESULT 1~5`：单模型输出预览，可单独运行/检查。\n- `SUCCESSFUL`：成功模型结果集合，给 Judge 使用。\n- `JUDGE`：对成功结果做综合分析。\n- `JUDGE-FINAL`：综合后的正向候选，已接入 `[03A]`。\n\n注意：本区输出仍是**候选**，不会直接进入 CLIP；最终进 CLIP 的入口仍是 `[00W-1-FINAL-IN]`。"
+      ],
+      "widgets_values_named": {
+        "text": "# SW-01G 五模型并发 / 综合候选链\n\n- `RESULT 1~5`：单模型输出预览，可单独运行/检查。\n- `SUCCESSFUL`：成功模型结果集合，给 Judge 使用。\n- `JUDGE`：对成功结果做综合分析。\n- `JUDGE-FINAL`：综合后的正向候选，已接入 `[03A]`。\n\n注意：本区输出仍是**候选**，不会直接进入 CLIP；最终进 CLIP 的入口仍是 `[00W-1-FINAL-IN]`。"
+      },
+      "color": "#3F6A78",
+      "bgcolor": "#182B34"
+    },
+    {
+      "id": 1184,
+      "type": "TB_Multi_API_Caption_SmartRunner_V16",
+      "pos": [
+        1920,
+        380
+      ],
+      "size": [
+        420,
+        680
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 63,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 10214
+        },
+        {
+          "localized_name": "system_prompt",
+          "name": "system_prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "system_prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "user_prompt",
+          "name": "user_prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "user_prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "enable_1",
+          "name": "enable_1",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "enable_1"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "slot_1_provider",
+          "name": "slot_1_provider",
+          "type": "COMBO",
+          "widget": {
+            "name": "slot_1_provider"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "slot_1_model",
+          "name": "slot_1_model",
+          "type": "COMBO",
+          "widget": {
+            "name": "slot_1_model"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "enable_2",
+          "name": "enable_2",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "enable_2"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "slot_2_provider",
+          "name": "slot_2_provider",
+          "type": "COMBO",
+          "widget": {
+            "name": "slot_2_provider"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "slot_2_model",
+          "name": "slot_2_model",
+          "type": "COMBO",
+          "widget": {
+            "name": "slot_2_model"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "enable_3",
+          "name": "enable_3",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "enable_3"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "slot_3_provider",
+          "name": "slot_3_provider",
+          "type": "COMBO",
+          "widget": {
+            "name": "slot_3_provider"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "slot_3_model",
+          "name": "slot_3_model",
+          "type": "COMBO",
+          "widget": {
+            "name": "slot_3_model"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "enable_4",
+          "name": "enable_4",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "enable_4"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "slot_4_provider",
+          "name": "slot_4_provider",
+          "type": "COMBO",
+          "widget": {
+            "name": "slot_4_provider"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "slot_4_model",
+          "name": "slot_4_model",
+          "type": "COMBO",
+          "widget": {
+            "name": "slot_4_model"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "enable_5",
+          "name": "enable_5",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "enable_5"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "slot_5_provider",
+          "name": "slot_5_provider",
+          "type": "COMBO",
+          "widget": {
+            "name": "slot_5_provider"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "slot_5_model",
+          "name": "slot_5_model",
+          "type": "COMBO",
+          "widget": {
+            "name": "slot_5_model"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "requested_slots",
+          "name": "requested_slots",
+          "type": "STRING",
+          "widget": {
+            "name": "requested_slots"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "accumulate_results",
+          "name": "accumulate_results",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "accumulate_results"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "timeout_seconds",
+          "name": "timeout_seconds",
+          "type": "INT",
+          "widget": {
+            "name": "timeout_seconds"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "temperature",
+          "name": "temperature",
+          "type": "FLOAT",
+          "widget": {
+            "name": "temperature"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "max_tokens",
+          "name": "max_tokens",
+          "type": "INT",
+          "widget": {
+            "name": "max_tokens"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "force_always_run",
+          "name": "force_always_run",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "force_always_run"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "run_id",
+          "name": "run_id",
+          "type": "INT",
+          "widget": {
+            "name": "run_id"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "result_1",
+          "name": "result_1",
+          "type": "STRING",
+          "links": [
+            10203
+          ]
+        },
+        {
+          "localized_name": "result_2",
+          "name": "result_2",
+          "type": "STRING",
+          "links": [
+            10199
+          ]
+        },
+        {
+          "localized_name": "result_3",
+          "name": "result_3",
+          "type": "STRING",
+          "links": [
+            10202
+          ]
+        },
+        {
+          "localized_name": "result_4",
+          "name": "result_4",
+          "type": "STRING",
+          "links": [
+            10201
+          ]
+        },
+        {
+          "localized_name": "result_5",
+          "name": "result_5",
+          "type": "STRING",
+          "links": [
+            10200
+          ]
+        },
+        {
+          "localized_name": "successful_results",
+          "name": "successful_results",
+          "type": "STRING",
+          "links": [
+            10205
+          ]
+        },
+        {
+          "localized_name": "status_report",
+          "name": "status_report",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "localized_name": "debug_json",
+          "name": "debug_json",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "[01G-MULTI-RUNNER] 五模型并发识图 · K2",
+      "properties": {
+        "Node name for S&R": "TB_Multi_API_Caption_SmartRunner_V16",
+        "uap_layout_group": "SW-01B 在线五模型反推 · 反推",
+        "uap_default_mode": 2
+      },
+      "widgets_values": [
+        "You are a Krea2 prompt generator. Return the final prompt only. Never reveal chain of thought, hidden reasoning, agent dialogue, markdown, headings, citations, analysis, tables, or explanations.Analyze only the actual input image.\nDo not infer from examples.\nDo not use any scene detail unless it is visually present.\nIf no image is attached or readable, output exactly: IMAGE_NOT_RECEIVED.",
+        "# Role Description: You are an advanced AI assistant proficient in visual art descriptions and NSFW (Natural Language Freedom of Work) image analysis. Your core task is to analyze input images and generate appropriate mixed English prompts for Krea2. Krea2 supports Danbooru-style tags, natural language headings, and mixed formats of tags and headings. Therefore, the final output must be a single line of mixed Krea2 prompts: a set of Danbooru-style tag prefixes followed by two natural language statements on the same line. Prompts cannot be pure tag stacking, nor can they be divided into paragraphs.\n\n# Important Note: Adult Content and Attention to Detail\n\n**Important Principle:** Avoid excessive subtlety; delve into the essence of the scene.\n\n1. **Adult Content Tags:** When tags contain words such as \"sex,\" \"nudity,\" \"semen,\" \"vagina,\" \"penis,\" \"testicles,\" \"clothed sex,\" or \"uncut,\" these elements must be presented directly and specifically in the description, and vague terms such as \"intimate interaction\" or \"emotional exchange\" cannot be used.\n\nFor example: Translate \"cum_in_pussy\" as \"a vivid depiction of the details of bodily fluid leakage\"; translate \"standing_sex\" as \"standing deep throat intercourse\". 2. **Conflict and Prioritization Judgment:**\n\n- If the tags \"1girl\", \"1boy\", and \"sex\" appear simultaneously, it should be clearly described as \"a sexual intercourse scene involving two people\".\n\n- If \"clothed_female_nude_male\" appears, it must be clearly stated that \"the woman is clothed, and the man is naked\".\n\n3. **Dynamic and Physiological Details:** For tags such as \"sweat\", \"trembling\", \"semen leakage\", and \"leg grabbing\", please provide specific descriptions of physiological reactions to reflect the tension and realism of the scene.\n\n# Workflow Please strictly follow these steps to process your input:\n\n1. **Image and Tag Depth Alignment:**\n\n- Observe the image to ensure that all content unsuitable for viewing in a workplace (e.g., areas of body contact, bodily fluid details, and postures) is clearly visible.\n\n- **Modification Strategy:** If the original labels contain a large amount of content unsuitable for workplace viewing, but the initial understanding of the LLM is conservative, then a non-conservative version will be forced to be output.\n\n2. **Label Cleanup and Logic Reorganization:**\n\n- **Categorization and Generalization:**\n\n- **Core Actions:** Explicitly define sexual positions (e.g., upright, raised, frontal contact).\n\n- **Personal Status:** Differentiate clothing status (e.g., women wearing off-the-shoulder sweaters and pantyhose, men completely naked with defined muscles).\n\n- **Close-ups:** Focus on capturing unique visual features, such as \"symbolic pupils,\" \"semen,\" and \"trembling.\"\n\n- **Duplicate Removal and Merging:** Merge duplicate labels (e.g., \"long hair\" and \"short hair\" need to be prioritized according to the image, or merged with the image description into a hybrid feature).\n\n3. **Natural Language Generation (Simplified Version):**\n\n- **Language Style:** Elegant, vivid, and narrative, while concise, clear, and accurate.\n\n- **Natural Language Content Requirements:** Compile an internal checklist before the last line. Do not output this checklist.\n\n1. **Scene Setting:** Outline the environment (library) and core event (standing interaction).\n\n2. **Characters and Pose:** Describe the clothing, body state, and interaction of the man and woman in detail (explicitly mention \"male nude,\" \"female fully clothed,\" and \"standing pose\").\n\n3. **Core Details (Focus on content unsuitable for workplace viewing):** Describe in depth the physiological details of the interaction, such as the fullness and overflow of bodily fluids, skin texture, glistening sweat, eye contact, and body trembling.\n\n4. **Enhancing Atmosphere:** Summarize the overall effect of the image by combining lighting, props (books, heart symbols), and emotional atmosphere.\n\n# Output Guidelines\n\n- **Required Keyword Transformation Examples:**\n\n- `standing_sex` + `lifting_person` -> “A man forcefully lifts a woman into the air; the two are intertwined, maintaining an upright posture.”\n\n- `cum_in_pussy` + `cum_overflow` -> “This image delicately captures the moment of fullness and natural flow of bodily fluids, showcasing the flow of life.”\n\n- `clothed_female_nude_male` -> “The woman wears a white off-the-shoulder sweater and dark pantyhose, while the man is naked, displaying his muscular physique.”\n\n- `trembling` + `sweat` -> “The two tremble slightly from their intimate interaction; tiny beads of sweat seep from their skin, conveying the passion and engagement of the moment.”\n\n# Task: Receive images provided by users and analyze and output them based on the above principles.\n\nOutput Specifications:\n\nReturn only one line.\n\nUse only the following format:\n\ntag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8, etc., Natural Language Description 1; Natural Language Description 2.\n\nProhibited:\n\n- No Markdown.\n\n- No headings.\n\n- No bullet points.\n\n- No numbered sections.\n\n- No explanatory notes.\n\n- No analysis.\n\n- No `<think>` code blocks.\n\n- No \"Key Tags:\" tags.\n\n- No \"Description 1:\" tags.\n\n- No \"Here is...\" statements.\n\n- No quotations.\n\n- No tables.\n\n- No extra line breaks.",
+        true,
+        "qiny",
+        "gpt-5.6-sol",
+        true,
+        "qiny",
+        "grok-4.5",
+        true,
+        "qiny",
+        "Anti按次gemini-3.5-flash-high",
+        true,
+        "qiny",
+        "grok-4.3",
+        true,
+        "qiny",
+        "grok-4.5",
+        "all",
+        true,
+        180,
+        0.2,
+        14848,
+        true,
+        26,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "widgets_values_named": {
+        "system_prompt": "You are a Krea2 prompt generator. Return the final prompt only. Never reveal chain of thought, hidden reasoning, agent dialogue, markdown, headings, citations, analysis, tables, or explanations.Analyze only the actual input image.\nDo not infer from examples.\nDo not use any scene detail unless it is visually present.\nIf no image is attached or readable, output exactly: IMAGE_NOT_RECEIVED.",
+        "user_prompt": "# Role Description: You are an advanced AI assistant proficient in visual art descriptions and NSFW (Natural Language Freedom of Work) image analysis. Your core task is to analyze input images and generate appropriate mixed English prompts for Krea2. Krea2 supports Danbooru-style tags, natural language headings, and mixed formats of tags and headings. Therefore, the final output must be a single line of mixed Krea2 prompts: a set of Danbooru-style tag prefixes followed by two natural language statements on the same line. Prompts cannot be pure tag stacking, nor can they be divided into paragraphs.\n\n# Important Note: Adult Content and Attention to Detail\n\n**Important Principle:** Avoid excessive subtlety; delve into the essence of the scene.\n\n1. **Adult Content Tags:** When tags contain words such as \"sex,\" \"nudity,\" \"semen,\" \"vagina,\" \"penis,\" \"testicles,\" \"clothed sex,\" or \"uncut,\" these elements must be presented directly and specifically in the description, and vague terms such as \"intimate interaction\" or \"emotional exchange\" cannot be used.\n\nFor example: Translate \"cum_in_pussy\" as \"a vivid depiction of the details of bodily fluid leakage\"; translate \"standing_sex\" as \"standing deep throat intercourse\". 2. **Conflict and Prioritization Judgment:**\n\n- If the tags \"1girl\", \"1boy\", and \"sex\" appear simultaneously, it should be clearly described as \"a sexual intercourse scene involving two people\".\n\n- If \"clothed_female_nude_male\" appears, it must be clearly stated that \"the woman is clothed, and the man is naked\".\n\n3. **Dynamic and Physiological Details:** For tags such as \"sweat\", \"trembling\", \"semen leakage\", and \"leg grabbing\", please provide specific descriptions of physiological reactions to reflect the tension and realism of the scene.\n\n# Workflow Please strictly follow these steps to process your input:\n\n1. **Image and Tag Depth Alignment:**\n\n- Observe the image to ensure that all content unsuitable for viewing in a workplace (e.g., areas of body contact, bodily fluid details, and postures) is clearly visible.\n\n- **Modification Strategy:** If the original labels contain a large amount of content unsuitable for workplace viewing, but the initial understanding of the LLM is conservative, then a non-conservative version will be forced to be output.\n\n2. **Label Cleanup and Logic Reorganization:**\n\n- **Categorization and Generalization:**\n\n- **Core Actions:** Explicitly define sexual positions (e.g., upright, raised, frontal contact).\n\n- **Personal Status:** Differentiate clothing status (e.g., women wearing off-the-shoulder sweaters and pantyhose, men completely naked with defined muscles).\n\n- **Close-ups:** Focus on capturing unique visual features, such as \"symbolic pupils,\" \"semen,\" and \"trembling.\"\n\n- **Duplicate Removal and Merging:** Merge duplicate labels (e.g., \"long hair\" and \"short hair\" need to be prioritized according to the image, or merged with the image description into a hybrid feature).\n\n3. **Natural Language Generation (Simplified Version):**\n\n- **Language Style:** Elegant, vivid, and narrative, while concise, clear, and accurate.\n\n- **Natural Language Content Requirements:** Compile an internal checklist before the last line. Do not output this checklist.\n\n1. **Scene Setting:** Outline the environment (library) and core event (standing interaction).\n\n2. **Characters and Pose:** Describe the clothing, body state, and interaction of the man and woman in detail (explicitly mention \"male nude,\" \"female fully clothed,\" and \"standing pose\").\n\n3. **Core Details (Focus on content unsuitable for workplace viewing):** Describe in depth the physiological details of the interaction, such as the fullness and overflow of bodily fluids, skin texture, glistening sweat, eye contact, and body trembling.\n\n4. **Enhancing Atmosphere:** Summarize the overall effect of the image by combining lighting, props (books, heart symbols), and emotional atmosphere.\n\n# Output Guidelines\n\n- **Required Keyword Transformation Examples:**\n\n- `standing_sex` + `lifting_person` -> “A man forcefully lifts a woman into the air; the two are intertwined, maintaining an upright posture.”\n\n- `cum_in_pussy` + `cum_overflow` -> “This image delicately captures the moment of fullness and natural flow of bodily fluids, showcasing the flow of life.”\n\n- `clothed_female_nude_male` -> “The woman wears a white off-the-shoulder sweater and dark pantyhose, while the man is naked, displaying his muscular physique.”\n\n- `trembling` + `sweat` -> “The two tremble slightly from their intimate interaction; tiny beads of sweat seep from their skin, conveying the passion and engagement of the moment.”\n\n# Task: Receive images provided by users and analyze and output them based on the above principles.\n\nOutput Specifications:\n\nReturn only one line.\n\nUse only the following format:\n\ntag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8, etc., Natural Language Description 1; Natural Language Description 2.\n\nProhibited:\n\n- No Markdown.\n\n- No headings.\n\n- No bullet points.\n\n- No numbered sections.\n\n- No explanatory notes.\n\n- No analysis.\n\n- No `<think>` code blocks.\n\n- No \"Key Tags:\" tags.\n\n- No \"Description 1:\" tags.\n\n- No \"Here is...\" statements.\n\n- No quotations.\n\n- No tables.\n\n- No extra line breaks.",
+        "enable_1": true,
+        "slot_1_provider": "qiny",
+        "slot_1_model": "gpt-5.6-sol",
+        "enable_2": true,
+        "slot_2_provider": "qiny",
+        "slot_2_model": "grok-4.5",
+        "enable_3": true,
+        "slot_3_provider": "qiny",
+        "slot_3_model": "Anti按次gemini-3.5-flash-high",
+        "enable_4": true,
+        "slot_4_provider": "qiny",
+        "slot_4_model": "grok-4.3",
+        "enable_5": true,
+        "slot_5_provider": "qiny",
+        "slot_5_model": "grok-4.5",
+        "requested_slots": "all",
+        "accumulate_results": true,
+        "timeout_seconds": 180,
+        "temperature": 0.2,
+        "max_tokens": 14848,
+        "force_always_run": true,
+        "run_id": 26,
+        "⚙ 配置 API / 模型": null,
+        "↻ 重新读取配置": null,
+        "🔁 手动强制重跑": null,
+        "🧹 清除结果缓存": null,
+        "▸/▾ 折叠模型槽位": null
+      },
+      "color": "#3F6A78",
+      "bgcolor": "#182B34"
+    },
+    {
+      "id": 1207,
+      "type": "ShowText|pysssss",
+      "pos": [
+        2380,
+        140
+      ],
+      "size": [
+        380,
+        220
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 77,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "text",
+          "name": "text",
+          "type": "STRING",
+          "link": 10203
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "字符串",
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "[01G-RESULT-1] 模型1输出预览",
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss",
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "1.2.5",
+        "uap_layout_group": "SW-01B 在线五模型反推 · 反推",
+        "uap_default_mode": 2
+      },
+      "widgets_values": [
+        ""
+      ],
+      "widgets_values_named": {
+        "text_0": "1girl, solo, anime_style, long_black_hair, blunt_bangs, blue_eyes, sailor_uniform, white_jacket, blue_trim, green_neckerchief, white_knee_socks, sitting_on_stairs, raised_knee, adjusting_sock, looking_at_viewer, outdoor_staircase, green_railings, tree, sunlight, dappled_shadows, shallow_depth_of_field, vertical_composition, detailed_hair, soft_painterly_shading, A blue-eyed girl with very long black hair sits on a sunlit outdoor staircase, leaning over one raised knee as she adjusts her white knee sock; Her white sailor-style jacket with blue striped trim and green neckerchief catches the dappled light, while green railings, softly blurred buildings, and a leafy tree frame the quiet scene."
+      },
+      "color": "#3F6A78",
+      "bgcolor": "#182B34"
+    },
+    {
+      "id": 1165,
+      "type": "ShowText|pysssss",
+      "pos": [
+        2800,
+        140
+      ],
+      "size": [
+        380,
+        220
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 78,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "text",
+          "name": "text",
+          "type": "STRING",
+          "link": 10199
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "字符串",
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "[01G-RESULT-2] 模型2输出预览",
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss",
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "1.2.5",
+        "uap_layout_group": "SW-01B 在线五模型反推 · 反推",
+        "uap_default_mode": 2
+      },
+      "widgets_values": [
+        ""
+      ],
+      "widgets_values_named": {
+        "text_0": "[ERROR] grok-4.5: RuntimeError: HTTP 500: {\"error\":{\"message\":\"网络请求失败（traceid: c342c9816b94c918ac5bdc7cda8584c7）\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
+      },
+      "color": "#3F6A78",
+      "bgcolor": "#182B34"
+    },
+    {
+      "id": 1174,
+      "type": "ShowText|pysssss",
+      "pos": [
+        2380,
+        400
+      ],
+      "size": [
+        380,
+        220
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 79,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "text",
+          "name": "text",
+          "type": "STRING",
+          "link": 10202
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "字符串",
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "[01G-RESULT-3] 模型3输出预览",
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss",
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "1.2.5",
+        "uap_layout_group": "SW-01B 在线五模型反推 · 反推",
+        "uap_default_mode": 2
+      },
+      "widgets_values": [
+        ""
+      ],
+      "widgets_values_named": {
+        "text_0": "[ERROR] Anti按次gemini-3.5-flash-high: RuntimeError: HTTP 400: {\"error\":{\"message\":\"许可证不存在（traceid: effc30845e94c9189db067603baa6b93）\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
+      },
+      "color": "#3F6A78",
+      "bgcolor": "#182B34"
+    },
+    {
+      "id": 1204,
+      "type": "ShowText|pysssss",
+      "pos": [
+        2800,
+        400
+      ],
+      "size": [
+        380,
+        220
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 80,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "text",
+          "name": "text",
+          "type": "STRING",
+          "link": 10201
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "字符串",
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "[01G-RESULT-4] 模型4输出预览",
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss",
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "1.2.5",
+        "uap_layout_group": "SW-01B 在线五模型反推 · 反推",
+        "uap_default_mode": 2
+      },
+      "widgets_values": [
+        ""
+      ],
+      "widgets_values_named": {
+        "text_0": "No image provided.** Please upload or attach an image for analysis and prompt generation."
+      },
+      "color": "#3F6A78",
+      "bgcolor": "#182B34"
+    },
+    {
+      "id": 1166,
+      "type": "ShowText|pysssss",
+      "pos": [
+        2380,
+        660
+      ],
+      "size": [
+        380,
+        220
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 81,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "text",
+          "name": "text",
+          "type": "STRING",
+          "link": 10200
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "字符串",
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "[01G-RESULT-5] 模型5输出预览",
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss",
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "1.2.5",
+        "uap_layout_group": "SW-01B 在线五模型反推 · 反推",
+        "uap_default_mode": 2
+      },
+      "widgets_values": [
+        ""
+      ],
+      "widgets_values_named": {
+        "text_0": "IMAGE_NOT_RECEIVED"
+      },
+      "color": "#3F6A78",
+      "bgcolor": "#182B34"
+    },
+    {
+      "id": 1154,
+      "type": "TB_Anima_Prompt_Judge_API_V16",
+      "pos": [
+        1920,
+        1100
+      ],
+      "size": [
+        420,
+        420
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 82,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "successful_results",
+          "name": "successful_results",
+          "type": "STRING",
+          "widget": {
+            "name": "successful_results"
+          },
+          "link": 10205
+        },
+        {
+          "localized_name": "judge_provider",
+          "name": "judge_provider",
+          "type": "COMBO",
+          "widget": {
+            "name": "judge_provider"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "judge_model",
+          "name": "judge_model",
+          "type": "COMBO",
+          "widget": {
+            "name": "judge_model"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "judge_system_prompt",
+          "name": "judge_system_prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "judge_system_prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "extra_instruction",
+          "name": "extra_instruction",
+          "type": "STRING",
+          "widget": {
+            "name": "extra_instruction"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "judge_input_mode",
+          "name": "judge_input_mode",
+          "type": "COMBO",
+          "widget": {
+            "name": "judge_input_mode"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "timeout_seconds",
+          "name": "timeout_seconds",
+          "type": "INT",
+          "widget": {
+            "name": "timeout_seconds"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "temperature",
+          "name": "temperature",
+          "type": "FLOAT",
+          "widget": {
+            "name": "temperature"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "max_tokens",
+          "name": "max_tokens",
+          "type": "INT",
+          "widget": {
+            "name": "max_tokens"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "force_always_run",
+          "name": "force_always_run",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "force_always_run"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "run_id",
+          "name": "run_id",
+          "type": "INT",
+          "widget": {
+            "name": "run_id"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "final_positive_prompt",
+          "name": "final_positive_prompt",
+          "type": "STRING",
+          "links": [
+            10204
+          ]
+        },
+        {
+          "localized_name": "final_negative_prompt",
+          "name": "final_negative_prompt",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "localized_name": "cn_review",
+          "name": "cn_review",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "localized_name": "model_comparison",
+          "name": "model_comparison",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "localized_name": "raw_response",
+          "name": "raw_response",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "localized_name": "judge_prompt",
+          "name": "judge_prompt",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "localized_name": "status_report",
+          "name": "status_report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "[01G-JUDGE] Krea2 综合分析 · API",
+      "properties": {
+        "Node name for S&R": "TB_Anima_Prompt_Judge_API_V16",
+        "uap_layout_group": "SW-01B 在线五模型反推 · 反推",
+        "uap_default_mode": 2
+      },
+      "widgets_values": [
+        "",
+        "qiny",
+        "<manual>",
+        "You are an expert Krea2 prompt judge and merger. Return strict JSON only.",
+        "You are a Krea2 prompt judge and merger.\n\nYou will receive several raw outputs from different vision-language models. These raw outputs may contain reasoning traces, <think> blocks, multi-agent dialogue, intermediate drafts, analysis paragraphs, repeated candidate prompts, mistranslations, malformed tags, and noisy descriptions.\n\nYour task is to remove formatting noise and merge reliable visual facts into one final Krea2 hybrid prompt.\n\nImportant distinction:\n- Clean formatting noise, not visual content.\n- Do not remove adult/NSFW visual elements solely because they are adult.\n- Preserve adult visual facts when they are clearly supported by the model outputs and are relevant to the image.\n- Do not euphemize adult content into vague wording if the raw evidence clearly describes adult content.\n- Only remove adult details if they are unsupported, contradictory, duplicated, malformed, or outside the requested content scope.\n- Do not generate or preserve sexual content involving minors, childlike subjects, coercion, or non-consensual framing. If the evidence suggests that, return a refusal-style safety note instead of a prompt.\n\nEvidence rules:\n1. Treat every model output as noisy evidence, not final truth.\n2. Ignore <think> content, Agent dialogue, roleplay text, citations, markdown headings, tables, and process notes.\n3. Extract visual facts from all model outputs.\n4. Prefer details supported by multiple outputs.\n5. If a detail appears in only one output, include it only if it is visually plausible and important.\n6. If outputs conflict, choose the most consistently supported version.\n7. Remove duplicate tags, malformed translated tags, broken mixed-language tags, and low-value filler tags.\n8. Preserve important adult tags and adult scene facts if they are supported.\n\nKrea2 formatting rules:\n1. Use Krea2 hybrid style: compact tag prefix + two natural-language English sentences.\n2. Use lowercase English tags.\n3. Use spaces instead of underscores for normal tags.\n4. Keep score tags with underscores, such as score_7.\n5. Use a small number of high-value tags, not a long Danbooru tag dump.\n6. Do not use \"safe\" if the content is adult/NSFW. Use \"explicit\" or omit the rating tag depending on evidence.\n7. Do not invent character names, series names, artist names, or background details.\n\nLanguage and format rules:\n- final_positive_prompt must be English only.\n- final_negative_prompt must be English only.\n- Do not translate anime tags into Chinese.\n- Do not translate score_7, 1girl, 1boy, fox ears, animal ears, standing sex, or any other tag.\n- Use normal English anime tags.\n- Use spaces instead of underscores for normal tags.\n- Keep score tags exactly as score_7, score_6, etc.\n- If the content is adult/NSFW, do not use safe. Use explicit or omit the rating tag.\n\nReturn strict JSON only:\n\n{\n  \"final_positive_prompt\": \"one-line Krea2 hybrid prompt\",\n  \"final_negative_prompt\": \"one-line negative prompt\",\n  \"cn_review\": \"brief Chinese review of kept facts, removed noise, uncertain details, and whether adult content was preserved\",\n  \"model_comparison\": \"brief Chinese comparison of common facts, conflicts, and unreliable details\"\n}",
+        "raw_text_only",
+        790,
+        0.15,
+        32000,
+        true,
+        1,
+        null,
+        null,
+        null
+      ],
+      "widgets_values_named": {
+        "successful_results": "",
+        "judge_provider": "qiny",
+        "judge_model": "<manual>",
+        "judge_system_prompt": "You are an expert Krea2 prompt judge and merger. Return strict JSON only.",
+        "extra_instruction": "You are a Krea2 prompt judge and merger.\n\nYou will receive several raw outputs from different vision-language models. These raw outputs may contain reasoning traces, <think> blocks, multi-agent dialogue, intermediate drafts, analysis paragraphs, repeated candidate prompts, mistranslations, malformed tags, and noisy descriptions.\n\nYour task is to remove formatting noise and merge reliable visual facts into one final Krea2 hybrid prompt.\n\nImportant distinction:\n- Clean formatting noise, not visual content.\n- Do not remove adult/NSFW visual elements solely because they are adult.\n- Preserve adult visual facts when they are clearly supported by the model outputs and are relevant to the image.\n- Do not euphemize adult content into vague wording if the raw evidence clearly describes adult content.\n- Only remove adult details if they are unsupported, contradictory, duplicated, malformed, or outside the requested content scope.\n- Do not generate or preserve sexual content involving minors, childlike subjects, coercion, or non-consensual framing. If the evidence suggests that, return a refusal-style safety note instead of a prompt.\n\nEvidence rules:\n1. Treat every model output as noisy evidence, not final truth.\n2. Ignore <think> content, Agent dialogue, roleplay text, citations, markdown headings, tables, and process notes.\n3. Extract visual facts from all model outputs.\n4. Prefer details supported by multiple outputs.\n5. If a detail appears in only one output, include it only if it is visually plausible and important.\n6. If outputs conflict, choose the most consistently supported version.\n7. Remove duplicate tags, malformed translated tags, broken mixed-language tags, and low-value filler tags.\n8. Preserve important adult tags and adult scene facts if they are supported.\n\nKrea2 formatting rules:\n1. Use Krea2 hybrid style: compact tag prefix + two natural-language English sentences.\n2. Use lowercase English tags.\n3. Use spaces instead of underscores for normal tags.\n4. Keep score tags with underscores, such as score_7.\n5. Use a small number of high-value tags, not a long Danbooru tag dump.\n6. Do not use \"safe\" if the content is adult/NSFW. Use \"explicit\" or omit the rating tag depending on evidence.\n7. Do not invent character names, series names, artist names, or background details.\n\nLanguage and format rules:\n- final_positive_prompt must be English only.\n- final_negative_prompt must be English only.\n- Do not translate anime tags into Chinese.\n- Do not translate score_7, 1girl, 1boy, fox ears, animal ears, standing sex, or any other tag.\n- Use normal English anime tags.\n- Use spaces instead of underscores for normal tags.\n- Keep score tags exactly as score_7, score_6, etc.\n- If the content is adult/NSFW, do not use safe. Use explicit or omit the rating tag.\n\nReturn strict JSON only:\n\n{\n  \"final_positive_prompt\": \"one-line Krea2 hybrid prompt\",\n  \"final_negative_prompt\": \"one-line negative prompt\",\n  \"cn_review\": \"brief Chinese review of kept facts, removed noise, uncertain details, and whether adult content was preserved\",\n  \"model_comparison\": \"brief Chinese comparison of common facts, conflicts, and unreliable details\"\n}",
+        "judge_input_mode": "raw_text_only",
+        "timeout_seconds": 790,
+        "temperature": 0.15,
+        "max_tokens": 32000,
+        "force_always_run": true,
+        "run_id": 1,
+        "⚙ 配置 API / 模型": null,
+        "↻ 重新读取配置": null,
+        "🔁 手动强制重跑": null
+      },
+      "color": "#58616B",
+      "bgcolor": "#20262D"
+    },
+    {
+      "id": 1175,
+      "type": "ShowText|pysssss",
+      "pos": [
+        2380,
+        940
+      ],
+      "size": [
+        800,
+        320
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 92,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "text",
+          "name": "text",
+          "type": "STRING",
+          "link": 10204
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "字符串",
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "[01G-JUDGE-FINAL] 综合正向候选 · 手动复制到00W-1",
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss",
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "1.2.5",
+        "uap_layout_group": "SW-01B 在线五模型反推 · 反推",
+        "uap_default_mode": 2
+      },
+      "color": "#A36B34",
+      "bgcolor": "#332112",
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 1233,
+      "type": "CR Prompt Text",
+      "title": "[00W-1] 反推提示词整理草稿（正向）",
+      "pos": [
+        40,
+        540
+      ],
+      "size": [
+        440,
+        220
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "localized_name": "show_help",
+          "name": "show_help",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CR Prompt Text",
+        "uap_layout_group": "CORE-01A 参考图输入与提示词整理 · 反推",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 130172,
+      "type": "MarkdownNote",
+      "title": "[00-README] 图片反推 · 提示词提取",
+      "pos": [
+        520,
+        540
+      ],
+      "size": [
+        380,
+        220
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "MarkdownNote",
+        "uap_layout_group": "CORE-01A 参考图输入与提示词整理 · 反推",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        "## 图片反推 · 提示词提取（UAP 独立工具工作流）\n\n- **PixAI 标签反推（默认启用）**：本地极速 Danbooru/动漫标签提取，直接点击「运行当前反推任务」或完整工作台「开始反推」。\n- **JoyCaption 三路反推（按需开启）**：本地自然语言草稿、Tag 与设计语言分析。\n- **在线五模型并发反推（按需开启）**：并发调用 5 路视觉模型并经 Judge 汇总为混合提示词。\n- **整理与带走**：反推结果可一键「复制结果」或「追加到正向」汇总到 `#1233` 草稿框，再通过顶部 UAP 下拉切回 Krea2 / MOSS 生成。\n"
+      ]
+    }
+  ],
+  "links": [
+    [
+      10191,
+      1206,
+      0,
+      1156,
+      0,
+      "IMAGE"
+    ],
+    [
+      10192,
+      1206,
+      0,
+      1130,
+      0,
+      "IMAGE"
+    ],
+    [
+      10193,
+      1130,
+      0,
+      1133,
+      0,
+      "STRING"
+    ],
+    [
+      10194,
+      1206,
+      0,
+      1129,
+      0,
+      "IMAGE"
+    ],
+    [
+      10195,
+      1129,
+      0,
+      1132,
+      0,
+      "STRING"
+    ],
+    [
+      10196,
+      1206,
+      0,
+      1131,
+      0,
+      "IMAGE"
+    ],
+    [
+      10197,
+      1131,
+      0,
+      1134,
+      0,
+      "STRING"
+    ],
+    [
+      10199,
+      1184,
+      1,
+      1165,
+      0,
+      "STRING"
+    ],
+    [
+      10200,
+      1184,
+      4,
+      1166,
+      0,
+      "STRING"
+    ],
+    [
+      10201,
+      1184,
+      3,
+      1204,
+      0,
+      "STRING"
+    ],
+    [
+      10202,
+      1184,
+      2,
+      1174,
+      0,
+      "STRING"
+    ],
+    [
+      10203,
+      1184,
+      0,
+      1207,
+      0,
+      "STRING"
+    ],
+    [
+      10204,
+      1154,
+      0,
+      1175,
+      0,
+      "STRING"
+    ],
+    [
+      10205,
+      1184,
+      5,
+      1154,
+      0,
+      "STRING"
+    ],
+    [
+      10213,
+      1206,
+      0,
+      1203,
+      0,
+      "IMAGE"
+    ],
+    [
+      10214,
+      1203,
+      0,
+      1184,
+      0,
+      "IMAGE"
+    ],
+    [
+      10240,
+      1156,
+      0,
+      1171,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "title": "CORE-01A 参考图输入与提示词整理 · 反推",
+      "bounding": [
+        12,
+        76,
+        916,
+        712
+      ],
+      "color": "#4D6C5B",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "SW-01C PixAI 标签反推 · 反推",
+      "bounding": [
+        972,
+        76,
+        876,
+        432
+      ],
+      "color": "#46637A",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "SW-01D JoyCaption 三路反推 · 反推",
+      "bounding": [
+        972,
+        586,
+        876,
+        982
+      ],
+      "color": "#6C5B4D",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "SW-01B 在线五模型反推 · 反推",
+      "bounding": [
+        1892,
+        76,
+        1316,
+        1472
+      ],
+      "color": "#5D5370",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "definitions": {
+    "subgraphs": []
+  },
+  "config": {},
+  "extra": {
+    "workflow_display_name": "工具 · 图片反推与提示词提取",
+    "workflow_variant": "caption_extract_uap_v1",
+    "qgn_navigation_groups": [
+      {
+        "groupName": "CORE-01A 参考图输入与提示词整理 · 反推",
+        "shortcut": "1"
+      },
+      {
+        "groupName": "SW-01C PixAI 标签反推 · 反推",
+        "shortcut": "2"
+      },
+      {
+        "groupName": "SW-01D JoyCaption 三路反推 · 反推",
+        "shortcut": "3"
+      },
+      {
+        "groupName": "SW-01B 在线五模型反推 · 反推",
+        "shortcut": "4"
+      }
+    ],
+    "uap_workbench": {
+      "version": 1,
+      "activeBranch": "caption",
+      "viewBranch": "caption",
+      "stage": "daily",
+      "compactWidgets": false,
+      "branches": [
+        {
+          "id": "caption",
+          "label": "图片反推 · 提示词提取",
+          "defaultTask": "caption",
+          "defaultCaptionMethod": "SW-01C",
+          "group": "CORE-01A 参考图输入与提示词整理 · 反推",
+          "nodeIds": [
+            1129,
+            1130,
+            1131,
+            1132,
+            1133,
+            1134,
+            1151,
+            1154,
+            1156,
+            1165,
+            1166,
+            1171,
+            1174,
+            1175,
+            1184,
+            1203,
+            1204,
+            1206,
+            1207,
+            1227,
+            1233,
+            130172
+          ],
+          "modes": {
+            "1129": 2,
+            "1130": 2,
+            "1131": 2,
+            "1132": 2,
+            "1133": 2,
+            "1134": 2,
+            "1151": 2,
+            "1154": 2,
+            "1156": 0,
+            "1165": 2,
+            "1166": 2,
+            "1171": 0,
+            "1174": 2,
+            "1175": 2,
+            "1184": 2,
+            "1203": 0,
+            "1204": 2,
+            "1206": 0,
+            "1207": 2,
+            "1227": 0,
+            "1233": 0,
+            "130172": 0
+          },
+          "stages": [
+            {
+              "id": "daily",
+              "label": "输入与 PixAI 反推",
+              "groups": [
+                "CORE-01A 参考图输入与提示词整理 · 反推",
+                "SW-01C PixAI 标签反推 · 反推"
+              ]
+            },
+            {
+              "id": "joycaption",
+              "label": "JoyCaption 三路",
+              "groups": [
+                "SW-01D JoyCaption 三路反推 · 反推"
+              ]
+            },
+            {
+              "id": "online",
+              "label": "在线五模型综合",
+              "groups": [
+                "SW-01B 在线五模型反推 · 反推"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "ds": {
+      "scale": 0.78,
+      "offset": [
+        40,
+        40
+      ]
+    }
+  },
+  "version": 0.4
+}

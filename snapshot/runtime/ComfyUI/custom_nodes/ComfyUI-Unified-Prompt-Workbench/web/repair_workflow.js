@@ -1,38 +1,54 @@
 // A saved workflow opens in its own ComfyUI tab; existing graphs stay intact.
-export const REPAIR_PATH = 'workflows/生产扩展_丝袜纹理修复.json';
+export const K2_PATH = 'workflows/Krea2_精简生产_v1.json';
 export const MOSS_PATH = 'workflows/MOSS_精简生产_v1.json';
+export const EXT04_PATH = 'workflows/生产扩展_04_Krea2_指令编辑.json';
+export const CAPTION_PATH = 'workflows/工具_图片反推_提示词提取.json';
+export const EXT06_PATH = 'workflows/生产扩展_06_透明素材_抠图导出.json';
+export const EXT08_PATH = 'workflows/生产扩展_08_超分_二倍交付.json';
+export const EXT09_PATH = 'workflows/生产扩展_09_超分_四倍素材.json';
+export const REPAIR_PATH = 'workflows/生产扩展_丝袜纹理修复.json';
 export const MAIN_PATH = 'workflows/UAP统一生产工作台_v2.json';
-export const REPAIR_CHOICE = '@workflow:stocking';
+
+export const K2_CHOICE = '@workflow:k2';
 export const MOSS_CHOICE = '@workflow:moss';
+export const EXT04_CHOICE = '@workflow:ext04';
+export const CAPTION_CHOICE = '@workflow:caption';
+export const EXT06_CHOICE = '@workflow:ext06';
+export const EXT08_CHOICE = '@workflow:ext08';
+export const EXT09_CHOICE = '@workflow:ext09';
+export const REPAIR_CHOICE = '@workflow:stocking';
+
+export const STANDALONE_WORKFLOWS = [
+    {id:'k2', choice:K2_CHOICE, path:K2_PATH, label:'Krea2 图像生成'},
+    {id:'moss', choice:MOSS_CHOICE, path:MOSS_PATH, label:'MOSS 图像生成'},
+    {id:'ext04', choice:EXT04_CHOICE, path:EXT04_PATH, label:'Krea2 指令编辑'},
+    {id:'caption', choice:CAPTION_CHOICE, path:CAPTION_PATH, label:'图片反推 · 提示词提取'},
+    {id:'ext06', choice:EXT06_CHOICE, path:EXT06_PATH, label:'透明素材抠图导出'},
+    {id:'ext08', choice:EXT08_CHOICE, path:EXT08_PATH, label:'超分二倍交付'},
+    {id:'ext09', choice:EXT09_CHOICE, path:EXT09_PATH, label:'超分四倍素材'},
+    {id:'stocking', choice:REPAIR_CHOICE, path:REPAIR_PATH, label:'丝袜纹理修复'},
+];
+const STANDALONE_BY_ID = new Map(STANDALONE_WORKFLOWS.map(item => [item.id, item]));
+const STANDALONE_BY_CHOICE = new Map(STANDALONE_WORKFLOWS.map(item => [item.choice, item]));
 
 export function workflowChoices(config) {
     const choices=(config?.branches||[]).map(b=>({value:b.id,label:b.label}));
-    if(choices.some(b=>b.value==='moss')) {
-        return [
-            {value:'@main',label:'返回统一生产工作台'},
-            ...choices,
-            {value:'@main:ext08',label:'2× 放大'},
-            {value:'@main:ext09',label:'4× 放大'},
-            {value:REPAIR_CHOICE,label:'丝袜纹理修复'},
-        ];
-    }
-    if(choices.some(b=>b.value==='stocking')) {
-        return [
-            {value:'@main',label:'返回统一生产工作台'},
-            {value:MOSS_CHOICE,label:'MOSS 图像生成'},
-            {value:'@main:ext08',label:'2× 放大'},
-            {value:'@main:ext09',label:'4× 放大'},
-            ...choices,
-        ];
+    if(choices.length===1&&STANDALONE_BY_ID.has(choices[0].value)) {
+        const current=choices[0];
+        return STANDALONE_WORKFLOWS.map(item =>
+            item.id===current.value
+                ? {value:current.value, label:current.label||item.label}
+                : {value:item.choice, label:item.label}
+        );
     }
     const genAfter=choices.findLastIndex(b=>b.value==='k2'||b.value==='ext04');
-    if(genAfter>=0)choices.splice(genAfter+1,0,{value:MOSS_CHOICE,label:'MOSS 图像生成'});
+    if(genAfter>=0)choices.splice(genAfter+1,0,{value:MOSS_CHOICE,label:'MOSS 图像生成'},{value:CAPTION_CHOICE,label:'图片反推 · 提示词提取'});
     const after=choices.findLastIndex(b=>b.value==='ext08'||b.value==='ext09');
     choices.splice(after<0?choices.length:after+1,0,{value:REPAIR_CHOICE,label:'丝袜纹理修复'});
     return choices;
 }
 
-export function isWorkflowChoice(value) { return value===REPAIR_CHOICE||value===MOSS_CHOICE||/^@main(?::ext0[89])?$/.test(value); }
+export function isWorkflowChoice(value) { return STANDALONE_BY_CHOICE.has(value)||/^@main(?::ext0[89])?$/.test(value); }
 
 let opening=false;
 export async function openWorkflowChoice(app,value) {
@@ -47,8 +63,15 @@ export async function openWorkflowChoice(app,value) {
         await store.syncWorkflows();
         const unchanged=()=>app.graph===previous&&store.activeWorkflow===active;
         if(!unchanged())throw new Error('工作流已变化，请重新选择入口。');
-        const path=value===REPAIR_CHOICE?REPAIR_PATH:value===MOSS_CHOICE?MOSS_PATH:MAIN_PATH;
-        const workflow=store.getWorkflowByPath(path);
+        const standalone=STANDALONE_BY_CHOICE.get(value);
+        let path=standalone?standalone.path:MAIN_PATH;
+        let workflow=store.getWorkflowByPath(path);
+        let usedStandaloneFallback=false;
+        if(!workflow&&!standalone) {
+            const fallbackPath=value==='@main:ext08'?EXT08_PATH:value==='@main:ext09'?EXT09_PATH:K2_PATH;
+            workflow=store.getWorkflowByPath(fallbackPath);
+            if(workflow){path=fallbackPath;usedStandaloneFallback=true;}
+        }
         if(!workflow)throw new Error('找不到 '+path.split('/').at(-1)+'，请确认已安装独立工作流。');
         // Match ComfyUI's workflow service: the store's openWorkflow only sets
         // tab metadata. Passing the workflow to loadGraphData also preserves
@@ -58,7 +81,7 @@ export async function openWorkflowChoice(app,value) {
         if(!unchanged())throw new Error('工作流已变化，请重新选择入口。');
         await app.loadGraphData(JSON.parse(JSON.stringify(workflow.activeState)),true,true,workflow,
             {checkForRerouteMigration:false,deferWarnings:true,skipAssetScans:!fromDisk});
-        const branch=value.startsWith('@main:')?value.split(':')[1]:null;
+        const branch=!usedStandaloneFallback&&value.startsWith('@main:')?value.split(':')[1]:null;
         if(branch) {
             if(!app.graph?.extra?.uap_workbench?.branches?.some(b=>b.id===branch))
                 throw new Error('已打开工作流，但其中没有对应分支。');

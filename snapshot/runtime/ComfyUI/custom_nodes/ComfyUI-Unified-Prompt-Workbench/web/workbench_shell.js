@@ -284,10 +284,10 @@ export async function openWorkbench(options={}) {
     // 底模快切/显存释放/尺寸参数）整块搬进本页，离开时原位还原。
     // 控制与擦线卡片仍由 uap_erase_ui_v2.js 独占挂载在「生成」页，本页不复制第二张卡。
     const canvasBar=element('div',null,sections.canvas,{className:'uw-toolbar'});
-    button('定位控制与擦线','canvas-locate-switches',async()=>{
+    const locateSwitchesButton=button('定位控制与擦线','canvas-locate-switches',async()=>{
         await navigate('workspace');
         const card=document.querySelector('#unified-workbench .desk-control-switches');
-        if(!card)throw new Error('控制与擦线卡片尚未挂载，请稍后重试。');
+        if(!card)throw new Error('当前流程不含深度控制/擦线组件。');
         card.scrollIntoView({block:'center'});
         card.querySelector('input,select,button')?.focus({preventScroll:true});
     },canvasBar);
@@ -312,10 +312,11 @@ export async function openWorkbench(options={}) {
     }
     function refreshCanvasPage(){
         const branch=activeBranch(),desk=window.unifiedDailyControls;
+        locateSwitchesButton.hidden=!branch||branch.id!=='k2'||branch.depthControl===false;
         canvasStatus.textContent=branch?`当前分支：${branch.label||branch.id} · 控件实时写入节点。`:'当前工作流没有已登记的活动分支。';
         if(!branch||typeof desk?.mount!=='function'){
             releaseCanvasPage();canvasHost.hidden=true;canvasFallback.hidden=false;
-            canvasFallbackText.textContent=branch?'常用控制台仍在加载；可先用下方浮层版，或稍后重新检查。':'先打开 UAP统一生产工作台_v2.json，再回到本页。';
+            canvasFallbackText.textContent=branch?'常用控制台仍在加载；可先用下方浮层版，或稍后重新检查。':'先打开任意 UAP 生产工作流（如 Krea2 / MOSS），再回到本页。';
             return;
         }
         canvasFallback.hidden=true;canvasHost.hidden=false;
