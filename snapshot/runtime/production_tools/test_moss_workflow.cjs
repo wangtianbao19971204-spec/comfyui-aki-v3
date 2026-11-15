@@ -63,11 +63,11 @@ vm.runInContext(stripModule(fs.readFileSync(path.join(web, 'task_activity.js'), 
 
 const mainChoices = navCtx.workflowChoices(uapMain.extra.uap_workbench);
 assert.deepEqual(Array.from(mainChoices, c => c.value), [
-    'k2', 'ext04', '@workflow:moss', 'ext06', 'ext08', 'ext09', '@workflow:stocking',
+    'k2', 'ext04', '@workflow:moss', '@workflow:caption', 'ext06', 'ext08', 'ext09', '@workflow:stocking',
 ]);
 const mossChoices = navCtx.workflowChoices(moss.extra.uap_workbench);
 assert.deepEqual(Array.from(mossChoices, c => c.value), [
-    '@main', 'moss', '@main:ext08', '@main:ext09', '@workflow:stocking',
+    '@workflow:k2', 'moss', '@workflow:ext04', '@workflow:caption', '@workflow:ext06', '@workflow:ext08', '@workflow:ext09', '@workflow:stocking',
 ]);
 
 // Runtime graph mock for MOSS

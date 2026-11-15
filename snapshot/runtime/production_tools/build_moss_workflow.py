@@ -50,8 +50,8 @@ SAMPLING_GUIDE = (
 )
 
 README_TEXT = (
-    "## MOSS 精简生产 v1（UAP 独立工作流）\n\n"
-    "- **独立零干扰**：与 `UAP统一生产工作台_v2.json`（Krea2）分处独立标签页，切工作流保留未保存草稿；切换到 Krea2 前可在常用控制台点「立即释放模型与缓存」。\n"
+    "## MOSS 精简生产 v1（UAP 独立轻量工作流）\n\n"
+    "- **独立零干扰**：与 `Krea2_精简生产_v1.json` 等全部独立流程分处原生多标签页，通过顶部 UAP 流程下拉保留未保存草稿无损切换；切换到 Krea2 前可在常用控制台点「立即释放模型与缓存」。\n"
     "- **链路**：`Unet Loader (LoraManager)` → `Lora Loader (LoraManager)`（model-only）→ `KSampler` → `VAEDecode` → `SaveImage`（13 节点 / 11 连线 / 无子图）。\n"
     "- **提示词**：正向 `#5 Prompt (LoraManager)`（自动拼接 `#4` 触发词），负向 `#6 CLIPTextEncode`；可在 UAP 常用控制台或完整工作台直接编辑与插入词库。\n"
     "- **模型防呆**：仅允许加载 `moss/` 底模、`Moss__Qwen3.5`（`type = moss_image`）、`Moss__Flux2 VAE` 与 `moss/` LoRA，双向拦截 Krea2 资源混用。\n"
@@ -439,7 +439,7 @@ def build() -> dict:
         "modes": {str(i): 0 for i in node_ids},
         "stages": [
             {"id": "daily", "label": "日常生图", "groups": [g_models, g_prompt, g_output]},
-            {"id": "compare", "label": "成品与说明", "groups": [g_output, g_guide]},
+            {"id": "guide", "label": "使用说明", "groups": [g_guide]},
         ],
     }
 

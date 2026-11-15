@@ -175,6 +175,7 @@
         "snapshot/runtime/production_tools/test_workspace_mount.cjs",
         "snapshot/runtime/production_tools/test_run_controls.cjs",
         "snapshot/runtime/production_tools/test_moss_workflow.cjs",
+        "snapshot/runtime/production_tools/test_uap_standalone_suite.cjs",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/scripts/uap_rewrite_guard.py"
       ],
       "evidence": [
@@ -209,7 +210,8 @@
         "snapshot/runtime/production_tools/test_model_quick_switch.cjs",
         "snapshot/runtime/production_tools/test_workspace_mount.cjs",
         "snapshot/runtime/production_tools/test_run_controls.cjs",
-        "snapshot/runtime/production_tools/test_moss_workflow.cjs"
+        "snapshot/runtime/production_tools/test_moss_workflow.cjs",
+        "snapshot/runtime/production_tools/test_uap_standalone_suite.cjs"
       ],
       "examples": [
         "snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
@@ -240,7 +242,17 @@
         "snapshot/runtime/production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
         "snapshot/runtime/production_tools/build_moss_workflow.py",
         "snapshot/runtime/production_tools/templates/MOSS_精简生产_v1.json",
-        "snapshot/runtime/ComfyUI/user/default/workflows/MOSS_精简生产_v1.json"
+        "snapshot/runtime/ComfyUI/user/default/workflows/MOSS_精简生产_v1.json",
+        "snapshot/runtime/production_tools/build_uap_standalone_suite.py",
+        "snapshot/runtime/production_tools/templates/Krea2_精简生产_v1.json",
+        "snapshot/runtime/ComfyUI/user/default/workflows/工具_图片反推_提示词提取.json",
+        "snapshot/runtime/production_tools/templates/工具_图片反推_提示词提取.json",
+        "snapshot/runtime/ComfyUI/user/default/workflows/生产扩展_06_透明素材_抠图导出.json",
+        "snapshot/runtime/production_tools/templates/生产扩展_06_透明素材_抠图导出.json",
+        "snapshot/runtime/ComfyUI/user/default/workflows/生产扩展_08_超分_二倍交付.json",
+        "snapshot/runtime/production_tools/templates/生产扩展_08_超分_二倍交付.json",
+        "snapshot/runtime/ComfyUI/user/default/workflows/生产扩展_09_超分_四倍素材.json",
+        "snapshot/runtime/production_tools/templates/生产扩展_09_超分_四倍素材.json"
       ],
       "tests": [
         "snapshot/runtime/production_tools/validate_uap_workflow.py",
@@ -252,7 +264,8 @@
         "snapshot/runtime/production_tools/test_stocking_workflow.cjs",
         "tests/test_anima_control_workflow.py",
         "tests/test_standalone_krea2_control_workflow.py",
-        "snapshot/runtime/production_tools/test_moss_workflow.cjs"
+        "snapshot/runtime/production_tools/test_moss_workflow.cjs",
+        "snapshot/runtime/production_tools/test_uap_standalone_suite.cjs"
       ],
       "evidence": [
         "snapshot/evidence/20261005_workflow_product_repair/FINAL_DELIVERY.json",
@@ -297,13 +310,17 @@
         "tests/test_standalone_krea2_control_workflow.py",
         "tests/fixtures/krea2_control_before.json",
         "snapshot/runtime/production_tools/build_moss_workflow.py",
-        "snapshot/runtime/production_tools/test_moss_workflow.cjs"
+        "snapshot/runtime/production_tools/test_moss_workflow.cjs",
+        "snapshot/runtime/production_tools/build_uap_standalone_suite.py",
+        "snapshot/runtime/production_tools/test_uap_standalone_suite.cjs"
       ],
       "examples": [
         "snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json",
         "snapshot/runtime/production_tools/templates/生产扩展_丝袜纹理修复.json",
         "snapshot/runtime/production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
-        "snapshot/runtime/production_tools/templates/MOSS_精简生产_v1.json"
+        "snapshot/runtime/production_tools/templates/MOSS_精简生产_v1.json",
+        "snapshot/runtime/production_tools/templates/Krea2_精简生产_v1.json",
+        "snapshot/runtime/production_tools/templates/工具_图片反推_提示词提取.json"
       ]
     },
     {

@@ -32,7 +32,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "LoadImage"
+        "Node name for S&R": "LoadImage",
+        "uap_layout_group": "01 输入与抠图处理 · EXT06",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "optimization_reference.png"
@@ -82,7 +84,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "BiRefNetRMBG"
+        "Node name for S&R": "BiRefNetRMBG",
+        "uap_layout_group": "01 输入与抠图处理 · EXT06",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "BiRefNet_lite",
@@ -123,7 +127,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "SaveImage"
+        "Node name for S&R": "SaveImage",
+        "uap_layout_group": "03 预览与保存 · EXT06",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "production_extensions/06_transparent"
@@ -159,7 +165,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "PreviewImage"
+        "Node name for S&R": "PreviewImage",
+        "uap_layout_group": "03 预览与保存 · EXT06",
+        "uap_default_mode": 0
       },
       "widgets_values": [],
       "title": "结果预览"
@@ -193,7 +201,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "VRAMCleanup"
+        "Node name for S&R": "VRAMCleanup",
+        "uap_layout_group": "03 预览与保存 · EXT06",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         false,
@@ -206,7 +216,7 @@
       "type": "MarkdownNote",
       "pos": [
         0,
-        -470
+        -540
       ],
       "size": [
         1120,
@@ -217,7 +227,10 @@
       "mode": 0,
       "inputs": [],
       "outputs": [],
-      "properties": {},
+      "properties": {
+        "uap_layout_group": "04 使用说明 · EXT06",
+        "uap_default_mode": 0
+      },
       "widgets_values": [
         "# 06_透明素材_抠图导出\n\n使用 BiRefNet lite 提取前景，直接保存带 Alpha 的 PNG。黑白边缘图需另接 MASK 预览。检查发丝、细线及半透明边缘后再用于生产。\n\n先另存为个人副本再改参数。参考图为本地验收生成图，可自行替换。固定种子用于复现；需要候选图时使用队列批次数量。"
       ]
@@ -257,7 +270,44 @@
       "IMAGE"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "title": "01 输入与抠图处理 · EXT06",
+      "bounding": [
+        -28,
+        -64,
+        836,
+        412
+      ],
+      "color": "#55705A",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "03 预览与保存 · EXT06",
+      "bounding": [
+        812,
+        -64,
+        416,
+        1452
+      ],
+      "color": "#5E7352",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "04 使用说明 · EXT06",
+      "bounding": [
+        -28,
+        -604,
+        1176,
+        472
+      ],
+      "color": "#5A5F66",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
     "ds": {
@@ -267,7 +317,69 @@
         490
       ]
     },
-    "optimization_release": "2026-09-06"
+    "optimization_release": "2026-09-06",
+    "qgn_navigation_groups": [
+      {
+        "groupName": "01 输入与抠图处理 · EXT06",
+        "shortcut": "1"
+      },
+      {
+        "groupName": "03 预览与保存 · EXT06",
+        "shortcut": "2"
+      },
+      {
+        "groupName": "04 使用说明 · EXT06",
+        "shortcut": "3"
+      }
+    ],
+    "uap_workbench": {
+      "version": 1,
+      "activeBranch": "ext06",
+      "viewBranch": "ext06",
+      "stage": "daily",
+      "compactWidgets": false,
+      "branches": [
+        {
+          "id": "ext06",
+          "label": "透明素材抠图导出",
+          "group": "01 输入与抠图处理 · EXT06",
+          "nodeIds": [
+            10,
+            11,
+            12,
+            80,
+            81,
+            900
+          ],
+          "modes": {
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "80": 0,
+            "81": 0,
+            "900": 0
+          },
+          "stages": [
+            {
+              "id": "daily",
+              "label": "日常操作",
+              "groups": [
+                "01 输入与抠图处理 · EXT06",
+                "03 预览与保存 · EXT06"
+              ]
+            },
+            {
+              "id": "guide",
+              "label": "使用说明",
+              "groups": [
+                "04 使用说明 · EXT06"
+              ]
+            }
+          ]
+        }
+      ]
+    }
   },
-  "version": 0.4
+  "version": 0.4,
+  "id": "uap-standalone-ext06-rmbg"
 }

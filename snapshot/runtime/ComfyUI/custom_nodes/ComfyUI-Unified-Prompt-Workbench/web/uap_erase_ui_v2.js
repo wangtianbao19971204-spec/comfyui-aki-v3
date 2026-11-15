@@ -70,7 +70,7 @@ function noticeReload(status) {
 function render() {
     const b = branch();
     const controls = document.querySelector("#unified-workbench .uw-workspace-controls");
-    if (!b || b.id !== "k2" || !controls) {
+    if (!b || b.id !== "k2" || b.depthControl === false || !controls) {
         cleanup();
         return;
     }

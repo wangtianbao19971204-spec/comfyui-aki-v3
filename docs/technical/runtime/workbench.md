@@ -25,6 +25,8 @@
 
 ## 更新记录
 
+- 2026-11-15：升级 `repair_workflow.js` 为 8 个对等独立轻量 UAP 工作流统一提供 `@workflow:<id>` 原生多标签互跳菜单及 `@main` 退休无损回退；在 `uap_daily_controls.js` 为所有含启用 `LoadImage` 的独立流程新增「输入图片」下拉选择与「上传图片」控件；在 `task_activity.js` 与 `runtime_controls.js` 支持纯反推工作流默认激活「提示词反推」页签、「运行当前反推任务」直接入队及 `#1233` 草稿框追加；在 `uap_erase_ui_v2.js`、`workbench_shell.js` 对 `depthControl: false` 的精简 Krea2 抑制缺失控制回退报错卡片与擦线按钮（已完成运行区热部署及 8 流程实页切换与 GPU 核验）。详见[本轮说明](../changes/runtime-workflows/2026-11-15-uap-standalone-workflow-suite.md)。
+
 - 2026-11-15：按独立轻量方案将 `MOSS_精简生产_v1.json` 接入 UAP 外壳（`@workflow:moss` ↔ `@main` 原生多标签无损互跳，`UAP统一生产工作台_v2.json` 零改动）；工作台、常用控制台与提示词检查器完整适配 `Unet Loader (LoraManager)`、`Prompt (LoraManager)`、`EmptyFlux2LatentImage`（MOSS 16 倍数预设）及 `type = moss_image` 说明，排除 `Lora Loader (LoraManager)` 的 `text` 误入提示词目标，开放跨体系显存 `/free` 按钮，并建立 Krea2 ↔ MOSS 底模/编码器/VAE/LoRA 双向防混用与 MOSS `clipStrength = 0` 默认锁定（已完成限定部署与 40 步真实 MOSS GPU 出图核验）。详见[本轮说明](../changes/runtime-workbench/2026-11-15-moss-uap-standalone-isolation.md)。
 
 - 2026-11-15：修复 UAP 常用控制台与工作台内嵌控制在 Krea2 / 指令编辑分支下主正向提示词缺失问题（支持沿输入连线回溯上游 `CR Prompt Text.prompt`、排除 `ShowText|pysssss` 等只读节点、优先绑定 `[00W-1]` / `[00W-1N]`，兼容 `WeiLinPromptUI` 与 `Krea2EditGroundedEncode` 及 V3 `COMBO` `/object_info`）；增强 `runtime_controls.js` 底模目录前缀家族拦截（禁用异构 `moss\` 底模）；同步阶段 1~3.2 前端（`canvas_write.js`、`uap_erase_ui_v2.js`、`uap_selfcheck.js`、`uap_rewrite_guard.py`）并退休旧单体 `workbench.js` / `anima_control.js`；实机全按钮与 Krea2 四条 GPU 链路点检同步修复「待用列表 · 组合预览」`openPending` 空引用竞态、`run_controls.js` 在 ComfyUI `0.42.0` `/jobs` API 下 `item.id` 中断识别及 `uap_daily_controls.js` 嵌套 `mount()` 释放状态恢复。详见[本轮说明](../changes/runtime-workbench/2026-11-15-krea2-uap-prompt-and-workflow-sync.md)。

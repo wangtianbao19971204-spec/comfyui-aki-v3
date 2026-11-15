@@ -66,7 +66,8 @@ function imageTaskName(context){
 
 export function taskPlan(app,task,method){
     const context=taskNodes(app),{entries,roots}=context;
-    const candidates=task==='generate'?generationResults(context):captionResults(context,method);
+    const resolvedMethods=task==='caption'&&!method?methods.map(([id])=>id):[method];
+    const candidates=task==='generate'?generationResults(context):resolvedMethods.flatMap(id=>captionResults(context,id));
     const targets=candidates.filter(item=>item.enabled);
     // These connected output nodes preserve the workflow's explicit after-run cleanup.
     if(task==='generate'&&targets.length){
@@ -74,15 +75,21 @@ export function taskPlan(app,task,method){
         targets.push(...entries.filter(item=>item.enabled&&item.node.type==='VRAMCleanup'&&groups.has(item.root.properties?.uap_layout_group)&&item.node.inputs?.some(input=>input.name==='anything'&&input.link!=null)));
         targets.push(...entries.filter(item=>item.enabled&&item.node.type==='Image Comparer (rgthree)'&&String(item.root.properties?.uap_layout_group||'').startsWith('SW-10V')));
     }
-    const methodRoots=roots.filter(node=>captionMethod(node)===method);
+    const methodRoots=roots.filter(node=>resolvedMethods.includes(captionMethod(node)));
     const label=task==='generate'?'开始'+imageTaskName(context):task==='caption'?'开始反推':'开始优化';
     let reason=app.rootGraph&&app.rootGraph!==app.graph?'请先返回主工作流，再选择要执行的任务。':task==='optimize'?'请在提示词优化面板中准备草稿。'
         : !candidates.length?'当前分支没有可识别的'+(task==='generate'?'图片输出节点。':'反推结果节点。')
         : !targets.length?'请先启用'+(task==='generate'?'当前分支的图片输出节点。':'所选反推工具。'):'';
+    if(!reason&&task==='caption'&&!method){
+        const activeMethods=Array.from(new Set(targets.map(item=>item.method).filter(Boolean)));
+        const refSources=activeMethods.flatMap(id=>referenceNodes(context,id,'caption'));
+        if(!refSources.length||refSources.some(node=>(node.mode!=null&&node.mode!==0)||!node.widgets?.find(widget=>widget.name==='image')?.value))
+            reason='请为所选反推方式连接并启用参考图节点，然后上传或选择图片。';
+    }
     const editor=roots.find(node=>node.type==='StockingTextureStudio');
     if(!reason&&task==='generate'&&editor&&!editor.inputs?.some(i=>i.name==='image'&&i.link!=null)&&!stockingProject(editor).asset)
         reason='请打开修复编辑器，导入图片并应用到节点。';
-    return {...context,task,method,label,reason,methodRoots,targets,queueNodeIds:targets.map(item=>item.id)};
+    return {...context,task,method:method||targets[0]?.method||'SW-01C',label,reason,methodRoots,targets,queueNodeIds:targets.map(item=>item.id)};
 }
 
 function imageUrl(picture){
@@ -198,8 +205,10 @@ export function mountTaskActivity(host,{app,element,button,report,onChange,actio
         if(disposed)return;
         const next=taskNodes(app);
         const repairing=next.roots.some(node=>node.type==='StockingTextureStudio');
+        const captionOnly=!repairing&&!generationResults(next).length&&methods.some(([id])=>next.roots.some(node=>captionMethod(node)===id));
         if(repairing)task='generate';
-        for(const [id,choice]of choices)choice.hidden=repairing&&id!=='generate';
+        else if(captionOnly&&task==='generate')task='caption';
+        for(const [id,choice]of choices)choice.hidden=(repairing&&id!=='generate')||(captionOnly&&id==='generate');
         const changed=context?.graph!==next.graph||context?.branch!==next.branch||next.entries.some((item,i)=>context?.entries[i]?.node!==item.node)||context?.entries.length!==next.entries.length;
         if(changed){record=null;historyVersion++;reference=null;referenceValue=null;writer?.dispose();writer=null;}
         context=next;
@@ -284,7 +293,8 @@ export function mountTaskActivity(host,{app,element,button,report,onChange,actio
                 const row=element('div',null,card,{className:'uw-toolbar'});
                 button('复制结果','task-copy-caption',async()=>{await navigator.clipboard.writeText(input.value);report('反推结果已复制。');},row);
                 const target=element('select',null,row);target.setAttribute('aria-label','追加到正向字段');
-                const targets=listPromptTargets(app).filter(item=>item.direction==='positive'&&item.usage==='generation');
+                const positiveTargets=listPromptTargets(app).filter(item=>item.direction==='positive');
+                const targets=positiveTargets.some(item=>item.usage==='generation')?positiveTargets.filter(item=>item.usage==='generation'):positiveTargets;
                 for(const [i,item]of targets.entries())element('option',item.label,target,{value:String(i)});
                 const capturedGraph=context.graph,capturedBranch=context.branch;
                 const apply=button('追加到正向','task-apply-caption',async()=>{

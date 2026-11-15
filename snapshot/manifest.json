@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-11-15T07:28:22.700912+00:00",
+  "created_at": "2026-11-15T08:58:13.130845+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -12466,8 +12466,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
-      "sha256": "16ef55eb1e29318ddd28d4e901ddb2264b92494b9bea4daf25a600d0cd8810b9",
-      "bytes": 71689,
+      "sha256": "6fc56d0324e285d7063f7c815bd8519435eab12c5f70d9c88cea42e2fd6b8873",
+      "bytes": 75813,
       "kind": "file"
     },
     {
@@ -24044,8 +24044,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
-      "sha256": "7f14ab11927637e9e131c9edc4bf7e12c148828da73dbf4fcb8885aa35b72632",
-      "bytes": 5661,
+      "sha256": "61f064d560d45e29f9f237e8a721a029b502438837f6aed08f2aaaf9a2f5f2b6",
+      "bytes": 7401,
       "kind": "file"
     },
     {
@@ -24072,8 +24072,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
-      "sha256": "578c0268b1f7d66e236d70ddd9050e22287d3f4b737c7b9227bff00911b0fa50",
-      "bytes": 18652,
+      "sha256": "84f38d2cbc6ca0d53f2822b41d64da728579d4ecc684ba26eecb1ec717f31ac9",
+      "bytes": 18770,
       "kind": "file"
     },
     {
@@ -24121,15 +24121,15 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
-      "sha256": "06444cddaad79b55ea684c426baf8eaa870f2bdd0e311d11cec11f31bb8ce072",
-      "bytes": 24728,
+      "sha256": "4c9459f23f0c47272598ba19c5d190345b524403c84b2e70a42c824f21bdbbf1",
+      "bytes": 25764,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/uap_erase_ui_v2.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/uap_erase_ui_v2.js",
-      "sha256": "77e9dfb3a1ba2e7d2c3bc7445a396376554d4e1f1106f6eca930eb7a8177b9d1",
-      "bytes": 4529,
+      "sha256": "5bb6156ffe543948c39a1941f148afe6501ae8dcd2e601a406bebc081dba8d60",
+      "bytes": 4557,
       "kind": "file"
     },
     {
@@ -24170,15 +24170,15 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
-      "sha256": "381783ec14bd4069907cfb6d46b1e74a0b1ae81c956a2e15e389860466e16470",
-      "bytes": 62421,
+      "sha256": "72fc962052b2ad6ea73e456903fea461e51a41ee321b65a2ce69ddeb907b72b8",
+      "bytes": 62547,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
-      "sha256": "6193977a9800212de85320cbfe6519e04e6bb7ac444c1c4d135cede24469bb6b",
-      "bytes": 22730,
+      "sha256": "ceeaa59af859c5eb5b074bdc2e8fed54004a7d47bb54c70782f4ebc8b82e568a",
+      "bytes": 22965,
       "kind": "file"
     },
     {
@@ -51631,15 +51631,15 @@
     {
       "source": "ComfyUI/user/default/workflows/Krea2_精简生产_v1.json",
       "path": "runtime/ComfyUI/user/default/workflows/Krea2_精简生产_v1.json",
-      "sha256": "c5e30e7bdbeb219e5e68e56f83fbf0ab280634d66cd4e88f7ab2d296bbdf93d8",
-      "bytes": 128611,
+      "sha256": "6a22f21f6c67c565a46b903a0b4be943f1c7781d885c3ea95fcfa1a4e76de225",
+      "bytes": 89176,
       "kind": "file"
     },
     {
       "source": "ComfyUI/user/default/workflows/MOSS_精简生产_v1.json",
       "path": "runtime/ComfyUI/user/default/workflows/MOSS_精简生产_v1.json",
-      "sha256": "0a2733c2f82ab0cf37a48ef615f3763a808f3963f2abc51771d64d431c489b4b",
-      "bytes": 32105,
+      "sha256": "a79df5c54a4693aaaf15206f78712ac6c98ef82196df618ce3c1a6d091474ef2",
+      "bytes": 32143,
       "kind": "file"
     },
     {
@@ -51668,6 +51668,13 @@
       "path": "runtime/ComfyUI/user/default/workflows/实验模板_04_SAM31_提示词候选_仅蒙版.json",
       "sha256": "4a7368e8f72b91e7132c4613188d03180f46be7775dac671e66bd9802573fbd5",
       "bytes": 26204,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/user/default/workflows/工具_图片反推_提示词提取.json",
+      "path": "runtime/ComfyUI/user/default/workflows/工具_图片反推_提示词提取.json",
+      "sha256": "a17d224370f4246c53b5a9e4bd9a0980ba4bbf65c8333a30486dca8054ff072b",
+      "bytes": 83010,
       "kind": "file"
     },
     {
@@ -51743,8 +51750,8 @@
     {
       "source": "ComfyUI/user/default/workflows/生产扩展_04_Krea2_指令编辑.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产扩展_04_Krea2_指令编辑.json",
-      "sha256": "2dd2d9051bae676b9db7545b7551dfca8506d766945e1589505d47b49a418f0e",
-      "bytes": 14023,
+      "sha256": "6d41b3084428f5b7494bbf041b74d5ae5cc98b3ca3b0c3899d3cb43206ac8de2",
+      "bytes": 22853,
       "kind": "file"
     },
     {
@@ -51757,8 +51764,8 @@
     {
       "source": "ComfyUI/user/default/workflows/生产扩展_06_透明素材_抠图导出.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产扩展_06_透明素材_抠图导出.json",
-      "sha256": "32189183436c09f3a9fa19e0e894251f5fedcf62f35e6de69db5f13d96f01fc3",
-      "bytes": 4989,
+      "sha256": "99a74f70c6f0ab6600a9a7e848014cbaa8199612f818a8028c4473f5c2028579",
+      "bytes": 7726,
       "kind": "file"
     },
     {
@@ -51771,15 +51778,15 @@
     {
       "source": "ComfyUI/user/default/workflows/生产扩展_08_超分_二倍交付.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产扩展_08_超分_二倍交付.json",
-      "sha256": "cea9fd2b4ef4f48ae1464a14b78793d8c4a9e2203d230f57bdb2017f7a42415e",
-      "bytes": 6160,
+      "sha256": "2fd040e93f75d3719d84c2ec81d6780b4ec51ae97c66d799c184cdab693a0a44",
+      "bytes": 9173,
       "kind": "file"
     },
     {
       "source": "ComfyUI/user/default/workflows/生产扩展_09_超分_四倍素材.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产扩展_09_超分_四倍素材.json",
-      "sha256": "af48d8a11187611b85f77a8f67c8b42a8f25993488c1bb6fae5fe8992d2b5862",
-      "bytes": 5382,
+      "sha256": "c014e191e7e8d837b7b07c092f9816fee4016e0a797c79c81305bfa095d60e80",
+      "bytes": 8256,
       "kind": "file"
     },
     {
@@ -57924,8 +57931,8 @@
     {
       "source": "production_tools/build_moss_workflow.py",
       "path": "runtime/production_tools/build_moss_workflow.py",
-      "sha256": "febd5126466523ec9608f2374fbbd980b1e0582b0e648bed784d0db5518b41b3",
-      "bytes": 24545,
+      "sha256": "f332c690548436af8cdd0043452f69f08619c525261195a8082e812c349517d1",
+      "bytes": 24573,
       "kind": "file"
     },
     {
@@ -57933,6 +57940,13 @@
       "path": "runtime/production_tools/build_stocking_workflow.py",
       "sha256": "153a37e1f1dfb6c73fe78fd8d2cb6c4c4cce933d6053110812e81df7bab8a02c",
       "bytes": 4064,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/build_uap_standalone_suite.py",
+      "path": "runtime/production_tools/build_uap_standalone_suite.py",
+      "sha256": "8c268637cda426ec2fb66c08e24dfd977c5501c7845628d3f9fea6d90150c785",
+      "bytes": 26855,
       "kind": "file"
     },
     {
@@ -58202,10 +58216,17 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/templates/Krea2_精简生产_v1.json",
+      "path": "runtime/production_tools/templates/Krea2_精简生产_v1.json",
+      "sha256": "6a22f21f6c67c565a46b903a0b4be943f1c7781d885c3ea95fcfa1a4e76de225",
+      "bytes": 89176,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/templates/MOSS_精简生产_v1.json",
       "path": "runtime/production_tools/templates/MOSS_精简生产_v1.json",
-      "sha256": "0a2733c2f82ab0cf37a48ef615f3763a808f3963f2abc51771d64d431c489b4b",
-      "bytes": 32105,
+      "sha256": "a79df5c54a4693aaaf15206f78712ac6c98ef82196df618ce3c1a6d091474ef2",
+      "bytes": 32143,
       "kind": "file"
     },
     {
@@ -58220,6 +58241,13 @@
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v2.json",
       "sha256": "a84b601480f6e52f6fb739c496c1793e547e0838046f2233b7f728d79b3f71ae",
       "bytes": 338726,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/templates/工具_图片反推_提示词提取.json",
+      "path": "runtime/production_tools/templates/工具_图片反推_提示词提取.json",
+      "sha256": "a17d224370f4246c53b5a9e4bd9a0980ba4bbf65c8333a30486dca8054ff072b",
+      "bytes": 83010,
       "kind": "file"
     },
     {
@@ -58253,8 +58281,8 @@
     {
       "source": "production_tools/templates/生产扩展_04_Krea2_指令编辑.json",
       "path": "runtime/production_tools/templates/生产扩展_04_Krea2_指令编辑.json",
-      "sha256": "2dd2d9051bae676b9db7545b7551dfca8506d766945e1589505d47b49a418f0e",
-      "bytes": 14023,
+      "sha256": "6d41b3084428f5b7494bbf041b74d5ae5cc98b3ca3b0c3899d3cb43206ac8de2",
+      "bytes": 22853,
       "kind": "file"
     },
     {
@@ -58267,8 +58295,8 @@
     {
       "source": "production_tools/templates/生产扩展_06_透明素材_抠图导出.json",
       "path": "runtime/production_tools/templates/生产扩展_06_透明素材_抠图导出.json",
-      "sha256": "32189183436c09f3a9fa19e0e894251f5fedcf62f35e6de69db5f13d96f01fc3",
-      "bytes": 4989,
+      "sha256": "99a74f70c6f0ab6600a9a7e848014cbaa8199612f818a8028c4473f5c2028579",
+      "bytes": 7726,
       "kind": "file"
     },
     {
@@ -58281,15 +58309,15 @@
     {
       "source": "production_tools/templates/生产扩展_08_超分_二倍交付.json",
       "path": "runtime/production_tools/templates/生产扩展_08_超分_二倍交付.json",
-      "sha256": "cea9fd2b4ef4f48ae1464a14b78793d8c4a9e2203d230f57bdb2017f7a42415e",
-      "bytes": 6160,
+      "sha256": "2fd040e93f75d3719d84c2ec81d6780b4ec51ae97c66d799c184cdab693a0a44",
+      "bytes": 9173,
       "kind": "file"
     },
     {
       "source": "production_tools/templates/生产扩展_09_超分_四倍素材.json",
       "path": "runtime/production_tools/templates/生产扩展_09_超分_四倍素材.json",
-      "sha256": "af48d8a11187611b85f77a8f67c8b42a8f25993488c1bb6fae5fe8992d2b5862",
-      "bytes": 5382,
+      "sha256": "c014e191e7e8d837b7b07c092f9816fee4016e0a797c79c81305bfa095d60e80",
+      "bytes": 8256,
       "kind": "file"
     },
     {
@@ -58323,8 +58351,8 @@
     {
       "source": "production_tools/test_control_switches.cjs",
       "path": "runtime/production_tools/test_control_switches.cjs",
-      "sha256": "6772712ea9dd90c73d50c72ec24dd70c3bf29d55c5380ccb73722d3d970cacff",
-      "bytes": 15489,
+      "sha256": "c88196a7303c8417972e5b8ca5c6950933b3ecc230558ccc9fae08b5e499076b",
+      "bytes": 16175,
       "kind": "file"
     },
     {
@@ -58344,8 +58372,8 @@
     {
       "source": "production_tools/test_moss_workflow.cjs",
       "path": "runtime/production_tools/test_moss_workflow.cjs",
-      "sha256": "8bf80244d009214f0004d2e30d76e9a147bbb73b60645af79b5d9661c54290cf",
-      "bytes": 21971,
+      "sha256": "4c1a8c59394c334d7ef4f3cb62b0165962e23dded809527ed3525159e7074cda",
+      "bytes": 22066,
       "kind": "file"
     },
     {
@@ -58402,6 +58430,13 @@
       "path": "runtime/production_tools/test_uap_navigation.cjs",
       "sha256": "d2b12016b5e3b4e1ee2b02bcb94234ca93a0c14e9bc310a3dcb40f22368577e4",
       "bytes": 4159,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/test_uap_standalone_suite.cjs",
+      "path": "runtime/production_tools/test_uap_standalone_suite.cjs",
+      "sha256": "5a146bd141a10c590e7bdf1d171010d347ece4100986d4a846cb237bbb581a5e",
+      "bytes": 13415,
       "kind": "file"
     },
     {
@@ -68359,26 +68394,39 @@
     }
   ],
   "development_revision": {
-    "note": "Onboard standalone MOSS workflow into UAP shell with Krea2/MOSS bidirectional isolation",
-    "previous_manifest_sha256": "625ac7ec5740a1b40759707bef8c062149112bfc1b1ad58227717a28413fbe0c",
+    "note": "Align 8 standalone UAP workflows, remove Krea2 lean depth control, and extract standalone caption workflow",
+    "previous_manifest_sha256": "7021cdeb63174fa67d6adf3d8fdcf4995cc2158091b6bc3e28f7c06a0c6dccde",
     "source_changes": {
       "added": [
-        "ComfyUI/user/default/workflows/MOSS_精简生产_v1.json",
-        "production_tools/build_moss_workflow.py",
-        "production_tools/templates/MOSS_精简生产_v1.json",
-        "production_tools/test_moss_workflow.cjs"
+        "ComfyUI/user/default/workflows/工具_图片反推_提示词提取.json",
+        "production_tools/build_uap_standalone_suite.py",
+        "production_tools/templates/Krea2_精简生产_v1.json",
+        "production_tools/templates/工具_图片反推_提示词提取.json",
+        "production_tools/test_uap_standalone_suite.cjs"
       ],
       "removed": [],
       "changed": [
         "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/web/comfyui/autocomplete.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/web/comfyui/workflow_targets.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_inspector.js",
         "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/resource_actions.js",
         "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/static_prompt_inspector.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js"
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/uap_erase_ui_v2.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
+        "ComfyUI/user/default/workflows/Krea2_精简生产_v1.json",
+        "ComfyUI/user/default/workflows/MOSS_精简生产_v1.json",
+        "ComfyUI/user/default/workflows/生产扩展_04_Krea2_指令编辑.json",
+        "ComfyUI/user/default/workflows/生产扩展_06_透明素材_抠图导出.json",
+        "ComfyUI/user/default/workflows/生产扩展_08_超分_二倍交付.json",
+        "ComfyUI/user/default/workflows/生产扩展_09_超分_四倍素材.json",
+        "production_tools/build_moss_workflow.py",
+        "production_tools/templates/MOSS_精简生产_v1.json",
+        "production_tools/templates/生产扩展_04_Krea2_指令编辑.json",
+        "production_tools/templates/生产扩展_06_透明素材_抠图导出.json",
+        "production_tools/templates/生产扩展_08_超分_二倍交付.json",
+        "production_tools/templates/生产扩展_09_超分_四倍素材.json",
+        "production_tools/test_control_switches.cjs",
+        "production_tools/test_moss_workflow.cjs"
       ]
     },
     "live_deployed": false,

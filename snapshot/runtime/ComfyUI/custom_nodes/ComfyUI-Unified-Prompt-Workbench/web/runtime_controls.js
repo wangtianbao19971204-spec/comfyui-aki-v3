@@ -132,7 +132,8 @@ export function installWorkflowGuard(app) {
             if(issue){app.ui?.dialog?.show(issue);return false;}
         }
         if(config&&!Array.isArray(args[2]?.queueNodeIds)){
-            const plan=taskPlan(app,'generate');
+            const activeBranch=config.branches?.find(item=>item.id===config.activeBranch);
+            const plan=taskPlan(app,activeBranch?.defaultTask||'generate');
             if(plan.reason){app.ui?.dialog?.show(plan.reason);return false;}
             args[2]={...args[2],queueNodeIds:plan.queueNodeIds};
         }

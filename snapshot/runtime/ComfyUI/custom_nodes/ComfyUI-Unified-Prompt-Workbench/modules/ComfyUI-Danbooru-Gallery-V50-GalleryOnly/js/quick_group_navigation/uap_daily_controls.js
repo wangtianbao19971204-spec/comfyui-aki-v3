@@ -327,7 +327,7 @@ export function createDailyControls(jump) {
     }
     const position = () => {
         const heading=panel.querySelector('.desk-heading small');
-        if(heading&&currentBranch){const text=`${currentBranch.label} · ${!active?'浏览中，请先启用此分支':panel.dataset.workbenchMounted?'修改实时同步，使用上方任务按钮运行':'修改实时同步；运行仅处理当前图像任务'}`;if(heading.textContent!==text)heading.textContent=text;}
+        if(heading&&currentBranch){const runHint=currentBranch.defaultTask==='caption'?'修改实时同步；运行仅执行已启用的反推工具':'修改实时同步；运行仅处理当前图像任务';const text=`${currentBranch.label} · ${!active?'浏览中，请先启用此分支':panel.dataset.workbenchMounted?'修改实时同步，使用上方任务按钮运行':runHint}`;if(heading.textContent!==text)heading.textContent=text;}
         if (panel.dataset.workbenchMounted) {if(panel.style.position!=='relative')panel.style.cssText='position:relative;inset:auto;width:100%;max-height:none;z-index:auto';return;}
         const nav = document.getElementById("uap-workbench-nav")?.getBoundingClientRect();
         if (!nav) return;
@@ -542,9 +542,10 @@ export function createDailyControls(jump) {
         const head = el("div", "", top, { className: "desk-head" });
         const heading=el('div','',head,{className:'desk-heading'});
         el("strong", "常用控制台", heading);
-        el("small", `${branch.label} · ${isActive ? "修改实时同步；运行仅处理当前图像任务" : "浏览中，请先启用此分支"}`, heading);
+        const defaultRunHint=branch.defaultTask==='caption'?"修改实时同步；运行仅执行已启用的反推工具":"修改实时同步；运行仅处理当前图像任务";
+        el("small", `${branch.label} · ${isActive ? defaultRunHint : "浏览中，请先启用此分支"}`, heading);
         const headActions=el('div','',head,{className:'desk-head-actions'});
-        const runCurrent=el('button','运行当前图像任务',headActions,{type:'button',className:'desk-run-current',disabled:!isActive});
+        const runCurrent=el('button',branch.defaultTask==='caption'?'运行当前反推任务':'运行当前图像任务',headActions,{type:'button',className:'desk-run-current',disabled:!isActive});
         let running=false;
         const runStatus=el('small','',top,{className:'desk-run-status'});runStatus.setAttribute('role','status');
         runCurrent.onclick=async()=>{
@@ -612,6 +613,67 @@ export function createDailyControls(jump) {
         const left = el("div", "", fields, { className: "desk-column" });
         const middle = el("div", "", fields, { className: "desk-column" });
         const right = el("div", "", fields, { className: "desk-column" });
+        const loadImages = nodes.filter(n => (n.type === "LoadImage" || n.comfyClass === "LoadImage") && (n.mode == null || n.mode === 0));
+        for (const imgNode of loadImages) {
+            const imgSource = widgetSource(imgNode, "image");
+            if (!imgSource || imgSource.node !== imgNode) continue;
+            const imgWidget = imgSource.widget;
+            const imgBox = section(left, branch.dailyRows ? "输入图片（图生图 / 遮罩按需启用）" : "输入图片", imgNode);
+            imgBox.dataset.deskArea = "parameters";
+            const imgRow = el("div", "", imgBox, { className: "plugin-tools" });
+            const imgSelect = el("select", "", imgRow, { style: "flex:1;min-width:160px" });
+            imgSelect.setAttribute("aria-label", `${shortTitle(imgNode.title || "输入图片")} 选择文件`);
+            const fileInput = el("input", "", imgRow, { type: "file", accept: "image/*", hidden: true });
+            const uploadBtn = el("button", "上传图片", imgRow, { type: "button", onclick: () => fileInput.click() });
+            const imgHint = el("small", "", imgBox);
+            imgHint.setAttribute("role", "status");
+            let lastSig = "";
+            const syncImage = () => {
+                const rawVals = typeof imgWidget.options?.values === "function" ? imgWidget.options.values() : imgWidget.options?.values;
+                const cur = String(imgWidget.value || "");
+                const opts = Array.from(new Set([...(Array.isArray(rawVals) ? rawVals.map(String) : []), ...(cur ? [cur] : [])]));
+                const sig = opts.join("\u0000") + "\u0001" + cur;
+                if (sig !== lastSig) {
+                    lastSig = sig;
+                    imgSelect.replaceChildren();
+                    if (!opts.length) el("option", "请上传输入图片", imgSelect, { value: "" });
+                    for (const item of opts) el("option", item, imgSelect, { value: item });
+                }
+                imgSelect.value = cur;
+                imgHint.textContent = cur ? `当前：${cur}` : "尚未选择输入图片。";
+            };
+            imgSelect.onchange = () => {
+                if (!isCurrent() || app.graph.extra?.uap_workbench?.activeBranch !== branch.id) return;
+                commitWidget(imgNode, imgWidget, imgSelect.value);
+                syncImage();
+            };
+            fileInput.onchange = async () => {
+                const file = fileInput.files?.[0];
+                if (!file || typeof api?.fetchApi !== "function") return;
+                uploadBtn.disabled = true;
+                try {
+                    const body = new FormData();
+                    body.append("image", file);
+                    body.append("type", "input");
+                    const res = await api.fetchApi("/upload/image", { method: "POST", body });
+                    if (!res.ok) throw new Error("图片上传失败，请重试。");
+                    const data = await res.json();
+                    if (!isCurrent() || app.graph.getNodeById(imgNode.id) !== imgNode) return;
+                    const val = (data.subfolder ? data.subfolder + "/" : "") + data.name;
+                    if (Array.isArray(imgWidget.options?.values) && !imgWidget.options.values.includes(val)) imgWidget.options.values.push(val);
+                    commitWidget(imgNode, imgWidget, val);
+                    lastSig = "";
+                    syncImage();
+                } catch (err) {
+                    imgHint.textContent = err.message || "图片上传失败。";
+                } finally {
+                    uploadBtn.disabled = false;
+                    fileInput.value = "";
+                }
+            };
+            syncImage();
+            sync.push(syncImage);
+        }
         const { positive, negative } = resolveBranchPromptNodes(nodes);
         const textBox = section(left, "提示词", positive);
         textBox.dataset.deskArea='prompts';
@@ -782,7 +844,7 @@ export function createDailyControls(jump) {
             const hint=el('small','',middle.querySelector('[data-desk-area=models]')||middle,{className:'desk-encoder-hint'});hint.dataset.encoderHint='';
             const scopeHint={
                 a1:'01 Anima 原版与 02 Anima 2.9B',a29:'01 Anima 原版与 02 Anima 2.9B',ext07:'01 Anima 原版与 07 左右扩图',
-                k2:'03 Krea2与 04 指令编辑',ext04:'03 Krea2与 04 指令编辑',ext05:'02 Anima 2.9B与 05 裁剪精修',
+                k2:'Krea2 精简生产与 04 指令编辑',ext04:'Krea2 精简生产与 04 指令编辑',ext05:'02 Anima 2.9B与 05 裁剪精修',
                 moss:'MOSS 独立生产流程',
             }[branch.id]||branch.label;
             let renderedHint='';

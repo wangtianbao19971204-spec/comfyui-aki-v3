@@ -8,12 +8,12 @@
       "id": 1135,
       "type": "VAEDecode",
       "pos": [
-        1190,
-        12960
+        1800,
+        740
       ],
       "size": [
-        270,
-        50
+        410,
+        60
       ],
       "flags": {
         "collapsed": false
@@ -48,7 +48,9 @@
       ],
       "title": "[06C-VAE-DECODE] VAE Decode",
       "properties": {
-        "Node name for S&R": "VAEDecode"
+        "Node name for S&R": "VAEDecode",
+        "uap_layout_group": "02 模型、LoRA 与主采样 · Krea2",
+        "uap_default_mode": 0
       },
       "color": "#745C8D",
       "bgcolor": "#272132"
@@ -57,12 +59,12 @@
       "id": 1136,
       "type": "SaveImage",
       "pos": [
-        1640,
-        12780
+        2320,
+        520
       ],
       "size": [
-        330,
-        70
+        420,
+        90
       ],
       "flags": {
         "collapsed": false
@@ -98,7 +100,9 @@
       ],
       "title": "[00W-6] 保存 Krea2 最终图（当前最高层级）",
       "properties": {
-        "Node name for S&R": "SaveImage"
+        "Node name for S&R": "SaveImage",
+        "uap_layout_group": "03 成品预览与保存 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "Production_Krea2_Integrated"
@@ -113,12 +117,12 @@
       "id": 1138,
       "type": "PreviewImage",
       "pos": [
-        1640,
-        12410
+        2320,
+        140
       ],
       "size": [
         420,
-        320
+        340
       ],
       "flags": {
         "collapsed": false
@@ -143,7 +147,9 @@
       ],
       "title": "[00W-5] Krea2 一体化最终预览：放大 > 修复/图生图 > 基础",
       "properties": {
-        "Node name for S&R": "PreviewImage"
+        "Node name for S&R": "PreviewImage",
+        "uap_layout_group": "03 成品预览与保存 · Krea2",
+        "uap_default_mode": 0
       },
       "color": "#745C8D",
       "bgcolor": "#272132"
@@ -152,12 +158,12 @@
       "id": 1158,
       "type": "UpscaleModelLoader",
       "pos": [
-        1820,
-        18240
+        1280,
+        980
       ],
       "size": [
         360,
-        70
+        80
       ],
       "flags": {
         "collapsed": false
@@ -187,7 +193,9 @@
       ],
       "title": "[11A] OmniSR · USDU 像素预放大模型",
       "properties": {
-        "Node name for S&R": "UpscaleModelLoader"
+        "Node name for S&R": "UpscaleModelLoader",
+        "uap_layout_group": "05 分块二放 1.5× 与说明 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "OmniSR_X4_DIV2K.safetensors"
@@ -199,130 +207,14 @@
       "bgcolor": "#2A2518"
     },
     {
-      "id": 1160,
-      "type": "Krea2ControlLoRALoader",
-      "pos": [
-        20,
-        21310
-      ],
-      "size": [
-        360,
-        100
-      ],
-      "flags": {
-        "collapsed": false
-      },
-      "order": 88,
-      "mode": 2,
-      "inputs": [
-        {
-          "localized_name": "model",
-          "name": "model",
-          "type": "MODEL",
-          "link": 10254
-        },
-        {
-          "localized_name": "lora_name",
-          "name": "lora_name",
-          "type": "COMBO",
-          "widget": {
-            "name": "lora_name"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "strength",
-          "name": "strength",
-          "type": "FLOAT",
-          "widget": {
-            "name": "strength"
-          },
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "localized_name": "模型",
-          "name": "MODEL",
-          "type": "MODEL",
-          "slot_index": 0,
-          "links": [
-            10255
-          ]
-        }
-      ],
-      "title": "[05K-LOADER] Krea2 Depth Control LoRA",
-      "properties": {
-        "Node name for S&R": "Krea2ControlLoRALoader"
-      },
-      "widgets_values": [
-        "krea2\\控制与编辑\\Krea2__Krea 2 Depth ControlNet LoRA__v1.0__FP32__cv3097135__f2976752.safetensors",
-        1
-      ],
-      "widgets_values_named": {
-        "lora_name": "krea2\\控制与编辑\\Krea2__Krea 2 Depth ControlNet LoRA__v1.0__FP32__cv3097135__f2976752.safetensors",
-        "strength": 1
-      },
-      "color": "#607A3B",
-      "bgcolor": "#1F2A1E"
-    },
-    {
-      "id": 1161,
-      "type": "Krea2ControlApply",
-      "pos": [
-        20,
-        21470
-      ],
-      "size": [
-        300,
-        80
-      ],
-      "flags": {
-        "collapsed": false
-      },
-      "order": 102,
-      "mode": 2,
-      "inputs": [
-        {
-          "localized_name": "model",
-          "name": "model",
-          "type": "MODEL",
-          "link": 10255
-        },
-        {
-          "localized_name": "control_latent",
-          "name": "control_latent",
-          "type": "LATENT",
-          "link": 338031
-        }
-      ],
-      "outputs": [
-        {
-          "localized_name": "模型",
-          "name": "MODEL",
-          "type": "MODEL",
-          "slot_index": 0,
-          "links": [
-            10258
-          ]
-        }
-      ],
-      "title": "[05K-APPLY] 挂载K2 Depth控制latent",
-      "properties": {
-        "Node name for S&R": "Krea2ControlApply"
-      },
-      "color": "#607A3B",
-      "bgcolor": "#1F2A1E"
-    },
-    {
       "id": 1173,
       "type": "Lora Loader (LoraManager)",
       "pos": [
-        440,
-        13380
+        1800,
+        140
       ],
       "size": [
-        400,
+        410,
         240
       ],
       "flags": {
@@ -376,8 +268,7 @@
           "slot_index": 0,
           "links": [
             10248,
-            10254,
-            10257
+            10259
           ]
         },
         {
@@ -407,7 +298,14 @@
       ],
       "title": "[02B4-K2-LORA-LOADER] K2 LoRA Manager Loader",
       "properties": {
-        "Node name for S&R": "Lora Loader (LoraManager)"
+        "Node name for S&R": "Lora Loader (LoraManager)",
+        "__lm_widget_ids": [
+          "__lm_autocomplete_meta_text",
+          "text",
+          "loras"
+        ],
+        "uap_layout_group": "02 模型、LoRA 与主采样 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         {
@@ -434,11 +332,11 @@
       "id": 1177,
       "type": "CLIPLoader",
       "pos": [
-        2800,
-        13770
+        930,
+        280
       ],
       "size": [
-        360,
+        380,
         110
       ],
       "flags": {
@@ -489,7 +387,9 @@
       ],
       "title": "[02D] Krea2 Qwen3-VL 4B 文本编码器",
       "properties": {
-        "Node name for S&R": "CLIPLoader"
+        "Node name for S&R": "CLIPLoader",
+        "uap_layout_group": "02 模型、LoRA 与主采样 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "qwen3-vl-4b-heretic.safetensors",
@@ -508,11 +408,11 @@
       "id": 1178,
       "type": "CLIPTextEncode",
       "pos": [
-        20,
-        18240
+        490,
+        580
       ],
       "size": [
-        350,
+        330,
         110
       ],
       "flags": {
@@ -551,7 +451,9 @@
       ],
       "title": "[04D-NEG-ENCODE] Negative CLIP · 负向编码",
       "properties": {
-        "Node name for S&R": "CLIPTextEncode"
+        "Node name for S&R": "CLIPTextEncode",
+        "uap_layout_group": "01 提示词与出图模式 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         ""
@@ -566,11 +468,11 @@
       "id": 1179,
       "type": "CLIPTextEncode",
       "pos": [
-        390,
-        18240
+        490,
+        430
       ],
       "size": [
-        340,
+        330,
         110
       ],
       "flags": {
@@ -609,7 +511,9 @@
       ],
       "title": "[04C-POS-ENCODE] Positive CLIP · 正向编码",
       "properties": {
-        "Node name for S&R": "CLIPTextEncode"
+        "Node name for S&R": "CLIPTextEncode",
+        "uap_layout_group": "01 提示词与出图模式 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         ""
@@ -624,12 +528,12 @@
       "id": 1181,
       "type": "Lora Stacker (LoraManager)",
       "pos": [
-        440,
-        13130
+        1350,
+        370
       ],
       "size": [
-        400,
-        200
+        410,
+        190
       ],
       "flags": {
         "collapsed": false
@@ -689,7 +593,14 @@
       ],
       "title": "[02B2-K2-LORA] 基础/修复/概念",
       "properties": {
-        "Node name for S&R": "Lora Stacker (LoraManager)"
+        "Node name for S&R": "Lora Stacker (LoraManager)",
+        "__lm_widget_ids": [
+          "__lm_autocomplete_meta_text",
+          "text",
+          "loras"
+        ],
+        "uap_layout_group": "02 模型、LoRA 与主采样 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         {
@@ -716,11 +627,11 @@
       "id": 1183,
       "type": "UNETLoader",
       "pos": [
-        2420,
-        13770
+        930,
+        140
       ],
       "size": [
-        360,
+        380,
         100
       ],
       "flags": {
@@ -759,9 +670,11 @@
           ]
         }
       ],
-      "title": "[02C] Krea2-Anime v3.0 BF16（姿态控制）",
+      "title": "[02C] 基础模型 · Krea2",
       "properties": {
-        "Node name for S&R": "UNETLoader"
+        "Node name for S&R": "UNETLoader",
+        "uap_layout_group": "02 模型、LoRA 与主采样 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "krea2\\图像生成\\Krea2__Krea2-Anime__v3.0__BF16__cv3435333__f3334576.safetensors",
@@ -778,12 +691,12 @@
       "id": 1185,
       "type": "CR Prompt Text",
       "pos": [
-        460,
-        12410
+        40,
+        430
       ],
       "size": [
-        320,
-        120
+        420,
+        150
       ],
       "flags": {
         "collapsed": false
@@ -819,7 +732,9 @@
       ],
       "title": "[00W-1N] 常用负向提示词",
       "properties": {
-        "Node name for S&R": "CR Prompt Text"
+        "Node name for S&R": "CR Prompt Text",
+        "uap_layout_group": "01 提示词与出图模式 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "worst quality, low quality, score_1, score_2, score_3, artist name, (bad hands:1.3), (extra fingers:1.3), (six fingers:1.4), fused fingers, missing fingers, deformed hands, mutated hands, bad anatomy"
@@ -834,11 +749,11 @@
       "id": 1186,
       "type": "easy seed",
       "pos": [
-        840,
-        12570
+        930,
+        690
       ],
       "size": [
-        320,
+        380,
         110
       ],
       "flags": {
@@ -869,7 +784,9 @@
       ],
       "title": "[00] 主种子与模式",
       "properties": {
-        "Node name for S&R": "easy seed"
+        "Node name for S&R": "easy seed",
+        "uap_layout_group": "02 模型、LoRA 与主采样 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         845401323336067,
@@ -883,184 +800,14 @@
       }
     },
     {
-      "id": 1187,
-      "type": "DazzleSwitch",
-      "pos": [
-        1190,
-        12410
-      ],
-      "size": [
-        390,
-        170
-      ],
-      "flags": {
-        "collapsed": false
-      },
-      "order": 103,
-      "mode": 0,
-      "inputs": [
-        {
-          "label": "SW-05K K2 Depth控制模型_优先",
-          "localized_name": "input_01",
-          "name": "input_01",
-          "shape": 7,
-          "type": "*",
-          "link": 10258
-        },
-        {
-          "label": "原始K2 LoRA模型_自动回退",
-          "localized_name": "input_02",
-          "name": "input_02",
-          "shape": 7,
-          "type": "*",
-          "link": 10257
-        },
-        {
-          "localized_name": "input_03",
-          "name": "input_03",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        },
-        {
-          "localized_name": "select",
-          "name": "select",
-          "type": "COMBO",
-          "widget": {
-            "name": "select"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "mode",
-          "name": "mode",
-          "type": "COMBO",
-          "widget": {
-            "name": "mode"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "select_override",
-          "name": "select_override",
-          "shape": 7,
-          "type": "INT",
-          "widget": {
-            "name": "select_override"
-          },
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "MODEL",
-          "localized_name": "output",
-          "name": "output",
-          "type": "MODEL",
-          "links": [
-            10259
-          ]
-        },
-        {
-          "localized_name": "selected_index",
-          "name": "selected_index",
-          "type": "INT",
-          "links": []
-        }
-      ],
-      "title": "[02G-MODEL-AUTO] K2 Depth控制优先 / 原模型回退",
-      "properties": {
-        "Node name for S&R": "DazzleSwitch"
-      },
-      "widgets_values": [
-        "原始K2 LoRA模型_自动回退",
-        "priority",
-        0
-      ],
-      "widgets_values_named": {
-        "select": "SW-05K K2 Depth控制模型_优先",
-        "mode": "strict",
-        "select_override": 0
-      },
-      "color": "#9A7040",
-      "bgcolor": "#2A2118"
-    },
-    {
-      "id": 1190,
-      "type": "LoadImage",
-      "pos": [
-        310,
-        18630
-      ],
-      "size": [
-        320,
-        320
-      ],
-      "flags": {
-        "collapsed": false
-      },
-      "order": 41,
-      "mode": 0,
-      "inputs": [
-        {
-          "localized_name": "图像",
-          "name": "image",
-          "type": "COMBO",
-          "widget": {
-            "name": "image"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "选择文件上传",
-          "name": "upload",
-          "type": "IMAGEUPLOAD",
-          "widget": {
-            "name": "upload"
-          },
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "localized_name": "图像",
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            338024
-          ]
-        },
-        {
-          "localized_name": "遮罩",
-          "name": "MASK",
-          "type": "MASK",
-          "links": []
-        }
-      ],
-      "title": "[05A] 姿态参考图输入",
-      "properties": {
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "06693d11-d952-4b22-b8cd-adc80a4314b8.jpeg",
-        "image"
-      ],
-      "widgets_values_named": {
-        "image": "06693d11-d952-4b22-b8cd-adc80a4314b8.jpeg",
-        "upload": "image"
-      },
-      "color": "#607A3B",
-      "bgcolor": "#1F2A1E"
-    },
-    {
       "id": 1192,
       "type": "UltimateSDUpscale",
       "pos": [
-        1440,
-        18240
+        1800,
+        980
       ],
       "size": [
-        360,
+        410,
         640
       ],
       "flags": {
@@ -1324,7 +1071,9 @@
       ],
       "title": "[11B] Krea2 分块二放 · 1.5×",
       "properties": {
-        "Node name for S&R": "UltimateSDUpscale"
+        "Node name for S&R": "UltimateSDUpscale",
+        "uap_layout_group": "05 分块二放 1.5× 与说明 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         1.5,
@@ -1379,12 +1128,12 @@
       "id": 1197,
       "type": "Lora Stacker (LoraManager)",
       "pos": [
-        20,
-        13380
+        1350,
+        600
       ],
       "size": [
-        400,
-        200
+        410,
+        190
       ],
       "flags": {
         "collapsed": false
@@ -1444,7 +1193,14 @@
       ],
       "title": "[02B3-K2-LORA] 风格/补充",
       "properties": {
-        "Node name for S&R": "Lora Stacker (LoraManager)"
+        "Node name for S&R": "Lora Stacker (LoraManager)",
+        "__lm_widget_ids": [
+          "__lm_autocomplete_meta_text",
+          "text",
+          "loras"
+        ],
+        "uap_layout_group": "02 模型、LoRA 与主采样 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         {
@@ -1471,12 +1227,12 @@
       "id": 1199,
       "type": "Lora Stacker (LoraManager)",
       "pos": [
-        20,
-        13130
+        1350,
+        140
       ],
       "size": [
-        400,
-        200
+        410,
+        190
       ],
       "flags": {
         "collapsed": false
@@ -1536,7 +1292,14 @@
       ],
       "title": "[02B1-K2-LORA] 角色/姿势",
       "properties": {
-        "Node name for S&R": "Lora Stacker (LoraManager)"
+        "Node name for S&R": "Lora Stacker (LoraManager)",
+        "__lm_widget_ids": [
+          "__lm_autocomplete_meta_text",
+          "text",
+          "loras"
+        ],
+        "uap_layout_group": "02 模型、LoRA 与主采样 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         {
@@ -1563,12 +1326,12 @@
       "id": 1200,
       "type": "KSampler",
       "pos": [
-        1190,
-        12630
+        1800,
+        420
       ],
       "size": [
-        300,
-        270
+        410,
+        280
       ],
       "flags": {
         "collapsed": false
@@ -1668,7 +1431,9 @@
       ],
       "title": "[06B] Krea2 一体化主采样",
       "properties": {
-        "Node name for S&R": "KSampler"
+        "Node name for S&R": "KSampler",
+        "uap_layout_group": "02 模型、LoRA 与主采样 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         1062315907611667,
@@ -1695,11 +1460,11 @@
       "id": 1201,
       "type": "VAELoader",
       "pos": [
-        2420,
-        13930
+        930,
+        430
       ],
       "size": [
-        360,
+        380,
         70
       ],
       "flags": {
@@ -1728,14 +1493,15 @@
             10186,
             10251,
             10266,
-            10269,
-            338026
+            10269
           ]
         }
       ],
       "title": "[02E] Krea2 Real VAE",
       "properties": {
-        "Node name for S&R": "VAELoader"
+        "Node name for S&R": "VAELoader",
+        "uap_layout_group": "02 模型、LoRA 与主采样 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "krea2RealVae_v10.safetensors"
@@ -1750,12 +1516,12 @@
       "id": 1202,
       "type": "VAEEncode",
       "pos": [
-        340,
-        21960
+        500,
+        980
       ],
       "size": [
-        240,
-        70
+        310,
+        80
       ],
       "flags": {
         "collapsed": false
@@ -1789,7 +1555,9 @@
       ],
       "title": "[06A2] 普通图生图编码",
       "properties": {
-        "Node name for S&R": "VAEEncode"
+        "Node name for S&R": "VAEEncode",
+        "uap_layout_group": "04 图生图与遮罩修复 · Krea2",
+        "uap_default_mode": 0
       },
       "color": "#745C8D",
       "bgcolor": "#272132"
@@ -1798,12 +1566,12 @@
       "id": 1203,
       "type": "ImageScaleToMaxDimension",
       "pos": [
-        20,
-        14130
+        40,
+        1360
       ],
       "size": [
-        400,
-        90
+        420,
+        95
       ],
       "flags": {
         "collapsed": false
@@ -1849,7 +1617,9 @@
       ],
       "title": "[01B-SCALE] Img2Img source scale - long edge 1024",
       "properties": {
-        "Node name for S&R": "ImageScaleToMaxDimension"
+        "Node name for S&R": "ImageScaleToMaxDimension",
+        "uap_layout_group": "04 图生图与遮罩修复 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "lanczos",
@@ -1864,11 +1634,11 @@
       "id": 1205,
       "type": "EmptyLatentImage",
       "pos": [
-        840,
-        12410
+        930,
+        540
       ],
       "size": [
-        300,
+        380,
         110
       ],
       "flags": {
@@ -1918,7 +1688,9 @@
       ],
       "title": "[06T] 文生图尺寸",
       "properties": {
-        "Node name for S&R": "EmptyLatentImage"
+        "Node name for S&R": "EmptyLatentImage",
+        "uap_layout_group": "02 模型、LoRA 与主采样 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         768,
@@ -1937,12 +1709,12 @@
       "id": 1206,
       "type": "LoadImage",
       "pos": [
-        20,
-        13770
+        40,
+        980
       ],
       "size": [
-        480,
-        320
+        420,
+        340
       ],
       "flags": {
         "collapsed": false
@@ -1987,9 +1759,11 @@
           ]
         }
       ],
-      "title": "[01A-IMG2IMG-IN] Input image - img2img source / caption source",
+      "title": "[01A-IMG2IMG-IN] 图生图 / 遮罩修复输入图",
       "properties": {
-        "Node name for S&R": "LoadImage"
+        "Node name for S&R": "LoadImage",
+        "uap_layout_group": "04 图生图与遮罩修复 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "civitai_134722333.jpg",
@@ -2006,12 +1780,12 @@
       "id": 1209,
       "type": "VAEEncodeForInpaint",
       "pos": [
-        20,
-        21680
+        500,
+        1100
       ],
       "size": [
-        300,
-        100
+        310,
+        105
       ],
       "flags": {
         "collapsed": false
@@ -2060,7 +1834,9 @@
       ],
       "title": "[06A3] 遮罩修复编码",
       "properties": {
-        "Node name for S&R": "VAEEncodeForInpaint"
+        "Node name for S&R": "VAEEncodeForInpaint",
+        "uap_layout_group": "04 图生图与遮罩修复 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         8
@@ -2075,11 +1851,11 @@
       "id": 1210,
       "type": "PrimitiveBoolean",
       "pos": [
-        460,
-        12580
+        490,
+        140
       ],
       "size": [
-        300,
+        330,
         60
       ],
       "flags": {
@@ -2111,7 +1887,9 @@
       ],
       "title": "[00W-2] 使用输入图（关=基础文生图）",
       "properties": {
-        "Node name for S&R": "PrimitiveBoolean"
+        "Node name for S&R": "PrimitiveBoolean",
+        "uap_layout_group": "01 提示词与出图模式 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         false
@@ -2126,11 +1904,11 @@
       "id": 1211,
       "type": "PrimitiveBoolean",
       "pos": [
-        460,
-        12700
+        490,
+        235
       ],
       "size": [
-        280,
+        330,
         60
       ],
       "flags": {
@@ -2162,7 +1940,9 @@
       ],
       "title": "[00W-3] 使用遮罩修复（次优先级）",
       "properties": {
-        "Node name for S&R": "PrimitiveBoolean"
+        "Node name for S&R": "PrimitiveBoolean",
+        "uap_layout_group": "01 提示词与出图模式 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         false
@@ -2177,12 +1957,12 @@
       "id": 1212,
       "type": "ImpactConditionalBranch",
       "pos": [
-        340,
-        21680
+        850,
+        980
       ],
       "size": [
-        300,
-        100
+        310,
+        105
       ],
       "flags": {
         "collapsed": false
@@ -2226,7 +2006,9 @@
       ],
       "title": "[06A4] 遮罩 / 普通图生图",
       "properties": {
-        "Node name for S&R": "ImpactConditionalBranch"
+        "Node name for S&R": "ImpactConditionalBranch",
+        "uap_layout_group": "04 图生图与遮罩修复 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         false
@@ -2241,12 +2023,12 @@
       "id": 1213,
       "type": "ImpactConditionalBranch",
       "pos": [
-        660,
-        21680
+        850,
+        1130
       ],
       "size": [
-        300,
-        100
+        310,
+        105
       ],
       "flags": {
         "collapsed": false
@@ -2284,14 +2066,15 @@
           "type": "LATENT",
           "slot_index": 0,
           "links": [
-            10277,
-            338027
+            10277
           ]
         }
       ],
       "title": "[06A5] 输入图 / 文生图惰性选择",
       "properties": {
-        "Node name for S&R": "ImpactConditionalBranch"
+        "Node name for S&R": "ImpactConditionalBranch",
+        "uap_layout_group": "04 图生图与遮罩修复 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         false
@@ -2306,11 +2089,11 @@
       "id": 1214,
       "type": "PrimitiveFloat",
       "pos": [
-        340,
-        21840
+        500,
+        1245
       ],
       "size": [
-        260,
+        310,
         70
       ],
       "flags": {
@@ -2341,7 +2124,9 @@
       ],
       "title": "[06A6] 文生图 denoise",
       "properties": {
-        "Node name for S&R": "PrimitiveFloat"
+        "Node name for S&R": "PrimitiveFloat",
+        "uap_layout_group": "04 图生图与遮罩修复 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         1
@@ -2356,11 +2141,11 @@
       "id": 1215,
       "type": "PrimitiveFloat",
       "pos": [
-        660,
-        21840
+        500,
+        1350
       ],
       "size": [
-        260,
+        310,
         70
       ],
       "flags": {
@@ -2391,7 +2176,9 @@
       ],
       "title": "[06A7] 图生图 denoise",
       "properties": {
-        "Node name for S&R": "PrimitiveFloat"
+        "Node name for S&R": "PrimitiveFloat",
+        "uap_layout_group": "04 图生图与遮罩修复 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         0.3
@@ -2406,11 +2193,11 @@
       "id": 1216,
       "type": "PrimitiveFloat",
       "pos": [
-        990,
-        21840
+        500,
+        1455
       ],
       "size": [
-        260,
+        310,
         70
       ],
       "flags": {
@@ -2441,7 +2228,9 @@
       ],
       "title": "[06A8] 遮罩修复 denoise",
       "properties": {
-        "Node name for S&R": "PrimitiveFloat"
+        "Node name for S&R": "PrimitiveFloat",
+        "uap_layout_group": "04 图生图与遮罩修复 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         0.35
@@ -2456,12 +2245,12 @@
       "id": 1217,
       "type": "ImpactConditionalBranch",
       "pos": [
-        20,
-        21840
+        850,
+        1280
       ],
       "size": [
-        300,
-        100
+        310,
+        105
       ],
       "flags": {
         "collapsed": false
@@ -2505,7 +2294,9 @@
       ],
       "title": "[06A9] 遮罩 / 普通重绘强度",
       "properties": {
-        "Node name for S&R": "ImpactConditionalBranch"
+        "Node name for S&R": "ImpactConditionalBranch",
+        "uap_layout_group": "04 图生图与遮罩修复 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         false
@@ -2520,12 +2311,12 @@
       "id": 1218,
       "type": "ImpactConditionalBranch",
       "pos": [
-        990,
-        21680
+        850,
+        1430
       ],
       "size": [
-        300,
-        100
+        310,
+        105
       ],
       "flags": {
         "collapsed": false
@@ -2569,7 +2360,9 @@
       ],
       "title": "[06A10] 自动选择重绘强度",
       "properties": {
-        "Node name for S&R": "ImpactConditionalBranch"
+        "Node name for S&R": "ImpactConditionalBranch",
+        "uap_layout_group": "04 图生图与遮罩修复 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         false
@@ -2584,8 +2377,8 @@
       "id": 1219,
       "type": "PrimitiveBoolean",
       "pos": [
-        460,
-        12810
+        490,
+        330
       ],
       "size": [
         330,
@@ -2619,7 +2412,9 @@
       ],
       "title": "[00W-4] 启用 Krea2 分块二放（1.5×，可选）",
       "properties": {
-        "Node name for S&R": "PrimitiveBoolean"
+        "Node name for S&R": "PrimitiveBoolean",
+        "uap_layout_group": "01 提示词与出图模式 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         false
@@ -2634,12 +2429,12 @@
       "id": 1220,
       "type": "ImpactConditionalBranch",
       "pos": [
-        2200,
-        18240
+        1280,
+        1100
       ],
       "size": [
-        300,
-        100
+        360,
+        105
       ],
       "flags": {
         "collapsed": false
@@ -2683,7 +2478,9 @@
       ],
       "title": "[11C] 二放 / 原尺寸惰性选择",
       "properties": {
-        "Node name for S&R": "ImpactConditionalBranch"
+        "Node name for S&R": "ImpactConditionalBranch",
+        "uap_layout_group": "05 分块二放 1.5× 与说明 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         false
@@ -2698,12 +2495,12 @@
       "id": 1226,
       "type": "VRAMCleanup",
       "pos": [
-        1640,
-        12910
+        2320,
+        650
       ],
       "size": [
-        300,
-        100
+        420,
+        110
       ],
       "flags": {
         "collapsed": false
@@ -2749,7 +2546,9 @@
       ],
       "title": "[12] 可选显存释放（默认保留模型）",
       "properties": {
-        "Node name for S&R": "VRAMCleanup"
+        "Node name for S&R": "VRAMCleanup",
+        "uap_layout_group": "03 成品预览与保存 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         false,
@@ -2764,12 +2563,12 @@
       "id": 1233,
       "type": "CR Prompt Text",
       "pos": [
-        20,
-        12410
+        40,
+        140
       ],
       "size": [
         420,
-        230
+        240
       ],
       "flags": {
         "collapsed": false
@@ -2807,7 +2606,9 @@
       ],
       "title": "[00W-1] 最常用正向提示词",
       "properties": {
-        "Node name for S&R": "CR Prompt Text"
+        "Node name for S&R": "CR Prompt Text",
+        "uap_layout_group": "01 提示词与出图模式 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "@nyanyastyle, @goosing, masterpiece, best quality, amazing quality, very aesthetic, extremely detailed, absurdres, highres, score_9, score_8, newest, adult bunnygirl nurse, bunny ears, nurse dress, garter belt, torn stockings, adult male patient, 1girl, 1boy, clothed male, lap sitting, hand on thigh, open collar, examining room, fallen privacy curtain. Perched across his lap to inspect a supposed ankle injury, she realizes too late that his hands have settled at her hips and neither of them is moving away. <lora:anima-base-1-masterpiece-v51:1.0> <lora:Goosing:0.75> <lora:nyanyastyle_v1.5-step00000800:1.0>"
@@ -2819,82 +2620,15 @@
       "bgcolor": "#2E2118"
     },
     {
-      "id": 130163,
-      "type": "945c8bd5-57ab-4054-ae97-da28ca17ccfc",
-      "pos": [
-        60,
-        18780
-      ],
-      "size": [
-        210,
-        150
-      ],
-      "flags": {},
-      "order": 95,
-      "mode": 2,
-      "inputs": [
-        {
-          "label": "image",
-          "localized_name": "image",
-          "name": "image",
-          "type": "IMAGE",
-          "link": 338024
-        },
-        {
-          "label": "vae",
-          "localized_name": "vae",
-          "name": "vae",
-          "type": "VAE",
-          "link": 338026
-        },
-        {
-          "label": "latent",
-          "localized_name": "latent",
-          "name": "latent",
-          "shape": 7,
-          "type": "LATENT",
-          "link": 338027
-        }
-      ],
-      "outputs": [
-        {
-          "label": "pose_compare",
-          "localized_name": "pose_compare",
-          "name": "pose_compare",
-          "type": "IMAGE",
-          "links": []
-        },
-        {
-          "label": "lineart_preview",
-          "localized_name": "lineart_preview",
-          "name": "lineart_preview",
-          "type": "IMAGE",
-          "links": []
-        },
-        {
-          "label": "control_latent",
-          "localized_name": "control_latent",
-          "name": "control_latent",
-          "type": "LATENT",
-          "links": [
-            338031
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "K2 线稿与控制图"
-      }
-    },
-    {
       "id": 130172,
       "type": "MarkdownNote",
       "pos": [
-        60,
-        40
+        1280,
+        1250
       ],
       "size": [
-        560,
-        300
+        480,
+        340
       ],
       "flags": {
         "collapsed": false
@@ -2905,10 +2639,12 @@
       "outputs": [],
       "title": "[00-README] Krea2 精简生产 v1",
       "properties": {
-        "Node name for S&R": "MarkdownNote"
+        "Node name for S&R": "MarkdownNote",
+        "uap_layout_group": "05 分块二放 1.5× 与说明 · Krea2",
+        "uap_default_mode": 0
       },
       "widgets_values": [
-        "## Krea2 精简生产 v1\n\n链路：`UNETLoader ->（可选）Krea2 Depth Control LoRA/Apply -> K2 LoRA Loader -> KSampler -> VAE Decode ->（可选）USDU 1.5x/2x -> SaveImage`\n\n- 提示词：`[00W-1]` 正向 / `[00W-1N]` 负向，都是纯文本节点（工作台「应用到目标」可写入）。\n- 线稿/深度控制：子图 `K2 线稿与控制图`，`[02G-MODEL-AUTO]` 为 `priority`：控制链启用时用控制模型，关闭时自动回退原模型，不会返回空模型。\n- 输入图 / 遮罩修复 / 二放 都靠 `[00W-2] [00W-3] [00W-4]` 三个开关选择，关掉即走基础文生图。\n- 本图不含分支快照、不含 compact 控件、不含「绑定/修复」回灌按钮；保存与重开是安全的。\n"
+        "## Krea2 精简生产 v1（UAP 独立轻量工作流）\n\n- **纯粹生成链路**：`UNETLoader` → 三栏 `LoRA Stacker` + `LoRA Loader` → `KSampler` → `VAEDecode` →（可选）`1.5× USDU 分块二放` → `SaveImage`（36 节点 / 0 子图 / 已移除深度控制与反推累赘）。\n- **提示词与词库**：正向 `[00W-1] #1233`、负向 `[00W-1N] #1185`，均可在 UAP 常用控制台或完整工作台直接编写、插入共享词库与补全。\n- **模式切换**：`[00W-2]` 使用输入图（关 = 基础文生图）、`[00W-3]` 遮罩修复、`[00W-4]` 1.5× 分块二放。\n- **对等互跳**：通过顶部 UAP 流程下拉可在 Krea2、MOSS、指令编辑、图片反推、抠图、2×/4× 超分、丝袜修复之间保留草稿无损切换。\n"
       ],
       "widgets_values_named": {
         "text": "## 完成与释放\n\n检查最终预览和保存路径。\n\n连续出图时保留模型缓存；本轮完成后使用 ComfyUI 的卸载模型操作，或打开 `生产套件_99_释放模型显存_v2.json`。"
@@ -3063,40 +2799,8 @@
       "UPSCALE_MODEL"
     ],
     [
-      10254,
-      1173,
-      0,
-      1160,
-      0,
-      "MODEL"
-    ],
-    [
-      10255,
-      1160,
-      0,
-      1161,
-      0,
-      "MODEL"
-    ],
-    [
-      10257,
-      1173,
-      0,
-      1187,
-      1,
-      "MODEL"
-    ],
-    [
-      10258,
-      1161,
-      0,
-      1187,
-      0,
-      "MODEL"
-    ],
-    [
       10259,
-      1187,
+      1173,
       0,
       1200,
       0,
@@ -3319,38 +3023,6 @@
       "IMAGE"
     ],
     [
-      338024,
-      1190,
-      0,
-      130163,
-      0,
-      "IMAGE"
-    ],
-    [
-      338026,
-      1201,
-      0,
-      130163,
-      1,
-      "VAE"
-    ],
-    [
-      338027,
-      1213,
-      0,
-      130163,
-      2,
-      "LATENT"
-    ],
-    [
-      338031,
-      130163,
-      2,
-      1161,
-      1,
-      "LATENT"
-    ],
-    [
       338041,
       1136,
       0,
@@ -3359,7 +3031,68 @@
       "IMAGE"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "title": "01 提示词与出图模式 · Krea2",
+      "bounding": [
+        12,
+        76,
+        836,
+        642
+      ],
+      "color": "#4D6C5B",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "02 模型、LoRA 与主采样 · Krea2",
+      "bounding": [
+        902,
+        76,
+        1336,
+        752
+      ],
+      "color": "#46637A",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "03 成品预览与保存 · Krea2",
+      "bounding": [
+        2292,
+        76,
+        476,
+        712
+      ],
+      "color": "#5E7352",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "04 图生图与遮罩修复 · Krea2",
+      "bounding": [
+        12,
+        916,
+        1176,
+        647
+      ],
+      "color": "#6C5B4D",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "05 分块二放 1.5× 与说明 · Krea2",
+      "bounding": [
+        1252,
+        916,
+        986,
+        732
+      ],
+      "color": "#5D5370",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
     "info": "Online LLM workflow rebuilt around visibility-faithful captioning/cleanup: concrete visible tags first; no workflow-side pre-filtering or forced neutralization; manual 03D/04A gate preserved. Added standalone SW-99-LLM-CHAT remote LLM chat UI: WeiLin input boxes, StringFunction packers, Prompt Assistant runner, ShowText output, no CLIP/Sampler connection.",
@@ -3372,53 +3105,24 @@
     "workflow_revision_note": "v19: changed online LLM rules from low-filter/safety-rewrite language to visibility-faithful rules. Preserves QWEN_TAGS/QWEN_CAPTION/QWEN_DESIGN and prioritizes concrete visible tags over generic safety-neutral summaries. No API key stored.",
     "qgn_navigation_groups": [
       {
-        "id": "uap_home",
-        "groupName": "[00] UAP统一工作台总控台",
-        "shortcutKey": "1",
-        "zoomScale": 95,
-        "order": 0
+        "groupName": "01 提示词与出图模式 · Krea2",
+        "shortcut": "1"
       },
       {
-        "id": "uap_k2",
-        "groupName": "01 提示词与出图模式 · K2 Krea2",
-        "shortcutKey": "2",
-        "zoomScale": 95,
-        "order": 1
+        "groupName": "02 模型、LoRA 与主采样 · Krea2",
+        "shortcut": "2"
       },
       {
-        "id": "uap_ext04",
-        "groupName": "输入与选区 · EXT04",
-        "shortcutKey": "3",
-        "zoomScale": 95,
-        "order": 2
+        "groupName": "03 成品预览与保存 · Krea2",
+        "shortcut": "3"
       },
       {
-        "id": "uap_ext06",
-        "groupName": "输入与选区 · EXT06",
-        "shortcutKey": "4",
-        "zoomScale": 95,
-        "order": 3
+        "groupName": "04 图生图与遮罩修复 · Krea2",
+        "shortcut": "4"
       },
       {
-        "id": "uap_ext08",
-        "groupName": "输入与选区 · EXT08",
-        "shortcutKey": "5",
-        "zoomScale": 95,
-        "order": 4
-      },
-      {
-        "id": "uap_ext09",
-        "groupName": "输入与选区 · EXT09",
-        "shortcutKey": "6",
-        "zoomScale": 95,
-        "order": 5
-      },
-      {
-        "id": "uap_release",
-        "groupName": "[10] 显存释放与收尾",
-        "shortcutKey": "L",
-        "zoomScale": 95,
-        "order": 6
+        "groupName": "05 分块二放 1.5× 与说明 · Krea2",
+        "shortcut": "5"
       }
     ],
     "qgn_locked": false,
@@ -3427,7 +3131,7 @@
     "workflow_version_note": "v16 editable rules online LLM: rule editors beside Prompt Assistant online nodes, safe rewrite branch, local LLM cleanup retained.",
     "workflow_revision_note_sw05_lineart_edit": "Added SW-05 lineart edit subchain: DazzleSwitch saves/previews selected lineart; new LoadImage [05C-LINEART-PAINT-IN] loads saved/edited lineart and provides MASK; ImageCompositeMasked erases white-mask regions to black; erased lineart feeds AnimaLLLiteApply.image.",
     "workflow_revision_note_canvas_priority": "Added [06A3-CANVAS-SELECT] DazzleSwitch: reference-image latent size has priority; manual EmptyLatentImage is fallback. Renamed duplicate [06A-CANVAS] nodes to [06A1] auto and [06A2] manual.",
-    "workflow_variant": "unified_visual_operation_layout",
+    "workflow_variant": "krea2_lean_uap_v1",
     "codex_subgraph_clean": {
       "source": "Anima_原版加K2可选二采_v1 (2).json",
       "change": "Converted selected visual groups into ComfyUI subgraph nodes. Internal links are rewired through subgraph input/output proxy nodes; original widgets/modes are preserved inside.",
@@ -3588,7 +3292,7 @@
       },
       "manual_prompt_result_node_id": 573
     },
-    "workflow_display_name": "UAP统一生产工作台 · 视觉操作优化",
+    "workflow_display_name": "Krea2 精简生产 v1",
     "workflow_revision_note_readable_names": "Short readable names; manual 01G result promoted to the main canvas.",
     "workflow_revision_note_canvas_layout": "Main canvas regrouped into a non-overlapping left-to-right data flow, with four staged image comparers below detail processing.",
     "codex_canvas_layout": {
@@ -3768,1673 +3472,222 @@
     "workflow_revision_note_erase_cleanup": "Removed the unused K2 subgraph erase chain (1140/1144/1145/1146/1147/1152/1155/1164) because its [05C2] mask LoadImage pointed at a missing clipspace file and blocked validation. The reference-depth control path was already direct (1191 -> 1159).",
     "workflow_revision_note_erase_restore": "Added optional erase branch in K2 subgraph: [05C2] mask LoadImage -> [05C7] composite with black source -> [05R2] bypass/enable switch -> [05K-ENCODE]. Default is bypass. Transparent mask areas are erased; opaque areas keep the depth control image.",
     "ds": {
-      "scale": 0.37974983358324127,
+      "scale": 0.72,
       "offset": [
-        1596.0698757258106,
-        -17189.741582743995
+        40,
+        40
+      ]
+    },
+    "uap_model_contracts": {
+      "version": 1,
+      "verified_at": "2026-11-15",
+      "evidence": "Local safetensors inventory and ComfyUI 0.42.0 CLIPLoader(moss_image) + Flux2 VAE pairing. Enforces Krea2/MOSS family isolation.",
+      "models": {
+        "moss/图像生成/Moss__MOSS Image__Base__BF16__cv3409868__f3301907.safetensors": {
+          "family": "moss"
+        },
+        "moss/图像生成/Moss__MOSS Image__SFT__BF16__cv3409867__f3301903.safetensors": {
+          "family": "moss"
+        },
+        "moss/图像生成/Moss__MOSS Cat Tower__v2.0__BF16__cv3447411__f3346762.safetensors": {
+          "family": "moss"
+        },
+        "krea2/图像生成/Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__CuteDisaster v2 Turbo UC__BF16__cv3151280__f3034252.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__DarkDesire V3 Turbo UC__BF16__cv3362930__f3250905.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__DarkDesire V3 Turbo UC__FP8-Mixed__cv3362930__f3251200.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Krea2-Anime__v2.0__BF16__cv3357716__f3246945.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Krea2-Anime__v2.0__INT8__cv3357716__f3245462.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Moody Krea 2 Mix (uncensored) V8SE Goes Ancient —__Premium 臻享版__INT8-ConvRot__cv3261440__f3153405.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Krea2 Cat Tower__v1.0 (Turbo INT8 ConvRot)__INT8-ConvRot__cv3163788__f3046237.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Krea2-Anime__v3.0__BF16__cv3435333__f3334576.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Krea2-Anime__v3.0__FP8__cv3435333__f3334536.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__LUSTIFY! [NSFW checkpoint]__v10 (Krea 2)__BF16__cv3112728__f3015315.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__LUSTIFY! [NSFW checkpoint]__v10 (Krea 2)__INT8-ConvRot__cv3112728__f2996235.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        }
+      },
+      "families": {
+        "moss": {
+          "label": "MOSS",
+          "clip": [
+            "Moss__Qwen3.5 9B Text Encoder__v1__BF16__sha__7E6E9F08D598.safetensors",
+            "Moss__Qwen3.5 9B Text Encoder__v1__W4A8-GPTQ__cv3409867__f3301906.safetensors"
+          ],
+          "clip_type": "moss_image",
+          "vae": [
+            "Moss__Flux2 VAE__v1__FP32__cv3409867__f3301980.safetensors"
+          ]
+        },
+        "krea2": {
+          "label": "Krea2",
+          "clip": [
+            "qwen3-vl-4b-heretic.safetensors"
+          ],
+          "clip_type": "krea2",
+          "vae": [
+            "krea2RealVae_v10.safetensors"
+          ]
+        }
+      }
+    },
+    "uap_workbench": {
+      "version": 1,
+      "activeBranch": "k2",
+      "viewBranch": "k2",
+      "stage": "daily",
+      "compactWidgets": false,
+      "branches": [
+        {
+          "id": "k2",
+          "label": "Krea2 图像生成",
+          "modelFamily": "krea2",
+          "depthControl": false,
+          "dailyRows": [
+            [
+              "01 提示词与出图模式 · Krea2",
+              "02 模型、LoRA 与主采样 · Krea2",
+              "03 成品预览与保存 · Krea2"
+            ]
+          ],
+          "group": "01 提示词与出图模式 · Krea2",
+          "nodeIds": [
+            1135,
+            1136,
+            1138,
+            1158,
+            1173,
+            1177,
+            1178,
+            1179,
+            1181,
+            1183,
+            1185,
+            1186,
+            1192,
+            1197,
+            1199,
+            1200,
+            1201,
+            1202,
+            1203,
+            1205,
+            1206,
+            1209,
+            1210,
+            1211,
+            1212,
+            1213,
+            1214,
+            1215,
+            1216,
+            1217,
+            1218,
+            1219,
+            1220,
+            1226,
+            1233,
+            130172
+          ],
+          "modes": {
+            "1135": 0,
+            "1136": 0,
+            "1138": 0,
+            "1158": 0,
+            "1173": 0,
+            "1177": 0,
+            "1178": 0,
+            "1179": 0,
+            "1181": 0,
+            "1183": 0,
+            "1185": 0,
+            "1186": 0,
+            "1192": 0,
+            "1197": 0,
+            "1199": 0,
+            "1200": 0,
+            "1201": 0,
+            "1202": 0,
+            "1203": 0,
+            "1205": 0,
+            "1206": 0,
+            "1209": 0,
+            "1210": 0,
+            "1211": 0,
+            "1212": 0,
+            "1213": 0,
+            "1214": 0,
+            "1215": 0,
+            "1216": 0,
+            "1217": 0,
+            "1218": 0,
+            "1219": 0,
+            "1220": 0,
+            "1226": 0,
+            "1233": 0,
+            "130172": 0
+          },
+          "stages": [
+            {
+              "id": "daily",
+              "label": "日常生图",
+              "groups": [
+                "01 提示词与出图模式 · Krea2",
+                "02 模型、LoRA 与主采样 · Krea2",
+                "03 成品预览与保存 · Krea2"
+              ]
+            },
+            {
+              "id": "input",
+              "label": "图生图与遮罩",
+              "groups": [
+                "04 图生图与遮罩修复 · Krea2"
+              ]
+            },
+            {
+              "id": "refine",
+              "label": "1.5× 二放与说明",
+              "groups": [
+                "05 分块二放 1.5× 与说明 · Krea2"
+              ]
+            }
+          ]
+        }
       ]
     }
   },
   "version": 0.4,
   "definitions": {
-    "subgraphs": [
-      {
-        "id": "945c8bd5-57ab-4054-ae97-da28ca17ccfc",
-        "version": 1,
-        "state": {
-          "lastGroupId": 501901,
-          "lastNodeId": 130171,
-          "lastLinkId": 338040,
-          "lastRerouteId": 0
-        },
-        "revision": 11,
-        "config": {},
-        "name": "K2 线稿与控制图",
-        "inputNode": {
-          "id": -10,
-          "bounding": [
-            -188,
-            10701,
-            128,
-            108
-          ]
-        },
-        "outputNode": {
-          "id": -20,
-          "bounding": [
-            3340,
-            10711,
-            133.939453125,
-            108
-          ]
-        },
-        "inputs": [
-          {
-            "id": "526b382a-25bb-40b0-b93f-db1147344dc4",
-            "name": "image",
-            "type": "IMAGE",
-            "linkIds": [
-              10241
-            ],
-            "localized_name": "image",
-            "label": "image",
-            "pos": [
-              -84,
-              10725
-            ]
-          },
-          {
-            "id": "4e2cee41-42b8-45c5-8897-c47b6c26a68e",
-            "name": "vae",
-            "type": "VAE",
-            "linkIds": [
-              10253
-            ],
-            "localized_name": "vae",
-            "label": "vae",
-            "pos": [
-              -84,
-              10745
-            ]
-          },
-          {
-            "id": "b59d942b-d872-4584-b618-62f4f3589425",
-            "name": "latent",
-            "type": "LATENT",
-            "linkIds": [
-              10267
-            ],
-            "localized_name": "latent",
-            "label": "latent",
-            "shape": 7,
-            "pos": [
-              -84,
-              10765
-            ]
-          }
-        ],
-        "outputs": [
-          {
-            "id": "61710b09-e3fb-4a73-b6a1-1c05ac0d923e",
-            "name": "pose_compare",
-            "type": "IMAGE",
-            "linkIds": [
-              10246
-            ],
-            "localized_name": "pose_compare",
-            "label": "pose_compare",
-            "pos": [
-              3364,
-              10735
-            ]
-          },
-          {
-            "id": "118762aa-0fdf-489a-8f08-0313293a67cb",
-            "name": "lineart_preview",
-            "type": "IMAGE",
-            "linkIds": [
-              10223
-            ],
-            "localized_name": "lineart_preview",
-            "label": "lineart_preview",
-            "pos": [
-              3364,
-              10755
-            ]
-          },
-          {
-            "id": "0bac45e7-b167-4603-bff5-22d02bfab5ec",
-            "name": "control_latent",
-            "type": "LATENT",
-            "linkIds": [
-              10256
-            ],
-            "localized_name": "control_latent",
-            "label": "control_latent",
-            "pos": [
-              3364,
-              10775
-            ]
-          }
-        ],
-        "widgets": [],
-        "nodes": [
-          {
-            "id": 1153,
-            "type": "ResizeImagesByLongerEdge",
-            "pos": [
-              720,
-              19130
-            ],
-            "size": [
-              280,
-              70
-            ],
-            "flags": {
-              "collapsed": false
-            },
-            "order": 8,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "图像",
-                "name": "images",
-                "type": "IMAGE",
-                "link": 10241
-              },
-              {
-                "localized_name": "长边",
-                "name": "longer_edge",
-                "type": "INT",
-                "widget": {
-                  "name": "longer_edge"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "图像",
-                "name": "images",
-                "type": "IMAGE",
-                "links": [
-                  10242,
-                  10243,
-                  10244,
-                  10245,
-                  10246
-                ]
-              }
-            ],
-            "title": "[05A1] 参考图长边缩放",
-            "properties": {
-              "Node name for S&R": "ResizeImagesByLongerEdge",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0",
-              "uap_compact_widgets": true,
-              "uap_layout_group": "CORE-05 参考预处理与控制图生成 · K2 Krea2"
-            },
-            "widgets_values": [
-              1524
-            ],
-            "widgets_values_named": {
-              "longer_edge": 1524
-            }
-          },
-          {
-            "id": 1141,
-            "type": "AIO_Preprocessor",
-            "pos": [
-              20,
-              18870
-            ],
-            "size": [
-              300,
-              100
-            ],
-            "flags": {
-              "collapsed": false
-            },
-            "order": 5,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "image",
-                "name": "image",
-                "type": "IMAGE",
-                "link": 10242
-              },
-              {
-                "localized_name": "preprocessor",
-                "name": "preprocessor",
-                "shape": 7,
-                "type": "COMBO",
-                "widget": {
-                  "name": "preprocessor"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "resolution",
-                "name": "resolution",
-                "shape": 7,
-                "type": "INT",
-                "widget": {
-                  "name": "resolution"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "图像",
-                "name": "IMAGE",
-                "type": "IMAGE",
-                "links": [
-                  10220,
-                  10217
-                ]
-              }
-            ],
-            "title": "[05B1] PyraCanny 预处理",
-            "properties": {
-              "Node name for S&R": "AIO_Preprocessor",
-              "cnr_id": "comfyui_controlnet_aux",
-              "ver": "e8b689a513c3e6b63edc44066560ca5919c0576e",
-              "uap_compact_widgets": true,
-              "uap_layout_group": "CORE-05 参考预处理与控制图生成 · K2 Krea2"
-            },
-            "widgets_values": [
-              "PyraCannyPreprocessor",
-              1024
-            ],
-            "widgets_values_named": {
-              "preprocessor": "PyraCannyPreprocessor",
-              "resolution": 1024
-            }
-          },
-          {
-            "id": 1142,
-            "type": "AIO_Preprocessor",
-            "pos": [
-              20,
-              19020
-            ],
-            "size": [
-              300,
-              100
-            ],
-            "flags": {
-              "collapsed": false
-            },
-            "order": 6,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "image",
-                "name": "image",
-                "type": "IMAGE",
-                "link": 10243
-              },
-              {
-                "localized_name": "preprocessor",
-                "name": "preprocessor",
-                "shape": 7,
-                "type": "COMBO",
-                "widget": {
-                  "name": "preprocessor"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "resolution",
-                "name": "resolution",
-                "shape": 7,
-                "type": "INT",
-                "widget": {
-                  "name": "resolution"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "图像",
-                "name": "IMAGE",
-                "type": "IMAGE",
-                "links": [
-                  10221,
-                  10222
-                ]
-              }
-            ],
-            "title": "[05B2] HED 预处理",
-            "properties": {
-              "Node name for S&R": "AIO_Preprocessor",
-              "cnr_id": "comfyui_controlnet_aux",
-              "ver": "e8b689a513c3e6b63edc44066560ca5919c0576e",
-              "uap_compact_widgets": true,
-              "uap_layout_group": "CORE-05 参考预处理与控制图生成 · K2 Krea2"
-            },
-            "widgets_values": [
-              "HEDPreprocessor",
-              1024
-            ],
-            "widgets_values_named": {
-              "preprocessor": "HEDPreprocessor",
-              "resolution": 1024
-            }
-          },
-          {
-            "id": 1143,
-            "type": "AIO_Preprocessor",
-            "pos": [
-              380,
-              18980
-            ],
-            "size": [
-              300,
-              100
-            ],
-            "flags": {
-              "collapsed": false
-            },
-            "order": 7,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "image",
-                "name": "image",
-                "type": "IMAGE",
-                "link": 10244
-              },
-              {
-                "localized_name": "preprocessor",
-                "name": "preprocessor",
-                "shape": 7,
-                "type": "COMBO",
-                "widget": {
-                  "name": "preprocessor"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "resolution",
-                "name": "resolution",
-                "shape": 7,
-                "type": "INT",
-                "widget": {
-                  "name": "resolution"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "图像",
-                "name": "IMAGE",
-                "type": "IMAGE",
-                "links": [
-                  10218,
-                  10215
-                ]
-              }
-            ],
-            "title": "[05B3] Manga 线稿预处理",
-            "properties": {
-              "Node name for S&R": "AIO_Preprocessor",
-              "cnr_id": "comfyui_controlnet_aux",
-              "ver": "e8b689a513c3e6b63edc44066560ca5919c0576e",
-              "uap_compact_widgets": true,
-              "uap_layout_group": "CORE-05 参考预处理与控制图生成 · K2 Krea2"
-            },
-            "widgets_values": [
-              "Manga2Anime_LineArt_Preprocessor",
-              1024
-            ],
-            "widgets_values_named": {
-              "preprocessor": "Manga2Anime_LineArt_Preprocessor",
-              "resolution": 1024
-            }
-          },
-          {
-            "id": 1191,
-            "type": "DepthAnythingV2Preprocessor",
-            "pos": [
-              720,
-              18980
-            ],
-            "size": [
-              300,
-              100
-            ],
-            "flags": {
-              "collapsed": false
-            },
-            "order": 16,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "image",
-                "name": "image",
-                "type": "IMAGE",
-                "link": 10245
-              },
-              {
-                "localized_name": "ckpt_name",
-                "name": "ckpt_name",
-                "shape": 7,
-                "type": "COMBO",
-                "widget": {
-                  "name": "ckpt_name"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "resolution",
-                "name": "resolution",
-                "shape": 7,
-                "type": "INT",
-                "widget": {
-                  "name": "resolution"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "图像",
-                "name": "IMAGE",
-                "type": "IMAGE",
-                "links": [
-                  10219,
-                  10216,
-                  338032,
-                  338036
-                ]
-              }
-            ],
-            "title": "[05B4] Depth Anything 预处理",
-            "properties": {
-              "Node name for S&R": "DepthAnythingV2Preprocessor",
-              "cnr_id": "comfyui_controlnet_aux",
-              "ver": "e8b689a513c3e6b63edc44066560ca5919c0576e",
-              "uap_compact_widgets": true,
-              "uap_layout_group": "CORE-05 参考预处理与控制图生成 · K2 Krea2"
-            },
-            "widgets_values": [
-              "depth_anything_v2_vitl.pth",
-              1024
-            ],
-            "widgets_values_named": {
-              "ckpt_name": "depth_anything_v2_vitl.pth",
-              "resolution": 1024
-            }
-          },
-          {
-            "id": 1157,
-            "type": "DazzleSwitch",
-            "pos": [
-              20,
-              18620
-            ],
-            "size": [
-              340,
-              190
-            ],
-            "flags": {
-              "collapsed": false
-            },
-            "order": 9,
-            "mode": 0,
-            "inputs": [
-              {
-                "label": "细致线稿",
-                "localized_name": "input_01",
-                "name": "input_01",
-                "shape": 7,
-                "type": "*",
-                "link": 10220
-              },
-              {
-                "label": "中细线稿",
-                "localized_name": "input_02",
-                "name": "input_02",
-                "shape": 7,
-                "type": "*",
-                "link": 10221
-              },
-              {
-                "label": "粗略线稿",
-                "localized_name": "input_03",
-                "name": "input_03",
-                "shape": 7,
-                "type": "*",
-                "link": 10218
-              },
-              {
-                "localized_name": "select",
-                "name": "select",
-                "type": "COMBO",
-                "widget": {
-                  "name": "select"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "mode",
-                "name": "mode",
-                "type": "COMBO",
-                "widget": {
-                  "name": "mode"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "select_override",
-                "name": "select_override",
-                "shape": 7,
-                "type": "INT",
-                "widget": {
-                  "name": "select_override"
-                },
-                "link": null
-              },
-              {
-                "label": "灰度图",
-                "name": "input_04",
-                "type": "*",
-                "link": 10219
-              },
-              {
-                "name": "input_05",
-                "type": "*",
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "label": "IMAGE",
-                "localized_name": "output",
-                "name": "output",
-                "type": "IMAGE",
-                "links": [
-                  10223
-                ]
-              },
-              {
-                "localized_name": "selected_index",
-                "name": "selected_index",
-                "type": "INT",
-                "links": []
-              }
-            ],
-            "title": "[05B5] 线稿来源选择",
-            "properties": {
-              "Node name for S&R": "DazzleSwitch",
-              "aux_id": "DazzleNodes/ComfyUI-DazzleSwitch",
-              "ver": "0c11da0fc65abb32b8f7584fd7d6ba449aec8c9a",
-              "uap_compact_widgets": true,
-              "uap_layout_group": "CORE-05 参考预处理与控制图生成 · K2 Krea2"
-            },
-            "widgets_values": [
-              "input_04",
-              "priority",
-              0
-            ],
-            "widgets_values_named": {
-              "select": "input_04",
-              "mode": "priority",
-              "select_override": 0
-            }
-          },
-          {
-            "id": 1167,
-            "type": "PreviewImage",
-            "pos": [
-              2980,
-              18240
-            ],
-            "size": [
-              300,
-              240
-            ],
-            "flags": {
-              "collapsed": false
-            },
-            "order": 12,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "图像",
-                "name": "images",
-                "type": "IMAGE",
-                "link": 10222
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "images",
-                "name": "images",
-                "type": "IMAGE",
-                "links": []
-              }
-            ],
-            "title": "[05V2] HED 预览",
-            "properties": {
-              "Node name for S&R": "PreviewImage",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0",
-              "uap_compact_widgets": true,
-              "uap_layout_group": "SW-05V 参考预处理阶段检查与临时保存 · K2 Krea2"
-            }
-          },
-          {
-            "id": 1168,
-            "type": "PreviewImage",
-            "pos": [
-              2630,
-              18360
-            ],
-            "size": [
-              300,
-              240
-            ],
-            "flags": {
-              "collapsed": false
-            },
-            "order": 13,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "图像",
-                "name": "images",
-                "type": "IMAGE",
-                "link": 10217
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "images",
-                "name": "images",
-                "type": "IMAGE",
-                "links": []
-              }
-            ],
-            "title": "[05V1] PyraCanny 预览",
-            "properties": {
-              "Node name for S&R": "PreviewImage",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0",
-              "uap_compact_widgets": true,
-              "uap_layout_group": "SW-05V 参考预处理阶段检查与临时保存 · K2 Krea2"
-            }
-          },
-          {
-            "id": 1169,
-            "type": "PreviewImage",
-            "pos": [
-              2980,
-              18530
-            ],
-            "size": [
-              300,
-              240
-            ],
-            "flags": {
-              "collapsed": false
-            },
-            "order": 14,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "图像",
-                "name": "images",
-                "type": "IMAGE",
-                "link": 10215
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "images",
-                "name": "images",
-                "type": "IMAGE",
-                "links": []
-              }
-            ],
-            "title": "[05V3] Manga 线稿预览",
-            "properties": {
-              "Node name for S&R": "PreviewImage",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0",
-              "uap_compact_widgets": true,
-              "uap_layout_group": "SW-05V 参考预处理阶段检查与临时保存 · K2 Krea2"
-            }
-          },
-          {
-            "id": 1189,
-            "type": "PreviewImage",
-            "pos": [
-              2630,
-              18660
-            ],
-            "size": [
-              300,
-              240
-            ],
-            "flags": {
-              "collapsed": false
-            },
-            "order": 15,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "图像",
-                "name": "images",
-                "type": "IMAGE",
-                "link": 10216
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "images",
-                "name": "images",
-                "type": "IMAGE",
-                "links": []
-              }
-            ],
-            "title": "[05V4] Depth 预览",
-            "properties": {
-              "Node name for S&R": "PreviewImage",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0",
-              "uap_compact_widgets": true,
-              "uap_layout_group": "SW-05V 参考预处理阶段检查与临时保存 · K2 Krea2"
-            }
-          },
-          {
-            "id": 1159,
-            "type": "Krea2ControlImageEncode",
-            "pos": [
-              400,
-              21310
-            ],
-            "size": [
-              340,
-              250
-            ],
-            "flags": {
-              "collapsed": false
-            },
-            "order": 10,
-            "mode": 2,
-            "inputs": [
-              {
-                "localized_name": "control_image",
-                "name": "control_image",
-                "type": "IMAGE",
-                "link": 338028
-              },
-              {
-                "localized_name": "vae",
-                "name": "vae",
-                "type": "VAE",
-                "link": 10253
-              },
-              {
-                "localized_name": "latent",
-                "name": "latent",
-                "shape": 7,
-                "type": "LATENT",
-                "link": 10267
-              },
-              {
-                "localized_name": "resize",
-                "name": "resize",
-                "type": "COMBO",
-                "widget": {
-                  "name": "resize"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "upscale_method",
-                "name": "upscale_method",
-                "type": "COMBO",
-                "widget": {
-                  "name": "upscale_method"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "crop",
-                "name": "crop",
-                "type": "COMBO",
-                "widget": {
-                  "name": "crop"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "channel_mode",
-                "name": "channel_mode",
-                "type": "COMBO",
-                "widget": {
-                  "name": "channel_mode"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "normalize",
-                "name": "normalize",
-                "type": "COMBO",
-                "widget": {
-                  "name": "normalize"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "invert",
-                "name": "invert",
-                "type": "BOOLEAN",
-                "widget": {
-                  "name": "invert"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "batch_mode",
-                "name": "batch_mode",
-                "type": "COMBO",
-                "widget": {
-                  "name": "batch_mode"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "control_latent",
-                "name": "control_latent",
-                "type": "LATENT",
-                "slot_index": 0,
-                "links": [
-                  10256
-                ]
-              },
-              {
-                "localized_name": "encoded_control_image",
-                "name": "encoded_control_image",
-                "type": "IMAGE",
-                "slot_index": 1,
-                "links": [
-                  10260
-                ]
-              }
-            ],
-            "title": "[05K-ENCODE] Krea2 Depth控制图编码",
-            "properties": {
-              "Node name for S&R": "Krea2ControlImageEncode",
-              "aux_id": "facok/comfyui-krea2-controlnet",
-              "ver": "main",
-              "label": "Depth Anything 输出 → Qwen Image VAE latent。默认按最终采样 latent 尺寸匹配。",
-              "uap_compact_widgets": true,
-              "uap_layout_group": "SW-05K Krea2 Depth ControlNet-LoRA · K2 Krea2"
-            },
-            "widgets_values": [
-              "match_latent_size",
-              "lanczos",
-              "center",
-              "grayscale",
-              "per_image_minmax",
-              false,
-              "independent_images"
-            ],
-            "widgets_values_named": {
-              "resize": "match_latent_size",
-              "upscale_method": "lanczos",
-              "crop": "center",
-              "channel_mode": "grayscale",
-              "normalize": "per_image_minmax",
-              "invert": false,
-              "batch_mode": "independent_images"
-            },
-            "color": "#607A3B",
-            "bgcolor": "#1F2A1E"
-          },
-          {
-            "id": 1162,
-            "type": "PreviewImage",
-            "pos": [
-              760,
-              21310
-            ],
-            "size": [
-              300,
-              240
-            ],
-            "flags": {
-              "collapsed": false
-            },
-            "order": 11,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "图像",
-                "name": "images",
-                "type": "IMAGE",
-                "link": 10260
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "images",
-                "name": "images",
-                "type": "IMAGE",
-                "links": []
-              }
-            ],
-            "title": "[05K-PREVIEW] 实际编码的Depth控制图",
-            "properties": {
-              "Node name for S&R": "PreviewImage",
-              "cnr_id": "comfy-core",
-              "ver": "0.22.0",
-              "label": "检查近处应偏白、远处偏黑；若方向相反，把 Encode 的 invert 改为 true。",
-              "uap_compact_widgets": true,
-              "uap_layout_group": "SW-05K Krea2 Depth ControlNet-LoRA · K2 Krea2"
-            },
-            "color": "#607A3B",
-            "bgcolor": "#1F2A1E"
-          },
-          {
-            "id": 130164,
-            "type": "LoadImage",
-            "pos": [
-              0,
-              19580
-            ],
-            "size": [
-              290,
-              320
-            ],
-            "flags": {},
-            "order": 0,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "图像",
-                "name": "image",
-                "type": "COMBO",
-                "widget": {
-                  "name": "image"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "选择文件上传",
-                "name": "upload",
-                "type": "IMAGEUPLOAD",
-                "widget": {
-                  "name": "upload"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "图像",
-                "name": "IMAGE",
-                "type": "IMAGE",
-                "links": []
-              },
-              {
-                "localized_name": "遮罩",
-                "name": "MASK",
-                "type": "MASK",
-                "links": [
-                  338034,
-                  338038
-                ]
-              }
-            ],
-            "title": "[05C2] 白色擦线遮罩输入",
-            "properties": {
-              "Node name for S&R": "LoadImage",
-              "cnr_id": "comfy-core",
-              "image": "clipspace-painted-masked-1792913109200.png [input]"
-            },
-            "widgets_values": [
-              "clipspace-painted-masked-1792913109200.png [input]",
-              "image"
-            ],
-            "widgets_values_named": {
-              "image": "clipspace-painted-masked-1792913109200.png [input]",
-              "upload": "image"
-            }
-          },
-          {
-            "id": 130165,
-            "type": "SolidMask",
-            "pos": [
-              0,
-              19940
-            ],
-            "size": [
-              260,
-              110
-            ],
-            "flags": {},
-            "order": 1,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "明度",
-                "name": "value",
-                "type": "FLOAT",
-                "widget": {
-                  "name": "value"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "宽度",
-                "name": "width",
-                "type": "INT",
-                "widget": {
-                  "name": "width"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "高度",
-                "name": "height",
-                "type": "INT",
-                "widget": {
-                  "name": "height"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "遮罩",
-                "name": "MASK",
-                "type": "MASK",
-                "links": [
-                  338040
-                ]
-              }
-            ],
-            "title": "[05C4] 黑色擦除底图",
-            "properties": {
-              "Node name for S&R": "SolidMask",
-              "cnr_id": "comfy-core"
-            },
-            "widgets_values": [
-              0,
-              1024,
-              1024
-            ],
-            "widgets_values_named": {
-              "value": 0,
-              "width": 1024,
-              "height": 1024
-            }
-          },
-          {
-            "id": 130166,
-            "type": "MaskToImage",
-            "pos": [
-              300,
-              19940
-            ],
-            "size": [
-              220,
-              90
-            ],
-            "flags": {},
-            "order": 3,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "遮罩",
-                "name": "mask",
-                "type": "MASK",
-                "link": 338040
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "图像",
-                "name": "IMAGE",
-                "type": "IMAGE",
-                "links": [
-                  338033
-                ]
-              }
-            ],
-            "title": "[05C5] 黑底转图",
-            "properties": {
-              "Node name for S&R": "MaskToImage",
-              "cnr_id": "comfy-core"
-            }
-          },
-          {
-            "id": 130167,
-            "type": "ImageCompositeMasked",
-            "pos": [
-              300,
-              19580
-            ],
-            "size": [
-              300,
-              160
-            ],
-            "flags": {},
-            "order": 17,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "目标图像",
-                "name": "destination",
-                "type": "IMAGE",
-                "link": 338032
-              },
-              {
-                "localized_name": "来源图像",
-                "name": "source",
-                "type": "IMAGE",
-                "link": 338033
-              },
-              {
-                "localized_name": "遮罩",
-                "name": "mask",
-                "shape": 7,
-                "type": "MASK",
-                "link": 338034
-              },
-              {
-                "localized_name": "x",
-                "name": "x",
-                "type": "INT",
-                "widget": {
-                  "name": "x"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "y",
-                "name": "y",
-                "type": "INT",
-                "widget": {
-                  "name": "y"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "缩放来源图像",
-                "name": "resize_source",
-                "type": "BOOLEAN",
-                "widget": {
-                  "name": "resize_source"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "图像",
-                "name": "IMAGE",
-                "type": "IMAGE",
-                "links": [
-                  338035,
-                  338037
-                ]
-              }
-            ],
-            "title": "[05C7] 擦线合成",
-            "properties": {
-              "Node name for S&R": "ImageCompositeMasked",
-              "cnr_id": "comfy-core"
-            },
-            "widgets_values": [
-              0,
-              0,
-              true
-            ],
-            "widgets_values_named": {
-              "x": 0,
-              "y": 0,
-              "resize_source": true
-            }
-          },
-          {
-            "id": 130168,
-            "type": "DazzleSwitch",
-            "pos": [
-              640,
-              19580
-            ],
-            "size": [
-              340,
-              180
-            ],
-            "flags": {},
-            "order": 18,
-            "mode": 0,
-            "inputs": [
-              {
-                "label": "启用擦线（透明遮罩区域被擦掉）",
-                "localized_name": "input_01",
-                "name": "input_01",
-                "shape": 7,
-                "type": "*",
-                "link": 338035
-              },
-              {
-                "label": "旁路：保留原深度控制图",
-                "localized_name": "input_02",
-                "name": "input_02",
-                "shape": 7,
-                "type": "*",
-                "link": 338036
-              },
-              {
-                "localized_name": "input_03",
-                "name": "input_03",
-                "shape": 7,
-                "type": "*",
-                "link": null
-              },
-              {
-                "localized_name": "select",
-                "name": "select",
-                "type": "COMBO",
-                "widget": {
-                  "name": "select"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "mode",
-                "name": "mode",
-                "type": "COMBO",
-                "widget": {
-                  "name": "mode"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "select_override",
-                "name": "select_override",
-                "shape": 7,
-                "type": "INT",
-                "widget": {
-                  "name": "select_override"
-                },
-                "link": null
-              }
-            ],
-            "outputs": [
-              {
-                "label": "IMAGE",
-                "localized_name": "output",
-                "name": "output",
-                "type": "IMAGE",
-                "links": [
-                  338028
-                ]
-              },
-              {
-                "localized_name": "selected_index",
-                "name": "selected_index",
-                "type": "INT",
-                "links": []
-              }
-            ],
-            "title": "[05R2] 擦线开关：旁路 / 启用",
-            "properties": {
-              "Node name for S&R": "DazzleSwitch"
-            },
-            "widgets_values": [
-              "input_02",
-              "priority",
-              0
-            ],
-            "widgets_values_named": {
-              "select": "input_02",
-              "mode": "priority",
-              "select_override": 0
-            }
-          },
-          {
-            "id": 130169,
-            "type": "PreviewImage",
-            "pos": [
-              640,
-              19900
-            ],
-            "size": [
-              280,
-              260
-            ],
-            "flags": {},
-            "order": 19,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "图像",
-                "name": "images",
-                "type": "IMAGE",
-                "link": 338037
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "images",
-                "name": "images",
-                "type": "IMAGE",
-                "links": []
-              }
-            ],
-            "title": "[05V7] 擦除后Depth预览",
-            "properties": {
-              "Node name for S&R": "PreviewImage",
-              "cnr_id": "comfy-core"
-            }
-          },
-          {
-            "id": 130171,
-            "type": "MaskToImage",
-            "pos": [
-              300,
-              20120
-            ],
-            "size": [
-              220,
-              90
-            ],
-            "flags": {},
-            "order": 2,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "遮罩",
-                "name": "mask",
-                "type": "MASK",
-                "link": 338038
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "图像",
-                "name": "IMAGE",
-                "type": "IMAGE",
-                "links": [
-                  338039
-                ]
-              }
-            ],
-            "title": "[05C6] 擦线遮罩预览图",
-            "properties": {
-              "Node name for S&R": "MaskToImage",
-              "cnr_id": "comfy-core"
-            }
-          },
-          {
-            "id": 130170,
-            "type": "PreviewImage",
-            "pos": [
-              640,
-              20220
-            ],
-            "size": [
-              280,
-              260
-            ],
-            "flags": {},
-            "order": 4,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "图像",
-                "name": "images",
-                "type": "IMAGE",
-                "link": 338039
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "images",
-                "name": "images",
-                "type": "IMAGE",
-                "links": []
-              }
-            ],
-            "title": "[05V6] 擦线遮罩预览",
-            "properties": {
-              "Node name for S&R": "PreviewImage",
-              "cnr_id": "comfy-core"
-            }
-          }
-        ],
-        "groups": [],
-        "links": [
-          {
-            "id": 10242,
-            "origin_id": 1153,
-            "origin_slot": 0,
-            "target_id": 1141,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 10243,
-            "origin_id": 1153,
-            "origin_slot": 0,
-            "target_id": 1142,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 10244,
-            "origin_id": 1153,
-            "origin_slot": 0,
-            "target_id": 1143,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 10245,
-            "origin_id": 1153,
-            "origin_slot": 0,
-            "target_id": 1191,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 10220,
-            "origin_id": 1141,
-            "origin_slot": 0,
-            "target_id": 1157,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 10221,
-            "origin_id": 1142,
-            "origin_slot": 0,
-            "target_id": 1157,
-            "target_slot": 1,
-            "type": "IMAGE"
-          },
-          {
-            "id": 10218,
-            "origin_id": 1143,
-            "origin_slot": 0,
-            "target_id": 1157,
-            "target_slot": 2,
-            "type": "IMAGE"
-          },
-          {
-            "id": 10219,
-            "origin_id": 1191,
-            "origin_slot": 0,
-            "target_id": 1157,
-            "target_slot": 6,
-            "type": "IMAGE"
-          },
-          {
-            "id": 10222,
-            "origin_id": 1142,
-            "origin_slot": 0,
-            "target_id": 1167,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 10217,
-            "origin_id": 1141,
-            "origin_slot": 0,
-            "target_id": 1168,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 10215,
-            "origin_id": 1143,
-            "origin_slot": 0,
-            "target_id": 1169,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 10216,
-            "origin_id": 1191,
-            "origin_slot": 0,
-            "target_id": 1189,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 338028,
-            "origin_id": 130168,
-            "origin_slot": 0,
-            "target_id": 1159,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 10260,
-            "origin_id": 1159,
-            "origin_slot": 1,
-            "target_id": 1162,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 10241,
-            "origin_id": -10,
-            "origin_slot": 0,
-            "target_id": 1153,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 10253,
-            "origin_id": -10,
-            "origin_slot": 1,
-            "target_id": 1159,
-            "target_slot": 1,
-            "type": "VAE"
-          },
-          {
-            "id": 10267,
-            "origin_id": -10,
-            "origin_slot": 2,
-            "target_id": 1159,
-            "target_slot": 2,
-            "type": "LATENT"
-          },
-          {
-            "id": 10246,
-            "origin_id": 1153,
-            "origin_slot": 0,
-            "target_id": -20,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 10223,
-            "origin_id": 1157,
-            "origin_slot": 0,
-            "target_id": -20,
-            "target_slot": 1,
-            "type": "IMAGE"
-          },
-          {
-            "id": 10256,
-            "origin_id": 1159,
-            "origin_slot": 0,
-            "target_id": -20,
-            "target_slot": 2,
-            "type": "LATENT"
-          },
-          {
-            "id": 338032,
-            "origin_id": 1191,
-            "origin_slot": 0,
-            "target_id": 130167,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 338033,
-            "origin_id": 130166,
-            "origin_slot": 0,
-            "target_id": 130167,
-            "target_slot": 1,
-            "type": "IMAGE"
-          },
-          {
-            "id": 338034,
-            "origin_id": 130164,
-            "origin_slot": 1,
-            "target_id": 130167,
-            "target_slot": 2,
-            "type": "MASK"
-          },
-          {
-            "id": 338035,
-            "origin_id": 130167,
-            "origin_slot": 0,
-            "target_id": 130168,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 338036,
-            "origin_id": 1191,
-            "origin_slot": 0,
-            "target_id": 130168,
-            "target_slot": 1,
-            "type": "IMAGE"
-          },
-          {
-            "id": 338037,
-            "origin_id": 130167,
-            "origin_slot": 0,
-            "target_id": 130169,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 338038,
-            "origin_id": 130164,
-            "origin_slot": 1,
-            "target_id": 130171,
-            "target_slot": 0,
-            "type": "MASK"
-          },
-          {
-            "id": 338039,
-            "origin_id": 130171,
-            "origin_slot": 0,
-            "target_id": 130170,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 338040,
-            "origin_id": 130165,
-            "origin_slot": 0,
-            "target_id": 130166,
-            "target_slot": 0,
-            "type": "MASK"
-          }
-        ],
-        "extra": {}
-      }
-    ]
+    "subgraphs": []
   }
 }
