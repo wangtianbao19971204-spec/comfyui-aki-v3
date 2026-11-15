@@ -1,24 +1,38 @@
 // A saved workflow opens in its own ComfyUI tab; existing graphs stay intact.
 export const REPAIR_PATH = 'workflows/生产扩展_丝袜纹理修复.json';
+export const MOSS_PATH = 'workflows/MOSS_精简生产_v1.json';
 export const MAIN_PATH = 'workflows/UAP统一生产工作台_v2.json';
 export const REPAIR_CHOICE = '@workflow:stocking';
+export const MOSS_CHOICE = '@workflow:moss';
 
 export function workflowChoices(config) {
     const choices=(config?.branches||[]).map(b=>({value:b.id,label:b.label}));
+    if(choices.some(b=>b.value==='moss')) {
+        return [
+            {value:'@main',label:'返回统一生产工作台'},
+            ...choices,
+            {value:'@main:ext08',label:'2× 放大'},
+            {value:'@main:ext09',label:'4× 放大'},
+            {value:REPAIR_CHOICE,label:'丝袜纹理修复'},
+        ];
+    }
     if(choices.some(b=>b.value==='stocking')) {
         return [
             {value:'@main',label:'返回统一生产工作台'},
+            {value:MOSS_CHOICE,label:'MOSS 图像生成'},
             {value:'@main:ext08',label:'2× 放大'},
             {value:'@main:ext09',label:'4× 放大'},
             ...choices,
         ];
     }
+    const genAfter=choices.findLastIndex(b=>b.value==='k2'||b.value==='ext04');
+    if(genAfter>=0)choices.splice(genAfter+1,0,{value:MOSS_CHOICE,label:'MOSS 图像生成'});
     const after=choices.findLastIndex(b=>b.value==='ext08'||b.value==='ext09');
     choices.splice(after<0?choices.length:after+1,0,{value:REPAIR_CHOICE,label:'丝袜纹理修复'});
     return choices;
 }
 
-export function isWorkflowChoice(value) { return value===REPAIR_CHOICE||/^@main(?::ext0[89])?$/.test(value); }
+export function isWorkflowChoice(value) { return value===REPAIR_CHOICE||value===MOSS_CHOICE||/^@main(?::ext0[89])?$/.test(value); }
 
 let opening=false;
 export async function openWorkflowChoice(app,value) {
@@ -33,7 +47,7 @@ export async function openWorkflowChoice(app,value) {
         await store.syncWorkflows();
         const unchanged=()=>app.graph===previous&&store.activeWorkflow===active;
         if(!unchanged())throw new Error('工作流已变化，请重新选择入口。');
-        const path=value===REPAIR_CHOICE?REPAIR_PATH:MAIN_PATH;
+        const path=value===REPAIR_CHOICE?REPAIR_PATH:value===MOSS_CHOICE?MOSS_PATH:MAIN_PATH;
         const workflow=store.getWorkflowByPath(path);
         if(!workflow)throw new Error('找不到 '+path.split('/').at(-1)+'，请确认已安装独立工作流。');
         // Match ComfyUI's workflow service: the store's openWorkflow only sets

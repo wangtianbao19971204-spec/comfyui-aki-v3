@@ -25,6 +25,8 @@
 
 ## 更新记录
 
+- 2026-11-15：按独立轻量方案将 `MOSS_精简生产_v1.json` 接入 UAP 外壳（`@workflow:moss` ↔ `@main` 原生多标签无损互跳，`UAP统一生产工作台_v2.json` 零改动）；工作台、常用控制台与提示词检查器完整适配 `Unet Loader (LoraManager)`、`Prompt (LoraManager)`、`EmptyFlux2LatentImage`（MOSS 16 倍数预设）及 `type = moss_image` 说明，排除 `Lora Loader (LoraManager)` 的 `text` 误入提示词目标，开放跨体系显存 `/free` 按钮，并建立 Krea2 ↔ MOSS 底模/编码器/VAE/LoRA 双向防混用与 MOSS `clipStrength = 0` 默认锁定（已完成限定部署与 40 步真实 MOSS GPU 出图核验）。详见[本轮说明](../changes/runtime-workbench/2026-11-15-moss-uap-standalone-isolation.md)。
+
 - 2026-11-15：修复 UAP 常用控制台与工作台内嵌控制在 Krea2 / 指令编辑分支下主正向提示词缺失问题（支持沿输入连线回溯上游 `CR Prompt Text.prompt`、排除 `ShowText|pysssss` 等只读节点、优先绑定 `[00W-1]` / `[00W-1N]`，兼容 `WeiLinPromptUI` 与 `Krea2EditGroundedEncode` 及 V3 `COMBO` `/object_info`）；增强 `runtime_controls.js` 底模目录前缀家族拦截（禁用异构 `moss\` 底模）；同步阶段 1~3.2 前端（`canvas_write.js`、`uap_erase_ui_v2.js`、`uap_selfcheck.js`、`uap_rewrite_guard.py`）并退休旧单体 `workbench.js` / `anima_control.js`；实机全按钮与 Krea2 四条 GPU 链路点检同步修复「待用列表 · 组合预览」`openPending` 空引用竞态、`run_controls.js` 在 ComfyUI `0.42.0` `/jobs` API 下 `item.id` 中断识别及 `uap_daily_controls.js` 嵌套 `mount()` 释放状态恢复。详见[本轮说明](../changes/runtime-workbench/2026-11-15-krea2-uap-prompt-and-workflow-sync.md)。
 
 - 2026-10-25：提示词库改 SQLite 权威存储（WAL + `synchronous=FULL`），读模型/API/语义不变，data.json 降级为按需导出快照；单条编辑只提交 1 行 + revision 小事务（**中位 1.59 ms**，原 ~1033 ms 且不再随库增长），批量事务化并事务前 backup；后台自动导出/备份 + 行级 journal + `store-status` 告警；迁移 8.81 s/逐字段 equal，启动加载 2.17–2.71 s；`UW_LIBRARY_STORE=json|sqlite` 灰度；snapshot/restore 将 library DB 纳入 SQL dump。测试 188 OK/1 skip，详见[说明](../changes/runtime-workbench/2026-10-25-library-store-sqlite.md)。本轮未部署生产。

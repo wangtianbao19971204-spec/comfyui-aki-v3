@@ -30,7 +30,7 @@ export function openLoraBrowserForNode(node) {
   url.searchParams.set("lm_target", `${reference.graph_id}:${reference.node_id}`);
   url.searchParams.set("lm_token", getTargetToken(node));
   url.searchParams.set("lm_label", [branch?.label, node.title || node.comfyClass].filter(Boolean).join(" / "));
-  const folder = { a1: "anima", a29: "anima", k2: "krea2" }[branch?.id];
+  const folder = { a1: "anima", a29: "anima", anima: "anima", anima29: "anima", k2: "krea2", ext04: "krea2", krea2: "krea2", moss: "moss" }[branch?.modelFamily || branch?.id];
   if (folder) url.searchParams.set("lm_folder", folder);
   window.open(url.href, "uap-lora-manager");
 }
