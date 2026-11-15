@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-11-15T05:45:19.778282+00:00",
+  "created_at": "2026-11-15T07:28:22.700912+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -12466,8 +12466,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
-      "sha256": "51eaf6b9afdbd33e0d1416ac4a4c9a3d7dd07f7a13eb8e3e1c27cdf5df7dd9eb",
-      "bytes": 69206,
+      "sha256": "16ef55eb1e29318ddd28d4e901ddb2264b92494b9bea4daf25a600d0cd8810b9",
+      "bytes": 71689,
       "kind": "file"
     },
     {
@@ -23463,8 +23463,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/web/comfyui/autocomplete.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/web/comfyui/autocomplete.js",
-      "sha256": "98db3472620692529a3df96355e96442624fdb88439b716b34c68bd465c8f961",
-      "bytes": 129913,
+      "sha256": "b667bfc1b907e0b471a57acee100168f544f5e533dee54d0b2844d85acb33e3a",
+      "bytes": 130707,
       "kind": "file"
     },
     {
@@ -23687,8 +23687,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/web/comfyui/workflow_targets.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/web/comfyui/workflow_targets.js",
-      "sha256": "f94923e8cc56188b5a9869c93f40fdaf5e779597a70d3779bfbff15605325018",
-      "bytes": 1705,
+      "sha256": "d0ce46c992ccb657b362b754317107e210c7ff9095e4c64d5509b13eb4089c38",
+      "bytes": 1808,
       "kind": "file"
     },
     {
@@ -24009,8 +24009,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_inspector.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_inspector.js",
-      "sha256": "305da3a8db57d3626bca56ad8adc6439a473c642061097b49578016ea465f444",
-      "bytes": 17899,
+      "sha256": "029113562892a4752f2055ac7d726bbe714c87f681b89679667f6e4fee5015d0",
+      "bytes": 19233,
       "kind": "file"
     },
     {
@@ -24044,15 +24044,15 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
-      "sha256": "8c2e516b235c764d4cb8f07205c1abae8eed534c1f3bb18b7fbe0de4a0de8f77",
-      "bytes": 4930,
+      "sha256": "7f14ab11927637e9e131c9edc4bf7e12c148828da73dbf4fcb8885aa35b72632",
+      "bytes": 5661,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/resource_actions.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/resource_actions.js",
-      "sha256": "29eb4fa506ede9b5f7f3db14a07d4bd169de3d3c8a584d9bd9a901034c09652c",
-      "bytes": 8408,
+      "sha256": "10b6508908c7e191d150a9d080d564c9b12d471138da792c70ebdc16cbdff629",
+      "bytes": 8510,
       "kind": "file"
     },
     {
@@ -24072,8 +24072,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
-      "sha256": "2d89b6f5148d4677ba48ee9dfa105606213428dd6d1c65a0c4934d4e33450845",
-      "bytes": 14755,
+      "sha256": "578c0268b1f7d66e236d70ddd9050e22287d3f4b737c7b9227bff00911b0fa50",
+      "bytes": 18652,
       "kind": "file"
     },
     {
@@ -24093,8 +24093,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/static_prompt_inspector.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/static_prompt_inspector.js",
-      "sha256": "12e56837ad2f2026acb7386869f44b765505e05ca500c37f8804c0e85d51b014",
-      "bytes": 2534,
+      "sha256": "5a3a1fbb25ac1ed9c69da9612f85decc04c14e67b9d284c48666d0d8997fb2d0",
+      "bytes": 3147,
       "kind": "file"
     },
     {
@@ -24177,8 +24177,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
-      "sha256": "21b67ac4990b7f7697696370bc8d8bc11703ef5ee91dad1d00b9d37497beaebc",
-      "bytes": 22656,
+      "sha256": "6193977a9800212de85320cbfe6519e04e6bb7ac444c1c4d135cede24469bb6b",
+      "bytes": 22730,
       "kind": "file"
     },
     {
@@ -51636,6 +51636,13 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/user/default/workflows/MOSS_精简生产_v1.json",
+      "path": "runtime/ComfyUI/user/default/workflows/MOSS_精简生产_v1.json",
+      "sha256": "0a2733c2f82ab0cf37a48ef615f3763a808f3963f2abc51771d64d431c489b4b",
+      "bytes": 32105,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
       "sha256": "1b55ac06c1ccfa9eee4dce00dd7718067e93a110117d48dc89112848ff8757f7",
@@ -57915,6 +57922,13 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/build_moss_workflow.py",
+      "path": "runtime/production_tools/build_moss_workflow.py",
+      "sha256": "febd5126466523ec9608f2374fbbd980b1e0582b0e648bed784d0db5518b41b3",
+      "bytes": 24545,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/build_stocking_workflow.py",
       "path": "runtime/production_tools/build_stocking_workflow.py",
       "sha256": "153a37e1f1dfb6c73fe78fd8d2cb6c4c4cce933d6053110812e81df7bab8a02c",
@@ -58188,6 +58202,13 @@
       "kind": "file"
     },
     {
+      "source": "production_tools/templates/MOSS_精简生产_v1.json",
+      "path": "runtime/production_tools/templates/MOSS_精简生产_v1.json",
+      "sha256": "0a2733c2f82ab0cf37a48ef615f3763a808f3963f2abc51771d64d431c489b4b",
+      "bytes": 32105,
+      "kind": "file"
+    },
+    {
       "source": "production_tools/templates/UAP统一生产工作台_v1.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v1.json",
       "sha256": "e235d3335e7aec81aa44a49eb371f73edb7f5c929291fc0d9570b8e1b6e80618",
@@ -58318,6 +58339,13 @@
       "path": "runtime/production_tools/test_model_quick_switch.cjs",
       "sha256": "8383bdfb4ddb2e18bd30cc305b7b8d174274cc3b0f444f8103f91aa6ef3a399b",
       "bytes": 7854,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/test_moss_workflow.cjs",
+      "path": "runtime/production_tools/test_moss_workflow.cjs",
+      "sha256": "8bf80244d009214f0004d2e30d76e9a147bbb73b60645af79b5d9661c54290cf",
+      "bytes": 21971,
       "kind": "file"
     },
     {
@@ -68331,18 +68359,26 @@
     }
   ],
   "development_revision": {
-    "note": "Fix UAP live QA findings and OlmJoyCaption VRAM/interrupt guard",
-    "previous_manifest_sha256": "d45622d81e6847a071bd41044d8f434ce64da4f5975ed481235fa14b5fef0525",
+    "note": "Onboard standalone MOSS workflow into UAP shell with Krea2/MOSS bidirectional isolation",
+    "previous_manifest_sha256": "625ac7ec5740a1b40759707bef8c062149112bfc1b1ad58227717a28413fbe0c",
     "source_changes": {
-      "added": [],
+      "added": [
+        "ComfyUI/user/default/workflows/MOSS_精简生产_v1.json",
+        "production_tools/build_moss_workflow.py",
+        "production_tools/templates/MOSS_精简生产_v1.json",
+        "production_tools/test_moss_workflow.cjs"
+      ],
       "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Olm-JoyCaption/olm_joycaption.py",
         "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/run_controls.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
-        "production_tools/test_run_controls.cjs",
-        "production_tools/test_workspace_mount.cjs"
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/web/comfyui/autocomplete.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/web/comfyui/workflow_targets.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_inspector.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/resource_actions.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/static_prompt_inspector.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js"
       ]
     },
     "live_deployed": false,

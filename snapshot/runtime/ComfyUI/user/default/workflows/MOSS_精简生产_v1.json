@@ -1,0 +1,1143 @@
+{
+  "id": "moss-lean-production-v1",
+  "revision": 0,
+  "last_node_id": 13,
+  "last_link_id": 12,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Unet Loader (LoraManager)",
+      "title": "[01M] 基础模型 · MOSS",
+      "pos": [
+        40,
+        130
+      ],
+      "size": [
+        420,
+        150
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "unet_name",
+          "name": "unet_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "unet_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "weight_dtype",
+          "name": "weight_dtype",
+          "type": "COMBO",
+          "widget": {
+            "name": "weight_dtype"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "base_model",
+          "name": "base_model",
+          "type": "COMBO",
+          "widget": {
+            "name": "base_model"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "模型",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Unet Loader (LoraManager)",
+        "uap_layout_group": "01 模型与 LoRA · MOSS",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        "moss\\图像生成\\Moss__MOSS Image__Base__BF16__cv3409868__f3301907.safetensors",
+        "fixed",
+        "Any",
+        "default",
+        "Any"
+      ],
+      "widgets_values_named": {
+        "unet_name": "moss\\图像生成\\Moss__MOSS Image__Base__BF16__cv3409868__f3301907.safetensors",
+        "fixed": "fixed",
+        "control_filter_list": "Any",
+        "weight_dtype": "default",
+        "base_model": "Any"
+      }
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "title": "[01C] 文本编码器 · MOSS",
+      "pos": [
+        40,
+        310
+      ],
+      "size": [
+        420,
+        110
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "CLIP名称",
+          "name": "clip_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "clip_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "类型",
+          "name": "type",
+          "type": "COMBO",
+          "widget": {
+            "name": "type"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "设备",
+          "name": "device",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "device"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "CLIP",
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            4,
+            5
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader",
+        "uap_layout_group": "01 模型与 LoRA · MOSS",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        "Moss__Qwen3.5 9B Text Encoder__v1__BF16__sha__7E6E9F08D598.safetensors",
+        "moss_image",
+        "default"
+      ],
+      "widgets_values_named": {
+        "clip_name": "Moss__Qwen3.5 9B Text Encoder__v1__BF16__sha__7E6E9F08D598.safetensors",
+        "type": "moss_image",
+        "device": "default"
+      }
+    },
+    {
+      "id": 3,
+      "type": "VAELoader",
+      "title": "[01V] VAE · MOSS",
+      "pos": [
+        40,
+        445
+      ],
+      "size": [
+        420,
+        65
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "vae名称",
+          "name": "vae_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "vae_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "VAE",
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            10
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader",
+        "uap_layout_group": "01 模型与 LoRA · MOSS",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        "Moss__Flux2 VAE__v1__FP32__cv3409867__f3301980.safetensors"
+      ],
+      "widgets_values_named": {
+        "vae_name": "Moss__Flux2 VAE__v1__FP32__cv3409867__f3301980.safetensors"
+      }
+    },
+    {
+      "id": 4,
+      "type": "Lora Loader (LoraManager)",
+      "title": "[01L] 风格与角色 LoRA · MOSS",
+      "pos": [
+        500,
+        130
+      ],
+      "size": [
+        580,
+        380
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        },
+        {
+          "localized_name": "text",
+          "name": "text",
+          "type": "AUTOCOMPLETE_TEXT_LORAS",
+          "widget": {
+            "name": "text"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "loras",
+          "name": "loras",
+          "type": "LORAS",
+          "widget": {
+            "name": "loras"
+          },
+          "link": null
+        },
+        {
+          "name": "clip",
+          "shape": 7,
+          "type": "CLIP",
+          "link": null
+        },
+        {
+          "name": "lora_stack",
+          "shape": 7,
+          "type": "LORA_STACK",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "模型",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            3
+          ]
+        },
+        {
+          "localized_name": "CLIP",
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": []
+        },
+        {
+          "localized_name": "trigger_words",
+          "name": "trigger_words",
+          "type": "STRING",
+          "links": [
+            11
+          ]
+        },
+        {
+          "localized_name": "loaded_loras",
+          "name": "loaded_loras",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Lora Loader (LoraManager)",
+        "__lm_widget_ids": [
+          "__lm_autocomplete_meta_text",
+          "text",
+          "loras"
+        ],
+        "uap_layout_group": "01 模型与 LoRA · MOSS",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        {
+          "version": 1,
+          "textWidgetName": "text"
+        },
+        "",
+        []
+      ],
+      "widgets_values_named": {
+        "__lm_autocomplete_meta_text": {
+          "version": 1,
+          "textWidgetName": "text"
+        },
+        "text": "",
+        "loras": []
+      }
+    },
+    {
+      "id": 5,
+      "type": "Prompt (LoraManager)",
+      "title": "[00W-1] 正向提示词 · MOSS",
+      "pos": [
+        1150,
+        130
+      ],
+      "size": [
+        560,
+        330
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "clip",
+          "name": "clip",
+          "type": "CLIP",
+          "link": 4
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "shape": 7,
+          "type": "INT",
+          "link": null
+        },
+        {
+          "localized_name": "trigger_words1",
+          "name": "trigger_words1",
+          "shape": 7,
+          "type": "STRING",
+          "link": 11
+        },
+        {
+          "localized_name": "text",
+          "name": "text",
+          "type": "AUTOCOMPLETE_TEXT_PROMPT,STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": null
+        },
+        {
+          "name": "trigger_words2",
+          "type": "STRING",
+          "link": null
+        },
+        {
+          "name": "trigger_words3",
+          "type": "STRING",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "条件",
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            6
+          ]
+        },
+        {
+          "localized_name": "PROMPT",
+          "name": "PROMPT",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Prompt (LoraManager)",
+        "__lm_widget_ids": [
+          "__lm_autocomplete_meta_text",
+          "text"
+        ],
+        "uap_layout_group": "02 提示词与采样 · MOSS",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        {
+          "version": 1,
+          "textWidgetName": "text"
+        },
+        "an oil-painted anime illustration, an extreme close-up on the lap of a single adult woman sitting up on a hotel bed at night.\n\nShe is fully nude: her white dress, long gloves, stockings and heels are already pulled off and lie in a heap at the left edge of the frame. She is cropped from just under her bare breasts down to mid-thigh, her long pale grey hair falling across one shoulder into the top of the frame, her knees pulled up and spread wide. Her right hand fills the middle of the picture, the index and middle fingers buried to the second knuckle inside herself, the lips stretched and glistening around them, her thumb pressed to her clit and the other fingers curled away; her left hand pulls her own thigh wider. Sweat runs down her stomach and the insides of her pale thighs, a thin strand of hair sticks to her hip. Her skin carries a flushed pink under the warm light.\n\nA warm lamp from the left, cold blue shadow to the right, thick palette-knife paint across the linen, dry-brush gaps showing the underdrawing, canvas grain in the flat shadows, muted amber and gray-blue."
+      ],
+      "widgets_values_named": {
+        "__lm_autocomplete_meta_text": {
+          "version": 1,
+          "textWidgetName": "text"
+        },
+        "text": "an oil-painted anime illustration, an extreme close-up on the lap of a single adult woman sitting up on a hotel bed at night.\n\nShe is fully nude: her white dress, long gloves, stockings and heels are already pulled off and lie in a heap at the left edge of the frame. She is cropped from just under her bare breasts down to mid-thigh, her long pale grey hair falling across one shoulder into the top of the frame, her knees pulled up and spread wide. Her right hand fills the middle of the picture, the index and middle fingers buried to the second knuckle inside herself, the lips stretched and glistening around them, her thumb pressed to her clit and the other fingers curled away; her left hand pulls her own thigh wider. Sweat runs down her stomach and the insides of her pale thighs, a thin strand of hair sticks to her hip. Her skin carries a flushed pink under the warm light.\n\nA warm lamp from the left, cold blue shadow to the right, thick palette-knife paint across the linen, dry-brush gaps showing the underdrawing, canvas grain in the flat shadows, muted amber and gray-blue."
+      }
+    },
+    {
+      "id": 6,
+      "type": "CLIPTextEncode",
+      "title": "[00W-1N] 负向提示词 · MOSS",
+      "pos": [
+        1150,
+        500
+      ],
+      "size": [
+        560,
+        200
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "clip",
+          "name": "clip",
+          "type": "CLIP",
+          "link": 5
+        },
+        {
+          "localized_name": "文本",
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "条件",
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            7
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode",
+        "uap_layout_group": "02 提示词与采样 · MOSS",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        "worst quality, bad anatomy, extra fingers, fused fingers, watermark, jpeg artifact, censored, text"
+      ],
+      "widgets_values_named": {
+        "text": "worst quality, bad anatomy, extra fingers, fused fingers, watermark, jpeg artifact, censored, text"
+      }
+    },
+    {
+      "id": 7,
+      "type": "EmptyFlux2LatentImage",
+      "title": "[02S] 画幅尺寸 · MOSS",
+      "pos": [
+        1750,
+        130
+      ],
+      "size": [
+        320,
+        120
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "batch_size",
+          "name": "batch_size",
+          "type": "INT",
+          "widget": {
+            "name": "batch_size"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "Latent",
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            8
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyFlux2LatentImage",
+        "uap_layout_group": "02 提示词与采样 · MOSS",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        1024,
+        1280,
+        1
+      ],
+      "widgets_values_named": {
+        "width": 1024,
+        "height": 1280,
+        "batch_size": 1
+      }
+    },
+    {
+      "id": 8,
+      "type": "KSampler",
+      "title": "[02K] 主采样器 · MOSS",
+      "pos": [
+        1750,
+        290
+      ],
+      "size": [
+        320,
+        410
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "模型",
+          "name": "model",
+          "type": "MODEL",
+          "link": 3
+        },
+        {
+          "localized_name": "正面条件",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 6
+        },
+        {
+          "localized_name": "负面条件",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 7
+        },
+        {
+          "localized_name": "Latent图像",
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 8
+        },
+        {
+          "localized_name": "种子",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "步数",
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "cfg",
+          "name": "cfg",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cfg"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "采样器名称",
+          "name": "sampler_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "sampler_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "调度器",
+          "name": "scheduler",
+          "type": "COMBO",
+          "widget": {
+            "name": "scheduler"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "降噪",
+          "name": "denoise",
+          "type": "FLOAT",
+          "widget": {
+            "name": "denoise"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "Latent",
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            9
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler",
+        "uap_layout_group": "02 提示词与采样 · MOSS",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        100002,
+        "randomize",
+        40,
+        3,
+        "euler",
+        "simple",
+        1
+      ],
+      "widgets_values_named": {
+        "seed": 100002,
+        "control_after_generate": "randomize",
+        "steps": 40,
+        "cfg": 3,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "denoise": 1
+      }
+    },
+    {
+      "id": 9,
+      "type": "VAEDecode",
+      "title": "[03D] VAE 解码 · MOSS",
+      "pos": [
+        2140,
+        130
+      ],
+      "size": [
+        210,
+        60
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "Latent",
+          "name": "samples",
+          "type": "LATENT",
+          "link": 9
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "图像",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            12
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode",
+        "uap_layout_group": "03 成品保存 · MOSS",
+        "uap_default_mode": 0
+      }
+    },
+    {
+      "id": 10,
+      "type": "SaveImage",
+      "title": "[03S] 成品保存 · MOSS",
+      "pos": [
+        2140,
+        230
+      ],
+      "size": [
+        420,
+        470
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "图片",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 12
+        },
+        {
+          "localized_name": "文件名前缀",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage",
+        "uap_layout_group": "03 成品保存 · MOSS",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        "Production_MOSS/moss"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "Production_MOSS/moss"
+      }
+    },
+    {
+      "id": 11,
+      "type": "Note",
+      "pos": [
+        390,
+        640
+      ],
+      "size": [
+        340,
+        310
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "text": "",
+        "uap_layout_group": "04 使用说明 · MOSS",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        "# LoRA 选择与 Krea2 隔离说明\n\n本工作流已与 Krea2 完全隔离，画布补全、UAP 常用控制台与 LoRA 浏览器均自动锁定 `moss/` 目录：\n\n- 在 `#4` 行内直接输入关键词（如 `moss`、`Tsaritsa`、`748cm`）即可搜出 MOSS 专属 LoRA，不会混入 Krea2 同名画风 LoRA\n- 鼠标悬停候选行可看预览图；选中后默认 `clipStrength = 0`，且触发词经 `trigger_words1` 自动拼入 `#5` 正向提示词\n- `#4` 已物理断开 `clip` 输入（走纯 model-only 路径），彻底避免污染 Qwen3.5 9B 文本编码器\n- 点 UAP 常用控制台 LoRA 卡片右上角「浏览器」，会直接打开锁定 `moss` 目录且绑定本节点的 LoRA Manager\n"
+      ],
+      "widgets_values_named": {
+        "text": "# LoRA 选择与 Krea2 隔离说明\n\n本工作流已与 Krea2 完全隔离，画布补全、UAP 常用控制台与 LoRA 浏览器均自动锁定 `moss/` 目录：\n\n- 在 `#4` 行内直接输入关键词（如 `moss`、`Tsaritsa`、`748cm`）即可搜出 MOSS 专属 LoRA，不会混入 Krea2 同名画风 LoRA\n- 鼠标悬停候选行可看预览图；选中后默认 `clipStrength = 0`，且触发词经 `trigger_words1` 自动拼入 `#5` 正向提示词\n- `#4` 已物理断开 `clip` 输入（走纯 model-only 路径），彻底避免污染 Qwen3.5 9B 文本编码器\n- 点 UAP 常用控制台 LoRA 卡片右上角「浏览器」，会直接打开锁定 `moss` 目录且绑定本节点的 LoRA Manager\n"
+      },
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 12,
+      "type": "Note",
+      "pos": [
+        750,
+        640
+      ],
+      "size": [
+        330,
+        310
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "text": "",
+        "uap_layout_group": "04 使用说明 · MOSS",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        "# 采样参数与换角色提示\n\n- 底模：MOSS Image **Base** BF16（社区 LoRA 贴合最好；SFT / Cat Tower v2.0 可在 UAP 底模快切一键切换）\n- 文本编码器：Qwen3.5 9B BF16（显存紧张可切 W4A8-GPTQ），`type` 必须是 `moss_image`\n- VAE：Moss Flux2 VAE FP32（勿混用 Krea2 VAE）\n- 采样：40 步 / CFG 3.0 / `euler` / `simple` / denoise 1（精细档可设 50 步）\n- 尺寸：1024 × 1280（`EmptyFlux2LatentImage`，保持 16 的倍数）\n- 负向提示词：不要放 `nsfw`，去码请保留 `censored`\n\n# 常见角色触发词\n\n在 `#4` 换上对应角色 LoRA 即可，触发词会自动经 `trigger_words1` 接入：\n\n| LoRA | 触发词 |\n|---|---|\n| HSRkafka | HSRkafka |\n| 洛茜 / Rossi | Rossi， |\n| 祀 / Si | Si |\n| 心月狐 / Hsin | Hsin |\n| Cantarella 坎特蕾拉 | Cantarella |\n| Lacrimosa (NTE) | lacrimosa (neverness to everness) |\n| Shantae | sh4nt4 |\n| Mal0 | Mal0 |\n"
+      ],
+      "widgets_values_named": {
+        "text": "# 采样参数与换角色提示\n\n- 底模：MOSS Image **Base** BF16（社区 LoRA 贴合最好；SFT / Cat Tower v2.0 可在 UAP 底模快切一键切换）\n- 文本编码器：Qwen3.5 9B BF16（显存紧张可切 W4A8-GPTQ），`type` 必须是 `moss_image`\n- VAE：Moss Flux2 VAE FP32（勿混用 Krea2 VAE）\n- 采样：40 步 / CFG 3.0 / `euler` / `simple` / denoise 1（精细档可设 50 步）\n- 尺寸：1024 × 1280（`EmptyFlux2LatentImage`，保持 16 的倍数）\n- 负向提示词：不要放 `nsfw`，去码请保留 `censored`\n\n# 常见角色触发词\n\n在 `#4` 换上对应角色 LoRA 即可，触发词会自动经 `trigger_words1` 接入：\n\n| LoRA | 触发词 |\n|---|---|\n| HSRkafka | HSRkafka |\n| 洛茜 / Rossi | Rossi， |\n| 祀 / Si | Si |\n| 心月狐 / Hsin | Hsin |\n| Cantarella 坎特蕾拉 | Cantarella |\n| Lacrimosa (NTE) | lacrimosa (neverness to everness) |\n| Shantae | sh4nt4 |\n| Mal0 | Mal0 |\n"
+      },
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 13,
+      "type": "MarkdownNote",
+      "title": "[00-README] MOSS 精简生产 v1",
+      "pos": [
+        40,
+        640
+      ],
+      "size": [
+        330,
+        310
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "MarkdownNote",
+        "uap_layout_group": "04 使用说明 · MOSS",
+        "uap_default_mode": 0
+      },
+      "widgets_values": [
+        "## MOSS 精简生产 v1（UAP 独立工作流）\n\n- **独立零干扰**：与 `UAP统一生产工作台_v2.json`（Krea2）分处独立标签页，切工作流保留未保存草稿；切换到 Krea2 前可在常用控制台点「立即释放模型与缓存」。\n- **链路**：`Unet Loader (LoraManager)` → `Lora Loader (LoraManager)`（model-only）→ `KSampler` → `VAEDecode` → `SaveImage`（13 节点 / 11 连线 / 无子图）。\n- **提示词**：正向 `#5 Prompt (LoraManager)`（自动拼接 `#4` 触发词），负向 `#6 CLIPTextEncode`；可在 UAP 常用控制台或完整工作台直接编辑与插入词库。\n- **模型防呆**：仅允许加载 `moss/` 底模、`Moss__Qwen3.5`（`type = moss_image`）、`Moss__Flux2 VAE` 与 `moss/` LoRA，双向拦截 Krea2 资源混用。\n- **输出隔离**：默认保存到 `Production_MOSS/moss`，最近结果面板仅展示本工作流输出。\n"
+      ],
+      "widgets_values_named": {
+        "text": "## MOSS 精简生产 v1（UAP 独立工作流）\n\n- **独立零干扰**：与 `UAP统一生产工作台_v2.json`（Krea2）分处独立标签页，切工作流保留未保存草稿；切换到 Krea2 前可在常用控制台点「立即释放模型与缓存」。\n- **链路**：`Unet Loader (LoraManager)` → `Lora Loader (LoraManager)`（model-only）→ `KSampler` → `VAEDecode` → `SaveImage`（13 节点 / 11 连线 / 无子图）。\n- **提示词**：正向 `#5 Prompt (LoraManager)`（自动拼接 `#4` 触发词），负向 `#6 CLIPTextEncode`；可在 UAP 常用控制台或完整工作台直接编辑与插入词库。\n- **模型防呆**：仅允许加载 `moss/` 底模、`Moss__Qwen3.5`（`type = moss_image`）、`Moss__Flux2 VAE` 与 `moss/` LoRA，双向拦截 Krea2 资源混用。\n- **输出隔离**：默认保存到 `Production_MOSS/moss`，最近结果面板仅展示本工作流输出。\n"
+      },
+      "color": "#432",
+      "bgcolor": "#653"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      4,
+      0,
+      "MODEL"
+    ],
+    [
+      3,
+      4,
+      0,
+      8,
+      0,
+      "MODEL"
+    ],
+    [
+      4,
+      2,
+      0,
+      5,
+      0,
+      "CLIP"
+    ],
+    [
+      5,
+      2,
+      0,
+      6,
+      0,
+      "CLIP"
+    ],
+    [
+      6,
+      5,
+      0,
+      8,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      7,
+      6,
+      0,
+      8,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      8,
+      7,
+      0,
+      8,
+      3,
+      "LATENT"
+    ],
+    [
+      9,
+      8,
+      0,
+      9,
+      0,
+      "LATENT"
+    ],
+    [
+      10,
+      3,
+      0,
+      9,
+      1,
+      "VAE"
+    ],
+    [
+      11,
+      4,
+      2,
+      5,
+      2,
+      "STRING"
+    ],
+    [
+      12,
+      9,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [
+    {
+      "title": "01 模型与 LoRA · MOSS",
+      "bounding": [
+        20,
+        50,
+        1080,
+        490
+      ],
+      "color": "#48687a",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "02 提示词与采样 · MOSS",
+      "bounding": [
+        1130,
+        50,
+        960,
+        680
+      ],
+      "color": "#526f5d",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "03 成品保存 · MOSS",
+      "bounding": [
+        2120,
+        50,
+        460,
+        680
+      ],
+      "color": "#647e56",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "04 使用说明 · MOSS",
+      "bounding": [
+        20,
+        565,
+        1080,
+        410
+      ],
+      "color": "#6d5f47",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "uap_workbench": {
+      "version": 1,
+      "activeBranch": "moss",
+      "viewBranch": "moss",
+      "stage": "daily",
+      "compactWidgets": false,
+      "branches": [
+        {
+          "id": "moss",
+          "label": "MOSS 图像生成",
+          "modelFamily": "moss",
+          "group": "01 模型与 LoRA · MOSS",
+          "nodeIds": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "modes": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 0,
+            "9": 0,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0
+          },
+          "stages": [
+            {
+              "id": "daily",
+              "label": "日常生图",
+              "groups": [
+                "01 模型与 LoRA · MOSS",
+                "02 提示词与采样 · MOSS",
+                "03 成品保存 · MOSS"
+              ]
+            },
+            {
+              "id": "compare",
+              "label": "成品与说明",
+              "groups": [
+                "03 成品保存 · MOSS",
+                "04 使用说明 · MOSS"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "uap_model_contracts": {
+      "version": 1,
+      "verified_at": "2026-11-15",
+      "evidence": "Local safetensors inventory and ComfyUI 0.42.0 CLIPLoader(moss_image) + Flux2 VAE pairing. Enforces Krea2/MOSS family isolation.",
+      "models": {
+        "moss/图像生成/Moss__MOSS Image__Base__BF16__cv3409868__f3301907.safetensors": {
+          "family": "moss"
+        },
+        "moss/图像生成/Moss__MOSS Image__SFT__BF16__cv3409867__f3301903.safetensors": {
+          "family": "moss"
+        },
+        "moss/图像生成/Moss__MOSS Cat Tower__v2.0__BF16__cv3447411__f3346762.safetensors": {
+          "family": "moss"
+        },
+        "krea2/图像生成/Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__CuteDisaster v2 Turbo UC__BF16__cv3151280__f3034252.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__DarkDesire V3 Turbo UC__BF16__cv3362930__f3250905.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__DarkDesire V3 Turbo UC__FP8-Mixed__cv3362930__f3251200.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Krea2-Anime__v2.0__BF16__cv3357716__f3246945.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Krea2-Anime__v2.0__INT8__cv3357716__f3245462.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Moody Krea 2 Mix (uncensored) V8SE Goes Ancient —__Premium 臻享版__INT8-ConvRot__cv3261440__f3153405.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Krea2 Cat Tower__v1.0 (Turbo INT8 ConvRot)__INT8-ConvRot__cv3163788__f3046237.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Krea2-Anime__v3.0__BF16__cv3435333__f3334576.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Krea2-Anime__v3.0__FP8__cv3435333__f3334536.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__LUSTIFY! [NSFW checkpoint]__v10 (Krea 2)__BF16__cv3112728__f3015315.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__LUSTIFY! [NSFW checkpoint]__v10 (Krea 2)__INT8-ConvRot__cv3112728__f2996235.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        }
+      },
+      "families": {
+        "moss": {
+          "label": "MOSS",
+          "clip": [
+            "Moss__Qwen3.5 9B Text Encoder__v1__BF16__sha__7E6E9F08D598.safetensors",
+            "Moss__Qwen3.5 9B Text Encoder__v1__W4A8-GPTQ__cv3409867__f3301906.safetensors"
+          ],
+          "clip_type": "moss_image",
+          "vae": [
+            "Moss__Flux2 VAE__v1__FP32__cv3409867__f3301980.safetensors"
+          ]
+        },
+        "krea2": {
+          "label": "Krea2",
+          "clip": [
+            "qwen3-vl-4b-heretic.safetensors"
+          ],
+          "clip_type": "krea2",
+          "vae": [
+            "krea2RealVae_v10.safetensors"
+          ]
+        }
+      }
+    },
+    "ds": {
+      "scale": 0.72,
+      "offset": [
+        30,
+        20
+      ]
+    }
+  },
+  "version": 0.4,
+  "definitions": {
+    "subgraphs": []
+  }
+}

@@ -8,16 +8,19 @@ export function inspectStaticPromptInputs(graph,branch){
     const rows=[];
     for(const node of nodes){
         const type=node.comfyClass||node.type;
-        if(!['CLIPTextEncode','Krea2EditGroundedEncode'].includes(type))continue;
-        const field=type==='CLIPTextEncode'?'text':'prompt';
+        if(!['CLIPTextEncode','Krea2EditGroundedEncode','Prompt (LoraManager)'].includes(type))continue;
+        const field=type==='Krea2EditGroundedEncode'?'prompt':'text';
         const label=`${node.title||type} #${node.id} / ${field}`;
         if(node.mode!=null&&node.mode!==0){rows.push({node,label,status:'disabled',reason:'编码节点未启用'});continue;}
         const input=node.inputs?.find(port=>port.name===field);
         if(input?.link==null){
             const widget=textWidget(node,field);
-            rows.push(widget?{node,label,status:type==='CLIPTextEncode'?'static':'source',
+            const hasTriggerLinks=type==='Prompt (LoraManager)'&&(node.inputs||[]).some(port=>/^trigger_words\d*$/.test(port.name||'')&&port.link!=null);
+            const hasWildcards=type==='Prompt (LoraManager)'&&/__[^_\s]+__|\{[^{}]*\|[^{}]*\}/.test(widget?.value||'');
+            const isStatic=type==='CLIPTextEncode'||(type==='Prompt (LoraManager)'&&!hasTriggerLinks&&!hasWildcards);
+            rows.push(widget?{node,label,status:isStatic?'static':'source',
                               text:widget.value,source:label,
-                              reason:type==='CLIPTextEncode'?'直接字段：编码前文本已确认':'编辑指令字段原文；图片与系统指令仍由运行时合成'}:
+                              reason:type==='CLIPTextEncode'?'直接字段：编码前文本已确认':isStatic?'直接字段：无已连接触发词或通配符，编码前文本已确认':type==='Prompt (LoraManager)'?'提示词字段原文；已连接的 LoRA 触发词或通配符将在运行时拼接':'编辑指令字段原文；图片与系统指令仍由运行时合成'}:
                              {node,label,status:'unknown',reason:'找不到可读的文本字段'});
             continue;
         }

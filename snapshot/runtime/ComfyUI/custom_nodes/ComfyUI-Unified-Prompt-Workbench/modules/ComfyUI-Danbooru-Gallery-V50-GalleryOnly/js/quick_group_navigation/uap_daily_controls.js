@@ -18,7 +18,11 @@ const el = (tag, text, parent, props = {}) => {
 };
 
 const PROMPT_INPUT_NAMES = new Set(["text", "prompt", "positive", "negative"]);
-const NON_EDITABLE_PROMPT_TYPES = new Set(["ShowText|pysssss", "ShowText", "MarkdownNote", "Note", "PreviewAny"]);
+const NON_EDITABLE_PROMPT_TYPES = new Set([
+    "ShowText|pysssss", "ShowText", "MarkdownNote", "Note", "PreviewAny",
+    "Lora Loader (LoraManager)", "Lora Stacker (LoraManager)",
+    "WanVideo Lora Select (LoraManager)", "Create Hook LoRA (LoraManager)",
+]);
 
 export function widgetSource(node, name) {
     const input = node?.inputs?.find(i => (i.widget?.name || i.name) === name);
@@ -63,6 +67,7 @@ export function resolveBranchPromptNodes(nodes) {
     const positive =
         candidates.find(n => /^\[00W-1(?:P)?\]/.test(n.title || "")) ||
         candidates.find(n => (n.type === "WeiLinPromptUI" || n.comfyClass === "WeiLinPromptUI")) ||
+        candidates.find(n => (n.type === "Prompt (LoraManager)" || n.comfyClass === "Prompt (LoraManager)") && !isNegativeTitle(n.title)) ||
         candidates.find(n => (n.type === "Krea2EditGroundedEncode" || n.comfyClass === "Krea2EditGroundedEncode") && !isNegativeTitle(n.title)) ||
         candidates.find(n => /正向|正面|编辑指令|\bpositive\b/i.test(n.title || "") && !isNegativeTitle(n.title)) ||
         null;
@@ -446,6 +451,9 @@ export function createDailyControls(jump) {
         const search = el("input", "", add, { placeholder: "搜索本地 LoRA…" });
         search.setAttribute("list", "uap-local-loras");
         search.setAttribute("aria-label", `${title} 选择 LoRA`);
+        const zeroClipDefault = () => currentBranch?.modelFamily === "moss" ||
+            ((node.type === "Lora Loader (LoraManager)" || node.comfyClass === "Lora Loader (LoraManager)") &&
+                Array.isArray(node.inputs) && node.inputs.some(i => i.name === "clip") && !node.inputs.some(i => i.name === "clip" && i.link != null));
         const commit = (values, force = false) => { commitWidget(node, widget, values); draw(force); };
         const addButton=el("button", "+", add, { title: `添加到${title}`, type: "button", onclick: async () => {
             error.textContent = "";
@@ -454,10 +462,23 @@ export function createDailyControls(jump) {
             try {
                 const { files, format } = await loraOptions;
                 if (!search.isConnected || !active || !currentBranch?.nodeIds?.some(id => String(id) === String(node.id))) return;
-                storedName = resolveLocalLoraName(name, files, format);
+                const contracts = app.graph?.extra?.uap_model_contracts;
+                const basenameOf = file => file.replace(/\\/g, "/").replace(/\.[^.\/]+$/, "").split("/").at(-1);
+                const compatible = files.filter(file => !modelOptionIssue("lora_name", file, currentBranch, contracts));
+                const matchesInput = file => file === name || basenameOf(file) === name;
+                if (!compatible.some(matchesInput)) {
+                    const foreign = files.find(matchesInput);
+                    const issue = foreign && modelOptionIssue("lora_name", foreign, currentBranch, contracts);
+                    if (issue) throw new Error(issue);
+                }
+                storedName = resolveLocalLoraName(name, compatible, format);
+                if (format !== "full" && files.filter(file => basenameOf(file).toLowerCase() === storedName.toLowerCase()).length > 1) {
+                    throw new Error("存在跨目录同名文件，请先在 LoRA Manager 开启完整路径语法，再刷新控制台。");
+                }
             } catch (err) { error.textContent = err.message; return; }
             if ((widget.value || []).some(v => v.name === storedName)) { error.textContent = "该 LoRA 已在本栏。"; return; }
-            commit([...(widget.value || []), { name: storedName, strength: 1, clipStrength: 1, active: true, expanded: false, locked: false }], true);
+            const initialClip = zeroClipDefault() ? 0 : 1;
+            commit([...(widget.value || []), { name: storedName, strength: 1, clipStrength: initialClip, active: true, expanded: false, locked: false }], true);
             search.value = "";
         } });
         addButton.setAttribute('aria-label',`添加到${title}`);
@@ -477,7 +498,12 @@ export function createDailyControls(jump) {
                 el("span", entry.name, row, { title: entry.name });
                 const strength = el("input", "", row, { type: "number", value: entry.strength, step: "0.05" });
                 strength.setAttribute("aria-label", `${title} ${entry.name} 强度`);
-                strength.oninput = strength.onchange = () => { if (strength.value !== "" && Number.isFinite(Number(strength.value))) update({ strength: Number(strength.value), ...(!entry.expanded ? { clipStrength: Number(strength.value) } : {}) }); };
+                strength.oninput = strength.onchange = () => {
+                    if (strength.value !== "" && Number.isFinite(Number(strength.value))) {
+                        const keepZeroClip = zeroClipDefault() && Number(entry.clipStrength) === 0;
+                        update({ strength: Number(strength.value), ...(!entry.expanded && !keepZeroClip ? { clipStrength: Number(strength.value) } : {}) });
+                    }
+                };
                 el("button", "×", row, { title: `移除 ${entry.name}`, type: "button", onclick: () => commit(widget.value.filter((_, i) => i !== index), true) });
                 if (entry.expanded || entry.clipStrength !== entry.strength) {
                     const clip = el("label", "CLIP", rows, { className: "lora-clip" });
@@ -660,7 +686,7 @@ export function createDailyControls(jump) {
             const workbench = await openWorkbench({page:'library', target, inputElement:positiveSource?.inputElement, reset:true, openPending:true});
             await workbench?.showPending?.();
         }, animaTools);
-        const size = find("EmptyLatentImage") || find("EmptySD3LatentImage");
+        const size = find("EmptyLatentImage") || find("EmptySD3LatentImage") || find("EmptyFlux2LatentImage");
         const sampler = find("KSampler"), seed = find("easy seed");
         const params = section(fields, "尺寸 · 种子 · 采样", size || sampler);
         params.dataset.deskArea='parameters';
@@ -728,7 +754,10 @@ export function createDailyControls(jump) {
         }
         if (size) {
             const presets = el("div", "", params.querySelector("h3"), { className: "presets" });
-            [["方图",1024,1024],["竖图",832,1216],["横图",1216,832]].forEach(([label,w,h]) => el("button",label,presets,{type:"button",title:`${w} × ${h}`,onclick:()=>setDimensions(w,h)}));
+            const sizePresets = branch.modelFamily === "moss"
+                ? [["方图",1024,1024],["竖图",1024,1280],["横图",1280,1024]]
+                : [["方图",1024,1024],["竖图",832,1216],["横图",1216,832]];
+            sizePresets.forEach(([label,w,h]) => el("button",label,presets,{type:"button",title:`${w} × ${h}`,onclick:()=>setDimensions(w,h)}));
         }
         if(!grid.children.length)params.remove();
         if(!positiveTextArea&&!negativeTextArea)textBox.remove();
@@ -737,7 +766,7 @@ export function createDailyControls(jump) {
         sync.push(runtimeControls.sync);
         const clipNode=find('CLIPLoader');
         const modelFields=[
-            [find('UNETLoader'),'unet_name','基础模型'],
+            [find('UNETLoader')||find('Unet Loader (LoraManager)'),'unet_name','基础模型'],
             [find('CheckpointLoaderSimple')||find('CheckpointLoader'),'ckpt_name','整合模型'],
             [clipNode,'clip_name','文本编码器'],
             [find('VAELoader'),'vae_name','VAE'],
@@ -754,6 +783,7 @@ export function createDailyControls(jump) {
             const scopeHint={
                 a1:'01 Anima 原版与 02 Anima 2.9B',a29:'01 Anima 原版与 02 Anima 2.9B',ext07:'01 Anima 原版与 07 左右扩图',
                 k2:'03 Krea2与 04 指令编辑',ext04:'03 Krea2与 04 指令编辑',ext05:'02 Anima 2.9B与 05 裁剪精修',
+                moss:'MOSS 独立生产流程',
             }[branch.id]||branch.label;
             let renderedHint='';
             // The 750ms sync loop calls this repeatedly; rebuild only when the text changes,
@@ -772,7 +802,7 @@ export function createDailyControls(jump) {
                 const file=String(source.widget.value);
                 const typeWidget=clipNode.widgets?.find(widget=>widget.name==='type');
                 const type=typeWidget?String(typeWidget.value??''):'';
-                const family=type==='stable_diffusion'?'Anima 原生文本编码器':type==='krea2'?'Krea2 专用文本编码器':/anima/i.test(file)?'Anima 系列编码器文件':/qwen3|krea/i.test(file)?'Qwen3-VL 系列编码器文件':'';
+                const family=type==='stable_diffusion'?'Anima 原生文本编码器':type==='krea2'?'Krea2 专用文本编码器':type==='moss_image'?'MOSS 专用 Qwen3.5 9B 文本编码器':/anima/i.test(file)?'Anima 系列编码器文件':/moss.*qwen/i.test(file)?'MOSS Qwen3.5 编码器文件':/qwen3|krea/i.test(file)?'Qwen3-VL 系列编码器文件':'';
                 const bypassed=(clipNode.mode!=null&&clipNode.mode!==0)||(source.node.mode!=null&&source.node.mode!==0);
                 const main=`文本编码器 #${clipNode.id}：${file} · 类型 ${type||'未提供'}${family?`（${family}）`:''}；适用：${scopeHint}。${bypassed?'当前分支未启用，此编码器处于旁路状态，切换后生效。':''}`;
                 const note=`编码器文件与类型都取自当前节点、只读显示，未改动任何值。type 字段按原样呈现：${type==='stable_diffusion'?'Anima 使用 stable_diffusion 是正常设置，不是错误配置；':'不同模型体系的 type 不能互换；'}更换模型体系时两者都要在节点里一起改。`;
@@ -874,7 +904,11 @@ export function createDailyControls(jump) {
             const files=Array.isArray(rawFiles?.[0])?rawFiles[0]:(rawFiles?.[1]?.options||[]);
             return {files,format:settings.settings?.lora_syntax_format || "legacy"};
         });
-        loraOptions.then(({files})=>{if(list.isConnected)files.forEach(name=>el("option","",list,{value:name}));}).catch(err=>{if(pluginStatus.isConnected)pluginStatus.textContent=err.message;});
+        loraOptions.then(({files})=>{
+            if(!list.isConnected)return;
+            const contracts=app.graph?.extra?.uap_model_contracts;
+            files.filter(name=>!modelOptionIssue("lora_name",name,branch,contracts)).forEach(name=>el("option","",list,{value:name}));
+        }).catch(err=>{if(pluginStatus.isConnected)pluginStatus.textContent=err.message;});
         fitEmbeddedTools();
         const embeddedTools=panel.querySelector('.desk-embedded-tools');
         if(embeddedTools)embeddedTools.open=embeddedToolsOpen;

@@ -46,7 +46,7 @@ export function mountWorkspace(host, {app, element, button, browse, selectTarget
         if(!rows.length){element('p','当前分支不使用提示词编码。',staticBody);return;}
         for(const row of rows){
             const card=element('section',null,staticBody,{className:'uw-static-inspector-row'});
-            const direction=promptDirection(app,row.node,{name:row.node.type==='CLIPTextEncode'?'text':'prompt'});
+            const direction=promptDirection(app,row.node,{name:['CLIPTextEncode','Prompt (LoraManager)'].includes(row.node.type)?'text':'prompt'});
             element('strong',row.label+' · '+({positive:'正向',negative:'负向'}[direction]||'方向未判定'),card);
             element('p',row.reason,card);
             if(row.source)element('small','来源：'+row.source,card);
@@ -157,7 +157,7 @@ export function mountWorkspace(host, {app, element, button, browse, selectTarget
         const branchState=app.graph?.extra?.uap_workbench;
         const branch=branchState?.branches?.find(item=>item.id===branchState.activeBranch);
 const branchNodes=branch?branch.nodeIds.map(id=>app.graph.getNodeById(id)).filter(Boolean):[];
-        if(branch&&branchNodes.some(node=>node.type==='UNETLoader')){
+        if(branch&&branchNodes.some(node=>node.type==='UNETLoader'||node.type==='Unet Loader (LoraManager)')){
             if(modelGraph!==app.graph||modelBranch!==branch){modelSwitch?.dispose();modelSwitch=mountModelSwitch(modelHost,app,branch,branchNodes,()=>app.graph?.extra?.uap_workbench?.activeBranch===branch.id);modelGraph=app.graph;modelBranch=branch;}
             modelSwitch?.sync();modelHost.hidden=!modelHost.childElementCount;
         }else{modelSwitch?.dispose();modelSwitch=null;modelGraph=null;modelBranch=null;modelHost.hidden=true;}

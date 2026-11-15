@@ -2,14 +2,34 @@ import {commitWidget} from './prompt_target.js';
 import {taskPlan} from './task_activity.js';
 
 const modelPath=value=>String(value||'').replace(/\\/g,'/');
-const DIRECTORY_MODEL_FAMILIES={moss:'moss',anima:'anima','anima-2.9b':'anima29',anima29:'anima29',krea2:'krea2'};
+const DIRECTORY_MODEL_FAMILIES={moss:'moss','moss image':'moss',anima:'anima','anima-2.9b':'anima29',anima29:'anima29',krea2:'krea2','krea 2':'krea2'};
+const UNET_TYPES=['UNETLoader','Unet Loader (LoraManager)'];
+const normalizeLoraFamily=family=>family==='anima29'?'anima':family;
 function inferredPathFamily(path){
     const head=path.split('/')[0]?.trim().toLowerCase()||'';
     return DIRECTORY_MODEL_FAMILIES[head]||'';
 }
+export function inferredLoraFamily(value){
+    const path=modelPath(value).trim();
+    if(!path)return '';
+    if(path.includes('/')){
+        const dirFamily=inferredPathFamily(path);
+        if(dirFamily)return dirFamily;
+    }
+    const stem=(path.split('/').at(-1)||'').replace(/\.(safetensors|ckpt|pt|bin)$/i,'').toLowerCase();
+    if(stem.startsWith('moss__'))return 'moss';
+    if(stem.startsWith('krea2__')||stem.includes('_krea2_'))return 'krea2';
+    if(stem.startsWith('anima__'))return 'anima';
+    return '';
+}
 export function modelOptionIssue(name,value,branch,contracts){
-    if(!branch?.modelFamily||!['unet_name','clip_name','vae_name'].includes(name))return '';
+    if(!branch?.modelFamily||!['unet_name','clip_name','vae_name','lora_name'].includes(name))return '';
     const family=contracts?.families?.[branch.modelFamily],path=modelPath(value);
+    if(name==='lora_name'){
+        const inferred=inferredLoraFamily(path);
+        const label=family?.label||branch.modelFamily.toUpperCase();
+        return !inferred||normalizeLoraFamily(inferred)===normalizeLoraFamily(branch.modelFamily)?'':`${label} 分支只能加载本体系 LoRA；此文件属于 ${inferred}，已拦截跨体系混用。`;
+    }
     if(!family)return '当前工作流缺少已核验的模型配套清单，请保存未完成编辑后加载最新版 UAP。';
     if(name==='unet_name'){
         const known=contracts?.models?.[path];
@@ -20,15 +40,53 @@ export function modelOptionIssue(name,value,branch,contracts){
     return family[name==='clip_name'?'clip':'vae'].includes(path)?'':`${family.label} 的${name==='clip_name'?'文本编码器':'VAE'}不匹配已核验组合。`;
 }
 
+export function loraCompatibilityIssue(nodes,branch,contracts){
+    if(!branch?.modelFamily)return '';
+    const loraTagPattern=/<lora:([^:>]+):([^:>]+)(?::([^:>]+))?>/gi;
+    for(const node of nodes){
+        if(node.mode!==0)continue;
+        const type=node.comfyClass||node.type;
+        if(type==='Lora Loader (LoraManager)'||type==='Lora Stacker (LoraManager)'){
+            const rows=node.lorasWidget?.value??node.widgets?.find(w=>w.name==='loras')?.value;
+            if(Array.isArray(rows)){
+                for(const row of rows){
+                    if(!row||row.active===false)continue;
+                    if(Number(row.strength)===0&&Number(row.clipStrength??row.strength)===0)continue;
+                    const issue=modelOptionIssue('lora_name',row.name,branch,contracts);
+                    if(issue)return `${node.title||type} #${node.id} 中的 LoRA「${row.name}」与当前分支冲突：${issue}`;
+                }
+            }
+            const text=node.widgets?.find(w=>w.name==='text')?.value;
+            if(typeof text==='string'&&text.includes('<lora:')){
+                for(const match of text.matchAll(loraTagPattern)){
+                    const [,loraName,mStr,cStr]=match;
+                    if(Number(mStr)===0&&Number(cStr??mStr)===0)continue;
+                    const issue=modelOptionIssue('lora_name',loraName,branch,contracts);
+                    if(issue)return `${node.title||type} #${node.id} 中的 LoRA「${loraName}」与当前分支冲突：${issue}`;
+                }
+            }
+        }else if(type==='LoraLoader'||type==='LoraLoaderModelOnly'){
+            const mStr=Number(node.widgets?.find(w=>w.name==='strength_model')?.value??1);
+            const cStr=Number(node.widgets?.find(w=>w.name==='strength_clip')?.value??0);
+            if(mStr===0&&cStr===0)continue;
+            const loraName=node.widgets?.find(w=>w.name==='lora_name')?.value;
+            const issue=loraName?modelOptionIssue('lora_name',loraName,branch,contracts):'';
+            if(issue)return `${node.title||type} #${node.id} 中的 LoRA「${loraName}」与当前分支冲突：${issue}`;
+        }
+    }
+    return '';
+}
+
 export function modelCompatibilityIssue(nodes,branch,contracts){
-    if(!branch?.modelFamily||!nodes.some(node=>node.type==='UNETLoader'&&node.mode===0))return '';
-    for(const [type,name] of [['UNETLoader','unet_name'],['CLIPLoader','clip_name'],['VAELoader','vae_name']]){
-        const node=nodes.find(node=>node.type===type&&node.mode===0);
-        if(!node)return `当前分支缺少启用的 ${type}，请恢复本分支模型组合。`;
+    const activeUnet=nodes.find(node=>UNET_TYPES.includes(node.type)&&node.mode===0);
+    if(!branch?.modelFamily||!activeUnet)return '';
+    for(const [types,label,name] of [[UNET_TYPES,activeUnet.type,'unet_name'],[['CLIPLoader'],'CLIPLoader','clip_name'],[['VAELoader'],'VAELoader','vae_name']]){
+        const node=nodes.find(item=>types.includes(item.type)&&item.mode===0);
+        if(!node)return `当前分支缺少启用的 ${label}，请恢复本分支模型组合。`;
         if(node.inputs?.some(input=>input.name===name&&input.link!=null))return '模型名称由连线提供，配套检查无法确认；请在模型节点中直接选择已核验组合。';
         const issue=modelOptionIssue(name,node.widgets?.find(widget=>widget.name===name)?.value,branch,contracts);
         if(issue)return issue;
-        if(type==='CLIPLoader'){
+        if(label==='CLIPLoader'){
             if(node.inputs?.some(input=>input.name==='type'&&input.link!=null))return '文本编码器类型由连线提供，无法确认配套。';
             if(node.widgets?.find(widget=>widget.name==='type')?.value!==contracts.families[branch.modelFamily].clip_type)return '文本编码器 type 与当前模型族不匹配，请从原节点恢复配套类型。';
         }
@@ -49,6 +107,7 @@ export function refinementBatchIssue(nodes) {
 export function workflowGuardIssue(nodes,branch,contracts) {
     const active=nodes.filter(node=>node.mode===0);
     const modelIssue=modelCompatibilityIssue(nodes,branch,contracts);if(modelIssue)return modelIssue;
+    const loraIssue=loraCompatibilityIssue(nodes,branch,contracts);if(loraIssue)return loraIssue;
     const parts=active.filter(node=>node.properties?.uap_refinement);
     if(parts.length){
         const issue=refinementBatchIssue(nodes);if(issue)return issue;
@@ -89,7 +148,7 @@ export function cleanupMode(nodes) {
 
 export function mountModelSwitch(host,app,branch,nodes,isCurrent){
     const graph=app.graph, graphId=graph.id;
-    const modelNode=nodes.find(node=>node.type==='UNETLoader'&&node.mode===0);
+    const modelNode=nodes.find(node=>UNET_TYPES.includes(node.type)&&node.mode===0);
     if(!modelNode)return null;
     const element=(tag,text,parent,attrs={})=>{const el=document.createElement(tag);if(text)el.textContent=text;Object.assign(el,attrs);parent.append(el);return el;};
     let disposed=false, signature='';
@@ -104,7 +163,7 @@ export function mountModelSwitch(host,app,branch,nodes,isCurrent){
     const select=element('select','',label);
     select.setAttribute('aria-label','切换当前分支底模');
     const note=element('small','',box);note.setAttribute('role','status');
-    element('small','只改本分支 UNETLoader 的 unet_name；步数、CFG、编码器与 LoRA 不随之变化。放进 models/diffusion_models 的底模刷新后即可选中。',box);
+    element('small',`只改本分支 ${modelNode.type} 的 unet_name；步数、CFG、编码器与 LoRA 不随之变化。放进 models/diffusion_models 的底模刷新后即可选中。`,box);
     select.onchange=()=>{
         const item=widget();
         if(!writable()||!item){sync();note.textContent='分支未启用或模型名由连线控制，请在原节点调整。';return;}
@@ -116,9 +175,11 @@ export function mountModelSwitch(host,app,branch,nodes,isCurrent){
     };
     refresh.onclick=async()=>{
         try{
-            const response=await fetch('/object_info/UNETLoader',{cache:'no-store'});
+            const endpoint=modelNode.type==='UNETLoader'?'/object_info/UNETLoader':'/object_info/'+encodeURIComponent(modelNode.type);
+            const response=await fetch(endpoint,{cache:'no-store'});
             if(!response.ok)throw new Error('HTTP '+response.status);
-            const spec=(await response.json())?.UNETLoader?.input?.required?.unet_name;
+            const info=await response.json();
+            const spec=(info?.[modelNode.type]||info?.UNETLoader)?.input?.required?.unet_name;
             const values=Array.isArray(spec?.[0])?spec[0]:spec?.[1]?.options;
             if(!Array.isArray(values)||!values.length)throw new Error('模型列表为空');
             const item=widget();
@@ -158,20 +219,22 @@ export function mountRuntimeControls(host, app, branch, nodes, isCurrent) {
     const current=()=>!disposed&&isCurrent()&&app.graph===graph&&graph.id===graphId&&graph.extra?.uap_workbench?.activeBranch===branch.id;
     const writable=()=>current()&&cleanups.length>0&&cleanups.every(node=>graph.getNodeById(node.id)===node&&node.mode===0&&['offload_model','offload_cache'].every(name=>node.widgets?.some(w=>w.name===name)&&!node.inputs?.some(input=>input.name===name&&input.link!=null)));
     let unload,release,status;
-    if(cleanups.length){
+    if(cleanups.length||branch.modelFamily){
         const box=element('section','',host);box.dataset.deskArea='parameters';
         element('h3','连续出图 · 显存释放',box);
         const row=element('div','',box,{className:'plugin-tools'});
-        const label=element('label','',row,{className:'switch'});
-        unload=element('input','',label,{type:'checkbox'});unload.setAttribute('aria-label','出图后卸载模型');
-        element('span','出图后卸载模型',label);
+        if(cleanups.length){
+            const label=element('label','',row,{className:'switch'});
+            unload=element('input','',label,{type:'checkbox'});unload.setAttribute('aria-label','出图后卸载模型');
+            element('span','出图后卸载模型',label);
+            unload.onchange=()=>{
+                if(!writable()){status.textContent='分支、清理节点或输入已变化，请刷新控制台。';sync();return;}
+                const enabled=unload.checked;
+                for(const node of cleanups)for(const name of ['offload_model','offload_cache'])commitWidget(app,node,node.widgets.find(w=>w.name===name),enabled);
+                status.textContent=enabled?'本分支每张完成后卸载模型并清缓存。':'本分支保留模型供下一张复用；这会继续占用显存。';
+            };
+        }
         status=element('small','',box);status.setAttribute('role','status');
-        unload.onchange=()=>{
-            if(!writable()){status.textContent='分支、清理节点或输入已变化，请刷新控制台。';sync();return;}
-            const enabled=unload.checked;
-            for(const node of cleanups)for(const name of ['offload_model','offload_cache'])commitWidget(app,node,node.widgets.find(w=>w.name===name),enabled);
-            status.textContent=enabled?'本分支每张完成后卸载模型并清缓存。':'本分支保留模型供下一张复用；这会继续占用显存。';
-        };
         release=element('button','立即释放模型与缓存',row,{type:'button'});
         release.onclick=async()=>{
             if(!current()||busy)return;
@@ -189,7 +252,7 @@ export function mountRuntimeControls(host, app, branch, nodes, isCurrent) {
             }catch(error){if(!disposed)status.textContent=error.message;}
             finally{busy=false;sync();}
         };
-        element('small','勾选：本分支每张出图后卸载模型并清缓存；不勾选：保留模型。立即释放按钮用于现在清理整个后端。',box);
+        element('small',cleanups.length?'勾选：本分支每张出图后卸载模型并清缓存；不勾选：保留模型。立即释放按钮用于现在清理整个后端。':'在 Krea2 与 MOSS 等不同模型体系之间切换前，可点击立即释放已驻留的模型权重与显存缓存。',box);
     }
     let modelStatus;
     if(branch.modelFamily){
@@ -204,13 +267,15 @@ export function mountRuntimeControls(host, app, branch, nodes, isCurrent) {
     }
     function sync(){
         if(disposed)return;
-        if(modelStatus){const issue=modelCompatibilityIssue(nodes,branch,graph.extra?.uap_model_contracts);modelStatus.textContent=!current()?'浏览未启用分支；启用后检查实际模型组合。':issue||'底模与 VAE 属于本分支家族；编码器文件/type 与 VAE 需配套。新底模只需放进 models/diffusion_models，刷新即可选中；此检查不保证 LoRA 兼容性或画质。';modelStatus.dataset.valid=String(!issue);}
+        const modelIssue=modelCompatibilityIssue(nodes,branch,graph.extra?.uap_model_contracts)||loraCompatibilityIssue(nodes,branch,graph.extra?.uap_model_contracts);
+        if(modelStatus){modelStatus.textContent=!current()?'浏览未启用分支；启用后检查实际模型组合。':modelIssue||'底模、文本编码器、VAE 与 LoRA 均匹配本分支模型族。新底模放进 models/diffusion_models 后刷新即可选中。';modelStatus.dataset.valid=String(!modelIssue);}
         modelSwitch?.sync();
+        if(release)release.disabled=busy||!current();
         if(unload){
             const mode=cleanupMode(cleanups);
             unload.checked=mode==='release';unload.indeterminate=mode==='custom';
             unload.title=mode==='custom'?'当前清理设置不一致；勾选统一卸载，取消统一保留。':'';
-            unload.disabled=busy||!writable();release.disabled=busy||!current();
+            unload.disabled=busy||!writable();
         }
     }
     sync();return {sync,dispose(){disposed=true;modelSwitch?.dispose();}};
