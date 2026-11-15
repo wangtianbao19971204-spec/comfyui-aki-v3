@@ -3,6 +3,7 @@ import {commitWidget, createWidgetInserter, isWritableTarget} from './prompt_tar
 import {listPromptTargets} from './resource_actions.js';
 import {mountPromptOptimizer} from './prompt_optimizer.js';
 import {stockingProject} from './repair_workflow.js';
+import {setNodeMode} from './canvas_write.js';
 
 const methods=[['SW-01C','PixAI · 标签反推'],['SW-01D','JoyCaption · 三路反推'],['SW-01B','在线模型 · 综合反推']];
 const imageTypes=new Set(['SaveImage','PreviewImage']);
@@ -72,8 +73,6 @@ export function taskPlan(app,task,method){
         const groups=deliveryGroups(context);
         targets.push(...entries.filter(item=>item.enabled&&item.node.type==='VRAMCleanup'&&groups.has(item.root.properties?.uap_layout_group)&&item.node.inputs?.some(input=>input.name==='anything'&&input.link!=null)));
         targets.push(...entries.filter(item=>item.enabled&&item.node.type==='Image Comparer (rgthree)'&&String(item.root.properties?.uap_layout_group||'').startsWith('SW-10V')));
-        targets.push(...entries.filter(item=>item.enabled&&item.root.properties?.uap_anima_control&&item.node.type==='PreviewImage'
-            &&String(item.node.id)===String(item.root.properties.anima_control_roles?.preview)));
     }
     const methodRoots=roots.filter(node=>captionMethod(node)===method);
     const label=task==='generate'?'开始'+imageTaskName(context):task==='caption'?'开始反推':'开始优化';
@@ -124,7 +123,7 @@ export function mountTaskActivity(host,{app,element,button,report,onChange,actio
     const enable=button('启用所选反推工具','task-enable-caption',()=>{
         const plan=taskPlan(app,task,method);
         if(plan.graph!==context?.graph||plan.branch!==context?.branch)throw new Error('工作流已切换，请重新选择反推方式。');
-        plan.graph.beforeChange?.();try{for(const node of plan.methodRoots)node.mode=0;}finally{plan.graph.afterChange?.();plan.graph.setDirtyCanvas?.(true,true);}
+        for(const node of plan.methodRoots)setNodeMode(app,node,0);
         refresh(true);
     },caption);
     const referenceLabel=element('label','参考图来源',caption),source=element('select',null,referenceLabel);source.setAttribute('aria-label','参考图来源');

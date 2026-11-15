@@ -2,8 +2,17 @@ import {app} from '../../../scripts/app.js';
 import {controlScope, mountControlSwitches} from './control_switches.js';
 
 // Standalone production workflows do not have the UAP daily controls.
+// 刷新只在挂载、加载画布、新增节点和点击按钮时发生，不再轮询。
+let refresh = () => {};
+
 app.registerExtension({
     name: 'UnifiedPromptWorkbench.ControlPanel',
+    afterConfigureGraph() {
+        refresh();
+    },
+    nodeCreated() {
+        refresh();
+    },
     setup() {
         const button = Object.assign(document.createElement('button'), {textContent: '控制与擦线', type: 'button', hidden: true});
         button.style.cssText = 'position:fixed;right:24px;bottom:64px;z-index:1000;padding:9px 16px;border-radius:8px;background:#233744;color:#e4f1f8;border:1px solid #648494;cursor:pointer';
@@ -13,7 +22,7 @@ app.registerExtension({
         style.textContent = '.desk-control-switches label{display:flex;gap:8px;align-items:center;margin:8px 0}.desk-control-switches small{display:block;margin-top:8px}.desk-control-switches select,.desk-control-switches button{font:inherit;padding:4px 8px}.desk-control-switches input[type=checkbox]{width:18px;height:18px;accent-color:#62abc5}';
         document.head.append(style); document.body.append(button, panel);
         let graph, model, controls;
-        const refresh = () => {
+        refresh = () => {
             const root = app.rootGraph || app.graph;
             const scope = root && !root.extra?.uap_workbench && controlScope(root);
             const available = !!scope;
@@ -31,7 +40,6 @@ app.registerExtension({
             panel.hidden = !panel.hidden;
             button.setAttribute('aria-expanded', String(!panel.hidden));
         };
-        setInterval(refresh, 750);
         refresh();
     },
 });

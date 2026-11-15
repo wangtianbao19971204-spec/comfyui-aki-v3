@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-31T06:25:55.214364+00:00",
+  "created_at": "2026-11-15T05:45:19.778282+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -8644,8 +8644,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Olm-JoyCaption/olm_joycaption.py",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Olm-JoyCaption/olm_joycaption.py",
-      "sha256": "13b4a6cda6ed41b9376f715c08557ecd7a46e4094adf8c34f8ead09b4d5bc9a3",
-      "bytes": 13123,
+      "sha256": "c2e03475df71dd3a8e0f07f84c38be793b980e9410125e8f93b1c0df69c0d0e6",
+      "bytes": 16407,
       "kind": "file"
     },
     {
@@ -12466,15 +12466,15 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
-      "sha256": "1c06a293fffb3de039dd829f52f4b03fa520c13ad0ede954194353cb9dba50bf",
-      "bytes": 59804,
+      "sha256": "51eaf6b9afdbd33e0d1416ac4a4c9a3d7dd07f7a13eb8e3e1c27cdf5df7dd9eb",
+      "bytes": 69206,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js",
-      "sha256": "2c8db20f3edf5efb4e4be153f265f0d71797fdadc9fe59a1304283ed727148d3",
-      "bytes": 13711,
+      "sha256": "6106a8ab8a9e7938439d8d08080613ecb9a332bd4b6bb5b766cdaedbce7a8881",
+      "bytes": 13374,
       "kind": "file"
     },
     {
@@ -23797,10 +23797,10 @@
       "kind": "file"
     },
     {
-      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
-      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
-      "sha256": "4c5dcf1031ae572c2f65519e378439898a59eeb05e8df6f7e9acbaeae1e8ca97",
-      "bytes": 7853,
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/scripts/uap_rewrite_guard.py",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/scripts/uap_rewrite_guard.py",
+      "sha256": "c026ac130778e2f9c4ec9578ec443ea337b99f1fbf9f6a8cbffea0269504b835",
+      "bytes": 6554,
       "kind": "file"
     },
     {
@@ -23813,8 +23813,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime_preview.html",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime_preview.html",
-      "sha256": "ce8e1b713479d59a2b4c28abed9db660573a439540aa3b7d46cf350179ed1b9c",
-      "bytes": 12505,
+      "sha256": "bc64a2349b27e43fd717008a2a0b4a16add4ec70b08906b90ee5258b16129284",
+      "bytes": 12465,
       "kind": "file"
     },
     {
@@ -23944,17 +23944,24 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/canvas_write.js",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/canvas_write.js",
+      "sha256": "0588856fce6d09340578440ff0d00c39adecd053fed764ec592b481660c7743e",
+      "bytes": 1767,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_panel.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_panel.js",
-      "sha256": "ec76cae447b129399eed9ee9852d019c9b3a5095f31ade75f18581532427f99b",
-      "bytes": 2369,
+      "sha256": "e673e5fb8a6e0c5dc0a2c5057677bb5b097415e6c81be354de5cf8a74168dd0e",
+      "bytes": 2547,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_switches.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_switches.js",
-      "sha256": "50f5d30b17cb78c6d7314b72daf2d04c6edcf6cfbdab3aed35a54dcde5c1ab4e",
-      "bytes": 12137,
+      "sha256": "4e6998123cec010db4e92bf736e3c2070ebb685d8ab2bdc3c84f4bbfb8abd974",
+      "bytes": 16316,
       "kind": "file"
     },
     {
@@ -24002,8 +24009,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_inspector.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_inspector.js",
-      "sha256": "73974f3283172cdf27adfb2a497d1b56b6cc27d0bb9a30195911bb5c25dd7d2c",
-      "bytes": 18160,
+      "sha256": "305da3a8db57d3626bca56ad8adc6439a473c642061097b49578016ea465f444",
+      "bytes": 17899,
       "kind": "file"
     },
     {
@@ -24037,8 +24044,8 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
-      "sha256": "cb29a53a55feb8e052a3468005d362cd79f9bf2daf6558418c336007411439b4",
-      "bytes": 4794,
+      "sha256": "8c2e516b235c764d4cb8f07205c1abae8eed534c1f3bb18b7fbe0de4a0de8f77",
+      "bytes": 4930,
       "kind": "file"
     },
     {
@@ -24058,15 +24065,15 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/run_controls.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/run_controls.js",
-      "sha256": "f573c69a49afbe013b0ba4a182c13c565ad0fe0fe5286958511958864e24f72f",
-      "bytes": 8547,
+      "sha256": "4c88d8746b5e6a9979062d036bf20b317e303ca382c4880d982874643e5d641a",
+      "bytes": 10887,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
-      "sha256": "8035456d5b36a0375805f125c01c85622167476ffc0812fcee0f2b4cbaf85186",
-      "bytes": 12246,
+      "sha256": "2d89b6f5148d4677ba48ee9dfa105606213428dd6d1c65a0c4934d4e33450845",
+      "bytes": 14755,
       "kind": "file"
     },
     {
@@ -24093,8 +24100,15 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/studio.css",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/studio.css",
-      "sha256": "f73dc4599d4c77c29b49f654bb0e8dbc7967aed23e60202e0bffbcf6fe89e6c1",
-      "bytes": 45609,
+      "sha256": "a4e6a7cb717a1433c218f2232bf52d4835c4c631b768f457a22cc472808a4df9",
+      "bytes": 46107,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/system_stats.js",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/system_stats.js",
+      "sha256": "79e50b66f5a80781b124b84271f17778a2f328f6e2b55ebb9977b19566fe2b07",
+      "bytes": 5678,
       "kind": "file"
     },
     {
@@ -24107,8 +24121,22 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
-      "sha256": "af35a74fa2a62cc044397abbeaa19a5f2b64c6f6b206614308c7bd9e39108b06",
-      "bytes": 25007,
+      "sha256": "06444cddaad79b55ea684c426baf8eaa870f2bdd0e311d11cec11f31bb8ce072",
+      "bytes": 24728,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/uap_erase_ui_v2.js",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/uap_erase_ui_v2.js",
+      "sha256": "77e9dfb3a1ba2e7d2c3bc7445a396376554d4e1f1106f6eca930eb7a8177b9d1",
+      "bytes": 4529,
+      "kind": "file"
+    },
+    {
+      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/uap_selfcheck.js",
+      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/uap_selfcheck.js",
+      "sha256": "1c1a83106b043fd3811d67cc5e521e7d2b3a5623300fc6749d8d196c33f70a85",
+      "bytes": 7007,
       "kind": "file"
     },
     {
@@ -24128,36 +24156,29 @@
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_theme.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_theme.js",
-      "sha256": "b1114c4e1324b0c95f00bbadefce82ad3bcb51199721672f5ac9d7c0e96d5c85",
-      "bytes": 2446,
+      "sha256": "082b53653b34c2dac5fb79c092e15cf7a35072977a9c95a858e354f68d94d4bb",
+      "bytes": 2389,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.css",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.css",
-      "sha256": "9fc38efb37118c2865285a00bd5756c2dc3a616b384bf28e297fe4fcc4c71f91",
-      "bytes": 35044,
-      "kind": "file"
-    },
-    {
-      "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.js",
-      "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.js",
-      "sha256": "510879615bd69fcedfdfe9ee869ed80463d4469e8fd9bf7e9b432e0148c6c848",
-      "bytes": 52,
+      "sha256": "cfdb312c40450803037d193b57acf51bd93f1c56fee062a7032f686741a78623",
+      "bytes": 38557,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
-      "sha256": "3a70878c77a4c49f214b57275461b65bc0de13a22425b9ce47bab045f0e5896d",
-      "bytes": 56777,
+      "sha256": "381783ec14bd4069907cfb6d46b1e74a0b1ae81c956a2e15e389860466e16470",
+      "bytes": 62421,
       "kind": "file"
     },
     {
       "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
       "path": "runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
-      "sha256": "7e4b65407314b2c70cdbd5d62443966d85bda9965b9971dafa8266bc89310499",
-      "bytes": 19569,
+      "sha256": "21b67ac4990b7f7697696370bc8d8bc11703ef5ee91dad1d00b9d37497beaebc",
+      "bytes": 22656,
       "kind": "file"
     },
     {
@@ -51608,6 +51629,13 @@
       "kind": "file"
     },
     {
+      "source": "ComfyUI/user/default/workflows/Krea2_精简生产_v1.json",
+      "path": "runtime/ComfyUI/user/default/workflows/Krea2_精简生产_v1.json",
+      "sha256": "c5e30e7bdbeb219e5e68e56f83fbf0ab280634d66cd4e88f7ab2d296bbdf93d8",
+      "bytes": 128611,
+      "kind": "file"
+    },
+    {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v1.json",
       "sha256": "1b55ac06c1ccfa9eee4dce00dd7718067e93a110117d48dc89112848ff8757f7",
@@ -51617,8 +51645,8 @@
     {
       "source": "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
       "path": "runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
-      "sha256": "c4eb1072b8742afb55675e1bb0f9136a10a01c99921bb53d6e9fd1173ad80267",
-      "bytes": 849423,
+      "sha256": "a84b601480f6e52f6fb739c496c1793e547e0838046f2233b7f728d79b3f71ae",
+      "bytes": 338726,
       "kind": "file"
     },
     {
@@ -51708,8 +51736,8 @@
     {
       "source": "ComfyUI/user/default/workflows/生产扩展_04_Krea2_指令编辑.json",
       "path": "runtime/ComfyUI/user/default/workflows/生产扩展_04_Krea2_指令编辑.json",
-      "sha256": "94d62e492f7ff837288dda0a0e26b9551b7bd026e09608dbcb6eb54ab96b7c63",
-      "bytes": 14025,
+      "sha256": "2dd2d9051bae676b9db7545b7551dfca8506d766945e1589505d47b49a418f0e",
+      "bytes": 14023,
       "kind": "file"
     },
     {
@@ -57840,8 +57868,8 @@
     {
       "source": "production_tools/UAP统一工作台说明.md",
       "path": "runtime/production_tools/UAP统一工作台说明.md",
-      "sha256": "2dbf2e2f77a9cc7368a8fe846ace05fad6176f1ca4017a52b50d4efbaa16a768",
-      "bytes": 7909,
+      "sha256": "4bb937035af7918b9698e356d1aae9a00f7adbc92649f69ced52bde2a13283ea",
+      "bytes": 7875,
       "kind": "file"
     },
     {
@@ -58071,15 +58099,15 @@
     {
       "source": "production_tools/layout_uap_workbench.py",
       "path": "runtime/production_tools/layout_uap_workbench.py",
-      "sha256": "4711dc921ee9ad62f63ffe8e37090ac54ad84717f41fb2298459c8cfd653ad45",
+      "sha256": "ad03943c7bfa2ee537a3bd333a8cd11b2ecb62b0e1cb654b16f947be4d675870",
       "bytes": 20349,
       "kind": "file"
     },
     {
       "source": "production_tools/merge_unified_workflow.py",
       "path": "runtime/production_tools/merge_unified_workflow.py",
-      "sha256": "c22f8ac79425459d750bef702e4a69d95ed9246c52fc3cb5fc8c578f80dce079",
-      "bytes": 37729,
+      "sha256": "63e6524091e072bb9dc422119216c636a53d3be0e392f6c18e800a0e86218bd9",
+      "bytes": 36579,
       "kind": "file"
     },
     {
@@ -58106,8 +58134,8 @@
     {
       "source": "production_tools/simplify_anima_control.py",
       "path": "runtime/production_tools/simplify_anima_control.py",
-      "sha256": "5d36098143c9193e4e39c0ebd1644713c384b899489d18df7b1fada716fd875b",
-      "bytes": 11950,
+      "sha256": "9ece1902a9f66ff9a930b9563cc253d847e94662e68662a6f4df42bb465a568b",
+      "bytes": 11906,
       "kind": "file"
     },
     {
@@ -58169,8 +58197,8 @@
     {
       "source": "production_tools/templates/UAP统一生产工作台_v2.json",
       "path": "runtime/production_tools/templates/UAP统一生产工作台_v2.json",
-      "sha256": "c4eb1072b8742afb55675e1bb0f9136a10a01c99921bb53d6e9fd1173ad80267",
-      "bytes": 849423,
+      "sha256": "a84b601480f6e52f6fb739c496c1793e547e0838046f2233b7f728d79b3f71ae",
+      "bytes": 338726,
       "kind": "file"
     },
     {
@@ -58204,8 +58232,8 @@
     {
       "source": "production_tools/templates/生产扩展_04_Krea2_指令编辑.json",
       "path": "runtime/production_tools/templates/生产扩展_04_Krea2_指令编辑.json",
-      "sha256": "94d62e492f7ff837288dda0a0e26b9551b7bd026e09608dbcb6eb54ab96b7c63",
-      "bytes": 14025,
+      "sha256": "2dd2d9051bae676b9db7545b7551dfca8506d766945e1589505d47b49a418f0e",
+      "bytes": 14023,
       "kind": "file"
     },
     {
@@ -58251,13 +58279,6 @@
       "kind": "file"
     },
     {
-      "source": "production_tools/test_anima_control.cjs",
-      "path": "runtime/production_tools/test_anima_control.cjs",
-      "sha256": "2d526655d14d1d42a270b7754d61aa737bfe40099526f1dbfb7916d887f7c1b5",
-      "bytes": 6362,
-      "kind": "file"
-    },
-    {
       "source": "production_tools/test_browser_bridge_server.py",
       "path": "runtime/production_tools/test_browser_bridge_server.py",
       "sha256": "d7233af3ed088fd925aa74de5ec6c019d2331dfeddedda865b94429cea938a99",
@@ -58281,8 +58302,8 @@
     {
       "source": "production_tools/test_control_switches.cjs",
       "path": "runtime/production_tools/test_control_switches.cjs",
-      "sha256": "7c5d6355dbdf92dc931a34c54c71a3128bc46a2965d6f59179db0c778c28a01f",
-      "bytes": 16697,
+      "sha256": "6772712ea9dd90c73d50c72ec24dd70c3bf29d55c5380ccb73722d3d970cacff",
+      "bytes": 15489,
       "kind": "file"
     },
     {
@@ -58290,6 +58311,13 @@
       "path": "runtime/production_tools/test_export_stocking_upstream.py",
       "sha256": "25c6ad35a02b607ea0269e5b168d7027fbb915b243b0a245acac8b77f7d80152",
       "bytes": 7470,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/test_model_quick_switch.cjs",
+      "path": "runtime/production_tools/test_model_quick_switch.cjs",
+      "sha256": "8383bdfb4ddb2e18bd30cc305b7b8d174274cc3b0f444f8103f91aa6ef3a399b",
+      "bytes": 7854,
       "kind": "file"
     },
     {
@@ -58309,8 +58337,8 @@
     {
       "source": "production_tools/test_run_controls.cjs",
       "path": "runtime/production_tools/test_run_controls.cjs",
-      "sha256": "fafbbaae016d9879410878528a2fec78f6cddcc9b5ac5b3efe92e34c0c700261",
-      "bytes": 12751,
+      "sha256": "de3efc48468f2e8cb521623f1c1852e69637edc432d3b6db162cc0a35a748352",
+      "bytes": 13069,
       "kind": "file"
     },
     {
@@ -58323,8 +58351,8 @@
     {
       "source": "production_tools/test_uap_browser_retirement.py",
       "path": "runtime/production_tools/test_uap_browser_retirement.py",
-      "sha256": "f6003bdae3c4d0f4c1de0d06ea407f4f21ef801b44258a213578c9ce2e7740b2",
-      "bytes": 15407,
+      "sha256": "4421513d2a3c6809609f40bfc75fd1f132f2971dcba4f8e639ae1e585a8987e0",
+      "bytes": 13101,
       "kind": "file"
     },
     {
@@ -58337,15 +58365,15 @@
     {
       "source": "production_tools/test_uap_daily_controls.cjs",
       "path": "runtime/production_tools/test_uap_daily_controls.cjs",
-      "sha256": "353fff5067ffccf0eecb7d77ec47358d876db9aecbdb98947a605793c8f81392",
-      "bytes": 3097,
+      "sha256": "d94e1fa6f67878374add15927d6733338e20b12e0b0cbceed34d8038c0c11b7d",
+      "bytes": 6890,
       "kind": "file"
     },
     {
       "source": "production_tools/test_uap_navigation.cjs",
       "path": "runtime/production_tools/test_uap_navigation.cjs",
-      "sha256": "38d9b4155868ab82cf8f89373adc91ddb3a8b8c5e5f5dbf6e058e113ed823e47",
-      "bytes": 3729,
+      "sha256": "d2b12016b5e3b4e1ee2b02bcb94234ca93a0c14e9bc310a3dcb40f22368577e4",
+      "bytes": 4159,
       "kind": "file"
     },
     {
@@ -58360,6 +58388,13 @@
       "path": "runtime/production_tools/test_vnccs_pose_sync.cjs",
       "sha256": "055fe958544150743a98c0383ee6cf6370446b82d18abbbcd0e138db48fad95a",
       "bytes": 1572,
+      "kind": "file"
+    },
+    {
+      "source": "production_tools/test_workspace_mount.cjs",
+      "path": "runtime/production_tools/test_workspace_mount.cjs",
+      "sha256": "6f99e0cca1688ef52a7549af28e4bfae28c95f98861ba89ca80d51e7d09adaae",
+      "bytes": 9454,
       "kind": "file"
     },
     {
@@ -58386,8 +58421,8 @@
     {
       "source": "production_tools/validate_uap_workflow.py",
       "path": "runtime/production_tools/validate_uap_workflow.py",
-      "sha256": "9969a025a5344d561d60acc666ecb905697b3b39392a57a96e23e03ce632313c",
-      "bytes": 9623,
+      "sha256": "f279856b640159d8d439a9af1643b3d411dcbeee560cd0928fe8161882b51ddd",
+      "bytes": 10169,
       "kind": "file"
     },
     {
@@ -68200,7 +68235,7 @@
     },
     {
       "path": "inventory/model_sources.json",
-      "sha256": "ffd73a0afc8065cc67a906a4ffaabcea41e559ff7c6dc59de69ad7c70c779343",
+      "sha256": "6523330376e6329d54bcd162e9272e845ac7c4eb777aa68a21cb4798361307df",
       "bytes": 1283777
     }
   ],
@@ -68296,36 +68331,18 @@
     }
   ],
   "development_revision": {
-    "note": "Sync stocking texture upstream to c38be2fe (oil gloss, texture export, UI scale)",
-    "previous_manifest_sha256": "e84dcd71a994da3743c9897437c6f5f7171cfedf49d1a92924119809677161c1",
+    "note": "Fix UAP live QA findings and OlmJoyCaption VRAM/interrupt guard",
+    "previous_manifest_sha256": "d45622d81e6847a071bd41044d8f434ce64da4f5975ed481235fa14b5fef0525",
     "source_changes": {
-      "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/_glint_position.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/_oily_absorption.py"
-      ],
+      "added": [],
       "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/engine.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_api.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_assets.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/document.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/export.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/guide_fields.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/look.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/oily.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/psd_io.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/server.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/session.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/app.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n/en.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/index.html",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/look.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/style.css"
+        "ComfyUI/custom_nodes/ComfyUI-Olm-JoyCaption/olm_joycaption.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/run_controls.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
+        "production_tools/test_run_controls.cjs",
+        "production_tools/test_workspace_mount.cjs"
       ]
     },
     "live_deployed": false,
@@ -68407,12 +68424,24 @@
         "previous_sha256": "1add5ddd582af05cdfff1c3a9b43b8cabd1fe265c8adb5a415df1a02b0914993"
       },
       {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
+        "previous_sha256": "4c5dcf1031ae572c2f65519e378439898a59eeb05e8df6f7e9acbaeae1e8ca97"
+      },
+      {
+        "source": "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.js",
+        "previous_sha256": "510879615bd69fcedfdfe9ee869ed80463d4469e8fd9bf7e9b432e0148c6c848"
+      },
+      {
         "source": "ComfyUI/custom_nodes/TB_Multi_API_Caption_ConfigPage_V17_ProviderAdapters/models_cache.json",
         "previous_sha256": "256920e0f444fce3358401b72bc1529e32d3954690ec2f1cd397aaf9251df3c6"
       },
       {
         "source": "production_tools/align_krea2_branch_modes.py",
         "previous_sha256": "c9446485c424dfbacf786fcc8b1939e550218b09963e636bf822e66df2acef3d"
+      },
+      {
+        "source": "production_tools/test_anima_control.cjs",
+        "previous_sha256": "2d526655d14d1d42a270b7754d61aa737bfe40099526f1dbfb7916d887f7c1b5"
       }
     ]
   },

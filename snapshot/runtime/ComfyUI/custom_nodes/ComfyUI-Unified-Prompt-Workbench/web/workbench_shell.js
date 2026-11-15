@@ -12,8 +12,17 @@ import {installUiTheme, mountThemeToggle} from './ui_theme.js';
 import {installCanvasTheme, mountCanvasThemeSetting} from './canvas_theme.js';
 import {toolIdentity, mountFunctionCard, mountFunctionIcon} from './ui_identity.js';
 import {mountSelectorTools, openPromptSelector} from './selector_tools.js';
+import {mountSystemStats} from './system_stats.js';
 
-const pages={workspace:'工作区',library:'资料库',models:'模型',gallery:'图库'};
+// 阶段 3.2 面板收敛：一级入口只有 3 个（生成 / 资料 / 画布控制）。
+// models 与 gallery 不再占一级位，降为「资料」页内的子视图；内部 page 值保持原样，
+// 所有既有 navigate('models'|'gallery')、渲染函数与 window.* 出口都不变。
+const pages={workspace:'生成',library:'资料',canvas:'画布控制'};
+const subpages={models:{label:'模型',parent:'library'},gallery:{label:'图库',parent:'library'}};
+const pageLabels={...pages,...Object.fromEntries(Object.entries(subpages).map(([key,item])=>[key,item.label]))};
+const topPage=key=>subpages[key]?.parent||key;
+// 「画布控制」是新增一级入口，ui_identity.js 里没有它的条目；图标/侧栏卡按有无自动跳过。
+const pageIdentity={...toolIdentity,canvas:{title:'画布控制 · 控制与擦线',purpose:'集中当前分支的控制、擦线、细化与模型/显存。',steps:'控制 → 细化 → 擦线'}};
 const providers={loras:'LoRA',checkpoints:'基础模型',embeddings:'Embedding','loras/recipes':'模型组合',statistics:'统计'};
 // 「Anima 画师」与「基础 Tag」同级：整区入口，条目正文是 @画师名（Anima 插件的写法）。
 // 这一区在资料库里是以分类前缀「Anima 画师风格 / 分档」存在的，所以入口用区域名做筛选。
@@ -59,7 +68,7 @@ let lastPage=localStorage.getItem('uw-last-page')||'';if(!pages[lastPage])lastPa
 const pendingDraft=[];
 
 export async function openWorkbench(options={}) {
-    if(current?.root.isConnected){current.root.hidden=false;await current.open(options);return current;}
+    if(current?.root.isConnected){const active=current;active.root.hidden=false;await active.open(options);return active;}
     const previousFocus=document.activeElement;
     const root=element('section',null,document.body,{id:'unified-workbench'});
     root.setAttribute('role','dialog');root.setAttribute('aria-label','统一工作台');
@@ -73,7 +82,8 @@ export async function openWorkbench(options={}) {
     const animeEyebrow=element('small','',animeCopy),animeTitle=element('h2','',animeCopy),animeDescription=element('p','',animeCopy);
     const selectorToolHost=element('section',null,main,{className:'uw-selector-tools',hidden:true});
     selectorToolHost.setAttribute('aria-label','六类提示词选择器');
-    const sections=Object.fromEntries(Object.keys(pages).map(key=>[key,element('section',null,main,{className:'uw-page',hidden:true})]));
+    // 一级页 3 个 + 2 个子视图页（models/gallery 仍各自保留 section 与渲染函数）。
+    const sections=Object.fromEntries(Object.keys(pageLabels).map(key=>[key,element('section',null,main,{className:'uw-page',hidden:true})]));
     const utility=element('section',null,main,{className:'uw-page',hidden:true});
     const footer=element('footer',null,root,{className:'uw-footer'});
     element('span','写入目标',footer);
@@ -116,7 +126,7 @@ export async function openWorkbench(options={}) {
             if(autoRetry)componentRetryTimer=setTimeout(()=>void checkComponents(false),2000);
         }
         finally{clearTimeout(timeout);if(!closed&&componentRequest===request)componentRetryButton.disabled=false;}
-        const dependencies={fragments:'weilin',tags:'weilin',plans:'weilin','page-models':'lora_manager','page-gallery':'gallery','manage-groups':'weilin',organize:'weilin'};
+        const dependencies={fragments:'weilin',tags:'weilin',plans:'weilin','subpage-models':'lora_manager','subpage-gallery':'gallery','manage-groups':'weilin',organize:'weilin'};
         for(const [action,key]of Object.entries(dependencies))for(const control of root.querySelectorAll('[data-uw="'+action+'"]')){control.disabled=unavailable.has(key);control.title=unavailable.has(key)?unavailable.get(key).error:'';}
         return data;
     }
@@ -126,7 +136,8 @@ export async function openWorkbench(options={}) {
     const undoResource=button('撤销本次写入','undo-resource',()=>{const success=writer?.undoLast?.();undoResource.hidden=true;report(success?'已撤销本次写入。':'目标已变化，无法撤销旧操作。');},footer);undoResource.hidden=true;
     const contextBack=button('返回浏览结果','context-back',()=>{if(!canLeave())return;contextBack.hidden=true;return browseReturn?.();},main);contextBack.hidden=true;main.prepend(contextBack);
     const canLeave=()=>{if(document.querySelector('#tb-shared-preset-editor, #unified-tag-manager .ut-dialog, #uw-reference-groups, #uw-replacement-review, .danbooru-settings-dialog, .danbooru-tag-catalog-dialog')){report('请先保存或关闭当前编辑。');return false;}try{if(!sections.models.hidden&&frame?.contentWindow?.modalManager?.isAnyModalOpen()){report('请先关闭模型详情或设置，再切换页面。');return false;}}catch{}return true;};
-    const pendingButton=button('待用列表 · 0','pending',()=>{if(utilityPage('待用列表')){pending.render(element('div',null,utility));updateTargetActions=pending.refreshTarget;}},header);
+    const openPendingPanel=()=>{if(closed||!root.isConnected)return false;if(!utility.hidden&&utility.dataset.utilityKind==='pending')return true;if(utilityPage('待用列表')){utility.dataset.utilityKind='pending';pending.render(element('div',null,utility));updateTargetActions=pending.refreshTarget;return true;}return false;};
+    const pendingButton=button('待用列表 · 0','pending',()=>openPendingPanel(),header);
     const pending=createPendingPrompts({element,button,insertionOptions,report,draft:pendingDraft,onCount:count=>{pendingButton.textContent='待用列表 · '+count;},openSource:item=>{
         if(item.provider==='library'){promptId=item.id;return chooseLibrary('prompts','all');}
         if(item.provider==='tag'){tagId=item.id;return chooseLibrary('tags','all');}
@@ -170,10 +181,10 @@ export async function openWorkbench(options={}) {
     async function targetChanged(){if(updateTargetActions)updateTargetActions();else if(page==='library'&&utility.hidden)await loadLibrary(false);}
     targetPicker.onchange=run(async()=>{const index=targetPicker.value;selectTarget(index===''?null:availableTargets()[Number(index)]);await targetChanged();});
     direction.onchange=run(async()=>{writer?.dispose();writer=null;undoResource.hidden=true;await targetChanged();});
-    for(const [key,label]of Object.entries(pages)){const item=button(label,'page-'+key,()=>{contextBack.hidden=true;browseReturn=null;return navigate(key);},nav);mountFunctionIcon(item,key);item.title=toolIdentity[key].purpose;}
+    for(const [key,label]of Object.entries(pages)){const item=button(label,'page-'+key,()=>{contextBack.hidden=true;browseReturn=null;return navigate(key);},nav);mountFunctionIcon(item,key);item.title=pageIdentity[key].purpose;}
     mountThemeToggle(header);
     button('设置','settings',()=>showSettings(),header);
-    function close(){if(!canLeave())return false;closed=true;clearTimeout(componentRetryTimer);componentRequest?.abort();sidebarVersion++;searchVersion++;results?.dispose();restoreSelector?.();utilityCleanup?.();utilityCleanup=null;clearInterval(targetTimer);clearTimeout(searchTimer);writer?.dispose();workspace.dispose();closeTagManager();restoreGallery?.();root.remove();current=null;if(previousFocus?.isConnected)previousFocus.focus?.();return true;}
+    function close(){if(!canLeave())return false;closed=true;clearTimeout(componentRetryTimer);componentRequest?.abort();sidebarVersion++;searchVersion++;results?.dispose();restoreSelector?.();utilityCleanup?.();utilityCleanup=null;clearInterval(targetTimer);systemStats.dispose();clearTimeout(searchTimer);writer?.dispose();releaseCanvasPage();workspace.dispose();closeTagManager();restoreGallery?.();root.remove();current=null;if(previousFocus?.isConnected)previousFocus.focus?.();return true;}
     const returnButton=button('返回常用控制台','return-origin',()=>{const destination=returnTo;if(close())destination?.onReturn();},header);
     returnButton.hidden=true;returnButton.className='uw-return-origin';header.prepend(returnButton);
     button('关闭工作台','close',close,header);
@@ -203,6 +214,8 @@ export async function openWorkbench(options={}) {
     const libraryBar=element('div',null,sections.library,{className:'uw-toolbar'}),libraryHost=element('div',null,sections.library,{className:'uw-library-host'});
     search.placeholder='搜索资料、Tag、模型 · Ctrl+K';
     search.setAttribute('aria-keyshortcuts','Control+k Meta+k');
+    // 显存/内存占用放在导航右端、侧栏开关之前；数据来自 /system_stats。
+    const systemStats=mountSystemStats(nav);
     const sidebarToggle=button('收起侧栏','sidebar-toggle',()=>{
         const collapsed=root.dataset.sidebarCollapsed!=='true';root.dataset.sidebarCollapsed=String(collapsed);
         sidebarToggle.textContent=collapsed?'展开侧栏':'收起侧栏';sidebarToggle.setAttribute('aria-expanded',String(!collapsed));
@@ -256,6 +269,62 @@ export async function openWorkbench(options={}) {
     const modelContext=element('span',null,modelBar),clearModel=button('清除筛选','model-clear',()=>{group='';modelQuery='';modelFile='';modelFavorites=false;return openModels();},modelBar);
     sections.gallery.classList.add('uw-gallery-page');
     const galleryBar=element('div',null,sections.gallery,{className:'uw-toolbar'}),galleryHost=element('div',null,sections.gallery,{className:'uw-provider-host uw-gallery-host'});
+    // 子视图入口：模型与图库只是「资料」页内的分区，各有自己的 section 与渲染函数，一级位不再有它们。
+    const subpageLinks=element('div',null,sections.library,{className:'uw-toolbar uw-subpage-links'});
+    button('模型','subpage-models',()=>navigate('models'),subpageLinks);
+    button('图库','subpage-gallery',()=>navigate('gallery'),subpageLinks);
+    sections.library.insertBefore(subpageLinks,libraryBar);
+    const modelSubpageLinks=element('div',null,sections.models,{className:'uw-toolbar uw-subpage-links'});
+    button('返回资料','subpage-models-back',()=>navigate('library'),modelSubpageLinks);
+    sections.models.insertBefore(modelSubpageLinks,modelBar);
+    const gallerySubpageLinks=element('div',null,sections.gallery,{className:'uw-toolbar uw-subpage-links'});
+    button('返回资料','subpage-gallery-back',()=>navigate('library'),gallerySubpageLinks);
+    sections.gallery.insertBefore(gallerySubpageLinks,galleryBar);
+    // 「画布控制」只做入口：复用 uap_daily_controls.js 已注册的常用控制台（开关/细化参数/
+    // 底模快切/显存释放/尺寸参数）整块搬进本页，离开时原位还原。
+    // 控制与擦线卡片仍由 uap_erase_ui_v2.js 独占挂载在「生成」页，本页不复制第二张卡。
+    const canvasBar=element('div',null,sections.canvas,{className:'uw-toolbar'});
+    button('定位控制与擦线','canvas-locate-switches',async()=>{
+        await navigate('workspace');
+        const card=document.querySelector('#unified-workbench .desk-control-switches');
+        if(!card)throw new Error('控制与擦线卡片尚未挂载，请稍后重试。');
+        card.scrollIntoView({block:'center'});
+        card.querySelector('input,select,button')?.focus({preventScroll:true});
+    },canvasBar);
+    const canvasStatus=element('p','',sections.canvas,{className:'uw-status'});
+    canvasStatus.setAttribute('role','status');
+    const canvasHost=element('div',null,sections.canvas,{className:'uw-canvas-controls-host'});
+    const canvasFallback=element('div',null,sections.canvas,{className:'uw-empty-state',hidden:true});
+    const canvasFallbackText=element('p','',canvasFallback);
+    button('打开常用控制台（浮层）','canvas-open-desk',()=>{
+        const desk=window.unifiedDailyControls;
+        if(typeof desk?.show!=='function')throw new Error('常用控制台仍在加载，请稍后重试。');
+        desk.show(true);
+    },canvasFallback);
+    button('重新检查','canvas-refresh',()=>refreshCanvasPage(),canvasFallback);
+    let canvasHandle=null,canvasGraph=null,canvasBranch=null;
+    function activeBranch(){const state=app.graph?.extra?.uap_workbench;return state?.branches?.find(item=>item.id===state.activeBranch)||null;}
+    function releaseCanvasPage(){
+        if(!canvasHandle)return;
+        const release=canvasHandle;
+        canvasHandle=null;canvasGraph=null;canvasBranch=null;
+        release();
+    }
+    function refreshCanvasPage(){
+        const branch=activeBranch(),desk=window.unifiedDailyControls;
+        canvasStatus.textContent=branch?`当前分支：${branch.label||branch.id} · 控件实时写入节点。`:'当前工作流没有已登记的活动分支。';
+        if(!branch||typeof desk?.mount!=='function'){
+            releaseCanvasPage();canvasHost.hidden=true;canvasFallback.hidden=false;
+            canvasFallbackText.textContent=branch?'常用控制台仍在加载；可先用下方浮层版，或稍后重新检查。':'先打开 UAP统一生产工作台_v2.json，再回到本页。';
+            return;
+        }
+        canvasFallback.hidden=true;canvasHost.hidden=false;
+        if(canvasGraph!==app.graph||canvasBranch!==branch){
+            releaseCanvasPage();
+            canvasHandle=desk.mount(canvasHost,branch,close);
+            canvasGraph=app.graph;canvasBranch=branch;
+        }
+    }
     const workspace=mountWorkspace(sections.workspace,{app,element,button,report,selectTarget,close,
         browse:async(next,inputElement,kind='')=>{selectTarget(next,inputElement);theme=kind;sourceCategory='';subcategory='';await chooseLibrary('prompts','all');},
         models:value=>navigate('models',{provider:value}),
@@ -351,8 +420,8 @@ export async function openWorkbench(options={}) {
         if(focus){const item=[...utility.querySelectorAll('button')].find(b=>b.dataset.uw===focus.key&&b.dataset.resourceKey===focus.resource);if(item&&!item.closest('[hidden]'))item.focus({preventScroll:true});}
         main.scrollTop=state.scrollTop||0;
     }
-    function cleanUtility(){updateTargetActions=null;const clean=utilityCleanup;utilityCleanup=null;clean?.();restoreSelector?.();}
-    function utilityPage(title,back){if(!canLeave())return false;workspace.setActive(false);animeIntro.hidden=true;selectorToolHost.hidden=true;saveBrowsePosition();browseState=null;if(utility.hidden)utilityReturnFocus=document.activeElement;const searching=document.activeElement===search;searchVersion++;results?.dispose();results=null;cleanUtility();Object.values(sections).forEach(s=>{s.hidden=true;});utility.hidden=false;utility.replaceChildren();const bar=element('div',null,utility,{className:'uw-toolbar'});const backButton=button(back?'返回浏览结果':'返回 '+pages[page],'back',back||(()=>navigate(page)),bar);element('h2',title,bar);if(!searching)backButton.focus();return true;}
+    function cleanUtility(){delete utility.dataset.utilityKind;updateTargetActions=null;const clean=utilityCleanup;utilityCleanup=null;clean?.();restoreSelector?.();}
+    function utilityPage(title,back){if(!canLeave())return false;workspace.setActive(false);animeIntro.hidden=true;selectorToolHost.hidden=true;saveBrowsePosition();browseState=null;if(utility.hidden)utilityReturnFocus=document.activeElement;const searching=document.activeElement===search;searchVersion++;results?.dispose();results=null;cleanUtility();Object.values(sections).forEach(s=>{s.hidden=true;});utility.hidden=false;utility.replaceChildren();const bar=element('div',null,utility,{className:'uw-toolbar'});const backButton=button(back?'返回浏览结果':'返回 '+pageLabels[page],'back',back||(()=>navigate(page)),bar);element('h2',title,bar);if(!searching)backButton.focus();return true;}
     function resourceResults(scope,extraSections=[]){
         results=mountResourceResults(element('div',null,utility),{element,button,scope,extraSections,state:browseState||{},open:async(kind,item,context)=>{
             saveBrowsePosition();browseState=null;
@@ -450,17 +519,19 @@ export async function openWorkbench(options={}) {
        element('p','含预览图导出会在临时目录生成数十 GB 归档；若可用空间不足会直接提示并拒绝，不会中断服务。Tag 可在列表选择范围后导出，模型文件与图库图片由对应专业工具管理。',utility);
         button('基础 Tag JSON 导入 / 导出','import-tags',()=>chooseLibrary('tags','all'),utility);button('模型库与备份','import-models',()=>navigate('models',{modelTool:'settings',modelSettings:'library'}),utility);}
     async function navigate(next,opts={}){
-        if(!canLeave())return;saveBrowsePosition();const returnFocus=!utility.hidden&&(utility.contains(document.activeElement)||document.activeElement===document.body)?utilityReturnFocus:null;utilityReturnFocus=null;searchVersion++;galleryVersion++;galleryIntent=opts.galleryIntent||null;results?.dispose();results=null;cleanUtility();page=next;lastPage=page;localStorage.setItem('uw-last-page',page);utility.hidden=true;Object.entries(sections).forEach(([key,s])=>{const active=key===page;s.hidden=!active;s.inert=!active;});
+        if(!canLeave())return;saveBrowsePosition();const returnFocus=!utility.hidden&&(utility.contains(document.activeElement)||document.activeElement===document.body)?utilityReturnFocus:null;utilityReturnFocus=null;searchVersion++;galleryVersion++;galleryIntent=opts.galleryIntent||null;results?.dispose();results=null;cleanUtility();page=next;lastPage=page;localStorage.setItem('uw-last-page',topPage(page));utility.hidden=true;Object.entries(sections).forEach(([key,s])=>{const active=key===page;s.hidden=!active;s.inert=!active;});
         workspace.setActive(page==='workspace');
         root.dataset.page=page;animeIntro.hidden=page==='workspace';
         if(page==='workspace')workspace.selectorHost.append(selectorToolHost);
-        else if(page==='library')main.insertBefore(selectorToolHost,sections.library);
-        selectorToolHost.hidden=!['workspace','library'].includes(page);
-        const intro=toolIdentity[page];animeEyebrow.textContent='晴空手帖 / '+pages[page];animeTitle.textContent=intro.title;animeDescription.textContent=intro.purpose;
-        nav.querySelectorAll('button').forEach(b=>b.setAttribute('aria-current',b.dataset.uw==='page-'+page?'page':'false'));report('');refreshTargets();
+        else if(topPage(page)==='library')main.insertBefore(selectorToolHost,sections.library);
+        selectorToolHost.hidden=!['workspace','library'].includes(topPage(page));
+        if(page==='canvas')refreshCanvasPage();else releaseCanvasPage();
+        const intro=pageIdentity[page];animeEyebrow.textContent='晴空手帖 / '+pageLabels[page];animeTitle.textContent=intro.title;animeDescription.textContent=intro.purpose;
+        nav.querySelectorAll('button').forEach(b=>b.setAttribute('aria-current',b.dataset.uw==='page-'+topPage(page)?'page':'false'));report('');refreshTargets();
         const sidebarReady=opts.openSelector?Promise.resolve():renderSidebar();
         if(page==='workspace')workspace.refresh();
         if(page==='library'&&!opts.openSelector&&!opts.openPending)await loadLibrary(!!opts.reset);
+        if(opts.openPending)openPendingPanel();
         if(page==='models')await openModels(opts.provider,opts.modelTool,opts.modelSettings);if(page==='gallery')await openGallery(opts.node);await sidebarReady;
         if(returnFocus&&!closed&&utility.hidden&&(document.activeElement===document.body||utility.contains(document.activeElement))){(returnFocus.isConnected&&!returnFocus.closest('[hidden]')?returnFocus:nav.querySelector('[aria-current=page]'))?.focus();}
     }
@@ -480,12 +551,13 @@ export async function openWorkbench(options={}) {
     async function renderSearch(value,state){
         if(!utilityPage('搜索：'+value))return;const version=searchVersion;browseState=state;query=value;search.value=value;contextBack.hidden=true;browseReturn=()=>renderSearch(value,state);button('在图库中搜索','search-gallery',()=>navigate('gallery',{galleryIntent:{action:'search',query:value,label:'搜索“'+value+'”'}}),utility);await resourceResults({query:value});restoreBrowsePosition(state,version);if(version===searchVersion&&!closed)report('');
     }
-    const targetTimer=setInterval(()=>{if(document.hidden||root.hidden||!root.isConnected)return;refreshTargets();if(!utility.hidden)return;if(page==='workspace')workspace.refresh();if(page==='gallery'){const nodes=(app.graph?._nodes||[]).filter(n=>n.unifiedGalleryActions);if(nodes.length!==galleryNodes.length||nodes.some((node,i)=>node!==galleryNodes[i]))void run(()=>openGallery())();}},750);
+    const targetTimer=setInterval(()=>{if(document.hidden||root.hidden||!root.isConnected)return;refreshTargets();if(!utility.hidden)return;if(page==='workspace')workspace.refresh();if(page==='canvas')refreshCanvasPage();if(page==='gallery'){const nodes=(app.graph?._nodes||[]).filter(n=>n.unifiedGalleryActions);if(nodes.length!==galleryNodes.length||nodes.some((node,i)=>node!==galleryNodes[i]))void run(()=>openGallery())();}},750);
     root.dataset.density=localStorage.getItem('uw-density')||'comfortable';
-    current={root,close,useResource,addPending:pending.add,addPendingMany:pending.addMany,showPending:()=>pendingButton.onclick(),open:async opts=>{if(opts.returnTo){returnTo=opts.returnTo;returnButton.textContent='← 返回'+returnTo.label;returnButton.title='回到打开前的'+returnTo.label;returnButton.hidden=false;}allowedTargets=opts.targetOptions||null;if(opts.targetOptions)selectTarget(null);if(opts.target)selectTarget(opts.target,opts.inputElement);if(opts.theme!=null){theme=opts.theme;group='';query='';if(opts.selector){sourceCategory='';subcategory='';search.value='';clearPoolOnce=true;removePoolThemeOnce='';}}if(opts.type)type=opts.type;if(opts.view)view=opts.view;selector=opts.selector||null;selectorTools.hidden=!selector;await navigate(opts.page||page||lastPage||(listPromptTargets(app).length?'workspace':'library'),{...opts,reset:opts.reset||opts.theme!=null||!!opts.view});if(opts.openSelector&&selector)await showSelectorTools({returnTo:opts.returnTo});}};
+    const instance={root,close,useResource,addPending:pending.add,addPendingMany:pending.addMany,showPending:()=>pendingButton.onclick(),open:async opts=>{if(opts.returnTo){returnTo=opts.returnTo;returnButton.textContent='← 返回'+returnTo.label;returnButton.title='回到打开前的'+returnTo.label;returnButton.hidden=false;}allowedTargets=opts.targetOptions||null;if(opts.targetOptions)selectTarget(null);if(opts.target)selectTarget(opts.target,opts.inputElement);if(opts.theme!=null){theme=opts.theme;group='';query='';if(opts.selector){sourceCategory='';subcategory='';search.value='';clearPoolOnce=true;removePoolThemeOnce='';}}if(opts.type)type=opts.type;if(opts.view)view=opts.view;selector=opts.selector||null;selectorTools.hidden=!selector;await navigate(opts.page||page||lastPage||(listPromptTargets(app).length?'workspace':'library'),{...opts,reset:opts.reset||opts.theme!=null||!!opts.view});if(opts.openSelector&&selector)await showSelectorTools({returnTo:opts.returnTo});}};
+    current=instance;
     window.unifiedWorkbenchOpenProvider=value=>current?.open({page:value==='gallery'?'gallery':'models',provider:value});window.unifiedWorkbenchReturn=()=>{if(current)current.root.hidden=false;};
     void checkComponents();
-    try{await current.open(options);}catch(error){report(error);}if(!closed&&!root.hidden&&(document.activeElement===previousFocus||document.activeElement===document.body))search.focus();return current;
+    try{await instance.open(options);}catch(error){report(error);}if(!closed&&!root.hidden&&(document.activeElement===previousFocus||document.activeElement===document.body))search.focus();return instance;
 }
 
 app.registerExtension({name:'UnifiedPromptWorkbench',afterConfigureGraph(){
@@ -498,7 +570,7 @@ app.registerExtension({name:'UnifiedPromptWorkbench',afterConfigureGraph(){
     window.unifiedUseResourcePrompt=async options=>{const owner=current?.root.isConnected?current:await openWorkbench();return owner.useResource(options);};
     window.unifiedQueuePrompt=async resource=>{const owner=current?.root.isConnected?current:await openWorkbench();owner.addPending(resource);if(resource.open)await owner.showPending();};
     window.unifiedQueuePrompts=async resources=>{const owner=current?.root.isConnected?current:await openWorkbench();return owner.addPendingMany(resources);};
-    if(!document.getElementById('uw-experience-style'))element('link',null,document.head,{id:'uw-experience-style',rel:'stylesheet',href:'/extensions/ComfyUI-Unified-Prompt-Workbench/workbench.css?v=20260928-gallery'});
-    const entry=element('button','统一工作台',document.body,{id:'unified-workbench-entry',type:'button'});entry.title='工作区、资料库、模型与图库';entry.onclick=()=>openWorkbench();
+    if(!document.getElementById('uw-experience-style'))element('link',null,document.head,{id:'uw-experience-style',rel:'stylesheet',href:'/extensions/ComfyUI-Unified-Prompt-Workbench/workbench.css?v=20261025-sysstats'});
+    const entry=element('button','统一工作台',document.body,{id:'unified-workbench-entry',type:'button'});entry.title='生成、资料与画布控制';entry.onclick=()=>openWorkbench();
     installBrowserImportReceiver({openWorkbench});
 }});
