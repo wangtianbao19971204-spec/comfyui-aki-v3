@@ -30,7 +30,9 @@ function harness(options = {}) {
         api.emit('promptQueued', {requestId, batchCount: 1}); return true;
     }, ...options.app};
     const report = message => reports.push(message); report.clear = key => reports.push(['clear', key]);
-    const context = vm.createContext({api, URLSearchParams, setTimeout, clearTimeout}); vm.runInContext(source, context);
+    const storage = new Map();
+    const localStorage = {getItem: key => storage.get(key) ?? null, setItem: (key, val) => storage.set(key, String(val))};
+    const context = vm.createContext({api, URLSearchParams, setTimeout, clearTimeout, localStorage}); vm.runInContext(source, context);
     const host = new Element('div');
     const controls = context.mountRunControls(host, {app, element, button, report,
         prepareTask: options.prepareTask || (() => ({task: 'generate', label: '生成', queueNodeIds: ['final']})), onSubmitted: task => submitted.push(task)});

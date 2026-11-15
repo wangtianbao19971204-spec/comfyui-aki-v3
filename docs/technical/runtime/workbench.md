@@ -3,13 +3,13 @@
 文档修订：2026-10-05.1。
 
 
-2026-10-11 更新：[anima_control.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js)给 UAP 2.9B 提供参考图、四种控制方式、强度和最终预览；高级区保留擦线、分辨率、时段、权重与子图入口。直接编辑子图原节点，异步上传检查当前图/分支/节点身份。擦线旁路同时静音内部输出节点，保存原 mode 后再恢复，防止不用擦线仍读遮罩/导出图片。原生菜单 API 导出及保存重载已在独立 CPU 页面核验；控件测试见 [test_anima_control.cjs](../../../snapshot/runtime/production_tools/test_anima_control.cjs)，范围与限制见 [收据](../../receipts/anima_control_simple_20261011.json)。后续 GPU 实测补齐最终预览目标与原生输出缓存刷新，已按限定范围部署并重启；见 [GPU/部署收据](../../receipts/anima_control_gpu_deployment_20261011.json)。深度模式建议关闭擦线，原默认值保留。
+2026-10-11 更新：原 `anima_control.js` 曾给 UAP 2.9B 提供参考图、四种控制方式、强度和最终预览；高级区保留擦线、分辨率、时段、权重与子图入口。直接编辑子图原节点，异步上传检查当前图/分支/节点身份。擦线旁路同时静音内部输出节点，保存原 mode 后再恢复，防止不用擦线仍读遮罩/导出图片。原生菜单 API 导出及保存重载已在独立 CPU 页面核验；原控件测试 `test_anima_control.cjs` 的范围与限制见 [收据](../../receipts/anima_control_simple_20261011.json)。后续 GPU 实测补齐最终预览目标与原生输出缓存刷新，已按限定范围部署并重启；见 [GPU/部署收据](../../receipts/anima_control_gpu_deployment_20261011.json)。深度模式建议关闭擦线，原默认值保留。
 
 ## 代码入口
 
-统一包 `web/` 是外层工作台唯一实现。主要入口：[workbench_shell.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js)、[workbench.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.js)。主题/图标为 [ui_theme.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_theme.js)、[ui_identity.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_identity.js)、[anime.css](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime.css)。
+统一包 `web/` 是外层工作台唯一实现。主要入口：[workbench_shell.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js)、[canvas_write.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/canvas_write.js)（原单体 `workbench.js` 与 `anima_control.js` 已退休拆分）。主题/图标为 [ui_theme.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_theme.js)、[ui_identity.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_identity.js)、[anime.css](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime.css)。
 
-交互按职责拆分：`modal_focus.js` 处理弹窗焦点，`prompt_target.js` 解析真实提示词目标，`pending_prompts.js` 管理待采用内容，`prompt_optimizer.js` 对接已有优化服务，`run_controls.js` 与 `runtime_controls.js` 管理提交反馈与运行状态，`refinement_controls.js` 编辑原节点的细化参数。不要在 UI 再造一份隐形参数状态。
+交互按职责拆分：`modal_focus.js` 处理弹窗焦点，`prompt_target.js` 与 [uap_daily_controls.js](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js) 解析真实提示词目标，`pending_prompts.js` 管理待采用内容，`prompt_optimizer.js` 对接已有优化服务，`run_controls.js` 与 `runtime_controls.js` 管理提交反馈、底模快切与运行状态，`control_switches.js`、`control_panel.js` 与 `uap_erase_ui_v2.js` 管理一键控制与擦线，`uap_selfcheck.js` 与 [uap_rewrite_guard.py](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/scripts/uap_rewrite_guard.py) 执行画布写入门禁与自检，`refinement_controls.js` 编辑原节点的细化参数。不要在 UI 再造一份隐形参数状态。
 
 ## 交互契约
 
@@ -24,6 +24,8 @@
 修改后用全新页面核对实际 served 文件和磁盘 SHA，检查主题、窄屏、键盘、焦点与提示词保持性。模拟 composition/事件不是物理 IME；浏览器拦截入队不等于 GPU 推理，历史测试数量不是今天自动通过的证明。
 
 ## 更新记录
+
+- 2026-11-15：修复 UAP 常用控制台与工作台内嵌控制在 Krea2 / 指令编辑分支下主正向提示词缺失问题（支持沿输入连线回溯上游 `CR Prompt Text.prompt`、排除 `ShowText|pysssss` 等只读节点、优先绑定 `[00W-1]` / `[00W-1N]`，兼容 `WeiLinPromptUI` 与 `Krea2EditGroundedEncode` 及 V3 `COMBO` `/object_info`）；增强 `runtime_controls.js` 底模目录前缀家族拦截（禁用异构 `moss\` 底模）；同步阶段 1~3.2 前端（`canvas_write.js`、`uap_erase_ui_v2.js`、`uap_selfcheck.js`、`uap_rewrite_guard.py`）并退休旧单体 `workbench.js` / `anima_control.js`。详见[本轮说明](../changes/runtime-workbench/2026-11-15-krea2-uap-prompt-and-workflow-sync.md)。
 
 - 2026-10-25：提示词库改 SQLite 权威存储（WAL + `synchronous=FULL`），读模型/API/语义不变，data.json 降级为按需导出快照；单条编辑只提交 1 行 + revision 小事务（**中位 1.59 ms**，原 ~1033 ms 且不再随库增长），批量事务化并事务前 backup；后台自动导出/备份 + 行级 journal + `store-status` 告警；迁移 8.81 s/逐字段 equal，启动加载 2.17–2.71 s；`UW_LIBRARY_STORE=json|sqlite` 灰度；snapshot/restore 将 library DB 纳入 SQL dump。测试 188 OK/1 skip，详见[说明](../changes/runtime-workbench/2026-10-25-library-store-sqlite.md)。本轮未部署生产。
 

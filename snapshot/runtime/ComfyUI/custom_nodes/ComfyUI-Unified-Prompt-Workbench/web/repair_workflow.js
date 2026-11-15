@@ -8,7 +8,6 @@ export function workflowChoices(config) {
     if(choices.some(b=>b.value==='stocking')) {
         return [
             {value:'@main',label:'返回统一生产工作台'},
-            {value:'@main:ext05',label:'裁剪精修'},
             {value:'@main:ext08',label:'2× 放大'},
             {value:'@main:ext09',label:'4× 放大'},
             ...choices,
@@ -19,7 +18,7 @@ export function workflowChoices(config) {
     return choices;
 }
 
-export function isWorkflowChoice(value) { return value===REPAIR_CHOICE||/^@main(?::ext0[589])?$/.test(value); }
+export function isWorkflowChoice(value) { return value===REPAIR_CHOICE||/^@main(?::ext0[89])?$/.test(value); }
 
 let opening=false;
 export async function openWorkflowChoice(app,value) {
@@ -75,6 +74,7 @@ export function mountStockingControls(host,{app,node,element,isCurrent}) {
     };
     element('p','建议先完成精修和 2× / 4× 放大，再导入最终尺寸图片修复纹理。应用后运行本工作流，同时保存成品和透明丝袜图层。',section);
     element('p','摩尔纹默认关闭；开启前先在编辑器中完成深度计算。油光仍为试验效果，建议从低强度开始预览。',section);
+    element('p','编辑器顶部可切换 GPU / CPU；精确对照原版时请选择 CPU。离开或关闭编辑器会释放模型缓存，草稿和计算完成的深度会保留。',section);
     const sync=()=>{
         const project=stockingProject(node);
         status.textContent=project.asset?`已应用：${project.name||'图片'} · ${project.regions?.length||0} 个部位`:'尚未应用图片；请先在编辑器中完成导入和应用。';

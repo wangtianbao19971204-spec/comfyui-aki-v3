@@ -71,7 +71,41 @@ export function mountRunControls(host,{app,element,button,report,prepareTask,onS
     },bar);
     const history=element('details',null,historyHost,{className:'uw-run-history'});element('summary','队列与最近结果',history);const results=element('div',null,history);
     button('刷新状态','refresh-run',refresh,history);
-    let disposed=false,version=0,stopping=false,hasRunning=false;
+    let disposed=false,version=0,stopping=false,hasRunning=false,unloadTimer=null,unloading=false;
+    const unloadKey='uap.unloadModelsAfterGenerate';
+    const unloadLabel=element('label','生图后卸载模型',bar,{className:'uw-run-unload'});
+    const unload=element('input',null,unloadLabel,{type:'checkbox'});
+    unload.checked=localStorage.getItem(unloadKey)==='1';
+    unload.title='队列清空后卸载模型并释放显存';
+    unload.setAttribute('aria-label','生图后卸载模型');
+    unload.onchange=()=>localStorage.setItem(unloadKey,unload.checked?'1':'0');
+    async function freeModels(force=false){
+        if(disposed||(!force&&!unload.checked)||unloading)return;
+        unloading=true;
+        try{
+            for(let i=0;i<20;i++){
+                if(disposed||(!force&&!unload.checked))return;
+                const queue=await api.getQueue({throwOnError:true});
+                if(!queue.Running.length&&!queue.Pending.length)break;
+                if(i===19){status.textContent='队列仍有任务，未卸载模型。';return;}
+                await new Promise(resolve=>setTimeout(resolve,250));
+            }
+            if(disposed||(!force&&!unload.checked))return;
+            status.textContent='正在卸载模型…';
+            const response=await api.fetchApi('/free',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({unload_models:true,free_memory:true})});
+            if(!response.ok)throw new Error('HTTP '+response.status);
+            if(!disposed)status.textContent='模型已卸载。';
+        }catch(error){if(!disposed)status.textContent='模型卸载失败：'+error.message;}
+        finally{unloading=false;}
+    }
+    const freeNow=button('立即卸载模型','free-models',()=>void freeModels(true),bar);
+    freeNow.title='立即调用 /free 卸载模型并释放显存';
+    const scheduleUnload=()=>{
+        if(!unload.checked||disposed)return;
+        clearTimeout(unloadTimer);
+        unloadTimer=setTimeout(()=>{unloadTimer=null;void freeModels();},350);
+    };
+    api.addEventListener('execution_success',scheduleUnload);api.addEventListener('execution_error',scheduleUnload);api.addEventListener('execution_interrupted',scheduleUnload);
     function updateStop(){
         stop.textContent=activeService?'取消提示词优化':'停止当前运行';
         if(!stopping)stop.disabled=currentTask?.task==='optimize'?!activeService:!activeService&&!hasRunning;
@@ -96,5 +130,5 @@ export function mountRunControls(host,{app,element,button,report,prepareTask,onS
         }catch(error){if(!disposed&&token===version&&!activeService){status.textContent='状态读取失败；可重试。';report(error);}}
     }
     const update=()=>void refresh();history.ontoggle=update;api.addEventListener('status',update);api.addEventListener('execution_success',update);api.addEventListener('execution_error',update);void refresh();
-    return {setTask(task){currentTask=task;run.textContent=task.label;run.title=task.reason||task.label;run.disabled=submitting||Boolean(task.reason);updateStop();},dispose(){disposed=true;version++;pendingQueueCleanup?.();if(activeService)void Promise.resolve(activeService.cancel?.()).catch(()=>{});for(const event of ['status','execution_success','execution_error'])api.removeEventListener(event,update);}};
+    return {setTask(task){currentTask=task;run.textContent=task.label;run.title=task.reason||task.label;run.disabled=submitting||Boolean(task.reason);updateStop();},dispose(){disposed=true;version++;clearTimeout(unloadTimer);pendingQueueCleanup?.();if(activeService)void Promise.resolve(activeService.cancel?.()).catch(()=>{});for(const event of ['status','execution_success','execution_error'])api.removeEventListener(event,update);for(const event of ['execution_success','execution_error','execution_interrupted'])api.removeEventListener(event,scheduleUnload);}};
 }

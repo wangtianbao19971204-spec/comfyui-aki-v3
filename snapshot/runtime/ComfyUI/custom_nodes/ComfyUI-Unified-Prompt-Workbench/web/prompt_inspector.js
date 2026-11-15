@@ -78,8 +78,6 @@ export function inspectPrompt(api, samplerId) {
 }
 
 export function modelNote(file) {
-    if (/animayume[_\\/.-]*v?15/i.test(file)) return 'AnimaYume v1.5；原版 Anima LoRA 的兼容性需逐个验证。';
-    if (/anima.*2[._-]?9|anima29|2\.9b/i.test(file)) return 'Anima 2.9B：原版 28 层 LoRA / LLLite 不可直接视为 40 层兼容。';
     if (/krea2/i.test(file)) return 'Krea2：提示词与采样参数应按当前具体模型版本设置。';
     return '文件名取自上游加载器；架构与 LoRA 兼容性不能仅凭分支名称判断。';
 }
