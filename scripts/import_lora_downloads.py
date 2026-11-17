@@ -160,6 +160,16 @@ def metadata_for(row, asset, version, target):
             'preview_url': ''}
 
 
+def current_branch():
+    """Read the branch name; a Git binary is optional on this host."""
+    try:
+        return subprocess.check_output(['git', 'branch', '--show-current'], cwd=REPO, text=True).strip()
+    except OSError:
+        head = (REPO / '.git' / 'HEAD').read_text(encoding='utf-8').strip()
+        prefix = 'ref: refs/heads/'
+        return head[len(prefix):] if head.startswith(prefix) else ''
+
+
 def apply_rows(rows, downloads, runtime, api, evidence, previews=True, keep_originals=False):
     queue = request(api + '/queue')
     if queue.get('queue_running') or queue.get('queue_pending'):
@@ -291,7 +301,7 @@ def main(argv=None):
                       'bytes': sum(r['bytes'] for r in rows), 'receipt': str(evidence)}, ensure_ascii=False), flush=True)
     if not args.apply or not rows:
         return
-    branch = subprocess.check_output(['git', 'branch', '--show-current'], cwd=REPO, text=True).strip()
+    branch = current_branch()
     if not branch or branch == 'main':
         raise ValueError('apply_requires_development_branch')
     original = catalogue.digest(REPO / catalogue.CATALOGUE)

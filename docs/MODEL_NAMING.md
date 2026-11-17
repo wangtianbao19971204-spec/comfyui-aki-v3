@@ -1,6 +1,20 @@
 # LoRA 与底模的分类和命名
 
-现行安装位置以 [来源目录](../snapshot/inventory/model_sources.json) 的 `current_path` 为准；没有此字段的资源仍使用 `path`。`path` 保留首次捕获身份，旧 inventory、训练发布记录与历史收据不重写。已删除的 15 个评估条目不参与命名或迁移。
+现行安装位置以 [来源目录](../snapshot/inventory/model_sources.json) 的 `current_path` 为准；没有此字段的资源仍使用 `path`。`path` 保留首次捕获身份，旧 inventory、训练发布记录与历史收据不重写。已删除的 262 条记录不参与命名或迁移：247 条是 2026-11-18 核对出的运行区缺失（226 LoRA、14 底模、2 文本编码器、2 VAE、2 ControlNet、1 checkpoint），15 条是更早已删除的训练评估检查点。
+
+2026-11-18 核对后的现行基线：运行区有 **241 个用户 LoRA**（Krea2 115、MOSS 126）和 **4 个图像底模**（均 Krea2），另有 SAM3.1 工具 1 个、Krea2 VAE 1 个、`qwen3-vl-4b-heretic` 文本编码器 1 个。Anima、Anima 2.9B 与 Qwen-Image 2.1 系列（含目录、底模、文本编码器、VAE 与 ControlNet）已于 2026-10-24 经用户授权永久删除，其记录按删除保留，不恢复、不迁移、不再计入总数；删除前清单在仓外私有回执 `anima-assets-deletion-20261024`，本轮核对与登记见[收据](receipts/lora_batch_20261118.json)。
+
+| 家族 | 用户 LoRA | 图像底模 | 工具 |
+|---|---:|---:|---:|
+| Anima | 0 | 0 | 0 |
+| Anima 2.9B | 0 | 0 | 0 |
+| Krea2 | 115 | 4 | 0 |
+| MOSS | 126 | 0 | 0 |
+| Qwen Image 2.1 | 0 | 0 | 0 |
+| SAM3.1 | 0 | 0 | 1 |
+| 合计 | 241 | 4 | 1 |
+
+MOSS 家族按 Civitai 版本级底模字段 `MOSS Image`（或审查过的组织记录 `Moss`/`MOSS`）归入 `moss` 目录，标题里的 “anima/krea2” 只说明兼容范围，不改变家族。文件名前缀沿用部署中已确立的 `Moss__`，与 Krea2 的 `Krea2__` 并存。
 
 2026-10-08 整理后有 **306 个用户 LoRA**：Anima 208、Anima 2.9B 2、Krea2 96。本轮 12 个下载中新增 11 个，ABP_ART 同摘要重复件保留现有版本；权重、预览、来源和离线缓存已登记，在线界面未测试，下载原件暂留。见[本轮导入记录](receipts/lora_download_import_20261008.json)。下面的 2026-10-07 表格保留当时全量整理的基线。
 
@@ -28,7 +42,8 @@ ComfyUI/models/
 ├─ loras/
 │  ├─ anima/<用途>/<规范文件名>
 │  ├─ anima-2.9b/<用途>/<规范文件名>
-│  └─ krea2/<用途>/<规范文件名>
+│  ├─ krea2/<用途>/<规范文件名>
+│  └─ moss/<用途>/<规范文件名>
 ├─ diffusion_models/
 │  ├─ anima/图像生成/<规范文件名>
 │  ├─ anima-2.9b/图像生成/<规范文件名>
@@ -39,13 +54,13 @@ ComfyUI/models/
    └─ sam3.1/目标检测与分割/<规范文件名>
 ```
 
-LoRA 用途统一为：画风与画师、角色与人物、服装与配饰、姿势与动作、背景与场景、光影与色彩、概念与效果、细节与修复、滑块与调节、控制与编辑、自训角色、其他与待核。普通角色、画风和自训成品各自保留原身份。用途优先使用已审查的组织记录与既有分类；网站宽泛标签不自动覆盖具体用途。原版 Anima 与 2.9B 分开，来源显示通用 Anima 时结合确切版本、已审查家族及原 2.9B 目录判断，不能凭跨家族标题推断兼容。
+LoRA 用途统一为：画风与画师、角色与人物、服装与配饰、姿势与动作、背景与场景、光影与色彩、概念与效果、细节与修复、滑块与调节、控制与编辑、自训角色、其他与待核。普通角色、画风和自训成品各自保留原身份。用途优先使用已审查的组织记录与既有分类；网站宽泛标签不自动覆盖具体用途。原版 Anima 与 2.9B 分开，来源显示通用 Anima 时结合确切版本、已审查家族及原 2.9B 目录判断，不能凭跨家族标题推断兼容。MOSS 与 Krea2 同样按版本级底模字段区分：`MOSS Image` 系列进 `moss/<用途>`，`Krea2`/`Krea 2` 系列进 `krea2/<用途>`，只写 “krea2&MOSS” 的标题不作为归属依据。
 
 底模指图像生成权重，SAM 是工具。编码器、VAE、检测器、插件固定权重和目录型模型仍按各加载器的配套契约放置，不能为了目录外观拆散配置、词表或分片。KJNodes 内置 intrinsic LoRA 的固定文件名由插件拥有，不套用用户 LoRA 的磁盘改名规则；其来源和用途继续登记。
 
 ## 文件名
 
-格式：`家族__公开模型名__确切版本__精度__cv版本ID__f文件ID.后缀`。
+格式：`家族__公开模型名__确切版本__精度__cv版本ID__f文件ID.后缀`。家族前缀为 Anima、Anima-2.9B、Krea2、Moss；MOSS 现网沿用首轮部署的 `Moss__`，不再另造 `MOSS__`。
 
 只保留有可靠记录的字段。没有语义版本就省略，不补造 v1；无 Civitai 身份时用固定上游提交 `rev...` 或实际完整摘要的前 12 位 `sha...` 区分。显示名保留原公开名称，磁盘名称作 Unicode 标准化、非法字符替换和长度收敛。来源页、上游原文件名、版本／文件 ID 与完整摘要另存于来源目录，名称截短不丢失原身份。
 
@@ -84,6 +99,9 @@ LoRA Manager 的常规与排除缓存须同时核验：本轮 286 个用户 LoRA
 完成后更新来源目录、MD、manifest 的对应 metadata 项、当前工作流摘要与技术记录；核对 loader 列表、全部文件和内容摘要，以及 4 个自训 release 副本。刷新已打开的工作台／工作流页面使其使用新下拉项；已经打开但未保存的旧图不会被磁盘迁移自动改写，需重新打开相应更新后的保存文件。
 
 ## 更新记录
+
+- 2026-11-18：补记 2026-11-14 MOSS 与后续 LoRA Manager 部署的 136 个权重（MOSS 117、Krea2 19），逐项按现行 sidecar 重建来源、完整 SHA 与卡片；其中 `Moss__MOSS Image Edit LoRA` 无 Civitai 身份，按 `unresolved` 记录。另导入 2026-11-18 新下载 LoRA 9 个（全为 MOSS：画风与画师 8、服装与配饰 1），9 项完整 SHA 与 Civitai 确切版本文件一致，卡片与 `LoraLoader` 枚举逐项通过，预览已取，下载原件本轮保留。把 247 条运行区已不存在的记录（226 LoRA、14 底模、2 文本编码器、2 VAE、2 ControlNet、1 checkpoint）标记为删除并清除位置与摘要，Anima/Qwen 系列引用 2026-10-24 授权删除回执。两个含全角冒号的旧文件名经管理器的重命名接口改为 `-`，以符合目录契约。见[收据](receipts/lora_batch_20261118.json)。
+- 2026-11-18：命名规则新增 MOSS 家族（版本级底模 `MOSS Image`／审查记录 `Moss`／`moss` 根目录），`scripts/model_naming_rules.py` 与 `tests/test_standardize_models.py` 补用例；新增 `scripts/register_present_loras.py`（登记已部署但未入册的权重）与 `scripts/reconcile_asset_presence.py`（缺失记录核对），见[本轮说明](technical/changes/runtime-models/2026-11-18-lora-batch-and-presence-reconcile.md)。
 
 - 2026-10-08：沿用同一命名规则导入 11 项并跳过 1 个重复下载；新增项保留完整公开原名、确切版本／文件 ID、SHA、AutoV3 与 API 触发词。Reflet Outfit 的 API 触发词为空，另标明作者说明中的 `reflet outfit`，不冒充 API 值。预览、离线缓存和本机加载器枚举通过；未启动服务或做 GPU 推理，原件保留，见[收据](receipts/lora_download_import_20261008.json)。
 

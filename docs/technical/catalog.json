@@ -290,7 +290,9 @@
         "scripts/model_naming_rules.py",
         "scripts/standardize_models.py",
         "scripts/import_lora_downloads.py",
-        "scripts/Import-DownloadedLoras.ps1"
+        "scripts/Import-DownloadedLoras.ps1",
+        "scripts/register_present_loras.py",
+        "scripts/reconcile_asset_presence.py"
       ],
       "tests": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/test_checkpoint_loaders.py",
@@ -299,7 +301,9 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/utils/test_civitai_utils.py",
         "tests/test_model_sources.py",
         "tests/test_standardize_models.py",
-        "tests/test_import_lora_downloads.py"
+        "tests/test_import_lora_downloads.py",
+        "tests/test_register_present_loras.py",
+        "tests/test_reconcile_asset_presence.py"
       ],
       "evidence": [
         "docs/technical/archive/benchmark_reports/MODEL_COMPARISON_RUNBOOK.md",
@@ -313,7 +317,8 @@
         "docs/receipts/lora_download_import_20261008.json",
         "docs/receipts/lora_quick_import_20261009.json",
         "docs/receipts/lora_download_import_20261011.json",
-        "docs/receipts/lora_download_import_20261019.json"
+        "docs/receipts/lora_download_import_20261019.json",
+        "docs/receipts/lora_batch_20261118.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -328,7 +333,11 @@
         "tests/test_standardize_models.py",
         "scripts/import_lora_downloads.py",
         "scripts/Import-DownloadedLoras.ps1",
-        "tests/test_import_lora_downloads.py"
+        "tests/test_import_lora_downloads.py",
+        "scripts/register_present_loras.py",
+        "tests/test_register_present_loras.py",
+        "scripts/reconcile_asset_presence.py",
+        "tests/test_reconcile_asset_presence.py"
       ],
       "examples": [
         "examples/external-assets/asset-record.example.json",

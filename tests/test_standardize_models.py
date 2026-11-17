@@ -69,6 +69,44 @@ class NamingRulesTests(unittest.TestCase):
         self.assertEqual(result['family_slug'], 'anima-2.9b')
         self.assertEqual(result['category'], '图像生成')
 
+    def test_moss_version_base_owns_the_family_over_a_cross_family_title(self):
+        asset = self.asset(family='Moss')
+        metadata = self.metadata(base='MOSS Image',
+                                title='Moss/Anima-质感 style [Anima][Krea 2][MOSS]')
+        result = rules.build_standardization(asset, metadata)
+        self.assertEqual(result['family_slug'], 'moss')
+        self.assertEqual(result['family_label'], 'Moss')
+        self.assertEqual(result['category'], '画风与画师')
+        self.assertTrue(result['target_path'].startswith('ComfyUI/models/loras/moss/画风与画师/Moss__'))
+
+    def test_moss_reviewed_family_does_not_fall_back_to_other(self):
+        asset = self.asset(family='MOSS')
+        metadata = {'civitai': {'id': 200, 'modelId': 100, 'name': 'MOSS v1.0',
+                                'model': {'name': 'BunnyMid AI Style', 'type': 'LORA'}},
+                    'organization': {'family': 'MOSS', 'purpose': '角色与人物'}}
+        result = rules.build_standardization(asset, metadata)
+        self.assertEqual(result['family_slug'], 'moss')
+        self.assertEqual(result['category'], '角色与人物')
+        self.assertIn('/loras/moss/角色与人物/', result['target_path'])
+
+    def test_moss_reviewed_library_root_keeps_existing_placement(self):
+        asset = self.asset(path='ComfyUI/models/loras/moss/控制与编辑/fixture.safetensors',
+                           family=None)
+        result = rules.build_standardization(
+            asset, {'civitai': {'id': 200, 'modelId': 100, 'name': 'v1',
+                                'model': {'name': 'MOSS Color Control', 'type': 'LORA'}}})
+        self.assertEqual(result['family_slug'], 'moss')
+        self.assertEqual(result['category'], '控制与编辑')
+
+    def test_moss_precision_comes_only_from_the_selected_file(self):
+        asset = self.asset(family='Moss')
+        metadata = self.metadata(base='MOSS Image', title='MOSS style')
+        metadata['civitai']['files'] = [{'id': 300, 'metadata': {'fp': 'bf16'}},
+                                        {'id': 301, 'metadata': {'fp': 'fp8'}}]
+        result = rules.build_standardization(asset, metadata)
+        self.assertEqual(result['precision'], 'BF16')
+        self.assertIn('__BF16__cv200__f300.safetensors', result['target_path'])
+
     def test_finished_local_anima29_uses_verified_release_identity(self):
         asset = self.asset(path='ComfyUI/models/loras/anima/自训角色/alicia_bell_morning_star_anima29_r32_v1.safetensors')
         asset['derivation'] = {'kind': 'local_training'}

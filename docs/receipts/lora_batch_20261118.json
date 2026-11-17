@@ -1,0 +1,1190 @@
+{
+  "receipt": "lora_batch_20261118",
+  "date": "2026-11-18",
+  "scope": "MOSS family naming support, backlog registration, 2026-11-18 download import, and presence reconciliation for the authorized 2026-10-24 Anima/Qwen purge.",
+  "catalogue": {
+    "assets": 576,
+    "observed_present": 314,
+    "observed_missing": 262,
+    "user_loras_present": 241,
+    "user_loras_by_family": {
+      "Krea2": 115,
+      "Moss": 126
+    },
+    "family_field_casing_note": "older registrations store the lowercase slug; counts are case-insensitive",
+    "image_models_present": 4
+  },
+  "registered_backlog": {
+    "count": 136,
+    "by_family": {
+      "krea2": 19,
+      "moss": 117
+    },
+    "unresolved_without_civitai_identity": [
+      "ComfyUI/models/loras/moss/控制与编辑/Moss__MOSS Image Edit LoRA__Rank64__BF16__sha__17A48B8C605D.safetensors"
+    ],
+    "evidence": "each weight re-hashed (SHA-256) from the deployed file and bound to its sidecar",
+    "items": [
+      {
+        "path": "ComfyUI/models/loras/krea2/光影与色彩/Krea2__白艺术光影__v2.0__FP16__cv3355484__f3242926.safetensors",
+        "sha256": "09bac46241a825890191d951542d97f651295ec1e6320986d5fbde8e1f33420e",
+        "family": "krea2",
+        "purpose": "光影与色彩",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/服装与配饰/Krea2__[krea 2_IL DRESS 14] Lolita Dress Coelestis Votis_Swathed in Divine Light, Bound by My Wil__krea 2__BF16__cv3443021__f3341486.safetensors",
+        "sha256": "52bcb48cdfa48659538b332e9daa8cc479fa10baf3fe0a47fd3b42d09d1d592a",
+        "family": "krea2",
+        "purpose": "服装与配饰",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/服装与配饰/Krea2__np_sheer_taut - Translucent Taut Sheer Tights (No__v1.1__FP16__cv3417930__f3311309.safetensors",
+        "sha256": "b6d48909787b677b1e3cabe64fb07b6f4a26a77e1e9ca7198619f9308e3384be",
+        "family": "krea2",
+        "purpose": "服装与配饰",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/服装与配饰/Krea2__【Krea 2】 Lolita Dress Nightmare at Daybreak 洛丽塔裙 黎明梦魇__BLACK__BF16__cv3445010__f3343823.safetensors",
+        "sha256": "5730fc71567b5e04eeeedf197e155958deccad25d0d6521b48070c10d18766bb",
+        "family": "krea2",
+        "purpose": "服装与配饰",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/概念与效果/Krea2__Beautiful Pussy v1 — Krea 2__beautiful pussy-v1.0__BF16__cv3430403__f3326191.safetensors",
+        "sha256": "72d13cf3f340d80ff338e4d8e92933431039577635b0e7cd2c70c21821035209",
+        "family": "krea2",
+        "purpose": "概念与效果",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/概念与效果/Krea2__God Pussy__Krea 2__BF16__cv3086265__f2965683.safetensors",
+        "sha256": "4223eaa3b3432d20956325ac24cd4741a51c7ccaa8864157a6ad2a980fe94104",
+        "family": "krea2",
+        "purpose": "概念与效果",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/概念与效果/Krea2__Juicy pussy, dripping wet vagina grool for Krea2__V1 KR2__cv3298822__f3184358.safetensors",
+        "sha256": "bdd74fa8179f6cac0d9c700a7f54c7501d3128449b628b43c38c942fcd248c01",
+        "family": "krea2",
+        "purpose": "概念与效果",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/概念与效果/Krea2__Real Pussy For Krea2__Natural Spread__FP16__cv3391453__f3280919.safetensors",
+        "sha256": "e1bf889ce2c86aac121dc21d48dc243cca4b8499108f325f29a4906b42f796df",
+        "family": "krea2",
+        "purpose": "概念与效果",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Abp_Art style 【krea2&MOSS&anima&il】__krea2 v1.0__BF16__cv3422406__f3316635.safetensors",
+        "sha256": "3a7829de7ed5b4d25ab6c7ad1963da8a065763f191ddc5021e5ab58bd03d6db4",
+        "family": "krea2",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Kzmynon AI Style [K-A]__krea2-v2__BF16__cv3377920__f3266337.safetensors",
+        "sha256": "09ae9c8d1d42129a333f7cd4a8b24d13bc6c7449fe65815ecbb007bc867488e2",
+        "family": "krea2",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__Line Art Anime Flat__Krea2.v3__BF16__cv3415176__f3307999.safetensors",
+        "sha256": "1bbe2d85dd9de4c493965d46601ec5aa03257c03cc2f91c7bdce5c62ed78a081",
+        "family": "krea2",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/画风与画师/Krea2__铭音 meion style 【krea2&MOSS&anima&il】__krea2 v1.0__FP16__cv3150830__f3031491.safetensors",
+        "sha256": "76bda49c9d55e4a5a13c0aa40010a28286121d37bb3a04e7fce23c3eb8fb5c1e",
+        "family": "krea2",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/画风与画师/NIJISIS_krea2_V2.safetensors",
+        "sha256": "9ae9d31a99ec51072d4d639af6b05b3025cde1e4fbc2cc0a71d60269f27d3b82",
+        "family": "krea2",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/细节与修复/Krea2__Add Micro Details - Concept (Illustrious _ Pony _ NoobAI)__v2.0_Krea2__BF16__cv3407019__f3298578.safetensors",
+        "sha256": "038083afd90606419dbdbbd576bd2dd728b32b53ab13626d4062cfca55520315",
+        "family": "krea2",
+        "purpose": "细节与修复",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/角色与人物/Krea2__Krea 2 星穹铁道 Lora 合集 - Krea 2 Honkai- Star Rail LoR__火花__BF16__cv3411688__f3303907.safetensors",
+        "sha256": "b1eeeed784c742de24731af366803e20909453783e3da89f9156ab1e78acb5f4",
+        "family": "krea2",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/角色与人物/Krea2__Krea 2 星穹铁道 Lora 合集 - Krea 2 Honkai- Star Rail LoR__知更鸟晴歌__BF16__cv3411706__f3303922.safetensors",
+        "sha256": "2c9f47a6650e55b7ba9354c95f71d439a0026ae9483178eb9366405bacff3942",
+        "family": "krea2",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/角色与人物/Krea2__Krea 2 星穹铁道 Lora 合集 - Krea 2 Honkai- Star Rail LoR__符玄__BF16__cv3411684__f3303904.safetensors",
+        "sha256": "e0f8ecde0926ed4ad45594f44ae586982bc98ecb2d6ea810aae59303fbadd598",
+        "family": "krea2",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/角色与人物/Krea2__Krea 2 星穹铁道 Lora 合集 - Krea 2 Honkai- Star Rail LoR__花火__BF16__cv3411687__f3303909.safetensors",
+        "sha256": "f908aeb14e2ff795b663e2a6cc40c6c7cc67f15b3ce2df208e3beae8f0f62ba8",
+        "family": "krea2",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/krea2/角色与人物/Krea2__Krea 2 星穹铁道 Lora 合集 - Krea 2 Honkai- Star Rail LoR__遐蝶皮肤__BF16__cv3411703__f3303923.safetensors",
+        "sha256": "45d22635d8805719d333ca42991fb5a69792b488e6e84a09b2e1b67442728868",
+        "family": "krea2",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/控制与编辑/Moss__MOSS Image Color Depth Control__v1__BF16__sha__E5C0C3EFD05E.safetensors",
+        "sha256": "e5c0c3efd05e4269207a39de6005798f14c90c6687c89c54eaffe4b76c43a763",
+        "family": "moss",
+        "purpose": "控制与编辑",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/控制与编辑/Moss__MOSS Image Edit LoRA__Rank64__BF16__sha__17A48B8C605D.safetensors",
+        "sha256": "17a48b8c605dcffdedb92a2b887d18cf316505be90802717669fb6556098dcdf",
+        "family": "moss",
+        "purpose": "控制与编辑",
+        "source_status": "unresolved"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__748cm (MOSS) _ Artist styles__v1.0__BF16__cv3424711__f3319394.safetensors",
+        "sha256": "a904a0834f0ec9b0a5d96029d30234a6a005114403aaba52377c8ebe7621a973",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__748cm Style _ MOSS, KREA 2 & Anima__MOSS__BF16__cv3435405__f3332255.safetensors",
+        "sha256": "9a4fd5909a30aa569f56e0c8977e63152eca1fef25fdc150bc02e7890a5bf48d",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__96YOTTEA - Artist Style__MOSS-Image - Base__BF16__cv3424191__f3318796.safetensors",
+        "sha256": "5f5495ddd045039231507b21df63c5ab12909e6966c367ad70735148f3e83894",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__@1041uuu TOYOI Yuuta Style__moss_v0.0.0__BF16__cv3417616__f3310948.safetensors",
+        "sha256": "a207b5ab7f43deb6f4c07bf001f8e099c5eded603f85674f6caf4f35a80f0cd4",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__[Anima_MOSS] sekali_p style__moss v1-dar__BF16__cv3459744__f3361499.safetensors",
+        "sha256": "09a8913f6fea109bc62c7fa00903b78af6ee69288017ea7be6e8a672ab02ebcf",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__[MOSS & IL]【flyx3】Colorful Line Art _ 彩色线稿__MOSS_v1.0__BF16__cv3434815__f3331511.safetensors",
+        "sha256": "364a43008618b7415feb5ff9847a74eae9d94f59f97bad1610c9fac158c1213a",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__[MOSS & Krea2 & Anima & IL] MeIoN_铭音_MeioN39- Artist Style__MOSS_v1.0__BF16__cv3423430__f3317881.safetensors",
+        "sha256": "0f65ee6b8a38fd7d86946c489c1f20a2eb1da4b27c80a9f66974d3c124946024",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__[MOSS & Krea2 & Anima] Yoneyama Mai_米山舞 - Artist Style__MOSS_v1.0__BF16__cv3425633__f3320510.safetensors",
+        "sha256": "428ea6827d484cc434bdf403c3356f3258c8bd249742e32de209a860fe0039e6",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__[MOSS] Blinklikeer Style__v1.0__BF16__cv3419366__f3313019.safetensors",
+        "sha256": "f21b8c4ffdf91f4ee2fe42466d7de01e4f825a2a5d932acf3996167615347933",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__[MOSS_Anima] Browndust2 style_棕色尘埃风格_暖色调厚涂韩系皮肤质感_glossy skin__MOSSv1.0__BF16__cv3446308__f3345347.safetensors",
+        "sha256": "a5fb611d11a3ca747146af2a763a8cbd8fd554610d19ea5ab02902fb90b3f856",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__[MOSS_H3 image] onineko (おにねこ) style__MOSS v0.5__BF16__cv3413959__f3306530.safetensors",
+        "sha256": "7abaecf6b934db4129f3cdd51e6dbe09850915f0dfc1ea7c026076a30f5dc3f1",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__A more realistic nsfw anime style__A more realistic nsfw ani__BF16__cv3416501__f3309603.safetensors",
+        "sha256": "e4df9ebefbdb28cb41454f6f6b93549641b87ebb97c4fb7a6daa99a34628321a",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Abp_Art style 【krea2&MOSS&anima&il】__moss base v0.5__BF16__cv3422628__f3316914.safetensors",
+        "sha256": "128727689d08fb9676e5620e694831d6bfc621477533eec3b0da415e2fdf6814",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Aesthetic Quality Modifiers - Masterpiece__v6.0 [moss]__BF16__cv3462001__f3364329.safetensors",
+        "sha256": "6973b708dfad3d703a8abaf6b0f5a30c072a064b773befe4ac741426109a00a9",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__AI画风 umina style 1【anima_krea2_moss】__moss v1.0__BF16__cv3416108__f3309073.safetensors",
+        "sha256": "44f62e295e97c414ec30b6e06ae92866baf99232a1915705aa05df7a0aded36a",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Anime Flat Style__MOSS Image__BF16__cv3413292__f3305869.safetensors",
+        "sha256": "203d3712e6101571a85f257adac1d1cefe16ad59562cb18558a0ca3b87706035",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Anireal _ Anime Realism for MOSS Image__v1.0__BF16__cv3411644__f3303851.safetensors",
+        "sha256": "827b1f76485d0cb63c6f84fa0ad5a2e4045667ad41b000f00c0a6f10d6e94f36",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Art Style-tokkyu__v1.0__BF16__cv3450860__f3350830.safetensors",
+        "sha256": "8497fa498e7982a1710f2cdb8950ec7c0e8afadcd1d36d4bb16a75f64a5194a0",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__artist-Si__wooupp Style [Moss_Anima]__Moss v0.9__BF16__cv3430939__f3326797.safetensors",
+        "sha256": "aff3de3cb2bace7879db5a175d50522a20c50f2ff7d937c1c7de161526d64620",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Bartolomeobari Style (Moss, IllustriousXL & Anima)__Barto Moss__BF16__cv3431236__f3327154.safetensors",
+        "sha256": "8866da7714d1313ce1db4359e10f641680dc8c63859cc4e70e056ae5083757ed",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__bin仪馆主任 style__moss__BF16__cv3422246__f3316456.safetensors",
+        "sha256": "499ab82e6f6f4f9bbd2048b9ba84dde7b461ac0a2178d6f2d15f16a8aac31854",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__BunnySlop AI Style 『MOSS _ Anima _ Illustrious』__MOSS v6.9__BF16__cv3412969__f3305424.safetensors",
+        "sha256": "5ba200c6e7b5fbc9230fe2bae7d118226d804364b9ccd80083d567c1138f32fe",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Cel-Animation Art Style__v1.0__BF16__cv3419395__f3313052.safetensors",
+        "sha256": "2e7ca7a91fb8ff0d4fcfaf601bf0a6d2e574d4d4eb2842d98e1bc91a04782b93",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Dragons Crown artbook style__Moss_Image_v1__BF16__cv3424222__f3318839.safetensors",
+        "sha256": "147f8f696a9f043cfb01881d4b40f984d67909005ca30ed20dfa188cfc40ae0b",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Envy Anime Oil MOSS_SDXL 01__MOSS v1.0__BF16__cv3444664__f3343383.safetensors",
+        "sha256": "9fc35fa934ea3f6bac4ab17a460df660569a8dd72888288ffafeecf32dc05cc1",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__FFstyle Anima_Moss Base_Moss Heal__v1.0 Moss heal__BF16__cv3451200__f3351237.safetensors",
+        "sha256": "3e7af2c643631494978cd8f369e4ade696387b49e220945b2c07906b58186316",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__FymriE style 【krea2&MOSS&anima&il】__moss-base v0.5__BF16__cv3417988__f3311371.safetensors",
+        "sha256": "653eac0c2e348dd0434ab11529e598b5a8d9e2e691a1a67577eaec9168d823f9",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Gladas' Style MOSS__v1b__BF16__cv3456003__f3356918.safetensors",
+        "sha256": "5137690c5361dd9cb5ed0bc9fec501f5fb9d7d20819f268bb9d6babbc744c3ad",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Granblue fantasy style__Granblue for moss image__BF16__cv3428623__f3324028.safetensors",
+        "sha256": "30e932c2c2f99d036f4eb85525574b31b837ee136f915782db633f61db080e1d",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__ICKPOT Style__MOSS__BF16__cv3462226__f3364606.safetensors",
+        "sha256": "aa9d1eb8bba9b20cc5c00f3e140c9cf4a4f6722e0bd76ffa0c6727549662e38f",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Impasto 2.5D Anime Style__v0.8-beta HE (Moss)__BF16__cv3412725__f3305140.safetensors",
+        "sha256": "c793c19be6c8bdfccdd31a34e9fb4d7c529b032e68adc7901b1305d122dd37d1",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__iwatomushi style (Anima_Illustrious_Krea2_MOSS_Pony)__MOSS - v1.0__BF16__cv3441462__f3339549.safetensors",
+        "sha256": "3bbed828704cd039a41942fb0bf1cf3d5b05acf45b8111282b685dfc4b45856e",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Ixy - Artist Style__MOSS-Image__BF16__cv3427663__f3322899.safetensors",
+        "sha256": "9ef92c735241ed414bc0986d514a132b69a410f9e1105cb45e62164358db8fdb",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Jadetilaurant Style [Anima_Illustrious_Krea2_MOSS]__MOSS v1.0__BF16__cv3444359__f3343037.safetensors",
+        "sha256": "f2f919e7caa48ea9fcb26ae852c1f9243e91690575f5aeff8fac4e451e04fa35",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__jewel milk style__v1.0__BF16__cv3465653__f3368764.safetensors",
+        "sha256": "9302ba45a4b39449a67febe968a46d612fb4ce7d54701af44d0b72ebbc1b4a06",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Jima Style Anima&Krea 2&Moss__Moss__BF16__cv3451027__f3351040.safetensors",
+        "sha256": "1a2151a1f0dca7e057609c02487118b5d886cfcc169e4b49e34a9b40a3ba5dce",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Kase Daiki - 加瀬大輝 Style For MOSS__v1.0__BF16__cv3426770__f3321791.safetensors",
+        "sha256": "67f1adf0ea725485504e9d08b8c97bc1d601e3495f4db7dba6961fbfac5c0266",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__kieed 画风_Style moss__v1.0__BF16__cv3420047__f3313859.safetensors",
+        "sha256": "c807d10c641ce23fb743a63cab6e12c92c0caa0a1389b6801350302a9d0ff63a",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__KurenaiZ style _ Anima _ Illustrious__MOSS v1.0__BF16__cv3441956__f3340143.safetensors",
+        "sha256": "047b09c9aba75e97ec7110c0c7d6612306bbf4f64efa42a6fe35d617b6441944",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Kzmynon AI Style [K_A]__moss-v1__BF16__cv3411295__f3303445.safetensors",
+        "sha256": "8f0a79e0703fbd5cca11c6d5d97cdf3ce349f420c116c964aca59925f3c3f260",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Kzmynon AI Style [K_A]__moss-v2__BF16__cv3436533__f3333601.safetensors",
+        "sha256": "f5d0d0905ea5f474c8528c51d06aa61118b84dc8269f386353b4b26eda9b0834",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Limbus Company Identity style__MOSS v1.0__BF16__cv3443233__f3341745.safetensors",
+        "sha256": "c6df7f5cf5d1571a94d867653c12f372c2caa30538f7b5fba9ecc76b7e40ccf8",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Love Live School Idol Festival All Stars [MOSS & ANI & IL]__MOSS__BF16__cv3427747__f3323018.safetensors",
+        "sha256": "651cac3c8fac9105ca767e0d1812a1a0b5f755c34478d1644312658d92a917de",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__LoveCacao Lora MOSS__v1.0__BF16__cv3425923__f3320857.safetensors",
+        "sha256": "0f8869994ed063ea76ff17c521a2da5de4116b76f2bf2176126a5dc79d7bc885",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Manhwa style (Solo Leveling)__MOSS Image__BF16__cv3442366__f3340650.safetensors",
+        "sha256": "34047cefe470c3c18e6323fb7e1a803a1e79d91260babc3e8e09ffe08b4fabe0",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Masoq style _ Anima _ Illustrious__MOSS v1.0__BF16__cv3443552__f3342095.safetensors",
+        "sha256": "af31422e793aa925cf22624f0027725c66165ebcf602d6bba9c6e8a0a1cbffad",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Mdastarou _ M-da s-tarou Style [MOSS & IL]__MOSS__BF16__cv3442595__f3340934.safetensors",
+        "sha256": "fe11ef1ef59dc8ae75da2db48c7415bca5f68ae5bb23baa80c44042339b93eb2",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__MeMaMoss Flat Anime Style - Moss__v2.0 [Moss-Base]__BF16__cv3438238__f3335575.safetensors",
+        "sha256": "1d033f4f3d136d968ef2534c85d3fa1ef1859e22e43a338fae1640dca4946679",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Mikozinn style - ミコジン style__MOSSV1.1__BF16__cv3422750__f3317058.safetensors",
+        "sha256": "c74f56f034ab8cd6d751add8a0151d3ec953451d8b0e600f0f58abf0a12ee9cd",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Mixdark Style _ MOSS__v2.0__BF16__cv3435857__f3332806.safetensors",
+        "sha256": "8ff4c9d88e2db289ccfbfb0e59da4d61e662184131b49554fc64f0ea9bca4c5e",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__moss image muqiu__v1.0 去码__BF16__cv3448273__f3347717.safetensors",
+        "sha256": "c78f0a2e5d09473e4a46d0cbf0e6d2f6a5e35aa9e890a4495e6134b3b093bbd0",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__MOSS Line Art Style__v1.0__BF16__cv3443754__f3342333.safetensors",
+        "sha256": "4475e5c76381b9368be7597ed7104e398d83e9ba3823bf01d4f420e723f3954b",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__MOSS-Kedama(玉之けだま) Art Style__v1.0__BF16__cv3419290__f3312915.safetensors",
+        "sha256": "77d101c2d5af8895a006e682001b15583c295c314a91610247c2b6141c1ff635",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Moss_Anima-style-nai5（其一）__Moss-base-V1.0__BF16__cv3437656__f3334919.safetensors",
+        "sha256": "7166832f2c1146c45da4e96d6f631f1ed187f6b544e93d857f6b81be800a6586",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__MOSS_Anima-style-光润皮肤__Moss-base-V1.0__BF16__cv3434274__f3330868.safetensors",
+        "sha256": "0f03c422520ac1da32b3cc15475c455add808f18a80bc15881637d856d5e6ebb",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Moss_Anima-style-梦幻柔光（nai5其五）__Moss-base-v1.0__BF16__cv3444130__f3342783.safetensors",
+        "sha256": "72947932d2d1208e113a67ec271bc4573a340e34165735e3e5bd8955d5ead3c5",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Moss_Anima-style-湿润皮肤（nai5其六）__Moss-base-V1.0__BF16__cv3461886__f3364225.safetensors",
+        "sha256": "2876b73b8a4415f3493791403ee5b3bbc6527f5fcc7d6a4c26b1db67c2d6c5d0",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Moss_Anima-Style-高光湿润渲染（nai5其九）__Moss-base-V2.0__BF16__cv3448018__f3347413.safetensors",
+        "sha256": "c2b67efc456f225e1e58b8a9e4666efb273d7309cfaec29fb38bc5595e32c51d",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Moss_Anima-油画湿润厚涂二次元（nai5其三）__Moss-base-V1.0__BF16__cv3437536__f3334771.safetensors",
+        "sha256": "33f6d547a93852a54af5c2c0f01a9b8e975efdbf9bdf144d60826b853b1b0a1f",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__MOSSimage鬼针草画风LORA__v1.0__BF16__cv3417363__f3310652.safetensors",
+        "sha256": "d72814124f9a517256bcbb8a377d22bcc97722d045172d219bd146ed00dfbfbe",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__MUNJI style[MOSS __ Anima]__MOSS v1.0__BF16__cv3442141__f3340383.safetensors",
+        "sha256": "1fa373f82866b357372b1ff055eabf67cad14bccb5179eb45401c18444986bdd",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Niji Sweet Spot__MOSS_v1_A__BF16__cv3430262__f3326021.safetensors",
+        "sha256": "1ae5f5ff1f08c34ee03a17e1d1dc29e0834167523e86cf1c5913dabbffc9b9c1",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__nkss style__MOSS__BF16__cv3420627__f3314548.safetensors",
+        "sha256": "72be61d9d4158eba664abcf926f1fa894697b0272efbd922979adf0c768287ad",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Nononononoway Style__Moss-Image v1.5.1 (A)__BF16__cv3451721__f3351890.safetensors",
+        "sha256": "2a760cac418e0cc71d72715810320d6f72ba0ffba3cee3a20e3c4548e3b284c2",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__nyalia style _ moss image base__v1.0__BF16__cv3411356__f3303513.safetensors",
+        "sha256": "4dfc6dfb4d823455a2783bed90d874fa07f2d1782d6cdc942cc7e44aa51c5303",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__PC-98風のアレ__Moss.v1.1__BF16__cv3419734__f3313469.safetensors",
+        "sha256": "974f06ea8a149d485f48b6d05481bb15aef420fea771e238eb913e2f236878d8",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Pilyeon Style [Anima_Krea2_MOSS_ZIT]__MOSS v1.0__BF16__cv3444292__f3342954.safetensors",
+        "sha256": "65f6a6da241d54da0fb24f34d02e3728e38d92a1966e5811e35f767cf5ea794f",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Ratatatat74 style__MOSS v1.0__BF16__cv3446114__f3345111.safetensors",
+        "sha256": "e239e565ca82e95f5dc9da17a4d7a9bdbaa7c1ce1c6e55af5a26823c6c8e09e3",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Seapall - Artist Style__MOSS-Image__BF16__cv3434505__f3331152.safetensors",
+        "sha256": "e10eb8332e64320cc5639bc62cdcb3cd87125742cc99bab37b2dfaf9ab582316",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Shuangbatian Style [Anima_Krea2_MOSS]__MOSS v1.0__BF16__cv3429463__f3325051.safetensors",
+        "sha256": "11536532c80d1c3b7970505e0515acdb774f74eb866ec5b8c210d04cc0b79c69",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__soft cel shading _ pastel color style for Anima__moss v1.0__BF16__cv3457665__f3358856.safetensors",
+        "sha256": "d7df713a0e772ddb0b8637205fa0ab1ba007395e72dcb5ddb2e5d4f56667e68c",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Soft light 3D Anime style - 柔和光影3D动漫风格 For MOSS__v2.0__BF16__cv3424305__f3318926.safetensors",
+        "sha256": "609d26deb281e33ccc0916bf4077908c9a32d0400262d1088db5d1bc3538e8c8",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Toratora style[MOSS __ Anima]__MOSS v1.1__BF16__cv3441561__f3342825.safetensors",
+        "sha256": "843c5ee019786de9c3a3f16559da8f06c4194ab6caf42ba861f52c14188d067c",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__uekura eku 上倉 Style__moss v1.0__BF16__cv3469724__f3373665.safetensors",
+        "sha256": "65ab90c58b402d03c166dda8a38d5402dfb8e203e3b81f948da07667ce80f2f4",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Velvet's Mythic Fantasy Styles _ Flux + Pony + illustrious + ZiT + Anima + Krea2__MOSS Dark Lines__BF16__cv3452384__f3352619.safetensors",
+        "sha256": "18109a47a21837c55e0e837d7904438c3a7cc710a0ef2876da42814007caeb43",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Volumetric Glow Fantasy Style Illustration Aesthetics__v1.0__BF16__cv3442897__f3341324.safetensors",
+        "sha256": "e3e37386f980c538c202c14c55a28e2683b1bd0359280a39bc3891fbc9e8b4a4",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__wlop Anima_krea2_moss__v0.1 moss__BF16__cv3413922__f3306489.safetensors",
+        "sha256": "8adfcda60bad4031c207a858c9a78833a7aedb62c38f839146422c2b3368832b",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__WLOP_Illustrations__MOSS v1.0__BF16__cv3437951__f3335252.safetensors",
+        "sha256": "5d57531b9bc6fbeebe0e9d41572f918c14e30c0e181d840a425d7dee9286f258",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Xiaoquandianer Style [Anima_Krea2_MOSS]__MOSS v1.0__BF16__cv3427047__f3322150.safetensors",
+        "sha256": "4ae6719db6936de7547a9a05f1b6e37ea36c8e097f72fd3b9b28c018a6ed64bf",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__xipa Style - MOS_ANI_2.9B_KR2__v0.01 Moss(test)__BF16__cv3426198__f3321214.safetensors",
+        "sha256": "c80f732b506ea771576af9763ac4926bcdd48e134da8804ca1f1f645146f9e36",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__X字マイクロビキニ_X micro bikini__v1.0 moss__BF16__cv3450219__f3350099.safetensors",
+        "sha256": "f63472410667bf981b112627ec05a136cc53a9c416f2eeb620cb1a2692d46733",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__Yayayoshi Style [Anima_Krea2_MOSS]__MOSS v1.0__BF16__cv3451970__f3352120.safetensors",
+        "sha256": "585b63ed1ff304bdf0a1a5773051defbd4f4c53c9ac1f5593d3dc8ce38ac149a",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__YOSHITAKA AMANO - Final Fantasy Style for Anima, Pony, IL, Krea 2__MOSS__BF16__cv3441768__f3339915.safetensors",
+        "sha256": "677159df0ae374aa9727c5b10f4f61336b68ac9a6291fc4d5a01f56615dd38a7",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__YUNSANG Style [MOSS __ Anima]__moss v1.0__BF16__cv3438879__f3336383.safetensors",
+        "sha256": "8eb5be22f125049caae87645ab3b47e901b62d9c4f53a2f71d3549c5a7c268e2",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__决明子 Style__moss v1.0__BF16__cv3469716__f3373658.safetensors",
+        "sha256": "b3588312fdc03b5b27faa478bd92888cb64f6e683dbf6e6be0e5609916206b88",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__画风 FymriE style 【anima】__moss__BF16__cv3430570__f3326384.safetensors",
+        "sha256": "51e6fd90e3b7a576c7d2e033c7f725c638d4510b9fa31a04236b747ccecc5c24",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__画风 kantoku カントク 监督 style 【anima_krea2】__moss__BF16__cv3433042__f3329387.safetensors",
+        "sha256": "c4a81535a5c39855cca8e8398b4e05c5ccde2a0691b8731f4d0bad7c62b776a5",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__画风 kieed style 【anima_krea2_moss】__moss__BF16__cv3424533__f3319190.safetensors",
+        "sha256": "36ee0f83e6d62c52dbd775deb74554d71d079fbb0724d10892b383c21dcedc21",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__画风 ningen mame style 【anima_krea2_moss】__moss__BF16__cv3424521__f3319177.safetensors",
+        "sha256": "5368b304b224bd06479d05cb405e58c598d55523a6479ba4b592df0b8fdb5576",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__画风 ogipote style 【anima_krea2】__moss__BF16__cv3452315__f3352547.safetensors",
+        "sha256": "776fb348d5a580bcfa1e7dcf7ce0fd7bb56c71e61c509258059226bad8f4dc76",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__画风 モだれ 毛谁 modare style 【anima_krea2_moss】__moss__BF16__cv3424528__f3319186.safetensors",
+        "sha256": "08ad400e68db0b6c5d1bf5fdf00721a6a01bfa3d8f3960a122d526ea2cd920aa",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__画风 织布机loom style 【anima】__moss__BF16__cv3433051__f3329407.safetensors",
+        "sha256": "ee8ae2ead0a6e8b69e52fa84526e5f9001f067f43380001293d8ea81db890aa5",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__画风 鬼针草 style 【anima_krea2_moss】__moss__BF16__cv3430563__f3326372.safetensors",
+        "sha256": "4fa0c1daa4fc07588ece42f4a800cc264af8182eeefffe1613189d6520de6c83",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__蔚蓝档案风格（blue archive style) style 【anima_ill_krea2】__moss v1.0__BF16__cv3415234__f3308541.safetensors",
+        "sha256": "5ae1fcecf79f4eae2fb2a928e46f71d59d737a1b48a2f1fe9f1c0cbc76e87cb8",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__铅笔绘画风格Pencil style__Moss_v1.0__BF16__cv3415163__f3307977.safetensors",
+        "sha256": "d91c42c490fd180e2ba2c3e1ff960407a1f49bae5728f6727e2f7c5abe26bf78",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/画风与画师/Moss__铭音 meion style 【krea2&MOSS&anima&il】__MOSS-heal v1.0__BF16__cv3454294__f3354941.safetensors",
+        "sha256": "058296921a6ae3a6a8127e3bc96813a65703a43eab1d1ed0abb2aaa6bca3af31",
+        "family": "moss",
+        "purpose": "画风与画师",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/细节与修复/Moss__[MOSS Image] Anime Enhance Lora__v1.0__BF16__cv3431017__f3326891.safetensors",
+        "sha256": "5ccc82ee063963fd5f537a9258d077248f58f32122052054853702f49deb0b47",
+        "family": "moss",
+        "purpose": "细节与修复",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__Arknights_ Endfield _ Operators Collection__v5.0 [moss]__BF16__cv3469836__f3373810.safetensors",
+        "sha256": "7dfe63b71d9da5cf9041c0ff630b4417453ba27daac05f61794c3d24c4f67668",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__DeepSeek 小鲸鱼 （大肥鱼） _ DeepSeek Whale Girl__MOSS-Image-Base v1.0__BF16__cv3454951__f3355712.safetensors",
+        "sha256": "6546fb6bcbb726885f000d57f701caa2f1b5d784e829b3fcd58072207d280899",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__Genshin Odette _ 原神 奥黛塔__v1.0__BF16__cv3441175__f3339192.safetensors",
+        "sha256": "fd4609f85728b96b505cfe47acc65d23c3f65cbc8549a0b494857b7cb9e1600c",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__Genshin Sandrone _ 原神 桑多涅__v1.0__BF16__cv3446117__f3345117.safetensors",
+        "sha256": "f4a1d68daeaf707259961a94a48e88fe7c6ed67ecc7f576fcaf1e160f1b576be",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__HSRkafka__v1__BF16__cv3440723__f3338638.safetensors",
+        "sha256": "fcb34ad31616614156b051817c4df29dde365012a111911d4bfb4272a8f2e5b6",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__Lily(wuthering waves)-MOSS__v0.9__BF16__cv3418282__f3311720.safetensors",
+        "sha256": "bb99038727b73c60477fa21edcc7c3301912313e71d9154fc3db3d8ada71f61b",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__MOSS image 异环 Lora 合集 _ MOSS image Neverness to Everness LoRA Collection__安魂曲__BF16__cv3424133__f3318728.safetensors",
+        "sha256": "a6621c4f90ab96c8d24c07cd6c5d07ebc4f1b4794235b50bce588e480e3ffeef",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__MOSS image 终末地 Lora 合集 _ MOSS image Arknights_ Endfield LoRA Collection__洛茜__BF16__cv3424139__f3318734.safetensors",
+        "sha256": "1323ea79a956bcd096e9a836ad116b7e1c5fc13cc09a21b7c6df862ea014b082",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__MOSS image 终末地 Lora 合集 _ MOSS image Arknights_ Endfield LoRA Collection__祀__BF16__cv3424153__f3318751.safetensors",
+        "sha256": "afc4edddcb7a32ff012460f4f6d7902e74243c831c860fe4f73860ef8da1b921",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__MOSS image 鸣潮 Lora 合集 _ MOSS image Wuthering Waves LoRA Collection__心月狐__BF16__cv3424156__f3318759.safetensors",
+        "sha256": "7f994b3617d2642743bdcaaab214883508c2e07a757e23ba268d632131c425b7",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__MOSS-Image - Neverness to Everness - Lacrimosa (NTE)__V1__BF16__cv3419684__f3313418.safetensors",
+        "sha256": "be399b43881377942187f1763c036d03907dad1d10af55e5395c8ef2efc023d1",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__SCP-1471-A, Mal0 [Moss_Ani_Illust_Pony]__Mal0 Moss__BF16__cv3455479__f3356330.safetensors",
+        "sha256": "230016ba7d0674b4fbdfa72ea03e09e84b3a316ed6c92eb45d11bc4d11e5ab0a",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__Shantae_ The Half Genie Hero [IL & MOSS]__MOSS__BF16__cv3427128__f3322241.safetensors",
+        "sha256": "d0f520a867ee18869acca128a33555cdb3c7e79db72fad02ce54dca97ff92345",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__Tsaritsa 冰之女皇_冰神 安娜丝塔夏 原神 Genshin Impact__v1.0__BF16__cv3454327__f3354976.safetensors",
+        "sha256": "75531f509e941e89f1f0656f94b94b4992d452bc5c5cc0d8df6ddfdd19019d08",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__Wendy (Wendy's) _ Where's the beef_ [ANI & MOSS & IL]__MOSS__BF16__cv3436458__f3333522.safetensors",
+        "sha256": "3b27e7558a9f861b5026970ef14f93c736d328a1159c3db6668eb598bfe9b0d8",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__明日方舟终末地 小葱 祀（スイ_si) arknights__moss__FP32__cv3434350__f3330957.safetensors",
+        "sha256": "e483d972f8fb7879e1e5a2470f2e2dea131a81d84d0ebceb7c9808f6f2b0da67",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__明日方舟终末地-祀（arknights__endfield-si）__MOSS__BF16__cv3428851__f3324310.safetensors",
+        "sha256": "6186291338e857545908d2975130514dda137bbb3772cfe6fc1bd82c6a544637",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      },
+      {
+        "path": "ComfyUI/models/loras/moss/角色与人物/Moss__鸣潮 坎特蕾拉__moss v1.0__BF16__cv3468348__f3372049.safetensors",
+        "sha256": "d9f014e96ba4b86360200d6f6ad5d8f1282c2636901e930fe4c066c534679052",
+        "family": "moss",
+        "purpose": "角色与人物",
+        "source_status": "version_metadata"
+      }
+    ]
+  },
+  "imported": {
+    "downloads_directory_checked": 17,
+    "new": 9,
+    "duplicates_skipped": 6,
+    "skipped": [
+      {
+        "original_name": "krea2CatTower_v20Raw_fp8.safetensors",
+        "reason": "source_is_not_lora"
+      },
+      {
+        "original_name": "Pussy%20Mix%20-%20Krea2%20-%20goddespussy%2Cpussymix%2C0.2-1.35str%2Copen-closed%20pussy.safetensors",
+        "reason": "HTTPError"
+      }
+    ],
+    "originals_moved": false,
+    "items": [
+      {
+        "download_name": "1999style_moss_v1.0.safetensors",
+        "target_path": "ComfyUI/models/loras/moss/画风与画师/Moss__Reverse-1999 Style [重返未来-1999 anima-moss]__moss_v1.0__BF16__cv3476557__f3381880.safetensors",
+        "sha256": "f3919aa7929b1360447297aab51aedd885c8d7ca0ea061788da55c14b7e9e31b",
+        "bytes": 148721648,
+        "civitai": {
+          "model_id": 2995308,
+          "version_id": 3476557,
+          "file_id": 3381880,
+          "version_name": "moss_v1.0",
+          "base_model": "MOSS Image"
+        },
+        "family": "moss",
+        "purpose": "画风与画师",
+        "precision": "BF16"
+      },
+      {
+        "download_name": "BunnyMid_MOSS.safetensors",
+        "target_path": "ComfyUI/models/loras/moss/画风与画师/Moss__BunnyMid AI Style 『MOSS - Krea2 - Anima - Illustri__MOSS v1.0__BF16__cv3425861__f3320793.safetensors",
+        "sha256": "974f3607443f83855f2eaaf54ab52b26efa639eb78752464146235c7b55a849e",
+        "bytes": 129017204,
+        "civitai": {
+          "model_id": 2833471,
+          "version_id": 3425861,
+          "file_id": 3320793,
+          "version_name": "MOSS v1.0",
+          "base_model": "MOSS Image"
+        },
+        "family": "moss",
+        "purpose": "画风与画师",
+        "precision": "BF16"
+      },
+      {
+        "download_name": "Delicate-oil-paint-brushstroke-style-moss-image.safetensors",
+        "target_path": "ComfyUI/models/loras/moss/画风与画师/Moss__Delicate-oil-paint-brushstroke-style-moss-image__v1.0__BF16__cv3476617__f3381944.safetensors",
+        "sha256": "2dfa51ca2a1427553445be06c2ed3fb24ed4f400337ba6d0ba2268aeaedc8f88",
+        "bytes": 155380792,
+        "civitai": {
+          "model_id": 3056207,
+          "version_id": 3476617,
+          "file_id": 3381944,
+          "version_name": "v1.0",
+          "base_model": "MOSS Image"
+        },
+        "family": "moss",
+        "purpose": "画风与画师",
+        "precision": "BF16"
+      },
+      {
+        "download_name": "E7B1B3E5AEA4Yonemuro.4b3f21e67500d7553874186a413eb333.safetensors",
+        "target_path": "ComfyUI/models/loras/moss/画风与画师/Moss__米室(yonemuro) style for Moss__v1.0__BF16__cv3475550__f3380625.safetensors",
+        "sha256": "851633dfe5393cf8f8745e424dab904ecd6b39eb8163ad1387ec30b174623172",
+        "bytes": 297333680,
+        "civitai": {
+          "model_id": 3055445,
+          "version_id": 3475550,
+          "file_id": 3380625,
+          "version_name": "v1.0",
+          "base_model": "MOSS Image"
+        },
+        "family": "moss",
+        "purpose": "画风与画师",
+        "precision": "BF16"
+      },
+      {
+        "download_name": "FymriE_moss_style_heal_lora_rd64_15MP-step_00006000.safetensors",
+        "target_path": "ComfyUI/models/loras/moss/画风与画师/Moss__FymriE style 【krea2&MOSS&anima&il】__Moss-heal v1.0__BF16__cv3470485__f3374600.safetensors",
+        "sha256": "4bb23819041603a66faf603867a89d0fc743c2f569e5f7f84e315f6fefe3ce2b",
+        "bytes": 207648144,
+        "civitai": {
+          "model_id": 2727362,
+          "version_id": 3470485,
+          "file_id": 3374600,
+          "version_name": "Moss-heal v1.0",
+          "base_model": "MOSS Image"
+        },
+        "family": "moss",
+        "purpose": "画风与画师",
+        "precision": "BF16"
+      },
+      {
+        "download_name": "mossE8B4A8E6849FE586B7E799BDE6B890.6ef2a5cdf57a524a4e23147340f1c006 (1).safetensors",
+        "target_path": "ComfyUI/models/loras/moss/服装与配饰/Moss__Moss-Anima-质感-冷白渐透丝袜-冷白肉色大腿质感__Moss-base-V1.0__BF16__cv3466557__f3369850.safetensors",
+        "sha256": "8f0b38119e0e425ed677b816606535498d5ca68e572375db9924145f3a8ebf30",
+        "bytes": 145157344,
+        "civitai": {
+          "model_id": 2849447,
+          "version_id": 3466557,
+          "file_id": 3369850,
+          "version_name": "Moss-base-V1.0",
+          "base_model": "MOSS Image"
+        },
+        "family": "moss",
+        "purpose": "服装与配饰",
+        "precision": "BF16"
+      },
+      {
+        "download_name": "nai2_v1_step2000.safetensors",
+        "target_path": "ComfyUI/models/loras/moss/画风与画师/Moss__少把盐 Moss Heal__v1.0__BF16__cv3454175__f3354800.safetensors",
+        "sha256": "42839ac35c9d56c5aafd94b6edbde6e25908fb9a9326d1938ccc68ce17c4926b",
+        "bytes": 148721584,
+        "civitai": {
+          "model_id": 3039326,
+          "version_id": 3454175,
+          "file_id": 3354800,
+          "version_name": "v1.0",
+          "base_model": "MOSS Image"
+        },
+        "family": "moss",
+        "purpose": "画风与画师",
+        "precision": "BF16"
+      },
+      {
+        "download_name": "no83_dongfang_r32_a128_1mp_e140.safetensors",
+        "target_path": "ComfyUI/models/loras/moss/画风与画师/Moss__浮生云绘 style - MOSS Image LoRA__v1.0__BF16__cv3474944__f3379883.safetensors",
+        "sha256": "c381f71bbaabed63c6c1029b00c34bf5117d9e0863513c01801e007b82fa3eee",
+        "bytes": 198237768,
+        "civitai": {
+          "model_id": 3054995,
+          "version_id": 3474944,
+          "file_id": 3379883,
+          "version_name": "v1.0",
+          "base_model": "MOSS Image"
+        },
+        "family": "moss",
+        "purpose": "画风与画师",
+        "precision": "BF16"
+      },
+      {
+        "download_name": "zorojtest-moss-image-base-epoch-20 (1).safetensors",
+        "target_path": "ComfyUI/models/loras/moss/画风与画师/Moss__Zoroj Style [Anima][Krea 2][MOSS]__MOSS-base test__BF16__cv3432923__f3329240.safetensors",
+        "sha256": "fc76d8e2e78741da12610af66b2532c5f4e4029a5e24109cefb5aa32c9d83c0a",
+        "bytes": 129017232,
+        "civitai": {
+          "model_id": 2598040,
+          "version_id": 3432923,
+          "file_id": 3329240,
+          "version_name": "MOSS-base test",
+          "base_model": "MOSS Image"
+        },
+        "family": "moss",
+        "purpose": "画风与画师",
+        "precision": "BF16"
+      }
+    ]
+  },
+  "renamed": [
+    {
+      "from": "Moss__Art Style：tokkyu__v1.0__BF16__cv3450860__f3350830.safetensors",
+      "to": "Moss__Art Style-tokkyu__v1.0__BF16__cv3450860__f3350830.safetensors",
+      "reason": "fullwidth colon normalizes to \":\" which the catalogue path contract forbids"
+    },
+    {
+      "from": "Moss__artist：Si__wooupp Style [Moss_Anima]__Moss v0.9__BF16__cv3430939__f3326797.safetensors",
+      "to": "Moss__artist-Si__wooupp Style [Moss_Anima]__Moss v0.9__BF16__cv3430939__f3326797.safetensors",
+      "reason": "same normalization rule"
+    }
+  ],
+  "deleted_records": {
+    "marked_missing": 247,
+    "bytes": 181085863281,
+    "by_kind": {
+      "checkpoint": 1,
+      "controlnet": 2,
+      "diffusion_model": 14,
+      "lora": 226,
+      "text_encoder": 2,
+      "vae": 2
+    },
+    "authorized_purge": 202,
+    "manager_delete": 45,
+    "already_missing_before_this_pass": 15,
+    "weights_restored": 0,
+    "private_evidence": "presence-20261118-013736-257357 and anima-assets-deletion-20261024 (both outside Git)"
+  },
+  "verification": {
+    "catalogue_contract": "validate_catalogue passed after registration, import and reconciliation",
+    "sha256_measured": "every newly registered and imported weight hashed locally",
+    "cards_verified": 9,
+    "loader_enumeration_verified": 9,
+    "previews_fetched": 9,
+    "gpu_inference": false,
+    "full_library_rescan": false,
+    "service_restarted": false
+  },
+  "tests": [
+    "tests/test_standardize_models.py",
+    "tests/test_register_present_loras.py",
+    "tests/test_reconcile_asset_presence.py",
+    "tests/test_import_lora_downloads.py",
+    "tests/test_model_sources.py"
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-10-31T06:25:55.214364+00:00",
+  "created_at": "2026-11-17T17:45:30.971831+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -68200,8 +68200,8 @@
     },
     {
       "path": "inventory/model_sources.json",
-      "sha256": "ffd73a0afc8065cc67a906a4ffaabcea41e559ff7c6dc59de69ad7c70c779343",
-      "bytes": 1283777
+      "sha256": "7f8fe523b654752fbefb9ff006e5c924b16ed14a341e0d367128382a6230af60",
+      "bytes": 1542889
     }
   ],
   "production_plugins": [
@@ -68296,36 +68296,16 @@
     }
   ],
   "development_revision": {
-    "note": "Sync stocking texture upstream to c38be2fe (oil gloss, texture export, UI scale)",
-    "previous_manifest_sha256": "e84dcd71a994da3743c9897437c6f5f7171cfedf49d1a92924119809677161c1",
+    "note": "MOSS family naming, backlog registration, new download import and presence reconciliation",
+    "previous_manifest_sha256": "f6832b6258792fce8d358f4e74f8c43185dad9f340ff9114c7d41bd890f9fb65",
     "source_changes": {
-      "added": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/_glint_position.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/_oily_absorption.py"
-      ],
+      "added": [],
       "removed": [],
       "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/UPSTREAM.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/engine.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_api.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_assets.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/studio_store.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_nodes.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_request_contract.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/tests/test_studio.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/document.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/export.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/guide_fields.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/look.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/oily.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/psd_io.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/server.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/session.py",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/app.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/i18n/en.json",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/index.html",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/look.js",
-        "ComfyUI/custom_nodes/ComfyUI-Stocking-Texture/upstream/stocking/static/style.css"
+        "production_tools/export_stocking_upstream.py",
+        "production_tools/stocking_independent_README.md",
+        "production_tools/stocking_upstream_README.md",
+        "production_tools/test_export_stocking_upstream.py"
       ]
     },
     "live_deployed": false,
