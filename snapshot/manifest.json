@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-11-15T08:58:13.130845+00:00",
+  "created_at": "2026-11-18T00:30:29.324922+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -68298,8 +68298,8 @@
     },
     {
       "path": "inventory/model_sources.json",
-      "sha256": "6523330376e6329d54bcd162e9272e845ac7c4eb777aa68a21cb4798361307df",
-      "bytes": 1283777
+      "sha256": "8968b3f20ba0b45af8ad4bb0baba17cb00dc93ef34f148b1c9f88d5e4cbaec0b",
+      "bytes": 1542889
     }
   ],
   "production_plugins": [
@@ -68394,39 +68394,74 @@
     }
   ],
   "development_revision": {
-    "note": "Align 8 standalone UAP workflows, remove Krea2 lean depth control, and extract standalone caption workflow",
-    "previous_manifest_sha256": "7021cdeb63174fa67d6adf3d8fdcf4995cc2158091b6bc3e28f7c06a0c6dccde",
+    "note": "Merge origin/main into the LoRA catalogue reconciliation branch",
+    "previous_manifest_sha256": "055fe9d6cddf6ec31c7c0ada8ce4fc1089c05b8e52a9596f19f61de623bc1fec",
     "source_changes": {
       "added": [
-        "ComfyUI/user/default/workflows/工具_图片反推_提示词提取.json",
-        "production_tools/build_uap_standalone_suite.py",
-        "production_tools/templates/Krea2_精简生产_v1.json",
-        "production_tools/templates/工具_图片反推_提示词提取.json",
-        "production_tools/test_uap_standalone_suite.cjs"
-      ],
-      "removed": [],
-      "changed": [
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/scripts/uap_rewrite_guard.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/canvas_write.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/system_stats.js",
         "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/uap_erase_ui_v2.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
-        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/uap_selfcheck.js",
         "ComfyUI/user/default/workflows/Krea2_精简生产_v1.json",
         "ComfyUI/user/default/workflows/MOSS_精简生产_v1.json",
+        "ComfyUI/user/default/workflows/工具_图片反推_提示词提取.json",
+        "production_tools/build_moss_workflow.py",
+        "production_tools/build_uap_standalone_suite.py",
+        "production_tools/templates/Krea2_精简生产_v1.json",
+        "production_tools/templates/MOSS_精简生产_v1.json",
+        "production_tools/templates/工具_图片反推_提示词提取.json",
+        "production_tools/test_model_quick_switch.cjs",
+        "production_tools/test_moss_workflow.cjs",
+        "production_tools/test_uap_standalone_suite.cjs",
+        "production_tools/test_workspace_mount.cjs"
+      ],
+      "removed": [
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.js",
+        "production_tools/test_anima_control.cjs"
+      ],
+      "changed": [
+        "ComfyUI/custom_nodes/ComfyUI-Olm-JoyCaption/olm_joycaption.py",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/web/comfyui/autocomplete.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/web/comfyui/workflow_targets.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime_preview.html",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_panel.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_switches.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_inspector.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/resource_actions.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/run_controls.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/static_prompt_inspector.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/studio.css",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_theme.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.css",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
+        "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
+        "ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
         "ComfyUI/user/default/workflows/生产扩展_04_Krea2_指令编辑.json",
         "ComfyUI/user/default/workflows/生产扩展_06_透明素材_抠图导出.json",
         "ComfyUI/user/default/workflows/生产扩展_08_超分_二倍交付.json",
         "ComfyUI/user/default/workflows/生产扩展_09_超分_四倍素材.json",
-        "production_tools/build_moss_workflow.py",
-        "production_tools/templates/MOSS_精简生产_v1.json",
+        "production_tools/UAP统一工作台说明.md",
+        "production_tools/layout_uap_workbench.py",
+        "production_tools/merge_unified_workflow.py",
+        "production_tools/simplify_anima_control.py",
+        "production_tools/templates/UAP统一生产工作台_v2.json",
         "production_tools/templates/生产扩展_04_Krea2_指令编辑.json",
         "production_tools/templates/生产扩展_06_透明素材_抠图导出.json",
         "production_tools/templates/生产扩展_08_超分_二倍交付.json",
         "production_tools/templates/生产扩展_09_超分_四倍素材.json",
         "production_tools/test_control_switches.cjs",
-        "production_tools/test_moss_workflow.cjs"
+        "production_tools/test_run_controls.cjs",
+        "production_tools/test_uap_browser_retirement.py",
+        "production_tools/test_uap_daily_controls.cjs",
+        "production_tools/test_uap_navigation.cjs",
+        "production_tools/validate_uap_workflow.py"
       ]
     },
     "live_deployed": false,

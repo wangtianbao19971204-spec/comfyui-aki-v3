@@ -17,6 +17,7 @@ FAMILY_LABELS = {
     "anima": "Anima",
     "anima-2.9b": "Anima-2.9B",
     "krea2": "Krea2",
+    "moss": "Moss",
     "qwen-image-2.1": "Qwen-Image-2.1",
     "sam3.1": "SAM3.1",
     "other": "Other",
@@ -104,6 +105,10 @@ def _family(asset: Mapping[str, Any], metadata: Mapping[str, Any], path: PurePos
             return "anima-2.9b"
         if normalized.startswith("krea2"):
             return "krea2"
+        # The MOSS Image release line names its base "MOSS Image" / "Moss";
+        # cross-family titles such as "MOSS & Krea2 & Anima" never decide it.
+        if normalized.startswith("moss"):
+            return "moss"
         if normalized.startswith("anima"):
             version = _text(civitai.get("name")) or ""
             reviewed_family = _text(organization.get("family")) or ""
@@ -116,6 +121,9 @@ def _family(asset: Mapping[str, Any], metadata: Mapping[str, Any], path: PurePos
         return "sam3.1"
     if path.name.casefold() == "qwen-image-2.1-uc-bf16.gguf":
         return "qwen-image-2.1"
+    # A reviewed MOSS library root is enough to keep re-standardization stable.
+    if any(part.casefold() == "moss" for part in path.parts[:-1]):
+        return "moss"
     reviewed_family = (_text(organization.get("family")) or "").casefold()
     for slug, label in FAMILY_LABELS.items():
         if reviewed_family in {slug, label.casefold()}:
