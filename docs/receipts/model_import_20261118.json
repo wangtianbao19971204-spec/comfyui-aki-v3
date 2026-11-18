@@ -1,0 +1,70 @@
+{
+  "receipt": "model_import_20261118",
+  "date": "2026-11-18",
+  "scope": "Import one downloaded Krea2 base model into the runtime, register its card, and record it in the public source catalogue.",
+  "imported": {
+    "download_name": "krea2CatTower_v20Raw_fp8.safetensors",
+    "bytes": 14125465720,
+    "sha256": "bf5f995522db5a99db3875829412de663ecd32523e318cb5f9df32f7b066be53",
+    "kind": "diffusion_model",
+    "loader": "UNETLoader (diffusion_models/krea2/图像生成)",
+    "current_path": "ComfyUI/models/diffusion_models/krea2/图像生成/Krea2__Krea2 Cat Tower__v2.0 (Raw)__FP8__cv3338554__f3229901.safetensors",
+    "civitai": {
+      "model_id": 2805913,
+      "version_id": 3338554,
+      "file_id": 3229901,
+      "version_name": "v2.0 (Raw)",
+      "base_model": "Krea 2"
+    },
+    "family": "krea2",
+    "purpose": "图像生成",
+    "version": "v2.0 (Raw)",
+    "precision": "FP8",
+    "source_identity": "civitai:model=2805913,version=3338554,file=3229901",
+    "source_page": "https://civitai.com/models/2805913?modelVersionId=3338554",
+    "upstream_file_name": "krea2_cat_tower_v2.0_raw_fp8.safetensors",
+    "preview_companion": [
+      "ComfyUI/models/diffusion_models/krea2/图像生成/Krea2__Krea2 Cat Tower__v2.0 (Raw)__FP8__cv3338554__f3229901.webp"
+    ],
+    "original_download_moved": true
+  },
+  "placement": {
+    "root": "ComfyUI/models/diffusion_models/krea2/图像生成",
+    "container": "diffusion-only safetensors (blocks/txtfusion tensors, no VAE or text encoder)",
+    "family_evidence": "Civitai version-level baseModel \"Krea 2\"",
+    "sibling": "Krea2 Cat Tower v1.0 (Turbo INT8 ConvRot) stays installed and unchanged"
+  },
+  "catalogue": {
+    "assets": 577,
+    "observed_present": 315,
+    "observed_missing": 262,
+    "present_image_models": 5,
+    "new_record": {
+      "path": "ComfyUI/models/diffusion_models/krea2CatTower_v20Raw_fp8.safetensors",
+      "current_path": "ComfyUI/models/diffusion_models/krea2/图像生成/Krea2__Krea2 Cat Tower__v2.0 (Raw)__FP8__cv3338554__f3229901.safetensors",
+      "family": "Krea2",
+      "source_status": "version_metadata"
+    }
+  },
+  "verification": {
+    "container_validated": true,
+    "copy_hash_source_and_destination": true,
+    "card_registered_and_read_back": true,
+    "loader_enumeration": "UNETLoader lists krea2\\图像生成\\Krea2__Krea2 Cat Tower__v2.0 (Raw)__FP8__...",
+    "preview_fetched": true,
+    "catalogue_contract": "validate_catalogue passed before and after the import",
+    "service_restarted": false,
+    "gpu_inference": false,
+    "full_library_rescan": false
+  },
+  "notes": [
+    "Weights, sidecars, previews and private receipts stay outside Git.",
+    "The download original is still in the downloads folder; the importer does not move it unless run without --keep-originals.",
+    "Loader enumeration only proves the path is selectable; it does not prove GPU inference."
+  ],
+  "tests": [
+    "tests/test_import_downloaded_model.py",
+    "tests/test_standardize_models.py",
+    "tests/test_model_sources.py"
+  ]
+}
