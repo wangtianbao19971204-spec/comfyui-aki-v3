@@ -53,7 +53,7 @@ export function promptUsage(app,node){
 export function listPromptTargets(app) {
     const targets=[];
     for(const node of app.graph?._nodes || []) {
-        if(!isEnabledTarget(app,node)||/^(?:MarkdownNote|Note|ShowText\|pysssss)$/.test(node.comfyClass||node.type||''))continue;
+        if(!isEnabledTarget(app,node)||/^(?:MarkdownNote|Note|ShowText\|pysssss|ShowText|PreviewAny|(?:Lora (?:Loader|Stacker)|WanVideo Lora Select|Create Hook LoRA) \(LoraManager\))$/.test(node.comfyClass||node.type||''))continue;
         for(const widget of node.widgets || []) {
             if(typeof widget.value!=='string' || !/^(text|prompt|positive|negative|positive_prompt|negative_prompt|[a-z_]+_tags)$/.test(widget.name || ''))continue;
             if(widget.options?.readOnly||widget.options?.readonly||widget.inputEl?.readOnly||!isWritableTarget(app,node,widget))continue;

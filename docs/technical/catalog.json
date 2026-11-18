@@ -93,7 +93,8 @@
         "snapshot/runtime/qwen21_lab/ComfyUI/models/configs/v1-inference.yaml",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/qwen/config.json",
         "snapshot/runtime/ComfyUI/custom_nodes/vnccs-utils/nodes/pose_studio.py",
-        "snapshot/runtime/ComfyUI/custom_nodes/vnccs-utils/web/vnccs_pose_studio.js"
+        "snapshot/runtime/ComfyUI/custom_nodes/vnccs-utils/web/vnccs_pose_studio.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Olm-JoyCaption/olm_joycaption.py"
       ],
       "tests": [
         "snapshot/runtime/production_tools/validate_profiles.py",
@@ -101,7 +102,8 @@
         "snapshot/runtime/production_tools/test_plugin_fusion.cjs",
         "snapshot/runtime/production_tools/test_validate_profiles.py",
         "snapshot/runtime/production_tools/test_vnccs_pose_sync.cjs",
-        "tests/test_vnccs_pose_sync.py"
+        "tests/test_vnccs_pose_sync.py",
+        "tests/test_olm_joycaption_vram_interrupt.py"
       ],
       "evidence": [
         "docs/receipts/browser_live_deployment_20261006.json",
@@ -118,7 +120,8 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules.json",
         "snapshot/runtime/production_tools/validate_profiles.py",
         "snapshot/runtime/production_tools/test_validate_profiles.py",
-        "tests/test_vnccs_pose_sync.py"
+        "tests/test_vnccs_pose_sync.py",
+        "tests/test_olm_joycaption_vram_interrupt.py"
       ],
       "examples": [
         "docs/technical/runtime/independent-services.md",
@@ -130,23 +133,34 @@
       "document": "docs/technical/runtime/workbench.md",
       "implementation": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench_shell.js",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workbench.css",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/studio.css",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_theme.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/ui_identity.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime.css",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anime_preview.html",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/canvas_write.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/modal_focus.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_target.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_inspector.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/pending_prompts.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/prompt_optimizer.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/run_controls.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/runtime_controls.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/refinement_controls.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/repair_workflow.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/system_stats.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/task_activity.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/workspace.js",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/anima_control.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_switches.js",
-        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_panel.js"
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/control_panel.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/uap_erase_ui_v2.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/uap_selfcheck.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/resource_actions.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/static_prompt_inspector.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/scripts/uap_rewrite_guard.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js"
       ],
       "tests": [
         "snapshot/runtime/production_tools/test_uap_navigation.cjs",
@@ -156,8 +170,13 @@
         "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/browser_measurement.js",
         "docs/technical/archive/benchmark_reports/2026-10-02_workbench_hourly/runs/20261002_214157/lifecycle_collector.js",
         "snapshot/runtime/production_tools/test_stocking_workflow.cjs",
-        "snapshot/runtime/production_tools/test_anima_control.cjs",
-        "snapshot/runtime/production_tools/test_control_switches.cjs"
+        "snapshot/runtime/production_tools/test_control_switches.cjs",
+        "snapshot/runtime/production_tools/test_model_quick_switch.cjs",
+        "snapshot/runtime/production_tools/test_workspace_mount.cjs",
+        "snapshot/runtime/production_tools/test_run_controls.cjs",
+        "snapshot/runtime/production_tools/test_moss_workflow.cjs",
+        "snapshot/runtime/production_tools/test_uap_standalone_suite.cjs",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/scripts/uap_rewrite_guard.py"
       ],
       "evidence": [
         "snapshot/evidence/20261005_workbench_anime_polish/REPORT.txt",
@@ -176,6 +195,8 @@
       "acceptance": "historical",
       "watch": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/scripts/",
+        "snapshot/runtime/production_tools/UAP统一工作台说明.md",
         "snapshot/runtime/production_tools/layout_uap_workbench.py",
         "snapshot/runtime/production_tools/tighten_uap_widgets.py",
         "snapshot/runtime/production_tools/arrange_uap_daily_controls.py",
@@ -185,7 +206,12 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_daily_controls.js",
         "snapshot/runtime/production_tools/test_anima_control.cjs",
-        "snapshot/runtime/production_tools/test_control_switches.cjs"
+        "snapshot/runtime/production_tools/test_control_switches.cjs",
+        "snapshot/runtime/production_tools/test_model_quick_switch.cjs",
+        "snapshot/runtime/production_tools/test_workspace_mount.cjs",
+        "snapshot/runtime/production_tools/test_run_controls.cjs",
+        "snapshot/runtime/production_tools/test_moss_workflow.cjs",
+        "snapshot/runtime/production_tools/test_uap_standalone_suite.cjs"
       ],
       "examples": [
         "snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
@@ -198,6 +224,9 @@
       "implementation": [
         "snapshot/runtime/ComfyUI/user/default/workflows/UAP统一生产工作台_v2.json",
         "snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json",
+        "snapshot/runtime/ComfyUI/user/default/workflows/Krea2_精简生产_v1.json",
+        "snapshot/runtime/ComfyUI/user/default/workflows/生产扩展_04_Krea2_指令编辑.json",
+        "snapshot/runtime/production_tools/templates/生产扩展_04_Krea2_指令编辑.json",
         "snapshot/runtime/production_tools/merge_unified_workflow.py",
         "snapshot/runtime/production_tools/validate_uap_workflow.py",
         "snapshot/runtime/production_tools/analyze_workflow_dependencies.py",
@@ -210,7 +239,20 @@
         "snapshot/runtime/production_tools/simplify_anima_control.py",
         "snapshot/runtime/production_tools/connect_standalone_krea2_control.py",
         "snapshot/runtime/ComfyUI/user/default/workflows/生产套件_03_Krea2_一体化生产_v2.json",
-        "snapshot/runtime/production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json"
+        "snapshot/runtime/production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
+        "snapshot/runtime/production_tools/build_moss_workflow.py",
+        "snapshot/runtime/production_tools/templates/MOSS_精简生产_v1.json",
+        "snapshot/runtime/ComfyUI/user/default/workflows/MOSS_精简生产_v1.json",
+        "snapshot/runtime/production_tools/build_uap_standalone_suite.py",
+        "snapshot/runtime/production_tools/templates/Krea2_精简生产_v1.json",
+        "snapshot/runtime/ComfyUI/user/default/workflows/工具_图片反推_提示词提取.json",
+        "snapshot/runtime/production_tools/templates/工具_图片反推_提示词提取.json",
+        "snapshot/runtime/ComfyUI/user/default/workflows/生产扩展_06_透明素材_抠图导出.json",
+        "snapshot/runtime/production_tools/templates/生产扩展_06_透明素材_抠图导出.json",
+        "snapshot/runtime/ComfyUI/user/default/workflows/生产扩展_08_超分_二倍交付.json",
+        "snapshot/runtime/production_tools/templates/生产扩展_08_超分_二倍交付.json",
+        "snapshot/runtime/ComfyUI/user/default/workflows/生产扩展_09_超分_四倍素材.json",
+        "snapshot/runtime/production_tools/templates/生产扩展_09_超分_四倍素材.json"
       ],
       "tests": [
         "snapshot/runtime/production_tools/validate_uap_workflow.py",
@@ -221,7 +263,9 @@
         "tests/test_native_workflow_acceptance.py",
         "snapshot/runtime/production_tools/test_stocking_workflow.cjs",
         "tests/test_anima_control_workflow.py",
-        "tests/test_standalone_krea2_control_workflow.py"
+        "tests/test_standalone_krea2_control_workflow.py",
+        "snapshot/runtime/production_tools/test_moss_workflow.cjs",
+        "snapshot/runtime/production_tools/test_uap_standalone_suite.cjs"
       ],
       "evidence": [
         "snapshot/evidence/20261005_workflow_product_repair/FINAL_DELIVERY.json",
@@ -264,12 +308,19 @@
         "tests/fixtures/anima_control_before.json",
         "snapshot/runtime/production_tools/connect_standalone_krea2_control.py",
         "tests/test_standalone_krea2_control_workflow.py",
-        "tests/fixtures/krea2_control_before.json"
+        "tests/fixtures/krea2_control_before.json",
+        "snapshot/runtime/production_tools/build_moss_workflow.py",
+        "snapshot/runtime/production_tools/test_moss_workflow.cjs",
+        "snapshot/runtime/production_tools/build_uap_standalone_suite.py",
+        "snapshot/runtime/production_tools/test_uap_standalone_suite.cjs"
       ],
       "examples": [
         "snapshot/runtime/production_tools/templates/UAP统一生产工作台_v2.json",
         "snapshot/runtime/production_tools/templates/生产扩展_丝袜纹理修复.json",
-        "snapshot/runtime/production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json"
+        "snapshot/runtime/production_tools/templates/生产套件_03_Krea2_一体化生产_v2.json",
+        "snapshot/runtime/production_tools/templates/MOSS_精简生产_v1.json",
+        "snapshot/runtime/production_tools/templates/Krea2_精简生产_v1.json",
+        "snapshot/runtime/production_tools/templates/工具_图片反推_提示词提取.json"
       ]
     },
     {
@@ -279,6 +330,8 @@
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/__init__.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/py/lora_manager.py",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/py/config.py",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/web/comfyui/workflow_targets.js",
+        "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/web/comfyui/autocomplete.js",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/vue-widgets/vite.config.mts",
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules.json",
         "snapshot/inventory/models.json",
@@ -305,7 +358,8 @@
         "tests/test_import_lora_downloads.py",
         "tests/test_register_present_loras.py",
         "tests/test_reconcile_asset_presence.py",
-        "tests/test_import_downloaded_model.py"
+        "tests/test_import_downloaded_model.py",
+        "snapshot/runtime/production_tools/test_moss_workflow.cjs"
       ],
       "evidence": [
         "docs/technical/archive/benchmark_reports/MODEL_COMPARISON_RUNBOOK.md",

@@ -8,9 +8,9 @@ from pathlib import Path
 import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
-FILES = ("UAP统一生产工作台_v2.json", "生产套件_02_Anima2.9B_动漫生产_v2.json")
+FILES = ("生产套件_02_Anima2.9B_动漫生产_v2.json",)
 BRANCH_FILES = {"a29": FILES,
-                "a1": (FILES[0], "生产套件_01_Anima原版_LoRA生产_v2.json")}
+                "a1": ("生产套件_01_Anima原版_LoRA生产_v2.json",)}
 CHOICES = {"细致线稿": "PyraCannyPreprocessor", "中细线稿": "HEDPreprocessor",
            "粗略线稿": "Manga2Anime_LineArt_Preprocessor", "灰度图": "DepthAnythingV2Preprocessor"}
 

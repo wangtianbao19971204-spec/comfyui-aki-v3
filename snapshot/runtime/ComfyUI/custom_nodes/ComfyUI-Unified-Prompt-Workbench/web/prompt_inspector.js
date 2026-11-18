@@ -21,6 +21,21 @@ function promptText(api, value, seen = new Set()) {
     const type = node.class_type, inputs = node.inputs || {};
     let result;
     if (type === 'CLIPTextEncode' && slot === 0) result = promptText(api, inputs.text, seen);
+    else if (type === 'Prompt (LoraManager)' && slot === 0 && typeof inputs.text === 'string' && !/__[^_\s]+__|\{[^{}]*\|[^{}]*\}/.test(inputs.text)) {
+        const triggerKeys = Object.keys(inputs).filter(key => /^trigger_words\d*$/.test(key));
+        const emptyTriggers = triggerKeys.every(key => {
+            const val = inputs[key];
+            if (val == null || val === '') return true;
+            if (!link(val)) return false;
+            const upstream = api[val[0]];
+            if (!upstream || !managerLoras.has(upstream.class_type) || val[1] !== 2) return false;
+            const rows = upstream.inputs?.loras?.__value__ ?? upstream.inputs?.loras;
+            return Array.isArray(rows) && rows.every(row => !row?.active || (Number(row.strength) === 0 && Number(row.clipStrength ?? row.strength) === 0));
+        });
+        result = emptyTriggers
+            ? {text: inputs.text, path: [], source: {id: String(id), widget: 'text'}}
+            : {reason: 'Prompt (LoraManager) 将在运行时自动前置拼接已启用 LoRA 的触发词', path: [], source: {id: String(id), widget: 'text'}};
+    }
     else if (['CR Prompt Text', 'PrimitiveString', 'PrimitiveStringMultiline'].includes(type) && slot === 0) result = promptText(api, inputs.prompt ?? inputs.value, seen);
     else if (type === 'WeiLinPromptUI' && slot === 0 && inputs.auto_random === false &&
         !inputs.opt_text && !inputs.lora_str && typeof inputs.positive === 'string' &&
@@ -67,7 +82,7 @@ export function inspectPrompt(api, samplerId) {
     // LoRAs on the actual encoder's CLIP path also affect conditioning.
     for (const value of [sampler.inputs.positive, sampler.inputs.negative]) {
         const encode = link(value) && api[value[0]];
-        if (encode?.class_type === 'CLIPTextEncode') walk(encode.inputs.clip, 'clip');
+        if (encode?.class_type === 'CLIPTextEncode' || encode?.class_type === 'Prompt (LoraManager)') walk(encode.inputs.clip, 'clip');
     }
     const cfg = sampler.inputs.cfg;
     const patched = unknown.length > 0 || /cfg_pp/.test(sampler.inputs.sampler_name || '');
@@ -78,8 +93,7 @@ export function inspectPrompt(api, samplerId) {
 }
 
 export function modelNote(file) {
-    if (/animayume[_\\/.-]*v?15/i.test(file)) return 'AnimaYume v1.5；原版 Anima LoRA 的兼容性需逐个验证。';
-    if (/anima.*2[._-]?9|anima29|2\.9b/i.test(file)) return 'Anima 2.9B：原版 28 层 LoRA / LLLite 不可直接视为 40 层兼容。';
+    if (/^(?:moss[\\/]|moss__)/i.test(file)) return 'MOSS：需配 Qwen3.5 9B（type = moss_image）与 Flux2 VAE，LoRA 保持 model-only（clipStrength = 0）。';
     if (/krea2/i.test(file)) return 'Krea2：提示词与采样参数应按当前具体模型版本设置。';
     return '文件名取自上游加载器；架构与 LoRA 兼容性不能仅凭分支名称判断。';
 }

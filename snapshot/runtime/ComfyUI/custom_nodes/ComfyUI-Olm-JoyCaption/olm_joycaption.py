@@ -5,9 +5,66 @@ import numpy as np
 from typing import Tuple
 from PIL import Image
 import torch
-from transformers import LlavaForConditionalGeneration, AutoProcessor, BitsAndBytesConfig
+from transformers import (
+    LlavaForConditionalGeneration,
+    AutoProcessor,
+    BitsAndBytesConfig,
+    StoppingCriteria,
+    StoppingCriteriaList,
+)
 from aiohttp import web
 from server import PromptServer
+
+try:
+    import comfy.model_management as model_management
+except Exception:  # pragma: no cover - standalone import fallback
+    model_management = None
+
+
+_VRAM_HEADROOM_BYTES = {
+    "fp16": int(18.5 * (1024 ** 3)),
+    "8bit": int(10.5 * (1024 ** 3)),
+    "4bit": int(7.0 * (1024 ** 3)),
+}
+
+
+def _check_interrupted() -> None:
+    if model_management is not None and hasattr(model_management, "throw_exception_if_processing_interrupted"):
+        model_management.throw_exception_if_processing_interrupted()
+
+
+def _is_interrupted() -> bool:
+    if model_management is not None and hasattr(model_management, "processing_interrupted"):
+        return bool(model_management.processing_interrupted())
+    return False
+
+
+class _ComfyInterruptCriteria(StoppingCriteria):
+    def __call__(self, input_ids, scores, **kwargs) -> bool:
+        return _is_interrupted()
+
+
+def _ensure_cuda_headroom(load_8bit: bool, load_4bit: bool) -> None:
+    if model_management is None or not torch.cuda.is_available():
+        return
+    mode = "4bit" if load_4bit else ("8bit" if load_8bit else "fp16")
+    required = _VRAM_HEADROOM_BYTES[mode]
+    try:
+        cuda_dev = (
+            model_management.get_torch_device()
+            if hasattr(model_management, "get_torch_device")
+            else torch.device("cuda")
+        )
+        free_bytes = int(model_management.get_free_memory(cuda_dev))
+    except Exception:
+        free_bytes = 0
+    if free_bytes < required:
+        if hasattr(model_management, "unload_all_models"):
+            model_management.unload_all_models()
+        if hasattr(model_management, "soft_empty_cache"):
+            model_management.soft_empty_cache()
+        gc.collect()
+        torch.cuda.empty_cache()
 
 
 DEBUG_MODE = False
@@ -160,12 +217,19 @@ class OlmJoyCaption:
 
 
     def _get_model_and_processor(self, model_id: str, load_8bit: bool, load_4bit: bool):
+        _check_interrupted()
         key = f"{model_id}_{'8bit' if load_8bit else ''}{'4bit' if load_4bit else ''}"
         if key in _MODEL_CACHE:
-            return _MODEL_CACHE[key]
+            cached_model, cached_processor = _MODEL_CACHE[key]
+            cached_map = getattr(cached_model, "hf_device_map", None) or {}
+            if not any(loc == "disk" for loc in cached_map.values()):
+                return cached_model, cached_processor
+            clear_model_cache()
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
         dtype = torch.float16 if device == "cuda" else torch.float32
+        if device == "cuda":
+            _ensure_cuda_headroom(load_8bit=load_8bit, load_4bit=load_4bit)
 
         quantization_config = None
         if device == "cuda" and (load_4bit or load_8bit):
@@ -186,6 +250,7 @@ class OlmJoyCaption:
                 debug_print("[OlmJoyCaption] Loading model in 8-bit (skipping vision components).")
 
         processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=True)
+        _check_interrupted()
         model = LlavaForConditionalGeneration.from_pretrained(
             model_id,
             trust_remote_code=True,
@@ -194,6 +259,21 @@ class OlmJoyCaption:
             quantization_config=quantization_config,
             low_cpu_mem_usage=True,
         )
+        device_map = getattr(model, "hf_device_map", None) or {}
+        if any(loc == "disk" for loc in device_map.values()):
+            try:
+                del model
+                del processor
+            except Exception:
+                pass
+            gc.collect()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+            raise RuntimeError(
+                "当前可用显存与内存不足以加载 JoyCaption 模型（已拦截极慢磁盘卸载）；"
+                "请释放显存或在节点中启用 load_4bit / load_8bit 量化后重试。"
+            )
+        _check_interrupted()
 
         if device == "cpu":
             model = model.to(device)  # type: ignore
@@ -225,48 +305,52 @@ class OlmJoyCaption:
         if load_4bit:
             load_8bit = False
 
+        _check_interrupted()
         model, processor = self._get_model_and_processor(model_id, load_8bit, load_4bit)
-        pil = _tensor_to_pil(image)
+        try:
+            pil = _tensor_to_pil(image)
 
-        user_prompt = prompt.strip() or "Describe this image in rich, precise detail."
-        debug_print("[OlmJoyCaption] user_prompt:", user_prompt)
+            user_prompt = prompt.strip() or "Describe this image in rich, precise detail."
+            debug_print("[OlmJoyCaption] user_prompt:", user_prompt)
 
-        convo = [{"role": "user", "content": user_prompt}]
-        convo_string = processor.apply_chat_template(convo, tokenize=False, add_generation_prompt=True)
-        debug_print("[OlmJoyCaption] convo_string:", convo_string)
+            convo = [{"role": "user", "content": user_prompt}]
+            convo_string = processor.apply_chat_template(convo, tokenize=False, add_generation_prompt=True)
+            debug_print("[OlmJoyCaption] convo_string:", convo_string)
 
-        inputs = processor(text=[convo_string], images=[pil], return_tensors="pt")
+            inputs = processor(text=[convo_string], images=[pil], return_tensors="pt")
 
-        for k, v in inputs.items():
-            if hasattr(v, "to"):
-                if k == "pixel_values":
-                    if load_4bit or load_8bit:
-                        inputs[k] = v.to(model.device, dtype=torch.float16 if torch.cuda.is_available() else torch.float32)
+            for k, v in inputs.items():
+                if hasattr(v, "to"):
+                    if k == "pixel_values":
+                        if load_4bit or load_8bit:
+                            inputs[k] = v.to(model.device, dtype=torch.float16 if torch.cuda.is_available() else torch.float32)
+                        else:
+                            inputs[k] = v.to(model.device, dtype=model.dtype)
                     else:
-                        inputs[k] = v.to(model.device, dtype=model.dtype)
-                else:
-                    inputs[k] = v.to(model.device)
+                        inputs[k] = v.to(model.device)
 
-        with torch.inference_mode():
-            out_ids = model.generate(
-                **inputs,
-                max_new_tokens=max_new_tokens,
-                do_sample=(temperature > 0),
-                temperature=temperature,
-                top_p=top_p,
-                pad_token_id=processor.tokenizer.eos_token_id,
-                use_cache=True,
-            )
+            _check_interrupted()
+            with torch.inference_mode():
+                out_ids = model.generate(
+                    **inputs,
+                    max_new_tokens=max_new_tokens,
+                    do_sample=(temperature > 0),
+                    temperature=temperature,
+                    top_p=top_p,
+                    pad_token_id=processor.tokenizer.eos_token_id,
+                    use_cache=True,
+                    stopping_criteria=StoppingCriteriaList([_ComfyInterruptCriteria()]),
+                )
+            _check_interrupted()
 
-        input_token_len = inputs["input_ids"].shape[1]
-        caption_ids = out_ids[0][input_token_len:]
-        caption = processor.tokenizer.decode(caption_ids, skip_special_tokens=True).strip() or "(empty caption)"
-
-        if unload_after:
-            debug_print("[OlmJoyCaption] Unloading model as requested...")
-            clear_model_cache()
-
-        return (caption,)
+            input_token_len = inputs["input_ids"].shape[1]
+            caption_ids = out_ids[0][input_token_len:]
+            caption = processor.tokenizer.decode(caption_ids, skip_special_tokens=True).strip() or "(empty caption)"
+            return (caption,)
+        finally:
+            if unload_after:
+                debug_print("[OlmJoyCaption] Unloading model as requested...")
+                clear_model_cache()
 
 
 if PromptServer is not None:

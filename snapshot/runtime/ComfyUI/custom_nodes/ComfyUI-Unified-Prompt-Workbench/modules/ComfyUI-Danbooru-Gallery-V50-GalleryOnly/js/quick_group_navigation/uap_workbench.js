@@ -3,6 +3,7 @@ import { createDailyControls } from "./uap_daily_controls.js";
 import {mountFunctionIcon} from '/extensions/ComfyUI-Unified-Prompt-Workbench/ui_identity.js';
 import {installWorkflowGuard} from '/extensions/ComfyUI-Unified-Prompt-Workbench/runtime_controls.js';
 import {workflowChoices, isWorkflowChoice, openWorkflowChoice} from '/extensions/ComfyUI-Unified-Prompt-Workbench/repair_workflow.js';
+import {applyBranchModes} from '/extensions/ComfyUI-Unified-Prompt-Workbench/canvas_write.js';
 
 export function focusGroups(names, zoom = 1) {
     const groups = app.graph._groups.filter(g => names.includes(g.title));
@@ -114,19 +115,7 @@ function activateBranch(branchId=viewBranch) {
     if (!c?.branches?.some(branch=>branch.id===branchId)) throw new Error('工作流已变化，请重新选择分支。');
     if (c.activeBranch === branchId) return;
     app.graph.beforeChange();
-    const previous = c.branches.find(b => b.id === c.activeBranch);
-    if (previous) {
-        previous.nodeIds.forEach(id => {
-            const node = app.graph.getNodeById(id);
-            if (node) previous.modes[id] = node.mode;
-        });
-    }
-    for (const b of c.branches) {
-        for (const id of b.nodeIds) {
-            const node = app.graph.getNodeById(id);
-            if (node) node.mode = b.id === branchId ? b.modes[id] ?? 0 : 2;
-        }
-    }
+    applyBranchModes(app, branchId);
     c.activeBranch = branchId;
     c.viewBranch = branchId;
     app.graph.afterChange();

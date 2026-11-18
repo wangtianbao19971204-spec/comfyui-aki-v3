@@ -1,6 +1,6 @@
 import {createWidgetInserter, commitWidget as sharedCommitWidget} from '/extensions/ComfyUI-Unified-Prompt-Workbench/prompt_target.js';
 import {mountPromptInspector} from '/extensions/ComfyUI-Unified-Prompt-Workbench/prompt_inspector.js';
-import {mountRuntimeControls,legacyControlIssue,refinementBatchIssue,modelOptionIssue} from '/extensions/ComfyUI-Unified-Prompt-Workbench/runtime_controls.js';
+import {mountRuntimeControls,refinementBatchIssue,modelOptionIssue} from '/extensions/ComfyUI-Unified-Prompt-Workbench/runtime_controls.js';
 import {mountRefinementControls} from '/extensions/ComfyUI-Unified-Prompt-Workbench/refinement_controls.js';
 import {attachPromptAutocomplete} from '/extensions/ComfyUI-Unified-Prompt-Workbench/resource_actions.js';
 import {mountThemeToggle} from '/extensions/ComfyUI-Unified-Prompt-Workbench/ui_theme.js';
@@ -17,25 +17,132 @@ const el = (tag, text, parent, props = {}) => {
     return item;
 };
 
+const PROMPT_INPUT_NAMES = new Set(["text", "prompt", "positive", "negative"]);
+const NON_EDITABLE_PROMPT_TYPES = new Set([
+    "ShowText|pysssss", "ShowText", "MarkdownNote", "Note", "PreviewAny",
+    "Lora Loader (LoraManager)", "Lora Stacker (LoraManager)",
+    "WanVideo Lora Select (LoraManager)", "Create Hook LoRA (LoraManager)",
+]);
+
 export function widgetSource(node, name) {
     const input = node?.inputs?.find(i => (i.widget?.name || i.name) === name);
     if (input?.link != null) {
         const link = app.graph.links[input.link];
         const source = link && app.graph.getNodeById(link.origin_id);
-        const widget = source?.widgets?.find(w => w.name === name || w.name === "value" || w.name === "seed");
-        return widget ? { node: source, widget } : null;
+        const widget = source?.widgets?.find(w =>
+            w.name === name || w.name === "value" || w.name === "seed" ||
+            (PROMPT_INPUT_NAMES.has(name) && w.name === "prompt" && typeof w.value === "string")
+        );
+        if (!widget) return null;
+        if (PROMPT_INPUT_NAMES.has(name) && source?.inputs?.some(i => (i.widget?.name || i.name) === widget.name && i.link != null)) return null;
+        return { node: source, widget };
     }
     const widget = node?.widgets?.find(w => w.name === name);
     return widget ? { node, widget } : null;
 }
 
-function promptWidgetSource(node, preferred) {
+export function preferredPromptWidget(node) {
+    const kind = node?.comfyClass || node?.type || "";
+    if (kind === "WeiLinPromptUI") return "positive";
+    if (node?.widgets?.some(w => w.name === "prompt")) return "prompt";
+    return "text";
+}
+
+export function promptWidgetSource(node, preferred = preferredPromptWidget(node)) {
     return widgetSource(node, preferred) || widgetSource(node, "text") || widgetSource(node, "prompt");
+}
+
+function isWritablePromptCandidate(node) {
+    const kind = node?.comfyClass || node?.type || "";
+    if (!node || NON_EDITABLE_PROMPT_TYPES.has(kind)) return false;
+    const source = promptWidgetSource(node, preferredPromptWidget(node));
+    if (!source || typeof source.widget?.value !== "string") return false;
+    if (source.widget.options?.readOnly || source.widget.options?.readonly || source.widget.inputEl?.readOnly) return false;
+    return !source.node?.inputs?.some(i => (i.widget?.name || i.name) === source.widget.name && i.link != null);
+}
+
+export function resolveBranchPromptNodes(nodes) {
+    const candidates = (nodes || []).filter(isWritablePromptCandidate);
+    const isNegativeTitle = title => /负向|负面|\bnegative\b/i.test(title || "");
+    const positive =
+        candidates.find(n => /^\[00W-1(?:P)?\]/.test(n.title || "")) ||
+        candidates.find(n => (n.type === "WeiLinPromptUI" || n.comfyClass === "WeiLinPromptUI")) ||
+        candidates.find(n => (n.type === "Prompt (LoraManager)" || n.comfyClass === "Prompt (LoraManager)") && !isNegativeTitle(n.title)) ||
+        candidates.find(n => (n.type === "Krea2EditGroundedEncode" || n.comfyClass === "Krea2EditGroundedEncode") && !isNegativeTitle(n.title)) ||
+        candidates.find(n => /正向|正面|编辑指令|\bpositive\b/i.test(n.title || "") && !isNegativeTitle(n.title)) ||
+        null;
+    const negative =
+        candidates.find(n => /^\[00W-1N\]/.test(n.title || "") && n !== positive) ||
+        candidates.find(n => (n.type === "Krea2EditGroundedEncode" || n.comfyClass === "Krea2EditGroundedEncode") && isNegativeTitle(n.title) && n !== positive) ||
+        candidates.find(n => isNegativeTitle(n.title) && n !== positive) ||
+        null;
+    return { positive, negative };
 }
 
 export function commitWidget(node, widget, value) {
     if (app.graph?.getNodeById(node?.id) !== node || !node?.widgets?.includes(widget)) return false;
     return sharedCommitWidget(app, node, widget, value);
+}
+
+const commonDimensions = [512, 640, 768, 832, 896, 960, 1024, 1152, 1216, 1280, 1344, 1536, 2048];
+export function dimensionValueAllowed(value, widgets) {
+    return Number.isSafeInteger(value) && value > 0 && widgets.filter(Boolean).every(widget => {
+        const {min, max, step2} = widget.options || {};
+        // step is LiteGraph's legacy display scale; step2 is the actual pixel step.
+        const step = Number.isFinite(step2) && step2 > 0 ? step2 : 1;
+        return (!Number.isFinite(min) || value >= min) && (!Number.isFinite(max) || value <= max) &&
+            Number.isInteger((value - (Number.isFinite(min) ? min : 0)) / step);
+    });
+}
+export function dimensionChoices(widgets) {
+    return commonDimensions.filter(value => dimensionValueAllowed(value, widgets));
+}
+export function dimensionSources(size) {
+    if (!size || app.graph?.getNodeById(size.id) !== size || (size.mode != null && size.mode !== 0)) return null;
+    const sources = ['width', 'height'].map(name => widgetSource(size, name));
+    const branch = app.graph.extra?.uap_workbench?.branches?.find(item => item.id === app.graph.extra.uap_workbench.activeBranch);
+    if (app.graph.extra?.uap_workbench && (!branch || !branch.nodeIds.some(id => String(id) === String(size.id)))) return null;
+    if (sources.some((source, index) => !source || app.graph.getNodeById(source.node.id) !== source.node ||
+        !source.node.widgets?.includes(source.widget) || typeof source.widget.value !== 'number' ||
+        (branch && !branch.nodeIds.some(id => String(id) === String(source.node.id))) ||
+        (branch && app.graph.extra.uap_workbench.branches.some(item => item !== branch && item.nodeIds?.some(id => String(id) === String(source.node.id)))) ||
+        (source.node.mode != null && source.node.mode !== 0) || source.node.inputs?.some(input =>
+            (input.widget?.name || input.name) === source.widget.name && input.link != null) ||
+        (source.node !== size && Object.values(app.graph.links || {}).some(link => link && link.origin_id === source.node.id &&
+            (link.target_id !== size.id || (size.inputs?.[link.target_slot]?.widget?.name || size.inputs?.[link.target_slot]?.name) !== ['width', 'height'][index]))))) return null;
+    return sources[0].widget === sources[1].widget ? null : sources;
+}
+function sameDimensionSources(size, expected) {
+    const current = dimensionSources(size);
+    return current && expected && current.every((source, index) => source.node === expected[index].node && source.widget === expected[index].widget);
+}
+export function commitDimensions(size, width, height, expected = dimensionSources(size)) {
+    const valuesAllowed = () => [width, height].every((value, index) =>
+        dimensionValueAllowed(value, [expected[index].widget, size.widgets?.find(widget => widget.name === ['width', 'height'][index])]));
+    if (!sameDimensionSources(size, expected) || !valuesAllowed()) return false;
+    if (expected.every((source, index) => source.widget.value === [width, height][index])) return true;
+    const graph = app.graph;
+    const before = expected.map(source => source.widget.value);
+    // ComfyUI's change tracker groups nested changes into one undo entry.
+    graph.beforeChange?.();
+    try {
+        expected.forEach((source, index) => {
+            if (!sameDimensionSources(size, expected) || !valuesAllowed() || commitWidget(source.node, source.widget, [width, height][index]) === false) throw new Error('Dimension source changed');
+        });
+        if (!sameDimensionSources(size, expected) || !valuesAllowed() || expected.some((source, index) => source.widget.value !== [width, height][index])) throw new Error('Dimension callback changed the requested pair');
+    } catch {
+        // Restore the pair if a native callback fails. Arbitrary third-party side effects
+        // remain the callback owner's responsibility; keep one undo boundary either way.
+        expected.forEach((source, index) => {
+            try {if (commitWidget(source.node, source.widget, before[index]) === false) source.widget.value = before[index];}
+            catch {source.widget.value = before[index];}
+        });
+        return false;
+    } finally {
+        graph.afterChange?.();
+        graph.setDirtyCanvas?.(true, true);
+    }
+    return true;
 }
 
 export function resolveLocalLoraName(input, files, format = "legacy") {
@@ -220,7 +327,7 @@ export function createDailyControls(jump) {
     }
     const position = () => {
         const heading=panel.querySelector('.desk-heading small');
-        if(heading&&currentBranch){const text=`${currentBranch.label} · ${!active?'浏览中，请先启用此分支':panel.dataset.workbenchMounted?'修改实时同步，使用上方任务按钮运行':'修改实时同步；运行仅处理当前图像任务'}`;if(heading.textContent!==text)heading.textContent=text;}
+        if(heading&&currentBranch){const runHint=currentBranch.defaultTask==='caption'?'修改实时同步；运行仅执行已启用的反推工具':'修改实时同步；运行仅处理当前图像任务';const text=`${currentBranch.label} · ${!active?'浏览中，请先启用此分支':panel.dataset.workbenchMounted?'修改实时同步，使用上方任务按钮运行':runHint}`;if(heading.textContent!==text)heading.textContent=text;}
         if (panel.dataset.workbenchMounted) {if(panel.style.position!=='relative')panel.style.cssText='position:relative;inset:auto;width:100%;max-height:none;z-index:auto';return;}
         const nav = document.getElementById("uap-workbench-nav")?.getBoundingClientRect();
         if (!nav) return;
@@ -243,7 +350,7 @@ export function createDailyControls(jump) {
         if (node) el("button", "原节点 ↗", heading, { className: "jump", type: "button", onclick: () => openNode(node) });
         return box;
     }
-    function bindField(parent, node, name, label, wide = false) {
+    function bindField(parent, node, name, label, wide = false, validate = () => true) {
         const source = widgetSource(node, name);
         const modelField=/^(unet_name|ckpt_name|clip_name|vae_name|model_name|lora_name)$/.test(name);
         if (!source) {
@@ -251,7 +358,7 @@ export function createDailyControls(jump) {
             return;
         }
         const { widget } = source;
-        const row = el("label", "", parent, { className: `field${wide ? " wide" : ""}` });
+        const row = el(/^(width|height)$/.test(name) ? 'div' : 'label', "", parent, { className: `field${wide ? " wide" : ""}` });
         el("span", label, row);
         const values = typeof widget.options?.values === "function" ? widget.options.values() : widget.options?.values;
         const control = el(Array.isArray(values)||modelField ? "select" : "input", "", row);
@@ -289,6 +396,7 @@ export function createDailyControls(jump) {
         };
         syncModel();
         const apply = () => {
+            if (!validate()) return false;
             const value = control.type === "number" ? Number(control.value) : control.value;
             if(modelField&&modelOptionIssue(name,value,currentBranch,app.graph.extra?.uap_model_contracts))return false;
             if (control.type === "number" && (control.value === "" || !control.checkValidity() || !Number.isFinite(value))) return false;
@@ -343,6 +451,9 @@ export function createDailyControls(jump) {
         const search = el("input", "", add, { placeholder: "搜索本地 LoRA…" });
         search.setAttribute("list", "uap-local-loras");
         search.setAttribute("aria-label", `${title} 选择 LoRA`);
+        const zeroClipDefault = () => currentBranch?.modelFamily === "moss" ||
+            ((node.type === "Lora Loader (LoraManager)" || node.comfyClass === "Lora Loader (LoraManager)") &&
+                Array.isArray(node.inputs) && node.inputs.some(i => i.name === "clip") && !node.inputs.some(i => i.name === "clip" && i.link != null));
         const commit = (values, force = false) => { commitWidget(node, widget, values); draw(force); };
         const addButton=el("button", "+", add, { title: `添加到${title}`, type: "button", onclick: async () => {
             error.textContent = "";
@@ -351,10 +462,23 @@ export function createDailyControls(jump) {
             try {
                 const { files, format } = await loraOptions;
                 if (!search.isConnected || !active || !currentBranch?.nodeIds?.some(id => String(id) === String(node.id))) return;
-                storedName = resolveLocalLoraName(name, files, format);
+                const contracts = app.graph?.extra?.uap_model_contracts;
+                const basenameOf = file => file.replace(/\\/g, "/").replace(/\.[^.\/]+$/, "").split("/").at(-1);
+                const compatible = files.filter(file => !modelOptionIssue("lora_name", file, currentBranch, contracts));
+                const matchesInput = file => file === name || basenameOf(file) === name;
+                if (!compatible.some(matchesInput)) {
+                    const foreign = files.find(matchesInput);
+                    const issue = foreign && modelOptionIssue("lora_name", foreign, currentBranch, contracts);
+                    if (issue) throw new Error(issue);
+                }
+                storedName = resolveLocalLoraName(name, compatible, format);
+                if (format !== "full" && files.filter(file => basenameOf(file).toLowerCase() === storedName.toLowerCase()).length > 1) {
+                    throw new Error("存在跨目录同名文件，请先在 LoRA Manager 开启完整路径语法，再刷新控制台。");
+                }
             } catch (err) { error.textContent = err.message; return; }
             if ((widget.value || []).some(v => v.name === storedName)) { error.textContent = "该 LoRA 已在本栏。"; return; }
-            commit([...(widget.value || []), { name: storedName, strength: 1, clipStrength: 1, active: true, expanded: false, locked: false }], true);
+            const initialClip = zeroClipDefault() ? 0 : 1;
+            commit([...(widget.value || []), { name: storedName, strength: 1, clipStrength: initialClip, active: true, expanded: false, locked: false }], true);
             search.value = "";
         } });
         addButton.setAttribute('aria-label',`添加到${title}`);
@@ -374,7 +498,12 @@ export function createDailyControls(jump) {
                 el("span", entry.name, row, { title: entry.name });
                 const strength = el("input", "", row, { type: "number", value: entry.strength, step: "0.05" });
                 strength.setAttribute("aria-label", `${title} ${entry.name} 强度`);
-                strength.oninput = strength.onchange = () => { if (strength.value !== "" && Number.isFinite(Number(strength.value))) update({ strength: Number(strength.value), ...(!entry.expanded ? { clipStrength: Number(strength.value) } : {}) }); };
+                strength.oninput = strength.onchange = () => {
+                    if (strength.value !== "" && Number.isFinite(Number(strength.value))) {
+                        const keepZeroClip = zeroClipDefault() && Number(entry.clipStrength) === 0;
+                        update({ strength: Number(strength.value), ...(!entry.expanded && !keepZeroClip ? { clipStrength: Number(strength.value) } : {}) });
+                    }
+                };
                 el("button", "×", row, { title: `移除 ${entry.name}`, type: "button", onclick: () => commit(widget.value.filter((_, i) => i !== index), true) });
                 if (entry.expanded || entry.clipStrength !== entry.strength) {
                     const clip = el("label", "CLIP", rows, { className: "lora-clip" });
@@ -413,9 +542,10 @@ export function createDailyControls(jump) {
         const head = el("div", "", top, { className: "desk-head" });
         const heading=el('div','',head,{className:'desk-heading'});
         el("strong", "常用控制台", heading);
-        el("small", `${branch.label} · ${isActive ? "修改实时同步；运行仅处理当前图像任务" : "浏览中，请先启用此分支"}`, heading);
+        const defaultRunHint=branch.defaultTask==='caption'?"修改实时同步；运行仅执行已启用的反推工具":"修改实时同步；运行仅处理当前图像任务";
+        el("small", `${branch.label} · ${isActive ? defaultRunHint : "浏览中，请先启用此分支"}`, heading);
         const headActions=el('div','',head,{className:'desk-head-actions'});
-        const runCurrent=el('button','运行当前图像任务',headActions,{type:'button',className:'desk-run-current',disabled:!isActive});
+        const runCurrent=el('button',branch.defaultTask==='caption'?'运行当前反推任务':'运行当前图像任务',headActions,{type:'button',className:'desk-run-current',disabled:!isActive});
         let running=false;
         const runStatus=el('small','',top,{className:'desk-run-status'});runStatus.setAttribute('role','status');
         runCurrent.onclick=async()=>{
@@ -483,12 +613,72 @@ export function createDailyControls(jump) {
         const left = el("div", "", fields, { className: "desk-column" });
         const middle = el("div", "", fields, { className: "desk-column" });
         const right = el("div", "", fields, { className: "desk-column" });
-        const positive = find("WeiLinPromptUI") || nodes.find(n => /正向|正面/.test(n.title));
-        const negative = nodes.find(n => /\[00W-1N\]/.test(n.title)) || nodes.find(n => /负向/.test(n.title));
+        const loadImages = nodes.filter(n => (n.type === "LoadImage" || n.comfyClass === "LoadImage") && (n.mode == null || n.mode === 0));
+        for (const imgNode of loadImages) {
+            const imgSource = widgetSource(imgNode, "image");
+            if (!imgSource || imgSource.node !== imgNode) continue;
+            const imgWidget = imgSource.widget;
+            const imgBox = section(left, branch.dailyRows ? "输入图片（图生图 / 遮罩按需启用）" : "输入图片", imgNode);
+            imgBox.dataset.deskArea = "parameters";
+            const imgRow = el("div", "", imgBox, { className: "plugin-tools" });
+            const imgSelect = el("select", "", imgRow, { style: "flex:1;min-width:160px" });
+            imgSelect.setAttribute("aria-label", `${shortTitle(imgNode.title || "输入图片")} 选择文件`);
+            const fileInput = el("input", "", imgRow, { type: "file", accept: "image/*", hidden: true });
+            const uploadBtn = el("button", "上传图片", imgRow, { type: "button", onclick: () => fileInput.click() });
+            const imgHint = el("small", "", imgBox);
+            imgHint.setAttribute("role", "status");
+            let lastSig = "";
+            const syncImage = () => {
+                const rawVals = typeof imgWidget.options?.values === "function" ? imgWidget.options.values() : imgWidget.options?.values;
+                const cur = String(imgWidget.value || "");
+                const opts = Array.from(new Set([...(Array.isArray(rawVals) ? rawVals.map(String) : []), ...(cur ? [cur] : [])]));
+                const sig = opts.join("\u0000") + "\u0001" + cur;
+                if (sig !== lastSig) {
+                    lastSig = sig;
+                    imgSelect.replaceChildren();
+                    if (!opts.length) el("option", "请上传输入图片", imgSelect, { value: "" });
+                    for (const item of opts) el("option", item, imgSelect, { value: item });
+                }
+                imgSelect.value = cur;
+                imgHint.textContent = cur ? `当前：${cur}` : "尚未选择输入图片。";
+            };
+            imgSelect.onchange = () => {
+                if (!isCurrent() || app.graph.extra?.uap_workbench?.activeBranch !== branch.id) return;
+                commitWidget(imgNode, imgWidget, imgSelect.value);
+                syncImage();
+            };
+            fileInput.onchange = async () => {
+                const file = fileInput.files?.[0];
+                if (!file || typeof api?.fetchApi !== "function") return;
+                uploadBtn.disabled = true;
+                try {
+                    const body = new FormData();
+                    body.append("image", file);
+                    body.append("type", "input");
+                    const res = await api.fetchApi("/upload/image", { method: "POST", body });
+                    if (!res.ok) throw new Error("图片上传失败，请重试。");
+                    const data = await res.json();
+                    if (!isCurrent() || app.graph.getNodeById(imgNode.id) !== imgNode) return;
+                    const val = (data.subfolder ? data.subfolder + "/" : "") + data.name;
+                    if (Array.isArray(imgWidget.options?.values) && !imgWidget.options.values.includes(val)) imgWidget.options.values.push(val);
+                    commitWidget(imgNode, imgWidget, val);
+                    lastSig = "";
+                    syncImage();
+                } catch (err) {
+                    imgHint.textContent = err.message || "图片上传失败。";
+                } finally {
+                    uploadBtn.disabled = false;
+                    fileInput.value = "";
+                }
+            };
+            syncImage();
+            sync.push(syncImage);
+        }
+        const { positive, negative } = resolveBranchPromptNodes(nodes);
         const textBox = section(left, "提示词", positive);
         textBox.dataset.deskArea='prompts';
-        const positiveTextArea = prompt(textBox, positive, positive?.comfyClass === "WeiLinPromptUI" || positive?.type === "WeiLinPromptUI" ? "positive" : "text", find('Krea2EditGroundedEncode')?"编辑指令":"常用正向提示词");
-        const negativeTextArea = prompt(textBox, negative, negative?.widgets?.some(w => w.name === "prompt") ? "prompt" : "text", "常用负向提示词", true);
+        const positiveTextArea = prompt(textBox, positive, preferredPromptWidget(positive), find('Krea2EditGroundedEncode')?"编辑指令":"常用正向提示词");
+        const negativeTextArea = prompt(textBox, negative, preferredPromptWidget(negative), "常用负向提示词", true);
         const pluginTools = el("div", "", textBox, { className: "plugin-tools desk-prompt-actions" });
         const pluginStatus = el("div", "", textBox, { className: "desk-error" });
         const action = (label, callback, parent = pluginTools) => el("button", label, parent, { type: "button", onclick: async () => {
@@ -512,8 +702,8 @@ export function createDailyControls(jump) {
         const targetLabel=el('label','插入到',pluginTools,{className:'desk-target-label'});
         const promptTarget = el("select", "", targetLabel, { title: "资料库插入目标" });
         promptTarget.setAttribute("aria-label", "资料库插入目标");
-        const positiveSource = promptWidgetSource(positive, positive?.type === "WeiLinPromptUI" ? "positive" : "text");
-        const negativeSource = promptWidgetSource(negative, negative?.widgets?.some(w => w.name === "prompt") ? "prompt" : "text");
+        const positiveSource = promptWidgetSource(positive, preferredPromptWidget(positive));
+        const negativeSource = promptWidgetSource(negative, preferredPromptWidget(negative));
         const bindInsertionTarget = (source, textarea) => {
             if (!source || !textarea) return;
             source.inputElement = textarea;
@@ -556,15 +746,68 @@ export function createDailyControls(jump) {
             if (positiveSource && positiveTextArea) bindInsertionTarget(positiveSource, positiveTextArea);
             const target = positiveSource ? {node:positiveSource.node, widget:positiveSource.widget, direction:'positive', label:`${branch.label} / 正向 #${positiveSource.node.id}`} : null;
             const workbench = await openWorkbench({page:'library', target, inputElement:positiveSource?.inputElement, reset:true, openPending:true});
-            await workbench.showPending();
+            await workbench?.showPending?.();
         }, animaTools);
-        const size = find("EmptyLatentImage") || find("EmptySD3LatentImage");
+        const size = find("EmptyLatentImage") || find("EmptySD3LatentImage") || find("EmptyFlux2LatentImage");
         const sampler = find("KSampler"), seed = find("easy seed");
         const params = section(fields, "尺寸 · 种子 · 采样", size || sampler);
         params.dataset.deskArea='parameters';
         params.classList.add("desk-parameters");
         const grid = el("div", "", params, { className: "fields" });
-        for (const [node, name, label, wide] of [[size,"width","宽度"],[size,"height","高度"],[size,"batch_size","批量"],[seed || sampler,"seed","种子",true],[seed || sampler,"control_after_generate","种子模式"],[sampler,"steps","步数"],[sampler,"cfg","CFG"],[sampler,"sampler_name","采样器",true],[sampler,"scheduler","调度器"],[sampler,"denoise","降噪"]]) bindField(grid,node,name,label,wide);
+        const dimensions = dimensionSources(size);
+        let setDimensions;
+        if (size) {
+            const pair = el('div', '', grid, {className: 'desk-size-pair'});
+            const status = el('small', '', pair, {className: 'desk-size-status', hidden: true});
+            status.setAttribute('role', 'status');
+            const current = () => isCurrent() && app.graph.extra?.uap_workbench?.activeBranch === branch.id && sameDimensionSources(size, dimensions);
+            setDimensions = (width, height) => {
+                const changed = current() && commitDimensions(size, width, height, dimensions);
+                status.textContent = changed ? '' : '尺寸来源或可用范围已变化，请刷新控制台后重试。';
+                status.hidden = !!changed;
+                sync.forEach(fn => fn());
+            };
+            for (const [index, name, label] of [[0, 'width', '宽度'], [1, 'height', '高度']]) {
+                if (index === 1) {
+                    const swap = el('button', '⇄', pair, {type: 'button', className: 'desk-size-swap', title: '互换宽度与高度', onclick: () => {
+                        if (dimensions) setDimensions(dimensions[1].widget.value, dimensions[0].widget.value);
+                    }});
+                    swap.setAttribute('aria-label', '互换宽度与高度');
+                    sync.push(() => {swap.disabled = !current();});
+                }
+                const source = widgetSource(size, name);
+                const widgets = [source?.widget, size.widgets?.find(widget => widget.name === name)];
+                const control = bindField(pair, size, name, label, false, () => current() && dimensionValueAllowed(Number(control.value), widgets));
+                if (!control) {const row = el('label', '', pair, {className: 'field'});el('span', label, row);el('small', '由连线控制，请从原节点调整。', row);continue;}
+                if (control.type !== 'number') continue;
+                const heading = control.parentElement.querySelector('span');
+                heading.classList.add('desk-size-label');
+                const list = el('select', '', heading, {className: 'desk-size-choices', title: `${label}常用尺寸（像素）`});
+                list.setAttribute('aria-label', `${label}常用尺寸`);
+                list.onchange = () => {
+                    if (list.value && current()) {control.value = list.value;control.onchange();}
+                    list.value = '';
+                };
+                control.title = '可手动输入，或选择常用尺寸（像素）';
+                const refreshChoices = () => {
+                    control.disabled = list.disabled = !current();
+                    const options = dimensionChoices(widgets);
+                    if (list.dataset.values !== options.join(',')) {
+                        list.replaceChildren();el('option', '常用', list, {value: ''});
+                        options.forEach(value => el('option', `${value} px`, list, {value: String(value)}));
+                        list.dataset.values = options.join(',');
+                    }
+                    const bounds = source.widget.options || {};
+                    control.min = Number.isFinite(bounds.min) ? String(bounds.min) : '';
+                    control.max = Number.isFinite(bounds.max) ? String(bounds.max) : '';
+                    control.step = Number.isFinite(bounds.step2) && bounds.step2 > 0 ? String(bounds.step2) : '1';
+                };
+                refreshChoices();sync.push(refreshChoices);
+            }
+            // Keep the status below both inputs without interrupting their keyboard order.
+            pair.append(status);
+        }
+        for (const [node, name, label, wide] of [[size,"batch_size","批量"],[seed || sampler,"seed","种子",true],[seed || sampler,"control_after_generate","种子模式"],[sampler,"steps","步数"],[sampler,"cfg","CFG"],[sampler,"sampler_name","采样器",true],[sampler,"scheduler","调度器"],[sampler,"denoise","降噪"]]) bindField(grid,node,name,label,wide);
         if (sampler && !widgetSource(sampler, "denoise")) {
             for (const node of nodes.filter(n => n.type === "PrimitiveFloat" && /denoise/i.test(n.title))) {
                 const label = /文生图/.test(node.title) ? "文生降噪" : /遮罩/.test(node.title) ? "遮罩降噪" : "图生降噪";
@@ -573,7 +816,10 @@ export function createDailyControls(jump) {
         }
         if (size) {
             const presets = el("div", "", params.querySelector("h3"), { className: "presets" });
-            [["方图",1024,1024],["竖图",832,1216],["横图",1216,832]].forEach(([label,w,h]) => el("button",label,presets,{type:"button",title:`${w} × ${h}`,onclick:()=>{for(const [name,value] of [["width",w],["height",h]]){const source=widgetSource(size,name);if(source)commitWidget(source.node,source.widget,value);}sync.forEach(fn=>fn());}}));
+            const sizePresets = branch.modelFamily === "moss"
+                ? [["方图",1024,1024],["竖图",1024,1280],["横图",1280,1024]]
+                : [["方图",1024,1024],["竖图",832,1216],["横图",1216,832]];
+            sizePresets.forEach(([label,w,h]) => el("button",label,presets,{type:"button",title:`${w} × ${h}`,onclick:()=>setDimensions(w,h)}));
         }
         if(!grid.children.length)params.remove();
         if(!positiveTextArea&&!negativeTextArea)textBox.remove();
@@ -582,7 +828,7 @@ export function createDailyControls(jump) {
         sync.push(runtimeControls.sync);
         const clipNode=find('CLIPLoader');
         const modelFields=[
-            [find('UNETLoader'),'unet_name','基础模型'],
+            [find('UNETLoader')||find('Unet Loader (LoraManager)'),'unet_name','基础模型'],
             [find('CheckpointLoaderSimple')||find('CheckpointLoader'),'ckpt_name','整合模型'],
             [clipNode,'clip_name','文本编码器'],
             [find('VAELoader'),'vae_name','VAE'],
@@ -598,7 +844,8 @@ export function createDailyControls(jump) {
             const hint=el('small','',middle.querySelector('[data-desk-area=models]')||middle,{className:'desk-encoder-hint'});hint.dataset.encoderHint='';
             const scopeHint={
                 a1:'01 Anima 原版与 02 Anima 2.9B',a29:'01 Anima 原版与 02 Anima 2.9B',ext07:'01 Anima 原版与 07 左右扩图',
-                k2:'03 Krea2与 04 指令编辑',ext04:'03 Krea2与 04 指令编辑',ext05:'02 Anima 2.9B与 05 裁剪精修',
+                k2:'Krea2 精简生产与 04 指令编辑',ext04:'Krea2 精简生产与 04 指令编辑',ext05:'02 Anima 2.9B与 05 裁剪精修',
+                moss:'MOSS 独立生产流程',
             }[branch.id]||branch.label;
             let renderedHint='';
             // The 750ms sync loop calls this repeatedly; rebuild only when the text changes,
@@ -617,7 +864,7 @@ export function createDailyControls(jump) {
                 const file=String(source.widget.value);
                 const typeWidget=clipNode.widgets?.find(widget=>widget.name==='type');
                 const type=typeWidget?String(typeWidget.value??''):'';
-                const family=type==='stable_diffusion'?'Anima 原生文本编码器':type==='krea2'?'Krea2 专用文本编码器':/anima/i.test(file)?'Anima 系列编码器文件':/qwen3|krea/i.test(file)?'Qwen3-VL 系列编码器文件':'';
+                const family=type==='stable_diffusion'?'Anima 原生文本编码器':type==='krea2'?'Krea2 专用文本编码器':type==='moss_image'?'MOSS 专用 Qwen3.5 9B 文本编码器':/anima/i.test(file)?'Anima 系列编码器文件':/moss.*qwen/i.test(file)?'MOSS Qwen3.5 编码器文件':/qwen3|krea/i.test(file)?'Qwen3-VL 系列编码器文件':'';
                 const bypassed=(clipNode.mode!=null&&clipNode.mode!==0)||(source.node.mode!=null&&source.node.mode!==0);
                 const main=`文本编码器 #${clipNode.id}：${file} · 类型 ${type||'未提供'}${family?`（${family}）`:''}；适用：${scopeHint}。${bypassed?'当前分支未启用，此编码器处于旁路状态，切换后生效。':''}`;
                 const note=`编码器文件与类型都取自当前节点、只读显示，未改动任何值。type 字段按原样呈现：${type==='stable_diffusion'?'Anima 使用 stable_diffusion 是正常设置，不是错误配置；':'不同模型体系的 type 不能互换；'}更换模型体系时两者都要在节点里一起改。`;
@@ -679,7 +926,7 @@ export function createDailyControls(jump) {
                 const check=el("input","",row,{type:"checkbox",checked:!!widget.toggled});check.setAttribute("aria-label",`开关 ${title}`);
                 el("span",title,row);el("button","↗",row,{className:"jump",type:"button",title:`定位 ${title}`,onclick:e=>{e.preventDefault();locateOnCanvas(()=>jump(group.title));}});
                 const members=()=>nodes.filter(node=>node.properties?.uap_layout_group===group.title);
-                const blocked=()=>members().some(node=>node.properties?.uap_legacy_lllite)?legacyControlIssue(nodes):members().some(node=>node.properties?.uap_refinement)?refinementBatchIssue(nodes):'';
+                const blocked=()=>members().some(node=>node.properties?.uap_refinement)?refinementBatchIssue(nodes):'';
                 check.onchange=()=>{
                     const issue=check.checked&&blocked();
                     if(issue){check.checked=!!widget.toggled;pluginStatus.textContent=issue;return;}
@@ -715,9 +962,15 @@ export function createDailyControls(jump) {
         if(!loraOptions)loraOptions=Promise.all([fetch("/object_info/LoraLoader"),fetch("/api/lm/settings")]).then(async responses=>{
             if(responses.some(r=>!r.ok))throw new Error("本地 LoRA 列表或设置读取失败，请刷新后重试。");
             const [info,settings]=await Promise.all(responses.map(r=>r.json()));
-            return {files:info.LoraLoader.input.required.lora_name[0],format:settings.settings?.lora_syntax_format || "legacy"};
+            const rawFiles=info?.LoraLoader?.input?.required?.lora_name;
+            const files=Array.isArray(rawFiles?.[0])?rawFiles[0]:(rawFiles?.[1]?.options||[]);
+            return {files,format:settings.settings?.lora_syntax_format || "legacy"};
         });
-        loraOptions.then(({files})=>{if(list.isConnected)files.forEach(name=>el("option","",list,{value:name}));}).catch(err=>{if(pluginStatus.isConnected)pluginStatus.textContent=err.message;});
+        loraOptions.then(({files})=>{
+            if(!list.isConnected)return;
+            const contracts=app.graph?.extra?.uap_model_contracts;
+            files.filter(name=>!modelOptionIssue("lora_name",name,branch,contracts)).forEach(name=>el("option","",list,{value:name}));
+        }).catch(err=>{if(pluginStatus.isConnected)pluginStatus.textContent=err.message;});
         fitEmbeddedTools();
         const embeddedTools=panel.querySelector('.desk-embedded-tools');
         if(embeddedTools)embeddedTools.open=embeddedToolsOpen;
@@ -736,30 +989,31 @@ export function createDailyControls(jump) {
         readPlan(){
             if(!isCurrent()||app.graph.extra?.uap_workbench?.activeBranch!==currentBranch?.id)throw new Error('当前分支已失效，请重新选择。');
             const nodes=currentBranch.nodeIds.map(id=>app.graph.getNodeById(id)).filter(Boolean);
-            const positive=nodes.find(n=>n.type==='WeiLinPromptUI'||n.comfyClass==='WeiLinPromptUI')||nodes.find(n=>/正向|正面/.test(n.title));
-            const negative=nodes.find(n=>/\[00W-1N\]/.test(n.title))||nodes.find(n=>/负向/.test(n.title));
+            const {positive,negative}=resolveBranchPromptNodes(nodes);
             const read=(node,name)=>{
                 if(!node)return '';
                 const source=promptWidgetSource(node,name);
                 if(!source||typeof source.widget.value!=='string'||(node.mode!=null&&node.mode!==0)||(source.node.mode!=null&&source.node.mode!==0))throw new Error('提示词来源已变化或无法读取，请检查当前分支的节点与连线。');
                 return source.widget.value;
             };
-            return {positive:read(positive,positive?.type==='WeiLinPromptUI'||positive?.comfyClass==='WeiLinPromptUI'?'positive':'text'),negative:read(negative,negative?.widgets?.some(w=>w.name==='prompt')?'prompt':'text')};
+            return {positive:read(positive,preferredPromptWidget(positive)),negative:read(negative,preferredPromptWidget(negative))};
         },
         mount(host, branch, onClose) {
             const marker=document.createComment('daily-controls-return'),previousShown=shown,previousStyle=panel.style.cssText;
+            const previousMounted=panel.dataset.workbenchMounted,previousClose=panel._workbenchClose;
             const reuse=isCurrent()&&currentBranch===branch&&active;
             panel.parentNode.insertBefore(marker,panel);host.append(panel);panel.dataset.workbenchMounted='true';panel._workbenchClose=onClose;shown=true;
             if(reuse){panel.hidden=false;position();}else render(branch,true);
             fitEmbeddedTools();
             return () => {
                 if(marker.parentNode)marker.replaceWith(panel);
-                delete panel.dataset.workbenchMounted;delete panel._workbenchClose;
+                if(previousMounted!==undefined)panel.dataset.workbenchMounted=previousMounted;else delete panel.dataset.workbenchMounted;
+                if(previousClose!==undefined)panel._workbenchClose=previousClose;else delete panel._workbenchClose;
                 fitEmbeddedTools();
                 panel.style.cssText=previousStyle;shown=previousShown;panel.hidden=!shown;
                 const config=app.graph?.extra?.uap_workbench;
                 const viewed=config?.branches?.find(item=>item.id===config.viewBranch);
-                if(viewed&&isCurrent()&&(currentBranch!==viewed||active!==(viewed.id===config.activeBranch)))
+                if(!panel.dataset.workbenchMounted&&viewed&&isCurrent()&&(currentBranch!==viewed||active!==(viewed.id===config.activeBranch)))
                     render(viewed,viewed.id===config.activeBranch);
                 else position();
             };

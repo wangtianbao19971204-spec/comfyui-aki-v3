@@ -401,6 +401,15 @@ export function stripAutocompleteMetadataFromPromptResult(result) {
     return result;
 }
 
+function _getUapBranchModelFamily() {
+    const workbench = app?.graph?.extra?.uap_workbench;
+    if (!workbench?.activeBranch || !Array.isArray(workbench.branches)) {
+        return null;
+    }
+    const branch = workbench.branches.find((b) => b.id === workbench.activeBranch);
+    return branch?.modelFamily || null;
+}
+
 function createDefaultBehavior(modelType) {
     return {
         enablePreview: false,
@@ -489,6 +498,10 @@ const MODEL_BEHAVIORS = {
                 }
             } catch (error) {
                 console.warn('Failed to fetch usage tips:', error);
+            }
+
+            if (clipStrength === null && _getUapBranchModelFamily() === 'moss') {
+                clipStrength = 0;
             }
 
             if (clipStrength !== null) {
@@ -1486,10 +1499,18 @@ class AutoComplete {
      * is not shared.
      */
     _getActiveLoraFilters() {
-        if (this.modelType !== 'loras' || !getLoraActiveFiltersAutocompletePreference()) {
+        if (this.modelType !== 'loras') {
             return null;
         }
-        return 'use_active_filters=true';
+        const family = _getUapBranchModelFamily();
+        const familyFolder = { krea2: 'krea2', moss: 'moss', anima: 'anima', anima29: 'anima' }[family];
+        if (familyFolder) {
+            return `folder=${encodeURIComponent(familyFolder)}&recursive=true`;
+        }
+        if (getLoraActiveFiltersAutocompletePreference()) {
+            return 'use_active_filters=true';
+        }
+        return null;
     }
 
     async search(term = '', endpoint = null) {
