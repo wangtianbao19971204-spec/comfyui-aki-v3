@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created_at": "2026-11-18T00:30:29.324922+00:00",
+  "created_at": "2026-11-18T00:37:48.849503+00:00",
   "source_root": "G:\\ComfyUI-aki-v3",
   "files": [
     {
@@ -68298,8 +68298,8 @@
     },
     {
       "path": "inventory/model_sources.json",
-      "sha256": "8968b3f20ba0b45af8ad4bb0baba17cb00dc93ef34f148b1c9f88d5e4cbaec0b",
-      "bytes": 1542889
+      "sha256": "c1b19764e5cd4767ef52ca21c024695aaa3a16bf75d0ee9e984bf979efeb4c64",
+      "bytes": 1545382
     }
   ],
   "production_plugins": [
@@ -68394,8 +68394,8 @@
     }
   ],
   "development_revision": {
-    "note": "Merge origin/main into the LoRA catalogue reconciliation branch",
-    "previous_manifest_sha256": "055fe9d6cddf6ec31c7c0ada8ce4fc1089c05b8e52a9596f19f61de623bc1fec",
+    "note": "Merge main into the base model import branch",
+    "previous_manifest_sha256": "7a70a32569147ede91e1a117cda2e112445bcea4d457cbd29d4c55de9e617374",
     "source_changes": {
       "added": [
         "ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/scripts/uap_rewrite_guard.py",

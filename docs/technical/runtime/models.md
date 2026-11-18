@@ -17,6 +17,8 @@
 
 ## 实现与资源
 
+2026-11-18：目录与运行区重新对齐。命名规则加入 MOSS 家族（版本级底模 `MOSS Image`，`moss/<用途>`、`Moss__` 前缀），补登记 2026-11-14 部署遗留的 136 个权重（MOSS 117、Krea2 19，逐个实测完整 SHA）；导入新下载 9 个 LoRA（全 MOSS：画风与画师 8、服装与配饰 1）；把 247 条运行区已不存在的记录标为删除（226 LoRA、14 底模、2 文本编码器、2 VAE、2 ControlNet、1 checkpoint，Anima／Qwen 系列引用 2026-10-24 授权删除回执），另 15 条早前已删的评估检查点维持原状。当前 **241 个用户 LoRA（Krea2 115、MOSS 126）、5 个图像底模（均 Krea2）、1 个 SAM3.1 工具**。同日导入下载的 `Krea2 Cat Tower` v2.0 (Raw) FP8 底模：容器只有 DiT 张量，按 `diffusion_models/krea2/图像生成` 落位并走 `UNETLoader`，完整 SHA 与 Civitai 确切文件一致，卡片、加载器枚举与官方预览通过，v1.0 Turbo INT8 保持原样。两个新入口 `scripts/register_present_loras.py`（认领已部署未入册权重）与 `scripts/reconcile_asset_presence.py`（缺失记录核对）默认只出计划，收据在仓外；单个底模导入用 `scripts/import_downloaded_model.py`。见[批次收据](../../receipts/lora_batch_20261118.json)、[底模导入收据](../../receipts/model_import_20261118.json)与[技术说明](../changes/runtime-models/2026-11-18-lora-batch-and-presence-reconcile.md)。未做 GPU 推理、全库重扫或服务重启。
+
 2026-10-19：按同一规则增量导入下载的 9 个 LoRA（Anima 7 个、Krea2 2 个），现有 322 个用户 LoRA。用途按已审查表落位为画风与画师 3、角色与人物 5、服装与配饰 1；9 项完整 SHA 与 Civitai 确切版本文件一致，卡片、`LoraLoader` 枚举和 9 张预览均通过，原有 329 条缓存行保持不变，成功后移走 9 个下载原件（同批 4 个重复件保留）。32 项导入回归、26 项来源回归、47 项命名回归、36 项目录回归通过；运行区服务为本批登记启动并保持空队列，未重启、全库重扫或做 GPU 生图。见[本批收据](../../receipts/lora_download_import_20261019.json)。
 
 2026-10-11：增量导入昨晚下载的 4 个服装 LoRA（Anima 2 个、Krea2 2 个），现有 313 个用户 LoRA。补齐分类、规范名、来源、触发词与 4 张官方预览，保留全部下载原件；326 条旧缓存身份／个人字段和既有索引保持。整理工具接纳 Civitai LoCon 类型，仍严格核对完整摘要与版本／文件身份，并新增 `--keep-originals`。32 项导入回归、26 项来源回归、47 项命名回归及在线卡片／加载器核验通过；未重启、全库重扫或做 GPU 生图。回滚依赖保留原件与本批路径／摘要日志，不覆盖在线库。见[本批收据](../../receipts/lora_download_import_20261011.json)。
@@ -60,6 +62,8 @@ LM Civitai 前后端兼容、插件版本和下载队列是独立边界，不能
 2026-10-07 [最终验收](../../receipts/final_workflow_acceptance_20261007.json)：Krea2 三个初始黑图在复合模型／执行缓存清理后用相同输入恢复。当前与历史正常记录的实际 UNET/VAE 均为 BF16，当前进程未强制其精度；原生 latent 类也有成功反证。本轮不盲改 dtype、latent 或正式参数，不能把冷态恢复称为根因永久修复。现行模型检查绑定此前完整摘要，不重复认证全部权重。
 
 ## 更新记录
+
+- 2026-11-18：导入下载的 Krea2 底模 `Krea2 Cat Tower` v2.0 (Raw) FP8，`diffusion_models/krea2/图像生成` + `UNETLoader`，完整 SHA 与 Civitai 确切文件一致，卡片、加载器枚举与预览通过；v1.0 未动。新增单文件导入入口 `scripts/import_downloaded_model.py`（默认只出计划，`--apply` 需开发分支），9 项隔离回归与既有导入／命名回归通过，未做 GPU 推理。见[底模导入收据](../../receipts/model_import_20261118.json)。
 
 - 2026-11-15：增强 LoRA Manager 与 UAP 的 Krea2 ↔ MOSS 双向家族隔离：`workflow_targets.js` 在 MOSS 分支将节点浏览器入口锁定到 `lm_folder=moss`；`autocomplete.js` 在 UAP 分支按 `modelFamily` 为 `<lora:...>` 自动补全注入 `folder=<family>&recursive=true`，并在 MOSS 分支无显式 CLIP 建议时默认输出 `<lora:name:strength:0>`；`MOSS_精简生产_v1.json` 登记本机 3 个 MOSS 底模、2 个 Qwen3.5 9B 编码器与 Flux2 VAE 契约（未新增、移动或下载任何权重，`UAP统一生产工作台_v2.json` 与 `model_sources.json` 摘要保持不变）。详见[本轮说明](../changes/runtime-workbench/2026-11-15-moss-uap-standalone-isolation.md)。
 

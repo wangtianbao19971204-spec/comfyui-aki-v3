@@ -29454,18 +29454,72 @@
           "ComfyUI/models/loras/zorojtest-moss-image-base-epoch-20 (1).metadata.json"
         ]
       }
+    },
+    {
+      "path": "ComfyUI/models/diffusion_models/krea2CatTower_v20Raw_fp8.safetensors",
+      "bytes": 14125465720,
+      "kind": "diffusion_model",
+      "captured_in_inventory": false,
+      "observed_present": true,
+      "local_sha256": "bf5f995522db5a99db3875829412de663ecd32523e318cb5f9df32f7b066be53",
+      "source_status": "version_metadata",
+      "family": "Krea2",
+      "sources": [
+        {
+          "provider": "civitai",
+          "page_url": "https://civitai.com/models/2805913?modelVersionId=3338554",
+          "download_url": "https://civitai.com/api/download/models/3338554",
+          "model_id": 2805913,
+          "version_id": 3338554,
+          "file_id": 3229901,
+          "filename": "krea2_cat_tower_v2.0_raw_fp8.safetensors",
+          "declared_sha256": "bf5f995522db5a99db3875829412de663ecd32523e318cb5f9df32f7b066be53",
+          "revision": null,
+          "evidence": [
+            {
+              "kind": "anonymous_public_version_metadata_and_measured_full_local_sha256",
+              "reference": "docs/technical/runtime/models.md"
+            }
+          ],
+          "availability": "public_version_metadata_and_local_sha256_match_download_not_tested"
+        }
+      ],
+      "companions": [
+        "ComfyUI/models/diffusion_models/krea2/图像生成/Krea2__Krea2 Cat Tower__v2.0 (Raw)__FP8__cv3338554__f3229901.metadata.json",
+        "ComfyUI/models/diffusion_models/krea2/图像生成/Krea2__Krea2 Cat Tower__v2.0 (Raw)__FP8__cv3338554__f3229901.webp"
+      ],
+      "workflows": [],
+      "derivation": null,
+      "notes": [
+        "Downloaded file verified by full SHA-256 against the exact public version; weights stay outside Git."
+      ],
+      "current_path": "ComfyUI/models/diffusion_models/krea2/图像生成/Krea2__Krea2 Cat Tower__v2.0 (Raw)__FP8__cv3338554__f3229901.safetensors",
+      "standardization": {
+        "family_slug": "krea2",
+        "family_label": "Krea2",
+        "category": "图像生成",
+        "display_name": "Krea2 Cat Tower",
+        "version": "v2.0 (Raw)",
+        "precision": "FP8",
+        "source_identity": "civitai:model=2805913,version=3338554,file=3229901",
+        "target_path": "ComfyUI/models/diffusion_models/krea2/图像生成/Krea2__Krea2 Cat Tower__v2.0 (Raw)__FP8__cv3338554__f3229901.safetensors",
+        "evidence": [
+          "snapshot/inventory/model_sources.json",
+          "ComfyUI/models/diffusion_models/krea2CatTower_v20Raw_fp8.metadata.json"
+        ]
+      }
     }
   ],
   "missing_workflow_references": [],
   "summary": {
-    "asset_count": 576,
+    "asset_count": 577,
     "inventory_asset_count": 384,
-    "observed_present_count": 314,
+    "observed_present_count": 315,
     "observed_missing_count": 262,
     "workflow_asset_count": 23,
     "missing_workflow_reference_count": 0,
     "source_status_counts": {
-      "version_metadata": 482,
+      "version_metadata": 483,
       "upstream_mapping": 73,
       "local_derivative": 19,
       "unresolved": 2

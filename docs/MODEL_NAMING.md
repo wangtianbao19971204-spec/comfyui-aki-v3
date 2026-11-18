@@ -2,17 +2,17 @@
 
 现行安装位置以 [来源目录](../snapshot/inventory/model_sources.json) 的 `current_path` 为准；没有此字段的资源仍使用 `path`。`path` 保留首次捕获身份，旧 inventory、训练发布记录与历史收据不重写。已删除的 262 条记录不参与命名或迁移：247 条是 2026-11-18 核对出的运行区缺失（226 LoRA、14 底模、2 文本编码器、2 VAE、2 ControlNet、1 checkpoint），15 条是更早已删除的训练评估检查点。
 
-2026-11-18 核对后的现行基线：运行区有 **241 个用户 LoRA**（Krea2 115、MOSS 126）和 **4 个图像底模**（均 Krea2），另有 SAM3.1 工具 1 个、Krea2 VAE 1 个、`qwen3-vl-4b-heretic` 文本编码器 1 个。Anima、Anima 2.9B 与 Qwen-Image 2.1 系列（含目录、底模、文本编码器、VAE 与 ControlNet）已于 2026-10-24 经用户授权永久删除，其记录按删除保留，不恢复、不迁移、不再计入总数；删除前清单在仓外私有回执 `anima-assets-deletion-20261024`，本轮核对与登记见[收据](receipts/lora_batch_20261118.json)。
+2026-11-18 核对后的现行基线：运行区有 **241 个用户 LoRA**（Krea2 115、MOSS 126）和 **5 个图像底模**（均 Krea2，含同日导入的 Krea2 Cat Tower v2.0 Raw FP8），另有 SAM3.1 工具 1 个、Krea2 VAE 1 个、`qwen3-vl-4b-heretic` 文本编码器 1 个。Anima、Anima 2.9B 与 Qwen-Image 2.1 系列（含目录、底模、文本编码器、VAE 与 ControlNet）已于 2026-10-24 经用户授权永久删除，其记录按删除保留，不恢复、不迁移、不再计入总数；删除前清单在仓外私有回执 `anima-assets-deletion-20261024`，本轮核对与登记见[收据](receipts/lora_batch_20261118.json)与[底模导入收据](receipts/model_import_20261118.json)。
 
 | 家族 | 用户 LoRA | 图像底模 | 工具 |
 |---|---:|---:|---:|
 | Anima | 0 | 0 | 0 |
 | Anima 2.9B | 0 | 0 | 0 |
-| Krea2 | 115 | 4 | 0 |
+| Krea2 | 115 | 5 | 0 |
 | MOSS | 126 | 0 | 0 |
 | Qwen Image 2.1 | 0 | 0 | 0 |
 | SAM3.1 | 0 | 0 | 1 |
-| 合计 | 241 | 4 | 1 |
+| 合计 | 241 | 5 | 1 |
 
 MOSS 家族按 Civitai 版本级底模字段 `MOSS Image`（或审查过的组织记录 `Moss`/`MOSS`）归入 `moss` 目录，标题里的 “anima/krea2” 只说明兼容范围，不改变家族。文件名前缀沿用部署中已确立的 `Moss__`，与 Krea2 的 `Krea2__` 并存。
 
@@ -100,6 +100,7 @@ LoRA Manager 的常规与排除缓存须同时核验：本轮 286 个用户 LoRA
 
 ## 更新记录
 
+- 2026-11-18：导入下载的 Krea2 底模 `Krea2 Cat Tower` v2.0 (Raw) FP8（`cv3338554`／`f3229901`）。文件是只含 DiT 张量的 safetensors，按 `diffusion_models/krea2/图像生成` 落位、走 `UNETLoader`；基线底模由 v1.0 Turbo INT8 的那个现存文件外加这一个，共 5 个。完整 SHA 与 Civitai 确切文件一致，卡片、`UNETLoader` 枚举与官方预览通过，v1.0 保持原样。入口为新增的 `scripts/import_downloaded_model.py`（单文件、默认只出计划），见[收据](receipts/model_import_20261118.json)。
 - 2026-11-18：补记 2026-11-14 MOSS 与后续 LoRA Manager 部署的 136 个权重（MOSS 117、Krea2 19），逐项按现行 sidecar 重建来源、完整 SHA 与卡片；其中 `Moss__MOSS Image Edit LoRA` 无 Civitai 身份，按 `unresolved` 记录。另导入 2026-11-18 新下载 LoRA 9 个（全为 MOSS：画风与画师 8、服装与配饰 1），9 项完整 SHA 与 Civitai 确切版本文件一致，卡片与 `LoraLoader` 枚举逐项通过，预览已取，下载原件本轮保留。把 247 条运行区已不存在的记录（226 LoRA、14 底模、2 文本编码器、2 VAE、2 ControlNet、1 checkpoint）标记为删除并清除位置与摘要，Anima/Qwen 系列引用 2026-10-24 授权删除回执。两个含全角冒号的旧文件名经管理器的重命名接口改为 `-`，以符合目录契约。见[收据](receipts/lora_batch_20261118.json)。
 - 2026-11-18：命名规则新增 MOSS 家族（版本级底模 `MOSS Image`／审查记录 `Moss`／`moss` 根目录），`scripts/model_naming_rules.py` 与 `tests/test_standardize_models.py` 补用例；新增 `scripts/register_present_loras.py`（登记已部署但未入册的权重）与 `scripts/reconcile_asset_presence.py`（缺失记录核对），见[本轮说明](technical/changes/runtime-models/2026-11-18-lora-batch-and-presence-reconcile.md)。
 

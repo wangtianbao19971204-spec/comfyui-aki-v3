@@ -345,7 +345,8 @@
         "scripts/import_lora_downloads.py",
         "scripts/Import-DownloadedLoras.ps1",
         "scripts/register_present_loras.py",
-        "scripts/reconcile_asset_presence.py"
+        "scripts/reconcile_asset_presence.py",
+        "scripts/import_downloaded_model.py"
       ],
       "tests": [
         "snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/comfyui-lora-manager/tests/test_checkpoint_loaders.py",
@@ -357,6 +358,7 @@
         "tests/test_import_lora_downloads.py",
         "tests/test_register_present_loras.py",
         "tests/test_reconcile_asset_presence.py",
+        "tests/test_import_downloaded_model.py",
         "snapshot/runtime/production_tools/test_moss_workflow.cjs"
       ],
       "evidence": [
@@ -372,7 +374,8 @@
         "docs/receipts/lora_quick_import_20261009.json",
         "docs/receipts/lora_download_import_20261011.json",
         "docs/receipts/lora_download_import_20261019.json",
-        "docs/receipts/lora_batch_20261118.json"
+        "docs/receipts/lora_batch_20261118.json",
+        "docs/receipts/model_import_20261118.json"
       ],
       "acceptance": "checked-source",
       "watch": [
@@ -391,7 +394,9 @@
         "scripts/register_present_loras.py",
         "tests/test_register_present_loras.py",
         "scripts/reconcile_asset_presence.py",
-        "tests/test_reconcile_asset_presence.py"
+        "tests/test_reconcile_asset_presence.py",
+        "scripts/import_downloaded_model.py",
+        "tests/test_import_downloaded_model.py"
       ],
       "examples": [
         "examples/external-assets/asset-record.example.json",
