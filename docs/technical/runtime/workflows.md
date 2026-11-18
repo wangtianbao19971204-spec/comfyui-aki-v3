@@ -1,6 +1,6 @@
 # UAP、子图、部位细化与二放
 
-文档修订：2026-10-11。
+文档修订：2026-11-15。
 
 2026-10-11 Krea2 默认底模：上一轮对照证明深度 ControlNet-LoRA 在非蒸馏底模上生效、在当前 Turbo 底模上不可用（Turbo 强度 4 还会把成图打散成噪声），因此把 K2 分支默认底模换成 `Krea2-Anime v2.0 BF16` 并把该底模需要的采样档位一并写入（步数 8→24、CFG 1→3.5、scheduler simple→normal；sampler 与 denoise 不变）。其余参数、LoRA 栈、提示词、种子、尺寸、控制强度与所有开关默认值保持。隔离验收：新默认配置下"关控制"与"开控制（姿势深度）"平均绝对差 89.12、变化 97.3% 像素；两文件已限定部署并重启（运行区 SHA `ceeeee13…`、进程 15244），运行区实页以默认提示词跑通一次完整生产链路（控制开、姿势档，输出 `_codex_qa/krea2_default_base_20261011/krea2_00001_.png`）。见[底模变更](../changes/runtime-workflows/2026-10-11-krea2-anime-default-base.md)。
 
@@ -86,6 +86,12 @@ A29 手阶段：原手部 YOLO 检测框已经纳入画面左侧裸脚区，SAM 
 区域 A1/A29 标准／快速四组通过正规 UI 开关与各自导出实际执行，所选 16 个 child 节点无缓存；四蒙版全空、最终 RGB 与输入相同，仅认证真实 no-hit 检测／透传路径。有命中重绘和画质仍未覆盖。内建手工蒙版编辑器已实际打开、载图并取消；画笔保存往返未测，旧 Impact 自动 SAM 编辑器仍因缺失依赖未修复。各项剩余边界继续在[已知问题](../../KNOWN_ISSUES.md)维护。
 
 ## 更新记录
+
+- 2026-11-15：新增构建器 [build_uap_standalone_suite.py](../../../snapshot/runtime/production_tools/build_uap_standalone_suite.py) 与专项测试 [test_uap_standalone_suite.cjs](../../../snapshot/runtime/production_tools/test_uap_standalone_suite.cjs)，将日常套件拉齐为 8 个对等独立轻量 UAP 工作流：移除 [Krea2_精简生产_v1.json](../../../snapshot/runtime/ComfyUI/user/default/workflows/Krea2_精简生产_v1.json)（含[模板](../../../snapshot/runtime/production_tools/templates/Krea2_精简生产_v1.json)）的深度控制节点与子图（精简为 36 节点 / 47 连线 / 0 子图，保留原提示词、LoRA、底模与采样参数），从合集工作流独立拆分出 [工具_图片反推_提示词提取.json](../../../snapshot/runtime/ComfyUI/user/default/workflows/工具_图片反推_提示词提取.json)（含[模板](../../../snapshot/runtime/production_tools/templates/工具_图片反推_提示词提取.json)，集成 PixAI / JoyCaption / 在线五模型三路反推），并为独立扩展 `04` / `06` / `08` / `09` 补齐完整 UAP 外壳与无重叠布局（已完成运行区限定部署、旧重复工作流归档及 Krea2 生图与 PixAI 反推实机 GPU 核验）。详见[本轮说明](../changes/runtime-workflows/2026-11-15-uap-standalone-workflow-suite.md)。
+
+- 2026-11-15：新增独立受控工作流 [MOSS_精简生产_v1.json](../../../snapshot/runtime/ComfyUI/user/default/workflows/MOSS_精简生产_v1.json)（含[模板](../../../snapshot/runtime/production_tools/templates/MOSS_精简生产_v1.json)与构建器 [build_moss_workflow.py](../../../snapshot/runtime/production_tools/build_moss_workflow.py)），保持正式 `UAP统一生产工作台_v2.json` 零字节改动；物理断开 `#4 Lora Loader` 的 `clip` 输入（`#2 CLIPLoader` 直连 `#5` / `#6`，保留 `trigger_words`），统一采样步数 `40`、独立输出目录 `Production_MOSS/moss`，补齐 `extra.uap_workbench` 与 `extra.uap_model_contracts` 并通过实页切换与 40 步真实 GPU 生图验收。详见[本轮说明](../changes/runtime-workbench/2026-11-15-moss-uap-standalone-isolation.md)。
+
+- 2026-11-15：同步五分支精简版 `UAP统一生产工作台_v2.json`（`k2`、`ext04`、`ext05`、`ext06`、`ext07`，含模板）与独立 [Krea2_精简生产_v1.json](../../../snapshot/runtime/ComfyUI/user/default/workflows/Krea2_精简生产_v1.json)；补齐 `#1233`（`CR Prompt Text`）的 `"widget": {"name": "prompt"}` 元数据，恢复 `k2` 分支 24 个可选工具节点的默认 `mode = 2` 与全节点 `uap_default_mode`；将 Krea2 Depth 控制链（`#1187` 及 `#130163/#1160/#1161/#1159`）默认设为关闭，开箱纯文生图；将 `ext04`（UAP `#1234` 与独立 04 `#1`）已删底模替换为现存 `DarkDesire V3 Turbo UC BF16`，提示词、LoRA、种子与采样数值零改动。详见[本轮说明](../changes/runtime-workbench/2026-11-15-krea2-uap-prompt-and-workflow-sync.md)。
 
 - 2026-10-13：修复独立 03 与对应模板的控制接线，参考图/VNCCS 经统一来源与可选擦线进入 Encode→Apply，保留原模型、提示词、种子和采样设置。17 项相关回归和实际原生出图核对通过，擦线直接控制图在蒙版支持域外零变化；原 Turbo 的服装与姿态质量限制、配套非 Turbo 的有限改善，以及旧 UAP K2 QA 提示词错误和 A1 高强度模糊分别记录。源验收当时未部署；随后仅两份 03 已部署，中性输入现场两例通过。见[本轮说明](../changes/runtime-workflows/2026-10-13-standalone-krea2-control-routing.md)、[源验收收据](../../receipts/control_erase_routing_repair_20261013.json)与[部署收据](../../receipts/control_erase_deployment_20261013.json)。
 

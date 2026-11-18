@@ -1,6 +1,6 @@
 # 模型、LoRA 管理与资源配套
 
-文档修订：2026-10-19。
+文档修订：2026-11-15。
 
 
 2026-10-11 更新：Anima 2.9B 控制图简化后，仅刷新 model_sources.json 的 UAP 文件摘要绑定，并重新生成下载表；对比基线确认 UAP 模型引用集合、23 项目录关联与所有资产身份保持。权重没有移动、下载或转换；[专用加载器](../../../snapshot/runtime/ComfyUI/custom_nodes/ComfyUI-Anima-LLLite/native_loader.py)继续读取原 controlnet 目录。见 [简化收据](../../receipts/anima_control_simple_20261011.json)。
@@ -60,6 +60,10 @@ LM Civitai 前后端兼容、插件版本和下载队列是独立边界，不能
 2026-10-07 [最终验收](../../receipts/final_workflow_acceptance_20261007.json)：Krea2 三个初始黑图在复合模型／执行缓存清理后用相同输入恢复。当前与历史正常记录的实际 UNET/VAE 均为 BF16，当前进程未强制其精度；原生 latent 类也有成功反证。本轮不盲改 dtype、latent 或正式参数，不能把冷态恢复称为根因永久修复。现行模型检查绑定此前完整摘要，不重复认证全部权重。
 
 ## 更新记录
+
+- 2026-11-15：增强 LoRA Manager 与 UAP 的 Krea2 ↔ MOSS 双向家族隔离：`workflow_targets.js` 在 MOSS 分支将节点浏览器入口锁定到 `lm_folder=moss`；`autocomplete.js` 在 UAP 分支按 `modelFamily` 为 `<lora:...>` 自动补全注入 `folder=<family>&recursive=true`，并在 MOSS 分支无显式 CLIP 建议时默认输出 `<lora:name:strength:0>`；`MOSS_精简生产_v1.json` 登记本机 3 个 MOSS 底模、2 个 Qwen3.5 9B 编码器与 Flux2 VAE 契约（未新增、移动或下载任何权重，`UAP统一生产工作台_v2.json` 与 `model_sources.json` 摘要保持不变）。详见[本轮说明](../changes/runtime-workbench/2026-11-15-moss-uap-standalone-isolation.md)。
+
+- 2026-11-15：在 `UAP统一生产工作台_v2.json` 的 `extra.uap_model_contracts` 中补充登记本机 3 个 `moss\图像生成\*.safetensors` 底模为 `family: "moss"`，配合前端目录前缀家族推断拦截跨架构误选；将 `ext04`（UAP `#1234` 及独立 04 `#1`）引用的已删底模更新为清单内现存的 `DarkDesire V3 Turbo UC BF16`，并同步刷新 `snapshot/inventory/model_sources.json` 与 `docs/MODEL_SOURCES.md` 的 `workflow_sha256`（未新增、移动或下载任何权重）。详见[本轮说明](../changes/runtime-workbench/2026-11-15-krea2-uap-prompt-and-workflow-sync.md)。
 
 - 2026-10-10：修正丝袜插件说明误写入生成目录导致的 CI `rendered_document_mismatch`。SAM ViT-B 与 Depth Anything V2 Small HF 的来源指引移至[模型维护](../../MODELS.md)，易读来源表由 `scripts/model_sources.py render` 重新生成并经 `check` 核对。仅调整文档，保留原来源 JSON、模型文件及工作流参数。
 

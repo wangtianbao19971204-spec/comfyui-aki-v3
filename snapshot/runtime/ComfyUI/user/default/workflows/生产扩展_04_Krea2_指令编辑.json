@@ -27,10 +27,12 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "UNETLoader"
+        "Node name for S&R": "UNETLoader",
+        "uap_layout_group": "01 输入、指令与模型 · EXT04",
+        "uap_default_mode": 0
       },
       "widgets_values": [
-        "krea2\\图像生成\\Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__CuteDisaster v2 Turbo UC__BF16__cv3151280__f3034252.safetensors",
+        "krea2\\图像生成\\Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__DarkDesire V3 Turbo UC__BF16__cv3362930__f3250905.safetensors",
         "default"
       ],
       "title": "模型选择"
@@ -61,7 +63,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "CLIPLoader"
+        "Node name for S&R": "CLIPLoader",
+        "uap_layout_group": "01 输入、指令与模型 · EXT04",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "qwen3-vl-4b-heretic.safetensors",
@@ -111,7 +115,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "Krea2EditGroundedEncode"
+        "Node name for S&R": "Krea2EditGroundedEncode",
+        "uap_layout_group": "01 输入、指令与模型 · EXT04",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "Change the blue raincoat to a bright green raincoat. Keep the person, bicycle, pose and background unchanged.",
@@ -161,7 +167,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "Krea2EditGroundedEncode"
+        "Node name for S&R": "Krea2EditGroundedEncode",
+        "uap_layout_group": "01 输入、指令与模型 · EXT04",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "",
@@ -174,8 +182,8 @@
       "id": 6,
       "type": "EmptySD3LatentImage",
       "pos": [
-        0,
-        1040
+        840,
+        520
       ],
       "size": [
         360,
@@ -196,7 +204,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "EmptySD3LatentImage"
+        "Node name for S&R": "EmptySD3LatentImage",
+        "uap_layout_group": "02 尺寸与采样 · EXT04",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         768,
@@ -250,7 +260,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "KSampler"
+        "Node name for S&R": "KSampler",
+        "uap_layout_group": "02 尺寸与采样 · EXT04",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         20260906,
@@ -268,7 +280,7 @@
       "type": "VAELoader",
       "pos": [
         0,
-        1560
+        1040
       ],
       "size": [
         360,
@@ -290,7 +302,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "VAELoader"
+        "Node name for S&R": "VAELoader",
+        "uap_layout_group": "01 输入、指令与模型 · EXT04",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "krea2RealVae_v10.safetensors"
@@ -335,7 +349,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "VAEDecode"
+        "Node name for S&R": "VAEDecode",
+        "uap_layout_group": "02 尺寸与采样 · EXT04",
+        "uap_default_mode": 0
       },
       "widgets_values": [],
       "title": "解码结果"
@@ -369,7 +385,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "SaveImage"
+        "Node name for S&R": "SaveImage",
+        "uap_layout_group": "03 预览与保存 · EXT04",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "production_extensions/04_krea2_edit"
@@ -381,7 +399,7 @@
       "type": "LoadImage",
       "pos": [
         0,
-        2080
+        1560
       ],
       "size": [
         360,
@@ -409,7 +427,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "LoadImage"
+        "Node name for S&R": "LoadImage",
+        "uap_layout_group": "01 输入、指令与模型 · EXT04",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "optimization_reference.png"
@@ -452,7 +472,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "VAEEncode"
+        "Node name for S&R": "VAEEncode",
+        "uap_layout_group": "01 输入、指令与模型 · EXT04",
+        "uap_default_mode": 0
       },
       "widgets_values": []
     },
@@ -487,7 +509,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "LoraLoaderModelOnly"
+        "Node name for S&R": "LoraLoaderModelOnly",
+        "uap_layout_group": "01 输入、指令与模型 · EXT04",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "krea2\\控制与编辑\\Krea2__Krea 2 Identity Edit__v1.2__FP16__cv3139172__f3019297.safetensors",
@@ -560,7 +584,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "Krea2EditModelPatch"
+        "Node name for S&R": "Krea2EditModelPatch",
+        "uap_layout_group": "02 尺寸与采样 · EXT04",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         4.0,
@@ -597,7 +623,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "PreviewImage"
+        "Node name for S&R": "PreviewImage",
+        "uap_layout_group": "03 预览与保存 · EXT04",
+        "uap_default_mode": 0
       },
       "widgets_values": [],
       "title": "结果预览"
@@ -631,7 +659,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "VRAMCleanup"
+        "Node name for S&R": "VRAMCleanup",
+        "uap_layout_group": "03 预览与保存 · EXT04",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         false,
@@ -644,7 +674,7 @@
       "type": "MarkdownNote",
       "pos": [
         0,
-        -470
+        -540
       ],
       "size": [
         1120,
@@ -655,7 +685,10 @@
       "mode": 0,
       "inputs": [],
       "outputs": [],
-      "properties": {},
+      "properties": {
+        "uap_layout_group": "04 使用说明 · EXT04",
+        "uap_default_mode": 0
+      },
       "widgets_values": [
         "# 04_Krea2_指令编辑\n\n替换输入图，修改绿色雨衣示例指令。Turbo 默认 8 步、CFG 1；强删除任务应另用 Raw 配方。源图同时进入 grounded encode 与 latent patch，target_latent 已接好，避免采样中途编码源图。\n\n先另存为个人副本再改参数。参考图为本地验收生成图，可自行替换。固定种子用于复现；需要候选图时使用队列批次数量。"
       ]
@@ -831,7 +864,56 @@
       "IMAGE"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "title": "01 输入、指令与模型 · EXT04",
+      "bounding": [
+        -28,
+        -64,
+        836,
+        1972
+      ],
+      "color": "#70566D",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "02 尺寸与采样 · EXT04",
+      "bounding": [
+        812,
+        -64,
+        1256,
+        932
+      ],
+      "color": "#46637A",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "03 预览与保存 · EXT04",
+      "bounding": [
+        2072,
+        -64,
+        416,
+        1452
+      ],
+      "color": "#5E7352",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "04 使用说明 · EXT04",
+      "bounding": [
+        -28,
+        -604,
+        1176,
+        472
+      ],
+      "color": "#5A5F66",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
     "ds": {
@@ -841,7 +923,178 @@
         490
       ]
     },
-    "optimization_release": "2026-09-06"
+    "optimization_release": "2026-09-06",
+    "qgn_navigation_groups": [
+      {
+        "groupName": "01 输入、指令与模型 · EXT04",
+        "shortcut": "1"
+      },
+      {
+        "groupName": "02 尺寸与采样 · EXT04",
+        "shortcut": "2"
+      },
+      {
+        "groupName": "03 预览与保存 · EXT04",
+        "shortcut": "3"
+      },
+      {
+        "groupName": "04 使用说明 · EXT04",
+        "shortcut": "4"
+      }
+    ],
+    "uap_model_contracts": {
+      "version": 1,
+      "verified_at": "2026-11-15",
+      "evidence": "Local safetensors inventory and ComfyUI 0.42.0 CLIPLoader(moss_image) + Flux2 VAE pairing. Enforces Krea2/MOSS family isolation.",
+      "models": {
+        "moss/图像生成/Moss__MOSS Image__Base__BF16__cv3409868__f3301907.safetensors": {
+          "family": "moss"
+        },
+        "moss/图像生成/Moss__MOSS Image__SFT__BF16__cv3409867__f3301903.safetensors": {
+          "family": "moss"
+        },
+        "moss/图像生成/Moss__MOSS Cat Tower__v2.0__BF16__cv3447411__f3346762.safetensors": {
+          "family": "moss"
+        },
+        "krea2/图像生成/Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__CuteDisaster v2 Turbo UC__BF16__cv3151280__f3034252.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__DarkDesire V3 Turbo UC__BF16__cv3362930__f3250905.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__🧊💀 DaSiWa Krea2 - Turbo - Raw 💀🧊__DarkDesire V3 Turbo UC__FP8-Mixed__cv3362930__f3251200.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Krea2-Anime__v2.0__BF16__cv3357716__f3246945.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Krea2-Anime__v2.0__INT8__cv3357716__f3245462.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Moody Krea 2 Mix (uncensored) V8SE Goes Ancient —__Premium 臻享版__INT8-ConvRot__cv3261440__f3153405.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Krea2 Cat Tower__v1.0 (Turbo INT8 ConvRot)__INT8-ConvRot__cv3163788__f3046237.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Krea2-Anime__v3.0__BF16__cv3435333__f3334576.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__Krea2-Anime__v3.0__FP8__cv3435333__f3334536.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__LUSTIFY! [NSFW checkpoint]__v10 (Krea 2)__BF16__cv3112728__f3015315.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        },
+        "krea2/图像生成/Krea2__LUSTIFY! [NSFW checkpoint]__v10 (Krea 2)__INT8-ConvRot__cv3112728__f2996235.safetensors": {
+          "family": "krea2",
+          "blocks": 28
+        }
+      },
+      "families": {
+        "moss": {
+          "label": "MOSS",
+          "clip": [
+            "Moss__Qwen3.5 9B Text Encoder__v1__BF16__sha__7E6E9F08D598.safetensors",
+            "Moss__Qwen3.5 9B Text Encoder__v1__W4A8-GPTQ__cv3409867__f3301906.safetensors"
+          ],
+          "clip_type": "moss_image",
+          "vae": [
+            "Moss__Flux2 VAE__v1__FP32__cv3409867__f3301980.safetensors"
+          ]
+        },
+        "krea2": {
+          "label": "Krea2",
+          "clip": [
+            "qwen3-vl-4b-heretic.safetensors"
+          ],
+          "clip_type": "krea2",
+          "vae": [
+            "krea2RealVae_v10.safetensors"
+          ]
+        }
+      }
+    },
+    "uap_workbench": {
+      "version": 1,
+      "activeBranch": "ext04",
+      "viewBranch": "ext04",
+      "stage": "daily",
+      "compactWidgets": false,
+      "branches": [
+        {
+          "id": "ext04",
+          "label": "Krea2 指令编辑",
+          "group": "01 输入、指令与模型 · EXT04",
+          "nodeIds": [
+            1,
+            2,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            80,
+            81,
+            900
+          ],
+          "modes": {
+            "1": 0,
+            "2": 0,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 0,
+            "9": 0,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "80": 0,
+            "81": 0,
+            "900": 0
+          },
+          "stages": [
+            {
+              "id": "daily",
+              "label": "日常操作",
+              "groups": [
+                "01 输入、指令与模型 · EXT04",
+                "02 尺寸与采样 · EXT04",
+                "03 预览与保存 · EXT04"
+              ]
+            },
+            {
+              "id": "guide",
+              "label": "使用说明",
+              "groups": [
+                "04 使用说明 · EXT04"
+              ]
+            }
+          ],
+          "modelFamily": "krea2"
+        }
+      ]
+    }
   },
-  "version": 0.4
+  "version": 0.4,
+  "id": "uap-standalone-ext04-krea2-edit"
 }

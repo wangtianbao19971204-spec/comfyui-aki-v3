@@ -3,9 +3,11 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
 
+const canvasWrite = fs.readFileSync(path.join(__dirname, '../ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/web/canvas_write.js'), 'utf8')
+    .replaceAll('export function ', 'function ');
 const source = fs.readFileSync(path.join(__dirname, '../ComfyUI/custom_nodes/ComfyUI-Unified-Prompt-Workbench/modules/ComfyUI-Danbooru-Gallery-V50-GalleryOnly/js/quick_group_navigation/uap_workbench.js'), 'utf8')
     .replace(/^import .*;\r?$/gm, '').replaceAll('export function ', 'function ');
-const nodes = new Map([[1, {mode: 0}], [2, {mode: 2}], [3, {mode: 4}], [4, {mode: 2}], [5, {mode: 2}]]);
+const nodes = new Map([[1, {id: 1, mode: 0}], [2, {id: 2, mode: 2}], [3, {id: 3, mode: 4}], [4, {id: 4, mode: 2}], [5, {id: 5, mode: 2}]]);
 const settings = {activeBranch: 'a', branches: [
     {id: 'a', label: 'A', nodeIds: [1, 2, 3], modes: {1: 0, 2: 2, 3: 4}, stages: [{id:'daily',label:'Daily',groups:[]}]},
     {id: 'b', label: 'B', nodeIds: [4, 5], modes: {4: 0, 5: 4}, stages: [{id:'daily',label:'Daily',groups:[]}]},
@@ -19,6 +21,7 @@ const app = {
         setZoom(value) {ds.scale = value;}, setDirty() {}}
 };
 const context = vm.createContext({app, document: {querySelector: () => null, getElementById: () => ({hidden: false, getBoundingClientRect: () => ({bottom: 246})})}});
+vm.runInContext(canvasWrite, context);
 vm.runInContext(source, context);
 vm.runInContext(`
     branchSelect = {};
@@ -31,11 +34,12 @@ vm.runInContext(`
     viewBranch = "b"; activateBranch();
 `, context);
 assert.deepEqual([...nodes.values()].map(n => n.mode), [2, 2, 2, 0, 4], 'Switch must restore bypassed state and mute the old branch');
-nodes.get(5).mode = 2;
+nodes.get(5).properties = {uap_default_mode: 2};
 vm.runInContext('viewBranch = "a"; activateBranch();', context);
 assert.deepEqual([...nodes.values()].map(n => n.mode), [0, 2, 4, 2, 2], 'A must recover its original optional and bypassed states');
 vm.runInContext('viewBranch = "b"; activateBranch();', context);
-assert.equal(nodes.get(5).mode, 2, 'A user change within B must survive a round trip');
+assert.equal(nodes.get(5).mode, 2, 'Explicit uap_default_mode overrides legacy snapshot without mutating branches[].modes');
+assert.equal(settings.branches[1].modes[5], 4, 'branches[].modes remains immutable at runtime');
 nodes.get(4).mode = 4;
 vm.runInContext('activateBranch();', context);
 assert.equal(nodes.get(4).mode, 4, 'Activating the current branch must not reset it');

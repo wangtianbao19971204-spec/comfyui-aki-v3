@@ -32,7 +32,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "LoadImage"
+        "Node name for S&R": "LoadImage",
+        "uap_layout_group": "01 输入与四倍超分 · EXT09",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "optimization_reference.png"
@@ -64,7 +66,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "UpscaleModelLoader"
+        "Node name for S&R": "UpscaleModelLoader",
+        "uap_layout_group": "01 输入与四倍超分 · EXT09",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "OmniSR_X4_DIV2K.safetensors"
@@ -108,7 +112,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "ImageUpscaleWithModel"
+        "Node name for S&R": "ImageUpscaleWithModel",
+        "uap_layout_group": "01 输入与四倍超分 · EXT09",
+        "uap_default_mode": 0
       },
       "widgets_values": []
     },
@@ -141,7 +147,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "SaveImage"
+        "Node name for S&R": "SaveImage",
+        "uap_layout_group": "03 预览与保存 · EXT09",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         "production_extensions/09_upscale_4x"
@@ -177,7 +185,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "PreviewImage"
+        "Node name for S&R": "PreviewImage",
+        "uap_layout_group": "03 预览与保存 · EXT09",
+        "uap_default_mode": 0
       },
       "widgets_values": [],
       "title": "结果预览"
@@ -211,7 +221,9 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "VRAMCleanup"
+        "Node name for S&R": "VRAMCleanup",
+        "uap_layout_group": "03 预览与保存 · EXT09",
+        "uap_default_mode": 0
       },
       "widgets_values": [
         false,
@@ -224,7 +236,7 @@
       "type": "MarkdownNote",
       "pos": [
         0,
-        -470
+        -540
       ],
       "size": [
         1120,
@@ -235,7 +247,10 @@
       "mode": 0,
       "inputs": [],
       "outputs": [],
-      "properties": {},
+      "properties": {
+        "uap_layout_group": "04 使用说明 · EXT09",
+        "uap_default_mode": 0
+      },
       "widgets_values": [
         "# 09_超分_四倍素材\n\n复用现有 OmniSR 四倍模型。大图较慢，先用二倍入口确认边缘与纹理。\n\n先另存为个人副本再改参数。参考图为本地验收生成图，可自行替换。固定种子用于复现；需要候选图时使用队列批次数量。"
       ]
@@ -283,7 +298,44 @@
       "IMAGE"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "title": "01 输入与四倍超分 · EXT09",
+      "bounding": [
+        -28,
+        -64,
+        836,
+        932
+      ],
+      "color": "#4D6C5B",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "03 预览与保存 · EXT09",
+      "bounding": [
+        812,
+        -64,
+        416,
+        1452
+      ],
+      "color": "#5E7352",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "title": "04 使用说明 · EXT09",
+      "bounding": [
+        -28,
+        -604,
+        1176,
+        472
+      ],
+      "color": "#5A5F66",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
     "ds": {
@@ -293,7 +345,71 @@
         490
       ]
     },
-    "optimization_release": "2026-09-06"
+    "optimization_release": "2026-09-06",
+    "qgn_navigation_groups": [
+      {
+        "groupName": "01 输入与四倍超分 · EXT09",
+        "shortcut": "1"
+      },
+      {
+        "groupName": "03 预览与保存 · EXT09",
+        "shortcut": "2"
+      },
+      {
+        "groupName": "04 使用说明 · EXT09",
+        "shortcut": "3"
+      }
+    ],
+    "uap_workbench": {
+      "version": 1,
+      "activeBranch": "ext09",
+      "viewBranch": "ext09",
+      "stage": "daily",
+      "compactWidgets": false,
+      "branches": [
+        {
+          "id": "ext09",
+          "label": "超分四倍素材",
+          "group": "01 输入与四倍超分 · EXT09",
+          "nodeIds": [
+            10,
+            11,
+            12,
+            13,
+            80,
+            81,
+            900
+          ],
+          "modes": {
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "80": 0,
+            "81": 0,
+            "900": 0
+          },
+          "stages": [
+            {
+              "id": "daily",
+              "label": "日常操作",
+              "groups": [
+                "01 输入与四倍超分 · EXT09",
+                "03 预览与保存 · EXT09"
+              ]
+            },
+            {
+              "id": "guide",
+              "label": "使用说明",
+              "groups": [
+                "04 使用说明 · EXT09"
+              ]
+            }
+          ]
+        }
+      ]
+    }
   },
-  "version": 0.4
+  "version": 0.4,
+  "id": "uap-standalone-ext09-upscale-4x"
 }

@@ -30,7 +30,9 @@ function harness(options = {}) {
         api.emit('promptQueued', {requestId, batchCount: 1}); return true;
     }, ...options.app};
     const report = message => reports.push(message); report.clear = key => reports.push(['clear', key]);
-    const context = vm.createContext({api, URLSearchParams, setTimeout, clearTimeout}); vm.runInContext(source, context);
+    const storage = new Map();
+    const localStorage = {getItem: key => storage.get(key) ?? null, setItem: (key, val) => storage.set(key, String(val))};
+    const context = vm.createContext({api, URLSearchParams, setTimeout, clearTimeout, localStorage}); vm.runInContext(source, context);
     const host = new Element('div');
     const controls = context.mountRunControls(host, {app, element, button, report,
         prepareTask: options.prepareTask || (() => ({task: 'generate', label: '生成', queueNodeIds: ['final']})), onSubmitted: task => submitted.push(task)});
@@ -79,6 +81,7 @@ async function main() {
         const h = harness(); await settle(); await h.stop.onclick(); assert.equal(h.calls.length, 0);
         h.queue.Running = [{}]; await assert.rejects(() => h.stop.onclick(), /无法确认/); assert.equal(h.calls.length, 0);
         h.queue.Running = [{prompt_id: 'own-running'}]; await h.stop.onclick(); assert.equal(h.calls[0][1], 'own-running');
+        h.queue.Running = [{id: 'jobs-api-running', status: 'in_progress'}]; await h.stop.onclick(); assert.equal(h.calls[1][1], 'jobs-api-running');
     });
     await test('repeated stop and dispose during queue read cause no repeated interruption', async () => {
         const gate = deferred(), h = harness(); await settle();

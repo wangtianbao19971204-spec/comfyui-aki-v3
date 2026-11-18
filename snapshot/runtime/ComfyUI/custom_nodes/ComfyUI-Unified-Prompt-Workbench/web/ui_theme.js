@@ -33,7 +33,7 @@ export function installUiTheme() {
     if (!document.getElementById('uw-studio-style')) {
         const style = document.createElement('link');
         style.id = 'uw-studio-style'; style.rel = 'stylesheet';
-        style.href = '/extensions/ComfyUI-Unified-Prompt-Workbench/studio.css?v=20261005-stickers';
+        style.href = '/extensions/ComfyUI-Unified-Prompt-Workbench/studio.css?v=20261025-sysstats';
         document.head.append(style);
     }
     window.addEventListener('storage', event => {

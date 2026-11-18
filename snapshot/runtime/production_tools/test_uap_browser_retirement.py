@@ -23,20 +23,29 @@ import merge_unified_workflow as merge
 
 
 TOOLS = Path(__file__).resolve().parent
-INPUT_UUID = "337bd605-fc7a-4bc5-a609-dac988131dee"
-OUTPUT_UUID = "ff03cc8b-4bec-4d36-aab2-e85581ba4ef3"
-A1_UUID = "a3693025-6d77-52d1-bc21-0606026e75c3"
-A29_UUID = "66bad938-cc35-53bc-bbc4-add4a1c83c60"
+K2_UUID = "945c8bd5-57ab-4054-ae97-da28ca17ccfc"
+RETIRED_UUIDS = {
+    "a3693025-6d77-52d1-bc21-0606026e75c3",  # a1 [01C] PixAI
+    "66bad938-cc35-53bc-bbc4-add4a1c83c60",  # a29 [01C] PixAI
+    "c064915a-364c-5684-bd22-e4ed08730e6d",  # a1 [05]
+    "38d947f0-68b4-5d72-a27e-60a91f65c23a",  # a29 [05]
+}
 RETIRED_TYPE = "DanbooruBrowserImportV05"
 FIXTURE_ID = 987654321
 
 
-def subgraph(data, graph_id=A1_UUID):
+def subgraph(data, graph_id=K2_UUID):
     return next(item for item in data["definitions"]["subgraphs"] if item["id"] == graph_id)
 
 
-def node(graph, node_id):
-    return next(item for item in graph["nodes"] if item["id"] == node_id)
+def usable_link(graph):
+    """First embedded link whose origin is a real node that back-references it."""
+    for link in graph["links"]:
+        origin = link["origin_id"]
+        node = next((item for item in graph["nodes"] if item["id"] == origin), None)
+        if node and any(link["id"] in (output.get("links") or []) for output in node.get("outputs", [])):
+            return link, node
+    raise AssertionError("fixture subgraph has no internally-originated link")
 
 
 def file_hashes(directory):
@@ -88,47 +97,6 @@ class BrowserRetirementAcceptance(unittest.TestCase):
             encoding="utf-8", timeout=30, check=False,
         )
 
-    def assert_pixai_interface(self, graph_id, tagger_id, wrapper_id, preview_id,
-                               input_link_id, export_link_id, external_link_id):
-        for source_name, data in self.sources.items():
-            with self.subTest(source=source_name):
-                graph = subgraph(data, graph_id)
-                self.assertEqual(graph["inputs"][0]["id"], INPUT_UUID)
-                self.assertEqual(graph["inputs"][0]["type"], "IMAGE")
-                self.assertEqual(graph["inputs"][0]["linkIds"], [input_link_id])
-                self.assertEqual(graph["outputs"][0]["id"], OUTPUT_UUID)
-                self.assertEqual(graph["outputs"][0]["name"], "merged_tags")
-                self.assertEqual(graph["outputs"][0]["type"], "STRING")
-                self.assertEqual(graph["outputs"][0]["linkIds"], [export_link_id])
-                self.assertEqual(node(graph, tagger_id)["type"], "PixAITagger")
-                self.assertEqual(node(graph, tagger_id)["inputs"][0]["name"], "image")
-                self.assertEqual(node(graph, tagger_id)["inputs"][0]["link"], input_link_id)
-                self.assertEqual(graph["inputNode"]["id"], -10)
-                self.assertEqual(graph["outputNode"]["id"], -20)
-                incoming = next(item for item in graph["links"] if item["id"] == input_link_id)
-                self.assertEqual(
-                    tuple(incoming[key] for key in ("origin_id", "origin_slot", "target_id", "target_slot", "type")),
-                    (-10, 0, tagger_id, 0, "IMAGE"),
-                )
-                exported = next(item for item in graph["links"] if item["id"] == export_link_id)
-                self.assertEqual(
-                    tuple(exported[key] for key in ("origin_id", "origin_slot", "target_id", "target_slot", "type")),
-                    (tagger_id, 0, -20, 0, "STRING"),
-                )
-                wrapper = node(data, wrapper_id)
-                self.assertEqual(wrapper["type"], graph_id)
-                self.assertEqual(wrapper["outputs"][0]["name"], "merged_tags")
-                self.assertEqual(wrapper["outputs"][0]["type"], "STRING")
-                self.assertEqual(wrapper["outputs"][0]["links"], [external_link_id])
-                outgoing = [item for item in data["links"] if item[1] == wrapper_id]
-                self.assertEqual([tuple(item[:6]) for item in outgoing],
-                                 [(external_link_id, wrapper_id, 0, preview_id, 0, "STRING")])
-                preview = node(data, preview_id)
-                self.assertEqual(preview["type"], "ShowText|pysssss")
-                self.assertEqual(preview["inputs"][0]["link"], external_link_id)
-                self.assertTrue(all(not output.get("links") for output in preview["outputs"]),
-                                "Tag preview must not feed a generation node")
-
     def test_01_formal_and_canonical_pass_strict_validation(self):
         for source_name, data in self.sources.items():
             with self.subTest(source=source_name):
@@ -141,11 +109,15 @@ class BrowserRetirementAcceptance(unittest.TestCase):
                 self.assertTrue({1148, 1180}.isdisjoint(node_ids),
                                 "A retired receiver or its dedicated top-level preview remains")
                 self.assertNotIn(10198, {item[0] for item in data["links"]})
-                self.assertNotIn(1074, {item["id"] for item in data["groups"]})
-                self.assertIn(1074, node_ids, "The legitimate A29 node sharing the retired group ID was removed")
-                for graph_id, retired_ids in ((A1_UUID, {104000, 104001}), (A29_UUID, {114000, 114001})):
-                    self.assertTrue(retired_ids.isdisjoint({item["id"] for item in subgraph(data, graph_id)["nodes"]}),
-                                    "An embedded receiver or its dedicated preview remains")
+                definitions = {item["id"] for item in data["definitions"]["subgraphs"]}
+                self.assertEqual(definitions, {K2_UUID}, "only the Krea2 embedded subgraph remains")
+                self.assertTrue(definitions.isdisjoint(RETIRED_UUIDS))
+                retired_nodes = {1022, 1066, 1074, 1090, 1275}
+                self.assertTrue(retired_nodes.isdisjoint(node_ids),
+                                "A retired Anima branch node remains in the current workflow")
+                branches = {branch.get("id") for branch in data["extra"]["uap_workbench"]["branches"]}
+                self.assertEqual(branches, {"k2", "ext04", "ext06", "ext08", "ext09"})
+                self.assertEqual(data["extra"]["uap_workbench"]["activeBranch"], "k2")
 
     def test_02_json_roundtrip_preserves_full_payload(self):
         for source_name, data in self.sources.items():
@@ -154,54 +126,50 @@ class BrowserRetirementAcceptance(unittest.TestCase):
                 self.assertTrue(restored == data, "Full workflow payload changed during JSON roundtrip")
                 self.assertEqual(self.strict_errors(restored), [])
 
-    def test_03_a1_pixai_uuid_and_preview_only_export(self):
-        self.assert_pixai_interface(A1_UUID, 104003, 1003, 1028, 308003, 308004, 10012)
-
-    def test_04_a29_pixai_uuid_and_preview_only_export(self):
-        self.assert_pixai_interface(A29_UUID, 114003, 1066, 1098, 328003, 328004, 10104)
-
-    def test_05_top_level_receiver_rejected_with_legacy_opt_out(self):
-        data = self.candidate()
-        data["nodes"].append({"id": FIXTURE_ID, "type": RETIRED_TYPE, "inputs": [], "outputs": []})
-        self.assert_rejected(data, "uses retired browser receiver")
-        self.assertEqual(merge.validate(data, forbid_browser_receiver=False), [])
-
-    def test_06_embedded_receiver_rejected_with_legacy_opt_out(self):
-        data = self.candidate()
-        subgraph(data)["nodes"].append({"id": FIXTURE_ID, "type": RETIRED_TYPE, "inputs": [], "outputs": []})
-        self.assert_rejected(data, "uses retired browser receiver")
-        self.assertEqual(merge.validate(data, forbid_browser_receiver=False), [])
-
-    def test_07_embedded_missing_endpoint_is_rejected(self):
+    def test_03_embedded_missing_endpoint_is_rejected(self):
         data = self.candidate()
         subgraph(data)["links"][0]["target_id"] = FIXTURE_ID
         self.assert_rejected(data, "points to missing node")
 
-    def test_08_embedded_missing_output_backlink_is_rejected(self):
+    def test_04_embedded_missing_output_backlink_is_rejected(self):
         data = self.candidate()
-        node(subgraph(data), 104003)["outputs"][0]["links"].remove(308004)
+        link, origin = usable_link(subgraph(data))
+        output = next(item for item in origin["outputs"] if link["id"] in (item.get("links") or []))
+        output["links"].remove(link["id"])
         self.assert_rejected(data, "is absent from its endpoint ports")
 
-    def test_09_missing_virtual_port_backlinks_are_rejected(self):
+    def test_05_missing_virtual_port_backlinks_are_rejected(self):
         for direction in ("inputs", "outputs"):
             with self.subTest(direction=direction):
                 data = self.candidate()
                 subgraph(data)[direction][0]["linkIds"] = []
                 self.assert_rejected(data, "is absent from its endpoint ports")
 
-    def test_10_obsolete_branch_saved_mode_is_rejected(self):
+    def test_06_top_level_receiver_rejected_with_legacy_opt_out(self):
+        data = self.candidate()
+        data["nodes"].append({"id": FIXTURE_ID, "type": RETIRED_TYPE, "inputs": [], "outputs": []})
+        self.assert_rejected(data, "uses retired browser receiver")
+        self.assertEqual(merge.validate(data, forbid_browser_receiver=False), [])
+
+    def test_07_embedded_receiver_rejected_with_legacy_opt_out(self):
+        data = self.candidate()
+        subgraph(data)["nodes"].append({"id": FIXTURE_ID, "type": RETIRED_TYPE, "inputs": [], "outputs": []})
+        self.assert_rejected(data, "uses retired browser receiver")
+        self.assertEqual(merge.validate(data, forbid_browser_receiver=False), [])
+
+    def test_08_obsolete_branch_saved_mode_is_rejected(self):
         data = self.candidate()
         data["extra"]["uap_workbench"]["branches"][0]["modes"][str(FIXTURE_ID)] = 0
         self.assert_rejected(data, "has obsolete saved mode")
 
-    def test_11_obsolete_branch_node_id_is_rejected(self):
+    def test_09_obsolete_branch_node_id_is_rejected(self):
         for missing_id in (FIXTURE_ID, str(FIXTURE_ID)):
             with self.subTest(node_id=missing_id):
                 data = self.candidate()
                 data["extra"]["uap_workbench"]["branches"][0]["nodeIds"].append(missing_id)
                 self.assert_rejected(data, "refers to missing node")
 
-    def test_11b_mixed_string_and_integer_branch_ids_are_valid(self):
+    def test_09b_mixed_string_and_integer_branch_ids_are_valid(self):
         for source_name, source in self.sources.items():
             with self.subTest(source=source_name):
                 data = copy.deepcopy(source)
@@ -210,7 +178,7 @@ class BrowserRetirementAcceptance(unittest.TestCase):
                                      for index, node_id in enumerate(branch["nodeIds"])]
                 self.assertEqual(self.strict_errors(data), [])
 
-    def test_12_obsolete_stage_group_is_rejected(self):
+    def test_10_obsolete_stage_group_is_rejected(self):
         data = self.candidate()
         data["extra"]["uap_workbench"]["branches"][0]["stages"][0]["groups"].append("__retired_browser_fixture__")
         self.assert_rejected(data, "refers to missing group")
